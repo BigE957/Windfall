@@ -9,7 +9,7 @@ using Terraria.ModLoader;
 
 namespace WindfallAttempt1.Items
 {
-	public class BraeLore : ModItem
+	public class StatisLore : ModItem
 	{
 
 
@@ -25,15 +25,7 @@ namespace WindfallAttempt1.Items
             Item.height = 20;
             Item.consumable = false;
 
-            if (ModLoader.HasMod("CalamityMod"))
-            {
-                ModRarity r;
-                Mod calamity = ModLoader.GetMod("CalamityMod");
-                calamity.TryFind<ModRarity>("PureGreen", out r);
-                Item.rare = r.Type;
-            } else {
-                Item.rare = 0;
-            }
+            Item.rare = 4;
         }
 
         public override void ModifyTooltips(List<TooltipLine> tooltips)
@@ -46,7 +38,7 @@ namespace WindfallAttempt1.Items
                 return;
             }
 
-            string tooltip = Language.GetOrRegister($"Mods.{nameof(WindfallAttempt1)}.LoreBraelor").Value;
+            string tooltip = Language.GetOrRegister($"Mods.{nameof(WindfallAttempt1)}.LoreStatis").Value;
 
             if (line != null)
                 line.Text = tooltip;
@@ -60,7 +52,7 @@ namespace WindfallAttempt1.Items
         {
             Mod calamity = ModLoader.GetMod("CalamityMod");
                 CreateRecipe()
-                    .AddIngredient(calamity.Find<ModItem>("DevourerofGodsTrophy").Type)
+                    .AddIngredient(calamity.Find<ModItem>("SlimeGodTrophy").Type)
                     .AddTile(TileID.Bookcases)
                     .Register();
         }

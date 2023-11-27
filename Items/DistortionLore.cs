@@ -9,7 +9,7 @@ using Terraria.ModLoader;
 
 namespace WindfallAttempt1.Items
 {
-	public class BraeLore : ModItem
+	public class DistortionLore : ModItem
 	{
 
 
@@ -46,7 +46,7 @@ namespace WindfallAttempt1.Items
                 return;
             }
 
-            string tooltip = Language.GetOrRegister($"Mods.{nameof(WindfallAttempt1)}.LoreBraelor").Value;
+            string tooltip = Language.GetOrRegister($"Mods.{nameof(WindfallAttempt1)}.LoreDistortion").Value;
 
             if (line != null)
                 line.Text = tooltip;

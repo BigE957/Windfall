@@ -9,7 +9,7 @@ using Terraria.ModLoader;
 
 namespace WindfallAttempt1.Items
 {
-	public class BraeLore : ModItem
+	public class DragonsAerieLore : ModItem
 	{
 
 
@@ -29,7 +29,7 @@ namespace WindfallAttempt1.Items
             {
                 ModRarity r;
                 Mod calamity = ModLoader.GetMod("CalamityMod");
-                calamity.TryFind<ModRarity>("PureGreen", out r);
+                calamity.TryFind<ModRarity>("DarkBlue", out r);
                 Item.rare = r.Type;
             } else {
                 Item.rare = 0;
@@ -46,7 +46,7 @@ namespace WindfallAttempt1.Items
                 return;
             }
 
-            string tooltip = Language.GetOrRegister($"Mods.{nameof(WindfallAttempt1)}.LoreBraelor").Value;
+            string tooltip = Language.GetOrRegister($"Mods.{nameof(WindfallAttempt1)}.LoreDragonsAerie").Value;
 
             if (line != null)
                 line.Text = tooltip;
@@ -60,7 +60,7 @@ namespace WindfallAttempt1.Items
         {
             Mod calamity = ModLoader.GetMod("CalamityMod");
                 CreateRecipe()
-                    .AddIngredient(calamity.Find<ModItem>("DevourerofGodsTrophy").Type)
+                    .AddIngredient(calamity.Find<ModItem>("YharonTrophy").Type)
                     .AddTile(TileID.Bookcases)
                     .Register();
         }
