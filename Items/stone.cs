@@ -12,8 +12,8 @@ namespace WindfallAttempt1.Items
 		{
 			Item.damage = 1000000;
 			Item.DamageType = DamageClass.Melee;
-			Item.width = 40;
-			Item.height = 40;
+			Item.width = 200;
+			Item.height = 200;
 			Item.useTime = 20;
 			Item.useAnimation = 20;
 			Item.useStyle = 1;

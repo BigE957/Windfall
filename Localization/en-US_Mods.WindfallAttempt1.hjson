@@ -10,4 +10,25 @@ Items: {
 		DisplayName: stone
 		Tooltip: ""
 	}
+
+	BraeLore: {
+		DisplayName: Braelor
+		Tooltip: ""
+	}
 }
+
+LoreGeneric:
+	'''
+	[c/E3AF40:Whispers from on high dance in your ears...]
+	[c/BEBEBE:Press "Left Shift" to listen closer]
+	'''
+LoreBraelor:
+	'''
+	I am not surprised to see Braelor alive. If any could survive that nightmarish dimension it would no doubt be he. 
+	Once renowned as a mighty hero, Braelor was one of two tasked by the Archons to put an end to my conquest. 
+	He served Silva as her champion, and was an inspiration to all who fought at his side. 
+	There was a time I once thought his persona a facade, however upon meeting him in battle, that notion was quickly corrected. 
+	As our blades met, I felt a true passion behind his strikes, that he believed his cause was absolute and just. 
+	Facing down the two of them was the first time I had felt truly challenged. That feeling was� Exhilarating. 
+	If not for that Wyrm, I�d have been killed that day. In all honesty, a part of me wishes it had held back�	
+	'''
