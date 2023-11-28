@@ -17,32 +17,32 @@ Items: {
 	}
 
 	DistortionLore: {
-		DisplayName: Distortion Lore
+		DisplayName: The Distortion
 		Tooltip: ""
 	}
 
 	DragonsAerieLore: {
-		DisplayName: Dragons Aerie Lore
+		DisplayName: The Dragon's Aerie
 		Tooltip: ""
 	}
 
 	HallowLore: {
-		DisplayName: Hallow Lore
+		DisplayName: The Hallow
 		Tooltip: ""
 	}
 
 	IllmerisLore: {
-		DisplayName: Illmeris Lore
+		DisplayName: Ilmeris
 		Tooltip: ""
 	}
 
 	ProfanedWastesLore: {
-		DisplayName: Profaned Wastes Lore
+		DisplayName: The Profaned Wastes
 		Tooltip: ""
 	}
 
 	StatisLore: {
-		DisplayName: Statis Lore
+		DisplayName: Statis
 		Tooltip: ""
 	}
 }
