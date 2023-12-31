@@ -56,7 +56,7 @@ namespace WindfallAttempt1
 			}
 			if (npc.type == calamity.Find<ModNPC>("Yharon").Type)
 			{
-				npcLoot.AddConditionalPerPlayer(() => !DownedBossSystem.downedDesertScourge, ModContent.ItemType<DragonsAerieLore>(), desc: CalamityMod.DropHelper.FirstKillText);
+				npcLoot.AddConditionalPerPlayer(() => !DownedBossSystem.downedYharon, ModContent.ItemType<DragonsAerieLore>(), desc: CalamityMod.DropHelper.FirstKillText);
 
 			}
 
