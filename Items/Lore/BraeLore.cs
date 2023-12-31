@@ -32,7 +32,7 @@ namespace WindfallAttempt1.Items.Lore
                 calamity.TryFind<ModRarity>("PureGreen", out r);
                 Item.rare = r.Type;
             } else {
-                Item.rare = 0;
+                Item.rare = ItemRarityID.Purple;
             }
         }
 
@@ -42,11 +42,11 @@ namespace WindfallAttempt1.Items.Lore
             if (!Main.keyState.IsKeyDown(Microsoft.Xna.Framework.Input.Keys.LeftShift))
             {
                 if (line != null)
-                    line.Text = Language.GetOrRegister($"Mods.{nameof(WindfallAttempt1)}.LoreGeneric").Value;
+                    line.Text = Language.GetOrRegister($"Mods.{nameof(WindfallAttempt1)}.LoreItems.LoreGeneric").Value;
                 return;
             }
 
-            string tooltip = Language.GetOrRegister($"Mods.{nameof(WindfallAttempt1)}.LoreBraelor").Value;
+            string tooltip = Language.GetOrRegister($"Mods.{nameof(WindfallAttempt1)}.LoreItems.LoreBraelor").Value;
 
             if (line != null)
                 line.Text = tooltip;

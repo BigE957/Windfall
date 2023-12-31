@@ -25,7 +25,7 @@ namespace WindfallAttempt1.Items.Lore
             Item.height = 20;
             Item.consumable = false;
 
-            Item.rare = 4;
+            Item.rare = ItemRarityID.LightRed;
         }
 
         public override void ModifyTooltips(List<TooltipLine> tooltips)
@@ -34,11 +34,11 @@ namespace WindfallAttempt1.Items.Lore
             if (!Main.keyState.IsKeyDown(Microsoft.Xna.Framework.Input.Keys.LeftShift))
             {
                 if (line != null)
-                    line.Text = Language.GetOrRegister($"Mods.{nameof(WindfallAttempt1)}.LoreGeneric").Value;
+                    line.Text = Language.GetOrRegister($"Mods.{nameof(WindfallAttempt1)}.LoreItems.LoreGeneric").Value;
                 return;
             }
 
-            string tooltip = Language.GetOrRegister($"Mods.{nameof(WindfallAttempt1)}.LoreStatis").Value;
+            string tooltip = Language.GetOrRegister($"Mods.{nameof(WindfallAttempt1)}.LoreItems.LoreStatis").Value;
 
             if (line != null)
                 line.Text = tooltip;

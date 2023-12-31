@@ -25,7 +25,7 @@ namespace WindfallAttempt1.Items.Lore
             Item.height = 20;
             Item.consumable = false;
 
-            Item.rare = 1;
+            Item.rare = ItemRarityID.Blue;
         }
 
         public override void ModifyTooltips(List<TooltipLine> tooltips)
@@ -34,12 +34,12 @@ namespace WindfallAttempt1.Items.Lore
             if (!Main.keyState.IsKeyDown(Microsoft.Xna.Framework.Input.Keys.LeftShift))
             {
                 if (line != null)
-                    line.Text = Language.GetOrRegister($"Mods.{nameof(WindfallAttempt1)}.LoreGeneric").Value;
+                    line.Text = Language.GetOrRegister($"Mods.{nameof(WindfallAttempt1)}.LoreItems.LoreGeneric").Value;
                 return;
             }
 
             //stuff is in HuntOfTheoldGodUtils
-            string tooltip = Language.GetOrRegister($"Mods.{nameof(WindfallAttempt1)}.LoreIllmeris").Value;
+            string tooltip = Language.GetOrRegister($"Mods.{nameof(WindfallAttempt1)}.LoreItems.LoreIllmeris").Value;
 
             if (line != null)
                 line.Text = tooltip;
