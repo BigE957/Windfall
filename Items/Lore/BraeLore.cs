@@ -46,7 +46,7 @@ namespace WindfallAttempt1.Items.Lore
                 return;
             }
 
-            string tooltip = Language.GetOrRegister($"Mods.{nameof(WindfallAttempt1)}.LoreItems.LoreBraelor").Value;
+            string tooltip = Language.GetOrRegister($"Mods.{nameof(WindfallAttempt1)}.LoreItems.BraeLore").Value;
 
             if (line != null)
                 line.Text = tooltip;

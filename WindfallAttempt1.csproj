@@ -8,6 +8,7 @@
     <LangVersion>latest</LangVersion>
   </PropertyGroup>
   <ItemGroup>
+    <None Remove="NPCs\EventNPCs\CalCloneTown.png" />
     <None Remove="NPCs\Gores\IlmeranPaladin_Gore_Arm.png" />
     <None Remove="NPCs\Gores\IlmeranPaladin_Gore_Head.png" />
     <None Remove="NPCs\Gores\IlmeranPaladin_Gore_Leg.png" />

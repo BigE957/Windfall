@@ -13,6 +13,7 @@ using Terraria.ModLoader;
 using Terraria.Utilities;
 using Terraria;
 using Microsoft.Xna.Framework;
+using Terraria.GameContent.Events;
 
 namespace WindfallAttempt1.NPCs.WanderingNPCs
 {
@@ -167,9 +168,17 @@ namespace WindfallAttempt1.NPCs.WanderingNPCs
             WeightedRandom<string> chat = new WeightedRandom<string>();
 
             // These are things that the NPC has a chance of telling you when you talk to it.
-            chat.Add(Language.GetTextValue($"Mods.{nameof(WindfallAttempt1)}.Dialogue.IlmeranPaladin.StandardDialogue1"));
-            chat.Add(Language.GetTextValue($"Mods.{nameof(WindfallAttempt1)}.IlmeranPaladin.StandardDialogue2"));
-            chat.Add(Language.GetTextValue($"Mods.{nameof(WindfallAttempt1)}.Dialogue.IlmeranPaladin.StandardDialogue3"));
+            if (Sandstorm.Happening)
+            {
+                chat.Add(Language.GetOrRegister($"Mods.{nameof(WindfallAttempt1)}.Dialogue.IlmeranPaladin.SandstormDialogue").Value);
+            }
+            else 
+            {
+                chat.Add(Language.GetOrRegister($"Mods.{nameof(WindfallAttempt1)}.Dialogue.IlmeranPaladin.NoSandstormDialogue").Value);
+            }
+            chat.Add(Language.GetOrRegister($"Mods.{nameof(WindfallAttempt1)}.Dialogue.IlmeranPaladin.StandardDialogue1").Value);
+            chat.Add(Language.GetOrRegister($"Mods.{nameof(WindfallAttempt1)}.Dialogue.IlmeranPaladin.StandardDialogue2").Value);
+            chat.Add(Language.GetOrRegister($"Mods.{nameof(WindfallAttempt1)}.Dialogue.IlmeranPaladin.StandardDialogue3").Value);
             return chat; // chat is implicitly cast to a string.
         }
 

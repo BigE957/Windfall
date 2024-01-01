@@ -1,183 +1,139 @@
 # This file will automatically update with entries for new content after a build and reload
 
-Mods: {
-	WindfallAttempt1: {
-		Dialogue: {
-			IlmeranPaladin: {
-				StandardDialogue1: It's relaxing down here in the underground.
-				StandardDialogue2: What am I doing down here you may ask? I'm not sure, but leave me be!
-				StandardDialogue3: Huh? What wares do I have? I have no idea! How about you ask?
-			}
-		}
-
-		Items: {
-			stabby: {
-				DisplayName: stabby
-				Tooltip: sussy
-			}
-
-			stone: {
-				DisplayName: Stone
-				Tooltip: The first object Noxus ever created
-			}
-
-			BraeLore: {
-				DisplayName: Braelor
-				Tooltip: ""
-			}
-
-			DistortionLore: {
-				DisplayName: The Distortion
-				Tooltip: ""
-			}
-
-			DragonsAerieLore: {
-				DisplayName: The Dragon's Aerie
-				Tooltip: ""
-			}
-
-			HallowLore: {
-				DisplayName: The Hallow
-				Tooltip: ""
-			}
-
-			IllmerisLore: {
-				DisplayName: Ilmeris
-				Tooltip: ""
-			}
-
-			ProfanedWastesLore: {
-				DisplayName: The Profaned Wastes
-				Tooltip: ""
-			}
-
-			StatisLore: {
-				DisplayName: Statis
-				Tooltip: ""
-			}
-		}
-
-		LoreItems: {
-			LoreGeneric:
-				'''
-				[c/E3AF40:Whispers from on high dance in your ears...]
-				[c/BEBEBE:Press "Left Shift" to listen closer]
-				'''
-			LoreBraelor:
-				'''
-				I am not surprised to see Braelor alive. If any could survive that nightmarish dimension it would no doubt be he. 
-				Once renowned as a mighty hero, Braelor was one of two tasked by the Archons to put an end to my conquest. 
-				He served Silva as her champion, and was an inspiration to all who fought at his side. 
-				There was a time I once thought his persona a facade, however upon meeting him in battle, that notion was quickly corrected. 
-				As our blades met, I felt a true passion behind his strikes, that he believed his cause was absolute and just. 
-				Facing down the two of them was the first time I had felt truly challenged. That feeling was� Exhilarating. 
-				If not for that Wyrm, I�d have been killed that day. In all honesty, a part of me wishes it had held back�	
-				'''
-			LoreDistortion:
-				'''
-				A dimension parallel to our own and an utter collapse of creation as we know it, 
-				this place has long been the fascination of both myself and Draedon. I myself have visited the Distortion only once, 
-				invited by the Wyrm soon after it entered my service. From atop its back, I was shown much of its home, 
-				and I was marvelled by what I witnessed. 
-				The twisted horrors which call this nightmarish dreamscape their home are as mesmerising as they are terrifying. 
-				The realm held a prevailing sense of emptiness to it, as if it had been abandoned by those who once watched over it… 
-				It reminded me much of our own world in that regard.
-				'''
-			LoreProfanedWastes:
-				'''
-				Yet another stain left upon these lands by the Archons, how pitiful. 
-				It would seem your actions have stirred the Profaned Goddess out of hiding and into action. 
-				With her pantheon and kingdoms demolished, she’s resorted to burning away everything, and starting anew with an empty, 
-				‘pure’ world. Whilst she has always preached purity through eradication, only now, 
-				backed into a corner, does she begin acting on such gospel. What the Archon’s preach often differs from their actions… 
-				Hypocrites, all of them. This unholy battlefield is but the beginning of her conquest, and if not stopped, 
-				this whole world shall be wreathed in her unholy flames.
-				'''
-			LoreHallow:
-				'''
-				Witness the result of your ‘heroic’ efforts. This land of deceiving looks was born from the outpour of energies unleashed upon the prison’s demise. 
-				Divine influence runs amok across these lands, just the same as those of darker hue. Light and Dark are two sides of the same coin, 
-				in a constant battle for absolute dominance. Should one ever overtake the other, this world may find itself in peril once more.
-				Let not these lands’ facade fool you, the deities whose essence now forms it were just as cruel and vile as the others, 
-				I assure you. This surge of power across the world will no doubt have grave consequences. New vacuums of power have been opened, 
-				and there are always those eager to seize such opportunities. Perhaps even you may hope to take advantage of these new circumstances…
-				'''
-			LoreStatis:
-				'''
-				So, Statis has finally come out of hiding? I had thought I had seen the last of him, but he is, as always, full of surprises. 
-				Once the highest ranking of the Onyx Kinsmen, Statis was one of two tasked by the Archons to put an end to my conquest. 
-				After his order was abandoned by their master, the Kinsmen were reduced to little more than dogs of the Archons, 
-				a pitiable fate for such a skilled group. Had they sworn allegiance to me, I’d have happily accepted them into my ranks, 
-				however that is now an impossibility. I witnessed the Kinsmen’s strength first hand as I faced Statis and Braelor, 
-				and could not allow such power to rest in the hands of my enemies. As such, I saw to their eradication, 
-				and tasked Signus with that duty. I’ve always had a taste for irony at its cruellest.
-				'''
-			LoreIllmeris:
-				'''
-				Once a sprawling city, little now remains of this oceanic civilization. Ruled by two Archons and their pathetic puppet king, 
-				I knew this kingdom would be far too great of a threat if not dealt with.
-				Its submarine nature proved to make it one of the toughest kingdoms I would ever wage war against, 
-				as my legions were ill prepared for aquatic warfare. Meanwhile, the opposite was true for the Ilmerans, 
-				who outmanoeuvred my forces with ease. Victory would have taken far longer had I not resorted to… desperate measures. 
-				Brimstone flames razed the entire kingdom, boiled its people within waters they once called home, 
-				and left nothing but a scorched desert in their wake. I wish it had not come to this, 
-				but such is the price that must be paid to rid the world of Archons. Whilst one such fool met their end that day, 
-				the other, ever elusive, fled into hiding. I am certain we shall one day put an end to him as well.
-				'''
-			LoreDragonsAerie:
-				'''
-				Ah… The Aerie… It brings me as much sorrow as it does joy each time I see it. 
-				This place was once the home of the majestic Dragons, but now it stands empty, filled only by the Grave of Light. 
-				It had long been my hope that one day this place might flourish with new life, 
-				had we found a way to revitalise the near extinct Dragons. However, we never did find a way to achieve that goal. 
-				Without a way to purify the corrupted Auric Souls of the Archons, Yharon’s powers of rebirth could never take effect, 
-				and I could feel his loyal embers fade with my growing despondence… It seems the time for our battle draws near, 
-				and it shall be from atop this mountain that we together witness the end of a cruel world.
-				'''
-		}
+Dialogue: {
+	IlmeranPaladin: {
+		StandardDialogue1: The desert will show you no mercy. Stay strong!
+		StandardDialogue2: Where could that sea horse have gotten off to...
+		StandardDialogue3: Care to rest a moment with me? This heat is exhausting; I know.
+		SandstormDialogue: The wind is howling most fiercely... Be warned, the creatures here have been stirred into a frenzy!
+		NoSandstormDialogue: The winds are calm... These sands can still be beautiful despite the regret they carry.
 	}
 }
 
-NPCs.IlmeranPaladin.DisplayName: Ilmeran Paladin
-
 Items: {
 	stone: {
-		Tooltip: ""
-		DisplayName: stone
+		DisplayName: Stone
+		Tooltip: The first object Vitae ever created
 	}
 
 	StatisLore: {
 		Tooltip: ""
-		DisplayName: Statis Lore
+		DisplayName: Statis
 	}
 
 	ProfanedWastesLore: {
 		Tooltip: ""
-		DisplayName: Profaned Wastes Lore
+		DisplayName: The Profaned Wastes
 	}
 
 	IllmerisLore: {
 		Tooltip: ""
-		DisplayName: Illmeris Lore
+		DisplayName: Illmeris
 	}
 
 	HallowLore: {
 		Tooltip: ""
-		DisplayName: Hallow Lore
+		DisplayName: The Hallow
 	}
 
 	DragonsAerieLore: {
 		Tooltip: ""
-		DisplayName: Dragons Aerie Lore
+		DisplayName: The Dragons Aerie
 	}
 
 	DistortionLore: {
 		Tooltip: ""
-		DisplayName: Distortion Lore
+		DisplayName: The Distortion
 	}
 
 	BraeLore: {
 		Tooltip: ""
-		DisplayName: Brae Lore
+		DisplayName: Braelor
+	}
+
+	stabby: {
+		DisplayName: stabby
+		Tooltip: sussy
 	}
 }
+
+LoreItems: {
+	LoreGeneric:
+		'''
+		[c/E3AF40:Whispers from on high dance in your ears...]
+		[c/BEBEBE:Press "Left Shift" to listen closer]
+		'''
+	LoreBraelor:
+		'''
+		I am not surprised to see Braelor alive. If any could survive that nightmarish dimension it would no doubt be he. 
+		Once renowned as a mighty hero, Braelor was one of two tasked by the Archons to put an end to my conquest. 
+		He served Silva as her champion, and was an inspiration to all who fought at his side. 
+		There was a time I once thought his persona a facade, however upon meeting him in battle, that notion was quickly corrected. 
+		As our blades met, I felt a true passion behind his strikes, that he believed his cause was absolute and just. 
+		Facing down the two of them was the first time I had felt truly challenged. That feeling was� Exhilarating. 
+		If not for that Wyrm, I�d have been killed that day. In all honesty, a part of me wishes it had held back�	
+		'''
+	LoreDistortion:
+		'''
+		A dimension parallel to our own and an utter collapse of creation as we know it, 
+		this place has long been the fascination of both myself and Draedon. I myself have visited the Distortion only once, 
+		invited by the Wyrm soon after it entered my service. From atop its back, I was shown much of its home, 
+		and I was marvelled by what I witnessed. 
+		The twisted horrors which call this nightmarish dreamscape their home are as mesmerising as they are terrifying. 
+		The realm held a prevailing sense of emptiness to it, as if it had been abandoned by those who once watched over it… 
+		It reminded me much of our own world in that regard.
+		'''
+	LoreProfanedWastes:
+		'''
+		Yet another stain left upon these lands by the Archons, how pitiful. 
+		It would seem your actions have stirred the Profaned Goddess out of hiding and into action. 
+		With her pantheon and kingdoms demolished, she’s resorted to burning away everything, and starting anew with an empty, 
+		‘pure’ world. Whilst she has always preached purity through eradication, only now, 
+		backed into a corner, does she begin acting on such gospel. What the Archon’s preach often differs from their actions… 
+		Hypocrites, all of them. This unholy battlefield is but the beginning of her conquest, and if not stopped, 
+		this whole world shall be wreathed in her unholy flames.
+		'''
+	LoreHallow:
+		'''
+		Witness the result of your ‘heroic’ efforts. This land of deceiving looks was born from the outpour of energies unleashed upon the prison’s demise. 
+		Divine influence runs amok across these lands, just the same as those of darker hue. Light and Dark are two sides of the same coin, 
+		in a constant battle for absolute dominance. Should one ever overtake the other, this world may find itself in peril once more.
+		Let not these lands’ facade fool you, the deities whose essence now forms it were just as cruel and vile as the others, 
+		I assure you. This surge of power across the world will no doubt have grave consequences. New vacuums of power have been opened, 
+		and there are always those eager to seize such opportunities. Perhaps even you may hope to take advantage of these new circumstances…
+		'''
+	LoreStatis:
+		'''
+		So, Statis has finally come out of hiding? I had thought I had seen the last of him, but he is, as always, full of surprises. 
+		Once the highest ranking of the Onyx Kinsmen, Statis was one of two tasked by the Archons to put an end to my conquest. 
+		After his order was abandoned by their master, the Kinsmen were reduced to little more than dogs of the Archons, 
+		a pitiable fate for such a skilled group. Had they sworn allegiance to me, I’d have happily accepted them into my ranks, 
+		however that is now an impossibility. I witnessed the Kinsmen’s strength first hand as I faced Statis and Braelor, 
+		and could not allow such power to rest in the hands of my enemies. As such, I saw to their eradication, 
+		and tasked Signus with that duty. I’ve always had a taste for irony at its cruellest.
+		'''
+	LoreIllmeris:
+		'''
+		Once a sprawling city, little now remains of this oceanic civilization. Ruled by two Archons and their pathetic puppet king, 
+		I knew this kingdom would be far too great of a threat if not dealt with.
+		Its submarine nature proved to make it one of the toughest kingdoms I would ever wage war against, 
+		as my legions were ill prepared for aquatic warfare. Meanwhile, the opposite was true for the Ilmerans, 
+		who outmanoeuvred my forces with ease. Victory would have taken far longer had I not resorted to… desperate measures. 
+		Brimstone flames razed the entire kingdom, boiled its people within waters they once called home, 
+		and left nothing but a scorched desert in their wake. I wish it had not come to this, 
+		but such is the price that must be paid to rid the world of Archons. Whilst one such fool met their end that day, 
+		the other, ever elusive, fled into hiding. I am certain we shall one day put an end to him as well.
+		'''
+	LoreDragonsAerie:
+		'''
+		Ah… The Aerie… It brings me as much sorrow as it does joy each time I see it. 
+		This place was once the home of the majestic Dragons, but now it stands empty, filled only by the Grave of Light. 
+		It had long been my hope that one day this place might flourish with new life, 
+		had we found a way to revitalise the near extinct Dragons. However, we never did find a way to achieve that goal. 
+		Without a way to purify the corrupted Auric Souls of the Archons, Yharon’s powers of rebirth could never take effect, 
+		and I could feel his loyal embers fade with my growing despondence… It seems the time for our battle draws near, 
+		and it shall be from atop this mountain that we together witness the end of a cruel world.
+		'''
+}
+
+NPCs.IlmeranPaladin.DisplayName: Ilmeran Paladin
