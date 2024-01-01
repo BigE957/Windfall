@@ -29,7 +29,7 @@ namespace WindfallAttempt1.Items.Lore
             {
                 ModRarity r;
                 Mod calamity = ModLoader.GetMod("CalamityMod");
-                calamity.TryFind<ModRarity>("PureGreen", out r);
+                calamity.TryFind<ModRarity>("Turquoise", out r);
                 Item.rare = r.Type;
             } else {
                 Item.rare = ItemRarityID.Purple;
@@ -60,7 +60,7 @@ namespace WindfallAttempt1.Items.Lore
         {
             Mod calamity = ModLoader.GetMod("CalamityMod");
                 CreateRecipe()
-                    .AddIngredient(calamity.Find<ModItem>("DevourerofGodsTrophy").Type)
+                    .AddIngredient(calamity.Find<ModItem>("ProvidenceTrophy").Type)
                     .AddTile(TileID.Bookcases)
                     .Register();
         }

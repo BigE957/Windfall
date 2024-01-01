@@ -48,9 +48,9 @@ namespace WindfallAttempt1
 				npcLoot.AddConditionalPerPlayer(() => !DownedBossSystem.downedDoG, ModContent.ItemType<DistortionLore>(), desc: CalamityMod.DropHelper.FirstKillText);
 
 			}
-			if (npc.type == calamity.Find<ModNPC>("DevourerofGodsHead").Type)
+			if (npc.type == calamity.Find<ModNPC>("Providence").Type)
 			{
-				npcLoot.AddConditionalPerPlayer(() => !DownedBossSystem.downedDesertScourge, ModContent.ItemType<BraeLore>(), desc: CalamityMod.DropHelper.FirstKillText);
+				npcLoot.AddConditionalPerPlayer(() => !DownedBossSystem.downedProvidence, ModContent.ItemType<BraeLore>(), desc: CalamityMod.DropHelper.FirstKillText);
 
 			}
 			if (npc.type == calamity.Find<ModNPC>("Yharon").Type)
