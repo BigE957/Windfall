@@ -40,7 +40,7 @@ namespace WindfallAttempt1
 			}
 			if (npc.type == calamity.Find<ModNPC>("ProfanedGuardianCommander").Type)
 			{
-				npcLoot.AddConditionalPerPlayer(() => !DownedBossSystem.downedGSS, ModContent.ItemType<ProfanedWastesLore>(), desc: CalamityMod.DropHelper.FirstKillText);
+				npcLoot.AddConditionalPerPlayer(() => !DownedBossSystem.downedGuardians, ModContent.ItemType<ProfanedWastesLore>(), desc: CalamityMod.DropHelper.FirstKillText);
 
 			}
 			if (npc.type == calamity.Find<ModNPC>("DevourerofGodsHead").Type)
