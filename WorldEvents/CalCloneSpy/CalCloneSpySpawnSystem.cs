@@ -25,7 +25,7 @@ namespace WindfallAttempt1.WorldEvents.CalCloneSpy
         {
             Player mainPlayer = Main.player[0];
             //Requirements for Calamitas to spawn.
-            if (!Main.hardMode || Main.dayTime || CalDown == 1)
+            if (!Main.hardMode || Main.dayTime || CalDown == 1 || CalamityUtils.AnyBossNPCS())
             {
                 if (Main.dayTime)
                 {
@@ -44,34 +44,36 @@ namespace WindfallAttempt1.WorldEvents.CalCloneSpy
                 if (CalDown != 2)
                 {
                     Main.NewText("Something calamitous is approaching...", Color.Red);
+                    //defines the delay between night starting and CalClone spawning
                     timeTillSpawn = Main.nightLength / Main.rand.Next(2, 4);
                     CalDown = 2;
                 }
-                if (Main.time > timeTillSpawn && mainPlayer.townNPCs > 2f && !mainPlayer.dead && mainPlayer.active && !CalamityUtils.AnyBossNPCS())
+                if (Main.time > timeTillSpawn && mainPlayer.townNPCs > 2f && !mainPlayer.dead && mainPlayer.active)
+                {
+                    Main.NewText("Something calamitous has awoken!", Color.Red);
+                    //sets the spawn location 
+                    Vector2 CalCloneSpawnLocation;
+                    if (mainPlayer.direction == 1)
                     {
-                        Main.NewText("Something calamitous has awoken!", Color.Red);
-                        //sets the spawn location 
-                        Vector2 CalCloneSpawnLocation;
-                        if (mainPlayer.direction == 1)
-                        {
-                            CalCloneSpawnLocation.X = mainPlayer.Center.X + 1000f;
-                        }
-                        else
-                        {
-                            CalCloneSpawnLocation.X = mainPlayer.Center.X - 1000f;
-                        }
+                        CalCloneSpawnLocation.X = mainPlayer.Center.X + 1000f;
+                    }
+                    else
+                    {
+                        CalCloneSpawnLocation.X = mainPlayer.Center.X - 1000f;
+                    }
 
-                        CalCloneSpawnLocation.Y = mainPlayer.Center.Y;
-                        for (int i = 0; i < Main.maxPlayers; i++)
+                    CalCloneSpawnLocation.Y = mainPlayer.Center.Y;
+                    //multiplayer shenanaganry: spawns the projectile for all players
+                    for (int i = 0; i < Main.maxPlayers; i++)
+                    {
+                        Player p = Main.player[i];
+                        if (!p.dead && p.active)
                         {
-                            Player p = Main.player[i];
-                            if (!p.dead && p.active)
-                            {
-                                Utilities.NewProjectileBetter(CalCloneSpawnLocation, Vector2.Zero, ModContent.ProjectileType<CalCloneSpyProj>(), 0, 0f);
-                                CalDown = 1;
-                                break;
-                            }
+                            Utilities.NewProjectileBetter(CalCloneSpawnLocation, Vector2.Zero, ModContent.ProjectileType<CalCloneSpyProj>(), 0, 0f);
+                            break;
                         }
+                    }
+                    CalDown = 1;
                 }
                 else
                 {
