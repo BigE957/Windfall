@@ -1,4 +1,5 @@
 ﻿using Terraria;
+using Terraria.Audio;
 using Terraria.ID;
 using Terraria.Localization;
 using Terraria.ModLoader;
@@ -9,6 +10,7 @@ namespace WindfallAttempt1.Items.Journals
     public class JournalCrimson : ModItem
     {
         internal bool isJournalOpen = false;
+        public static readonly SoundStyle UseSound = new("WindfallAttempt1/Sounds/Items/JournalPageTurn");
         public override void SetDefaults()
         {
             Item.width = 28;
@@ -16,6 +18,11 @@ namespace WindfallAttempt1.Items.Journals
             Item.rare = ItemRarityID.Blue;
             Item.useAnimation = Item.useTime = 20;
             Item.useStyle = ItemUseStyleID.HoldUp;
+            Item.UseSound = UseSound with
+            {
+                Pitch = -0.25f,
+                PitchVariance = 0.5f,
+            };
         }
 
         public override bool? UseItem(Player player)

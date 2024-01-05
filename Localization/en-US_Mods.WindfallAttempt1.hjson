@@ -70,6 +70,7 @@ Items: {
 		DisplayName: Wanderer's Journal: The Tundra
 		Tooltip: A tattered page from the journal of an explorer.
 	}
+
 	JournalCorruption: {
 		DisplayName: Wanderer's Journal: The Corruption
 		Tooltip: A tattered page from the journal of an explorer.
@@ -84,18 +85,22 @@ Items: {
 		DisplayName: Wanderer's Journal: The Jungle
 		Tooltip: A tattered page from the journal of an explorer.
 	}
+
 	JournalOcean: {
 		DisplayName: Wanderer's Journal: The Ocean
 		Tooltip: A tattered page from the journal of an explorer.
 	}
+
 	JournalDungeon: {
 		DisplayName: Wanderer's Journal: The Dungeon
 		Tooltip: A tattered page from the journal of an explorer.
 	}
+
 	JournalSulphur: {
 		DisplayName: Wanderer's Journal: The Sulphurous Sea
 		Tooltip: A tattered page from the journal of an explorer.
 	}
+
 	JournalAerie: {
 		DisplayName: Wanderer's Journal: The Dragon's Aerie
 		Tooltip: A tattered page from the journal of an explorer.
@@ -309,10 +314,7 @@ JournalContents: {
 		scorched, burnt by… something. A battle perhaps? Though this skeleton positioning makes that seem 
 		unlikely... Every discovery I’ve made here seems only to raise more questions...
 		'''
-	Aerie4:
-		'''
-		    (Last Part TBA)
-		'''
+	Aerie4: "    (Last Part TBA)"
 }
 
 LoreItems: {
