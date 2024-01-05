@@ -8,10 +8,22 @@
     <LangVersion>latest</LangVersion>
   </PropertyGroup>
   <ItemGroup>
+    <None Remove="Items\Journals\JournalAerie.png" />
+    <None Remove="Items\Journals\JournalCorruption.png" />
+    <None Remove="Items\Journals\JournalCrimson.png" />
+    <None Remove="Items\Journals\JournalDesert.png" />
+    <None Remove="Items\Journals\JournalDungeon.png" />
+    <None Remove="Items\Journals\JournalForest.png" />
+    <None Remove="Items\Journals\JournalIlmeris.png" />
+    <None Remove="Items\Journals\JournalJungle.png" />
+    <None Remove="Items\Journals\JournalOcean.png" />
+    <None Remove="Items\Journals\JournalSulphur.png" />
+    <None Remove="Items\Journals\JournalTundra.png" />
     <None Remove="NPCs\Gores\IlmeranPaladin_Gore_Arm.png" />
     <None Remove="NPCs\Gores\IlmeranPaladin_Gore_Head.png" />
     <None Remove="NPCs\Gores\IlmeranPaladin_Gore_Leg.png" />
     <None Remove="NPCs\WanderingNPCs\IlmeranPaladin.png" />
+    <None Remove="UI\WanderersJournals\JournalPage.png" />
     <None Remove="WorldEvents\CalCloneSpy\CalCloneSpyProj.png" />
   </ItemGroup>
   <ItemGroup>

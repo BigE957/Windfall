@@ -51,10 +51,268 @@ Items: {
 		DisplayName: Braelor
 	}
 
-	stabby: {
-		DisplayName: stabby
-		Tooltip: sussy
+	JournalForest: {
+		DisplayName: Wanderer's Journal: The Forest
+		Tooltip: A tattered page from the journal of an explorer.
 	}
+
+	JournalDesert: {
+		DisplayName: Wanderer's Journal: The Desert
+		Tooltip: A tattered page from the journal of an explorer.
+	}
+
+	JournalIlmeris: {
+		DisplayName: Wanderer's Journal: The Ilmeran Ruins
+		Tooltip: A tattered page from the journal of an explorer.
+	}
+
+	JournalTundra: {
+		DisplayName: Wanderer's Journal: The Tundra
+		Tooltip: A tattered page from the journal of an explorer.
+	}
+	JournalCorruption: {
+		DisplayName: Wanderer's Journal: The Corruption
+		Tooltip: A tattered page from the journal of an explorer.
+	}
+
+	JournalCrimson: {
+		DisplayName: Wanderer's Journal: The Crimson
+		Tooltip: A tattered page from the journal of an explorer.
+	}
+
+	JournalJungle: {
+		DisplayName: Wanderer's Journal: The Jungle
+		Tooltip: A tattered page from the journal of an explorer.
+	}
+	JournalOcean: {
+		DisplayName: Wanderer's Journal: The Ocean
+		Tooltip: A tattered page from the journal of an explorer.
+	}
+	JournalDungeon: {
+		DisplayName: Wanderer's Journal: The Dungeon
+		Tooltip: A tattered page from the journal of an explorer.
+	}
+	JournalSulphur: {
+		DisplayName: Wanderer's Journal: The Sulphurous Sea
+		Tooltip: A tattered page from the journal of an explorer.
+	}
+	JournalAerie: {
+		DisplayName: Wanderer's Journal: The Dragon's Aerie
+		Tooltip: A tattered page from the journal of an explorer.
+	}
+}
+
+JournalContents: {
+	Forest:
+		'''
+		    Today marks the beginning of my journey across these expansive 
+		lands I’ve called my home. For all my life, I’ve lived within these forests. 
+		I’ve carved out a simple, peaceful life for myself, in a world where peace 
+		seems to get rarer each day. Now as I’ve grown older, a longing has 
+		grown deep inside my heart. I want to see. I want to know. I’ve heard so 
+		much from travellers and passersby of the wonders they have seen. The 
+		aurora’s of the tundras, the ruins of Ilmeris, the verdant fauna of the 
+		jungles, and so, so much more. I write this now as a farewell to the life 
+		I once knew, and as the beginning of my chronicling of this journey I am 
+		soon to set off on. Goodbye, I shall hold onto the memories I’ve made 
+		here with each step I take.
+		'''
+	Tundra:
+		'''
+		    I’ve always heard stories of the unnatural, eternal winter of the 
+		tundra, but only now do I see it for myself. The snowfall is mesmerising, 
+		it is something I have only witnessed on rare occasions back home, but 
+		here it seems to be near constant. I’ve had the pleasure of encountering 
+		a few of this region’s native wildlife, Penguins. Such cute little things 
+		they are, and they are quite friendly. One even came up to me and let me 
+		pet him!
+
+		    I hadn’t expected to meet any other people in this harsh environment, 
+		but on that I was proven wrong. During a particularly heavy snowstorm, 
+		I saw a light in the distance, and it turned out to be a cabin! Inside, a 
+		lovely woman offered me refuge for the night. She was a mechanic by 
+		trade, and we talked for hours over a nice cup of tea. As I likely won’t be 
+		seeing her again, I’ve decided to leave this page of my journal with her, 
+		as a keepsake. Thank you very much for the hospitality. I won't forget it!
+		'''
+	Desert:
+		'''
+		    I must admit, this is one of the places I was least looking forward 
+		to visiting, however it is necessary, both for completionist sakes and 
+		as it leads directly to the Ilmeran Ruins I am so very much looking 
+		forward to seeing. The legends of what happened to this place are still 
+		talked about to this day. Once a great sea kingdom sat here, but during 
+		the great war, it was utterly incinerated, its waters completely 
+		evaporated. Now all that remains is a desert, or so most think. I’ve
+		heard stories of an underground oasis deep beneath the sands, the sole 
+		remnant of the former ocean.
+
+		    Once again I was shocked to meet another person on my travels, this 
+		one was most interesting. He sat atop a massive seahorse. Cnidarian I 
+		believe it was called? He didn’t give me a name, only introducing himself 
+		as ‘The Last Paladin of Ilmeris’. At first I was quite afraid of him, but as 
+		we began talking my nerves were eased. I could write a whole book on 
+		just the knowledge he held alone! Once I told him of the journey I was 
+		taking and my eagerness to visit the ruins of Ilmeris, he offered to 
+		bring me there himself, what luck! I’m writing this now from atop the 
+		back of his seahorse. It is quite the gentle creature despite what its size 
+		might suggest. I’m just bursting with excitement! I’ll have much to write 
+		about once we arrive, I’m sure.
+		'''
+	Ilmeris:
+		'''
+		    So much to write about! The ruins! They were just as amazing as I 
+		had imagined, no, more so! Ah, first things first though. The paladin 
+		brought us down into the depths of the desert, and he alone tore through 
+		hundreds of ‘antlions’. Our journey down was quite long; each time I 
+		thought we finally reached the bottom, there was another tunnel to follow. 
+		However, as the orange sandstone began to turn to a cool navy, I was 
+		certain we had reached it. The paladin called this place “The Sunken Sea”, 
+		a comparatively small area of land on the outskirts of what once was 
+		Ilmeris, and now all that remains of the great sea which was once here.
+
+		    However, this place is of course an ocean, and to get to the ruins 
+		would involve me going into the water. My journals would never survive 
+		that, however thankfully the Paladin had a solution most mesmerising. 
+		With his magic, he conjured a large bubble around me! The bubble kept 
+		me completely dry as I dove into the deep blue waters of the Sunken Sea. 
+		What a beautiful place it was to see! The glistening navy stone which 
+		made up the caverns, the prismatic blue crystals lining the walls all 
+		around me, and the iridescent white sand. It was all too beautiful for 
+		words to describe!
+
+		    Even then, we had yet to reach the ruins themselves! My friend and 
+		his great steed led me there. The ruins were of an outpost placed in the 
+		lowest depths of Ilmeris. Its purpose, the paladin explained to me, was to 
+		protect the kingdom from threats which lie even further below. These 
+		ruins are now the place these two called home, though they spent most of 
+		their time on the surface. Even though their kingdom has long been 
+		gone, they still hold onto their duty to protect what remains of it. 
+		They’re dedication is admirable, and I shall hold these two in my 
+		memory as I continue forth on my travels.
+		'''
+	Corruption:
+		'''
+		    After my exploration of Ilmeris, I’ll admit, I wasn’t looking forward 
+		to this next place. I intend to make my stay in this place brief. The 
+		Corruption, as it is now known, was once the site of a great battle. 
+		Little of what took place during this war is known now, but what is 
+		remembered is that the evils vanquished here formed into this foul, 
+		abominable sickness upon the earth. The horrors which call this place 
+		their home are as frightful as they are deadly. I shan’t stay here a 
+		moment longer.
+		'''
+	Crimson:
+		'''
+		    After my exploration of Ilmeris, I’ll admit, I wasn’t looking forward 
+		to this next place. I intend to make my stay in this place brief. The Crimson, 
+		as it is now known, was once the site of a great battle. Little of what took 
+		place during this war is known now, but what is remembered is that the 
+		blood shed here formed into this foul, abominable sickness upon the earth. 
+		The horrors which call this place their home are as frightful as they are 
+		deadly. I shan’t stay here a moment longer.
+		'''
+	Jungle:
+		'''
+		    With haste to escape those lands most foul, I next headed somewhere 
+		far greener. I had heard much of the beauty the Jungles held from 
+		explorers and adventurers, but to see the colourful menagary of fauna in 
+		person was a completely different experience. Their words had failed to 
+		describe the beauty of such a place, and I doubt mine will either.
+
+		    It was here that I encountered one who had only been described in 
+		myth previously: a living Dryad, quite possibly the last of her kind. 
+		When I first spotted her, she stood still, a hand placed upon a tree. 
+		The breaking of branch under foot disturbed her from her... 
+		communion? Her turn was swift, and I could see the glow of magic 
+		from her fingertips. For a brief moment, the look in her eyes was fierce; 
+		I was frozen in place by it alone.
+
+		    However, she quickly realised I was no threat, and eased herself, 
+		much to my relief. We soon introduced ourselves, and quickly got to 
+		talking. I’ve been so lucky to meet so many interesting people on my 
+		journeys, and this Dryad was of course no different. Such a storied past 
+		I’ve heard of the dryads, and she was able to confirm most of what I had 
+		heard over the years, and correct the many errors. I’m unsure I have the 
+		arm-strength to recount the tale here... Perhaps a future novel I shall 
+		write once this journey of mine is over.
+		'''
+	Ocean:
+		'''
+		    An old friend of mine was a sailor. He travelled the seas, carrying 
+		shipments across perilous waters and passengers to new, brighter lives. 
+		It is no secret that the stories he’d return with were part of what has 
+		inspired me to undergo this journey. These waters are as marvellous as 
+		he described, and yet this moment can’t help but feel bittersweet. My 
+		dearest friend, I had hoped to share this view with you, that together 
+		we might stare out towards the horizon.
+
+		    I still think of you often. I wonder, do you see me now, from 
+		wherever it is that you rest? Have you followed me on this journey? I 
+		hold it in my heart that you have. I hope you are proud of how far I’ve 
+		come. I hope you’ll follow me to this journey’s end... Ah... 
+		I mustn’t dwell too long. Farewell, till we meet again, my friend.
+		'''
+	Dungeon:
+		'''
+		    I’ve stumbled upon a strange structure in the midst of my travels. It 
+		is quite unlike anything I’ve ever seen. It gives off a most foul odour, 
+		the scent of death. I warrilly approached its entrance, tall pillars lined 
+		my path. Strangely, I found an old man wandering about its entrance. I 
+		called out to him, but as he turned to face me, I could tell something was 
+		off. The way he walked towards me, even for an elder, was strange, 
+		almost... puppet-like? As he finally reached speaking distance, he froze, 
+		then suddenly began shouting, demanding I flee. Now let me tell you, 
+		fleeing is exactly what I did. I ran like my life depended on it! I’m 
+		actually still quite sure it did.
+		'''
+	Sulphur:
+		'''
+		    What a strange place. I suppose it is true that often the most tragic 
+		of things can still often be the most beautiful. While I cannot deny the 
+		horror of what has taken place here, there is still something gorgeous here. 
+		These noxious, teal waters still glimmer the same as any other, possibly 
+		even more so. The steam and gases which on a rarity burst from the 
+		depths are a wonder. Truly there is no place in this world quite like this 
+		one. Were its denizens not so dangerous, I’d have liked to spend some 
+		more time here.
+		'''
+	Aerie1:
+		'''
+		    When I set forth on this journey, oh so long ago, there was one place, above all others, 
+		that I desired to step foot in: the Dragon’s Aerie. What a storied place indeed! The long 
+		abandoned home of the Dragons! To think, such mythical beasts once roamed this place, and so 
+		commonly at that! To at last step foot here is indeed a dream come true. The air here is 
+		quite thin, but I’ll gladly put up with it. The landscape is painted a golden orange, and 
+		the tree pierce the heavens! It's as if I’m standing within a piece of art! This place is 
+		covered head to toe in ruins older than Ilmeris, probably some of the oldest still standing! 
+		These ancient carvings… They depict humans and dragons alike. Was there once a time where 
+		the two of our species coexisted? I have oh, so many questions!
+		'''
+	Aerie2:
+		'''
+		    Today I stumbled upon my greatest discovery yet, some sort of mausoleum. However, these 
+		graves... They’re massive! They must indeed belong to the dragons! There are so many... 
+		Further in I more carvings, and what they depicted was most fascinating. They depicted a grand 
+		battle among the stars in which a mighty dragon battled against... the Moon? What a strange story. 
+		It seems this mausoleum holds those who died in that battle. I could likely spend an eternity 
+		exploring just these vast halls. Perhaps one day I might document each dragon who lays here. 
+		However, I see no sign of the dragon depicted in the mural… It doesn’t show his death either... 
+		Perhaps I might find more about this legend if I continue my exploration.
+		'''
+	Aerie3:
+		'''
+		    I have climbed the great mountain which lies at the Aerie’s centre, and it is here I find what 
+		I can only describe as a marvel. It is a skeleton, the fossils of an ancient dragon preserved to 
+		perfection. Judging by its shape, this is the dragon I saw depicted in the mausoleum’s mural... 
+		the Dragon King... I cannot help but wonder what must’ve transpired here… The land here seems almost 
+		scorched, burnt by… something. A battle perhaps? Though this skeleton positioning makes that seem 
+		unlikely... Every discovery I’ve made here seems only to raise more questions...
+		'''
+	Aerie4:
+		'''
+		    (Last Part TBA)
+		'''
 }
 
 LoreItems: {
@@ -137,4 +395,4 @@ LoreItems: {
 }
 
 NPCs.IlmeranPaladin.DisplayName: Ilmeran Paladin
-Projectiles.CalCloneSpyProj.DisplayName: Cal Clone Spy Proj
+Projectiles.CalCloneSpyProj.DisplayName: ???

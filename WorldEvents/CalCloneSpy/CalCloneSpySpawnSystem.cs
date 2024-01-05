@@ -69,7 +69,7 @@ namespace WindfallAttempt1.WorldEvents.CalCloneSpy
                         Player p = Main.player[i];
                         if (!p.dead && p.active)
                         {
-                            Utilities.NewProjectileBetter(CalCloneSpawnLocation, Vector2.Zero, ModContent.ProjectileType<CalCloneSpyProj>(), 0, 0f);
+                            Utilities.Utilities.NewProjectileBetter(CalCloneSpawnLocation, Vector2.Zero, ModContent.ProjectileType<CalCloneSpyProj>(), 0, 0f);
                             break;
                         }
                     }

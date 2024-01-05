@@ -11,9 +11,6 @@ namespace WindfallAttempt1.Items.Lore
 {
 	public class BraeLore : ModItem
 	{
-
-
-
  public override void SetStaticDefaults()
         {
             ItemID.Sets.ItemNoGravity[Type] = true;
