@@ -17,6 +17,7 @@ namespace WindfallAttempt1.Items.Journals
             Item.height = 28;
             Item.rare = ItemRarityID.Blue;
             Item.useAnimation = Item.useTime = 20;
+            Item.useStyle = ItemUseStyleID.HoldUp;
             Item.UseSound = UseSound with
             {
                 Pitch = -0.25f,
@@ -28,7 +29,6 @@ namespace WindfallAttempt1.Items.Journals
         {
             if (Main.myPlayer == player.whoAmI)
             {
-                SoundEngine.PlaySound(UseSound, player.Center);
                 if (!isJournalOpen)
                 {
                     isJournalOpen = true;

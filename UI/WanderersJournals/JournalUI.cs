@@ -9,6 +9,8 @@ using Terraria.GameContent;
 using Terraria.ID;
 using Terraria.Localization;
 using Terraria.ModLoader;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace WindfallAttempt1.UI.WanderersJournals
 {
@@ -65,13 +67,38 @@ namespace WindfallAttempt1.UI.WanderersJournals
     public class JournalText : UIElement
     {
         public static string JournalContents;
+        float xResolutionScale = Main.screenWidth / 2560f;
+        float yResolutionScale = Main.screenHeight / 1440f;
+        readonly float xScale = MathHelper.Lerp(0.004f, 1f, 1);
         protected override void DrawSelf(SpriteBatch spriteBatch)
         {
             CalculatedStyle innerDimensions = GetInnerDimensions();
             // Getting top left position of this UIElement
-            float shopx = innerDimensions.X;
-            float shopy = innerDimensions.Y;
-            Utils.DrawBorderStringFourWay(spriteBatch, FontAssets.ItemStack.Value, JournalContents, shopx - 6f, shopy + 12f, Color.Black, Color.Tan, new Vector2(0.3f), 0.75f);
+            float xPageTop = innerDimensions.X - 6f;
+            float yPageTop = innerDimensions.Y + 12f;
+            
+            //clammy code
+            Texture2D pageTexture = ModContent.Request<Texture2D>("WindfallAttempt1/UI/WanderersJournals/JournalPage").Value;
+            int textWidth = (int)((int)(xScale * pageTexture.Width) - 6f);
+            textWidth = (int)(textWidth * xResolutionScale);
+            List<string> dialogLines = Utils.WordwrapString(JournalContents, FontAssets.MouseText.Value, (int)(textWidth / 0.45f), 250, out _).ToList();
+            dialogLines.RemoveAll(text => string.IsNullOrEmpty(text));
+
+            int trimmedTextCharacterCount = string.Concat(dialogLines).Length;
+            float yOffsetPerLine = 28f;
+            int yScale = (int)(42 * yResolutionScale);
+            int yScale2 = (int)(yOffsetPerLine * yResolutionScale);
+            for (int i = 0; i < dialogLines.Count; i++)
+            {
+                if (dialogLines[i] != null)
+                {
+                    int textDrawPositionY = yScale + i * yScale2 + (int)yPageTop;
+                    Utils.DrawBorderStringFourWay(spriteBatch, FontAssets.ItemStack.Value, dialogLines[i], xPageTop, textDrawPositionY, Color.Black, Color.Tan, Vector2.Zero, 0.75f);
+                }
+            }
+            //clammy code
+
+            //Utils.DrawBorderStringFourWay(spriteBatch, FontAssets.ItemStack.Value, JournalContents, shopx - 6f, shopy + 12f, Color.Black, Color.Tan, new Vector2(0.3f), 0.75f);
         }
     }
 
