@@ -52,57 +52,57 @@ Items: {
 	}
 
 	JournalForest: {
-		DisplayName: Wanderer's Journal: The Forest
+		DisplayName: Journal Entry: The Forest
 		Tooltip: A tattered page from the journal of an explorer.
 	}
 
 	JournalDesert: {
-		DisplayName: Wanderer's Journal: The Desert
+		DisplayName: Journal Entry: The Desert
 		Tooltip: A tattered page from the journal of an explorer.
 	}
 
 	JournalIlmeris: {
-		DisplayName: Wanderer's Journal: The Ilmeran Ruins
+		DisplayName: Journal Entry: The Ilmeran Ruins
 		Tooltip: A tattered page from the journal of an explorer.
 	}
 
 	JournalTundra: {
-		DisplayName: Wanderer's Journal: The Tundra
+		DisplayName: Journal Entry: The Tundra
 		Tooltip: A tattered page from the journal of an explorer.
 	}
 
 	JournalCorruption: {
-		DisplayName: Wanderer's Journal: The Corruption
+		DisplayName: Journal Entry: The Corruption
 		Tooltip: A tattered page from the journal of an explorer.
 	}
 
 	JournalCrimson: {
-		DisplayName: Wanderer's Journal: The Crimson
+		DisplayName: Journal Entry: The Crimson
 		Tooltip: A tattered page from the journal of an explorer.
 	}
 
 	JournalJungle: {
-		DisplayName: Wanderer's Journal: The Jungle
+		DisplayName: Journal Entry: The Jungle
 		Tooltip: A tattered page from the journal of an explorer.
 	}
 
 	JournalOcean: {
-		DisplayName: Wanderer's Journal: The Ocean
+		DisplayName: Journal Entry: The Ocean
 		Tooltip: A tattered page from the journal of an explorer.
 	}
 
 	JournalDungeon: {
-		DisplayName: Wanderer's Journal: The Dungeon
+		DisplayName: Journal Entry: The Dungeon
 		Tooltip: A tattered page from the journal of an explorer.
 	}
 
 	JournalSulphur: {
-		DisplayName: Wanderer's Journal: The Sulphurous Sea
+		DisplayName: Journal Entry: The Sulphurous Sea
 		Tooltip: A tattered page from the journal of an explorer.
 	}
 
 	JournalAerie: {
-		DisplayName: Wanderer's Journal: The Dragon's Aerie
+		DisplayName: Journal Entry: The Dragon's Aerie
 		Tooltip: A tattered page from the journal of an explorer.
 	}
 

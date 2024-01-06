@@ -1,19 +1,9 @@
 ﻿using Terraria.ModLoader;
-using System;
-using Terraria.GameContent.ItemDropRules;
 using Terraria;
-using Terraria.Graphics.Shaders;
 using Terraria.ID;
-using Terraria.Utilities;
-using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
-using System.Collections.Generic;
-using Terraria.DataStructures;
-using Terraria.Localization;
-using CalamityMod.Systems;
 using CalamityMod;
 using WindfallAttempt1.Items.Lore;
-
+using WindfallAttempt1.Items.Journals;
 
 namespace WindfallAttempt1.Utilities
 {
@@ -23,6 +13,26 @@ namespace WindfallAttempt1.Utilities
         public override void ModifyNPCLoot(NPC npc, NPCLoot npcLoot)
         {
             Mod calamity = ModLoader.GetMod("CalamityMod");
+            if (npc.type == calamity.Find<ModNPC>("Cnidrion").Type)
+            {
+                npcLoot.AddConditionalPerPlayer(() => !DownedNPCSystem.downedCnidrion, ModContent.ItemType<JournalDesert>(), desc: CalamityMod.DropHelper.FirstKillText);
+
+            }
+            if (npc.type == calamity.Find<ModNPC>("GiantClam").Type)
+            {
+                npcLoot.AddConditionalPerPlayer(() => !DownedBossSystem.downedCLAM, ModContent.ItemType<JournalIlmeris>(), desc: CalamityMod.DropHelper.FirstKillText);
+
+            }
+            if (npc.type == calamity.Find<ModNPC>("CragmawMire").Type)
+            {
+                npcLoot.AddConditionalPerPlayer(() => !DownedBossSystem.downedCragmawMire, ModContent.ItemType<JournalSulphur>(), desc: CalamityMod.DropHelper.FirstKillText);
+
+            }
+            if (npc.type == calamity.Find<ModNPC>("LeviathanStart").Type)
+            {
+                npcLoot.AddConditionalPerPlayer(() => !DownedNPCSystem.downedSirenLure, ModContent.ItemType<JournalDesert>(), desc: CalamityMod.DropHelper.FirstKillText);
+
+            }
             if (npc.type == calamity.Find<ModNPC>("DesertScourgeHead").Type)
             {
                 npcLoot.AddConditionalPerPlayer(() => !DownedBossSystem.downedDesertScourge, ModContent.ItemType<IllmerisLore>(), desc: CalamityMod.DropHelper.FirstKillText);
