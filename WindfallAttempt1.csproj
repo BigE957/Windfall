@@ -9,6 +9,7 @@
   </PropertyGroup>
   <ItemGroup>
     <None Remove="Items\Journals\JournalAerie.png" />
+    <None Remove="Items\Journals\JournalCompilation.png" />
     <None Remove="Items\Journals\JournalCorruption.png" />
     <None Remove="Items\Journals\JournalCrimson.png" />
     <None Remove="Items\Journals\JournalDesert.png" />

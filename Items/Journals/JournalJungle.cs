@@ -9,8 +9,6 @@ namespace WindfallAttempt1.Items.Journals
 {
     public class JournalJungle : ModItem
     {
-        internal bool isJournalOpen = false;
-        public static readonly SoundStyle UseSound = new("WindfallAttempt1/Sounds/Items/JournalPageTurn");
         public override void SetDefaults()
         {
             Item.width = 28;
@@ -18,26 +16,26 @@ namespace WindfallAttempt1.Items.Journals
             Item.rare = ItemRarityID.Blue;
             Item.useAnimation = Item.useTime = 20;
             Item.useStyle = ItemUseStyleID.HoldUp;
-            Item.UseSound = UseSound with
-            {
-                Pitch = -0.25f,
-                PitchVariance = 0.5f,
-            };
         }
-
+        public override bool OnPickup(Player player)
+        {
+            if (Main.myPlayer == player.whoAmI)
+            {
+                JournalUISystem.JournalsCollected[5] = true;
+            }
+            return true;
+        }
         public override bool? UseItem(Player player)
         {
             if (Main.myPlayer == player.whoAmI)
             {
-                if (!isJournalOpen)
+                if (!JournalUISystem.isJournalOpen)
                 {
-                    isJournalOpen = true;
                     JournalText.JournalContents = Language.GetOrRegister($"Mods.{nameof(WindfallAttempt1)}.JournalContents.Jungle").Value;
-                    ModContent.GetInstance<JournalUISystem>().ShowMyUI();
+                    ModContent.GetInstance<JournalUISystem>().ShowPageUI();
                 }
                 else
                 {
-                    isJournalOpen = false;
                     ModContent.GetInstance<JournalUISystem>().HideMyUI();
                 }
             }

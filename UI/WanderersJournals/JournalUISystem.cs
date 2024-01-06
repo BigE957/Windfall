@@ -5,6 +5,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Terraria;
+using Terraria.Audio;
+using Terraria.GameContent.UI.Elements;
+using Terraria.ID;
 using Terraria.ModLoader;
 using Terraria.UI;
 
@@ -12,16 +15,51 @@ namespace WindfallAttempt1.UI.WanderersJournals
 {
     public class JournalUISystem : ModSystem
     {
-        internal JournalUIState JournalUIState;
+        public static readonly SoundStyle UseSound = new("WindfallAttempt1/Sounds/Items/JournalPageTurn");
+        internal JournalPageUIState JournalPageUIState;
+        internal JournalFullUIState JournalFullUIState;
         private UserInterface JournalUI;
+        public static bool isJournalOpen = false;
+        public static List<bool> JournalsCollected = new(13);
+        public static string whichEvilJournal = "None";
 
-        public void ShowMyUI()
+        public void ShowPageUI()
         {
-            JournalUI?.SetState(JournalUIState);
+            SoundEngine.PlaySound(UseSound with
+            {
+                Pitch = -0.25f,
+                PitchVariance = 0.5f,
+                MaxInstances = 5,
+                SoundLimitBehavior = SoundLimitBehavior.ReplaceOldest
+            });
+            isJournalOpen = true;
+            JournalText.isFullJournal = false;
+            JournalUI?.SetState(JournalPageUIState);
+        }
+        public void ShowJournalUI()
+        {
+            SoundEngine.PlaySound(UseSound with
+            {
+                Pitch = -0.25f,
+                PitchVariance = 0.5f,
+                MaxInstances = 5,
+                SoundLimitBehavior = SoundLimitBehavior.ReplaceOldest
+            });
+            isJournalOpen = true;
+            JournalText.isFullJournal = true;
+            JournalUI?.SetState(JournalFullUIState);
         }
 
         public void HideMyUI()
         {
+            SoundEngine.PlaySound(UseSound with
+            {
+                Pitch = -0.25f,
+                PitchVariance = 0.5f,
+                MaxInstances = 5,
+                SoundLimitBehavior = SoundLimitBehavior.ReplaceOldest
+            });
+            isJournalOpen = false;
             JournalUI?.SetState(null);
         }
         public override void Load()
@@ -29,10 +67,17 @@ namespace WindfallAttempt1.UI.WanderersJournals
             // Create custom interface which can swap between different UIStates
             JournalUI = new UserInterface();
             // Creating custom UIState
-            JournalUIState = new JournalUIState();
+            JournalPageUIState = new JournalPageUIState();
+            JournalPageUIState.Activate();
+
+            JournalFullUIState = new JournalFullUIState();
+            for (int i = 0; i < 13; i++)
+            {
+                JournalsCollected.Add(false);
+            }
 
             // Activate calls Initialize() on the UIState if not initialized, then calls OnActivate and then calls Activate on every child element
-            JournalUIState.Activate();
+            JournalFullUIState.Activate();
         }
         public override void UpdateUI(GameTime gameTime)
         {

@@ -14,13 +14,12 @@ using System.Linq;
 
 namespace WindfallAttempt1.UI.WanderersJournals
 {
-    internal class JournalUIState : UIState
+    internal class JournalPageUIState : UIState
     {
         public int i = 0;
         public JournalButton JournalButton;
         public JournalUIPanel UIPanel;
         public JournalText JournalContents;
-        public JournalPage Page;
 
         public override void OnInitialize()
         {
@@ -38,15 +37,7 @@ namespace WindfallAttempt1.UI.WanderersJournals
             JournalPage page = new (pageTexture);
             SetRectangle(page, left: -55f, top: -25f, width: 400f, height: 518f);
             UIPanel.Append(page);
-
-            Asset<Texture2D> buttonDeleteTexture = ModContent.Request<Texture2D>("Terraria/Images/UI/ButtonDelete");
-            JournalButton closeButton = new(buttonDeleteTexture, Language.GetTextValue("LegacyInterface.52")); // Localized text for "Close"
-            SetRectangle(closeButton, left: 375f, top: 5f, width: 22f, height: 20f);
-            closeButton.OnLeftClick += new MouseEvent(CloseButtonClicked);
-            UIPanel.Append(closeButton);
-
-            // UIMoneyDisplay is a fairly complicated custom UIElement. UIMoneyDisplay handles drawing some text and coin textures.
-            // Organization is key to managing UI design. Making a contained UIElement like UIMoneyDisplay will make many things easier.
+           
             JournalContents = new JournalText();
             SetRectangle(JournalContents, 15f, 20f, 100f, 40f);
             UIPanel.Append(JournalContents);
@@ -58,14 +49,122 @@ namespace WindfallAttempt1.UI.WanderersJournals
             uiElement.Width.Set(width, 0f);
             uiElement.Height.Set(height, 0f);
         }
-        private void CloseButtonClicked(UIMouseEvent evt, UIElement listeningElement)
+    }
+    internal class JournalFullUIState : UIState
+    {
+        public int i = 0;
+        public JournalButton JournalButton;
+        public JournalUIPanel UIPanel;
+        public JournalText JournalContents;
+        public JournalPage Page;
+        public static int PageNumber = 0;
+        public enum JournalTypes
         {
-            SoundEngine.PlaySound(SoundID.MenuClose);
-            ModContent.GetInstance<JournalUISystem>().HideMyUI();
+            Forest,
+            Tundra,
+            Desert,
+            Ilmeris,
+            Evil,
+            Jungle,
+            Ocean,
+            Dungeon,
+            Sulphur,
+            Aerie1,
+            Aerie2,
+            Aerie3,
+            Aerie4,
+        }
+
+        public override void OnInitialize()
+        {
+            JournalUIPanel UIPanel = new();
+            UIPanel.SetPadding(0);
+            // We need to place this UIElement in relation to its Parent. Later we will be calling `base.Append(coinCounterPanel);`. 
+            // This means that this class, ExampleCoinsUI, will be our Parent. Since ExampleCoinsUI is a UIState, the Left and Top are relative to the top left of the screen.
+            // SetRectangle method help us to set the position and size of UIElement
+            SetRectangle(UIPanel, left: 200f, top: 100f, width: 400f, height: 518f);
+            UIPanel.BackgroundColor = new Color(73, 94, 171);
+            Append(UIPanel);
+
+            Asset<Texture2D> pageTexture = ModContent.Request<Texture2D>("WindfallAttempt1/UI/WanderersJournals/JournalPage");
+            JournalPage page = new(pageTexture);
+            SetRectangle(page, left: -55f, top: -25f, width: 400f, height: 518f);
+            UIPanel.Append(page);
+
+            Asset<Texture2D> buttonPlayTexture = ModContent.Request<Texture2D>("Terraria/Images/UI/ButtonPlay"); ;
+            JournalButton nextPageButton = new(buttonPlayTexture, "Next Page");
+            SetRectangle(nextPageButton, left: 375f, top: 500f, width: 22f, height: 20f);
+            nextPageButton.OnLeftClick += new MouseEvent(NextPage);
+            UIPanel.Append(nextPageButton);
+
+            JournalButton previousPageButton = new(buttonPlayTexture, "Previous Page");
+            SetRectangle(previousPageButton, left: 25f, top: 500f, width: 22f, height: 20f);
+            previousPageButton.OnLeftClick += new MouseEvent(PreviousPage);
+            UIPanel.Append(previousPageButton);
+
+            JournalContents = new JournalText();
+            SetRectangle(JournalContents, 15f, 20f, 100f, 40f);
+            UIPanel.Append(JournalContents);
+        }
+        private void SetRectangle(UIElement uiElement, float left, float top, float width, float height)
+        {
+            uiElement.Left.Set(left, 0f);
+            uiElement.Top.Set(top, 0f);
+            uiElement.Width.Set(width, 0f);
+            uiElement.Height.Set(height, 0f);
+        }
+        private void NextPage(UIMouseEvent evt, UIElement listeningElement)
+        {
+
+            if (PageNumber != 12)
+            {
+                PageNumber++;
+                LoadPage();
+            }
+        }
+        private void PreviousPage(UIMouseEvent evt, UIElement listeningElement)
+        {
+            if (PageNumber != 0)
+            {
+                PageNumber--;
+                LoadPage();
+            }
+        }
+        private void LoadPage()
+        {
+            if (JournalUISystem.JournalsCollected[PageNumber])
+            {
+                if ((JournalTypes)PageNumber == JournalTypes.Evil)
+                {
+                    if (JournalUISystem.whichEvilJournal == "Crimson")
+                    {
+                        JournalText.JournalContents = Language.GetOrRegister($"Mods.{nameof(WindfallAttempt1)}.JournalContents.Crimson").Value;
+                    }
+                    else if (JournalUISystem.whichEvilJournal == "Corruption")
+                    {
+                        JournalText.JournalContents = Language.GetOrRegister($"Mods.{nameof(WindfallAttempt1)}.JournalContents.Corruption").Value;
+                    }
+                    else
+                    {
+                        JournalText.JournalContents = "";
+                    }
+                }
+                else
+                {
+                    JournalText.JournalContents = Language.GetOrRegister($"Mods.{nameof(WindfallAttempt1)}.JournalContents.{(JournalTypes)PageNumber}").Value;
+                }
+            }
+            else
+            {
+                JournalText.JournalContents = "";
+
+            }
+            ModContent.GetInstance<JournalUISystem>().ShowJournalUI();
         }
     }
     public class JournalText : UIElement
     {
+        public static bool isFullJournal;
         public static string JournalContents;
         float xResolutionScale = Main.screenWidth / 2560f;
         float yResolutionScale = Main.screenHeight / 1440f;
@@ -77,7 +176,6 @@ namespace WindfallAttempt1.UI.WanderersJournals
             float xPageTop = innerDimensions.X - 6f;
             float yPageTop = innerDimensions.Y + 12f;
             
-            //clammy code
             Texture2D pageTexture = ModContent.Request<Texture2D>("WindfallAttempt1/UI/WanderersJournals/JournalPage").Value;
             int textWidth = (int)((int)(xScale * pageTexture.Width) - 6f);
             textWidth = (int)(textWidth * xResolutionScale);
@@ -96,9 +194,11 @@ namespace WindfallAttempt1.UI.WanderersJournals
                     Utils.DrawBorderStringFourWay(spriteBatch, FontAssets.ItemStack.Value, dialogLines[i], xPageTop, textDrawPositionY, Color.Black, Color.Tan, Vector2.Zero, 0.75f);
                 }
             }
-            //clammy code
-
-            //Utils.DrawBorderStringFourWay(spriteBatch, FontAssets.ItemStack.Value, JournalContents, shopx - 6f, shopy + 12f, Color.Black, Color.Tan, new Vector2(0.3f), 0.75f);
+            if(isFullJournal)
+            {
+                string pgNumStr = Convert.ToString(JournalFullUIState.PageNumber + 1);
+                Utils.DrawBorderStringFourWay(spriteBatch, FontAssets.ItemStack.Value, pgNumStr, 400f, 600f, Color.Black, Color.Tan, Vector2.Zero, 1.5f);
+            }
         }
     }
 
