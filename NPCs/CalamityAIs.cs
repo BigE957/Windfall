@@ -208,7 +208,7 @@ namespace WindfallAttempt1.NPCs
                             float calCloneBroProjSpeed = NPC.AnyNPCs(ModContent.NPCType<Catastrophe>()) ? 4f : 6f;
                             calCloneBroProjSpeed += 1;
                             int type = ModContent.ProjectileType<BrimstoneFire>();
-                            int damage = npc.GetProjectileDamage(type);
+                            int damage = Main.masterMode ? 234 : (CalamityWorld.death ? 176 : (CalamityWorld.revenge ? 160 : (Main.expertMode ? 140 : 80)));
                             calCloneBroProjLocation = new Vector2(npc.position.X + npc.width * 0.5f, npc.position.Y + npc.height * 0.5f);
                             calCloneBroProjTargetX = player.position.X + (player.width / 2) - calCloneBroProjLocation.X;
                             calCloneBroProjTargetY = player.position.Y + (player.height / 2) - calCloneBroProjLocation.Y;
@@ -255,7 +255,7 @@ namespace WindfallAttempt1.NPCs
                         SoundEngine.PlaySound(SupremeCalamitas.BrimstoneShotSound, npc.Center);
 
                         int type = ModContent.ProjectileType<BrimstoneBarrage>();
-                        int damage = npc.GetProjectileDamage(ModContent.ProjectileType<BrimstoneFire>());
+                        int damage = Main.masterMode ? 192 : (CalamityWorld.death ? 140 : (CalamityWorld.revenge ? 128 : (Main.expertMode ? 112 : 70)));
                         int totalProjectiles = death ? 10 : revenge ? 8 : expertMode ? 6 : 4;
                         float radians = MathHelper.TwoPi / totalProjectiles;
                         float velocity = 5f;
