@@ -138,11 +138,11 @@ namespace WindfallAttempt1.UI.WanderersJournals
                 {
                     if (JournalUISystem.whichEvilJournal == "Crimson")
                     {
-                        JournalText.JournalContents = Language.GetOrRegister($"Mods.{nameof(WindfallAttempt1)}.JournalContents.Crimson").Value;
+                        JournalText.JournalContents = Language.GetOrRegister($"Mods.{nameof(Windfall)}.JournalContents.Crimson").Value;
                     }
                     else if (JournalUISystem.whichEvilJournal == "Corruption")
                     {
-                        JournalText.JournalContents = Language.GetOrRegister($"Mods.{nameof(WindfallAttempt1)}.JournalContents.Corruption").Value;
+                        JournalText.JournalContents = Language.GetOrRegister($"Mods.{nameof(Windfall)}.JournalContents.Corruption").Value;
                     }
                     else
                     {
@@ -151,7 +151,7 @@ namespace WindfallAttempt1.UI.WanderersJournals
                 }
                 else
                 {
-                    JournalText.JournalContents = Language.GetOrRegister($"Mods.{nameof(WindfallAttempt1)}.JournalContents.{(JournalTypes)PageNumber}").Value;
+                    JournalText.JournalContents = Language.GetOrRegister($"Mods.{nameof(Windfall)}.JournalContents.{(JournalTypes)PageNumber}").Value;
                 }
             }
             else

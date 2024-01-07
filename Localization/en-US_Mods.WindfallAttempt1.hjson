@@ -108,7 +108,7 @@ Items: {
 
 	JournalCompilation: {
 		DisplayName: The Wanderer's Journal
-		Tooltip: "A collection of journal entries about various locations and environments."
+		Tooltip: A collection of journal entries about various locations and environments.
 	}
 }
 
@@ -237,5 +237,10 @@ LoreItems: {
 		'''
 }
 
-NPCs.IlmeranPaladin.DisplayName: Ilmeran Paladin
+NPCs: {
+	IlmeranPaladin.DisplayName: Ilmeran Paladin
+	WorldCataclysm.DisplayName: Cataclysmic Construct
+	WorldCatastrophe.DisplayName: Catastrophic Construct
+}
+
 Projectiles.CalCloneSpyProj.DisplayName: ???

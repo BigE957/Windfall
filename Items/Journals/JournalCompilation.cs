@@ -35,11 +35,11 @@ namespace WindfallAttempt1.Items.Journals
                             {
                                 if (JournalUISystem.whichEvilJournal == "Crimson")
                                 {
-                                    JournalText.JournalContents = Language.GetOrRegister($"Mods.{nameof(WindfallAttempt1)}.JournalContents.Crimson").Value;
+                                    JournalText.JournalContents = Language.GetOrRegister($"Mods.{nameof(Windfall)}.JournalContents.Crimson").Value;
                                 }
                                 else if (JournalUISystem.whichEvilJournal == "Corruption")
                                 {
-                                    JournalText.JournalContents = Language.GetOrRegister($"Mods.{nameof(WindfallAttempt1)}.JournalContents.Corruption").Value;
+                                    JournalText.JournalContents = Language.GetOrRegister($"Mods.{nameof(Windfall)}.JournalContents.Corruption").Value;
                                 }
                                 else
                                 {
@@ -48,7 +48,7 @@ namespace WindfallAttempt1.Items.Journals
                             }
                             else
                             {
-                                JournalText.JournalContents = Language.GetOrRegister($"Mods.{nameof(WindfallAttempt1)}.JournalContents.{i}").Value;
+                                JournalText.JournalContents = Language.GetOrRegister($"Mods.{nameof(Windfall)}.JournalContents.{i}").Value;
                             }
                             PageNumber = (int)i;
                             break;

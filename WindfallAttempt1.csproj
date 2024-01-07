@@ -24,6 +24,10 @@
     <None Remove="NPCs\Gores\IlmeranPaladin_Gore_Head.png" />
     <None Remove="NPCs\Gores\IlmeranPaladin_Gore_Leg.png" />
     <None Remove="NPCs\WanderingNPCs\IlmeranPaladin.png" />
+    <None Remove="NPCs\WorldEvents\WorldCataclysm.png" />
+    <None Remove="NPCs\WorldEvents\WorldCataclysm_Head_Boss.png" />
+    <None Remove="NPCs\WorldEvents\WorldCatastrophe.png" />
+    <None Remove="NPCs\WorldEvents\WorldCatastrophe_Head_Boss.png" />
     <None Remove="UI\WanderersJournals\JournalPage.png" />
     <None Remove="WorldEvents\CalCloneSpy\CalCloneSpyProj.png" />
   </ItemGroup>
@@ -34,5 +38,8 @@
     <Reference Include="CalamityMod">
       <HintPath>..\ModAssemblies\CalamityMod.dll</HintPath>
     </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="World\" />
   </ItemGroup>
 </Project>

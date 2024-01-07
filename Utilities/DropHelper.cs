@@ -30,7 +30,7 @@ namespace WindfallAttempt1.Utilities
             }
             if (npc.type == calamity.Find<ModNPC>("LeviathanStart").Type)
             {
-                npcLoot.AddConditionalPerPlayer(() => !DownedNPCSystem.downedSirenLure, ModContent.ItemType<JournalDesert>(), desc: CalamityMod.DropHelper.FirstKillText);
+                npcLoot.AddConditionalPerPlayer(() => !DownedNPCSystem.downedSirenLure, ModContent.ItemType<JournalOcean>(), desc: CalamityMod.DropHelper.FirstKillText);
 
             }
             if (npc.type == calamity.Find<ModNPC>("DesertScourgeHead").Type)

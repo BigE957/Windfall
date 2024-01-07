@@ -31,7 +31,7 @@ namespace WindfallAttempt1.Items.Journals
             {
                 if (!JournalUISystem.isJournalOpen)
                 {
-                    JournalText.JournalContents = Language.GetOrRegister($"Mods.{nameof(WindfallAttempt1)}.JournalContents.Tundra").Value;
+                    JournalText.JournalContents = Language.GetOrRegister($"Mods.{nameof(Windfall)}.JournalContents.Tundra").Value;
                     ModContent.GetInstance<JournalUISystem>().ShowPageUI();
                 }
                 else
