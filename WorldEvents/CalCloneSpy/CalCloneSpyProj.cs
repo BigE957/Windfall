@@ -197,7 +197,12 @@ namespace WindfallAttempt1.WorldEvents.CalCloneSpy
                         SoundEngine.PlaySound(CalCloneTeleport, Projectile.Center);
                         Projectile.Kill();
                     }
-
+                    else if (i == 31)
+                    {
+                        Color messageColor = Color.Orange;
+                        Rectangle location = new ((int)Projectile.Center.X, (int)Projectile.Center.Y, Projectile.width, Projectile.width);
+                        CombatText.NewText(location, messageColor, "Have fun you two~!", true);
+                    }
                     break;
             }
         }

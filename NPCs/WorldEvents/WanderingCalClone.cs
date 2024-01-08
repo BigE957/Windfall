@@ -232,64 +232,123 @@ namespace WindfallAttempt1.NPCs.WorldEvents
                     Color messageColor = Color.Orange;
                     CalamityUtils.DisplayLocalizedText(key, messageColor);
                 }
-                else if (aiCounter == 60)
+                if (!WorldSaveSystem.CloneRevealed)
                 {
-                    string key = "TOO BAD!";
-                    Color messageColor = Color.Orange;
-                    CalamityUtils.DisplayLocalizedText(key, messageColor);
-                }
-                else if (aiCounter == 90)
-                {
-                    string key = "The only thing you’re getting from me is PAIN… and… DEATH!";
-                    Color messageColor = Color.Orange;
-                    CalamityUtils.DisplayLocalizedText(key, messageColor);
-                }
-                else if (aiCounter == 150)
-                {
-                    string key = "Cause I’m taking over this town! All your friends are gonna soon be MY FRIENDS!";
-                    Color messageColor = Color.Orange;
-                    CalamityUtils.DisplayLocalizedText(key, messageColor);
-                }
-                else if (aiCounter == 210)
-                {
-                    i = 20;
-                    SoundEngine.PlaySound(DashSound, NPC.Center);
-                    string key = "MWAHAHAHAHA!!!";
-                    Color messageColor = Color.Orange;
-                    CalamityUtils.DisplayLocalizedText(key, messageColor);
-                }
-                else if (aiCounter == 240)
-                {
-                    for (int i = 0; i < 40; i++)
+                    if (aiCounter == 60)
                     {
-                        int brimDust = Dust.NewDust(new Vector2((int)NPC.Center.X - 20, (int)NPC.position.Y- 10), 100, 100, (int)CalamityDusts.Brimstone, 0f, 0f, 100, default, 2f);
-                        Main.dust[brimDust].velocity *= 3f;
-                        if (Main.rand.NextBool())
+                        string key = "TOO BAD!";
+                        Color messageColor = Color.Orange;
+                        CalamityUtils.DisplayLocalizedText(key, messageColor);
+                    }
+                    else if (aiCounter == 90)
+                    {
+                        string key = "The only thing you’re getting from me is PAIN… and… DEATH!";
+                        Color messageColor = Color.Orange;
+                        CalamityUtils.DisplayLocalizedText(key, messageColor);
+                    }
+                    else if (aiCounter == 150)
+                    {
+                        string key = "Cause I’m taking over this town! All your friends are gonna soon be MY FRIENDS!";
+                        Color messageColor = Color.Orange;
+                        CalamityUtils.DisplayLocalizedText(key, messageColor);
+                    }
+                    else if (aiCounter == 210)
+                    {
+                        i = 20;
+                        SoundEngine.PlaySound(DashSound, NPC.Center);
+                        string key = "MWAHAHAHAHA!!!";
+                        Color messageColor = Color.Orange;
+                        CalamityUtils.DisplayLocalizedText(key, messageColor);
+                    }
+                    else if (aiCounter == 240)
+                    {
+                        for (int i = 0; i < 40; i++)
                         {
-                            Main.dust[brimDust].scale = 0.5f;
-                            Main.dust[brimDust].fadeIn = 1f + (float)Main.rand.Next(10) * 0.1f;
+                            int brimDust = Dust.NewDust(new Vector2((int)NPC.Center.X - 20, (int)NPC.position.Y - 10), 100, 100, (int)CalamityDusts.Brimstone, 0f, 0f, 100, default, 2f);
+                            Main.dust[brimDust].velocity *= 3f;
+                            if (Main.rand.NextBool())
+                            {
+                                Main.dust[brimDust].scale = 0.5f;
+                                Main.dust[brimDust].fadeIn = 1f + (float)Main.rand.Next(10) * 0.1f;
+                            }
+                        }
+                        for (int j = 0; j < 70; j++)
+                        {
+                            int brimDust2 = Dust.NewDust(new Vector2((int)NPC.Center.X - 20, (int)NPC.position.Y - 10), 100, 100, (int)CalamityDusts.Brimstone, 0f, 0f, 100, default, 3f);
+                            Main.dust[brimDust2].noGravity = true;
+                            Main.dust[brimDust2].velocity *= 5f;
+                            brimDust2 = Dust.NewDust(new Vector2((int)NPC.Center.X - 20, (int)NPC.position.Y - 10), 100, 100, (int)CalamityDusts.Brimstone, 0f, 0f, 100, default, 2f);
+                            Main.dust[brimDust2].velocity *= 2f;
+                        }
+                        SoundEngine.PlaySound(Transformation, NPC.Center + new Vector2(0, +10));
+                        NPC.NewNPC(NPC.GetSource_FromAI(), (int)NPC.Center.X - 20, (int)NPC.Center.Y + 50, ModContent.NPCType<CalamitasClone>());
+                        NPC.active = false;
+                    }
+                    if (aiCounter >= 210)
+                    {
+                        if (i > 0)
+                        {
+                            NPC.position.Y -= i-- * 1.5f;
+                            CalCloneHoverY = NPC.position.Y;
+                        }
+                        else
+                        {
+                            NPC.position.Y = CalCloneHoverY;
                         }
                     }
-                    for (int j = 0; j < 70; j++)
+                }
+                else
+                {
+                    if (aiCounter == 60)
                     {
-                        int brimDust2 = Dust.NewDust(new Vector2((int)NPC.Center.X - 20, (int)NPC.position.Y -10), 100, 100, (int)CalamityDusts.Brimstone, 0f, 0f, 100, default, 3f);
-                        Main.dust[brimDust2].noGravity = true;
-                        Main.dust[brimDust2].velocity *= 5f;
-                        brimDust2 = Dust.NewDust(new Vector2((int)NPC.Center.X - 20, (int)NPC.position.Y -10), 100, 100, (int)CalamityDusts.Brimstone, 0f, 0f, 100, default, 2f);
-                        Main.dust[brimDust2].velocity *= 2f;
+                        string key = "Fine, I’ll just beat you again!";
+                        Color messageColor = Color.Orange;
+                        CalamityUtils.DisplayLocalizedText(key, messageColor);
                     }
-                    SoundEngine.PlaySound(Transformation, NPC.Center + new Vector2(0, + 10));
-                    NPC.NewNPC(NPC.GetSource_FromAI(), (int)NPC.Center.X - 20, (int)NPC.Center.Y + 50, ModContent.NPCType<CalamitasClone>());
-                    NPC.active = false;
-                }
-                if (aiCounter >= 210 && i > 0)
-                {
-                    NPC.position.Y -= i-- * 1.5f;
-                    CalCloneHoverY = NPC.position.Y;
-                }
-                else if (aiCounter >= 210)
-                {
-                    NPC.position.Y = CalCloneHoverY;
+                    else if (aiCounter == 90)
+                    {
+                        i = 20;
+                        SoundEngine.PlaySound(DashSound, NPC.Center);
+                        string key = "MWAHAHAHAHA!!!";
+                        Color messageColor = Color.Orange;
+                        CalamityUtils.DisplayLocalizedText(key, messageColor);
+                    }
+                    else if (aiCounter == 120)
+                    {
+                        for (int i = 0; i < 40; i++)
+                        {
+                            int brimDust = Dust.NewDust(new Vector2((int)NPC.Center.X - 20, (int)NPC.position.Y - 10), 100, 100, (int)CalamityDusts.Brimstone, 0f, 0f, 100, default, 2f);
+                            Main.dust[brimDust].velocity *= 3f;
+                            if (Main.rand.NextBool())
+                            {
+                                Main.dust[brimDust].scale = 0.5f;
+                                Main.dust[brimDust].fadeIn = 1f + (float)Main.rand.Next(10) * 0.1f;
+                            }
+                        }
+                        for (int j = 0; j < 70; j++)
+                        {
+                            int brimDust2 = Dust.NewDust(new Vector2((int)NPC.Center.X - 20, (int)NPC.position.Y - 10), 100, 100, (int)CalamityDusts.Brimstone, 0f, 0f, 100, default, 3f);
+                            Main.dust[brimDust2].noGravity = true;
+                            Main.dust[brimDust2].velocity *= 5f;
+                            brimDust2 = Dust.NewDust(new Vector2((int)NPC.Center.X - 20, (int)NPC.position.Y - 10), 100, 100, (int)CalamityDusts.Brimstone, 0f, 0f, 100, default, 2f);
+                            Main.dust[brimDust2].velocity *= 2f;
+                        }
+                        SoundEngine.PlaySound(Transformation, NPC.Center + new Vector2(0, +10));
+                        NPC.NewNPC(NPC.GetSource_FromAI(), (int)NPC.Center.X - 20, (int)NPC.Center.Y + 50, ModContent.NPCType<CalamitasClone>());
+                        NPC.active = false;
+                    }
+                    if (aiCounter >= 90)
+                    {
+                        if (i > 0)
+                        {
+                            NPC.position.Y -= i-- * 1.5f;
+                            CalCloneHoverY = NPC.position.Y;
+                        }
+                        else
+                        {
+                            NPC.position.Y = CalCloneHoverY;
+                        }
+                    }
                 }
             }
         }
