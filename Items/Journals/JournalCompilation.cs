@@ -65,5 +65,12 @@ namespace WindfallAttempt1.Items.Journals
             }
             return true;
         }
+        public override void AddRecipes()
+        {
+            Recipe recipe = CreateRecipe();
+            recipe.AddIngredient(ItemID.Leather, 2);
+            recipe.AddTile(TileID.Bookcases);
+            recipe.Register();
+        }
     }
 }
