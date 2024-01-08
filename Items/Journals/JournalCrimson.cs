@@ -4,6 +4,7 @@ using Terraria.ID;
 using Terraria.Localization;
 using Terraria.ModLoader;
 using WindfallAttempt1.UI.WanderersJournals;
+using WindfallAttempt1.Utilities;
 
 namespace WindfallAttempt1.Items.Journals
 {
@@ -21,7 +22,7 @@ namespace WindfallAttempt1.Items.Journals
         {
             if (Main.myPlayer == player.whoAmI)
             {
-                JournalUISystem.JournalsCollected[4] = true;
+                WorldSaveSystem.JournalsCollected[4] = true;
                 JournalUISystem.whichEvilJournal = "Crimson";
             }
             return true;
@@ -32,7 +33,7 @@ namespace WindfallAttempt1.Items.Journals
             {
                 if (!JournalUISystem.isJournalOpen)
                 {
-                    JournalText.JournalContents = Language.GetOrRegister($"Mods.{nameof(Windfall)}.JournalContents.Crimson").Value;
+                    JournalText.JournalContents = Language.GetOrRegister($"Mods.{nameof(WindfallAttempt1)}.JournalContents.Crimson").Value;
                     ModContent.GetInstance<JournalUISystem>().ShowPageUI();
                 }
                 else

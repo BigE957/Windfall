@@ -5,6 +5,8 @@ using Terraria.Localization;
 using Terraria.ModLoader;
 using WindfallAttempt1.UI.WanderersJournals;
 using static WindfallAttempt1.UI.WanderersJournals.JournalFullUIState;
+using WindfallAttempt1.Utilities;
+
 
 namespace WindfallAttempt1.Items.Journals
 {
@@ -29,17 +31,17 @@ namespace WindfallAttempt1.Items.Journals
                     //JournalText.JournalContents = "Mfw I'm the compilation item and therefore do not need to tell you my contents because I'm the coolest :sunglasses:";
                     for (JournalTypes i = 0; (int)i < 12; i++)
                     {
-                        if (JournalUISystem.JournalsCollected[(int)i])
+                        if (WorldSaveSystem.JournalsCollected[(int)i])
                         {
                             if (i == JournalTypes.Evil)
                             {
                                 if (JournalUISystem.whichEvilJournal == "Crimson")
                                 {
-                                    JournalText.JournalContents = Language.GetOrRegister($"Mods.{nameof(Windfall)}.JournalContents.Crimson").Value;
+                                    JournalText.JournalContents = Language.GetOrRegister($"Mods.{nameof(WindfallAttempt1)}.JournalContents.Crimson").Value;
                                 }
                                 else if (JournalUISystem.whichEvilJournal == "Corruption")
                                 {
-                                    JournalText.JournalContents = Language.GetOrRegister($"Mods.{nameof(Windfall)}.JournalContents.Corruption").Value;
+                                    JournalText.JournalContents = Language.GetOrRegister($"Mods.{nameof(WindfallAttempt1)}.JournalContents.Corruption").Value;
                                 }
                                 else
                                 {
@@ -48,7 +50,7 @@ namespace WindfallAttempt1.Items.Journals
                             }
                             else
                             {
-                                JournalText.JournalContents = Language.GetOrRegister($"Mods.{nameof(Windfall)}.JournalContents.{i}").Value;
+                                JournalText.JournalContents = Language.GetOrRegister($"Mods.{nameof(WindfallAttempt1)}.JournalContents.{i}").Value;
                             }
                             PageNumber = (int)i;
                             break;

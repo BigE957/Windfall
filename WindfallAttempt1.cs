@@ -2,7 +2,7 @@ using Terraria.ModLoader;
 
 namespace WindfallAttempt1
 {
-	public class Windfall : Mod
+	public class WindfallAttempt1 : Mod
 	{
 
 

@@ -11,6 +11,7 @@ using Terraria.Localization;
 using Terraria.ModLoader;
 using System.Collections.Generic;
 using System.Linq;
+using WindfallAttempt1.Utilities;
 
 namespace WindfallAttempt1.UI.WanderersJournals
 {
@@ -132,17 +133,17 @@ namespace WindfallAttempt1.UI.WanderersJournals
         }
         private void LoadPage()
         {
-            if (JournalUISystem.JournalsCollected[PageNumber])
+            if (WorldSaveSystem.JournalsCollected[PageNumber])
             {
                 if ((JournalTypes)PageNumber == JournalTypes.Evil)
                 {
                     if (JournalUISystem.whichEvilJournal == "Crimson")
                     {
-                        JournalText.JournalContents = Language.GetOrRegister($"Mods.{nameof(Windfall)}.JournalContents.Crimson").Value;
+                        JournalText.JournalContents = Language.GetOrRegister($"Mods.{nameof(WindfallAttempt1)}.JournalContents.Crimson").Value;
                     }
                     else if (JournalUISystem.whichEvilJournal == "Corruption")
                     {
-                        JournalText.JournalContents = Language.GetOrRegister($"Mods.{nameof(Windfall)}.JournalContents.Corruption").Value;
+                        JournalText.JournalContents = Language.GetOrRegister($"Mods.{nameof(WindfallAttempt1)}.JournalContents.Corruption").Value;
                     }
                     else
                     {
@@ -151,7 +152,7 @@ namespace WindfallAttempt1.UI.WanderersJournals
                 }
                 else
                 {
-                    JournalText.JournalContents = Language.GetOrRegister($"Mods.{nameof(Windfall)}.JournalContents.{(JournalTypes)PageNumber}").Value;
+                    JournalText.JournalContents = Language.GetOrRegister($"Mods.{nameof(WindfallAttempt1)}.JournalContents.{(JournalTypes)PageNumber}").Value;
                 }
             }
             else

@@ -14,7 +14,7 @@ namespace WindfallAttempt1.WorldEvents.CalCloneSpy
             Spawn,
         }
         //used to stop Calamitas from spawning regardless of other conditions. serves as a cooldown so she only spawns once a night
-        internal int CalDown = 0;
+        internal int CalDown = 1;
         public static bool cragsCal;
         internal double timeTillSpawn;
         internal int cragsTimer;

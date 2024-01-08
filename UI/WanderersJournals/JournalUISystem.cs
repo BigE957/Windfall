@@ -1,5 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -9,7 +10,9 @@ using Terraria.Audio;
 using Terraria.GameContent.UI.Elements;
 using Terraria.ID;
 using Terraria.ModLoader;
+using Terraria.ModLoader.IO;
 using Terraria.UI;
+using WindfallAttempt1.Utilities;
 
 namespace WindfallAttempt1.UI.WanderersJournals
 {
@@ -20,8 +23,8 @@ namespace WindfallAttempt1.UI.WanderersJournals
         internal JournalFullUIState JournalFullUIState;
         private UserInterface JournalUI;
         public static bool isJournalOpen = false;
-        public static List<bool> JournalsCollected = new(13);
         public static string whichEvilJournal = "None";
+
 
         public void ShowPageUI()
         {
@@ -73,7 +76,7 @@ namespace WindfallAttempt1.UI.WanderersJournals
             JournalFullUIState = new JournalFullUIState();
             for (int i = 0; i < 13; i++)
             {
-                JournalsCollected.Add(false);
+                WorldSaveSystem.JournalsCollected.Add(false);
             }
 
             // Activate calls Initialize() on the UIState if not initialized, then calls OnActivate and then calls Activate on every child element

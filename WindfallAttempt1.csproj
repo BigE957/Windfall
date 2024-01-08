@@ -24,6 +24,7 @@
     <None Remove="NPCs\Gores\IlmeranPaladin_Gore_Head.png" />
     <None Remove="NPCs\Gores\IlmeranPaladin_Gore_Leg.png" />
     <None Remove="NPCs\WanderingNPCs\IlmeranPaladin.png" />
+    <None Remove="NPCs\WorldEvents\WanderingCalClone.png" />
     <None Remove="NPCs\WorldEvents\WorldCataclysm.png" />
     <None Remove="NPCs\WorldEvents\WorldCataclysm_Head_Boss.png" />
     <None Remove="NPCs\WorldEvents\WorldCatastrophe.png" />

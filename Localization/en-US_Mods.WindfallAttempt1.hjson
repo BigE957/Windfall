@@ -8,6 +8,15 @@ Dialogue: {
 		SandstormDialogue: The wind is howling most fiercely... Be warned, the creatures here have been stirred into a frenzy!
 		NoSandstormDialogue: The winds are calm... These sands can still be beautiful despite the regret they carry.
 	}
+
+	CalPotionSeller: {
+		PotionSellerDialogue1: Could I interest you in an elixer?
+		PotionSellerDialogue2: I have many powerful potions to choose from, would you like one?
+		PotionSellerdDialogue3: Care to try one of my brews?
+		StandardDialogue1: Wanna get beat again?
+		StandardDialogue2: Haha, back for more are we?
+		StandardDialogue3: Care to try one of my brews?
+	}
 }
 
 Items: {
@@ -241,6 +250,7 @@ NPCs: {
 	IlmeranPaladin.DisplayName: Ilmeran Paladin
 	WorldCataclysm.DisplayName: Cataclysmic Construct
 	WorldCatastrophe.DisplayName: Catastrophic Construct
+	WanderingCalClone.DisplayName: Wandering Cal Clone
 }
 
 Projectiles.CalCloneSpyProj.DisplayName: ???

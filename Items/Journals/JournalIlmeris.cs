@@ -4,6 +4,8 @@ using Terraria.ID;
 using Terraria.Localization;
 using Terraria.ModLoader;
 using WindfallAttempt1.UI.WanderersJournals;
+using WindfallAttempt1.Utilities;
+
 
 namespace WindfallAttempt1.Items.Journals
 {
@@ -21,7 +23,7 @@ namespace WindfallAttempt1.Items.Journals
         {
             if (Main.myPlayer == player.whoAmI)
             {
-                JournalUISystem.JournalsCollected[3] = true;
+                WorldSaveSystem.JournalsCollected[3] = true;
             }
             return true;
         }
@@ -31,7 +33,7 @@ namespace WindfallAttempt1.Items.Journals
             {
                 if (!JournalUISystem.isJournalOpen)
                 {
-                    JournalText.JournalContents = Language.GetOrRegister($"Mods.{nameof(Windfall)}.JournalContents.Ilmeris").Value;
+                    JournalText.JournalContents = Language.GetOrRegister($"Mods.{nameof(WindfallAttempt1)}.JournalContents.Ilmeris").Value;
                     ModContent.GetInstance<JournalUISystem>().ShowPageUI();
                 }
                 else

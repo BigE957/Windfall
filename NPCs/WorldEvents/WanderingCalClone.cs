@@ -14,10 +14,22 @@ using Terraria.Utilities;
 using Terraria;
 using Microsoft.Xna.Framework;
 using Terraria.GameContent.Events;
+using Terraria.DataStructures;
+using CalamityMod;
+using CalamityMod.NPCs.CeaselessVoid;
+using CalamityMod.NPCs.CalClone;
+using CalamityMod.NPCs.SupremeCalamitas;
+using Terraria.Audio;
+using CalamityMod.NPCs;
+using Humanizer;
+using CalamityMod.NPCs.TownNPCs;
+using CalamityMod.Dusts;
+using Terraria.ModLoader.IO;
+using WindfallAttempt1.Utilities;
 
-namespace WindfallAttempt1.NPCs.WanderingNPCs
+namespace WindfallAttempt1.NPCs.WorldEvents
 {
-    public class IlmeranPaladin : ModNPC
+    public class WanderingCalClone : ModNPC
     {
         /// <summary>
         /// The main focus of this NPC is to show how to make something similar to the vanilla bone merchant;
@@ -25,16 +37,16 @@ namespace WindfallAttempt1.NPCs.WanderingNPCs
         /// and will spawn like an enemy NPC. If you want a traditional town NPC instead, see <see cref="ExamplePerson"/>.
         /// </summary>
         private static Profiles.StackedNPCProfile NPCProfile;
-
         public override void SetStaticDefaults()
         {
             Main.npcFrameCount[Type] = 25; // The amount of frames the NPC has
 
-            NPCID.Sets.ExtraFramesCount[Type] = 9; // Generally for Town NPCs, but this is how the NPC does extra things such as sitting in a chair and talking to other NPCs.
-            NPCID.Sets.AttackFrameCount[Type] = 4;
+            Main.npcFrameCount[NPC.type] = 27;
+            NPCID.Sets.ExtraFramesCount[NPC.type] = 9;
+            NPCID.Sets.AttackFrameCount[NPC.type] = 4;
             NPCID.Sets.DangerDetectRange[Type] = 700; // The amount of pixels away from the center of the npc that it tries to attack enemies.
             NPCID.Sets.PrettySafe[Type] = 300;
-            NPCID.Sets.AttackType[Type] = 0; // Throws a weapon
+            NPCID.Sets.AttackType[Type] = 1;
             NPCID.Sets.AttackTime[Type] = 60; // The amount of time it takes for the NPC's attack animation to be over once it starts.
             NPCID.Sets.AttackAverageChance[Type] = 30;
             NPCID.Sets.HatOffsetY[Type] = 4; // For when a party is active, the party hat spawns at a Y offset.
@@ -58,21 +70,7 @@ namespace WindfallAttempt1.NPCs.WanderingNPCs
 
             //The vanilla Bone Merchant cannot interact with doors (open or close them, specifically), but if you want your NPC to be able to interact with them despite this,
             //uncomment this line below.
-            //NPCID.Sets.AllowDoorInteraction[Type] = true;
-
-            // Influences how the NPC looks in the Bestiary
-            NPCID.Sets.NPCBestiaryDrawModifiers drawModifiers = new NPCID.Sets.NPCBestiaryDrawModifiers()
-            {
-                Velocity = 1f, // Draws the NPC in the bestiary as if its walking +1 tiles in the x direction
-                Direction = 1 // -1 is left and 1 is right. NPCs are drawn facing the left by default but ExamplePerson will be drawn facing the right
-            };
-
-            NPCID.Sets.NPCBestiaryDrawOffset.Add(Type, drawModifiers);
-
-            NPCProfile = new Profiles.StackedNPCProfile(
-                new Profiles.DefaultNPCProfile(Texture, -1)
-                //new Profiles.DefaultNPCProfile(Texture + "_Shimmer", -1)
-            );
+            NPCID.Sets.AllowDoorInteraction[Type] = true;
         }
 
         public override void SetDefaults()
@@ -85,7 +83,7 @@ namespace WindfallAttempt1.NPCs.WanderingNPCs
             NPC.defense = 15;
             NPC.lifeMax = 250;
             NPC.HitSound = SoundID.NPCHit1;
-            NPC.DeathSound = SoundID.NPCDeath1;
+            NPC.DeathSound = SoundID.NPCDeath6;
             NPC.knockBackResist = 0.5f;
 
             AnimationType = NPCID.Guide;
@@ -95,19 +93,6 @@ namespace WindfallAttempt1.NPCs.WanderingNPCs
         public override bool CanChat()
         {
             return true;
-        }
-
-        public override void SetBestiary(BestiaryDatabase database, BestiaryEntry bestiaryEntry)
-        {
-            // We can use AddRange instead of calling Add multiple times in order to add multiple items at once
-            bestiaryEntry.Info.AddRange(new IBestiaryInfoElement[] {
-			// Sets the preferred biomes of this town NPC listed in the bestiary.
-			// With Town NPCs, you usually set this to what biome it likes the most in regards to NPC happiness.
-			BestiaryDatabaseNPCsPopulator.CommonTags.SpawnConditions.Biomes.Desert,
-
-			// Sets your NPC's flavor text in the bestiary.
-			new FlavorTextBestiaryInfoElement("One of few to have survived the Incineration of Ilmeris, this paladin wanders the remnants of his home; keeping an eternal vigil over his sacred home."),
-        });
         }
 
         public override void HitEffect(NPC.HitInfo hit)
@@ -145,40 +130,62 @@ namespace WindfallAttempt1.NPCs.WanderingNPCs
         public override List<string> SetNPCNameList()
         {
             return new List<string> {
-            "Haakor",
-            "Riley",
-            "John",
+            "Wandering Potionseller",
         };
         }
-
         public override float SpawnChance(NPCSpawnInfo spawnInfo)
         {
             //If any player is underground and has an example item in their inventory, the example bone merchant will have a slight chance to spawn.
-            if (spawnInfo.Player.ZoneDesert)
+            if (spawnInfo.Player.townNPCs > 2f && !DownedBossSystem.downedCalamitasClone && NPC.downedMechBoss1 && NPC.downedMechBoss2 && NPC.downedMechBoss3 && !Main.dayTime && !NPC.AnyNPCs(ModContent.NPCType<WanderingCalClone>()))
             {
-                return 0.34f;
+                if (WorldSaveSystem.CloneRevealed)
+                {
+                    return 0.35f;
+                }
+                else
+                {
+                    return 0.1f;
+                }
             }
 
             //Else, the example bone merchant will not spawn if the above conditions are not met.
             return 0f;
         }
-
+        public override void OnSpawn(IEntitySource source)
+        {
+            if (WorldSaveSystem.CloneRevealed)
+            {
+                base.OnSpawn(source);
+                string key = "Calamitas is back...";
+                Color messageColor = new Color(50, 125, 255);
+                CalamityUtils.DisplayLocalizedText(key, messageColor);
+            }
+            else
+            {
+                base.OnSpawn(source);
+                string key = "A Potionseller has arrived!";
+                Color messageColor = new Color(50, 125, 255);
+                CalamityUtils.DisplayLocalizedText(key, messageColor);
+            }
+        }
         public override string GetChat()
         {
             WeightedRandom<string> chat = new WeightedRandom<string>();
 
             // These are things that the NPC has a chance of telling you when you talk to it.
-            if (Sandstorm.Happening)
+            if (WorldSaveSystem.CloneRevealed)
             {
-                chat.Add(Language.GetOrRegister($"Mods.{nameof(WindfallAttempt1)}.Dialogue.IlmeranPaladin.SandstormDialogue").Value);
+                chat.Add(Language.GetOrRegister($"Mods.{nameof(WindfallAttempt1)}.Dialogue.CalPotionSeller.StandardDialogue1").Value);
+                chat.Add(Language.GetOrRegister($"Mods.{nameof(WindfallAttempt1)}.Dialogue.CalPotionSeller.StandardDialogue2").Value);
+                chat.Add(Language.GetOrRegister($"Mods.{nameof(WindfallAttempt1)}.Dialogue.CalPotionSeller.StandardDialogue3").Value);
             }
-            else 
+            else
             {
-                chat.Add(Language.GetOrRegister($"Mods.{nameof(WindfallAttempt1)}.Dialogue.IlmeranPaladin.NoSandstormDialogue").Value);
+                chat.Add(Language.GetOrRegister($"Mods.{nameof(WindfallAttempt1)}.Dialogue.CalPotionSeller.PotionSellerDialogue1").Value);
+                chat.Add(Language.GetOrRegister($"Mods.{nameof(WindfallAttempt1)}.Dialogue.CalPotionSeller.PotionSellerDialogue2").Value);
+                chat.Add(Language.GetOrRegister($"Mods.{nameof(WindfallAttempt1)}.Dialogue.CalPotionSeller.PotionSellerDialogue3").Value);
             }
-            chat.Add(Language.GetOrRegister($"Mods.{nameof(WindfallAttempt1)}.Dialogue.IlmeranPaladin.StandardDialogue1").Value);
-            chat.Add(Language.GetOrRegister($"Mods.{nameof(WindfallAttempt1)}.Dialogue.IlmeranPaladin.StandardDialogue2").Value);
-            chat.Add(Language.GetOrRegister($"Mods.{nameof(WindfallAttempt1)}.Dialogue.IlmeranPaladin.StandardDialogue3").Value);
+            
             return chat; // chat is implicitly cast to a string.
         }
 
@@ -186,22 +193,106 @@ namespace WindfallAttempt1.NPCs.WanderingNPCs
         { // What the chat buttons are when you open up the chat UI
             button = Language.GetTextValue("LegacyInterface.28"); //This is the key to the word "Shop"
         }
-
         public override void OnChatButtonClicked(bool firstButton, ref string shop)
         {
             if (firstButton)
             {
-                shop = "Shop";
+                NPC.aiStyle = 0;
+                WorldSaveSystem.CloneRevealed = true;
+                Main.CloseNPCChatOrSign();
             }
         }
+        public static readonly SoundStyle DashSound = new("CalamityMod/Sounds/Custom/SCalSounds/SCalDash");
+        public static readonly SoundStyle Transformation = new("CalamityMod/Sounds/Custom/SCalSounds/BrimstoneBigShoot");
+        public static readonly SoundStyle CalCloneTeleport = new("CalamityMod/Sounds/Custom/SCalSounds/BrimstoneHellblastSound");
 
-        public override void AddShops()
+        internal int aiCounter = 0;
+        int i = 20;
+        float CalCloneHoverY;
+
+        public override void AI()
         {
-            new NPCShop(Type)
-                .Add<AmidiasSpark>()
-                .Register();
+            if (Main.dayTime)
+            {
+                for (int i = 0; i < 50; i++)
+                {
+                    Vector2 speed = Main.rand.NextVector2Circular(0.5f, 1f);
+                    Dust d = Dust.NewDustPerfect(NPC.Center, DustID.Blood, speed * 5, Scale: 1.5f);
+                    d.noGravity = true;
+                }
+                SoundEngine.PlaySound(CalCloneTeleport, NPC.Center);
+                NPC.active = false;
+            }
+            if (NPC.aiStyle == 0)
+            {
+                aiCounter++;
+                if (aiCounter == 1)
+                {
+                    string key = "Well...";
+                    Color messageColor = Color.Orange;
+                    CalamityUtils.DisplayLocalizedText(key, messageColor);
+                }
+                else if (aiCounter == 60)
+                {
+                    string key = "TOO BAD!";
+                    Color messageColor = Color.Orange;
+                    CalamityUtils.DisplayLocalizedText(key, messageColor);
+                }
+                else if (aiCounter == 90)
+                {
+                    string key = "The only thing you’re getting from me is PAIN… and… DEATH!";
+                    Color messageColor = Color.Orange;
+                    CalamityUtils.DisplayLocalizedText(key, messageColor);
+                }
+                else if (aiCounter == 150)
+                {
+                    string key = "Cause I’m taking over this town! All your friends are gonna soon be MY FRIENDS!";
+                    Color messageColor = Color.Orange;
+                    CalamityUtils.DisplayLocalizedText(key, messageColor);
+                }
+                else if (aiCounter == 210)
+                {
+                    i = 20;
+                    SoundEngine.PlaySound(DashSound, NPC.Center);
+                    string key = "MWAHAHAHAHA!!!";
+                    Color messageColor = Color.Orange;
+                    CalamityUtils.DisplayLocalizedText(key, messageColor);
+                }
+                else if (aiCounter == 240)
+                {
+                    for (int i = 0; i < 40; i++)
+                    {
+                        int brimDust = Dust.NewDust(new Vector2((int)NPC.Center.X - 20, (int)NPC.position.Y- 10), 100, 100, (int)CalamityDusts.Brimstone, 0f, 0f, 100, default, 2f);
+                        Main.dust[brimDust].velocity *= 3f;
+                        if (Main.rand.NextBool())
+                        {
+                            Main.dust[brimDust].scale = 0.5f;
+                            Main.dust[brimDust].fadeIn = 1f + (float)Main.rand.Next(10) * 0.1f;
+                        }
+                    }
+                    for (int j = 0; j < 70; j++)
+                    {
+                        int brimDust2 = Dust.NewDust(new Vector2((int)NPC.Center.X - 20, (int)NPC.position.Y -10), 100, 100, (int)CalamityDusts.Brimstone, 0f, 0f, 100, default, 3f);
+                        Main.dust[brimDust2].noGravity = true;
+                        Main.dust[brimDust2].velocity *= 5f;
+                        brimDust2 = Dust.NewDust(new Vector2((int)NPC.Center.X - 20, (int)NPC.position.Y -10), 100, 100, (int)CalamityDusts.Brimstone, 0f, 0f, 100, default, 2f);
+                        Main.dust[brimDust2].velocity *= 2f;
+                    }
+                    SoundEngine.PlaySound(Transformation, NPC.Center + new Vector2(0, + 10));
+                    NPC.NewNPC(NPC.GetSource_FromAI(), (int)NPC.Center.X - 20, (int)NPC.Center.Y + 50, ModContent.NPCType<CalamitasClone>());
+                    NPC.active = false;
+                }
+                if (aiCounter >= 210 && i > 0)
+                {
+                    NPC.position.Y -= i-- * 1.5f;
+                    CalCloneHoverY = NPC.position.Y;
+                }
+                else if (aiCounter >= 210)
+                {
+                    NPC.position.Y = CalCloneHoverY;
+                }
+            }
         }
-
         public override void TownNPCAttackStrength(ref int damage, ref float knockback)
         {
             damage = 20;
@@ -217,15 +308,13 @@ namespace WindfallAttempt1.NPCs.WanderingNPCs
         public override void TownNPCAttackProj(ref int projType, ref int attackDelay)
         {
             Mod calamity = ModLoader.GetMod("CalamityMod");
-            projType = (calamity.Find<ModProjectile>("ScourgeoftheDesertProj").Type);
+            projType = (calamity.Find<ModProjectile>("SeethingDischargeBrimstoneHellblast").Type);
             attackDelay = 1;
         }
 
         public override void TownNPCAttackProjSpeed(ref float multiplier, ref float gravityCorrection, ref float randomOffset)
         {
-            multiplier = 12f;
-            randomOffset = 2f;
-            // SparklingBall is not affected by gravity, so gravityCorrection is left alone.
+            multiplier = 2f;
         }
     }
 }
