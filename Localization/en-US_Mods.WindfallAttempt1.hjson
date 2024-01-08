@@ -250,7 +250,7 @@ NPCs: {
 	IlmeranPaladin.DisplayName: Ilmeran Paladin
 	WorldCataclysm.DisplayName: Cataclysmic Construct
 	WorldCatastrophe.DisplayName: Catastrophic Construct
-	WanderingCalClone.DisplayName: Wandering Cal Clone
+	WanderingCalClone.DisplayName: Wandering Potion Seller...?
 }
 
 Projectiles.CalCloneSpyProj.DisplayName: ???

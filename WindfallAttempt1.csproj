@@ -40,7 +40,4 @@
       <HintPath>..\ModAssemblies\CalamityMod.dll</HintPath>
     </Reference>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="World\" />
-  </ItemGroup>
 </Project>
