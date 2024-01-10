@@ -35,7 +35,6 @@ public class WorldCataclysm : ModNPC
 
         if (CalamityWorld.death)
             NPC.scale *= 1.2f;
-
         NPC.defense = (CalamityWorld.death) ? 15 : 10;
         NPC.DR_NERD((CalamityWorld.death) ? 0.225f : 0.15f);
         NPC.LifeMaxNERB(11000, 13200, 80000);

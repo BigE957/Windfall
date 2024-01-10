@@ -9,9 +9,9 @@ using WindfallAttempt1.NPCs.WorldEvents;
 using CalamityMod.NPCs.Crags;
 using CalamityMod.Dusts;
 
-namespace WindfallAttempt1.WorldEvents.CalCloneSpy
+namespace WindfallAttempt1.WorldEvents.CalClone
 {
-    public class CalCloneSpyProj : ModProjectile
+    public class CalCloneProj : ModProjectile
     {
         //nabs some sounds from Calamity
         public static readonly SoundStyle DashSound = new("CalamityMod/Sounds/Custom/SCalSounds/SCalDash");
@@ -56,7 +56,7 @@ namespace WindfallAttempt1.WorldEvents.CalCloneSpy
             {
                 for (int i = 0; i < 50; i++)
                 {
-                    Vector2 speed = Main.rand.NextVector2Circular(0.5f, 1f);
+                    Vector2 speed = Main.rand.NextVector2Circular(1.5f, 2f);
                     Dust d = Dust.NewDustPerfect(Projectile.Center, DustID.Blood, speed * 5, Scale: 1.5f);
                     d.noGravity = true;
                 }
@@ -119,7 +119,7 @@ namespace WindfallAttempt1.WorldEvents.CalCloneSpy
                         CombatText.NewText(location, messageColor, "?!", true);
                         i = 30;
                         Projectile.velocity.X = 0;
-                        if (CalCloneSpySpawnSystem.cragsCal)
+                        if (CalCloneSpawnSystem.cragsCal)
                         {
                             CurrentAI = AIState.Summoning;
                         }
@@ -190,7 +190,7 @@ namespace WindfallAttempt1.WorldEvents.CalCloneSpy
                     {
                         for (int i = 0; i < 50; i++)
                         {
-                            Vector2 speed = Main.rand.NextVector2Circular(0.5f, 1f);
+                            Vector2 speed = Main.rand.NextVector2Circular(1.5f, 2f);
                             Dust d = Dust.NewDustPerfect(Projectile.Center, DustID.Blood, speed * 5, Scale: 1.5f);
                             d.noGravity = true;
                         }

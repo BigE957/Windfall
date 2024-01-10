@@ -3,9 +3,9 @@ using Terraria;
 using Terraria.ModLoader;
 using Microsoft.Xna.Framework;
 
-namespace WindfallAttempt1.WorldEvents.CalCloneSpy
+namespace WindfallAttempt1.WorldEvents.CalClone
 {
-    public class CalCloneSpySpawnSystem : ModSystem
+    public class CalCloneSpawnSystem : ModSystem
     {
         public enum SystemState
         {
@@ -129,7 +129,7 @@ namespace WindfallAttempt1.WorldEvents.CalCloneSpy
                                 Player p = Main.player[i];
                                 if (!p.dead && p.active)
                                 {
-                                    Utilities.Utilities.NewProjectileBetter(CalCloneSpawnLocation, Vector2.Zero, ModContent.ProjectileType<CalCloneSpyProj>(), 0, 0f);
+                                    Utilities.Utilities.NewProjectileBetter(CalCloneSpawnLocation, Vector2.Zero, ModContent.ProjectileType<CalCloneProj>(), 0, 0f);
                                     break;
                                 }
                             }
@@ -161,7 +161,7 @@ namespace WindfallAttempt1.WorldEvents.CalCloneSpy
                                 Player p = Main.player[i];
                                 if (!p.dead && p.active)
                                 {
-                                    Utilities.Utilities.NewProjectileBetter(CalCloneSpawnLocation, Vector2.Zero, ModContent.ProjectileType<CalCloneSpyProj>(), 0, 0f);
+                                    Utilities.Utilities.NewProjectileBetter(CalCloneSpawnLocation, Vector2.Zero, ModContent.ProjectileType<CalCloneProj>(), 0, 0f);
                                     break;
                                 }
                             }

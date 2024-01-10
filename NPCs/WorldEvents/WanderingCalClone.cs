@@ -39,11 +39,7 @@ namespace WindfallAttempt1.NPCs.WorldEvents
         private static Profiles.StackedNPCProfile NPCProfile;
         public override void SetStaticDefaults()
         {
-            Main.npcFrameCount[Type] = 25; // The amount of frames the NPC has
-
-            Main.npcFrameCount[NPC.type] = 27;
-            NPCID.Sets.ExtraFramesCount[NPC.type] = 9;
-            NPCID.Sets.AttackFrameCount[NPC.type] = 4;
+            Main.npcFrameCount[Type] = 6; // The amount of frames the NPC has
             NPCID.Sets.DangerDetectRange[Type] = 700; // The amount of pixels away from the center of the npc that it tries to attack enemies.
             NPCID.Sets.PrettySafe[Type] = 300;
             NPCID.Sets.AttackType[Type] = 1;
@@ -60,10 +56,6 @@ namespace WindfallAttempt1.NPCs.WorldEvents
             // This prevents the happiness button
             NPCID.Sets.NoTownNPCHappiness[Type] = true;
 
-            //To reiterate, since this NPC isn't technically a town NPC, we need to tell the game that we still want this NPC to have a custom/randomized name when they spawn.
-            //In order to do this, we simply make this hook return true, which will make the game call the TownNPCName method when spawning the NPC to determine the NPC's name.
-            NPCID.Sets.SpawnsWithCustomName[Type] = true;
-
             // Connects this NPC with a custom emote.
             // This makes it when the NPC is in the world, other NPCs will "talk about him".
             //NPCID.Sets.FaceEmote[Type] = ModContent.EmoteBubbleType<ExampleBoneMerchantEmote>();
@@ -76,6 +68,7 @@ namespace WindfallAttempt1.NPCs.WorldEvents
         public override void SetDefaults()
         {
             NPC.friendly = true; // NPC Will not attack player
+            NPC.townNPC = true;
             NPC.width = 18;
             NPC.height = 40;
             NPC.aiStyle = 7;
@@ -85,8 +78,6 @@ namespace WindfallAttempt1.NPCs.WorldEvents
             NPC.HitSound = SoundID.NPCHit1;
             NPC.DeathSound = SoundID.NPCDeath6;
             NPC.knockBackResist = 0.5f;
-
-            AnimationType = NPCID.Guide;
         }
 
         //Make sure to allow your NPC to chat, since being "like a town NPC" doesn't automatically allow for chatting.
@@ -99,94 +90,37 @@ namespace WindfallAttempt1.NPCs.WorldEvents
         {
             return NPCProfile;
         }
-
-        public override List<string> SetNPCNameList()
-        {
-            return new List<string> {
-            "Wandering Potion Seller",
-        };
-        }
         public override float SpawnChance(NPCSpawnInfo spawnInfo)
         {
             //If any player is underground and has an example item in their inventory, the example bone merchant will have a slight chance to spawn.
-            if (spawnInfo.Player.townNPCs > 2f && !DownedBossSystem.downedCalamitasClone && NPC.downedMechBoss1 && NPC.downedMechBoss2 && NPC.downedMechBoss3 && !Main.dayTime && !NPC.AnyNPCs(ModContent.NPCType<WanderingCalClone>()))
+            if (spawnInfo.Player.townNPCs > 2f && !DownedBossSystem.downedCalamitasClone && NPC.downedMechBoss1 && NPC.downedMechBoss2 && NPC.downedMechBoss3 && WorldSaveSystem.CloneRevealed && !Main.dayTime && !NPC.AnyNPCs(ModContent.NPCType<WanderingPotionSeller>()) && !NPC.AnyNPCs(ModContent.NPCType<WanderingCalClone>()))
             {
-                if (WorldSaveSystem.CloneRevealed)
-                {
-                    return 0.35f;
-                }
-                else
-                {
-                    return 0.1f;
-                }
+                return 0.35f;
             }
-
             //Else, the example bone merchant will not spawn if the above conditions are not met.
             return 0f;
         }
         public override void OnSpawn(IEntitySource source)
         {
-            if (WorldSaveSystem.CloneRevealed)
+            base.OnSpawn(source);
+            if (NPC.ai[0] == 1f)
             {
-                base.OnSpawn(source);
+                NPC.aiStyle = 0;
+                NPC.noGravity = true;
+            }
+            else
+            {
                 string key = "Calamitas is back...";
                 Color messageColor = new Color(50, 125, 255);
                 CalamityUtils.DisplayLocalizedText(key, messageColor);
             }
-            else
-            {
-                base.OnSpawn(source);
-                string key = "A Potion Seller has arrived!";
-                Color messageColor = new Color(50, 125, 255);
-                CalamityUtils.DisplayLocalizedText(key, messageColor);
-            }
         }
-        public override string GetChat()
-        {
-            WeightedRandom<string> chat = new WeightedRandom<string>();
-
-            // These are things that the NPC has a chance of telling you when you talk to it.
-            if (WorldSaveSystem.CloneRevealed)
-            {
-                chat.Add(Language.GetOrRegister($"Mods.{nameof(WindfallAttempt1)}.Dialogue.CalPotionSeller.StandardDialogue1").Value);
-                chat.Add(Language.GetOrRegister($"Mods.{nameof(WindfallAttempt1)}.Dialogue.CalPotionSeller.StandardDialogue2").Value);
-                chat.Add(Language.GetOrRegister($"Mods.{nameof(WindfallAttempt1)}.Dialogue.CalPotionSeller.StandardDialogue3").Value);
-            }
-            else
-            {
-                chat.Add(Language.GetOrRegister($"Mods.{nameof(WindfallAttempt1)}.Dialogue.CalPotionSeller.PotionSellerDialogue1").Value);
-                chat.Add(Language.GetOrRegister($"Mods.{nameof(WindfallAttempt1)}.Dialogue.CalPotionSeller.PotionSellerDialogue2").Value);
-                chat.Add(Language.GetOrRegister($"Mods.{nameof(WindfallAttempt1)}.Dialogue.CalPotionSeller.PotionSellerDialogue3").Value);
-            }
-            
-            return chat; // chat is implicitly cast to a string.
-        }
-
-        public override void SetChatButtons(ref string button, ref string button2)
-        { // What the chat buttons are when you open up the chat UI
-            button = Language.GetTextValue("LegacyInterface.28"); //This is the key to the word "Shop"
-        }
-        public override void OnChatButtonClicked(bool firstButton, ref string shop)
-        {
-            if (firstButton)
-            {
-                NPC.aiStyle = 0;
-                WorldSaveSystem.CloneRevealed = true;
-                Main.CloseNPCChatOrSign();
-            }
-        }
-        public static readonly SoundStyle DashSound = new("CalamityMod/Sounds/Custom/SCalSounds/SCalDash");
-        public static readonly SoundStyle Transformation = new("CalamityMod/Sounds/Custom/SCalSounds/BrimstoneBigShoot");
-        public static readonly SoundStyle CalCloneTeleport = new("CalamityMod/Sounds/Custom/SCalSounds/BrimstoneHellblastSound");
-
-        internal int aiCounter = 0;
-        int i = 20;
-        float CalCloneHoverY;
-
-        public override void AI()
+        public override bool PreAI()
         {
             if (Main.dayTime)
             {
+                // Here we despawn the NPC and send a message stating that the NPC has despawned
+                // LegacyMisc.35 is {0) has departed!
                 for (int i = 0; i < 50; i++)
                 {
                     Vector2 speed = Main.rand.NextVector2Circular(0.5f, 1f);
@@ -194,17 +128,55 @@ namespace WindfallAttempt1.NPCs.WorldEvents
                     d.noGravity = true;
                 }
                 SoundEngine.PlaySound(CalCloneTeleport, NPC.Center);
+                string key = "Calamitas has left... finally.";
+                Color messageColor = new Color(50, 125, 255);
+                CalamityUtils.DisplayLocalizedText(key, messageColor);
                 NPC.active = false;
+                NPC.netSkip = -1;
+                NPC.life = 0;
+                return false;
             }
+            return true;
+        }
+        public override string GetChat()
+        {
+            WeightedRandom<string> chat = new WeightedRandom<string>();
+
+            // These are things that the NPC has a chance of telling you when you talk to it.
+            chat.Add(Language.GetOrRegister($"Mods.{nameof(WindfallAttempt1)}.Dialogue.CalPotionSeller.StandardDialogue1").Value);
+            chat.Add(Language.GetOrRegister($"Mods.{nameof(WindfallAttempt1)}.Dialogue.CalPotionSeller.StandardDialogue2").Value);
+            chat.Add(Language.GetOrRegister($"Mods.{nameof(WindfallAttempt1)}.Dialogue.CalPotionSeller.StandardDialogue3").Value);
+
+            return chat; // chat is implicitly cast to a string.
+        }
+
+        public override void SetChatButtons(ref string button, ref string button2)
+        { // What the chat buttons are when you open up the chat UI
+            button = "Challenge"; //This is the key to the word "Shop"
+        }
+        public override void OnChatButtonClicked(bool firstButton, ref string shop)
+        {
+            if (firstButton)
+            {
+                NPC.aiStyle = 0;
+                NPC.noGravity = true;
+                Main.CloseNPCChatOrSign();
+            }
+        }
+        public static readonly SoundStyle DashSound = new("CalamityMod/Sounds/Custom/SCalSounds/SCalDash");
+        public static readonly SoundStyle Transformation = new("CalamityMod/Sounds/Custom/SCalSounds/BrimstoneBigShoot");
+        public static readonly SoundStyle CalCloneTeleport = new("CalamityMod/Sounds/Custom/SCalSounds/BrimstoneHellblastSound");
+
+        internal int aiCounter = 59;
+        int i = 20;
+        float CalCloneHoverY;
+
+        public override void AI()
+        {
+            NPC.homeless = true;
             if (NPC.aiStyle == 0)
             {
                 aiCounter++;
-                if (aiCounter == 1)
-                {
-                    string key = "Well...";
-                    Color messageColor = Color.Orange;
-                    CalamityUtils.DisplayLocalizedText(key, messageColor);
-                }
                 if (!WorldSaveSystem.CloneRevealed)
                 {
                     if (aiCounter == 60)
@@ -221,7 +193,7 @@ namespace WindfallAttempt1.NPCs.WorldEvents
                     }
                     else if (aiCounter == 150)
                     {
-                        string key = "Cause I’m taking over this town! All your friends are gonna soon be MY FRIENDS!";
+                        string key = "Cause I’m taking over this town! Then all your friends are gonna be MY FRIENDS!";
                         Color messageColor = Color.Orange;
                         CalamityUtils.DisplayLocalizedText(key, messageColor);
                     }
@@ -233,7 +205,7 @@ namespace WindfallAttempt1.NPCs.WorldEvents
                         Color messageColor = Color.Orange;
                         CalamityUtils.DisplayLocalizedText(key, messageColor);
                     }
-                    else if (aiCounter == 240)
+                    else if (aiCounter == 230)
                     {
                         for (int i = 0; i < 40; i++)
                         {
@@ -255,6 +227,7 @@ namespace WindfallAttempt1.NPCs.WorldEvents
                         }
                         SoundEngine.PlaySound(Transformation, NPC.Center + new Vector2(0, +10));
                         NPC.NewNPC(NPC.GetSource_FromAI(), (int)NPC.Center.X - 20, (int)NPC.Center.Y + 50, ModContent.NPCType<CalamitasClone>());
+                        WorldSaveSystem.CloneRevealed = true;
                         NPC.active = false;
                     }
                     if (aiCounter >= 210)
@@ -264,21 +237,17 @@ namespace WindfallAttempt1.NPCs.WorldEvents
                             NPC.position.Y -= i-- * 1.5f;
                             CalCloneHoverY = NPC.position.Y;
                         }
-                        else
-                        {
-                            NPC.position.Y = CalCloneHoverY;
-                        }
                     }
                 }
                 else
                 {
                     if (aiCounter == 60)
                     {
-                        string key = "Fine, I’ll just beat you again!";
+                        string key = "Fine then, I’ll just beat you again!";
                         Color messageColor = Color.Orange;
                         CalamityUtils.DisplayLocalizedText(key, messageColor);
                     }
-                    else if (aiCounter == 90)
+                    else if (aiCounter == 120)
                     {
                         i = 20;
                         SoundEngine.PlaySound(DashSound, NPC.Center);
@@ -286,7 +255,7 @@ namespace WindfallAttempt1.NPCs.WorldEvents
                         Color messageColor = Color.Orange;
                         CalamityUtils.DisplayLocalizedText(key, messageColor);
                     }
-                    else if (aiCounter == 120)
+                    else if (aiCounter == 140)
                     {
                         for (int i = 0; i < 40; i++)
                         {
@@ -310,16 +279,12 @@ namespace WindfallAttempt1.NPCs.WorldEvents
                         NPC.NewNPC(NPC.GetSource_FromAI(), (int)NPC.Center.X - 20, (int)NPC.Center.Y + 50, ModContent.NPCType<CalamitasClone>());
                         NPC.active = false;
                     }
-                    if (aiCounter >= 90)
+                    if (aiCounter >= 120)
                     {
                         if (i > 0)
                         {
                             NPC.position.Y -= i-- * 1.5f;
                             CalCloneHoverY = NPC.position.Y;
-                        }
-                        else
-                        {
-                            NPC.position.Y = CalCloneHoverY;
                         }
                     }
                 }
@@ -347,6 +312,23 @@ namespace WindfallAttempt1.NPCs.WorldEvents
         public override void TownNPCAttackProjSpeed(ref float multiplier, ref float gravityCorrection, ref float randomOffset)
         {
             multiplier = 2f;
+        }
+        public override void FindFrame(int frameHeight)
+        {
+            NPC.frameCounter += 0.2f;
+            NPC.frame.Y = frameHeight * ((int)NPC.frameCounter % 6);
+            NPC.spriteDirection = NPC.direction;
+        }
+        public override bool PreDraw(SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor)
+        {
+            Texture2D texture = TextureAssets.Npc[NPC.type].Value;
+            Vector2 halfSizeTexture = new Vector2((float)(TextureAssets.Npc[NPC.type].Value.Width / 2), (float)(TextureAssets.Npc[NPC.type].Value.Height / Main.npcFrameCount[NPC.type] / 2));
+            Vector2 drawPosition = new Vector2(NPC.Center.X, NPC.Center.Y - 10) - screenPos + Vector2.UnitY * NPC.gfxOffY;
+            SpriteEffects spriteEffects = SpriteEffects.None;
+            if (NPC.spriteDirection == -1)
+                spriteEffects = SpriteEffects.FlipHorizontally;
+            spriteBatch.Draw(texture, drawPosition, NPC.frame, NPC.GetAlpha(drawColor), NPC.rotation, halfSizeTexture, NPC.scale, spriteEffects, 0f);
+            return false;
         }
     }
 }
