@@ -13,111 +13,231 @@ Dialogue: {
 		PotionSellerDialogue1: Could I interest you in an elixer?
 		PotionSellerDialogue2: I have many powerful potions to choose from, would you like one?
 		PotionSellerdDialogue3: Care to try one of my brews?
-		StandardDialogue1: Wanna get beat again?
-		StandardDialogue2: Haha, back for more are we?
-		StandardDialogue3: Was one beating not enough?
+		StandardDialogue1: You looking for something?
+		StandardDialogue2: Haha, back for more are ya?
+		StandardDialogue3: I won't give you potions, but I'll definitely give you a fight!
 	}
 }
 
 Items: {
-	stone: {
-		DisplayName: Stone
-		Tooltip: The first object Vitae ever created
+	Melee: {
+		stone: {
+			DisplayName: Stone
+			Tooltip: The first object Vitae ever created
+		}
+
+		Boneripper: {
+			DisplayName: Boneripper
+			Tooltip: Imma wip up ya bone :3
+		}
 	}
 
-	StatisLore: {
-		Tooltip: ""
-		DisplayName: Statis
-	}
+	Lore: {
+		StatisLore: {
+			Tooltip: ""
+			DisplayName: Statis
+		}
 
-	ProfanedWastesLore: {
-		Tooltip: ""
-		DisplayName: The Profaned Wastes
-	}
+		ProfanedWastesLore: {
+			Tooltip: ""
+			DisplayName: The Profaned Wastes
+		}
 
-	IllmerisLore: {
-		Tooltip: ""
-		DisplayName: Illmeris
-	}
+		IllmerisLore: {
+			Tooltip: ""
+			DisplayName: Illmeris
+		}
 
-	HallowLore: {
-		Tooltip: ""
-		DisplayName: The Hallow
-	}
+		HallowLore: {
+			Tooltip: ""
+			DisplayName: The Hallow
+		}
 
-	DragonsAerieLore: {
-		Tooltip: ""
-		DisplayName: The Dragons Aerie
-	}
+		DragonsAerieLore: {
+			Tooltip: ""
+			DisplayName: The Dragons Aerie
+		}
 
-	DistortionLore: {
-		Tooltip: ""
-		DisplayName: The Distortion
-	}
+		DistortionLore: {
+			Tooltip: ""
+			DisplayName: The Distortion
+		}
 
-	BraeLore: {
-		Tooltip: ""
-		DisplayName: Braelor
-	}
+		BraeLore: {
+			Tooltip: ""
+			DisplayName: Braelor
+		}
 
-	JournalForest: {
-		DisplayName: Journal Entry: The Forest
-		Tooltip: A tattered page from the journal of an explorer.
-	}
+		JournalForest: {
+			DisplayName: Journal Entry: The Forest
+			Tooltip: A tattered page from the journal of an explorer.
+		}
 
-	JournalDesert: {
-		DisplayName: Journal Entry: The Desert
-		Tooltip: A tattered page from the journal of an explorer.
-	}
+		JournalDesert: {
+			DisplayName: Journal Entry: The Desert
+			Tooltip: A tattered page from the journal of an explorer.
+		}
 
-	JournalIlmeris: {
-		DisplayName: Journal Entry: The Ilmeran Ruins
-		Tooltip: A tattered page from the journal of an explorer.
-	}
+		JournalIlmeris: {
+			DisplayName: Journal Entry: The Ilmeran Ruins
+			Tooltip: A tattered page from the journal of an explorer.
+		}
 
-	JournalTundra: {
-		DisplayName: Journal Entry: The Tundra
-		Tooltip: A tattered page from the journal of an explorer.
-	}
+		JournalTundra: {
+			DisplayName: Journal Entry: The Tundra
+			Tooltip: A tattered page from the journal of an explorer.
+		}
 
-	JournalCorruption: {
-		DisplayName: Journal Entry: The Corruption
-		Tooltip: A tattered page from the journal of an explorer.
-	}
+		JournalCorruption: {
+			DisplayName: Journal Entry: The Corruption
+			Tooltip: A tattered page from the journal of an explorer.
+		}
 
-	JournalCrimson: {
-		DisplayName: Journal Entry: The Crimson
-		Tooltip: A tattered page from the journal of an explorer.
-	}
+		JournalCrimson: {
+			DisplayName: Journal Entry: The Crimson
+			Tooltip: A tattered page from the journal of an explorer.
+		}
 
-	JournalJungle: {
-		DisplayName: Journal Entry: The Jungle
-		Tooltip: A tattered page from the journal of an explorer.
-	}
+		JournalJungle: {
+			DisplayName: Journal Entry: The Jungle
+			Tooltip: A tattered page from the journal of an explorer.
+		}
 
-	JournalOcean: {
-		DisplayName: Journal Entry: The Ocean
-		Tooltip: A tattered page from the journal of an explorer.
-	}
+		JournalOcean: {
+			DisplayName: Journal Entry: The Ocean
+			Tooltip: A tattered page from the journal of an explorer.
+		}
 
-	JournalDungeon: {
-		DisplayName: Journal Entry: The Dungeon
-		Tooltip: A tattered page from the journal of an explorer.
-	}
+		JournalDungeon: {
+			DisplayName: Journal Entry: The Dungeon
+			Tooltip: A tattered page from the journal of an explorer.
+		}
 
-	JournalSulphur: {
-		DisplayName: Journal Entry: The Sulphurous Sea
-		Tooltip: A tattered page from the journal of an explorer.
-	}
+		JournalSulphur: {
+			DisplayName: Journal Entry: The Sulphurous Sea
+			Tooltip: A tattered page from the journal of an explorer.
+		}
 
-	JournalAerie: {
-		DisplayName: Journal Entry: The Dragon's Aerie
-		Tooltip: A tattered page from the journal of an explorer.
+		JournalAerie: {
+			DisplayName: Journal Entry: The Dragon's Aerie
+			Tooltip: A tattered page from the journal of an explorer.
+		}
+
+		JournalCompilation: {
+			DisplayName: The Wanderer's Journal
+			Tooltip: A collection of journal entries about various locations and environments.
+		}
 	}
 
 	JournalCompilation: {
-		DisplayName: The Wanderer's Journal
-		Tooltip: A collection of journal entries about various locations and environments.
+		DisplayName: Journal Compilation
+		Tooltip: ""
+	}
+
+	JournalCorruption: {
+		DisplayName: Journal Corruption
+		Tooltip: ""
+	}
+
+	JournalCrimson: {
+		DisplayName: Journal Crimson
+		Tooltip: ""
+	}
+
+	JournalDesert: {
+		DisplayName: Journal Desert
+		Tooltip: ""
+	}
+
+	JournalDungeon: {
+		DisplayName: Journal Dungeon
+		Tooltip: ""
+	}
+
+	JournalForest: {
+		DisplayName: Journal Forest
+		Tooltip: ""
+	}
+
+	JournalIlmeris: {
+		DisplayName: Journal Ilmeris
+		Tooltip: ""
+	}
+
+	JournalJungle: {
+		DisplayName: Journal Jungle
+		Tooltip: ""
+	}
+
+	JournalOcean: {
+		DisplayName: Journal Ocean
+		Tooltip: ""
+	}
+
+	JournalSulphur: {
+		DisplayName: Journal Sulphur
+		Tooltip: ""
+	}
+
+	JournalTundra: {
+		DisplayName: Journal Tundra
+		Tooltip: ""
+	}
+
+	BraeLore: {
+		DisplayName: Brae Lore
+		Tooltip: ""
+	}
+
+	DistortionLore: {
+		DisplayName: Distortion Lore
+		Tooltip: ""
+	}
+
+	DragonsAerieLore: {
+		DisplayName: Dragons Aerie Lore
+		Tooltip: ""
+	}
+
+	HallowLore: {
+		DisplayName: Hallow Lore
+		Tooltip: ""
+	}
+
+	IllmerisLore: {
+		DisplayName: Illmeris Lore
+		Tooltip: ""
+	}
+
+	ProfanedWastesLore: {
+		DisplayName: Profaned Wastes Lore
+		Tooltip: ""
+	}
+
+	StatisLore: {
+		DisplayName: Statis Lore
+		Tooltip: ""
+	}
+
+	Weapons: {
+		Melee: {
+			Boneripper: {
+				DisplayName: Boneripper
+				Tooltip: 
+				'''
+				Spins a two-headed scythe around the player.
+				Hits gather malevolent energy that empowers the weapon upon release.
+				Stage One causes the weapon to be thrown out towards the mouse upon release.
+				Stage Two makes the weapon follow after the cursor and inflict Brimstone Flames
+				Stage Three creates Brimstone Explosions on enemy hits. 
+				'''
+			}
+		}
+	}
+
+	stone: {
+		DisplayName: stone
+		Tooltip: ""
 	}
 }
 
@@ -255,6 +375,6 @@ NPCs: {
 }
 
 Projectiles: {
-	CalCloneSpyProj.DisplayName: ???
-	CalCloneProj.DisplayName: Cal Clone Proj
+	CalCloneProj.DisplayName: ???
+	BoneripperProj.DisplayName: Boneripper
 }
