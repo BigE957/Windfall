@@ -13,6 +13,7 @@ using System.IO;
 using CalamityMod;
 using WindfallAttempt1.Items.Weapons.Melee;
 using WindfallAttempt1.Utilities;
+using CalamityMod.NPCs.CalClone;
 
 namespace WindfallAttempt1.NPCs.WorldEvents;
 
@@ -29,7 +30,7 @@ public class WorldCatastrophe : ModNPC
     {
         NPC.BossBar = Main.BigBossProgressBar.NeverValid;
         NPC.Calamity().canBreakPlayerDefense = true;
-        NPC.damage = (int)(Main.masterMode ? 216 : (CalamityWorld.death ? 162 : (CalamityWorld.revenge ? 150 : (Main.expertMode ? 130 : 65))) / 1.5);
+        NPC.damage = StatCorrections.ScaleContactDamage(Main.masterMode ? 216 : (CalamityWorld.death ? 162 : (CalamityWorld.revenge ? 150 : (Main.expertMode ? 130 : 65))));
         NPC.npcSlots = 5f;
         NPC.width = 120;
         NPC.height = 120;

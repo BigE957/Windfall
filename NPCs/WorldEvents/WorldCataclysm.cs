@@ -31,7 +31,7 @@ public class WorldCataclysm : ModNPC
     {
         NPC.BossBar = Main.BigBossProgressBar.NeverValid;
         NPC.Calamity().canBreakPlayerDefense = true;
-        NPC.damage = (int)(Main.masterMode ? 198 : (CalamityWorld.death ? 148 : (CalamityWorld.revenge ? 138 : (Main.expertMode ? 120 : 60))) / 1.5);
+        NPC.damage = StatCorrections.ScaleContactDamage(Main.masterMode ? 198 : (CalamityWorld.death ? 148 : (CalamityWorld.revenge ? 138 : (Main.expertMode ? 120 : 60))));
         NPC.npcSlots = 5f;
         NPC.width = 120;
         NPC.height = 120;
