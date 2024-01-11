@@ -44,12 +44,6 @@ namespace WindfallAttempt1.Projectiles.Melee
             Projectile.usesLocalNPCImmunity = true;
             Projectile.localNPCHitCooldown = 15;
         }
-        public override void OnSpawn(IEntitySource source)
-        {
-            string key = "A Boneripper Projectile has spawned!";
-            Color messageColor = new Color(50, 125, 255);
-            CalamityUtils.DisplayLocalizedText(key, messageColor);
-        }
         public override void AI()
         {
             Player player = Main.player[Projectile.owner];

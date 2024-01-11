@@ -8,8 +8,9 @@ using WindfallAttempt1.Utilities;
 
 namespace WindfallAttempt1.Items.Journals
 {
-    public class JournalCrimson : ModItem
+    public class JournalCrimson : ModItem, ILocalizedModType
     {
+        public new string LocalizationCategory => "Items.Journals";
         public override void SetDefaults()
         {
             Item.width = 28;

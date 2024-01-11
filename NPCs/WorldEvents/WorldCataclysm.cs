@@ -12,6 +12,9 @@ using Terraria.ID;
 using Terraria.ModLoader;
 using System.IO;
 using CalamityMod;
+using WindfallAttempt1.Items.Weapons.Melee;
+using WindfallAttempt1.Utilities;
+using CalamityMod.NPCs.CalClone;
 
 namespace WindfallAttempt1.NPCs.WorldEvents;
 
@@ -28,7 +31,7 @@ public class WorldCataclysm : ModNPC
     {
         NPC.BossBar = Main.BigBossProgressBar.NeverValid;
         NPC.Calamity().canBreakPlayerDefense = true;
-        NPC.damage = Main.masterMode ? 198 : (CalamityWorld.death ? 148 : (CalamityWorld.revenge ? 138 : (Main.expertMode ? 120 : 60)));
+        NPC.damage = (int)(Main.masterMode ? 198 : (CalamityWorld.death ? 148 : (CalamityWorld.revenge ? 138 : (Main.expertMode ? 120 : 60))) / 1.5);
         NPC.npcSlots = 5f;
         NPC.width = 120;
         NPC.height = 120;
@@ -141,6 +144,7 @@ public class WorldCataclysm : ModNPC
     {
         npcLoot.Add(ModContent.ItemType<CataclysmTrophy>(), 10);
         npcLoot.Add(ModContent.ItemType<HavocsBreath>(), 4);
+        npcLoot.Add(ModContent.ItemType<Boneripper>(), 4);
     }
 
     public override void HitEffect(NPC.HitInfo hit)

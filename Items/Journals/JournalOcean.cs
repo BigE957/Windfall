@@ -9,8 +9,9 @@ using WindfallAttempt1.Utilities;
 
 namespace WindfallAttempt1.Items.Journals
 {
-    public class JournalOcean : ModItem
+    public class JournalOcean : ModItem, ILocalizedModType
     {
+        public new string LocalizationCategory => "Items.Journals";
         public override void SetDefaults()
         {
             Item.width = 28;

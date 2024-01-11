@@ -20,18 +20,6 @@ Dialogue: {
 }
 
 Items: {
-	Melee: {
-		stone: {
-			DisplayName: Stone
-			Tooltip: The first object Vitae ever created
-		}
-
-		Boneripper: {
-			DisplayName: Boneripper
-			Tooltip: Imma wip up ya bone :3
-		}
-	}
-
 	Lore: {
 		StatisLore: {
 			Tooltip: ""
@@ -67,7 +55,9 @@ Items: {
 			Tooltip: ""
 			DisplayName: Braelor
 		}
+	}
 
+	Journals: {
 		JournalForest: {
 			DisplayName: Journal Entry: The Forest
 			Tooltip: A tattered page from the journal of an explorer.
@@ -129,115 +119,25 @@ Items: {
 		}
 	}
 
-	JournalCompilation: {
-		DisplayName: Journal Compilation
-		Tooltip: ""
-	}
-
-	JournalCorruption: {
-		DisplayName: Journal Corruption
-		Tooltip: ""
-	}
-
-	JournalCrimson: {
-		DisplayName: Journal Crimson
-		Tooltip: ""
-	}
-
-	JournalDesert: {
-		DisplayName: Journal Desert
-		Tooltip: ""
-	}
-
-	JournalDungeon: {
-		DisplayName: Journal Dungeon
-		Tooltip: ""
-	}
-
-	JournalForest: {
-		DisplayName: Journal Forest
-		Tooltip: ""
-	}
-
-	JournalIlmeris: {
-		DisplayName: Journal Ilmeris
-		Tooltip: ""
-	}
-
-	JournalJungle: {
-		DisplayName: Journal Jungle
-		Tooltip: ""
-	}
-
-	JournalOcean: {
-		DisplayName: Journal Ocean
-		Tooltip: ""
-	}
-
-	JournalSulphur: {
-		DisplayName: Journal Sulphur
-		Tooltip: ""
-	}
-
-	JournalTundra: {
-		DisplayName: Journal Tundra
-		Tooltip: ""
-	}
-
-	BraeLore: {
-		DisplayName: Brae Lore
-		Tooltip: ""
-	}
-
-	DistortionLore: {
-		DisplayName: Distortion Lore
-		Tooltip: ""
-	}
-
-	DragonsAerieLore: {
-		DisplayName: Dragons Aerie Lore
-		Tooltip: ""
-	}
-
-	HallowLore: {
-		DisplayName: Hallow Lore
-		Tooltip: ""
-	}
-
-	IllmerisLore: {
-		DisplayName: Illmeris Lore
-		Tooltip: ""
-	}
-
-	ProfanedWastesLore: {
-		DisplayName: Profaned Wastes Lore
-		Tooltip: ""
-	}
-
-	StatisLore: {
-		DisplayName: Statis Lore
-		Tooltip: ""
-	}
-
 	Weapons: {
 		Melee: {
 			Boneripper: {
 				DisplayName: Boneripper
-				Tooltip: 
-				'''
-				Spins a two-headed scythe around the player.
-				Hits gather malevolent energy that empowers the weapon upon release.
-				Stage One causes the weapon to be thrown out towards the mouse upon release.
-				Stage Two makes the weapon follow after the cursor and inflict Brimstone Flames
-				Stage Three creates Brimstone Explosions on enemy hits. 
-				'''
+				Tooltip:
+					'''
+					Spins a two-headed scythe around the player.
+					Hits gather malevolent energy that empowers the weapon upon release.
+					Stage One causes the weapon to be thrown out towards the mouse upon release.
+					Stage Two makes the weapon follow after the cursor and inflict Brimstone Flames
+					Stage Three creates Brimstone Explosions on enemy hits. 
+					'''
+			}
+
+			stone: {
+				DisplayName: Stone
+				Tooltip: The first object Vitae ever created
 			}
 		}
-	}
-
-	stone: {
-		DisplayName: stone
-		Tooltip: ""
 	}
 }
 

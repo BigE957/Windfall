@@ -9,13 +9,13 @@ using Terraria.ModLoader;
 
 namespace WindfallAttempt1.Items.Lore
 {
-	public class BraeLore : ModItem
-	{
- public override void SetStaticDefaults()
-        {
-            ItemID.Sets.ItemNoGravity[Type] = true;
-        }
-
+	public class BraeLore : ModItem, ILocalizedModType
+    {
+        public new string LocalizationCategory => "Items.Lore";
+        public override void SetStaticDefaults()
+            {
+                ItemID.Sets.ItemNoGravity[Type] = true;
+            }
         public override void SetDefaults()
         {
             Item.width = 20;

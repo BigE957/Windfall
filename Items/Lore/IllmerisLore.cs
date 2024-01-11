@@ -9,12 +9,10 @@ using Terraria.ModLoader;
 
 namespace WindfallAttempt1.Items.Lore
 {
-	public class IllmerisLore : ModItem
+	public class IllmerisLore : ModItem, ILocalizedModType
 	{
-
-
-
- public override void SetStaticDefaults()
+        public new string LocalizationCategory => "Items.Lore";
+        public override void SetStaticDefaults()
         {
             ItemID.Sets.ItemNoGravity[Type] = true;
         }
