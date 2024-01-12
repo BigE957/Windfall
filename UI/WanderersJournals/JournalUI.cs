@@ -92,19 +92,20 @@ namespace WindfallAttempt1.UI.WanderersJournals
             SetRectangle(page, left: -55f, top: -25f, width: 400f, height: 518f);
             UIPanel.Append(page);
 
-            Asset<Texture2D> buttonPlayTexture = ModContent.Request<Texture2D>("Terraria/Images/UI/ButtonPlay"); ;
-            JournalButton nextPageButton = new(buttonPlayTexture, "Next Page");
-            SetRectangle(nextPageButton, left: 375f, top: 500f, width: 22f, height: 20f);
+            Asset<Texture2D> journalArrowRightTexture = ModContent.Request<Texture2D>("WindfallAttempt1/UI/WanderersJournals/JournalArrowRight");
+            JournalButton nextPageButton = new(journalArrowRightTexture, "Next Page");
+            SetRectangle(nextPageButton, left: 325f, top: 500f, width: 56f, height: 26f);
             nextPageButton.OnLeftClick += new MouseEvent(NextPage);
             UIPanel.Append(nextPageButton);
 
-            JournalButton previousPageButton = new(buttonPlayTexture, "Previous Page");
-            SetRectangle(previousPageButton, left: 25f, top: 500f, width: 22f, height: 20f);
+            Asset<Texture2D> journalArrowLeftTexture = ModContent.Request<Texture2D>("WindfallAttempt1/UI/WanderersJournals/JournalArrowLeft");
+            JournalButton previousPageButton = new(journalArrowLeftTexture, "Previous Page");
+            SetRectangle(previousPageButton, left: 25f, top: 500f, width: 56f, height: 26f);
             previousPageButton.OnLeftClick += new MouseEvent(PreviousPage);
             UIPanel.Append(previousPageButton);
 
             JournalContents = new JournalText();
-            SetRectangle(JournalContents, 15f, 20f, 100f, 40f);
+            SetRectangle(JournalContents, left: 15f, top: 20f, width: 100f, height: 40f);
             UIPanel.Append(JournalContents);
         }
         private void SetRectangle(UIElement uiElement, float left, float top, float width, float height)
@@ -198,7 +199,7 @@ namespace WindfallAttempt1.UI.WanderersJournals
             if(isFullJournal)
             {
                 string pgNumStr = Convert.ToString(JournalFullUIState.PageNumber + 1);
-                Utils.DrawBorderStringFourWay(spriteBatch, FontAssets.ItemStack.Value, pgNumStr, 400f, 600f, Color.Black, Color.Tan, Vector2.Zero, 1.5f);
+                Utils.DrawBorderStringFourWay(spriteBatch, FontAssets.ItemStack.Value, pgNumStr, xPageTop + 185f, yPageTop + 470f, Color.Black, Color.Tan, Vector2.Zero, 1.5f);
             }
         }
     }

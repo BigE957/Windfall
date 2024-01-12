@@ -26,7 +26,7 @@ namespace WindfallAttempt1.Items.Lore
             {
                 ModRarity r;
                 Mod calamity = ModLoader.GetMod("CalamityMod");
-                calamity.TryFind<ModRarity>("Turquoise", out r);
+                calamity.TryFind("Turquoise", out r);
                 Item.rare = r.Type;
             } else {
                 Item.rare = ItemRarityID.Purple;

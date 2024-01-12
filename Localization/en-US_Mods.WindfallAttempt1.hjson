@@ -139,6 +139,18 @@ Items: {
 			}
 		}
 	}
+
+	Debug: {
+		TheZoomer: {
+			DisplayName: The Zoomer
+			Tooltip: The power of perspective in the palm of your hand!
+		}
+
+		PortableDraedonDatabase: {
+			DisplayName: Portable Draedon's Database
+			Tooltip: All of the Nightmare Fabricator's knowledge in the palm of your hand!
+		}
+	}
 }
 
 JournalContents: {

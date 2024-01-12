@@ -8,6 +8,8 @@
     <LangVersion>latest</LangVersion>
   </PropertyGroup>
   <ItemGroup>
+    <None Remove="Items\Debug\PortableDraedonDatabase.png" />
+    <None Remove="Items\Debug\TheZoomer.png" />
     <None Remove="Items\Journals\JournalAerie.png" />
     <None Remove="Items\Journals\JournalCompilation.png" />
     <None Remove="Items\Journals\JournalCorruption.png" />
@@ -33,6 +35,10 @@
     <None Remove="NPCs\WorldEvents\WorldCatastrophe.png" />
     <None Remove="NPCs\WorldEvents\WorldCatastrophe_Head_Boss.png" />
     <None Remove="Projectiles\Melee\BoneripperProj.png" />
+    <None Remove="UI\WanderersJournals\JournalArrowLeft(Highlighted).png" />
+    <None Remove="UI\WanderersJournals\JournalArrowLeft.png" />
+    <None Remove="UI\WanderersJournals\JournalArrowRight(Highlighted).png" />
+    <None Remove="UI\WanderersJournals\JournalArrowRight.png" />
     <None Remove="UI\WanderersJournals\JournalPage.png" />
     <None Remove="WorldEvents\CalClone\CalCloneProj.png" />
   </ItemGroup>

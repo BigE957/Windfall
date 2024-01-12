@@ -68,23 +68,32 @@ namespace WindfallAttempt1.UI.WanderersJournals
         public override void Load()
         {
             // Create custom interface which can swap between different UIStates
-            JournalUI = new UserInterface();
-            // Creating custom UIState
-            JournalPageUIState = new JournalPageUIState();
-            JournalPageUIState.Activate();
-
-            JournalFullUIState = new JournalFullUIState();
-            for (int i = 0; i < 13; i++)
+            if (!Main.dedServ)
             {
-                WorldSaveSystem.JournalsCollected.Add(false);
-            }
+                JournalUI = new UserInterface();
+                // Creating custom UIState
+                JournalPageUIState = new JournalPageUIState();
+                JournalPageUIState.Activate();
 
-            // Activate calls Initialize() on the UIState if not initialized, then calls OnActivate and then calls Activate on every child element
-            JournalFullUIState.Activate();
+                JournalFullUIState = new JournalFullUIState();
+                for (int i = 0; i < 13; i++)
+                {
+                    WorldSaveSystem.JournalsCollected.Add(false);
+                }
+
+                // Activate calls Initialize() on the UIState if not initialized, then calls OnActivate and then calls Activate on every child element
+                JournalFullUIState.Activate();
+            }
         }
+        private GameTime _lastUpdateUiGameTime;
+
         public override void UpdateUI(GameTime gameTime)
         {
-            JournalUI?.Update(gameTime);
+            _lastUpdateUiGameTime = gameTime;
+            if (JournalUI?.CurrentState != null)
+            {
+                JournalUI?.Update(gameTime);
+            }
         }
         public override void ModifyInterfaceLayers(List<GameInterfaceLayer> layers)
         {
