@@ -53,7 +53,7 @@ namespace WindfallAttempt1.UI.WanderersJournals
             JournalUI?.SetState(JournalFullUIState);
         }
 
-        public void HideMyUI()
+        public void HideWandererUI()
         {
             SoundEngine.PlaySound(UseSound with
             {

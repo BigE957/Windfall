@@ -1,20 +1,20 @@
-﻿﻿using Microsoft.Xna.Framework.Graphics;
+﻿using Microsoft.Xna.Framework.Graphics;
 using ReLogic.Content;
 using Terraria;
 using Terraria.GameContent.UI.Elements;
 
-namespace WindfallAttempt1.UI.WanderersJournals
+namespace WindfallAttempt1.UI
 {
     // This JournalButton class inherits from UIImageButton. 
     // Inheriting is a great tool for UI design. 
     // By inheriting, we get the Image drawing, MouseOver sound, and fading for free from UIImageButton
     // We've added some code to allow the Button to show a text tooltip while hovered
-    public class JournalButton : UIImageButton
+    public class UIButton : UIImageButton
     {
         // Tooltip text that will be shown on hover
         internal string hoverText;
 
-        public JournalButton(Asset<Texture2D> texture, string hoverText) : base(texture)
+        public UIButton(Asset<Texture2D> texture, string hoverText) : base(texture)
         {
             this.hoverText = hoverText;
         }

@@ -151,6 +151,17 @@ Items: {
 			Tooltip: All of the Nightmare Fabricator's knowledge in the palm of your hand!
 		}
 	}
+
+	Utility: {
+		DraedonCharger: {
+			DisplayName: Voltaic Accumulator
+			Tooltip: 
+			'''
+			Stores charge that can be used to instantly charge Arsenal Weapons
+			Right click this item while holding an Arsenal Weapon to charge it!
+			'''
+		}
+	}
 }
 
 JournalContents: {

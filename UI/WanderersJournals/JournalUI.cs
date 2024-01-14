@@ -12,30 +12,27 @@ using Terraria.ModLoader;
 using System.Collections.Generic;
 using System.Linq;
 using WindfallAttempt1.Utilities;
+using Terraria.GameContent.UI.Elements;
 
 namespace WindfallAttempt1.UI.WanderersJournals
 {
     internal class JournalPageUIState : UIState
     {
         public int i = 0;
-        public JournalButton JournalButton;
-        public JournalUIPanel UIPanel;
+        public DraggableUIPanel UIPanel;
         public JournalText JournalContents;
 
         public override void OnInitialize()
         {
             //UIPanel = new JournalUIPanel();
-            JournalUIPanel UIPanel = new();
+            DraggableUIPanel UIPanel = new();
             UIPanel.SetPadding(0);
-            // We need to place this UIElement in relation to its Parent. Later we will be calling `base.Append(coinCounterPanel);`. 
-            // This means that this class, ExampleCoinsUI, will be our Parent. Since ExampleCoinsUI is a UIState, the Left and Top are relative to the top left of the screen.
-            // SetRectangle method help us to set the position and size of UIElement
             SetRectangle(UIPanel, left: 200f, top: 100f, width: 400f, height: 518f);
             UIPanel.BackgroundColor = new Color(73, 94, 171);
             Append(UIPanel);
 
             Asset<Texture2D> pageTexture = ModContent.Request<Texture2D>("WindfallAttempt1/UI/WanderersJournals/JournalPage");
-            JournalPage page = new (pageTexture);
+            UIImage page = new (pageTexture);
             SetRectangle(page, left: -55f, top: -25f, width: 400f, height: 518f);
             UIPanel.Append(page);
            
@@ -54,10 +51,9 @@ namespace WindfallAttempt1.UI.WanderersJournals
     internal class JournalFullUIState : UIState
     {
         public int i = 0;
-        public JournalButton JournalButton;
-        public JournalUIPanel UIPanel;
+        public DraggableUIPanel UIPanel;
         public JournalText JournalContents;
-        public JournalPage Page;
+        public UIImage Page;
         public static int PageNumber = 0;
         public enum JournalTypes
         {
@@ -78,7 +74,7 @@ namespace WindfallAttempt1.UI.WanderersJournals
 
         public override void OnInitialize()
         {
-            JournalUIPanel UIPanel = new();
+            DraggableUIPanel UIPanel = new();
             UIPanel.SetPadding(0);
             // We need to place this UIElement in relation to its Parent. Later we will be calling `base.Append(coinCounterPanel);`. 
             // This means that this class, ExampleCoinsUI, will be our Parent. Since ExampleCoinsUI is a UIState, the Left and Top are relative to the top left of the screen.
@@ -88,18 +84,18 @@ namespace WindfallAttempt1.UI.WanderersJournals
             Append(UIPanel);
 
             Asset<Texture2D> pageTexture = ModContent.Request<Texture2D>("WindfallAttempt1/UI/WanderersJournals/JournalPage");
-            JournalPage page = new(pageTexture);
+            UIImage page = new(pageTexture);
             SetRectangle(page, left: -55f, top: -25f, width: 400f, height: 518f);
             UIPanel.Append(page);
 
             Asset<Texture2D> journalArrowRightTexture = ModContent.Request<Texture2D>("WindfallAttempt1/UI/WanderersJournals/JournalArrowRight");
-            JournalButton nextPageButton = new(journalArrowRightTexture, "Next Page");
+            UIButton nextPageButton = new(journalArrowRightTexture, "Next Page");
             SetRectangle(nextPageButton, left: 325f, top: 500f, width: 56f, height: 26f);
             nextPageButton.OnLeftClick += new MouseEvent(NextPage);
             UIPanel.Append(nextPageButton);
 
             Asset<Texture2D> journalArrowLeftTexture = ModContent.Request<Texture2D>("WindfallAttempt1/UI/WanderersJournals/JournalArrowLeft");
-            JournalButton previousPageButton = new(journalArrowLeftTexture, "Previous Page");
+            UIButton previousPageButton = new(journalArrowLeftTexture, "Previous Page");
             SetRectangle(previousPageButton, left: 25f, top: 500f, width: 56f, height: 26f);
             previousPageButton.OnLeftClick += new MouseEvent(PreviousPage);
             UIPanel.Append(previousPageButton);

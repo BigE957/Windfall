@@ -40,7 +40,7 @@ namespace WindfallAttempt1.Items.Journals
                 }
                 else
                 {
-                    ModContent.GetInstance<JournalUISystem>().HideMyUI();
+                    ModContent.GetInstance<JournalUISystem>().HideWandererUI();
                 }
             }
             return true;

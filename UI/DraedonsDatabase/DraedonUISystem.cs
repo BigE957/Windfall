@@ -13,7 +13,8 @@ namespace WindfallAttempt1.UI.DraedonsDatabase
     public class DraedonUISystem : ModSystem
     {
         internal UserInterface DraedonUI;
-        internal DraedonUI DraedonUIState;
+        internal Desktop DesktopState;
+        internal DraeDash DraeDashState;
         public static bool databaseOpen = false;
         public override void Load()
         {
@@ -21,24 +22,32 @@ namespace WindfallAttempt1.UI.DraedonsDatabase
             {
                 DraedonUI = new UserInterface();
 
-                DraedonUIState = new DraedonUI();
-                DraedonUIState.Activate(); // Activate calls Initialize() on the UIState if not initialized and calls OnActivate, then calls Activate on every child element.
+                DesktopState = new Desktop();
+                DesktopState.Activate(); // Activate calls Initialize() on the UIState if not initialized and calls OnActivate, then calls Activate on every child element.
+
+                DraeDashState = new DraeDash();
+                DraeDashState.Activate();
             }
         }
         public override void Unload()
         {
-            DraedonUIState = null;
+            DesktopState = null;
         }
-        internal void ShowMyUI()
+        internal void OpenDraedonDatabase()
         {
             databaseOpen = true;
-            DraedonUI?.SetState(DraedonUIState);
+            DraedonUI?.SetState(DesktopState);
         }
 
-        internal void HideMyUI()
+        internal void CloseDraedonDatabase()
         {
             databaseOpen = false;
             DraedonUI?.SetState(null);
+        }
+
+        internal void OpenDraedonApp(string app)
+        {
+            DraedonUI?.SetState(DraeDashState);
         }
 
         private GameTime _lastUpdateUiGameTime;
