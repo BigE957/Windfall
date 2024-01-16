@@ -68,24 +68,3 @@ namespace WindfallAttempt1.Items.Utility
         }
     }
 }
-//Item heldItem = player.HeldItem;
-//CalamityGlobalItem itemToCharge = heldItem.Calamity();
-//CalamityGlobalItem thisItem = Item.Calamity();
-//if (itemToCharge.UsesCharge)
-//{
-//    if (itemToCharge.Charge < itemToCharge.MaxCharge && thisItem.Charge > 0f)
-//    {
-//        float chargeToFill = itemToCharge.MaxCharge - itemToCharge.Charge;
-//        if (thisItem.Charge >= chargeToFill)
-//        {
-//            itemToCharge.Charge = itemToCharge.MaxCharge;
-///            thisItem.Charge -= chargeToFill;
-//        }
-//        else
-//        {
-//            itemToCharge.Charge += thisItem.Charge;
-//            thisItem.Charge = 0f;
-//       }
-//       SoundEngine.PlaySound(SoundID.Item94 with { Volume = SoundID.Item94.Volume * 0.75f }, player.position);
-//    }
-//}

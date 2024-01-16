@@ -150,16 +150,21 @@ Items: {
 			DisplayName: Portable Draedon's Database
 			Tooltip: All of the Nightmare Fabricator's knowledge in the palm of your hand!
 		}
+
+		DraeDashGiftCard: {
+			DisplayName: $19 Drae-Dash Gift Card
+			Tooltip: Who wants it?
+		}
 	}
 
 	Utility: {
 		DraedonCharger: {
 			DisplayName: Voltaic Accumulator
-			Tooltip: 
-			'''
-			Stores charge that can be used to instantly charge Arsenal Weapons.
-			Right click this item while holding an Arsenal Weapon to charge it!
-			'''
+			Tooltip:
+				'''
+				Stores charge that can be used to instantly charge Arsenal Weapons.
+				Right click this item while holding an Arsenal Weapon to charge it!
+				'''
 		}
 	}
 }
@@ -300,4 +305,5 @@ NPCs: {
 Projectiles: {
 	CalCloneProj.DisplayName: ???
 	BoneripperProj.DisplayName: Boneripper
+	Other.DraeDashDropPod.DisplayName: Drae-Dash Drop Pod
 }

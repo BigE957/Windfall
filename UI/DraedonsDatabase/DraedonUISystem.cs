@@ -15,8 +15,9 @@ namespace WindfallAttempt1.UI.DraedonsDatabase
         internal UserInterface DraedonUI;
         internal Desktop DesktopState;
         internal DraeDash DraeDashState;
+        public static Dictionary<string, int> DraeDashOrder = new Dictionary<string, int>();
         public static bool databaseOpen = false;
-        public override void Load()
+        public override void PostSetupContent()
         {
             if (!Main.dedServ)
             {
