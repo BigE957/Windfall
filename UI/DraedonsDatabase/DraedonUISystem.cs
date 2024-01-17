@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using Terraria;
 using Terraria.ModLoader;
 using Terraria.UI;
+using WindfallAttempt1.Utilities;
 
 namespace WindfallAttempt1.UI.DraedonsDatabase
 {
@@ -15,6 +16,8 @@ namespace WindfallAttempt1.UI.DraedonsDatabase
         internal UserInterface DraedonUI;
         internal Desktop DesktopState;
         internal DraeDash DraeDashState;
+        internal PlutusVault PlutusVaultState;
+        internal OrderEnRoute OrderEnRouteState;
         public static Dictionary<string, int> DraeDashOrder = new Dictionary<string, int>();
         public static bool databaseOpen = false;
         public override void PostSetupContent()
@@ -28,6 +31,12 @@ namespace WindfallAttempt1.UI.DraedonsDatabase
 
                 DraeDashState = new DraeDash();
                 DraeDashState.Activate();
+
+                PlutusVaultState = new PlutusVault();
+                PlutusVaultState.Activate();
+
+                OrderEnRouteState = new OrderEnRoute();
+                OrderEnRouteState.Activate();
             }
         }
         public override void Unload()
@@ -36,6 +45,19 @@ namespace WindfallAttempt1.UI.DraedonsDatabase
         }
         internal void OpenDraedonDatabase()
         {
+            if (WorldSaveSystem.CreditDataNames != null)
+            {
+                if (!WorldSaveSystem.CreditDataNames.Any(n => n == Main.LocalPlayer.name))
+                {
+                    WorldSaveSystem.CreditDataNames.Add(Main.LocalPlayer.name);
+                    WorldSaveSystem.CreditDataCredits.Add(0);
+                }
+            }
+            else
+            {
+                WorldSaveSystem.CreditDataNames.Add(Main.LocalPlayer.name);
+                WorldSaveSystem.CreditDataCredits.Add(0);
+            }
             databaseOpen = true;
             DraedonUI?.SetState(DesktopState);
         }
@@ -48,7 +70,19 @@ namespace WindfallAttempt1.UI.DraedonsDatabase
 
         internal void OpenDraedonApp(string app)
         {
-            DraedonUI?.SetState(DraeDashState);
+            if(app == "DraeDash")
+            {
+                if (DraeDash.orderEnRoute)
+                {
+                    DraedonUI?.SetState(OrderEnRouteState);
+                }
+                else
+                {
+                    DraedonUI?.SetState(DraeDashState);
+                }
+            }
+            else if (app == "PlutusVault")
+                DraedonUI?.SetState(PlutusVaultState);
         }
 
         private GameTime _lastUpdateUiGameTime;

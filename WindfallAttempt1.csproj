@@ -45,6 +45,7 @@
     <None Remove="UI\DraedonsDatabase\DraedonUIDraeDashLogo.png" />
     <None Remove="UI\DraedonsDatabase\DraedonUIIconBG.png" />
     <None Remove="UI\DraedonsDatabase\DraedonUIPurchase.png" />
+    <None Remove="UI\WanderersJournals\DraedonsUICheckmark.png" />
     <None Remove="UI\WanderersJournals\JournalArrowLeft(Highlighted).png" />
     <None Remove="UI\WanderersJournals\JournalArrowLeft.png" />
     <None Remove="UI\WanderersJournals\JournalArrowRight(Highlighted).png" />
