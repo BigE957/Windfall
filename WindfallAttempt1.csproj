@@ -23,6 +23,7 @@
     <None Remove="Items\Journals\JournalOcean.png" />
     <None Remove="Items\Journals\JournalSulphur.png" />
     <None Remove="Items\Journals\JournalTundra.png" />
+    <None Remove="Items\Placeables\Special\DatabaseTerminalItem.png" />
     <None Remove="Items\Utility\DraedonCharger.png" />
     <None Remove="Items\Weapons\Melee\Boneripper(no_flame).png" />
     <None Remove="Items\Weapons\Melee\Boneripper.png" />
@@ -38,6 +39,7 @@
     <None Remove="NPCs\WorldEvents\WorldCatastrophe_Head_Boss.png" />
     <None Remove="Projectiles\Melee\BoneripperProj.png" />
     <None Remove="Projectiles\Other\DraeDashDropPod.png" />
+    <None Remove="Tiles\Special\DatabaseTerminal.png" />
     <None Remove="UI\DraedonsDatabase\DraedonUIArrowLeft.png" />
     <None Remove="UI\DraedonsDatabase\DraedonUIArrowRight.png" />
     <None Remove="UI\DraedonsDatabase\DraedonUIBG.png" />

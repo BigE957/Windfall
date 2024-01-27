@@ -167,6 +167,17 @@ Items: {
 				'''
 		}
 	}
+
+	Placeables: {
+		DatabaseTerminalItem: {
+			DisplayName: Database Terminal Item
+			Tooltip:
+				'''
+				An advanced terminal that grants access to Draedon's Database
+				Right Click to access
+				'''
+		}
+	}
 }
 
 JournalContents: {
@@ -307,3 +318,5 @@ Projectiles: {
 	BoneripperProj.DisplayName: Boneripper
 	Other.DraeDashDropPod.DisplayName: Drae-Dash Drop Pod
 }
+
+Tiles.DatabaseTerminal: Database Terminal
