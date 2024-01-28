@@ -7,10 +7,10 @@ using Terraria.ID;
 using Terraria.Localization;
 using Terraria.ModLoader;
 using Terraria;
-using WindfallAttempt1.UI.WanderersJournals;
-using WindfallAttempt1.Utilities;
+using Windfall.UI.WanderersJournals;
+using Windfall.Utilities;
 
-namespace WindfallAttempt1.Items.Debug
+namespace Windfall.Items.Debug
 {
     public class TheZoomer : ModItem, ILocalizedModType
     {

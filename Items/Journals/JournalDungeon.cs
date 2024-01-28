@@ -3,11 +3,11 @@ using Terraria.Audio;
 using Terraria.ID;
 using Terraria.Localization;
 using Terraria.ModLoader;
-using WindfallAttempt1.UI.WanderersJournals;
-using WindfallAttempt1.Utilities;
+using Windfall.UI.WanderersJournals;
+using Windfall.Utilities;
 
 
-namespace WindfallAttempt1.Items.Journals
+namespace Windfall.Items.Journals
 {
     public class JournalDungeon : ModItem, ILocalizedModType
     {
@@ -34,7 +34,7 @@ namespace WindfallAttempt1.Items.Journals
             {
                 if (!JournalUISystem.isJournalOpen)
                 {
-                    JournalText.JournalContents = Language.GetOrRegister($"Mods.{nameof(WindfallAttempt1)}.JournalContents.Dungeon").Value;
+                    JournalText.JournalContents = Language.GetOrRegister($"Mods.{nameof(Windfall)}.JournalContents.Dungeon").Value;
                     ModContent.GetInstance<JournalUISystem>().ShowPageUI();
                 }
                 else

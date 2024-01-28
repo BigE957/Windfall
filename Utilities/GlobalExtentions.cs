@@ -1,7 +1,7 @@
-﻿using WindfallAttempt1.Players;
+﻿using Windfall.Players;
 using Terraria;
 
-namespace WindfallAttempt1.Utilities
+namespace Windfall.Utilities
 {
     public static partial class Utilities
     {

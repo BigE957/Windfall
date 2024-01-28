@@ -13,11 +13,11 @@ using CalamityMod.Items.Weapons.Rogue;
 using Terraria.Audio;
 using Microsoft.Xna.Framework.Input;
 using Terraria.DataStructures;
-using WindfallAttempt1.WorldEvents.CalClone;
+using Windfall.WorldEvents.CalClone;
 using CalamityMod.Items.Weapons.Ranged;
 using CalamityMod.Projectiles.Ranged;
 
-namespace WindfallAttempt1.Projectiles.Melee
+namespace Windfall.Projectiles.Melee
 {
     public class BoneripperProj : ModProjectile
     {

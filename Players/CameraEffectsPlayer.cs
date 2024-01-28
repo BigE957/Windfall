@@ -3,7 +3,7 @@ using Microsoft.Xna.Framework;
 using Terraria;
 using Terraria.ModLoader;
 
-namespace WindfallAttempt1.Players
+namespace Windfall.Players
 {
     public class CameraEffectsPlayer : ModPlayer
     {

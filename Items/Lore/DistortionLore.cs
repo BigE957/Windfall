@@ -7,7 +7,7 @@ using Terraria.Localization;
 using Terraria.ModLoader;
 
 
-namespace WindfallAttempt1.Items.Lore
+namespace Windfall.Items.Lore
 {
 	public class DistortionLore : ModItem, ILocalizedModType
     {
@@ -40,11 +40,11 @@ namespace WindfallAttempt1.Items.Lore
             if (!Main.keyState.IsKeyDown(Microsoft.Xna.Framework.Input.Keys.LeftShift))
             {
                 if (line != null)
-                    line.Text = Language.GetOrRegister($"Mods.{nameof(WindfallAttempt1)}.LoreItems.LoreGeneric").Value;
+                    line.Text = Language.GetOrRegister($"Mods.{nameof(Windfall)}.LoreItems.LoreGeneric").Value;
                 return;
             }
 
-            string tooltip = Language.GetOrRegister($"Mods.{nameof(WindfallAttempt1)}.LoreItems.LoreDistortion").Value;
+            string tooltip = Language.GetOrRegister($"Mods.{nameof(Windfall)}.LoreItems.LoreDistortion").Value;
 
             if (line != null)
                 line.Text = tooltip;

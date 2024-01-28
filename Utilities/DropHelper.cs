@@ -2,10 +2,10 @@
 using Terraria;
 using Terraria.ID;
 using CalamityMod;
-using WindfallAttempt1.Items.Lore;
-using WindfallAttempt1.Items.Journals;
+using Windfall.Items.Lore;
+using Windfall.Items.Journals;
 
-namespace WindfallAttempt1.Utilities
+namespace Windfall.Utilities
 {
     public class DropHelper : GlobalNPC
     {

@@ -3,12 +3,12 @@ using Terraria.Audio;
 using Terraria.ID;
 using Terraria.Localization;
 using Terraria.ModLoader;
-using WindfallAttempt1.UI.WanderersJournals;
-using static WindfallAttempt1.UI.WanderersJournals.JournalFullUIState;
-using WindfallAttempt1.Utilities;
+using Windfall.UI.WanderersJournals;
+using static Windfall.UI.WanderersJournals.JournalFullUIState;
+using Windfall.Utilities;
 
 
-namespace WindfallAttempt1.Items.Journals
+namespace Windfall.Items.Journals
 {
     public class JournalCompilation : ModItem, ILocalizedModType
     {
@@ -38,11 +38,11 @@ namespace WindfallAttempt1.Items.Journals
                             {
                                 if (JournalUISystem.whichEvilJournal == "Crimson")
                                 {
-                                    JournalText.JournalContents = Language.GetOrRegister($"Mods.{nameof(WindfallAttempt1)}.JournalContents.Crimson").Value;
+                                    JournalText.JournalContents = Language.GetOrRegister($"Mods.{nameof(Windfall)}.JournalContents.Crimson").Value;
                                 }
                                 else if (JournalUISystem.whichEvilJournal == "Corruption")
                                 {
-                                    JournalText.JournalContents = Language.GetOrRegister($"Mods.{nameof(WindfallAttempt1)}.JournalContents.Corruption").Value;
+                                    JournalText.JournalContents = Language.GetOrRegister($"Mods.{nameof(Windfall)}.JournalContents.Corruption").Value;
                                 }
                                 else
                                 {
@@ -51,7 +51,7 @@ namespace WindfallAttempt1.Items.Journals
                             }
                             else
                             {
-                                JournalText.JournalContents = Language.GetOrRegister($"Mods.{nameof(WindfallAttempt1)}.JournalContents.{i}").Value;
+                                JournalText.JournalContents = Language.GetOrRegister($"Mods.{nameof(Windfall)}.JournalContents.{i}").Value;
                             }
                             PageNumber = (int)i;
                             break;

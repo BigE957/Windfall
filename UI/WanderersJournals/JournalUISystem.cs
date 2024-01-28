@@ -12,9 +12,9 @@ using Terraria.ID;
 using Terraria.ModLoader;
 using Terraria.ModLoader.IO;
 using Terraria.UI;
-using WindfallAttempt1.Utilities;
+using Windfall.Utilities;
 
-namespace WindfallAttempt1.UI.WanderersJournals
+namespace Windfall.UI.WanderersJournals
 {
     public class JournalUISystem : ModSystem
     {

@@ -12,7 +12,7 @@ using CalamityMod.Items;
 using CalamityMod;
 using Terraria.Audio;
 
-namespace WindfallAttempt1.Items.Utility
+namespace Windfall.Items.Utility
 {
     //CalamityGlobalItem
     public class DraedonCharger : ModItem, ILocalizedModType

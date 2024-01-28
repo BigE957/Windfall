@@ -2,7 +2,7 @@
 using Terraria.ID;
 using Terraria.ModLoader;
 using Terraria;
-using WindfallAttempt1.Tiles.Special;
+using Windfall.Tiles.Special;
 using CalamityMod.CustomRecipes;
 using CalamityMod.Items.Placeables;
 using CalamityMod.Items.Placeables.DraedonStructures;
@@ -11,7 +11,7 @@ using CalamityMod.Items;
 using System.Collections.Generic;
 using CalamityMod.Rarities;
 
-namespace WindfallAttempt1.Items.Placeables.Special
+namespace Windfall.Items.Placeables.Special
 {
     internal class DatabaseTerminalItem : ModItem, ILocalizedModType
     {

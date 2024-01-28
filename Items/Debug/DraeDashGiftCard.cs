@@ -3,10 +3,10 @@ using Microsoft.Xna.Framework;
 using CalamityMod.Rarities;
 using Terraria.ID;
 using Terraria.ModLoader;
-using WindfallAttempt1.Projectiles.Other;
+using Windfall.Projectiles.Other;
 using Terraria.DataStructures;
 
-namespace WindfallAttempt1.Items.Debug
+namespace Windfall.Items.Debug
 {
     public class DraeDashGiftCard : ModItem, ILocalizedModType
     {

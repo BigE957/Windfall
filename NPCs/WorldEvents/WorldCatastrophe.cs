@@ -11,11 +11,11 @@ using Terraria.ID;
 using Terraria.ModLoader;
 using System.IO;
 using CalamityMod;
-using WindfallAttempt1.Items.Weapons.Melee;
-using WindfallAttempt1.Utilities;
+using Windfall.Items.Weapons.Melee;
+using Windfall.Utilities;
 using CalamityMod.NPCs.CalClone;
 
-namespace WindfallAttempt1.NPCs.WorldEvents;
+namespace Windfall.NPCs.WorldEvents;
 
 [AutoloadBossHead]
 public class WorldCatastrophe : ModNPC

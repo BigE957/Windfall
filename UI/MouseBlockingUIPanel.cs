@@ -8,7 +8,7 @@ using Terraria;
 using Terraria.GameContent.UI.Elements;
 using Terraria.UI;
 
-namespace WindfallAttempt1.UI
+namespace Windfall.UI
 {
     public class MouseBlockingUIPanel : UIPanel
     {

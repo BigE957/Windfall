@@ -7,7 +7,7 @@ using Terraria.DataStructures;
 using Terraria;
 using Microsoft.Xna.Framework;
 
-namespace WindfallAttempt1.Utilities
+namespace Windfall.Utilities
 {
     public static partial class Utilities
     {

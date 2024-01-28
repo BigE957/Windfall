@@ -11,10 +11,10 @@ using Terraria.Localization;
 using Terraria.ModLoader;
 using System.Collections.Generic;
 using System.Linq;
-using WindfallAttempt1.Utilities;
+using Windfall.Utilities;
 using Terraria.GameContent.UI.Elements;
 
-namespace WindfallAttempt1.UI.WanderersJournals
+namespace Windfall.UI.WanderersJournals
 {
     internal class JournalPageUIState : UIState
     {
@@ -31,7 +31,7 @@ namespace WindfallAttempt1.UI.WanderersJournals
             UIPanel.BackgroundColor = new Color(73, 94, 171);
             Append(UIPanel);
 
-            Asset<Texture2D> pageTexture = ModContent.Request<Texture2D>("WindfallAttempt1/UI/WanderersJournals/JournalPage");
+            Asset<Texture2D> pageTexture = ModContent.Request<Texture2D>($"{nameof(Windfall)}/UI/WanderersJournals/JournalPage");
             UIImage page = new (pageTexture);
             SetRectangle(page, left: -55f, top: -25f, width: 400f, height: 518f);
             UIPanel.Append(page);
@@ -83,18 +83,18 @@ namespace WindfallAttempt1.UI.WanderersJournals
             UIPanel.BackgroundColor = new Color(73, 94, 171);
             Append(UIPanel);
 
-            Asset<Texture2D> pageTexture = ModContent.Request<Texture2D>("WindfallAttempt1/UI/WanderersJournals/JournalPage");
+            Asset<Texture2D> pageTexture = ModContent.Request<Texture2D>($"{nameof(Windfall)}/UI/WanderersJournals/JournalPage");
             UIImage page = new(pageTexture);
             SetRectangle(page, left: -55f, top: -25f, width: 400f, height: 518f);
             UIPanel.Append(page);
 
-            Asset<Texture2D> journalArrowRightTexture = ModContent.Request<Texture2D>("WindfallAttempt1/UI/WanderersJournals/JournalArrowRight");
+            Asset<Texture2D> journalArrowRightTexture = ModContent.Request<Texture2D>($"{nameof(Windfall)}/UI/WanderersJournals/JournalArrowRight");
             UIButton nextPageButton = new(journalArrowRightTexture, "Next Page");
             SetRectangle(nextPageButton, left: 325f, top: 500f, width: 56f, height: 26f);
             nextPageButton.OnLeftClick += new MouseEvent(NextPage);
             UIPanel.Append(nextPageButton);
 
-            Asset<Texture2D> journalArrowLeftTexture = ModContent.Request<Texture2D>("WindfallAttempt1/UI/WanderersJournals/JournalArrowLeft");
+            Asset<Texture2D> journalArrowLeftTexture = ModContent.Request<Texture2D>($"{nameof(Windfall)}/UI/WanderersJournals/JournalArrowLeft");
             UIButton previousPageButton = new(journalArrowLeftTexture, "Previous Page");
             SetRectangle(previousPageButton, left: 25f, top: 500f, width: 56f, height: 26f);
             previousPageButton.OnLeftClick += new MouseEvent(PreviousPage);
@@ -136,11 +136,11 @@ namespace WindfallAttempt1.UI.WanderersJournals
                 {
                     if (JournalUISystem.whichEvilJournal == "Crimson")
                     {
-                        JournalText.JournalContents = Language.GetOrRegister($"Mods.{nameof(WindfallAttempt1)}.JournalContents.Crimson").Value;
+                        JournalText.JournalContents = Language.GetOrRegister($"Mods.{nameof(Windfall)}.JournalContents.Crimson").Value;
                     }
                     else if (JournalUISystem.whichEvilJournal == "Corruption")
                     {
-                        JournalText.JournalContents = Language.GetOrRegister($"Mods.{nameof(WindfallAttempt1)}.JournalContents.Corruption").Value;
+                        JournalText.JournalContents = Language.GetOrRegister($"Mods.{nameof(Windfall)}.JournalContents.Corruption").Value;
                     }
                     else
                     {
@@ -149,7 +149,7 @@ namespace WindfallAttempt1.UI.WanderersJournals
                 }
                 else
                 {
-                    JournalText.JournalContents = Language.GetOrRegister($"Mods.{nameof(WindfallAttempt1)}.JournalContents.{(JournalTypes)PageNumber}").Value;
+                    JournalText.JournalContents = Language.GetOrRegister($"Mods.{nameof(Windfall)}.JournalContents.{(JournalTypes)PageNumber}").Value;
                 }
             }
             else
@@ -174,7 +174,7 @@ namespace WindfallAttempt1.UI.WanderersJournals
             float xPageTop = innerDimensions.X - 6f;
             float yPageTop = innerDimensions.Y + 12f;
             
-            Texture2D pageTexture = ModContent.Request<Texture2D>("WindfallAttempt1/UI/WanderersJournals/JournalPage").Value;
+            Texture2D pageTexture = ModContent.Request<Texture2D>($"{nameof(Windfall)}/UI/WanderersJournals/JournalPage").Value;
             int textWidth = (int)((int)(xScale * pageTexture.Width) - 6f);
             textWidth = (int)(textWidth * xResolutionScale);
             List<string> dialogLines = Utils.WordwrapString(JournalContents, FontAssets.MouseText.Value, (int)(textWidth / 0.45f), 250, out _).ToList();

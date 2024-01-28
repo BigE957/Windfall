@@ -11,11 +11,11 @@ using CalamityMod;
 using System.Reflection;
 using System.Runtime.InteropServices;
 using Terraria.GameContent;
-using WindfallAttempt1.NPCs.WorldEvents;
+using Windfall.NPCs.WorldEvents;
 using CalamityMod.Buffs.DamageOverTime;
 using CalamityMod.Buffs.StatDebuffs;
 
-namespace WindfallAttempt1.Utilities
+namespace Windfall.Utilities
 {
     public class StatCorrections : ModSystem
     {

@@ -16,9 +16,9 @@ using Terraria.Audio;
 using Terraria.ID;
 using Terraria.ModLoader;
 using Terraria;
-using WindfallAttempt1.Utilities;
+using Windfall.Utilities;
 
-namespace WindfallAttempt1.NPCs
+namespace Windfall.NPCs
 {
     public class CalamityAIs
     {

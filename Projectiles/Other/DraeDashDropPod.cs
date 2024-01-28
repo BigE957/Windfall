@@ -8,13 +8,13 @@ using CalamityMod.NPCs.ExoMechs.Thanatos;
 using System.Collections.Generic;
 using CalamityMod;
 using CalamityMod.Projectiles.Summon;
-using WindfallAttempt1.UI.DraedonsDatabase;
-using WindfallAttempt1.Items.Utility;
+using Windfall.UI.DraedonsDatabase;
+using Windfall.Items.Utility;
 using Steamworks;
 using System.Linq;
 using System;
 
-namespace WindfallAttempt1.Projectiles.Other
+namespace Windfall.Projectiles.Other
 {
     public class DraeDashDropPod : ModProjectile, ILocalizedModType
     {

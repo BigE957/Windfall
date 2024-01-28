@@ -7,9 +7,9 @@ using System.Threading.Tasks;
 using Terraria;
 using Terraria.ModLoader;
 using Terraria.UI;
-using WindfallAttempt1.Utilities;
+using Windfall.Utilities;
 
-namespace WindfallAttempt1.UI.DraedonsDatabase
+namespace Windfall.UI.DraedonsDatabase
 {
     public class DraedonUISystem : ModSystem
     {

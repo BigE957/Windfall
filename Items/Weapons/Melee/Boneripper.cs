@@ -1,12 +1,12 @@
 ﻿using Terraria.ID;
 using Terraria.ModLoader;
 using CalamityMod.Items;
-using WindfallAttempt1.Projectiles.Melee;
+using Windfall.Projectiles.Melee;
 using CalamityMod.Items.Weapons.Melee;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework;
 
-namespace WindfallAttempt1.Items.Weapons.Melee
+namespace Windfall.Items.Weapons.Melee
 {
     public class Boneripper : ModItem, ILocalizedModType
     {

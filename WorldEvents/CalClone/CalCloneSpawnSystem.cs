@@ -3,7 +3,7 @@ using Terraria;
 using Terraria.ModLoader;
 using Microsoft.Xna.Framework;
 
-namespace WindfallAttempt1.WorldEvents.CalClone
+namespace Windfall.WorldEvents.CalClone
 {
     public class CalCloneSpawnSystem : ModSystem
     {

@@ -11,9 +11,9 @@ using CalamityMod;
 using CalamityMod.Tiles.DraedonStructures;
 using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Graphics;
-using WindfallAttempt1.UI.DraedonsDatabase;
+using Windfall.UI.DraedonsDatabase;
 
-namespace WindfallAttempt1.Tiles.Special
+namespace Windfall.Tiles.Special
 {
     public class DatabaseTerminal : ModTile
     {
@@ -43,7 +43,7 @@ namespace WindfallAttempt1.Tiles.Special
             TileObjectData.addAlternate(1);
             TileObjectData.addTile(Type);
 
-            AddMapEntry(Color.DarkSlateGray, Language.GetText($"Mods.{nameof(WindfallAttempt1)}.Tiles.DatabaseTerminal"));
+            AddMapEntry(Color.DarkSlateGray, Language.GetText($"Mods.{nameof(Windfall)}.Tiles.DatabaseTerminal"));
 
             DustType = DustID.TheDestroyer;
         }

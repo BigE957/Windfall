@@ -4,7 +4,7 @@ using Terraria.ID;
 using Terraria.ModLoader;
 using Microsoft.Xna.Framework;
 
-namespace WindfallAttempt1.Utilities
+namespace Windfall.Utilities
 {
     public class ZoomSystem : ModSystem
     {

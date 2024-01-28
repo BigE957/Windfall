@@ -5,11 +5,11 @@ using System;
 using Terraria.ID;
 using Terraria.Audio;
 using CalamityMod;
-using WindfallAttempt1.NPCs.WorldEvents;
+using Windfall.NPCs.WorldEvents;
 using CalamityMod.NPCs.Crags;
 using CalamityMod.Dusts;
 
-namespace WindfallAttempt1.WorldEvents.CalClone
+namespace Windfall.WorldEvents.CalClone
 {
     public class CalCloneProj : ModProjectile
     {

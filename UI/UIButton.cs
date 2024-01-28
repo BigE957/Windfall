@@ -3,7 +3,7 @@ using ReLogic.Content;
 using Terraria;
 using Terraria.GameContent.UI.Elements;
 
-namespace WindfallAttempt1.UI
+namespace Windfall.UI
 {
     // This JournalButton class inherits from UIImageButton. 
     // Inheriting is a great tool for UI design. 

@@ -25,9 +25,9 @@ using Humanizer;
 using CalamityMod.NPCs.TownNPCs;
 using CalamityMod.Dusts;
 using Terraria.ModLoader.IO;
-using WindfallAttempt1.Utilities;
+using Windfall.Utilities;
 
-namespace WindfallAttempt1.NPCs.WorldEvents
+namespace Windfall.NPCs.WorldEvents
 {
     public class WanderingCalClone : ModNPC
     {
@@ -143,9 +143,9 @@ namespace WindfallAttempt1.NPCs.WorldEvents
             WeightedRandom<string> chat = new WeightedRandom<string>();
 
             // These are things that the NPC has a chance of telling you when you talk to it.
-            chat.Add(Language.GetOrRegister($"Mods.{nameof(WindfallAttempt1)}.Dialogue.CalPotionSeller.StandardDialogue1").Value);
-            chat.Add(Language.GetOrRegister($"Mods.{nameof(WindfallAttempt1)}.Dialogue.CalPotionSeller.StandardDialogue2").Value);
-            chat.Add(Language.GetOrRegister($"Mods.{nameof(WindfallAttempt1)}.Dialogue.CalPotionSeller.StandardDialogue3").Value);
+            chat.Add(Language.GetOrRegister($"Mods.{nameof(Windfall)}.Dialogue.CalPotionSeller.StandardDialogue1").Value);
+            chat.Add(Language.GetOrRegister($"Mods.{nameof(Windfall)}.Dialogue.CalPotionSeller.StandardDialogue2").Value);
+            chat.Add(Language.GetOrRegister($"Mods.{nameof(Windfall)}.Dialogue.CalPotionSeller.StandardDialogue3").Value);
 
             return chat; // chat is implicitly cast to a string.
         }

@@ -4,19 +4,19 @@ using Terraria.UI;
 using Terraria;
 using Terraria.ModLoader;
 using Terraria.GameContent.UI.Elements;
-using WindfallAttempt1.UI.DraedonsDatabase;
-using WindfallAttempt1.Items.Utility;
+using Windfall.UI.DraedonsDatabase;
+using Windfall.Items.Utility;
 using Microsoft.Xna.Framework;
 using System;
 using Terraria.GameContent;
 using Terraria.ID;
 using CalamityMod.Items.Placeables.DraedonStructures;
-using WindfallAttempt1.Projectiles.Other;
-using WindfallAttempt1.Utilities;
+using Windfall.Projectiles.Other;
+using Windfall.Utilities;
 using System.Linq;
 using System.Collections.Generic;
 
-namespace WindfallAttempt1.UI.DraedonsDatabase
+namespace Windfall.UI.DraedonsDatabase
 {
     internal class Desktop : UIState
     {
@@ -29,12 +29,12 @@ namespace WindfallAttempt1.UI.DraedonsDatabase
             panel.HAlign = panel.VAlign = 0.5f;
             Append(panel);
 
-            Asset<Texture2D> BackgroundTexture = ModContent.Request<Texture2D>("WindfallAttempt1/UI/DraedonsDatabase/DraedonUIBG");
+            Asset<Texture2D> BackgroundTexture = ModContent.Request<Texture2D>($"{nameof(Windfall)}/UI/DraedonsDatabase/DraedonUIBG");
             UIImage Background = new(BackgroundTexture);
             SetRectangle(Background, left: -125f, top: -125f, width: 400f, height: 518f);
             panel.Append(Background);
 
-            Asset<Texture2D> CloseButtonTexture = ModContent.Request<Texture2D>("WindfallAttempt1/UI/DraedonsDatabase/DraedonUIClose");
+            Asset<Texture2D> CloseButtonTexture = ModContent.Request<Texture2D>($"{nameof(Windfall)}/UI/DraedonsDatabase/DraedonUIClose");
             UIButton CloseButton = new(CloseButtonTexture, "Close Database");
             SetRectangle(CloseButton, left: 1270f, top: 115f, width: 26f, height: 26f);
             CloseButton.OnLeftClick += (evt, listeningElement) =>
@@ -43,7 +43,7 @@ namespace WindfallAttempt1.UI.DraedonsDatabase
             };
             panel.Append(CloseButton);
 
-            Asset<Texture2D> DraeDashIconTexture = ModContent.Request<Texture2D>("WindfallAttempt1/UI/DraedonsDatabase/DraedonUIDraeDashLogo");
+            Asset<Texture2D> DraeDashIconTexture = ModContent.Request<Texture2D>($"{nameof(Windfall)}/UI/DraedonsDatabase/DraedonUIDraeDashLogo");
             UIButton DraeDashIcon = new(DraeDashIconTexture, "Open Drae-Dash");
             SetRectangle(DraeDashIcon, left: 210f, top: 115f, width: 52f, height: 52f);
             DraeDashIcon.OnLeftClick += (evt, listeningElement) =>
@@ -52,7 +52,7 @@ namespace WindfallAttempt1.UI.DraedonsDatabase
             };
             panel.Append(DraeDashIcon);
 
-            Asset<Texture2D> PlutusVaultIconTexture = ModContent.Request<Texture2D>("WindfallAttempt1/UI/DraedonsDatabase/DraedonUIDraeDashLogo");
+            Asset<Texture2D> PlutusVaultIconTexture = ModContent.Request<Texture2D>($"{nameof(Windfall)}/UI/DraedonsDatabase/DraedonUIDraeDashLogo");
             UIButton PlutusVault = new(DraeDashIconTexture, "Open Plutus' Vault");
             SetRectangle(PlutusVault, left: 270f, top: 115f, width: 52f, height: 52f);
             PlutusVault.OnLeftClick += (evt, listeningElement) =>
@@ -134,12 +134,12 @@ namespace WindfallAttempt1.UI.DraedonsDatabase
             panel.HAlign = panel.VAlign = 0.5f;
             Append(panel);
 
-            Asset<Texture2D> BackgroundTexture = ModContent.Request<Texture2D>("WindfallAttempt1/UI/DraedonsDatabase/DraedonUIBG");
+            Asset<Texture2D> BackgroundTexture = ModContent.Request<Texture2D>($"{nameof(Windfall)}/UI/DraedonsDatabase/DraedonUIBG");
             UIImage Background = new(BackgroundTexture);
             SetRectangle(Background, left: -125f, top: -125f, width: 56f, height: 56);
             panel.Append(Background);
 
-            Asset<Texture2D> CloseButtonTexture = ModContent.Request<Texture2D>("WindfallAttempt1/UI/DraedonsDatabase/DraedonUIClose");
+            Asset<Texture2D> CloseButtonTexture = ModContent.Request<Texture2D>($"{nameof(Windfall)}/UI/DraedonsDatabase/DraedonUIClose");
             UIButton CloseButton = new(CloseButtonTexture, "Close Drae-Dash");
             SetRectangle(CloseButton, left: 1270f, top: 115f, width: 56f, height: 26f);
             CloseButton.OnLeftClick += (evt, listeningElement) =>
@@ -173,7 +173,7 @@ namespace WindfallAttempt1.UI.DraedonsDatabase
             if (calamityMusic != null)
                 CreateDraeDashItemUI(calamityMusic.Find<ModItem>("BioLabMusicBox").Type, 1, 100000, g, j);
 
-            Asset<Texture2D> BuyButtonTexture = ModContent.Request<Texture2D>("WindfallAttempt1/UI/DraedonsDatabase/DraedonUIPurchase");
+            Asset<Texture2D> BuyButtonTexture = ModContent.Request<Texture2D>($"{nameof(Windfall)}/UI/DraedonsDatabase/DraedonUIPurchase");
             UIButton BuyButton = new(BuyButtonTexture, "Complete Order");
             SetRectangle(BuyButton, left: (Main.screenWidth / 4) * 3, top: (Main.screenHeight / 4) * 3, width: 56f, height: 26f);
             BuyButton.OnLeftClick += (evt, listeningElement) =>
@@ -222,7 +222,7 @@ namespace WindfallAttempt1.UI.DraedonsDatabase
             x = ((Main.screenWidth / 2) - 400) + (150 * x);
             y = ((Main.screenHeight / 2) - 200) + (100 * y);
 
-            Asset<Texture2D> IconBackgroundTexture = ModContent.Request<Texture2D>("WindfallAttempt1/UI/DraedonsDatabase/DraedonUIIconBG");
+            Asset<Texture2D> IconBackgroundTexture = ModContent.Request<Texture2D>($"{nameof(Windfall)}/UI/DraedonsDatabase/DraedonUIIconBG");
             UIImage IconBackground = new(IconBackgroundTexture);
             SetRectangle(IconBackground, left: x - 52 / 2, top: y - 52 / 2 - 15f, width: 52, height: 52);
             panel.Append(IconBackground);
@@ -242,7 +242,7 @@ namespace WindfallAttempt1.UI.DraedonsDatabase
             };
             panel.Append(itemOrderCount);
 
-            Asset<Texture2D> AddButtonTexture = ModContent.Request<Texture2D>("WindfallAttempt1/UI/DraedonsDatabase/DraedonUIArrowRight");
+            Asset<Texture2D> AddButtonTexture = ModContent.Request<Texture2D>($"{nameof(Windfall)}/UI/DraedonsDatabase/DraedonUIArrowRight");
             UIButton AddButton = new(AddButtonTexture, "+1");
             SetRectangle(AddButton, left: (x - (56 / 2)) + 45f, top: (y - (26 / 2)) + 20f, width: 56f, height: 26f);
             AddButton.OnLeftClick += (evt, listeningElement) =>
@@ -263,7 +263,7 @@ namespace WindfallAttempt1.UI.DraedonsDatabase
             };
             panel.Append(AddButton);
 
-            Asset<Texture2D> SubtractButtonTexture = ModContent.Request<Texture2D>("WindfallAttempt1/UI/DraedonsDatabase/DraedonUIArrowLeft");
+            Asset<Texture2D> SubtractButtonTexture = ModContent.Request<Texture2D>($"{nameof(Windfall)}/UI/DraedonsDatabase/DraedonUIArrowLeft");
             UIButton SubtractButton = new(SubtractButtonTexture, "-1");
             SetRectangle(SubtractButton, left: (x - (56 / 2)) - 45f, top: (y - (26 / 2)) + 20f, width: 56f, height: 26f);
             SubtractButton.OnLeftClick += (evt, listeningElement) =>
@@ -319,12 +319,12 @@ namespace WindfallAttempt1.UI.DraedonsDatabase
             panel.HAlign = panel.VAlign = 0.5f;
             Append(panel);
 
-            Asset<Texture2D> BackgroundTexture = ModContent.Request<Texture2D>("WindfallAttempt1/UI/DraedonsDatabase/DraedonUIBG");
+            Asset<Texture2D> BackgroundTexture = ModContent.Request<Texture2D>($"{nameof(Windfall)}/UI/DraedonsDatabase/DraedonUIBG");
             UIImage Background = new(BackgroundTexture);
             SetRectangle(Background, left: -125f, top: -125f, width: 400f, height: 518f);
             panel.Append(Background);
 
-            Asset<Texture2D> CloseButtonTexture = ModContent.Request<Texture2D>("WindfallAttempt1/UI/DraedonsDatabase/DraedonUIClose");
+            Asset<Texture2D> CloseButtonTexture = ModContent.Request<Texture2D>($"{nameof(Windfall)}/UI/DraedonsDatabase/DraedonUIClose");
             UIButton CloseButton = new(CloseButtonTexture, "Close Database");
             SetRectangle(CloseButton, left: 1270f, top: 115f, width: 26f, height: 26f);
             CloseButton.OnLeftClick += (evt, listeningElement) =>
@@ -338,7 +338,7 @@ namespace WindfallAttempt1.UI.DraedonsDatabase
                 CreatePlutusVaultCoinUI(i + 71, i, 0);
             }
 
-            Asset<Texture2D> CheckButtonTexture = ModContent.Request<Texture2D>("WindfallAttempt1/UI/DraedonsDatabase/DraedonUICheckmark");
+            Asset<Texture2D> CheckButtonTexture = ModContent.Request<Texture2D>($"{nameof(Windfall)}/UI/DraedonsDatabase/DraedonUICheckmark");
             UIButton CheckButton = new(CheckButtonTexture, "Transfer to Credits");
             SetRectangle(CheckButton, left: 800f, top: 250, width: 26f, height: 26f);
             CheckButton.OnLeftClick += (evt, listeningElement) =>
@@ -390,7 +390,7 @@ namespace WindfallAttempt1.UI.DraedonsDatabase
             x = ((Main.screenWidth / 2) - 400) + (150 * x);
             y = ((Main.screenHeight / 2) - 200) + (100 * y);
 
-            Asset<Texture2D> IconBackgroundTexture = ModContent.Request<Texture2D>("WindfallAttempt1/UI/DraedonsDatabase/DraedonUIIconBG");
+            Asset<Texture2D> IconBackgroundTexture = ModContent.Request<Texture2D>($"{nameof(Windfall)}/UI/DraedonsDatabase/DraedonUIIconBG");
             UIImage IconBackground = new(IconBackgroundTexture);
             SetRectangle(IconBackground, left: x - 52 / 2, top: y - 52 / 2 - 15f, width: 52, height: 52);
             panel.Append(IconBackground);
@@ -408,7 +408,7 @@ namespace WindfallAttempt1.UI.DraedonsDatabase
             };
             panel.Append(coinCount);
 
-            Asset<Texture2D> AddButtonTexture = ModContent.Request<Texture2D>("WindfallAttempt1/UI/DraedonsDatabase/DraedonUIArrowRight");
+            Asset<Texture2D> AddButtonTexture = ModContent.Request<Texture2D>($"{nameof(Windfall)}/UI/DraedonsDatabase/DraedonUIArrowRight");
             UIButton AddButton = new(AddButtonTexture, "+1");
             SetRectangle(AddButton, left: (x - (56 / 2)) + 45f, top: (y - (26 / 2)) + 20f, width: 56f, height: 26f);
             AddButton.OnLeftClick += (evt, listeningElement) =>
@@ -424,7 +424,7 @@ namespace WindfallAttempt1.UI.DraedonsDatabase
             };
             panel.Append(AddButton);
 
-            Asset<Texture2D> SubtractButtonTexture = ModContent.Request<Texture2D>("WindfallAttempt1/UI/DraedonsDatabase/DraedonUIArrowLeft");
+            Asset<Texture2D> SubtractButtonTexture = ModContent.Request<Texture2D>($"{nameof(Windfall)}/UI/DraedonsDatabase/DraedonUIArrowLeft");
             UIButton SubtractButton = new(SubtractButtonTexture, "-1");
             SetRectangle(SubtractButton, left: (x - (56 / 2)) - 45f, top: (y - (26 / 2)) + 20f, width: 56f, height: 26f);
             SubtractButton.OnLeftClick += (evt, listeningElement) =>
@@ -480,12 +480,12 @@ namespace WindfallAttempt1.UI.DraedonsDatabase
             panel.HAlign = panel.VAlign = 0.5f;
             Append(panel);
 
-            Asset<Texture2D> BackgroundTexture = ModContent.Request<Texture2D>("WindfallAttempt1/UI/DraedonsDatabase/DraedonUIBG");
+            Asset<Texture2D> BackgroundTexture = ModContent.Request<Texture2D>($"{nameof(Windfall)}/UI/DraedonsDatabase/DraedonUIBG");
             UIImage Background = new(BackgroundTexture);
             SetRectangle(Background, left: -125f, top: -125f, width: 56f, height: 56);
             panel.Append(Background);
 
-            Asset<Texture2D> CloseButtonTexture = ModContent.Request<Texture2D>("WindfallAttempt1/UI/DraedonsDatabase/DraedonUIClose");
+            Asset<Texture2D> CloseButtonTexture = ModContent.Request<Texture2D>($"{nameof(Windfall)}/UI/DraedonsDatabase/DraedonUIClose");
             UIButton CloseButton = new(CloseButtonTexture, "Close Drae-Dash");
             SetRectangle(CloseButton, left: 1270f, top: 115f, width: 56f, height: 26f);
             CloseButton.OnLeftClick += (evt, listeningElement) =>
