@@ -16,7 +16,7 @@ using Terraria.Audio;
 using Terraria.ID;
 using Terraria.ModLoader;
 using Terraria;
-using Windfall.Utilities;
+using Windfall.Systems;
 
 namespace Windfall.NPCs
 {

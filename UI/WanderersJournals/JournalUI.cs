@@ -11,8 +11,8 @@ using Terraria.Localization;
 using Terraria.ModLoader;
 using System.Collections.Generic;
 using System.Linq;
-using Windfall.Utilities;
 using Terraria.GameContent.UI.Elements;
+using Windfall.Systems;
 
 namespace Windfall.UI.WanderersJournals
 {

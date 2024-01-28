@@ -12,7 +12,7 @@ using Terraria.ID;
 using Terraria.ModLoader;
 using Terraria.ModLoader.IO;
 using Terraria.UI;
-using Windfall.Utilities;
+using Windfall.Systems;
 
 namespace Windfall.UI.WanderersJournals
 {

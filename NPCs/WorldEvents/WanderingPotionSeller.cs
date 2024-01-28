@@ -25,11 +25,11 @@ using Humanizer;
 using CalamityMod.NPCs.TownNPCs;
 using CalamityMod.Dusts;
 using Terraria.ModLoader.IO;
-using Windfall.Utilities;
 using CalamityMod.NPCs.Crags;
 using static Terraria.GameContent.Animations.IL_Actions.NPCs;
 using Mono.Cecil;
 using Terraria.Chat;
+using Windfall.Systems;
 
 namespace Windfall.NPCs.WorldEvents
 {

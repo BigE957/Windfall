@@ -13,8 +13,8 @@ using Terraria.ModLoader;
 using System.IO;
 using CalamityMod;
 using Windfall.Items.Weapons.Melee;
-using Windfall.Utilities;
 using CalamityMod.NPCs.CalClone;
+using Windfall.Systems;
 
 namespace Windfall.NPCs.WorldEvents;
 

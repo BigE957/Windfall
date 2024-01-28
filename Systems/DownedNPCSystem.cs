@@ -7,7 +7,7 @@ using Terraria;
 using Terraria.ModLoader;
 using Terraria.ModLoader.IO;
 
-namespace Windfall.Utilities
+namespace Windfall.Systems
 {
     public class DownedNPCSystem : ModSystem
     {

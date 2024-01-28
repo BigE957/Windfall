@@ -1,8 +1,8 @@
 ﻿using Terraria;
 using Terraria.ModLoader;
-using Windfall.Utilities;
+using Windfall.Systems;
 
-namespace Windfall
+namespace Windfall.NPCs
 {
     public class WindfallGlobalNPC : GlobalNPC
     {

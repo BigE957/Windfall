@@ -4,8 +4,9 @@ using Terraria.ID;
 using CalamityMod;
 using Windfall.Items.Lore;
 using Windfall.Items.Journals;
+using Windfall.Systems;
 
-namespace Windfall.Utilities
+namespace Windfall.NPCs
 {
     public class DropHelper : GlobalNPC
     {

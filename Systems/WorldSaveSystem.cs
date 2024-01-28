@@ -7,13 +7,13 @@ using Terraria;
 using Terraria.ModLoader;
 using Terraria.ModLoader.IO;
 
-namespace Windfall.Utilities
+namespace Windfall.Systems
 {
     public class WorldSaveSystem : ModSystem
     {
         public static List<bool> JournalsCollected = new(13);
         public static bool CloneRevealed = false;
-        
+
         public static List<string> CreditDataNames;
         public static List<int> CreditDataCredits;
         public override void ClearWorld()

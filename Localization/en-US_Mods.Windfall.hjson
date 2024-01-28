@@ -22,90 +22,56 @@ Dialogue: {
 Items: {
 	Lore: {
 		StatisLore: {
-			Tooltip: ""
-			DisplayName: Statis
 		}
 
 		ProfanedWastesLore: {
-			Tooltip: ""
-			DisplayName: The Profaned Wastes
 		}
 
 		IllmerisLore: {
-			Tooltip: ""
-			DisplayName: Illmeris
 		}
 
 		HallowLore: {
-			Tooltip: ""
-			DisplayName: The Hallow
 		}
 
 		DragonsAerieLore: {
-			Tooltip: ""
-			DisplayName: The Dragons Aerie
 		}
 
 		DistortionLore: {
-			Tooltip: ""
-			DisplayName: The Distortion
 		}
 
 		BraeLore: {
-			Tooltip: ""
-			DisplayName: Braelor
 		}
 	}
 
 	Journals: {
 		JournalForest: {
-			DisplayName: Journal Entry: The Forest
-			Tooltip: A tattered page from the journal of an explorer.
 		}
 
 		JournalDesert: {
-			DisplayName: Journal Entry: The Desert
-			Tooltip: A tattered page from the journal of an explorer.
 		}
 
 		JournalIlmeris: {
-			DisplayName: Journal Entry: The Ilmeran Ruins
-			Tooltip: A tattered page from the journal of an explorer.
 		}
 
 		JournalTundra: {
-			DisplayName: Journal Entry: The Tundra
-			Tooltip: A tattered page from the journal of an explorer.
 		}
 
 		JournalCorruption: {
-			DisplayName: Journal Entry: The Corruption
-			Tooltip: A tattered page from the journal of an explorer.
 		}
 
 		JournalCrimson: {
-			DisplayName: Journal Entry: The Crimson
-			Tooltip: A tattered page from the journal of an explorer.
 		}
 
 		JournalJungle: {
-			DisplayName: Journal Entry: The Jungle
-			Tooltip: A tattered page from the journal of an explorer.
 		}
 
 		JournalOcean: {
-			DisplayName: Journal Entry: The Ocean
-			Tooltip: A tattered page from the journal of an explorer.
 		}
 
 		JournalDungeon: {
-			DisplayName: Journal Entry: The Dungeon
-			Tooltip: A tattered page from the journal of an explorer.
 		}
 
 		JournalSulphur: {
-			DisplayName: Journal Entry: The Sulphurous Sea
-			Tooltip: A tattered page from the journal of an explorer.
 		}
 
 		JournalAerie: {
@@ -114,68 +80,37 @@ Items: {
 		}
 
 		JournalCompilation: {
-			DisplayName: The Wanderer's Journal
-			Tooltip: A collection of journal entries about various locations and environments.
 		}
 	}
 
 	Weapons: {
 		Melee: {
 			Boneripper: {
-				DisplayName: Boneripper
-				Tooltip:
-					'''
-					Spins a two-headed scythe around the player.
-					Hits gather malevolent energy that empowers the weapon upon release.
-					Stage One causes the weapon to be thrown out towards the mouse upon release.
-					Stage Two makes the weapon follow after the cursor and inflict Brimstone Flames
-					Stage Three creates Brimstone Explosions on enemy hits. 
-					'''
 			}
 
 			stone: {
-				DisplayName: Stone
-				Tooltip: The first object Vitae ever created
 			}
 		}
 	}
 
 	Debug: {
 		TheZoomer: {
-			DisplayName: The Zoomer
-			Tooltip: The power of perspective in the palm of your hand!
 		}
 
 		PortableDraedonDatabase: {
-			DisplayName: Portable Draedon's Database
-			Tooltip: All of the Nightmare Fabricator's knowledge in the palm of your hand!
 		}
 
 		DraeDashGiftCard: {
-			DisplayName: $19 Drae-Dash Gift Card
-			Tooltip: Who wants it?
 		}
 	}
 
 	Utility: {
 		DraedonCharger: {
-			DisplayName: Voltaic Accumulator
-			Tooltip:
-				'''
-				Stores charge that can be used to instantly charge Arsenal Weapons.
-				Right click this item while holding an Arsenal Weapon to charge it!
-				'''
 		}
 	}
 
 	Placeables: {
 		DatabaseTerminalItem: {
-			DisplayName: Database Terminal Item
-			Tooltip:
-				'''
-				An advanced terminal that grants access to Draedon's Database
-				Right Click to access
-				'''
 		}
 	}
 }
@@ -306,17 +241,9 @@ LoreItems: {
 }
 
 NPCs: {
-	IlmeranPaladin.DisplayName: Ilmeran Paladin
-	WorldCataclysm.DisplayName: Cataclysmic Construct
-	WorldCatastrophe.DisplayName: Catastrophic Construct
-	WanderingCalClone.DisplayName: Calamitas' Clone
-	WanderingPotionSeller.DisplayName: Wandering Potion Seller
 }
 
 Projectiles: {
-	CalCloneProj.DisplayName: ???
-	BoneripperProj.DisplayName: Boneripper
-	Other.DraeDashDropPod.DisplayName: Drae-Dash Drop Pod
 }
 
 Tiles.DatabaseTerminal: Database Terminal

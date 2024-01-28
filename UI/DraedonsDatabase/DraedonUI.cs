@@ -12,9 +12,9 @@ using Terraria.GameContent;
 using Terraria.ID;
 using CalamityMod.Items.Placeables.DraedonStructures;
 using Windfall.Projectiles.Other;
-using Windfall.Utilities;
 using System.Linq;
 using System.Collections.Generic;
+using Windfall.Systems;
 
 namespace Windfall.UI.DraedonsDatabase
 {

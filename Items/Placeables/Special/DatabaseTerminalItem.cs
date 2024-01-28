@@ -6,7 +6,6 @@ using Windfall.Tiles.Special;
 using CalamityMod.CustomRecipes;
 using CalamityMod.Items.Placeables;
 using CalamityMod.Items.Placeables.DraedonStructures;
-using CalamityMod.Items.Weapons.DraedonsArsenal;
 using CalamityMod.Items;
 using System.Collections.Generic;
 using CalamityMod.Rarities;

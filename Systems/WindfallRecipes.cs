@@ -3,7 +3,7 @@ using Terraria.ModLoader;
 using CalamityMod.Items.Materials;
 using CalamityMod.Items.SummonItems;
 
-namespace Windfall.Utilities
+namespace Windfall.Systems
 {
     public class WindfallRecipes : ModSystem
     {

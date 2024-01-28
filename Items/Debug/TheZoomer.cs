@@ -8,7 +8,7 @@ using Terraria.Localization;
 using Terraria.ModLoader;
 using Terraria;
 using Windfall.UI.WanderersJournals;
-using Windfall.Utilities;
+using Windfall.Systems;
 
 namespace Windfall.Items.Debug
 {
