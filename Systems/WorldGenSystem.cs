@@ -16,7 +16,6 @@ namespace Windfall.Systems
 {
     public class WorldGenSystem : ModSystem
     {
-        #region ModifyWorldGenTasks
         public override void ModifyWorldGenTasks(List<GenPass> tasks, ref double totalWeight)
         {
             // Wanderers Cabin
@@ -30,6 +29,9 @@ namespace Windfall.Systems
                 }));
             }
         }
-        #endregion
-    }
+        public override void PostWorldGen()
+        {
+            ChestAdditions.FillChestsAgain();
+        }
+    }        
 }
