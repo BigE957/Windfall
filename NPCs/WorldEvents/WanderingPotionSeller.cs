@@ -175,7 +175,6 @@ namespace Windfall.NPCs.WorldEvents
         public static readonly SoundStyle CalCloneTeleport = new("CalamityMod/Sounds/Custom/SCalSounds/BrimstoneHellblastSound");
 
         internal int aiCounter = 0;
-        int i = 20;
         float CalCloneHoverY;
 
         public override void AI()

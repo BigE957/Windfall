@@ -23,7 +23,6 @@ namespace Windfall.Projectiles.Melee
     {
         internal int boneripperHits = 0;
         internal int boneripperCharge = 0;
-        private int maxDist;
         public enum AIState
         {
             Spinning,
