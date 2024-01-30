@@ -15,9 +15,7 @@ namespace Windfall.Systems
         internal static Dictionary<string, SchematicMetaTile[,]> TileMaps =>
             typeof(SchematicManager).GetField("TileMaps", Utilities.Utilities.UniversalBindingFlags).GetValue(null) as Dictionary<string, SchematicMetaTile[,]>;
 
-#pragma warning disable CS0649 // Field 'SchematicAdditions.PilePlacementMaps' is never assigned to, and will always have its default value null
         internal static Dictionary<string, PilePlacementFunction> PilePlacementMaps;
-#pragma warning restore CS0649 // Field 'SchematicAdditions.PilePlacementMaps' is never assigned to, and will always have its default value null
 
         internal static readonly MethodInfo ImportSchematicMethod = typeof(CalamitySchematicIO).GetMethod("ImportSchematic", Utilities.Utilities.UniversalBindingFlags);
 

@@ -36,10 +36,10 @@ namespace Windfall.World
             bool desertLeft = Main.dungeonX < Main.maxTilesX / 2;
 
             int placementPositionX;
-            if(desertLeft) 
-                placementPositionX = WorldGen.genRand.Next(Main.spawnTileX - 100, GenVars.UndergroundDesertLocation.Center.X + GenVars.UndergroundDesertLocation.Width / 2);
+            if(!desertLeft) 
+                placementPositionX = WorldGen.genRand.Next(Main.spawnTileX - 400, Main.spawnTileX - 100);
             else
-                placementPositionX = WorldGen.genRand.Next(GenVars.UndergroundDesertLocation.Center.X - GenVars.UndergroundDesertLocation.Width/2, Main.spawnTileX + 100);
+                placementPositionX = WorldGen.genRand.Next(Main.spawnTileX + 100, Main.spawnTileX + 400);
 
             int placementPositionY = (int)Main.worldSurface - (Main.maxTilesY / 6);
 
@@ -58,7 +58,7 @@ namespace Windfall.World
                 }
             }
 
-            Point placementPoint = new Point(placementPositionX, placementPositionY + 5);
+            Point placementPoint = new Point(placementPositionX, placementPositionY + 4);
 
             Vector2 schematicSize = new Vector2(schematic.GetLength(0), schematic.GetLength(1));
             SchematicAnchor anchorType = SchematicAnchor.BottomCenter;
