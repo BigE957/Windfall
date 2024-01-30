@@ -31,7 +31,7 @@ namespace Windfall.World
         public static void PlaceWanderersCabin(StructureMap structures)
         {
             string mapKey = "Wanderers Cabin";
-            SchematicMetaTile[,] schematic = SchematicAdditions.TileMaps[mapKey];
+            SchematicMetaTile[,] schematic = WFSchematicManager.TileMaps[mapKey];
 
             bool desertLeft = Main.dungeonX < Main.maxTilesX / 2;
 

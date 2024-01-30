@@ -36,7 +36,9 @@ namespace Windfall.NPCs.WorldEvents
         /// which means that the NPC will act like any other town NPC but won't have a happiness button, won't appear on the minimap,
         /// and will spawn like an enemy NPC. If you want a traditional town NPC instead, see <see cref="ExamplePerson"/>.
         /// </summary>
-        private static Profiles.StackedNPCProfile NPCProfile;
+#pragma warning disable CS0649 // Field 'WanderingCalClone.NPCProfile' is never assigned to, and will always have its default value null
+        private static readonly Profiles.StackedNPCProfile NPCProfile;
+#pragma warning restore CS0649 // Field 'WanderingCalClone.NPCProfile' is never assigned to, and will always have its default value null
         public override void SetStaticDefaults()
         {
             Main.npcFrameCount[Type] = 6; // The amount of frames the NPC has

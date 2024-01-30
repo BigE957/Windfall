@@ -40,7 +40,9 @@ namespace Windfall.NPCs.WorldEvents
         /// which means that the NPC will act like any other town NPC but won't have a happiness button, won't appear on the minimap,
         /// and will spawn like an enemy NPC. If you want a traditional town NPC instead, see <see cref="ExamplePerson"/>.
         /// </summary>
+#pragma warning disable CS0649 // Field 'WanderingPotionSeller.NPCProfile' is never assigned to, and will always have its default value null
         private static Profiles.StackedNPCProfile NPCProfile;
+#pragma warning restore CS0649 // Field 'WanderingPotionSeller.NPCProfile' is never assigned to, and will always have its default value null
 
         // the time of day the traveler will spawn (double.MaxValue for no spawn). Saved and loaded with the world in TravelingMerchantSystem
         public static double spawnTime = double.MaxValue;
@@ -175,7 +177,6 @@ namespace Windfall.NPCs.WorldEvents
         public static readonly SoundStyle CalCloneTeleport = new("CalamityMod/Sounds/Custom/SCalSounds/BrimstoneHellblastSound");
 
         internal int aiCounter = 0;
-        float CalCloneHoverY;
 
         public override void AI()
         {

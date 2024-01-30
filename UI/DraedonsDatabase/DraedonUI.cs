@@ -442,7 +442,6 @@ namespace Windfall.UI.DraedonsDatabase
         internal float drawX;
         internal float drawY;
         string creditNum;
-        int index;
         protected override void DrawSelf(SpriteBatch spriteBatch)
         {
             int index = WorldSaveSystem.CreditDataNames.FindIndex(n => n == Main.LocalPlayer.name); CalculatedStyle innerDimensions = GetInnerDimensions();
