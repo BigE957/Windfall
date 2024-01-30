@@ -186,9 +186,17 @@ Items: {
 }
 
 NPCs: {
+	IlmeranPaladin.DisplayName: Ilmeran Paladin
+	WanderingCalClone.DisplayName: Wandering Cal Clone
+	WanderingPotionSeller.DisplayName: Wandering Potion Seller
+	WorldCataclysm.DisplayName: World Cataclysm
+	WorldCatastrophe.DisplayName: World Catastrophe
 }
 
 Projectiles: {
+	BoneripperProj.DisplayName: Boneripper Proj
+	Other.DraeDashDropPod.DisplayName: Drae Dash Drop Pod
+	CalCloneProj.DisplayName: Cal Clone Proj
 }
 
 JournalContents: {
