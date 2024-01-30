@@ -24,6 +24,16 @@ namespace Windfall.NPCs
                 npcLoot.AddConditionalPerPlayer(() => !DownedBossSystem.downedCLAM, ModContent.ItemType<JournalIlmeris>(), desc: CalamityMod.DropHelper.FirstKillText);
 
             }
+            if (npc.type == calamity.Find<ModNPC>("PerforatorCyst").Type)
+            {
+                npcLoot.AddConditionalPerPlayer(() => !DownedNPCSystem.downedEvil2Summon, ModContent.ItemType<JournalCrimson>(), desc: CalamityMod.DropHelper.FirstKillText);
+
+            }
+            if(npc.type == calamity.Find<ModNPC>("HiveTumor").Type)
+            {
+                npcLoot.AddConditionalPerPlayer(() => !DownedNPCSystem.downedEvil2Summon, ModContent.ItemType<JournalCorruption>(), desc: CalamityMod.DropHelper.FirstKillText);
+
+            }
             if (npc.type == calamity.Find<ModNPC>("CragmawMire").Type)
             {
                 npcLoot.AddConditionalPerPlayer(() => !DownedBossSystem.downedCragmawMire, ModContent.ItemType<JournalSulphur>(), desc: CalamityMod.DropHelper.FirstKillText);

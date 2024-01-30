@@ -13,6 +13,8 @@ namespace Windfall.NPCs
                 DownedNPCSystem.downedCnidrion = true;
             if (npc.type == calamity.Find<ModNPC>("LeviathanStart").Type)
                 DownedNPCSystem.downedSirenLure = true;
+            if (npc.type == calamity.Find<ModNPC>("PerforatorCyst").Type || npc.type == calamity.Find<ModNPC>("HiveTumor").Type)
+                DownedNPCSystem.downedEvil2Summon = true;
         }
     }
 }
