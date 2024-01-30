@@ -7,7 +7,7 @@ namespace Windfall.Items.Weapons.Melee
     public class stone : ModItem, ILocalizedModType
     {
         public new string LocalizationCategory => "Items.Weapons.Melee";
-        // The Display Name and Tooltip of this item can be edited in the Localization/en-US_Mods.WindfallAttempt1.hjson file.
+        // The Display Name and Tooltip of this item can be edited in the Localization/en-US_Mods.Windfall.hjson file.
 
         public override void SetDefaults()
         {
