@@ -18,27 +18,12 @@ namespace Windfall.UI.WanderersJournals
 {
     public class JournalUISystem : ModSystem
     {
-        public static readonly SoundStyle UseSound = new("WindfallAttempt1/Sounds/Items/JournalPageTurn");
-        internal JournalPageUIState JournalPageUIState;
+        public static readonly SoundStyle UseSound = new("Windfall/Sounds/Items/JournalPageTurn");
         internal JournalFullUIState JournalFullUIState;
         private UserInterface JournalUI;
         public static bool isJournalOpen = false;
         public static string whichEvilJournal = "None";
 
-
-        public void ShowPageUI()
-        {
-            SoundEngine.PlaySound(UseSound with
-            {
-                Pitch = -0.25f,
-                PitchVariance = 0.5f,
-                MaxInstances = 5,
-                SoundLimitBehavior = SoundLimitBehavior.ReplaceOldest
-            });
-            isJournalOpen = true;
-            JournalText.isFullJournal = false;
-            JournalUI?.SetState(JournalPageUIState);
-        }
         public void ShowJournalUI()
         {
             SoundEngine.PlaySound(UseSound with
@@ -72,8 +57,6 @@ namespace Windfall.UI.WanderersJournals
             {
                 JournalUI = new UserInterface();
                 // Creating custom UIState
-                JournalPageUIState = new JournalPageUIState();
-                JournalPageUIState.Activate();
 
                 JournalFullUIState = new JournalFullUIState();
                 for (int i = 0; i < 13; i++)

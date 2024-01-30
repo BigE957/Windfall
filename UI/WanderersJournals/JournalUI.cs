@@ -16,44 +16,16 @@ using Windfall.Systems;
 
 namespace Windfall.UI.WanderersJournals
 {
-    internal class JournalPageUIState : UIState
-    {
-        public int i = 0;
-        public DraggableUIPanel UIPanel;
-        public JournalText JournalContents;
-
-        public override void OnInitialize()
-        {
-            //UIPanel = new JournalUIPanel();
-            DraggableUIPanel UIPanel = new();
-            UIPanel.SetPadding(0);
-            SetRectangle(UIPanel, left: 200f, top: 100f, width: 400f, height: 518f);
-            UIPanel.BackgroundColor = new Color(73, 94, 171);
-            Append(UIPanel);
-
-            Asset<Texture2D> pageTexture = ModContent.Request<Texture2D>($"{nameof(Windfall)}/UI/WanderersJournals/JournalPage");
-            UIImage page = new (pageTexture);
-            SetRectangle(page, left: -55f, top: -25f, width: 400f, height: 518f);
-            UIPanel.Append(page);
-           
-            JournalContents = new JournalText();
-            SetRectangle(JournalContents, 15f, 20f, 100f, 40f);
-            UIPanel.Append(JournalContents);
-        }
-        private void SetRectangle(UIElement uiElement, float left, float top, float width, float height)
-        {
-            uiElement.Left.Set(left, 0f);
-            uiElement.Top.Set(top, 0f);
-            uiElement.Width.Set(width, 0f);
-            uiElement.Height.Set(height, 0f);
-        }
-    }
     internal class JournalFullUIState : UIState
     {
         public int i = 0;
+#pragma warning disable CS0649 // Field 'JournalFullUIState.UIPanel' is never assigned to, and will always have its default value null
         public DraggableUIPanel UIPanel;
+#pragma warning restore CS0649 // Field 'JournalFullUIState.UIPanel' is never assigned to, and will always have its default value null
         public JournalText JournalContents;
+#pragma warning disable CS0649 // Field 'JournalFullUIState.Page' is never assigned to, and will always have its default value null
         public UIImage Page;
+#pragma warning restore CS0649 // Field 'JournalFullUIState.Page' is never assigned to, and will always have its default value null
         public static int PageNumber = 0;
         public enum JournalTypes
         {

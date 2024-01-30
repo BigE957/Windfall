@@ -1,4 +1,5 @@
-﻿using Terraria;
+﻿using System.Collections.Generic;
+using Terraria;
 using Terraria.Audio;
 using Terraria.ID;
 using Terraria.Localization;
@@ -11,36 +12,28 @@ namespace Windfall.Items.Journals
 {
     public class JournalForest : ModItem, ILocalizedModType
     {
+        public static readonly SoundStyle UseSound = new("Windfall/Sounds/Items/JournalPageTurn");
+
         public new string LocalizationCategory => "Items.Journals";
         public override void SetDefaults()
         {
             Item.width = 28;
             Item.height = 28;
+            Item.consumable = true;
             Item.rare = ItemRarityID.Blue;
             Item.useAnimation = Item.useTime = 20;
             Item.useStyle = ItemUseStyleID.HoldUp;
+            Item.UseSound = UseSound;
         }
-        public override bool OnPickup(Player player)
+        public override void ModifyTooltips(List<TooltipLine> tooltips)
         {
-            if (Main.myPlayer == player.whoAmI)
-            {
-                WorldSaveSystem.JournalsCollected[0] = true;
-            }
-            return true;
+            WindfallGlobalItem.InsertJournalTooltop(tooltips);
         }
         public override bool? UseItem(Player player)
         {
             if (Main.myPlayer == player.whoAmI)
             {
-                if (!JournalUISystem.isJournalOpen)
-                {
-                    JournalText.JournalContents = Language.GetOrRegister($"Mods.{nameof(Windfall)}.JournalContents.Forest").Value;
-                    ModContent.GetInstance<JournalUISystem>().ShowPageUI();
-                }
-                else
-                {
-                    ModContent.GetInstance<JournalUISystem>().HideWandererUI();
-                }
+                WorldSaveSystem.JournalsCollected[0] = true;
             }
             return true;
         }
