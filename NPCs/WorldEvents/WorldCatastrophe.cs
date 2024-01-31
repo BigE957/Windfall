@@ -12,17 +12,20 @@ using Terraria.ModLoader;
 using System.IO;
 using CalamityMod;
 using Windfall.Items.Weapons.Melee;
-using CalamityMod.NPCs.CalClone;
 using Windfall.Systems;
+using CalamityMod.NPCs.NormalNPCs;
+using CalamityMod.NPCs.CalClone;
 
 namespace Windfall.NPCs.WorldEvents;
 
-[AutoloadBossHead]
 public class WorldCatastrophe : ModNPC
 {
-    public override string Texture => "NPCs/CalClone/Catastrophe";
+    public override string Texture => "CalamityMod/NPCs/CalClone/Catastrophe";
+    public override string BossHeadTexture => "CalamityMod/NPCs/CalClone/CatastropheHead_Boss";
+
     public override void SetStaticDefaults()
     {
+        this.HideFromBestiary();
         Main.npcFrameCount[NPC.type] = 6;
         NPCID.Sets.TrailingMode[NPC.type] = 1;
     }
@@ -136,7 +139,8 @@ public class WorldCatastrophe : ModNPC
 
     public override void OnKill()
     {
-        int heartAmt = Main.rand.Next(3) + 3;
+        Main.BestiaryTracker.Kills.RegisterKill(ModContent.GetInstance<Catastrophe>().NPC);
+    int heartAmt = Main.rand.Next(3) + 3;
         for (int i = 0; i < heartAmt; i++)
             Item.NewItem(NPC.GetSource_Loot(), (int)NPC.position.X, (int)NPC.position.Y, NPC.width, NPC.height, ItemID.Heart);
     }

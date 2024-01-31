@@ -19,16 +19,11 @@ namespace Windfall.NPCs.Enemies
     {
         bool stopMoving;
         float movementSpeed = 1f;
-        public override string Texture => "NPCs/NormalNPCs/Cnidrion";
+        public override string Texture => "CalamityMod/NPCs/NormalNPCs/Cnidrion";
         public override void SetStaticDefaults()
         {
+            this.HideFromBestiary();
             Main.npcFrameCount[NPC.type] = 10;
-            NPCID.Sets.NPCBestiaryDrawModifiers value = new(0)
-            {
-                Scale = 0.8f,
-            };
-            value.Position.X += 48f;
-            NPCID.Sets.NPCBestiaryDrawOffset[Type] = value;
         }
 
         public override void SetDefaults()
@@ -55,16 +50,6 @@ namespace Windfall.NPCs.Enemies
             NPC.Calamity().VulnerableToSickness = true;
             NPC.Calamity().VulnerableToWater = true;
         }
-
-        public override void SetBestiary(BestiaryDatabase database, BestiaryEntry bestiaryEntry)
-        {
-            bestiaryEntry.Info.AddRange(new IBestiaryInfoElement[]
-            {
-                BestiaryDatabaseNPCsPopulator.CommonTags.SpawnConditions.Biomes.Desert,
-                new FlavorTextBestiaryInfoElement("Mods.CalamityMod.Bestiary.Cnidrion")
-            });
-        }
-
         public override float SpawnChance(NPCSpawnInfo spawnInfo)
         {
             if (spawnInfo.Player.PillarZone() ||
@@ -332,6 +317,10 @@ namespace Windfall.NPCs.Enemies
         public override void ModifyNPCLoot(NPCLoot npcLoot)
         {
             npcLoot.Add(ItemID.FossilOre, 1, 4, 5);
+        }
+        public override void OnKill()
+        {
+            Main.BestiaryTracker.Kills.RegisterKill(ModContent.GetInstance<Cnidrion>().NPC);
         }
     }
 }
