@@ -19,8 +19,11 @@ namespace Windfall.Systems
         {
             if(isNPCTouchingItem(ModContent.NPCType<WFCnidrion>(), ItemID.DirtBlock, true))
             {
-                Main.npc[targetNPC].ai[0] = 5f;
-                Main.npc[targetNPC].ai[1] = 0f;
+                if(Main.npc[targetNPC].life <= Main.npc[targetNPC].lifeMax / 4)
+                {
+                    Main.npc[targetNPC].ai[0] = 5f;
+                    Main.npc[targetNPC].ai[1] = 0f;
+                }
             }
         }
         internal bool isNPCTouchingItem(int npcType, int itemType, bool killItem)
