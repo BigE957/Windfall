@@ -9,26 +9,32 @@ using Terraria;
 using Terraria.ModLoader;
 using CalamityMod.Items.Accessories;
 using Windfall.NPCs.Enemies;
+using Windfall.Items.Weapons.Misc;
+using Terraria.Audio;
 
 namespace Windfall.Systems
 {
     public class ItemNPCContactSystem : ModSystem
     {
         int targetNPC = -1;
+        int targetItem = -1;
         public override void PostUpdateNPCs()
         {
-            if(isNPCTouchingItem(ModContent.NPCType<WFCnidrion>(), ItemID.DirtBlock, true))
+            if(isNPCTouchingItem(ModContent.NPCType<WFCnidrion>(), ModContent.ItemType<Cnidrisnack>()))
             {
                 if(Main.npc[targetNPC].life <= Main.npc[targetNPC].lifeMax / 4)
                 {
                     Main.npc[targetNPC].ai[0] = 5f;
                     Main.npc[targetNPC].ai[1] = 0f;
+                    Main.npc[targetNPC].life = Main.npc[targetNPC].lifeMax;
+                    Main.item[targetItem].active = false;
+                    SoundEngine.PlaySound(SoundID.Item2, Main.npc[targetNPC].Center);
                 }
             }
         }
-        internal bool isNPCTouchingItem(int npcType, int itemType, bool killItem)
+        internal bool isNPCTouchingItem(int npcType, int itemType)
         {
-            targetNPC = -1;
+            targetNPC = targetItem = -1;
             foreach (NPC npc in Main.npc.Where(n => (n.type == npcType && n.active)))
             {
                 targetNPC = npc.whoAmI;
@@ -40,8 +46,7 @@ namespace Windfall.Systems
                 {
                     if (Main.npc[targetNPC].Hitbox.Intersects(item.Hitbox))
                     {
-                        if(killItem)
-                            item.active = false;
+                        targetItem = item.whoAmI;
                         return true;
                     }
                 }

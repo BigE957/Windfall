@@ -17,6 +17,8 @@ namespace Windfall.NPCs.Enemies
 {
     public class WFCnidrion : ModNPC
     {
+        bool stopMoving;
+        float movementSpeed = 1f;
         public override void SetStaticDefaults()
         {
             Main.npcFrameCount[NPC.type] = 10;
@@ -90,9 +92,9 @@ namespace Windfall.NPCs.Enemies
             Player player = Main.player[NPC.target];
             bool expertMode = Main.expertMode;
             NPC.spriteDirection = (NPC.direction > 0) ? 1 : -1;
-            float movementSpeed = 1f;
+            movementSpeed = 1f;
             NPC.TargetClosest(true);
-            bool stopMoving = false;
+            stopMoving = false;
             int offsetX = 80;
             int projectileDamage = expertMode ? 9 : 12;
             if (NPC.life < NPC.lifeMax * 0.33 && CalamityWorld.death)
@@ -239,7 +241,7 @@ namespace Windfall.NPCs.Enemies
             else if (NPC.ai[0] == 5f)
             {
                 NPC.AddBuff(BuffID.Lovestruck, 30);
-                NPC.immortal = true;
+                NPC.friendly = true;
             }
 
             if (Math.Abs(NPC.Center.X - player.Center.X) < 50f)
@@ -303,7 +305,8 @@ namespace Windfall.NPCs.Enemies
 
         public override void FindFrame(int frameHeight)
         {
-            NPC.frameCounter += 0.1f;
+            if(!(stopMoving && ((int)NPC.frameCounter == 2 || (int)NPC.frameCounter == 8)))
+                NPC.frameCounter += movementSpeed/10f;
             NPC.frameCounter %= Main.npcFrameCount[NPC.type];
             int frame = (int)NPC.frameCounter;
             NPC.frame.Y = frame * frameHeight;
