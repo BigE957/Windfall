@@ -18,7 +18,7 @@ namespace Windfall.Projectiles.Other
 {
     public class DraeDashDropPod : ModProjectile, ILocalizedModType
     {
-        public override string Texture => "Projectiles/Summon/AtlasMunitionsDropPod";
+        public override string Texture => "CalamityMod/Projectiles/Summon/AtlasMunitionsDropPod";
         public new string LocalizationCategory => "Projectiles.Other";
         public Player Owner => Main.player[Projectile.owner];
 
