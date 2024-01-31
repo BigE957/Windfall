@@ -27,6 +27,7 @@
     <None Remove="Items\Utility\DraedonCharger.png" />
     <None Remove="Items\Weapons\Melee\Boneripper(no_flame).png" />
     <None Remove="Items\Weapons\Melee\Boneripper.png" />
+    <None Remove="NPCs\Enemies\WFCnidrion.png" />
     <None Remove="NPCs\Gores\IlmeranPaladin_Gore_Arm.png" />
     <None Remove="NPCs\Gores\IlmeranPaladin_Gore_Head.png" />
     <None Remove="NPCs\Gores\IlmeranPaladin_Gore_Leg.png" />

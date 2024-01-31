@@ -187,16 +187,17 @@ Items: {
 
 NPCs: {
 	IlmeranPaladin.DisplayName: Ilmeran Paladin
-	WanderingCalClone.DisplayName: Wandering Cal Clone
+	WorldCataclysm.DisplayName: Cataclysmic Construct
+	WorldCatastrophe.DisplayName: Catastrophic Construct
+	WanderingCalClone.DisplayName: Calamitas' Clone
 	WanderingPotionSeller.DisplayName: Wandering Potion Seller
-	WorldCataclysm.DisplayName: World Cataclysm
-	WorldCatastrophe.DisplayName: World Catastrophe
+	WFCnidrion.DisplayName: Cnidrion
 }
 
 Projectiles: {
-	BoneripperProj.DisplayName: Boneripper Proj
-	Other.DraeDashDropPod.DisplayName: Drae Dash Drop Pod
-	CalCloneProj.DisplayName: Cal Clone Proj
+	CalCloneProj.DisplayName: ???
+	BoneripperProj.DisplayName: Boneripper
+	Other.DraeDashDropPod.DisplayName: Drae-Dash Drop Pod
 }
 
 JournalContents: {
