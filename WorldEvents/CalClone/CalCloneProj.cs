@@ -32,6 +32,7 @@ namespace Windfall.WorldEvents.CalClone
             get => (AIState)Projectile.ai[0];
             set => Projectile.ai[0] = (int)value;
         }
+        public override string Texture => "Windfall/NPCs/WorldEvents/WanderingCalClone";
         public override void SetStaticDefaults()
         {
             // DisplayName.SetDefault("Calamitas");

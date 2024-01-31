@@ -20,6 +20,7 @@ namespace Windfall.NPCs.WorldEvents;
 [AutoloadBossHead]
 public class WorldCatastrophe : ModNPC
 {
+    public override string Texture => "NPCs/CalClone/Catastrophe";
     public override void SetStaticDefaults()
     {
         Main.npcFrameCount[NPC.type] = 6;

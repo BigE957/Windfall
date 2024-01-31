@@ -19,6 +19,7 @@ namespace Windfall.NPCs.Enemies
     {
         bool stopMoving;
         float movementSpeed = 1f;
+        public override string Texture => "NPCs/NormalNPCs/Cnidrion";
         public override void SetStaticDefaults()
         {
             Main.npcFrameCount[NPC.type] = 10;

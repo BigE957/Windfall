@@ -29,6 +29,7 @@ namespace Windfall.Projectiles.Melee
             Throwing,
         }
         AIState state = AIState.Spinning;
+        public override string Texture => "Windfall/Items/Weapons/Melee/Boneripper";
         public override void SetDefaults()
         {
             Projectile.width = (Projectile.height = 90);

@@ -25,9 +25,8 @@
     <None Remove="Items\Journals\JournalTundra.png" />
     <None Remove="Items\Placeables\Special\DatabaseTerminalItem.png" />
     <None Remove="Items\Utility\DraedonCharger.png" />
-    <None Remove="Items\Weapons\Melee\Boneripper(no_flame).png" />
     <None Remove="Items\Weapons\Melee\Boneripper.png" />
-    <None Remove="NPCs\Enemies\WFCnidrion.png" />
+    <None Remove="Items\Weapons\Misc\Cnidrisnack.png" />
     <None Remove="NPCs\Gores\IlmeranPaladin_Gore_Arm.png" />
     <None Remove="NPCs\Gores\IlmeranPaladin_Gore_Head.png" />
     <None Remove="NPCs\Gores\IlmeranPaladin_Gore_Leg.png" />
@@ -38,8 +37,6 @@
     <None Remove="NPCs\WorldEvents\WorldCataclysm_Head_Boss.png" />
     <None Remove="NPCs\WorldEvents\WorldCatastrophe.png" />
     <None Remove="NPCs\WorldEvents\WorldCatastrophe_Head_Boss.png" />
-    <None Remove="Projectiles\Melee\BoneripperProj.png" />
-    <None Remove="Projectiles\Other\DraeDashDropPod.png" />
     <None Remove="Tiles\Special\DatabaseTerminal.png" />
     <None Remove="UI\DraedonsDatabase\DraedonUIArrowLeft.png" />
     <None Remove="UI\DraedonsDatabase\DraedonUIArrowRight.png" />

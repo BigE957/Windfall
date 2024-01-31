@@ -21,6 +21,7 @@ namespace Windfall.NPCs.WorldEvents;
 [AutoloadBossHead]
 public class WorldCataclysm : ModNPC
 {
+    public override string Texture => "NPCs/CalClone/Cataclysm";
     public override void SetStaticDefaults()
     {
         Main.npcFrameCount[NPC.type] = 6;
