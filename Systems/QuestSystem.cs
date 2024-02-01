@@ -72,7 +72,7 @@ namespace Windfall.Systems
         {
             List<Quest> list = new()
             {
-                CreateQuest("CnidrionHunt", new List<string>{"Pacify 5 Cnidrions"}, new List<int>{5}, new List<Item>{ new Item { Type = ModContent.ItemType<Cnidrisnack>(), Stack = 5 } }, new List<Item>{ new Item { Type = ModContent.ItemType<CnidrionBanner>(), Stack = 4 }, new Item {Type = ModContent.ItemType<AmidiasSpark>() } })
+                CreateQuest("CnidrionHunt", new List<string>{"Pacify 5 Cnidrions"}, new List<int>{5}, new List<Item>{ new Item { Type = ModContent.ItemType<Cnidrisnack>(), Stack = 5 } }, new List<Item>{ new Item { Type = ModContent.ItemType<CnidrionBanner>(), Stack = 4 }, new Item {Type = ModContent.ItemType<AmidiasSpark>(), Stack = 1} })
             };
             return list;
         }
