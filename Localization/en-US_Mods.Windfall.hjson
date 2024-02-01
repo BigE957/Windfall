@@ -173,8 +173,8 @@ Items: {
 		}
 
 		QuestsEnd: {
-			DisplayName: Quests End
-			Tooltip: ""
+			DisplayName: Quest's End
+			Tooltip: "All of your work... Gone, in an instant."
 		}
 	}
 
