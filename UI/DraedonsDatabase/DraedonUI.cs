@@ -168,8 +168,7 @@ namespace Windfall.UI.DraedonsDatabase
                 }
             }
 
-            Mod calamityMusic = null;
-            ModLoader.TryGetMod("CalamityModMusic", out calamityMusic);
+            ModLoader.TryGetMod("CalamityModMusic", out Mod calamityMusic);
             if (calamityMusic != null)
                 CreateDraeDashItemUI(calamityMusic.Find<ModItem>("BioLabMusicBox").Type, 1, 100000, g, j);
 
@@ -186,7 +185,7 @@ namespace Windfall.UI.DraedonsDatabase
                     positionForVelocity = new Vector2(player.Center.X + 400f, player.Center.Y - 40f);
                 else
                     positionForVelocity = new Vector2(player.Center.X - 400f, player.Center.Y - 40f);
-                Vector2 position = new Vector2(positionForVelocity.X, positionForVelocity.Y - 4080);
+                Vector2 position = new(positionForVelocity.X, positionForVelocity.Y - 4080);
                 Vector2 velocity = (positionForVelocity - position).SafeNormalize(Vector2.UnitY) * Main.rand.NextFloat(9f, 10f);
                 Projectile.NewProjectile(null, position, velocity, ModContent.ProjectileType<DraeDashDropPod>(), 0, 0, player.whoAmI, player.Center.Y - 40f);
                 orderEnRoute = true;
@@ -304,7 +303,7 @@ namespace Windfall.UI.DraedonsDatabase
     internal class PlutusVault : UIState
     {
         public MouseBlockingUIPanel panel;
-        public static List<int> coins = new List<int>()
+        public static List<int> coins = new()
         {
             0,
             0,

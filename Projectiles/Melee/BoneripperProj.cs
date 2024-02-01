@@ -311,7 +311,7 @@ namespace Windfall.Projectiles.Melee
             {
                 Texture2D value = ModContent.Request<Texture2D>(Texture).Value;
                 Vector2 vector = Projectile.Center - Main.screenPosition + new Vector2(0f, Projectile.gfxOffY);
-                Rectangle value2 = new Rectangle(0, 0, value.Width, value.Height);
+                Rectangle value2 = new(0, 0, value.Width, value.Height);
                 Vector2 vector2 = value.Size() / 2f;
                 SpriteEffects spriteEffects = SpriteEffects.None;
                 if (Projectile.spriteDirection == -1)

@@ -15,7 +15,7 @@ namespace Windfall.Items
 
     public class WindfallGlobalItem : GlobalItem
     {
-        public override bool? UseItem(Item item, Player player)
+        public override bool? UseItem(Terraria.Item item, Player player)
         {
             bool isJournalPage = item.type == ModContent.ItemType<JournalCorruption>() || item.type == ModContent.ItemType<JournalCrimson>() || item.type == ModContent.ItemType<JournalForest>() || item.type == ModContent.ItemType<JournalTundra>() || item.type == ModContent.ItemType<JournalIlmeris>() || item.type == ModContent.ItemType<JournalJungle>() || item.type == ModContent.ItemType<JournalDesert>() || item.type == ModContent.ItemType<JournalDungeon>() || item.type == ModContent.ItemType<JournalOcean>() || item.type == ModContent.ItemType<JournalSulphur>();
 
@@ -23,7 +23,7 @@ namespace Windfall.Items
             {
                 if(firstJournal() == true)
                 {
-                    Item.NewItem(null, player.Center, 1, 1, ModContent.ItemType<JournalCompilation>());
+                    Terraria.Item.NewItem(null, player.Center, 1, 1, ModContent.ItemType<JournalCompilation>());
                 }
             }
             return base.UseItem(item, player);

@@ -141,7 +141,7 @@ public class WorldCatastrophe : ModNPC
         Main.BestiaryTracker.Kills.RegisterKill(ModContent.GetInstance<Catastrophe>().NPC);
     int heartAmt = Main.rand.Next(3) + 3;
         for (int i = 0; i < heartAmt; i++)
-            Item.NewItem(NPC.GetSource_Loot(), (int)NPC.position.X, (int)NPC.position.Y, NPC.width, NPC.height, ItemID.Heart);
+            Terraria.Item.NewItem(NPC.GetSource_Loot(), (int)NPC.position.X, (int)NPC.position.Y, NPC.width, NPC.height, ItemID.Heart);
     }
 
     public override void ModifyNPCLoot(NPCLoot npcLoot)
