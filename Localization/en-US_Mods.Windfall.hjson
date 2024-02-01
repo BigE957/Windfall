@@ -151,7 +151,7 @@ Items: {
 		Misc: {
 			Cnidrisnack: {
 				DisplayName: Cnidrisnack
-				Tooltip: ""
+				Tooltip: A Cnidrion's favorite treat!
 			}
 		}
 	}
@@ -230,7 +230,7 @@ Projectiles: {
 	CalCloneProj.DisplayName: ???
 	BoneripperProj.DisplayName: Boneripper
 	Other.DraeDashDropPod.DisplayName: Drae-Dash Drop Pod
-	CnidrisnackThrow.DisplayName: Cnidrisnack Throw
+	CnidrisnackThrow.DisplayName: Cnidrisnack
 }
 
 JournalContents: {
