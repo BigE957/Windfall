@@ -23,7 +23,10 @@ namespace Windfall.Systems
                     Main.npc[targetNPC].ai[0] = 5f;
                     Main.npc[targetNPC].ai[1] = 0f;
                     Main.npc[targetNPC].life = Main.npc[targetNPC].lifeMax;
-                    Main.item[targetItem].active = false;
+                    if (Main.item[targetItem].stack > 1)
+                        Main.item[targetItem].stack--;
+                    else
+                        Main.item[targetItem].active = false;
                     SoundEngine.PlaySound(SoundID.Item2, Main.npc[targetNPC].Center);
                     int index = QuestSystem.QuestLog.FindIndex(quest => quest.Name == "CnidrionHunt");
                     if (index != -1)
