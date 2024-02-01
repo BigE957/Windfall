@@ -25,10 +25,6 @@ namespace Windfall.Projectiles.Other
             Projectile.localNPCHitCooldown = 15;
             Projectile.aiStyle = 2;
         }
-        public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
-        {
-            Item.NewItem(Projectile.GetSource_DropAsItem(), (int)Projectile.position.X, (int)Projectile.position.Y, Projectile.width, Projectile.height, ModContent.ItemType<Cnidrisnack>());
-        }
         public override void OnKill(int timeLeft)
         {
             Item.NewItem(Projectile.GetSource_DropAsItem(), (int)Projectile.position.X, (int)Projectile.position.Y, Projectile.width, Projectile.height, ModContent.ItemType<Cnidrisnack>());

@@ -45,10 +45,6 @@ namespace Windfall.Systems
             foreach (NPC npc in Main.npc.Where(n => (n.type == npcType && n.active)))
             {
                 targetNPC = npc.whoAmI;
-                break;
-            }
-            if (targetNPC > -1)
-            {
                 foreach (Terraria.Item item in Main.item.Where(n => n.active && n.type == itemType))
                 {
                     if (Main.npc[targetNPC].Hitbox.Intersects(item.Hitbox))
