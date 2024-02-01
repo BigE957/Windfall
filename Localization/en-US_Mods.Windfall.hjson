@@ -7,9 +7,9 @@ Dialogue: {
 		StandardDialogue3: Care to rest a moment with me? This heat is exhausting; I know.
 		SandstormDialogue: The wind is howling most fiercely... Be warned, the creatures here have been stirred into a frenzy!
 		NoSandstormDialogue: The winds are calm... These sands can still be beautiful despite the regret they carry.
-		Quest1DialogueStart: Ever since the Incineration, the poor Cnidrion have been stirred into a frenzy! Would you do me a favor and lend me a hand in calming the poor guys down? All you gotta do is toss them one of these after you've tired them out a bit. Cnidrisnacks are their favorite! Once they've had one, they're sure to calm down, might even take a liking towards you.
-		Quest1DialogueDuring: Those Cnidrions aren't gonna calm themselves down! Toss them a Cnidrisnack once they've been tuckered out, and they'll calm right down!
-		Quest1DialogueEnd: Nice work! Are those lick marks I see on you? Guess you're quite the Cnidrion tamer. You might've made a good paladin yourself!
+		CnidrionHuntDialogueStart: Ever since the Incineration, the poor Cnidrion have been stirred into a frenzy! Would you do me a favor and lend me a hand in calming the poor guys down? All you gotta do is toss them one of these after you've tired them out a bit. Cnidrisnacks are their favorite! Once they've had one, they're sure to calm down, might even take a liking towards you.
+		CnidrionHuntDialogueDuring: Those Cnidrions aren't gonna calm themselves down! Toss them a Cnidrisnack once they've been tuckered out, and they'll calm right down!
+		CnidrionHuntDialogueEnd: Nice work! Are those lick marks I see on you? Guess you're quite the Cnidrion tamer. You might've made a good paladin yourself!
 		NoQuestDialogue: You've done all I could ask of you. Come back later, and maybe I'll have something more for you to do.
 	}
 

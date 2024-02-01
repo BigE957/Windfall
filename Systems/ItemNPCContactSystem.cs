@@ -16,7 +16,7 @@ namespace Windfall.Systems
         int targetItem = -1;
         public override void PostUpdateNPCs()
         {
-            if(isNPCTouchingItem(ModContent.NPCType<WFCnidrion>(), ModContent.ItemType<Cnidrisnack>()))
+            if(IsNPCTouchingItem(ModContent.NPCType<WFCnidrion>(), ModContent.ItemType<Cnidrisnack>()))
             {
                 if(Main.npc[targetNPC].life <= Main.npc[targetNPC].lifeMax / 4)
                 {
@@ -39,7 +39,7 @@ namespace Windfall.Systems
                 }
             }
         }
-        internal bool isNPCTouchingItem(int npcType, int itemType)
+        internal bool IsNPCTouchingItem(int npcType, int itemType)
         {
             targetNPC = targetItem = -1;
             foreach (NPC npc in Main.npc.Where(n => (n.type == npcType && n.active)))
@@ -49,7 +49,7 @@ namespace Windfall.Systems
             }
             if (targetNPC > -1)
             {
-                foreach (Item item in Main.item.Where(n => n.active && n.type == itemType))
+                foreach (Terraria.Item item in Main.item.Where(n => n.active && n.type == itemType))
                 {
                     if (Main.npc[targetNPC].Hitbox.Intersects(item.Hitbox))
                     {

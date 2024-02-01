@@ -14,10 +14,7 @@ using Terraria.Utilities;
 using Terraria;
 using Microsoft.Xna.Framework;
 using Terraria.GameContent.Events;
-using Windfall.Systems;
-using Windfall.Items.Weapons.Misc;
-using Terraria.DataStructures;
-using CalamityMod.Items.Placeables.Banners;
+using Windfall.Utilities;
 
 namespace Windfall.NPCs.WanderingNPCs
 {
@@ -60,7 +57,7 @@ namespace Windfall.NPCs.WanderingNPCs
             //NPCID.Sets.AllowDoorInteraction[Type] = true;
 
             // Influences how the NPC looks in the Bestiary
-            NPCID.Sets.NPCBestiaryDrawModifiers drawModifiers = new NPCID.Sets.NPCBestiaryDrawModifiers()
+            NPCID.Sets.NPCBestiaryDrawModifiers drawModifiers = new()
             {
                 Velocity = 1f, // Draws the NPC in the bestiary as if its walking +1 tiles in the x direction
                 Direction = 1 // -1 is left and 1 is right. NPCs are drawn facing the left by default but ExamplePerson will be drawn facing the right
@@ -164,7 +161,7 @@ namespace Windfall.NPCs.WanderingNPCs
 
         public override string GetChat()
         {
-            WeightedRandom<string> chat = new WeightedRandom<string>();
+            WeightedRandom<string> chat = new();
 
             // These are things that the NPC has a chance of telling you when you talk to it.
             if (Sandstorm.Happening)
@@ -195,46 +192,7 @@ namespace Windfall.NPCs.WanderingNPCs
             }
             else
             {
-                int index = QuestSystem.QuestLog.FindIndex(quest => quest.Name == "CnidrionHunt");
-                if (index != -1)
-                {
-                    if (!QuestSystem.QuestLog[index].Completed)
-                    {
-                        if (!QuestSystem.QuestLog[index].Active)
-                        {
-                            Main.npcChatText = Language.GetOrRegister($"Mods.{nameof(Windfall)}.Dialogue.IlmeranPaladin.Quest1DialogueStart").Value;
-                            Main.npcChatCornerItem = ModContent.ItemType<Cnidrisnack>();
-
-                            var entitySource = NPC.GetSource_GiftOrReward();
-                            Main.LocalPlayer.QuickSpawnItem(entitySource, ModContent.ItemType<Cnidrisnack>(), 5);
-
-                            QuestSystem.ToggleQuestActive(index);
-                        }
-                        else
-                        {
-                            Main.npcChatText = Language.GetOrRegister($"Mods.{nameof(Windfall)}.Dialogue.IlmeranPaladin.Quest1DialogueDuring").Value;
-                            Main.npcChatCornerItem = ModContent.ItemType<Cnidrisnack>();
-                        }
-                    }
-                    else
-                    {
-                        if (QuestSystem.QuestLog[index].Active)
-                        {
-                            Main.npcChatText = Language.GetOrRegister($"Mods.{nameof(Windfall)}.Dialogue.IlmeranPaladin.Quest1DialogueEnd").Value;
-
-                            var entitySource = NPC.GetSource_GiftOrReward();
-                            Main.LocalPlayer.QuickSpawnItem(entitySource, ModContent.ItemType<CnidrionBanner>());
-                            Main.LocalPlayer.QuickSpawnItem(entitySource, ModContent.ItemType<AmidiasPendant>());
-
-                            QuestSystem.ToggleQuestActive(index);
-                        }
-                        else
-                        {
-                            Main.npcChatText = Language.GetOrRegister($"Mods.{nameof(Windfall)}.Dialogue.IlmeranPaladin.NoQuestDialogue").Value;
-                        }
-                    }
-                }
-
+                Utilities.Utilities.QuestDialogueHelper(Main.npc[NPC.whoAmI]);
             }
         }
 

@@ -1,10 +1,25 @@
-﻿using System;
+﻿using CalamityMod.Items.Accessories;
+using CalamityMod.Items.Placeables.Banners;
+using System;
 using System.Collections.Generic;
 using Terraria.ModLoader;
 using Terraria.ModLoader.IO;
+using Windfall.Items.Weapons.Misc;
 
 namespace Windfall.Systems
 {
+    public struct Item
+    {
+        internal int Type;
+
+        internal int Stack = 1;
+
+        internal Item(int type, int stack)
+        {
+            Type = type;
+            Stack = stack;
+        }
+    }
     public class QuestSystem : ModSystem
     {
         public struct Quest
@@ -15,7 +30,9 @@ namespace Windfall.Systems
             public List<string> Objectives;
             public List<int> ObjectiveRequirements;
             public List<int> ObjectiveProgress;
-            public Quest(string name, List<string> objective, bool completed, List<int> objReq, List<int> objProg, bool active)
+            public List<Item> QuestGifts;
+            public List<Item> QuestRewards;
+            public Quest(string name, List<string> objective, bool completed, List<int> objReq, List<int> objProg, bool active, List<Item> questGifts, List<Item> questRewards)
             {
                 Name = name;
                 Completed = completed;
@@ -23,6 +40,8 @@ namespace Windfall.Systems
                 Objectives = objective;
                 ObjectiveRequirements = objReq;
                 ObjectiveProgress = objProg;
+                QuestGifts = questGifts;
+                QuestRewards = questRewards;
             }
         }
         public static List<Quest> QuestLog = InitializeQuestLog();
@@ -40,20 +59,20 @@ namespace Windfall.Systems
         {
             tag["QuestLog"] = QuestLog;
         }
-        internal static Quest CreateQuest(string Name, List<string>Objectives, List<int>ObjectiveRequirements)
+        internal static Quest CreateQuest(string Name, List<string>Objectives, List<int>ObjectiveRequirements, List<Item>QuestGifts = null, List<Item>QuestRewards = null)
         {
-            List<int> objectiveProgress = new List<int>();
+            List<int> objectiveProgress = new();
             for(int i = 0; i < ObjectiveRequirements.Count; i++ )
             {
                 objectiveProgress.Add(0);
             }
-            return new Quest { Name = Name, Completed = false, Objectives = Objectives, ObjectiveProgress = objectiveProgress, ObjectiveRequirements = ObjectiveRequirements, Active = false};
+            return new Quest { Name = Name, Completed = false, Objectives = Objectives, ObjectiveProgress = objectiveProgress, ObjectiveRequirements = ObjectiveRequirements, Active = false, QuestGifts = QuestGifts, QuestRewards = QuestRewards};
         }
         internal static List<Quest> InitializeQuestLog()
         {
             List<Quest> list = new()
             {
-                CreateQuest("CnidrionHunt", new List<string>{"Pacify 5 Cnidrions"}, new List<int>{5}),
+                CreateQuest("CnidrionHunt", new List<string>{"Pacify 5 Cnidrions"}, new List<int>{5}, new List<Item>{ new Item { Type = ModContent.ItemType<Cnidrisnack>(), Stack = 5 } }, new List<Item>{ new Item { Type = ModContent.ItemType<CnidrionBanner>(), Stack = 4 }, new Item {Type = ModContent.ItemType<AmidiasSpark>() } })
             };
             return list;
         }
@@ -84,7 +103,7 @@ namespace Windfall.Systems
         }
         public class QuestSerializer : TagSerializer<Quest, TagCompound>
         {
-            public override TagCompound Serialize(Quest value) => new TagCompound
+            public override TagCompound Serialize(Quest value) => new()
             {
                 ["name"] = value.Name,
                 ["completion"] = value.Completed,
@@ -92,10 +111,22 @@ namespace Windfall.Systems
                 ["objectives"] = value.Objectives,
                 ["objReqs"] = value.ObjectiveRequirements,
                 ["objProg"] = value.ObjectiveProgress,
+                ["gifts"] = value.QuestGifts,
+                ["rewards"] = value.QuestRewards
+            };
+
+            public override Quest Deserialize(TagCompound tag) => new(tag.GetString("name"), (List<string>)tag.GetList<string>("objectives"), tag.GetBool("completion"), (List<int>)tag.GetList<int>("objReqs"), (List<int>)tag.GetList<int>("objProg"), tag.GetBool("active"), (List<Item>)tag.GetList<Item>("gifts"), (List<Item>)tag.GetList<Item>("rewards"));
+        }
+        public class QuestItemSerializer : TagSerializer<Item, TagCompound>
+        {
+            public override TagCompound Serialize(Item value) => new()
+            {
+                ["type"] = value.Type,
+                ["stack"] = value.Stack,
 
             };
 
-            public override Quest Deserialize(TagCompound tag) => new Quest(tag.GetString("name"), (List<string>)tag.GetList<string>("objectives"), tag.GetBool("completion"), (List<int>)tag.GetList<int>("objReqs"), (List<int>)tag.GetList<int>("objProg"), tag.GetBool("active"));
+            public override Item Deserialize(TagCompound tag) => new(tag.GetInt("type"), tag.GetInt("stack"));
         }
     }
 }
