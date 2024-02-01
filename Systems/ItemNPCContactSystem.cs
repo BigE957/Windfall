@@ -1,16 +1,12 @@
-﻿using CalamityMod.Projectiles.Ranged;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Terraria.ID;
-using Terraria;
+﻿using Terraria;
 using Terraria.ModLoader;
-using CalamityMod.Items.Accessories;
+using Microsoft.Xna.Framework;
+using System.Linq;
+using Terraria.ID;
 using Windfall.NPCs.Enemies;
 using Windfall.Items.Weapons.Misc;
 using Terraria.Audio;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace Windfall.Systems
 {
@@ -29,6 +25,17 @@ namespace Windfall.Systems
                     Main.npc[targetNPC].life = Main.npc[targetNPC].lifeMax;
                     Main.item[targetItem].active = false;
                     SoundEngine.PlaySound(SoundID.Item2, Main.npc[targetNPC].Center);
+                    int index = QuestSystem.QuestLog.FindIndex(quest => quest.Name == "CnidrionHunt");
+                    if (index != -1)
+                    {
+                        if (QuestSystem.QuestLog[index].Active)
+                        {
+                            QuestSystem.IncrementQuestProgress(index, 0);
+                            Main.NewText("Quest Progress: " + QuestSystem.QuestLog[index].ObjectiveProgress[0], Color.Yellow);
+                            if (QuestSystem.QuestLog[index].Completed)
+                                Main.NewText($"Quest Complete!", Color.Yellow);
+                        }
+                    }
                 }
             }
         }

@@ -1,6 +1,5 @@
 ﻿using CalamityMod.Items.Placeables.Banners;
 using CalamityMod;
-using Terraria.GameContent.Bestiary;
 using Terraria.ID;
 using Terraria;
 using Terraria.ModLoader;
@@ -9,9 +8,6 @@ using CalamityMod.Projectiles.Enemy;
 using CalamityMod.World;
 using System;
 using Microsoft.Xna.Framework;
-using CalamityMod.Particles;
-using Terraria.DataStructures;
-using Terraria.ModLoader.Utilities;
 
 namespace Windfall.NPCs.Enemies
 {
@@ -130,7 +126,7 @@ namespace Windfall.NPCs.Enemies
                 NPC.ai[1] += 1f;
                 if (NPC.ai[1] % 30f == 0f)
                 {
-                    Vector2 npcPosition = new Vector2(NPC.position.X + NPC.width * 0.5f, NPC.position.Y + 20f);
+                    Vector2 npcPosition = new(NPC.position.X + NPC.width * 0.5f, NPC.position.Y + 20f);
                     npcPosition.X += offsetX * NPC.direction;
                     float targetXDist = Main.player[NPC.target].position.X + Main.player[NPC.target].width * 0.5f - npcPosition.X;
                     float targetYDist = Main.player[NPC.target].position.Y - npcPosition.Y;
@@ -155,7 +151,7 @@ namespace Windfall.NPCs.Enemies
                 NPC.ai[1] += 1f;
                 if (NPC.ai[1] > 60f && NPC.ai[1] < 240f && NPC.ai[1] % 16f == 0f)
                 {
-                    Vector2 npcPosition = new Vector2(NPC.position.X + NPC.width * 0.5f, NPC.position.Y + 20f);
+                    Vector2 npcPosition = new(NPC.position.X + NPC.width * 0.5f, NPC.position.Y + 20f);
                     npcPosition.X += offsetX * NPC.direction;
                     float targetXDist = Main.player[NPC.target].position.X + Main.player[NPC.target].width * 0.5f - npcPosition.X;
                     float targetYDist = Main.player[NPC.target].position.Y - npcPosition.Y;
@@ -180,7 +176,7 @@ namespace Windfall.NPCs.Enemies
                 NPC.ai[1] += 1f;
                 if (NPC.ai[1] % 30f == 0f)
                 {
-                    Vector2 npcPosition = new Vector2(NPC.position.X + NPC.width * 0.5f, NPC.position.Y + 20f);
+                    Vector2 npcPosition = new(NPC.position.X + NPC.width * 0.5f, NPC.position.Y + 20f);
                     npcPosition.X += offsetX * NPC.direction;
                     float fastTargetXDist = Main.player[NPC.target].position.X + Main.player[NPC.target].width * 0.5f - npcPosition.X;
                     float fastTargetYDist = Main.player[NPC.target].position.Y - npcPosition.Y;
@@ -205,7 +201,7 @@ namespace Windfall.NPCs.Enemies
                 NPC.ai[1] += 1f;
                 if (NPC.ai[1] % 20f == 0f)
                 {
-                    Vector2 npcPosition = new Vector2(NPC.position.X + NPC.width * 0.5f, NPC.position.Y + 20f);
+                    Vector2 npcPosition = new(NPC.position.X + NPC.width * 0.5f, NPC.position.Y + 20f);
                     npcPosition.X += offsetX * NPC.direction;
                     float targetXDist = Main.player[NPC.target].position.X + Main.player[NPC.target].width * 0.5f - npcPosition.X;
                     float targetYDist = Main.player[NPC.target].position.Y - npcPosition.Y;
@@ -228,6 +224,7 @@ namespace Windfall.NPCs.Enemies
             {
                 NPC.AddBuff(BuffID.Lovestruck, 30);
                 NPC.friendly = true;
+                NPC.immortal = true;
             }
 
             if (Math.Abs(NPC.Center.X - player.Center.X) < 50f)
@@ -262,7 +259,7 @@ namespace Windfall.NPCs.Enemies
 
                 int collisionWidth = 80;
                 int collisionHeight = 20;
-                Vector2 collisionSize = new Vector2(NPC.Center.X - (collisionWidth / 2), NPC.position.Y + NPC.height - collisionHeight);
+                Vector2 collisionSize = new(NPC.Center.X - (collisionWidth / 2), NPC.position.Y + NPC.height - collisionHeight);
                 if (Collision.SolidCollision(collisionSize, collisionWidth, collisionHeight))
                 {
                     if (NPC.velocity.Y > 0f)

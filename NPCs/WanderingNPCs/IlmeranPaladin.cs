@@ -14,16 +14,15 @@ using Terraria.Utilities;
 using Terraria;
 using Microsoft.Xna.Framework;
 using Terraria.GameContent.Events;
+using Windfall.Systems;
+using Windfall.Items.Weapons.Misc;
+using Terraria.DataStructures;
+using CalamityMod.Items.Placeables.Banners;
 
 namespace Windfall.NPCs.WanderingNPCs
 {
     public class IlmeranPaladin : ModNPC
     {
-        /// <summary>
-        /// The main focus of this NPC is to show how to make something similar to the vanilla bone merchant;
-        /// which means that the NPC will act like any other town NPC but won't have a happiness button, won't appear on the minimap,
-        /// and will spawn like an enemy NPC. If you want a traditional town NPC instead, see <see cref="ExamplePerson"/>.
-        /// </summary>
         private static Profiles.StackedNPCProfile NPCProfile;
 
         public override void SetStaticDefaults()
@@ -185,6 +184,7 @@ namespace Windfall.NPCs.WanderingNPCs
         public override void SetChatButtons(ref string button, ref string button2)
         { // What the chat buttons are when you open up the chat UI
             button = Language.GetTextValue("LegacyInterface.28"); //This is the key to the word "Shop"
+            button2 = "Quest";
         }
 
         public override void OnChatButtonClicked(bool firstButton, ref string shop)
@@ -192,6 +192,49 @@ namespace Windfall.NPCs.WanderingNPCs
             if (firstButton)
             {
                 shop = "Shop";
+            }
+            else
+            {
+                int index = QuestSystem.QuestLog.FindIndex(quest => quest.Name == "CnidrionHunt");
+                if (index != -1)
+                {
+                    if (!QuestSystem.QuestLog[index].Completed)
+                    {
+                        if (!QuestSystem.QuestLog[index].Active)
+                        {
+                            Main.npcChatText = Language.GetOrRegister($"Mods.{nameof(Windfall)}.Dialogue.IlmeranPaladin.Quest1DialogueStart").Value;
+                            Main.npcChatCornerItem = ModContent.ItemType<Cnidrisnack>();
+
+                            var entitySource = NPC.GetSource_GiftOrReward();
+                            Main.LocalPlayer.QuickSpawnItem(entitySource, ModContent.ItemType<Cnidrisnack>(), 5);
+
+                            QuestSystem.ToggleQuestActive(index);
+                        }
+                        else
+                        {
+                            Main.npcChatText = Language.GetOrRegister($"Mods.{nameof(Windfall)}.Dialogue.IlmeranPaladin.Quest1DialogueDuring").Value;
+                            Main.npcChatCornerItem = ModContent.ItemType<Cnidrisnack>();
+                        }
+                    }
+                    else
+                    {
+                        if (QuestSystem.QuestLog[index].Active)
+                        {
+                            Main.npcChatText = Language.GetOrRegister($"Mods.{nameof(Windfall)}.Dialogue.IlmeranPaladin.Quest1DialogueEnd").Value;
+
+                            var entitySource = NPC.GetSource_GiftOrReward();
+                            Main.LocalPlayer.QuickSpawnItem(entitySource, ModContent.ItemType<CnidrionBanner>());
+                            Main.LocalPlayer.QuickSpawnItem(entitySource, ModContent.ItemType<AmidiasPendant>());
+
+                            QuestSystem.ToggleQuestActive(index);
+                        }
+                        else
+                        {
+                            Main.npcChatText = Language.GetOrRegister($"Mods.{nameof(Windfall)}.Dialogue.IlmeranPaladin.NoQuestDialogue").Value;
+                        }
+                    }
+                }
+
             }
         }
 
