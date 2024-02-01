@@ -159,22 +159,38 @@ Items: {
 	Debug: {
 		TheZoomer: {
 			DisplayName: The Zoomer
-			Tooltip: The power of perspective in the palm of your hand!
+			Tooltip: 
+				'''
+				The power of perspective in the palm of your hand!
+				Zooms the camera on use
+				'''
 		}
 
 		PortableDraedonDatabase: {
 			DisplayName: Portable Draedon's Database
-			Tooltip: All of the Nightmare Fabricator's knowledge in the palm of your hand!
+			Tooltip: 
+				'''
+				All of the Nightmare Fabricator's knowledge in the palm of your hand!
+				Opens Draedon's Database on use
+				'''
 		}
 
 		DraeDashGiftCard: {
 			DisplayName: $19 Drae-Dash Gift Card
-			Tooltip: Who wants it?
+			Tooltip: 
+				'''
+				Who wants it?
+				Drops a DraeDash Pod over the mouse location on use
+				'''
 		}
 
 		QuestsEnd: {
 			DisplayName: Quest's End
-			Tooltip: "All of your work... Gone, in an instant."
+			Tooltip: 
+				'''
+				All of your work... Gone, in an instant.
+				Resets all Quest Data on use
+				'''
 		}
 	}
 
