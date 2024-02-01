@@ -13,7 +13,6 @@ using System.IO;
 using CalamityMod;
 using Windfall.Items.Weapons.Melee;
 using Windfall.Systems;
-using CalamityMod.NPCs.NormalNPCs;
 using CalamityMod.NPCs.CalClone;
 
 namespace Windfall.NPCs.WorldEvents;
@@ -90,7 +89,7 @@ public class WorldCatastrophe : ModNPC
             spriteEffects = SpriteEffects.FlipHorizontally;
 
         Texture2D texture2D15 = TextureAssets.Npc[NPC.type].Value;
-        Vector2 halfSizeTexture = new Vector2((float)(TextureAssets.Npc[NPC.type].Value.Width / 2), (float)(TextureAssets.Npc[NPC.type].Value.Height / Main.npcFrameCount[NPC.type] / 2));
+        Vector2 halfSizeTexture = new((float)(TextureAssets.Npc[NPC.type].Value.Width / 2), (float)(TextureAssets.Npc[NPC.type].Value.Height / Main.npcFrameCount[NPC.type] / 2));
         int afterimageAmt = 7;
 
         if (CalamityConfig.Instance.Afterimages)

@@ -1,16 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Terraria.ID;
-using Terraria.Localization;
+﻿using Terraria.ID;
 using Terraria.ModLoader;
 using Terraria;
-using Windfall.UI.WanderersJournals;
-using Windfall.Utilities;
 using CalamityMod.Rarities;
-using CalamityMod.Items.Weapons.Melee;
 using Windfall.UI.DraedonsDatabase;
 
 namespace Windfall.Items.Debug
@@ -18,6 +9,7 @@ namespace Windfall.Items.Debug
     public class PortableDraedonDatabase : ModItem, ILocalizedModType
     {
         public new string LocalizationCategory => "Items.Debug";
+        public override string Texture => "CalamityMod/Items/DraedonMisc/DraedonsLogHell";
         public override void SetDefaults()
         {
             Item.width = 25;

@@ -9,7 +9,6 @@
   </PropertyGroup>
   <ItemGroup>
     <None Remove="Items\Debug\DraeDashGiftCard.png" />
-    <None Remove="Items\Debug\PortableDraedonDatabase.png" />
     <None Remove="Items\Debug\TheZoomer.png" />
     <None Remove="Items\Journals\JournalAerie.png" />
     <None Remove="Items\Journals\JournalCompilation.png" />

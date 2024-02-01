@@ -1,6 +1,5 @@
 ﻿using CalamityMod.Buffs.DamageOverTime;
 using CalamityMod.Dusts;
-using CalamityMod.Events;
 using CalamityMod.Items.Placeables.Furniture.Trophies;
 using CalamityMod.Items.Weapons.Ranged;
 using CalamityMod.World;
@@ -15,7 +14,6 @@ using CalamityMod;
 using Windfall.Items.Weapons.Melee;
 using CalamityMod.NPCs.CalClone;
 using Windfall.Systems;
-using CalamityMod.NPCs.NormalNPCs;
 
 namespace Windfall.NPCs.WorldEvents;
 
@@ -89,7 +87,7 @@ public class WorldCataclysm : ModNPC
             spriteEffects = SpriteEffects.FlipHorizontally;
 
         Texture2D texture2D15 = TextureAssets.Npc[NPC.type].Value;
-        Vector2 halfSizeTexture = new Vector2((float)(TextureAssets.Npc[NPC.type].Value.Width / 2), (float)(TextureAssets.Npc[NPC.type].Value.Height / Main.npcFrameCount[NPC.type] / 2));
+        Vector2 halfSizeTexture = new(TextureAssets.Npc[NPC.type].Value.Width / 2, TextureAssets.Npc[NPC.type].Value.Height / Main.npcFrameCount[NPC.type] / 2);
         int afterimageAmt = 7;
 
         if (CalamityConfig.Instance.Afterimages)
@@ -99,9 +97,9 @@ public class WorldCataclysm : ModNPC
                 Color afterimageColor = drawColor;
                 afterimageColor = Color.Lerp(afterimageColor, Color.White, 0.5f);
                 afterimageColor = NPC.GetAlpha(afterimageColor);
-                afterimageColor *= (float)(afterimageAmt - i) / 15f;
-                Vector2 afterimageDrawPos = NPC.oldPos[i] + new Vector2((float)NPC.width, (float)NPC.height) / 2f - screenPos;
-                afterimageDrawPos -= new Vector2((float)texture2D15.Width, (float)(texture2D15.Height / Main.npcFrameCount[NPC.type])) * NPC.scale / 2f;
+                afterimageColor *= (afterimageAmt - i) / 15f;
+                Vector2 afterimageDrawPos = NPC.oldPos[i] + new Vector2(NPC.width, NPC.height) / 2f - screenPos;
+                afterimageDrawPos -= new Vector2(texture2D15.Width, (texture2D15.Height / Main.npcFrameCount[NPC.type])) * NPC.scale / 2f;
                 afterimageDrawPos += halfSizeTexture * NPC.scale + new Vector2(0f, NPC.gfxOffY);
                 spriteBatch.Draw(texture2D15, afterimageDrawPos, NPC.frame, afterimageColor, NPC.rotation, halfSizeTexture, NPC.scale, spriteEffects, 0f);
             }
