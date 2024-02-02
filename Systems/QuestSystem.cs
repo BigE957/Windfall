@@ -58,7 +58,7 @@ namespace Windfall.Systems
         public override void LoadWorldData(TagCompound tag)
         {
             QuestLog = (List<Quest>)tag.GetList<Quest>("QuestLog");
-            EnsureQuestLogPopulated(InitializedQuestLog());
+            EnsureQuestLogUpToDate(InitializedQuestLog());
         }
         public override void SaveWorldData(TagCompound tag)
         {
@@ -82,12 +82,37 @@ namespace Windfall.Systems
             };
             return list;
         }
-        internal static void EnsureQuestLogPopulated(List<Quest> initList)
+        internal static void EnsureQuestLogUpToDate(List<Quest> initList)
         {
             for(int i = 0; i < initList.Count; i++)
             {
-                if(i >= QuestLog.Count)
+                if (i >= QuestLog.Count)
                     QuestLog.Add(initList[i]);
+                else
+                {
+                    //Ensures changed details about pre-existing quests are updated
+
+                    Quest temp = QuestLog[i];
+                    if (temp.Name != initList[i].Name)
+                        temp.Name = initList[i].Name;
+                    if(temp.QuestGifts != initList[i].QuestGifts)
+                        temp.QuestGifts = initList[i].QuestGifts;
+                    if(temp.ObjectiveRequirements != initList[i].ObjectiveRequirements)
+                        temp.ObjectiveRequirements = initList[i].ObjectiveRequirements;
+                    if(temp.QuestRewards != initList[i].QuestRewards)
+                        temp.QuestRewards = initList[i].QuestRewards;
+                    if(temp.Objectives != initList[i].Objectives)
+                        temp.Objectives = initList[i].Objectives;
+                    for (int j = 0; i < temp.ObjectiveProgress.Count; j++)
+                        if (temp.ObjectiveProgress.Count <= j)
+                            temp.ObjectiveProgress.Add(initList[i].ObjectiveProgress[j]);
+                        else if (temp.ObjectiveProgress[j] >= temp.ObjectiveRequirements[j])
+                        {
+                            temp.ObjectiveProgress[j] = temp.ObjectiveRequirements[j];
+                            temp.Completed = true;
+                        }
+                    QuestLog[i] = temp;
+                }
             }
         }
         public static void IncrementQuestProgress(int questIndex, int questReqIndex)
