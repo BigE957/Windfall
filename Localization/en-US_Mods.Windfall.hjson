@@ -7,6 +7,7 @@ Dialogue: {
 		StandardDialogue3: Care to rest a moment with me? This heat is exhausting; I know.
 		SandstormDialogue: The wind is howling most fiercely... Be warned, the creatures here have been stirred into a frenzy!
 		NoSandstormDialogue: The winds are calm... These sands can still be beautiful despite the regret they carry.
+		SavedDialogue: Geez... Was almost a goner there. Thanks for the rescue!
 		CnidrionHuntDialogueStart: Ever since the Incineration, the poor Cnidrion have been stirred into a frenzy! Would you do me a favor and lend me a hand in calming the poor guys down? All you gotta do is toss them one of these after you've tired them out a bit. Cnidrisnacks are their favorite! Once they've had one, they're sure to calm down, might even take a liking towards you. If you could handle 5 that'd be a real big help.
 		CnidrionHuntDialogueDuring: Those Cnidrions aren't gonna calm themselves down! Toss them a Cnidrisnack once they've been tuckered out, and they'll calm right down! If you can take care of 5 that'd be perfect.
 		CnidrionHuntDialogueEnd: Nice work! Are those lick marks I see on you? Guess you're quite the Cnidrion tamer. You might've made a good paladin yourself!
@@ -222,7 +223,7 @@ Items: {
 	Fishing: {
 		AncientIlmeranRod: {
 			DisplayName: Ancient Ilmeran Rod
-			Tooltip: ""
+			Tooltip: "Used to fish up the largest of catches..."
 		}
 	}
 }
@@ -234,6 +235,7 @@ NPCs: {
 	WanderingCalClone.DisplayName: Calamitas' Clone
 	WanderingPotionSeller.DisplayName: Wandering Potion Seller
 	WFCnidrion.DisplayName: Cnidrion
+	IlmeranPaladinKnocked.DisplayName: Unconscious Ilmeran Paladin
 }
 
 Projectiles: {

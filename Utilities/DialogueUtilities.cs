@@ -17,8 +17,9 @@ namespace Windfall.Utilities
         {
             int index = -1;
             string npcName = npc.TypeName.Replace(" ", "");
-            if (npcName == "IlmeranPaladin")
+            if (npcName == "IlmeranPaladin" || npcName == "IlmeranPaladinKnocked")
             {
+                npcName = "IlmeranPaladin";
                 bool success = false;
                 for (int i = 0; i < PaladinQuests.Count; i++) 
                 {

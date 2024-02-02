@@ -21,7 +21,6 @@ namespace Windfall.NPCs.WanderingNPCs
     public class IlmeranPaladin : ModNPC
     {
         private static Profiles.StackedNPCProfile NPCProfile;
-
         public override void SetStaticDefaults()
         {
             Main.npcFrameCount[Type] = 25; // The amount of frames the NPC has
@@ -54,7 +53,7 @@ namespace Windfall.NPCs.WanderingNPCs
 
             //The vanilla Bone Merchant cannot interact with doors (open or close them, specifically), but if you want your NPC to be able to interact with them despite this,
             //uncomment this line below.
-            //NPCID.Sets.AllowDoorInteraction[Type] = true;
+            NPCID.Sets.AllowDoorInteraction[Type] = true;
 
             // Influences how the NPC looks in the Bestiary
             NPCID.Sets.NPCBestiaryDrawModifiers drawModifiers = new()
@@ -83,6 +82,7 @@ namespace Windfall.NPCs.WanderingNPCs
             NPC.HitSound = SoundID.NPCHit1;
             NPC.DeathSound = SoundID.NPCDeath1;
             NPC.knockBackResist = 0.5f;
+            NPC.ai[1] = 0;
 
             AnimationType = NPCID.Guide;
         }
@@ -108,28 +108,12 @@ namespace Windfall.NPCs.WanderingNPCs
 
         public override void HitEffect(NPC.HitInfo hit)
         {
-            // Causes dust to spawn when the NPC takes damage.
-            //int num = NPC.life > 0 ? 1 : 5;
-
-            //for (int k = 0; k < num; k++)
-            //{
-            //    Dust.NewDust(NPC.position, NPC.width, NPC.height, ModContent.DustType<Sparkle>());
-            //}
-
-            // Create gore when the NPC is killed.
+            // "Knocks out" the Ilmeran Paladin when the NPC is killed.
             if (Main.netMode != NetmodeID.Server && NPC.life <= 0)
             {
-                // Retrieve the gore types. This NPC only has shimmer variants. (6 total gores)
-                int headGore = Mod.Find<ModGore>($"{Name}_Gore_Head").Type;
-                int armGore = Mod.Find<ModGore>($"{Name}_Gore_Arm").Type;
-                int legGore = Mod.Find<ModGore>($"{Name}_Gore_Leg").Type;
-
-                // Spawn the gores. The positions of the arms and legs are lowered for a more natural look.
-                Gore.NewGore(NPC.GetSource_Death(), NPC.position, NPC.velocity, headGore, 1f);
-                Gore.NewGore(NPC.GetSource_Death(), NPC.position + new Vector2(0, 20), NPC.velocity, armGore);
-                Gore.NewGore(NPC.GetSource_Death(), NPC.position + new Vector2(0, 20), NPC.velocity, armGore);
-                Gore.NewGore(NPC.GetSource_Death(), NPC.position + new Vector2(0, 34), NPC.velocity, legGore);
-                Gore.NewGore(NPC.GetSource_Death(), NPC.position + new Vector2(0, 34), NPC.velocity, legGore);
+                NPC.life = NPC.lifeMax;
+                NPC.velocity = new Vector2(0,0);
+                NPC.Transform(ModContent.NPCType<IlmeranPaladinKnocked>());
             }
         }
 
@@ -164,14 +148,15 @@ namespace Windfall.NPCs.WanderingNPCs
             WeightedRandom<string> chat = new();
 
             // These are things that the NPC has a chance of telling you when you talk to it.
-            if (Sandstorm.Happening)
+            if (NPC.ai[1] == 1)
             {
+                NPC.ai[1] = 0;
+                return Language.GetOrRegister($"Mods.{nameof(Windfall)}.Dialogue.IlmeranPaladin.SavedDialogue").Value;
+            }
+            else if (Sandstorm.Happening)
                 chat.Add(Language.GetOrRegister($"Mods.{nameof(Windfall)}.Dialogue.IlmeranPaladin.SandstormDialogue").Value);
-            }
-            else 
-            {
+            else
                 chat.Add(Language.GetOrRegister($"Mods.{nameof(Windfall)}.Dialogue.IlmeranPaladin.NoSandstormDialogue").Value);
-            }
             chat.Add(Language.GetOrRegister($"Mods.{nameof(Windfall)}.Dialogue.IlmeranPaladin.StandardDialogue1").Value);
             chat.Add(Language.GetOrRegister($"Mods.{nameof(Windfall)}.Dialogue.IlmeranPaladin.StandardDialogue2").Value);
             chat.Add(Language.GetOrRegister($"Mods.{nameof(Windfall)}.Dialogue.IlmeranPaladin.StandardDialogue3").Value);
