@@ -30,6 +30,7 @@
     <None Remove="NPCs\Gores\IlmeranPaladin_Gore_Head.png" />
     <None Remove="NPCs\Gores\IlmeranPaladin_Gore_Leg.png" />
     <None Remove="NPCs\WanderingNPCs\IlmeranPaladin.png" />
+    <None Remove="NPCs\WanderingNPCs\IlmeranPaladinKnocked.png" />
     <None Remove="NPCs\WorldEvents\WanderingCalClone.png" />
     <None Remove="NPCs\WorldEvents\WanderingPotionSeller.png" />
     <None Remove="Tiles\Special\DatabaseTerminal.png" />

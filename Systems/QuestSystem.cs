@@ -103,13 +103,12 @@ namespace Windfall.Systems
                         temp.QuestRewards = initList[i].QuestRewards;
                     if(temp.Objectives != initList[i].Objectives)
                         temp.Objectives = initList[i].Objectives;
-                    for (int j = 0; i < temp.ObjectiveProgress.Count; j++)
+                    for (int j = 0; j < temp.ObjectiveRequirements.Count; j++)
                         if (temp.ObjectiveProgress.Count <= j)
-                            temp.ObjectiveProgress.Add(initList[i].ObjectiveProgress[j]);
+                            temp.ObjectiveProgress.Add(initList[i].ObjectiveRequirements[j]);
                         else if (temp.ObjectiveProgress[j] >= temp.ObjectiveRequirements[j])
                         {
                             temp.ObjectiveProgress[j] = temp.ObjectiveRequirements[j];
-                            temp.Completed = true;
                         }
                     QuestLog[i] = temp;
                 }
