@@ -7,6 +7,7 @@ using Windfall.NPCs.Enemies;
 using Windfall.Items.Weapons.Misc;
 using Terraria.Audio;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
+using CalamityMod.Items.Accessories;
 
 namespace Windfall.Systems
 {
@@ -33,10 +34,20 @@ namespace Windfall.Systems
                     {
                         if (QuestSystem.QuestLog[index].Active)
                         {
+                            if (QuestSystem.QuestLog[index].ObjectiveProgress[0] == 4)
+                            {
+                                Mod CalVal = ModLoader.GetMod("CalValEX");
+                                if (CalVal != null)
+                                {
+                                    Item.NewItem(null, Main.npc[targetNPC].Center, 8, 4, CalVal.Find<ModItem>("SunDriedShrimp").Type);
+                                }
+                            }
                             QuestSystem.IncrementQuestProgress(index, 0);
                             Main.NewText("Quest Progress: " + QuestSystem.QuestLog[index].ObjectiveProgress[0], Color.Yellow);
                             if (QuestSystem.QuestLog[index].Completed)
+                            {
                                 Main.NewText($"Quest Complete!", Color.Yellow);
+                            }
                         }
                     }
                 }
