@@ -70,7 +70,7 @@ namespace Windfall.Utilities
                         Main.npcChatText = Language.GetOrRegister($"Mods.{nameof(Windfall)}.Dialogue.{npcName}.{QuestSystem.QuestLog[index].Name}DialogueEnd").Value;
 
                         var entitySource = npc.GetSource_GiftOrReward();
-                        for (int i = 0; i < QuestSystem.QuestLog[index].QuestGifts.Count; i++)
+                        for (int i = 0; i < QuestSystem.QuestLog[index].QuestRewards.Count; i++)
                         {
                             Main.LocalPlayer.QuickSpawnItem(entitySource, QuestSystem.QuestLog[index].QuestRewards[i].Type, QuestSystem.QuestLog[index].QuestRewards[i].Stack);
                         }

@@ -21,14 +21,14 @@ namespace Windfall.Items
 
             if(isJournalPage)
             {
-                if(firstJournal() == true)
+                if(FirstJournal() == true)
                 {
                     Terraria.Item.NewItem(null, player.Center, 1, 1, ModContent.ItemType<JournalCompilation>());
                 }
             }
             return base.UseItem(item, player);
         }
-        internal static bool firstJournal()
+        internal static bool FirstJournal()
         {
             for(int i = 0; i < WorldSaveSystem.JournalsCollected.Count; i++)
             {
