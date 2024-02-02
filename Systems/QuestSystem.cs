@@ -8,13 +8,13 @@ using Windfall.Items.Weapons.Misc;
 
 namespace Windfall.Systems
 {
-    public struct Item
+    public struct QuestItem
     {
         internal int Type;
 
         internal int Stack = 1;
 
-        internal Item(int type, int stack)
+        internal QuestItem(int type, int stack)
         {
             Type = type;
             Stack = stack;
@@ -30,9 +30,9 @@ namespace Windfall.Systems
             public List<string> Objectives;
             public List<int> ObjectiveRequirements;
             public List<int> ObjectiveProgress;
-            public List<Item> QuestGifts;
-            public List<Item> QuestRewards;
-            public Quest(string name, List<string> objective, bool completed, List<int> objReq, List<int> objProg, bool active, List<Item> questGifts, List<Item> questRewards)
+            public List<QuestItem> QuestGifts;
+            public List<QuestItem> QuestRewards;
+            public Quest(string name, List<string> objective, bool completed, List<int> objReq, List<int> objProg, bool active, List<QuestItem> questGifts, List<QuestItem> questRewards)
             {
                 Name = name;
                 Completed = completed;
@@ -59,7 +59,7 @@ namespace Windfall.Systems
         {
             tag["QuestLog"] = QuestLog;
         }
-        internal static Quest CreateQuest(string Name, List<string>Objectives, List<int>ObjectiveRequirements, List<Item>QuestGifts = null, List<Item>QuestRewards = null)
+        internal static Quest CreateQuest(string Name, List<string>Objectives, List<int>ObjectiveRequirements, List<QuestItem>QuestGifts = null, List<QuestItem>QuestRewards = null)
         {
             List<int> objectiveProgress = new();
             for(int i = 0; i < ObjectiveRequirements.Count; i++ )
@@ -72,7 +72,7 @@ namespace Windfall.Systems
         {
             List<Quest> list = new()
             {
-                CreateQuest("CnidrionHunt", new List<string>{"Pacify 5 Cnidrions"}, new List<int>{5}, new List<Item>{ new Item { Type = ModContent.ItemType<Cnidrisnack>(), Stack = 5 } }, new List<Item>{ new Item { Type = ModContent.ItemType<CnidrionBanner>(), Stack = 4 }, new Item {Type = ModContent.ItemType<AmidiasSpark>(), Stack = 1} })
+                CreateQuest("CnidrionHunt", new List<string>{"Pacify 5 Cnidrions"}, new List<int>{5}, new List<QuestItem>{ new QuestItem { Type = ModContent.ItemType<Cnidrisnack>(), Stack = 5 } }, new List<QuestItem>{ new QuestItem { Type = ModContent.ItemType<CnidrionBanner>(), Stack = 4 }, new QuestItem {Type = ModContent.ItemType<AmidiasSpark>(), Stack = 1} })
             };
             return list;
         }
@@ -115,18 +115,18 @@ namespace Windfall.Systems
                 ["rewards"] = value.QuestRewards
             };
 
-            public override Quest Deserialize(TagCompound tag) => new(tag.GetString("name"), (List<string>)tag.GetList<string>("objectives"), tag.GetBool("completion"), (List<int>)tag.GetList<int>("objReqs"), (List<int>)tag.GetList<int>("objProg"), tag.GetBool("active"), (List<Item>)tag.GetList<Item>("gifts"), (List<Item>)tag.GetList<Item>("rewards"));
+            public override Quest Deserialize(TagCompound tag) => new(tag.GetString("name"), (List<string>)tag.GetList<string>("objectives"), tag.GetBool("completion"), (List<int>)tag.GetList<int>("objReqs"), (List<int>)tag.GetList<int>("objProg"), tag.GetBool("active"), (List<QuestItem>)tag.GetList<QuestItem>("gifts"), (List<QuestItem>)tag.GetList<QuestItem>("rewards"));
         }
-        public class QuestItemSerializer : TagSerializer<Item, TagCompound>
+        public class QuestItemSerializer : TagSerializer<QuestItem, TagCompound>
         {
-            public override TagCompound Serialize(Item value) => new()
+            public override TagCompound Serialize(QuestItem value) => new()
             {
                 ["type"] = value.Type,
                 ["stack"] = value.Stack,
 
             };
 
-            public override Item Deserialize(TagCompound tag) => new(tag.GetInt("type"), tag.GetInt("stack"));
+            public override QuestItem Deserialize(TagCompound tag) => new(tag.GetInt("type"), tag.GetInt("stack"));
         }
     }
 }
