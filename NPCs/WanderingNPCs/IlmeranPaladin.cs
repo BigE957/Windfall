@@ -16,6 +16,9 @@ using Microsoft.Xna.Framework;
 using Terraria.GameContent.Events;
 using Windfall.Utilities;
 using Terraria.DataStructures;
+using Windfall.Items.Weapons.Misc;
+using CalamityMod.Projectiles.Melee;
+using CalamityMod.Projectiles.Rogue;
 
 namespace Windfall.NPCs.WanderingNPCs
 {
@@ -190,12 +193,13 @@ namespace Windfall.NPCs.WanderingNPCs
         {
             new NPCShop(Type)
                 .Add<AmidiasSpark>()
+                .Add<Cnidrisnack>()
                 .Register();
         }
 
         public override void TownNPCAttackStrength(ref int damage, ref float knockback)
         {
-            damage = 20;
+            damage = 10;
             knockback = 4f;
         }
 
@@ -207,8 +211,7 @@ namespace Windfall.NPCs.WanderingNPCs
 
         public override void TownNPCAttackProj(ref int projType, ref int attackDelay)
         {
-            Mod calamity = ModLoader.GetMod("CalamityMod");
-            projType = (calamity.Find<ModProjectile>("ScourgeoftheDesertProj").Type);
+            projType = ModContent.ProjectileType<ScourgeoftheDesertProj>();
             attackDelay = 1;
         }
 
