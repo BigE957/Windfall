@@ -1,10 +1,14 @@
 ﻿using CalamityMod.Items.Accessories;
 using CalamityMod.Items.Placeables.Banners;
+using CalamityMod.Items.Placeables.Furniture.Trophies;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Terraria.ModLoader;
 using Terraria.ModLoader.IO;
+using Windfall.Items.Fishing;
 using Windfall.Items.Weapons.Misc;
+using Windfall.Projectiles.Fishing;
 
 namespace Windfall.Systems
 {
@@ -44,16 +48,17 @@ namespace Windfall.Systems
                 QuestRewards = questRewards;
             }
         }
-        public static List<Quest> QuestLog = InitializeQuestLog();
+        public static List<Quest> QuestLog = InitializedQuestLog();
         public static List<int> Nums;
 
         public override void ClearWorld()
         {
-            QuestLog = InitializeQuestLog();
+            QuestLog = InitializedQuestLog();
         }
         public override void LoadWorldData(TagCompound tag)
         {
             QuestLog = (List<Quest>)tag.GetList<Quest>("QuestLog");
+            EnsureQuestLogPopulated(InitializedQuestLog());
         }
         public override void SaveWorldData(TagCompound tag)
         {
@@ -68,13 +73,22 @@ namespace Windfall.Systems
             }
             return new Quest { Name = Name, Completed = false, Objectives = Objectives, ObjectiveProgress = objectiveProgress, ObjectiveRequirements = ObjectiveRequirements, Active = false, QuestGifts = QuestGifts, QuestRewards = QuestRewards};
         }
-        internal static List<Quest> InitializeQuestLog()
+        internal static List<Quest> InitializedQuestLog()
         {
             List<Quest> list = new()
             {
-                CreateQuest("CnidrionHunt", new List<string>{"Pacify 5 Cnidrions"}, new List<int>{5}, new List<QuestItem>{ new QuestItem { Type = ModContent.ItemType<Cnidrisnack>(), Stack = 5 } }, new List<QuestItem>{ new QuestItem { Type = ModContent.ItemType<CnidrionBanner>(), Stack = 4 }, new QuestItem {Type = ModContent.ItemType<AmidiasSpark>(), Stack = 1} })
+                CreateQuest("CnidrionHunt", new List<string>{"Pacify 5 Cnidrions"}, new List<int>{5}, new List<QuestItem>{ new QuestItem { Type = ModContent.ItemType<Cnidrisnack>(), Stack = 5 } }, new List<QuestItem>{ new QuestItem { Type = ModContent.ItemType<CnidrionBanner>(), Stack = 4 }, new QuestItem {Type = ModContent.ItemType<AmidiasSpark>(), Stack = 1} }),
+                CreateQuest("ScoogHunt", new List<string>{"Defeat Desert Scourge"}, new List<int>{1}, new List<QuestItem>{ new QuestItem { Type = ModContent.ItemType<AncientIlmeranRod>(), Stack = 1 }, new QuestItem { Type = ModContent.ItemType<Cnidrisnack>(), Stack = 5 } }, new List<QuestItem>{ new QuestItem { Type = ModContent.ItemType<DesertScourgeTrophy>(), Stack = 1 } })
             };
             return list;
+        }
+        internal static void EnsureQuestLogPopulated(List<Quest> initList)
+        {
+            for(int i = 0; i < initList.Count; i++)
+            {
+                if(i > QuestLog.Count)
+                    QuestLog.Append(initList[i]);
+            }
         }
         public static void IncrementQuestProgress(int questIndex, int questReqIndex)
         {
