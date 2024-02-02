@@ -25,12 +25,17 @@ namespace Windfall.Items.Weapons.Misc
             Item.shootSpeed = 14f;
             Item.shoot = ModContent.ProjectileType<CnidrisnackThrow>();
             Item.maxStack = 99;
+            Item.bait = 25;
 
             Item.width = Item.height = 16;
             Item.useStyle = ItemUseStyleID.Swing;
             Item.UseSound = SoundID.Item7;
             Item.value = CalamityGlobalItem.Rarity7BuyPrice;
             Item.rare = ItemRarityID.Blue;
+        }
+        public override void ModifyResearchSorting(ref ContentSamples.CreativeHelper.ItemGroup itemGroup)
+        {
+            itemGroup = ContentSamples.CreativeHelper.ItemGroup.FishingBait;
         }
     }
 }
