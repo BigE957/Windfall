@@ -86,8 +86,8 @@ namespace Windfall.Systems
         {
             for(int i = 0; i < initList.Count; i++)
             {
-                if(i > QuestLog.Count)
-                    QuestLog.Append(initList[i]);
+                if(i >= QuestLog.Count)
+                    QuestLog.Add(initList[i]);
             }
         }
         public static void IncrementQuestProgress(int questIndex, int questReqIndex)

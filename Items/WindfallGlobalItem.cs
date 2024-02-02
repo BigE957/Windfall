@@ -39,7 +39,7 @@ namespace Windfall.Items
         }
         public static void InsertJournalTooltop(List<TooltipLine> tooltips)
         {
-            TooltipLine tooltipLine = new TooltipLine(Windfall.Instance, "JournalPage", "Use to add this page to your Wanderer's Journal");
+            TooltipLine tooltipLine = new(Windfall.Instance, "JournalPage", "Use to add this page to your Wanderer's Journal");
             tooltips.Add(tooltipLine);
         }
     }

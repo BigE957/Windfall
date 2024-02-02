@@ -11,7 +11,7 @@ namespace Windfall.Utilities
         private static readonly List<string> PaladinQuests = new()
         {
             "CnidrionHunt",
-            //rest go here
+            "ScoogHunt",
         };
         public static void QuestDialogueHelper(NPC npc)
         {
