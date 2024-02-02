@@ -71,6 +71,27 @@ namespace Windfall.World
                             }
                         }
                     }
+                    // Replaces the Desert Medalions Calamity adds to chest with the vanity version if CalVal is on. Otherwise, murders them.
+                    if (isSandstoneChest)
+                    {
+                        {
+                            for (int inventoryIndex = 0; inventoryIndex < 40; inventoryIndex++)
+                            {
+                                if (chest.item[inventoryIndex].type == ModContent.ItemType<DesertMedallion>())
+                                {
+                                    Mod CalVal = ModLoader.GetMod("CalValEX");
+                                    if (CalVal != null)
+                                    {
+                                        chest.item[inventoryIndex].type = CalVal.Find<ModItem>("DesertMedallion").Type;
+                                    }
+                                    else
+                                    {
+                                        chest.item[inventoryIndex].TurnToAir();
+                                    }
+                                }
+                            }
+                        }
+                    }
                 }
             }
         }

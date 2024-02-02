@@ -16,6 +16,10 @@ namespace Windfall.Systems
                 {
                     recipe.AddIngredient(ModContent.ItemType<AshesofCalamity>(), 5);
                 }
+                if (recipe.HasResult(ModContent.ItemType<DesertMedallion>()))
+                {
+                    recipe.AddIngredient(ModContent.ItemType<PearlShard>(), 5);
+                }
             }
         }
     }
