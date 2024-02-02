@@ -223,7 +223,7 @@ Items: {
 	Fishing: {
 		AncientIlmeranRod: {
 			DisplayName: Ancient Ilmeran Rod
-			Tooltip: "Used to fish up the largest of catches..."
+			Tooltip: Used to fish up the largest of catches...
 		}
 	}
 }
@@ -244,6 +244,7 @@ Projectiles: {
 	Other.DraeDashDropPod.DisplayName: Drae-Dash Drop Pod
 	CnidrisnackThrow.DisplayName: Cnidrisnack
 	AncientIlmeranBobber.DisplayName: Ancient Ilmeran Bobber
+	IlmeranPaladinDig.DisplayName: Ilmeran Paladin Dig
 }
 
 JournalContents: {

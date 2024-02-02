@@ -15,6 +15,7 @@ using Terraria;
 using Microsoft.Xna.Framework;
 using Terraria.GameContent.Events;
 using Windfall.Utilities;
+using Terraria.DataStructures;
 
 namespace Windfall.NPCs.WanderingNPCs
 {
@@ -85,6 +86,10 @@ namespace Windfall.NPCs.WanderingNPCs
             NPC.ai[1] = 0;
 
             AnimationType = NPCID.Guide;
+        }
+        public override void OnSpawn(IEntitySource source)
+        {
+            NPC.velocity = new Vector2(0, NPC.ai[0]);
         }
 
         //Make sure to allow your NPC to chat, since being "like a town NPC" doesn't automatically allow for chatting.

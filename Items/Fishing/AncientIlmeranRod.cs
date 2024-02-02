@@ -3,14 +3,15 @@ using CalamityMod.Items;
 using CalamityMod.NPCs.DesertScourge;
 using CalamityMod.World;
 using Microsoft.Xna.Framework;
-using System;
-using System.Linq;
+using Terraria.DataStructures;
 using Terraria;
 using Terraria.Audio;
 using Terraria.ID;
 using Terraria.ModLoader;
 using Windfall.Projectiles.Fishing;
+using Windfall.Projectiles.NPCAnimations;
 using Windfall.Systems;
+using Windfall.NPCs.WanderingNPCs;
 
 namespace Windfall.Items.Fishing
 {
@@ -36,8 +37,8 @@ namespace Windfall.Items.Fishing
         internal int scoogCounter = 0;
         public override void HoldItem(Player player)
         {
-            
-            for(int i = 0; i < Main.projectile.Length; i++)
+            isCast = false;
+            for (int i = 0; i < Main.projectile.Length; i++)
             {
                 if (Main.projectile[i].type == ModContent.ProjectileType<AncientIlmeranBobber>())
                 {
@@ -48,7 +49,7 @@ namespace Windfall.Items.Fishing
             int scoogWait = 60;
             if(isCast && player.ZoneDesert && !NPC.AnyNPCs(ModContent.NPCType<DesertScourgeHead>()) && !BossRushEvent.BossRushActive)
             {
-                //Main.NewText("Desert Scoog is approaching!", Color.Yellow);
+                
                 if(scoogCounter == 0)
                 {
                     if (WorldSaveSystem.ScoogFished)
@@ -57,6 +58,13 @@ namespace Windfall.Items.Fishing
                         scoogWait = Main.rand.Next(50, 70);
                 }
                 scoogCounter++;
+
+                if (scoogCounter == 60 * 5 && (!NPC.AnyNPCs(ModContent.NPCType<IlmeranPaladin>()) && !NPC.AnyNPCs(ModContent.NPCType<IlmeranPaladinKnocked>())))
+                {
+                    Projectile.NewProjectile(null, new Vector2(player.Center.X - (80 * player.direction), player.Center.Y + 100), new Vector2(0, -8), ModContent.ProjectileType<IlmeranPaladinDig>(), 0, 0);
+                    //Main.NewText("Paladin is approaching!", Color.Yellow);
+                }
+
                 if(scoogCounter >= 60 * scoogWait)
                 {
                     SoundEngine.PlaySound(SoundID.Roar, player.Center);
