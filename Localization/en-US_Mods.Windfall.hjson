@@ -12,15 +12,15 @@ Dialogue: {
 		CnidrionHuntDialogueDuring: Those Cnidrions aren't gonna calm themselves down! Toss them a Cnidrisnack once they've been tuckered out, and they'll calm right down! If you can take care of 5 that'd be perfect.
 		CnidrionHuntDialogueEnd: Nice work! Are those lick marks I see on you? Guess you're quite the Cnidrion tamer. You might've made a good paladin yourself!
 		NoQuestDialogue: You've done all I could ask of you. Come back later, and maybe I'll have something more for you to do.
-		ScoogHuntDialogueStart: I think you've proven yourself to be quite capable; capable enough to lend me a hand in a real hunt. I'm sure you've felt the tremors below the sands. Take this, and you'll be able to lure out its source. Though be prepared for a fight once it surfaces.
+		ScoogHuntDialogueStart: I think you've proven yourself to be quite capable; perhaps even enough to lend me a hand in a real hunt. I'm sure you've felt the tremors below the sands. Take this, and you'll be able to lure out its source. Though be prepared for a fight once it surfaces.
 		ScoogHuntDialogueDuring: Just cast that line, and then we'll wait for her to surface. It can be a bit unnerving, I know.
 		ScoogHuntDialogueEnd: Well now, that sure was quite the fight, wasn't it! You fought like a real paladin out there! Almost reminds me of the days before the Incineration.
 	}
 
 	CalPotionSeller: {
-		PotionSellerDialogue1: Could I interest you in an elixer?
-		PotionSellerDialogue2: I have many powerful potions to choose from, would you like one?
-		PotionSellerdDialogue3: Care to try one of my brews?
+		PotionSellerDialogue1: Hey there, traveller. You wanna see some one-of-a-kind potions? I brewed them myself!
+		PotionSellerDialogue2: Alone on a Friday night? Pathetic. Buy some potions instead!
+		PotionSellerdDialogue3: *clink clink* Sorry about the noise, who knew carrying potions in your coat would be so hard? The movies made it seem so easy... Wanna buy some?
 		StandardDialogue1: You looking for something?
 		StandardDialogue2: Haha, back for more are ya?
 		StandardDialogue3: I won't give you potions, but I'll definitely give you a fight!
@@ -66,6 +66,11 @@ Items: {
 
 		BraeLore: {
 			DisplayName: Braelor
+			Tooltip: ""
+		}
+
+		IlmerisLore: {
+			DisplayName: Ilmeris Lore
 			Tooltip: ""
 		}
 	}
@@ -138,11 +143,11 @@ Items: {
 				DisplayName: Boneripper
 				Tooltip:
 					'''
-					Spins a two-headed scythe around the player.
-					Hits gather malevolent energy that empowers the weapon upon release.
-					Stage One causes the weapon to be thrown out towards the mouse upon release.
-					Stage Two makes the weapon follow after the cursor and inflict Brimstone Flames
-					Stage Three creates Brimstone Explosions on enemy hits. 
+					Spins a two-headed scythe around the player
+					Hitting enemies gathers malevolent energy that empowers the weapon upon release
+					The first stage causes the weapon to be thrown out towards the cursor
+					The second stage makes the weapon follow the cursor and inflict Brimstone Flames
+					The third stage causes explosions of Brimstone Flames on enemy hits
 					'''
 			}
 
@@ -223,7 +228,11 @@ Items: {
 	Fishing: {
 		AncientIlmeranRod: {
 			DisplayName: Ancient Ilmeran Rod
-			Tooltip: Used to fish up the largest of catches...
+			Tooltip:
+				'''
+				This old rod's amber bobber has a strange creature trapped inside...
+				Lures out the origin of the Desert's trembling ground
+				'''
 		}
 	}
 }

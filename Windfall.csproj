@@ -8,45 +8,45 @@
     <LangVersion>latest</LangVersion>
   </PropertyGroup>
   <ItemGroup>
-    <None Remove="Items\Debug\DraeDashGiftCard.png" />
-    <None Remove="Items\Debug\TheZoomer.png" />
-    <None Remove="Items\Journals\JournalAerie.png" />
-    <None Remove="Items\Journals\JournalCompilation.png" />
-    <None Remove="Items\Journals\JournalCorruption.png" />
-    <None Remove="Items\Journals\JournalCrimson.png" />
-    <None Remove="Items\Journals\JournalDesert.png" />
-    <None Remove="Items\Journals\JournalDungeon.png" />
-    <None Remove="Items\Journals\JournalForest.png" />
-    <None Remove="Items\Journals\JournalIlmeris.png" />
-    <None Remove="Items\Journals\JournalJungle.png" />
-    <None Remove="Items\Journals\JournalOcean.png" />
-    <None Remove="Items\Journals\JournalSulphur.png" />
-    <None Remove="Items\Journals\JournalTundra.png" />
-    <None Remove="Items\Placeables\Special\DatabaseTerminalItem.png" />
-    <None Remove="Items\Utility\DraedonCharger.png" />
-    <None Remove="Items\Weapons\Melee\Boneripper.png" />
-    <None Remove="Items\Weapons\Misc\Cnidrisnack.png" />
-    <None Remove="NPCs\Gores\IlmeranPaladin_Gore_Arm.png" />
-    <None Remove="NPCs\Gores\IlmeranPaladin_Gore_Head.png" />
-    <None Remove="NPCs\Gores\IlmeranPaladin_Gore_Leg.png" />
-    <None Remove="NPCs\WanderingNPCs\IlmeranPaladin.png" />
-    <None Remove="NPCs\WanderingNPCs\IlmeranPaladinKnocked.png" />
-    <None Remove="NPCs\WorldEvents\WanderingCalClone.png" />
-    <None Remove="NPCs\WorldEvents\WanderingPotionSeller.png" />
-    <None Remove="Tiles\Special\DatabaseTerminal.png" />
-    <None Remove="UI\DraedonsDatabase\DraedonUIArrowLeft.png" />
-    <None Remove="UI\DraedonsDatabase\DraedonUIArrowRight.png" />
-    <None Remove="UI\DraedonsDatabase\DraedonUIBG.png" />
-    <None Remove="UI\DraedonsDatabase\DraedonUIClose.png" />
-    <None Remove="UI\DraedonsDatabase\DraedonUIDraeDashLogo.png" />
-    <None Remove="UI\DraedonsDatabase\DraedonUIIconBG.png" />
-    <None Remove="UI\DraedonsDatabase\DraedonUIPurchase.png" />
-    <None Remove="UI\WanderersJournals\DraedonsUICheckmark.png" />
-    <None Remove="UI\WanderersJournals\JournalArrowLeft(Highlighted).png" />
-    <None Remove="UI\WanderersJournals\JournalArrowLeft.png" />
-    <None Remove="UI\WanderersJournals\JournalArrowRight(Highlighted).png" />
-    <None Remove="UI\WanderersJournals\JournalArrowRight.png" />
-    <None Remove="UI\WanderersJournals\JournalPage.png" />
+    <None Remove="Content\Items\Debug\DraeDashGiftCard.png" />
+    <None Remove="Content\Items\Debug\TheZoomer.png" />
+    <None Remove="Content\Items\Journals\JournalAerie.png" />
+    <None Remove="Content\Items\Journals\JournalCompilation.png" />
+    <None Remove="Content\Items\Journals\JournalCorruption.png" />
+    <None Remove="Content\Items\Journals\JournalCrimson.png" />
+    <None Remove="Content\Items\Journals\JournalDesert.png" />
+    <None Remove="Content\Items\Journals\JournalDungeon.png" />
+    <None Remove="Content\Items\Journals\JournalForest.png" />
+    <None Remove="Content\Items\Journals\JournalIlmeris.png" />
+    <None Remove="Content\Items\Journals\JournalJungle.png" />
+    <None Remove="Content\Items\Journals\JournalOcean.png" />
+    <None Remove="Content\Items\Journals\JournalSulphur.png" />
+    <None Remove="Content\Items\Journals\JournalTundra.png" />
+    <None Remove="Content\Items\Placeables\Special\DatabaseTerminalItem.png" />
+    <None Remove="Content\Items\Utility\DraedonCharger.png" />
+    <None Remove="Content\Items\Weapons\Melee\Boneripper.png" />
+    <None Remove="Content\Items\Weapons\Misc\Cnidrisnack.png" />
+    <None Remove="Assets\Gores\IlmeranPaladin_Gore_Arm.png" />
+    <None Remove="Assets\Gores\IlmeranPaladin_Gore_Head.png" />
+    <None Remove="Assets\Gores\IlmeranPaladin_Gore_Leg.png" />
+    <None Remove="Content\NPCs\WanderingNPCs\IlmeranPaladin.png" />
+    <None Remove="Content\NPCs\WanderingNPCs\IlmeranPaladinKnocked.png" />
+    <None Remove="Content\NPCs\WorldEvents\WanderingCalClone.png" />
+    <None Remove="Content\NPCs\WorldEvents\WanderingPotionSeller.png" />
+    <None Remove="Content\Tiles\Special\DatabaseTerminal.png" />
+    <None Remove="Content\UI\DraedonsDatabase\DraedonUIArrowLeft.png" />
+    <None Remove="Content\UI\DraedonsDatabase\DraedonUIArrowRight.png" />
+    <None Remove="Content\UI\DraedonsDatabase\DraedonUIBG.png" />
+    <None Remove="Content\UI\DraedonsDatabase\DraedonUIClose.png" />
+    <None Remove="Content\UI\DraedonsDatabase\DraedonUIDraeDashLogo.png" />
+    <None Remove="Content\UI\DraedonsDatabase\DraedonUIIconBG.png" />
+    <None Remove="Content\UI\DraedonsDatabase\DraedonUIPurchase.png" />
+    <None Remove="Content\UI\WanderersJournals\DraedonsUICheckmark.png" />
+    <None Remove="Content\UI\WanderersJournals\JournalArrowLeft(Highlighted).png" />
+    <None Remove="Content\UI\WanderersJournals\JournalArrowLeft.png" />
+    <None Remove="Content\UI\WanderersJournals\JournalArrowRight(Highlighted).png" />
+    <None Remove="Content\UI\WanderersJournals\JournalArrowRight.png" />
+    <None Remove="Content\UI\WanderersJournals\JournalPage.png" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="tModLoader.CodeAssist" Version="0.1.*" />
@@ -55,5 +55,10 @@
     <Reference Include="CalamityMod">
       <HintPath>..\ModAssemblies\CalamityMod.dll</HintPath>
     </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Assets\Items\Fishing\" />
+    <Folder Include="Assets\NPCs\Enemies\" />
+    <Folder Include="Assets\Projectiles\Melee\" />
   </ItemGroup>
 </Project>
