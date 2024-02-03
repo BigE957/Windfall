@@ -93,6 +93,10 @@ namespace Windfall.NPCs.WanderingNPCs
         public override void OnSpawn(IEntitySource source)
         {
             NPC.velocity = new Vector2(0, NPC.ai[0]);
+            if (NPC.ai[1] != 0)
+            {
+                NPC.spriteDirection = NPC.direction = (int)NPC.ai[1] * -1;
+            }
         }
 
         //Make sure to allow your NPC to chat, since being "like a town NPC" doesn't automatically allow for chatting.

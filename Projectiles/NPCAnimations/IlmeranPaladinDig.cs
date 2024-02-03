@@ -32,9 +32,13 @@ namespace Windfall.Projectiles.NPCAnimations
             Projectile.netImportant = true;
             Projectile.penetrate = -1;
             Projectile.timeLeft = int.MaxValue;
+            Projectile.hide = true;
+
         }
         public override void AI()
         {
+            Projectile.spriteDirection = Projectile.direction = (Main.player[Projectile.owner].Center.X < Projectile.Center.X).ToDirectionInt();
+
             Projectile.velocity *= 0.998f;
             Projectile.velocity.Y += 0.01f;
             InsideTiles = Collision.SolidCollision(Projectile.Center, Projectile.width, Projectile.height);
@@ -58,7 +62,7 @@ namespace Windfall.Projectiles.NPCAnimations
             }
             if (Projectile.Center.Y < Main.player[Projectile.owner].Center.Y)
             {
-                NPC.NewNPC(null, (int)Projectile.Center.X, (int)Projectile.Center.Y, ModContent.NPCType<IlmeranPaladin>(), 0, Projectile.velocity.Y);
+                NPC.NewNPC(null, (int)Projectile.Center.X, (int)Projectile.Center.Y, ModContent.NPCType<IlmeranPaladin>(), 0, Projectile.velocity.Y, Projectile.direction);
                 if (PostExitTiles == false)
                 {
                     PostExitTiles = true;
@@ -79,6 +83,10 @@ namespace Windfall.Projectiles.NPCAnimations
                 }
                 Projectile.active = false;
             }
+        }
+        public override void DrawBehind(int index, List<int> behindNPCsAndTiles, List<int> behindNPCs, List<int> behindProjectiles, List<int> overPlayers, List<int> overWiresUI)
+        {
+            behindNPCsAndTiles.Add(index);
         }
     }
 }
