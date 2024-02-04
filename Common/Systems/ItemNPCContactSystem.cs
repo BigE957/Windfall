@@ -9,7 +9,7 @@ using CalamityMod.Items.Accessories;
 using Windfall.Content.Items.Weapons.Misc;
 using Windfall.Content.NPCs.Enemies;
 
-namespace Windfall.Content.Systems
+namespace Windfall.Common.Systems
 {
     public class ItemNPCContactSystem : ModSystem
     {

@@ -10,7 +10,7 @@ using Windfall.Content.Items.Fishing;
 using Windfall.Content.Items.Weapons.Misc;
 using Windfall.Content.Projectiles.Fishing;
 
-namespace Windfall.Content.Systems
+namespace Windfall.Common.Systems
 {
     public struct QuestItem
     {

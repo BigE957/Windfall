@@ -6,8 +6,8 @@ using System.Text;
 using System.Threading.Tasks;
 using Terraria;
 using Terraria.ModLoader;
+using Windfall.Common.Systems;
 using Windfall.Content.Items.Journals;
-using Windfall.Content.Systems;
 
 namespace Windfall.Content.Items
 {

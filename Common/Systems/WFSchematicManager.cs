@@ -6,7 +6,7 @@ using static CalamityMod.Schematics.SchematicManager;
 using System.Reflection;
 using Windfall.Utilities;
 
-namespace Windfall.Content.Systems
+namespace Windfall.Common.Systems
 {
     public class WFSchematicManager : ModSystem
     {

@@ -5,7 +5,7 @@ using Terraria.Localization;
 using Terraria.ModLoader;
 using static Windfall.Content.UI.WanderersJournals.JournalFullUIState;
 using Windfall.Content.UI.WanderersJournals;
-using Windfall.Content.Systems;
+using Windfall.Common.Systems;
 
 namespace Windfall.Content.Items.Journals
 {

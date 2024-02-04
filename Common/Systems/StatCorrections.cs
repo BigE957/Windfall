@@ -15,7 +15,7 @@ using Windfall.Content.NPCs.WorldEvents;
 using CalamityMod.Buffs.DamageOverTime;
 using CalamityMod.Buffs.StatDebuffs;
 
-namespace Windfall.Content.Systems
+namespace Windfall.Common.Systems
 {
     public class StatCorrections : ModSystem
     {

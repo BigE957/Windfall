@@ -7,8 +7,7 @@ using Terraria.ID;
 using Terraria.Localization;
 using Terraria.ModLoader;
 using Terraria;
-using Windfall.UI.WanderersJournals;
-using Windfall.Systems;
+using Windfall.Common.Systems;
 
 namespace Windfall.Items.Debug
 {
@@ -17,6 +16,8 @@ namespace Windfall.Items.Debug
         static bool zooming = false;
         float zoom = 0;
         public new string LocalizationCategory => "Items.Debug";
+        public override string Texture => "Windfall/Assets/Items/Debug/TheZoomer";
+
         public override void SetDefaults()
         {
             Item.width = 28;

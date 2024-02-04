@@ -10,8 +10,8 @@ using Terraria.ID;
 using Terraria.ModLoader;
 using Windfall.Content.Projectiles.Fishing;
 using Windfall.Content.Projectiles.NPCAnimations;
-using Windfall.Content.Systems;
 using Windfall.Content.NPCs.WanderingNPCs;
+using Windfall.Common.Systems;
 
 namespace Windfall.Content.Items.Fishing
 {

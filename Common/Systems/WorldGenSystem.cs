@@ -12,7 +12,7 @@ using static CalamityMod.World.CalamityWorld;
 using Terraria.Localization;
 using Windfall.Content.World;
 
-namespace Windfall.Content.Systems
+namespace Windfall.Common.Systems
 {
     public class WorldGenSystem : ModSystem
     {

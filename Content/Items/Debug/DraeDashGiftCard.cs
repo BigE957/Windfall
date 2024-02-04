@@ -3,7 +3,7 @@ using Microsoft.Xna.Framework;
 using CalamityMod.Rarities;
 using Terraria.ID;
 using Terraria.ModLoader;
-using Windfall.Projectiles.Other;
+using Windfall.Content.Projectiles.Other;
 using Terraria.DataStructures;
 
 namespace Windfall.Items.Debug
@@ -11,6 +11,7 @@ namespace Windfall.Items.Debug
     public class DraeDashGiftCard : ModItem, ILocalizedModType
     {
         public new string LocalizationCategory => "Items.Debug";
+        public override string Texture => "Windfall/Assets/Items/Debug/DraeDashGiftCard";
         public override void SetDefaults()
         {
             Item.width = 25;

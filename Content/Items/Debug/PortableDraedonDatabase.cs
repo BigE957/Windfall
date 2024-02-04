@@ -2,7 +2,7 @@
 using Terraria.ModLoader;
 using Terraria;
 using CalamityMod.Rarities;
-using Windfall.UI.DraedonsDatabase;
+using Windfall.Content.UI.DraedonsDatabase;
 
 namespace Windfall.Items.Debug
 {

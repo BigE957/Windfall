@@ -13,7 +13,7 @@ using System.IO;
 using CalamityMod;
 using CalamityMod.NPCs.CalClone;
 using Windfall.Content.Items.Weapons.Melee;
-using Windfall.Content.Systems;
+using Windfall.Common.Systems;
 
 namespace Windfall.Content.NPCs.WorldEvents;
 

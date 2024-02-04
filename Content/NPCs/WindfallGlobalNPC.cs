@@ -1,8 +1,8 @@
 ﻿using Terraria;
 using Terraria.DataStructures;
 using Terraria.ModLoader;
+using Windfall.Common.Systems;
 using Windfall.Content.NPCs.Enemies;
-using Windfall.Content.Systems;
 
 namespace Windfall.Content.NPCs
 {

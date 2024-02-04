@@ -4,7 +4,7 @@ using Terraria.ID;
 using CalamityMod;
 using Windfall.Content.Items.Journals;
 using Windfall.Content.Items.Lore;
-using Windfall.Content.Systems;
+using Windfall.Common.Systems;
 
 namespace Windfall.Content.NPCs
 {

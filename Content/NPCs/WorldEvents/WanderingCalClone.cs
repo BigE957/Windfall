@@ -25,7 +25,7 @@ using Humanizer;
 using CalamityMod.NPCs.TownNPCs;
 using CalamityMod.Dusts;
 using Terraria.ModLoader.IO;
-using Windfall.Content.Systems;
+using Windfall.Common.Systems;
 
 namespace Windfall.Content.NPCs.WorldEvents
 {

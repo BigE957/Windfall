@@ -29,7 +29,7 @@ using CalamityMod.NPCs.Crags;
 using static Terraria.GameContent.Animations.IL_Actions.NPCs;
 using Mono.Cecil;
 using Terraria.Chat;
-using Windfall.Content.Systems;
+using Windfall.Common.Systems;
 
 namespace Windfall.Content.NPCs.WorldEvents
 {

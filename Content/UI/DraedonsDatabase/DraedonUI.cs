@@ -13,7 +13,7 @@ using System.Linq;
 using System.Collections.Generic;
 using Windfall.Content.Items.Utility;
 using Windfall.Content.Projectiles.Other;
-using Windfall.Content.Systems;
+using Windfall.Common.Systems;
 
 namespace Windfall.Content.UI.DraedonsDatabase
 {

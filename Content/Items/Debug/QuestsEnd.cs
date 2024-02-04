@@ -2,7 +2,7 @@
 using Terraria.ModLoader;
 using Terraria;
 using CalamityMod.Rarities;
-using Windfall.Content.Systems;
+using Windfall.Common.Systems;
 
 namespace Windfall.Items.Debug
 {
