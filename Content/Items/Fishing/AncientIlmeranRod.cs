@@ -22,6 +22,9 @@ namespace Windfall.Content.Items.Fishing
     {
         public new string LocalizationCategory => "Items.Fishing";
         public override string Texture => "Windfall/Assets/Items/Fishing/AncientIlmeranRod";
+
+        public static readonly SoundStyle Roar = new("Calamitymod/Sounds/Custom/DesertScourgeRoar");
+
         public override void SetDefaults()
         {
             Item.width = 24;
@@ -193,7 +196,7 @@ namespace Windfall.Content.Items.Fishing
         internal static void PaladinMessage(string text, NPC Paladin)
         {
             Rectangle location = new((int)Paladin.Center.X, (int)Paladin.Center.Y, Paladin.width, Paladin.width);
-            CombatText.NewText(location, Color.SandyBrown, text, false);
+            CombatText.NewText(location, Color.SandyBrown, text, true);
         }
         internal static void ScoogShake(Player target, int scoogTimer, int midpoint)
         {
@@ -214,15 +217,19 @@ namespace Windfall.Content.Items.Fishing
             }
             // Create screen shake effects.
             target.Windfall_Camera().CurrentScreenShakePower = (float)(MathF.Pow(groundShakeInterpolant, 1.81f) * 10f);
-
-            if (scoogTimer > midpoint)
-            {
+            if (scoogTimer == midpoint)
+                if (Main.rand.NextBool())
+                {
+                    SoundEngine.PlaySound(Roar with { Volume = 0.25f }, target.Center + new Vector2(Main.rand.Next(-300, -200), 150));
+                }
+                else
+                {
+                    SoundEngine.PlaySound(Roar with { Volume = 0.25f }, target.Center + new Vector2(Main.rand.Next(300, 200), 150));
+                }
+            else if (scoogTimer > midpoint)
                 shakeCounter--;
-            }
             else
-            {
                 shakeCounter++;
-            }
         }
     }
 }

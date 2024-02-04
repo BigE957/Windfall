@@ -1,10 +1,5 @@
 ﻿using CalamityMod;
 using CalamityMod.Items.Accessories;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Terraria;
 using Terraria.ID;
 using Terraria.Localization;
@@ -16,7 +11,6 @@ namespace Windfall.Content.NPCs.WanderingNPCs
     public class IlmeranPaladinKnocked : ModNPC
     {
         public override string Texture => "Windfall/Assets/NPCs/WanderingNPCs/IlmeranPaladinKnocked";
-
         public override void SetStaticDefaults()
         {
             this.HideFromBestiary();
