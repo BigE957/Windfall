@@ -100,7 +100,8 @@ namespace Windfall.Content.Items.Fishing
                         scoogWait = 30;
                         //scoogWait = Main.rand.Next(20, 40);
                     else
-                        scoogWait = Main.rand.Next(65, 70);
+                        scoogWait = 68;
+                        //scoogWait = Main.rand.Next(65, 70);
                 }
                 scoogCounter++;
                 
@@ -136,9 +137,13 @@ namespace Windfall.Content.Items.Fishing
                 //Does the ambiant Scourge Sound and Screen Shake
                 if (!WorldSaveSystem.ScoogFished)
                 {
-                    if(scoogCounter >= 60 * 49)
+                    if(scoogCounter >= 60 * 49 && scoogCounter <= 60 * 55)
                     {
-                        ScoogShake(player, scoogCounter);
+                        ScoogShake(player, scoogCounter, 60 * 52);
+                    }
+                    if (scoogCounter >= 60 * 60 && scoogCounter <= 60 * 65)
+                    {
+                        ScoogShake(player, scoogCounter, 60 * 65);
                     }
                 }
                 else
@@ -188,38 +193,35 @@ namespace Windfall.Content.Items.Fishing
         internal static void PaladinMessage(string text, NPC Paladin)
         {
             Rectangle location = new((int)Paladin.Center.X, (int)Paladin.Center.Y, Paladin.width, Paladin.width);
-            CombatText.NewText(location, Color.SandyBrown, text, true);
+            CombatText.NewText(location, Color.SandyBrown, text, false);
         }
-        internal static void ScoogShake(Player target, int scoogTimer)
+        internal static void ScoogShake(Player target, int scoogTimer, int midpoint)
         {
-            int groundShakeTime = 270;
+            float groundShakeTime = 270f;
 
             // Make the ground shake and the ground create rising sand particles on the ground at first.
-            if (scoogTimer <= 60 * 55)
+            float groundShakeInterpolant = (float)shakeCounter / groundShakeTime;
+
+            for (int i = 0; i < 3; i++)
             {
-                float groundShakeInterpolant = (float)shakeCounter / (float)groundShakeTime;
+                if (Main.rand.NextFloat() >= groundShakeInterpolant + 0.2f)
+                    continue;
 
-                for (int i = 0; i < 3; i++)
-                {
-                    if (Main.rand.NextFloat() >= groundShakeInterpolant + 0.2f)
-                        continue;
+                Vector2 particleSpawnPosition = Utilities.GetGroundPositionFrom(target.Center + new Vector2(Main.rand.NextFloatDirection() * 1200f, -560f));
+                bool sandBelow = CalamityUtils.ParanoidTileRetrieval((int)(particleSpawnPosition.X / 16f), (int)(particleSpawnPosition.Y / 16f)).TileType == TileID.Sand;
+                if (sandBelow)
+                    Dust.NewDustPerfect(particleSpawnPosition + new Vector2(Main.rand.NextFloatDirection() * 8f, -8f), 32, Main.rand.NextVector2Circular(1.5f, 1.5f) - Vector2.UnitY * 1.5f);
+            }
+            // Create screen shake effects.
+            target.Windfall_Camera().CurrentScreenShakePower = (float)(MathF.Pow(groundShakeInterpolant, 1.81f) * 10f);
 
-                    Vector2 particleSpawnPosition = Utilities.GetGroundPositionFrom(target.Center + new Vector2(Main.rand.NextFloatDirection() * 1200f, -560f));
-                    bool sandBelow = CalamityUtils.ParanoidTileRetrieval((int)(particleSpawnPosition.X / 16f), (int)(particleSpawnPosition.Y / 16f)).TileType == TileID.Sand;
-                    if (sandBelow)
-                        Dust.NewDustPerfect(particleSpawnPosition + new Vector2(Main.rand.NextFloatDirection() * 8f, -8f), 32, Main.rand.NextVector2Circular(1.5f, 1.5f) - Vector2.UnitY * 1.5f);
-                }
-                // Create screen shake effects.
-                target.Windfall_Camera().CurrentScreenShakePower = (float)(MathF.Pow(groundShakeInterpolant, 1.81f) * 10f);
-
-                if (scoogTimer > 60 * 52)
-                {
-                    shakeCounter--;
-                }
-                else
-                {
-                    shakeCounter++;
-                }
+            if (scoogTimer > midpoint)
+            {
+                shakeCounter--;
+            }
+            else
+            {
+                shakeCounter++;
             }
         }
     }
