@@ -115,7 +115,7 @@ namespace Windfall.Content.NPCs.WorldEvents
             else
             {
                 string key = "Calamitas is back...";
-                Color messageColor = new Color(50, 125, 255);
+                Color messageColor = new(50, 125, 255);
                 CalamityUtils.DisplayLocalizedText(key, messageColor);
             }
         }
@@ -133,7 +133,7 @@ namespace Windfall.Content.NPCs.WorldEvents
                 }
                 SoundEngine.PlaySound(CalCloneTeleport, NPC.Center);
                 string key = "Calamitas has left... finally.";
-                Color messageColor = new Color(50, 125, 255);
+                Color messageColor = new(50, 125, 255);
                 CalamityUtils.DisplayLocalizedText(key, messageColor);
                 NPC.active = false;
                 NPC.netSkip = -1;
@@ -144,7 +144,7 @@ namespace Windfall.Content.NPCs.WorldEvents
         }
         public override string GetChat()
         {
-            WeightedRandom<string> chat = new WeightedRandom<string>();
+            WeightedRandom<string> chat = new();
 
             // These are things that the NPC has a chance of telling you when you talk to it.
             chat.Add(Language.GetOrRegister($"Mods.{nameof(Windfall)}.Dialogue.CalPotionSeller.StandardDialogue1").Value);
@@ -333,7 +333,7 @@ namespace Windfall.Content.NPCs.WorldEvents
         public override bool PreDraw(SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor)
         {
             Texture2D texture = TextureAssets.Npc[NPC.type].Value;
-            Vector2 halfSizeTexture = new Vector2(TextureAssets.Npc[NPC.type].Value.Width / 2, TextureAssets.Npc[NPC.type].Value.Height / Main.npcFrameCount[NPC.type] / 2);
+            Vector2 halfSizeTexture = new(TextureAssets.Npc[NPC.type].Value.Width / 2, TextureAssets.Npc[NPC.type].Value.Height / Main.npcFrameCount[NPC.type] / 2);
             Vector2 drawPosition = new Vector2(NPC.Center.X, NPC.Center.Y - 10) - screenPos + Vector2.UnitY * NPC.gfxOffY;
             SpriteEffects spriteEffects = SpriteEffects.None;
             if (NPC.spriteDirection == -1)

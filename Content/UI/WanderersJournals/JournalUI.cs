@@ -76,7 +76,7 @@ namespace Windfall.Content.UI.WanderersJournals
             SetRectangle(JournalContents, left: 15f, top: 20f, width: 100f, height: 40f);
             UIPanel.Append(JournalContents);
         }
-        private void SetRectangle(UIElement uiElement, float left, float top, float width, float height)
+        private static void SetRectangle(UIElement uiElement, float left, float top, float width, float height)
         {
             uiElement.Left.Set(left, 0f);
             uiElement.Top.Set(top, 0f);
@@ -136,8 +136,8 @@ namespace Windfall.Content.UI.WanderersJournals
     {
         public static bool isFullJournal;
         public static string JournalContents;
-        float xResolutionScale = Main.screenWidth / 2560f;
-        float yResolutionScale = Main.screenHeight / 1440f;
+        readonly float xResolutionScale = Main.screenWidth / 2560f;
+        readonly float yResolutionScale = Main.screenHeight / 1440f;
         readonly float xScale = MathHelper.Lerp(0.004f, 1f, 1);
         protected override void DrawSelf(SpriteBatch spriteBatch)
         {

@@ -100,7 +100,7 @@ namespace Windfall.Content.Projectiles.Melee
                     Projectile.netUpdate = true;
                 }
 
-                SpawnDust(player, num2);
+                SpawnDust(num2);
                 VisibilityAndLight();
                 PositionAndRotation(player);
             }
@@ -170,10 +170,10 @@ namespace Windfall.Content.Projectiles.Melee
                             Projectile.Kill();
                 }
                 int num2 = Math.Sign(Projectile.velocity.X);
-                SpawnDust(player, num2);
+                SpawnDust(num2);
             }
         }
-        private void SpawnDust(Player player, int direction)
+        private void SpawnDust(int direction)
         {
             float num = Projectile.rotation - MathF.PI / 4f * direction;
             Vector2 vector = Projectile.Center + (num + (direction == -1 ? MathF.PI : 0f)).ToRotationVector2() * 30f;
