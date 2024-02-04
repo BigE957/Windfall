@@ -224,7 +224,7 @@ namespace Windfall.Content.Items.Fishing
                 }
                 else
                 {
-                    SoundEngine.PlaySound(Roar with { Volume = 0.25f }, target.Center + new Vector2(Main.rand.Next(300, 200), 150));
+                    SoundEngine.PlaySound(Roar with { Volume = 0.25f }, target.Center + new Vector2(Main.rand.Next(200, 300), 150));
                 }
             else if (scoogTimer > midpoint)
                 shakeCounter--;
