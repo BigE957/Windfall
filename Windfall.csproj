@@ -10,6 +10,8 @@
   <ItemGroup>
     <None Remove="Assets\Items\Debug\DraeDashGiftCard.png" />
     <None Remove="Assets\Items\Debug\TheZoomer.png" />
+    <None Remove="Assets\Items\Weapons\Misc\Cnidrisnack.png" />
+    <None Remove="Assets\Items\Weapons\Misc\Cnidrisnack_glow.png" />
     <None Remove="Content\Items\Journals\JournalAerie.png" />
     <None Remove="Content\Items\Journals\JournalCompilation.png" />
     <None Remove="Content\Items\Journals\JournalCorruption.png" />
@@ -59,6 +61,5 @@
   <ItemGroup>
     <Folder Include="Assets\Items\Fishing\" />
     <Folder Include="Assets\NPCs\Enemies\" />
-    <Folder Include="Assets\Projectiles\Melee\" />
   </ItemGroup>
 </Project>

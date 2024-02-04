@@ -1,9 +1,13 @@
 ﻿using CalamityMod.Items;
+using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
+using ReLogic.Content;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
 using Windfall.Content.Projectiles.Other;
@@ -38,6 +42,22 @@ namespace Windfall.Content.Items.Weapons.Misc
         public override void ModifyResearchSorting(ref ContentSamples.CreativeHelper.ItemGroup itemGroup)
         {
             itemGroup = ContentSamples.CreativeHelper.ItemGroup.FishingBait;
+        }
+        public override void PostDrawInWorld(SpriteBatch spriteBatch, Color lightColor, Color alphaColor, float rotation, float scale, int whoAmI)
+        {
+            Texture2D texture = ModContent.Request<Texture2D>("Windfall/Assets/Items/Weapons/Misc/Cnidrisnack_Glow", AssetRequestMode.ImmediateLoad).Value;
+            spriteBatch.Draw
+            (
+                texture,
+                new Vector2(Item.Center.X - Main.screenPosition.X, Item.Center.Y - 8 - Main.screenPosition.Y),
+                new Rectangle(0, 0, texture.Width, texture.Height),
+                Color.White,
+                rotation,
+                texture.Size() * 0.5f,
+                scale,
+                SpriteEffects.None,
+                0f
+            );
         }
     }
 }
