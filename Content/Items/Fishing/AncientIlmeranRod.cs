@@ -103,7 +103,7 @@ namespace Windfall.Content.Items.Fishing
                 if (scoogCounter == 0)
                 {
                     shakeCounter = 0;
-                    bool startLeft = Main.rand.NextBool();
+                    startLeft = Main.rand.NextBool();
                     if (WorldSaveSystem.ScoogFished)
                     {
                         scoogWait = Main.rand.Next(30, 31);
