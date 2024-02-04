@@ -15,6 +15,9 @@ Dialogue: {
 		ScoogHuntDialogueStart: I think you've proven yourself to be quite capable; perhaps even enough to lend me a hand in a real hunt. I'm sure you've felt the tremors below the sands. Take this, and you'll be able to lure out its source. Though be prepared for a fight once it surfaces.
 		ScoogHuntDialogueDuring: Just cast that line, and then we'll wait for her to surface. It can be a bit unnerving, I know.
 		ScoogHuntDialogueEnd: Well now, that sure was quite the fight, wasn't it! You fought like a real paladin out there! Almost reminds me of the days before the Incineration.
+		ScoogHunt2DialogueStart: Hey, nice to see you again! I've made quite the discovery since we last spoke... Apparently, there's another still living Scourge! However, its living in arguably even worse conditions than the former: The Sulphurous Sea. I feel bad for the poor thing, and I ask you lay it to rest as you did the first. That fishing rod I gave you should still be just as useful for luring it out of hiding!
+		ScoogHunt2DialogueDuring: Cast that rod I gave you into the Sulphurous Sea, and the other scourge'll come out just like the last. Though be ready for an even more dangerous fight!
+		ScoogHunt2DialogueEnd: Well done! I'm happy to know that the Scourges are at last resting peacefully, free from the torturous lives forced upon them by the Incineration. As always, I'm impressed by your skills. You've gone above and beyond as an Paladin, and made certain the King won't regret his decision.
 	}
 
 	CalPotionSeller: {
