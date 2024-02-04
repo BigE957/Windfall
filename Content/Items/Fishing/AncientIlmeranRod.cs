@@ -223,12 +223,20 @@ namespace Windfall.Content.Items.Fishing
                             NetMessage.SendData(MessageID.SpawnBossUseLicenseStartEvent, -1, -1, null, player.whoAmI, ModContent.NPCType<AquaticScourgeHead>());
                     }
                 }
-                else
+            }
+            else
+            {
+                if (scoogCounter != 0)
                 {
-                    if (scoogCounter != 0 && player.ZoneDesert && NPC.AnyNPCs(ModContent.NPCType<IlmeranPaladin>()) && !NPC.AnyNPCs(ModContent.NPCType<DesertScourgeHead>()))
+                    if (player.ZoneDesert && NPC.AnyNPCs(ModContent.NPCType<IlmeranPaladin>()) && !NPC.AnyNPCs(ModContent.NPCType<DesertScourgeHead>()))
                     {
                         NPC Paladin = Main.npc[NPC.FindFirstNPC(ModContent.NPCType<IlmeranPaladin>())];
                         PaladinMessage("Oh, nevermind...", Paladin);
+                    }
+                    else if (NPC.AnyNPCs(ModContent.NPCType<AquaticScourgeHead>()))
+                    {
+                        NPC npc = Main.npc[NPC.FindFirstNPC(ModContent.NPCType<AquaticScourgeHead>())];
+                        npc.life = (int)(npc.lifeMax * 0.999);
                     }
                     scoogCounter = 0;
                 }
