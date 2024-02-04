@@ -65,7 +65,7 @@ namespace Windfall.Content.Items.Fishing
             new dialogue {text = "However, to truly become a Paladin, you'd need to be recognized by the King.", delay = 3},
             new dialogue {text = "And... Well...", delay = 3},
             new dialogue {text = "No one knows what became of him after the Incineration...", delay = 2},
-            new dialogue {text = "I still hold out hope he may oneday be found.", delay = 3},
+            new dialogue {text = "I still hold out hope he may one day be found.", delay = 3},
             new dialogue {text = "If he were to return, perhaps there'd be hope for-", delay = 3},
             new dialogue {text = "?!", delay = 2},
             new dialogue {text = "The Scourge draws near...", delay = 5},
