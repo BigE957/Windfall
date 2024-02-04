@@ -3,7 +3,6 @@ using CalamityMod.Items;
 using CalamityMod.NPCs.DesertScourge;
 using CalamityMod.World;
 using Microsoft.Xna.Framework;
-using Terraria.DataStructures;
 using Terraria;
 using Terraria.Audio;
 using Terraria.ID;
@@ -12,6 +11,10 @@ using Windfall.Content.Projectiles.Fishing;
 using Windfall.Content.Projectiles.NPCAnimations;
 using Windfall.Content.NPCs.WanderingNPCs;
 using Windfall.Common.Systems;
+using System.Collections.Generic;
+using Windfall.Common.Utilities;
+using CalamityMod;
+using System;
 
 namespace Windfall.Content.Items.Fishing
 {
@@ -35,6 +38,46 @@ namespace Windfall.Content.Items.Fishing
         }
         internal bool isCast = false;
         internal int scoogCounter = 0;
+        internal struct dialogue
+        {
+            internal string text;
+            internal int delay;
+        }
+        internal static List<dialogue> PaladinDialogue = new()
+        { 
+            //First Time Dialogue
+            new dialogue {text = "Salutations!" , delay = 7},
+            new dialogue {text = "I see you've got your line cast...", delay = 4},
+            new dialogue {text = "You're ready for battle then.", delay = 3},
+            new dialogue {text = "Ah, this takes me back...", delay = 6},
+            new dialogue {text = "Hunting a Scourge was once a right of passage for Paladin's in training.", delay = 3},
+            new dialogue {text = "I still remember mine like it was yesterday...", delay = 3},
+            /*
+            new dialogue {text = "Its a real shame you won't get to see one in its prime, cause let me tell you...", delay = 5},
+            new dialogue {text = "The Scourges were some of the most magestic creatures the Ilmeran Sea had to offer.", delay = 3},
+            new dialogue {text = "Now all thats left of them is a dried husk, driven mad with hunger...", delay = 3},
+            */
+            new dialogue {text = "If you are to emerge victorious, you wouldn't be far off from being a paladin yourself.", delay = 5},
+            new dialogue {text = "It'd makes me happy to know I'm not the last...", delay = 3},
+            new dialogue {text = "However, to truly become a Paladin, you'd need to be recognized by the King.", delay = 3},
+            new dialogue {text = "And... Well...", delay = 3},
+            new dialogue {text = "No one knows what became of him after the Incineration...", delay = 2},
+            new dialogue {text = "I still hold out hope he may oneday be found.", delay = 3},
+            new dialogue {text = "If he were to return, perhaps there'd be hope for-", delay = 3},
+            new dialogue {text = "?!", delay = 2},
+            new dialogue {text = "The Scourge draws near...", delay = 5},
+            new dialogue {text = "...ready yourself.", delay = 3},
+            //Marks end of this set of dialogue
+            new dialogue {text = "I should never say this :3", delay = 20},
+
+            //Subsequent Time Dialogue
+
+            //Here only for error checking
+            new dialogue {text = "YOU'RE OUT OF BOUNDS DUMBASS!!!", delay = 10},
+        };
+        int scoogWait = 60;
+        int dialogueCounter = 0;
+        static int shakeCounter = 0;
         public override void HoldItem(Player player)
         {
             isCast = false;
@@ -46,27 +89,72 @@ namespace Windfall.Content.Items.Fishing
                     break;
                 }
             }
-            int scoogWait = 60;
             if (isCast && player.ZoneDesert && !NPC.AnyNPCs(ModContent.NPCType<DesertScourgeHead>()) && !BossRushEvent.BossRushActive)
             {
-
+                //Determines how long the wait for Desert Scourge will be based on ScoogFished
                 if (scoogCounter == 0)
                 {
+                    dialogueCounter = 0;
+                    shakeCounter = 0;
                     if (WorldSaveSystem.ScoogFished)
-                        scoogWait = Main.rand.Next(20, 40);
+                        scoogWait = 30;
+                        //scoogWait = Main.rand.Next(20, 40);
                     else
-                        scoogWait = Main.rand.Next(50, 70);
+                        scoogWait = Main.rand.Next(65, 70);
                 }
                 scoogCounter++;
-
+                
+                //Spawns Paladin after 5 Seconds
                 if (scoogCounter == 60 * 5 && !NPC.AnyNPCs(ModContent.NPCType<IlmeranPaladin>()) && !NPC.AnyNPCs(ModContent.NPCType<IlmeranPaladinKnocked>()))
                 {
                     Projectile.NewProjectile(null, new Vector2(player.Center.X - 80 * player.direction, player.Center.Y + 100), new Vector2(0, -8), ModContent.ProjectileType<IlmeranPaladinDig>(), 0, 0);
-                    //Main.NewText("Paladin is approaching!", Color.Yellow);
                 }
 
+                //Ilmeran Paladin Dialogue during the wait for Desert Scourge
+                int Delay = 0;
+                for(int i = dialogueCounter; i >= 0; i--)
+                {
+                    Delay += PaladinDialogue[i].delay;
+                }
+                if (NPC.AnyNPCs(ModContent.NPCType<IlmeranPaladin>()))
+                {
+                    NPC Paladin = Main.npc[NPC.FindFirstNPC(ModContent.NPCType<IlmeranPaladin>())];
+                    if (!WorldSaveSystem.ScoogFished)
+                    {
+                        if (scoogCounter == (60 * (Delay)))
+                        {
+                            PaladinMessage(PaladinDialogue[dialogueCounter].text, Paladin);
+                            dialogueCounter++;
+                        }
+                    }
+                    else
+                    {
+
+                    }
+                }
+
+                //Does the ambiant Scourge Sound and Screen Shake
+                if (!WorldSaveSystem.ScoogFished)
+                {
+                    if(scoogCounter >= 60 * 49)
+                    {
+                        ScoogShake(player, scoogCounter);
+                    }
+                }
+                else
+                {
+
+                }
+
+                //Spawns Desert Scourge after "scoogWait" seconds
                 if (scoogCounter >= 60 * scoogWait)
                 {
+                    if (NPC.AnyNPCs(ModContent.NPCType<IlmeranPaladin>()))
+                    {
+                        NPC Paladin = Main.npc[NPC.FindFirstNPC(ModContent.NPCType<IlmeranPaladin>())];
+                        PaladinMessage("En garde!!", Paladin);
+                    }
+                    //WorldSaveSystem.ScoogFished = true;
                     SoundEngine.PlaySound(SoundID.Roar, player.Center);
                     if (Main.netMode != NetmodeID.MultiplayerClient)
                         NPC.SpawnOnPlayer(player.whoAmI, ModContent.NPCType<DesertScourgeHead>());
@@ -89,7 +177,49 @@ namespace Windfall.Content.Items.Fishing
             }
             else
             {
+                if (scoogCounter != 0 && NPC.AnyNPCs(ModContent.NPCType<IlmeranPaladin>()) && !NPC.AnyNPCs(ModContent.NPCType<DesertScourgeHead>()))
+                {
+                    NPC Paladin = Main.npc[NPC.FindFirstNPC(ModContent.NPCType<IlmeranPaladin>())];
+                    PaladinMessage("Oh, nevermind...", Paladin);
+                }
                 scoogCounter = 0;
+            }
+        }
+        internal static void PaladinMessage(string text, NPC Paladin)
+        {
+            Rectangle location = new((int)Paladin.Center.X, (int)Paladin.Center.Y, Paladin.width, Paladin.width);
+            CombatText.NewText(location, Color.SandyBrown, text, true);
+        }
+        internal static void ScoogShake(Player target, int scoogTimer)
+        {
+            int groundShakeTime = 270;
+
+            // Make the ground shake and the ground create rising sand particles on the ground at first.
+            if (scoogTimer <= 60 * 55)
+            {
+                float groundShakeInterpolant = (float)shakeCounter / (float)groundShakeTime;
+
+                for (int i = 0; i < 3; i++)
+                {
+                    if (Main.rand.NextFloat() >= groundShakeInterpolant + 0.2f)
+                        continue;
+
+                    Vector2 particleSpawnPosition = Utilities.GetGroundPositionFrom(target.Center + new Vector2(Main.rand.NextFloatDirection() * 1200f, -560f));
+                    bool sandBelow = CalamityUtils.ParanoidTileRetrieval((int)(particleSpawnPosition.X / 16f), (int)(particleSpawnPosition.Y / 16f)).TileType == TileID.Sand;
+                    if (sandBelow)
+                        Dust.NewDustPerfect(particleSpawnPosition + new Vector2(Main.rand.NextFloatDirection() * 8f, -8f), 32, Main.rand.NextVector2Circular(1.5f, 1.5f) - Vector2.UnitY * 1.5f);
+                }
+                // Create screen shake effects.
+                target.Windfall_Camera().CurrentScreenShakePower = (float)(MathF.Pow(groundShakeInterpolant, 1.81f) * 10f);
+
+                if (scoogTimer > 60 * 52)
+                {
+                    shakeCounter--;
+                }
+                else
+                {
+                    shakeCounter++;
+                }
             }
         }
     }
