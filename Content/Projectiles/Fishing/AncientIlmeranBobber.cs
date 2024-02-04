@@ -22,7 +22,7 @@ namespace Windfall.Content.Projectiles.Fishing
 
         public override bool PreDrawExtras()
         {
-            return Projectile.DrawFishingLine(ModContent.ItemType<AncientIlmeranRod>(), new Color(200, 200, 200, 100), 38, 28f);
+            return Projectile.DrawFishingLine(ModContent.ItemType<AncientIlmeranRod>(), new Color(144, 65, 57, 100), 38, 28f);
         }
     }
 }
