@@ -31,16 +31,18 @@ namespace Windfall.Common.Systems
             public string Name;
             public bool Completed = false;
             public bool Active = false;
+            public bool Unlocked = false;
             public List<string> Objectives;
             public List<int> ObjectiveRequirements;
             public List<int> ObjectiveProgress;
             public List<QuestItem> QuestGifts;
             public List<QuestItem> QuestRewards;
-            public Quest(string name, List<string> objective, bool completed, List<int> objReq, List<int> objProg, bool active, List<QuestItem> questGifts, List<QuestItem> questRewards)
+            public Quest(string name, List<string> objective, bool completed, bool unlocked, List<int> objReq, List<int> objProg, bool active, List<QuestItem> questGifts, List<QuestItem> questRewards)
             {
                 Name = name;
                 Completed = completed;
                 Active = active;
+                Unlocked = unlocked;
                 Objectives = objective;
                 ObjectiveRequirements = objReq;
                 ObjectiveProgress = objProg;
@@ -64,7 +66,7 @@ namespace Windfall.Common.Systems
         {
             tag["QuestLog"] = QuestLog;
         }
-        internal static Quest CreateQuest(string Name, List<string> Objectives, List<int> ObjectiveRequirements, List<QuestItem> QuestGifts = null, List<QuestItem> QuestRewards = null)
+        internal static Quest CreateQuest(string Name, List<string> Objectives, List<int> ObjectiveRequirements, bool Unlocked, List<QuestItem> QuestGifts = null, List<QuestItem> QuestRewards = null)
         {
             List<int> objectiveProgress = new();
             for (int i = 0; i < ObjectiveRequirements.Count; i++)
@@ -77,8 +79,8 @@ namespace Windfall.Common.Systems
         {
             List<Quest> list = new()
             {
-                CreateQuest("CnidrionHunt", new List<string>{"Pacify 5 Cnidrions"}, new List<int>{5}, new List<QuestItem>{ new QuestItem { Type = ModContent.ItemType<Cnidrisnack>(), Stack = 5 } }, new List<QuestItem>{ new QuestItem { Type = ModContent.ItemType<CnidrionBanner>(), Stack = 4 }, new QuestItem {Type = ModContent.ItemType<AmidiasSpark>(), Stack = 1} }),
-                CreateQuest("ScoogHunt", new List<string>{"Defeat Desert Scourge"}, new List<int>{1}, new List<QuestItem>{ new QuestItem { Type = ModContent.ItemType<AncientIlmeranRod>(), Stack = 1 }, new QuestItem { Type = ModContent.ItemType<Cnidrisnack>(), Stack = 5 } }, new List<QuestItem>{ new QuestItem { Type = ModContent.ItemType<DesertScourgeTrophy>(), Stack = 1 } })
+                CreateQuest("CnidrionHunt", new List<string>{"Pacify 5 Cnidrions"}, new List<int>{5}, true, new List<QuestItem>{ new QuestItem { Type = ModContent.ItemType<Cnidrisnack>(), Stack = 5 } }, new List<QuestItem>{ new QuestItem { Type = ModContent.ItemType<CnidrionBanner>(), Stack = 4 }, new QuestItem {Type = ModContent.ItemType<AmidiasSpark>(), Stack = 1} }),
+                CreateQuest("ScoogHunt", new List<string>{"Defeat Desert Scourge"}, new List<int>{1}, QuestLog[0].Completed == true, new List<QuestItem>{ new QuestItem { Type = ModContent.ItemType<AncientIlmeranRod>(), Stack = 1 }, new QuestItem { Type = ModContent.ItemType<Cnidrisnack>(), Stack = 5 } }, new List<QuestItem>{ new QuestItem { Type = ModContent.ItemType<DesertScourgeTrophy>(), Stack = 1 } })
             };
             return list;
         }
@@ -95,6 +97,8 @@ namespace Windfall.Common.Systems
                     Quest temp = QuestLog[i];
                     if (temp.Name != initList[i].Name)
                         temp.Name = initList[i].Name;
+                    if (temp.Unlocked != initList[i].Unlocked)
+                        temp.Unlocked = initList[i].Unlocked;
                     if (temp.QuestGifts != initList[i].QuestGifts)
                         temp.QuestGifts = initList[i].QuestGifts;
                     if (temp.ObjectiveRequirements != initList[i].ObjectiveRequirements)
@@ -147,6 +151,7 @@ namespace Windfall.Common.Systems
                 ["name"] = value.Name,
                 ["completion"] = value.Completed,
                 ["active"] = value.Active,
+                ["unlocked"] = value.Unlocked,
                 ["objectives"] = value.Objectives,
                 ["objReqs"] = value.ObjectiveRequirements,
                 ["objProg"] = value.ObjectiveProgress,
@@ -154,7 +159,7 @@ namespace Windfall.Common.Systems
                 ["rewards"] = value.QuestRewards
             };
 
-            public override Quest Deserialize(TagCompound tag) => new(tag.GetString("name"), (List<string>)tag.GetList<string>("objectives"), tag.GetBool("completion"), (List<int>)tag.GetList<int>("objReqs"), (List<int>)tag.GetList<int>("objProg"), tag.GetBool("active"), (List<QuestItem>)tag.GetList<QuestItem>("gifts"), (List<QuestItem>)tag.GetList<QuestItem>("rewards"));
+            public override Quest Deserialize(TagCompound tag) => new(tag.GetString("name"), (List<string>)tag.GetList<string>("objectives"), tag.GetBool("completion"), tag.GetBool("unlocked"), (List<int>)tag.GetList<int>("objReqs"), (List<int>)tag.GetList<int>("objProg"), tag.GetBool("active"), (List<QuestItem>)tag.GetList<QuestItem>("gifts"), (List<QuestItem>)tag.GetList<QuestItem>("rewards"));
         }
         public class QuestItemSerializer : TagSerializer<QuestItem, TagCompound>
         {

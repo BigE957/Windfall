@@ -27,7 +27,7 @@ namespace Windfall.Common.Utilities
                     index = QuestSystem.QuestLog.FindIndex(quest => quest.Name == PaladinQuests[i]);
                     if(index != -1)
                     {
-                        if (!QuestSystem.QuestLog[index].Completed || QuestSystem.QuestLog[index].Active)
+                        if ((!QuestSystem.QuestLog[index].Completed || QuestSystem.QuestLog[index].Active) && QuestSystem.QuestLog[index].Unlocked)
                         {
                             success = true;
                             break;
