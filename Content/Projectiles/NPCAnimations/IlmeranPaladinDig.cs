@@ -7,6 +7,7 @@ using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Threading.Tasks;
 using Terraria;
+using Terraria.Audio;
 using Terraria.ModLoader;
 using Windfall.Content.NPCs.WanderingNPCs;
 
@@ -18,6 +19,8 @@ namespace Windfall.Content.Projectiles.NPCAnimations
 
         public bool InsideTiles = false;
         public bool PostExitTiles = false;
+        public static readonly SoundStyle Emerge = new("Windfall/Assets/Sounds/NPCs/PaladinEmerge");
+
 
         public override void SetStaticDefaults()
         {
@@ -58,6 +61,7 @@ namespace Windfall.Content.Projectiles.NPCAnimations
                     dust.noGravity = false;
                     dust.velocity = velOffset;
                     dust.scale = Main.rand.NextFloat(1.2f, 1.6f);
+                    SoundEngine.PlaySound(Emerge, Projectile.Center);
                 }
             }
             if (Projectile.Center.Y < Main.player[Projectile.owner].Center.Y)
@@ -79,6 +83,7 @@ namespace Windfall.Content.Projectiles.NPCAnimations
                         dust.noGravity = false;
                         dust.velocity = velOffset;
                         dust.scale = Main.rand.NextFloat(1.2f, 1.6f);
+                        SoundEngine.PlaySound(Emerge, Projectile.Center);
                     }
                 }
                 Projectile.active = false;
