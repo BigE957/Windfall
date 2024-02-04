@@ -3,9 +3,9 @@ using Microsoft.Xna.Framework;
 using Terraria;
 using Terraria.ID;
 using Terraria.WorldBuilding;
-using Windfall.Utilities;
+using Windfall.Common.Utilities;
 
-namespace Windfall.Utilities
+namespace Windfall.Common.Utilities
 {
     public static partial class Utilities
     {

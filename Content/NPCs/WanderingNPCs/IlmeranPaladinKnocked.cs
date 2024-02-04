@@ -9,6 +9,7 @@ using Terraria;
 using Terraria.ID;
 using Terraria.Localization;
 using Terraria.ModLoader;
+using Windfall.Common.Utilities;
 
 namespace Windfall.Content.NPCs.WanderingNPCs
 {
@@ -55,7 +56,7 @@ namespace Windfall.Content.NPCs.WanderingNPCs
             }
             else
             {
-                Utilities.Utilities.QuestDialogueHelper(Main.npc[NPC.whoAmI]);
+                Utilities.QuestDialogueHelper(Main.npc[NPC.whoAmI]);
             }
         }
 

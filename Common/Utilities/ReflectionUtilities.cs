@@ -5,7 +5,7 @@ using System.Linq.Expressions;
 using System.Reflection;
 using Terraria.ModLoader.Core;
 
-namespace Windfall.Utilities
+namespace Windfall.Common.Utilities
 {
     public static partial class Utilities
     {

@@ -2,6 +2,7 @@
 using Terraria;
 using Terraria.ModLoader;
 using Microsoft.Xna.Framework;
+using Windfall.Common.Utilities;
 
 namespace Windfall.Content.WorldEvents.CalClone
 {
@@ -129,7 +130,7 @@ namespace Windfall.Content.WorldEvents.CalClone
                                 Player p = Main.player[i];
                                 if (!p.dead && p.active)
                                 {
-                                    Utilities.Utilities.NewProjectileBetter(CalCloneSpawnLocation, Vector2.Zero, ModContent.ProjectileType<CalCloneProj>(), 0, 0f);
+                                    Utilities.NewProjectileBetter(CalCloneSpawnLocation, Vector2.Zero, ModContent.ProjectileType<CalCloneProj>(), 0, 0f);
                                     break;
                                 }
                             }
@@ -161,7 +162,7 @@ namespace Windfall.Content.WorldEvents.CalClone
                                 Player p = Main.player[i];
                                 if (!p.dead && p.active)
                                 {
-                                    Utilities.Utilities.NewProjectileBetter(CalCloneSpawnLocation, Vector2.Zero, ModContent.ProjectileType<CalCloneProj>(), 0, 0f);
+                                    Utilities.NewProjectileBetter(CalCloneSpawnLocation, Vector2.Zero, ModContent.ProjectileType<CalCloneProj>(), 0, 0f);
                                     break;
                                 }
                             }

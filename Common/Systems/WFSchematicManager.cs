@@ -4,7 +4,7 @@ using CalamityMod.Schematics;
 using System.IO;
 using static CalamityMod.Schematics.SchematicManager;
 using System.Reflection;
-using Windfall.Utilities;
+using Windfall.Common.Utilities;
 
 namespace Windfall.Common.Systems
 {

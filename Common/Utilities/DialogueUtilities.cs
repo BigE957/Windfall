@@ -3,8 +3,9 @@ using Terraria.Localization;
 using Terraria;
 using Microsoft.Xna.Framework;
 using Windfall.Common.Systems;
+using Windfall.Common.Utilities;
 
-namespace Windfall.Utilities
+namespace Windfall.Common.Utilities
 {
     public static partial class Utilities
     {

@@ -14,7 +14,7 @@ using Terraria.Utilities;
 using Terraria;
 using Microsoft.Xna.Framework;
 using Terraria.GameContent.Events;
-using Windfall.Utilities;
+using Windfall.Common.Utilities;
 using Terraria.DataStructures;
 using CalamityMod.Projectiles.Melee;
 using CalamityMod.Projectiles.Rogue;
@@ -191,7 +191,7 @@ namespace Windfall.Content.NPCs.WanderingNPCs
             }
             else
             {
-                Utilities.Utilities.QuestDialogueHelper(Main.npc[NPC.whoAmI]);
+                Utilities.QuestDialogueHelper(Main.npc[NPC.whoAmI]);
             }
         }
 

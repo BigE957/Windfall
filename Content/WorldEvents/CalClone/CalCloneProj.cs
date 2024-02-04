@@ -116,7 +116,7 @@ namespace Windfall.Content.WorldEvents.CalClone
                     {
                         //creates an Orange Combat Text out of the projectile
                         Color messageColor = Color.Orange;
-                        Rectangle location = new Rectangle((int)Projectile.Center.X, (int)Projectile.Center.Y, Projectile.width, Projectile.width);
+                        Rectangle location = new((int)Projectile.Center.X, (int)Projectile.Center.Y, Projectile.width, Projectile.width);
                         CombatText.NewText(location, messageColor, "?!", true);
                         i = 30;
                         Projectile.velocity.X = 0;
