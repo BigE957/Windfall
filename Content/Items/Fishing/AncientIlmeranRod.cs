@@ -15,6 +15,8 @@ using System.Collections.Generic;
 using Windfall.Common.Utilities;
 using CalamityMod;
 using System;
+using CalamityMod.Projectiles.Ranged;
+using CalamityMod.NPCs.AquaticScourge;
 
 namespace Windfall.Content.Items.Fishing
 {
@@ -97,121 +99,139 @@ namespace Windfall.Content.Items.Fishing
                     break;
                 }
             }
-            if (isCast && player.ZoneDesert && !NPC.AnyNPCs(ModContent.NPCType<DesertScourgeHead>()) && !BossRushEvent.BossRushActive)
+            if (isCast)
             {
-                //Determines how long the wait for Desert Scourge will be based on ScoogFished
-                if (scoogCounter == 0)
+                if (player.ZoneDesert && !NPC.AnyNPCs(ModContent.NPCType<DesertScourgeHead>()) && !BossRushEvent.BossRushActive)
                 {
-                    shakeCounter = 0;
-                    startLeft = Main.rand.NextBool();
-                    if (WorldSaveSystem.ScoogFished)
+                    //Determines how long the wait for Desert Scourge will be based on ScoogFished
+                    if (scoogCounter == 0)
                     {
-                        scoogWait = Main.rand.Next(30, 31);
-                        dialogueCounter = 17;
+                        shakeCounter = 0;
+                        startLeft = Main.rand.NextBool();
+                        if (WorldSaveSystem.ScoogFished)
+                        {
+                            scoogWait = Main.rand.Next(30, 31);
+                            dialogueCounter = 17;
+                        }
+                        else
+                        {
+                            scoogWait = Main.rand.Next(68, 69);
+                            dialogueCounter = 0;
+                        }
                     }
-                    else
-                    {
-                        scoogWait = Main.rand.Next(68, 69);
-                        dialogueCounter = 0;
-                    }
-                }
-                scoogCounter++;
-                
-                //Spawns Paladin after 5 Seconds
-                if (scoogCounter == 60 * 5 && !NPC.AnyNPCs(ModContent.NPCType<IlmeranPaladin>()) && !NPC.AnyNPCs(ModContent.NPCType<IlmeranPaladinKnocked>()))
-                {
-                    Projectile.NewProjectile(null, new Vector2(player.Center.X - 80 * player.direction, player.Center.Y + 100), new Vector2(0, -8), ModContent.ProjectileType<IlmeranPaladinDig>(), 0, 0);
-                }
+                    scoogCounter++;
 
-                //Ilmeran Paladin Dialogue during the wait for Desert Scourge
-                
-                if (NPC.AnyNPCs(ModContent.NPCType<IlmeranPaladin>()))
-                {
-                    NPC Paladin = Main.npc[NPC.FindFirstNPC(ModContent.NPCType<IlmeranPaladin>())];
-                    int Delay = 0;
+                    //Spawns Paladin after 5 Seconds
+                    if (scoogCounter == 60 * 5 && !NPC.AnyNPCs(ModContent.NPCType<IlmeranPaladin>()) && !NPC.AnyNPCs(ModContent.NPCType<IlmeranPaladinKnocked>()))
+                    {
+                        Projectile.NewProjectile(null, new Vector2(player.Center.X - 80 * player.direction, player.Center.Y + 100), new Vector2(0, -8), ModContent.ProjectileType<IlmeranPaladinDig>(), 0, 0);
+                    }
+
+                    //Ilmeran Paladin Dialogue during the wait for Desert Scourge
+
+                    if (NPC.AnyNPCs(ModContent.NPCType<IlmeranPaladin>()))
+                    {
+                        NPC Paladin = Main.npc[NPC.FindFirstNPC(ModContent.NPCType<IlmeranPaladin>())];
+                        int Delay = 0;
+                        if (!WorldSaveSystem.ScoogFished)
+                        {
+                            for (int i = dialogueCounter; i >= 0; i--)
+                            {
+                                Delay += PaladinDialogue[i].delay;
+                            }
+                        }
+                        else
+                        {
+                            for (int i = dialogueCounter; i >= 17; i--)
+                            {
+                                Delay += PaladinDialogue[i].delay;
+                            }
+
+                        }
+                        if (scoogCounter == (60 * (Delay)))
+                        {
+                            PaladinMessage(PaladinDialogue[dialogueCounter].text, Paladin);
+                            dialogueCounter++;
+                        }
+                    }
+
+                    //Does the ambiant Scourge Sound and Screen Shake
                     if (!WorldSaveSystem.ScoogFished)
                     {
-                        for (int i = dialogueCounter; i >= 0; i--)
+                        if (scoogCounter >= 60 * 49 && scoogCounter <= 60 * 55)
                         {
-                            Delay += PaladinDialogue[i].delay;
+                            ScoogShake(player, scoogCounter, 60 * 52, startLeft, 0.25f);
+                        }
+                        if (scoogCounter >= 60 * 60 && scoogCounter <= 60 * 65)
+                        {
+                            ScoogShake(player, scoogCounter, 60 * 65, !startLeft, 0.5f);
                         }
                     }
                     else
                     {
-                        for (int i = dialogueCounter; i >= 17; i--)
+                        if (scoogCounter >= 60 * 14 && scoogCounter <= 60 * 20)
                         {
-                            Delay += PaladinDialogue[i].delay;
+                            ScoogShake(player, scoogCounter, 60 * 16, startLeft, 0.25f);
                         }
-
+                        if (scoogCounter >= 60 * 22 && scoogCounter <= 60 * 28)
+                        {
+                            ScoogShake(player, scoogCounter, 60 * 28, !startLeft, 0.5f);
+                        }
                     }
-                    if (scoogCounter == (60 * (Delay)))
+
+                    //Spawns Desert Scourge after "scoogWait" seconds
+                    if (scoogCounter >= 60 * scoogWait)
                     {
-                        PaladinMessage(PaladinDialogue[dialogueCounter].text, Paladin);
-                        dialogueCounter++;
+                        if (NPC.AnyNPCs(ModContent.NPCType<IlmeranPaladin>()))
+                        {
+                            NPC Paladin = Main.npc[NPC.FindFirstNPC(ModContent.NPCType<IlmeranPaladin>())];
+                            PaladinMessage("En garde!!", Paladin);
+                        }
+                        WorldSaveSystem.ScoogFished = true;
+                        SoundEngine.PlaySound(SoundID.Roar, player.Center);
+                        if (Main.netMode != NetmodeID.MultiplayerClient)
+                            NPC.SpawnOnPlayer(player.whoAmI, ModContent.NPCType<DesertScourgeHead>());
+                        else
+                            NetMessage.SendData(MessageID.SpawnBossUseLicenseStartEvent, -1, -1, null, player.whoAmI, ModContent.NPCType<DesertScourgeHead>());
+
+                        if (CalamityWorld.revenge)
+                        {
+                            if (Main.netMode != NetmodeID.MultiplayerClient)
+                                NPC.SpawnOnPlayer(player.whoAmI, ModContent.NPCType<DesertNuisanceHead>());
+                            else
+                                NetMessage.SendData(MessageID.SpawnBossUseLicenseStartEvent, -1, -1, null, player.whoAmI, ModContent.NPCType<DesertNuisanceHead>());
+
+                            if (Main.netMode != NetmodeID.MultiplayerClient)
+                                NPC.SpawnOnPlayer(player.whoAmI, ModContent.NPCType<DesertNuisanceHead>());
+                            else
+                                NetMessage.SendData(MessageID.SpawnBossUseLicenseStartEvent, -1, -1, null, player.whoAmI, ModContent.NPCType<DesertNuisanceHead>());
+                        }
                     }
                 }
-
-                //Does the ambiant Scourge Sound and Screen Shake
-                if (!WorldSaveSystem.ScoogFished)
+                else if (player.InSulphur() && !NPC.AnyNPCs(ModContent.NPCType<AquaticScourgeHead>()) && !BossRushEvent.BossRushActive)
                 {
-                    if(scoogCounter >= 60 * 49 && scoogCounter <= 60 * 55)
+                    if (scoogCounter == 0)
                     {
-                        ScoogShake(player, scoogCounter, 60 * 52, startLeft, 0.25f);
+                        scoogWait = Main.rand.Next(20, 30);
                     }
-                    if (scoogCounter >= 60 * 60 && scoogCounter <= 60 * 65)
+                    scoogCounter++;
+                    if (scoogCounter >= 60 * scoogWait)
                     {
-                        ScoogShake(player, scoogCounter, 60 * 65, !startLeft, 0.5f);
+                        if (Main.netMode != NetmodeID.MultiplayerClient)
+                            NPC.SpawnOnPlayer(player.whoAmI, ModContent.NPCType<AquaticScourgeHead>());
+                        else
+                            NetMessage.SendData(MessageID.SpawnBossUseLicenseStartEvent, -1, -1, null, player.whoAmI, ModContent.NPCType<AquaticScourgeHead>());
                     }
                 }
                 else
                 {
-                    if (scoogCounter >= 60 * 14 && scoogCounter <= 60 * 20)
-                    {
-                        ScoogShake(player, scoogCounter, 60 * 16, startLeft, 0.25f);
-                    }
-                    if (scoogCounter >= 60 * 22 && scoogCounter <= 60 * 28)
-                    {
-                        ScoogShake(player, scoogCounter, 60 * 28, !startLeft, 0.5f);
-                    }
-                }
-
-                //Spawns Desert Scourge after "scoogWait" seconds
-                if (scoogCounter >= 60 * scoogWait)
-                {
-                    if (NPC.AnyNPCs(ModContent.NPCType<IlmeranPaladin>()))
+                    if (scoogCounter != 0 && player.ZoneDesert && NPC.AnyNPCs(ModContent.NPCType<IlmeranPaladin>()) && !NPC.AnyNPCs(ModContent.NPCType<DesertScourgeHead>()))
                     {
                         NPC Paladin = Main.npc[NPC.FindFirstNPC(ModContent.NPCType<IlmeranPaladin>())];
-                        PaladinMessage("En garde!!", Paladin);
+                        PaladinMessage("Oh, nevermind...", Paladin);
                     }
-                    WorldSaveSystem.ScoogFished = true;
-                    SoundEngine.PlaySound(SoundID.Roar, player.Center);
-                    if (Main.netMode != NetmodeID.MultiplayerClient)
-                        NPC.SpawnOnPlayer(player.whoAmI, ModContent.NPCType<DesertScourgeHead>());
-                    else
-                        NetMessage.SendData(MessageID.SpawnBossUseLicenseStartEvent, -1, -1, null, player.whoAmI, ModContent.NPCType<DesertScourgeHead>());
-
-                    if (CalamityWorld.revenge)
-                    {
-                        if (Main.netMode != NetmodeID.MultiplayerClient)
-                            NPC.SpawnOnPlayer(player.whoAmI, ModContent.NPCType<DesertNuisanceHead>());
-                        else
-                            NetMessage.SendData(MessageID.SpawnBossUseLicenseStartEvent, -1, -1, null, player.whoAmI, ModContent.NPCType<DesertNuisanceHead>());
-
-                        if (Main.netMode != NetmodeID.MultiplayerClient)
-                            NPC.SpawnOnPlayer(player.whoAmI, ModContent.NPCType<DesertNuisanceHead>());
-                        else
-                            NetMessage.SendData(MessageID.SpawnBossUseLicenseStartEvent, -1, -1, null, player.whoAmI, ModContent.NPCType<DesertNuisanceHead>());
-                    }
+                    scoogCounter = 0;
                 }
-            }
-            else
-            {
-                if (scoogCounter != 0 && NPC.AnyNPCs(ModContent.NPCType<IlmeranPaladin>()) && !NPC.AnyNPCs(ModContent.NPCType<DesertScourgeHead>()))
-                {
-                    NPC Paladin = Main.npc[NPC.FindFirstNPC(ModContent.NPCType<IlmeranPaladin>())];
-                    PaladinMessage("Oh, nevermind...", Paladin);
-                }
-                scoogCounter = 0;
             }
         }
         internal static void PaladinMessage(string text, NPC Paladin)
@@ -251,6 +271,7 @@ namespace Windfall.Content.Items.Fishing
                 shakeCounter--;
             else
                 shakeCounter++;
+
         }
     }
 }
