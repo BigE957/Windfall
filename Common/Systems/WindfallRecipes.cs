@@ -12,13 +12,17 @@ namespace Windfall.Common.Systems
             for (int i = 0; i < Recipe.numRecipes; i++)
             {
                 Recipe recipe = Main.recipe[i];
-                if (recipe.HasResult(ModContent.ItemType<EyeofDesolation>()))
-                {
-                    recipe.AddIngredient(ModContent.ItemType<AshesofCalamity>(), 5);
-                }
                 if (recipe.HasResult(ModContent.ItemType<DesertMedallion>()))
                 {
                     recipe.AddIngredient(ModContent.ItemType<PearlShard>(), 5);
+                }
+                if (recipe.HasResult(ModContent.ItemType<Seafood>()))
+                {
+                    recipe.AddIngredient(ModContent.ItemType<CorrodedFossil>(), 5);
+                }
+                if (recipe.HasResult(ModContent.ItemType<EyeofDesolation>()))
+                {
+                    recipe.AddIngredient(ModContent.ItemType<AshesofCalamity>(), 5);
                 }
             }
         }
