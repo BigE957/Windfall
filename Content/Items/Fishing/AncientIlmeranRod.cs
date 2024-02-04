@@ -74,13 +74,18 @@ namespace Windfall.Content.Items.Fishing
             new dialogue {text = "I should never say this :3", delay = 20},
 
             //Subsequent Time Dialogue
+            new dialogue {text = "Alright!" , delay = 6},
+            new dialogue {text = "Let's give this another go." , delay = 3},
+            new dialogue {text = "?!" , delay = 6},
+            new dialogue {text = "Here she comes!" , delay = 3},
 
             //Here only for error checking
-            new dialogue {text = "YOU'RE OUT OF BOUNDS DUMBASS!!!", delay = 10},
+            new dialogue {text = "YOU'RE OUT OF BOUNDS DUMBASS!!!", delay = 20},
         };
         int scoogWait = 60;
         int dialogueCounter = 0;
         static int shakeCounter = 0;
+        bool startLeft = false;
         public override void HoldItem(Player player)
         {
             isCast = false;
@@ -97,14 +102,18 @@ namespace Windfall.Content.Items.Fishing
                 //Determines how long the wait for Desert Scourge will be based on ScoogFished
                 if (scoogCounter == 0)
                 {
-                    dialogueCounter = 0;
                     shakeCounter = 0;
+                    bool startLeft = Main.rand.NextBool();
                     if (WorldSaveSystem.ScoogFished)
-                        scoogWait = 30;
-                        //scoogWait = Main.rand.Next(20, 40);
+                    {
+                        scoogWait = Main.rand.Next(30, 31);
+                        dialogueCounter = 17;
+                    }
                     else
-                        scoogWait = 68;
-                        //scoogWait = Main.rand.Next(65, 70);
+                    {
+                        scoogWait = Main.rand.Next(68, 69);
+                        dialogueCounter = 0;
+                    }
                 }
                 scoogCounter++;
                 
@@ -115,25 +124,30 @@ namespace Windfall.Content.Items.Fishing
                 }
 
                 //Ilmeran Paladin Dialogue during the wait for Desert Scourge
-                int Delay = 0;
-                for(int i = dialogueCounter; i >= 0; i--)
-                {
-                    Delay += PaladinDialogue[i].delay;
-                }
+                
                 if (NPC.AnyNPCs(ModContent.NPCType<IlmeranPaladin>()))
                 {
                     NPC Paladin = Main.npc[NPC.FindFirstNPC(ModContent.NPCType<IlmeranPaladin>())];
+                    int Delay = 0;
                     if (!WorldSaveSystem.ScoogFished)
                     {
-                        if (scoogCounter == (60 * (Delay)))
+                        for (int i = dialogueCounter; i >= 0; i--)
                         {
-                            PaladinMessage(PaladinDialogue[dialogueCounter].text, Paladin);
-                            dialogueCounter++;
+                            Delay += PaladinDialogue[i].delay;
                         }
                     }
                     else
                     {
+                        for (int i = dialogueCounter; i >= 17; i--)
+                        {
+                            Delay += PaladinDialogue[i].delay;
+                        }
 
+                    }
+                    if (scoogCounter == (60 * (Delay)))
+                    {
+                        PaladinMessage(PaladinDialogue[dialogueCounter].text, Paladin);
+                        dialogueCounter++;
                     }
                 }
 
@@ -142,16 +156,23 @@ namespace Windfall.Content.Items.Fishing
                 {
                     if(scoogCounter >= 60 * 49 && scoogCounter <= 60 * 55)
                     {
-                        ScoogShake(player, scoogCounter, 60 * 52);
+                        ScoogShake(player, scoogCounter, 60 * 52, startLeft, 0.25f);
                     }
                     if (scoogCounter >= 60 * 60 && scoogCounter <= 60 * 65)
                     {
-                        ScoogShake(player, scoogCounter, 60 * 65);
+                        ScoogShake(player, scoogCounter, 60 * 65, !startLeft, 0.5f);
                     }
                 }
                 else
                 {
-
+                    if (scoogCounter >= 60 * 14 && scoogCounter <= 60 * 20)
+                    {
+                        ScoogShake(player, scoogCounter, 60 * 16, startLeft, 0.25f);
+                    }
+                    if (scoogCounter >= 60 * 22 && scoogCounter <= 60 * 28)
+                    {
+                        ScoogShake(player, scoogCounter, 60 * 28, !startLeft, 0.5f);
+                    }
                 }
 
                 //Spawns Desert Scourge after "scoogWait" seconds
@@ -162,7 +183,7 @@ namespace Windfall.Content.Items.Fishing
                         NPC Paladin = Main.npc[NPC.FindFirstNPC(ModContent.NPCType<IlmeranPaladin>())];
                         PaladinMessage("En garde!!", Paladin);
                     }
-                    //WorldSaveSystem.ScoogFished = true;
+                    WorldSaveSystem.ScoogFished = true;
                     SoundEngine.PlaySound(SoundID.Roar, player.Center);
                     if (Main.netMode != NetmodeID.MultiplayerClient)
                         NPC.SpawnOnPlayer(player.whoAmI, ModContent.NPCType<DesertScourgeHead>());
@@ -198,7 +219,7 @@ namespace Windfall.Content.Items.Fishing
             Rectangle location = new((int)Paladin.Center.X, (int)Paladin.Center.Y, Paladin.width, Paladin.width);
             CombatText.NewText(location, Color.SandyBrown, text, true);
         }
-        internal static void ScoogShake(Player target, int scoogTimer, int midpoint)
+        internal static void ScoogShake(Player target, int scoogTimer, int midpoint, bool leftSide, float volume)
         {
             float groundShakeTime = 270f;
 
@@ -218,13 +239,13 @@ namespace Windfall.Content.Items.Fishing
             // Create screen shake effects.
             target.Windfall_Camera().CurrentScreenShakePower = (float)(MathF.Pow(groundShakeInterpolant, 1.81f) * 10f);
             if (scoogTimer == midpoint)
-                if (Main.rand.NextBool())
+                if (leftSide)
                 {
-                    SoundEngine.PlaySound(Roar with { Volume = 0.25f }, target.Center + new Vector2(Main.rand.Next(-300, -200), 150));
+                    SoundEngine.PlaySound(Roar with { Volume = volume }, target.Center + new Vector2(Main.rand.Next(-300, -200), 150));
                 }
                 else
                 {
-                    SoundEngine.PlaySound(Roar with { Volume = 0.25f }, target.Center + new Vector2(Main.rand.Next(200, 300), 150));
+                    SoundEngine.PlaySound(Roar with { Volume = volume }, target.Center + new Vector2(Main.rand.Next(200, 300), 150));
                 }
             else if (scoogTimer > midpoint)
                 shakeCounter--;
