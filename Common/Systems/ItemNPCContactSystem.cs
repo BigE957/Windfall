@@ -4,10 +4,9 @@ using Microsoft.Xna.Framework;
 using System.Linq;
 using Terraria.ID;
 using Terraria.Audio;
-using Microsoft.CodeAnalysis.CSharp.Syntax;
-using CalamityMod.Items.Accessories;
 using Windfall.Content.Items.Weapons.Misc;
 using Windfall.Content.NPCs.Enemies;
+using Windfall.Content.Items.Debug;
 
 namespace Windfall.Common.Systems
 {
@@ -17,9 +16,9 @@ namespace Windfall.Common.Systems
         int targetItem = -1;
         public override void PostUpdateNPCs()
         {
-            if (IsNPCTouchingItem(ModContent.NPCType<WFCnidrion>(), ModContent.ItemType<Cnidrisnack>()))
+            if (IsNPCTouchingItem(ModContent.NPCType<WFCnidrion>(), ModContent.ItemType<Cnidrisnack>()) || IsNPCTouchingItem(ModContent.NPCType<WFCnidrion>(), ModContent.ItemType<SuperCnidrisnack>()))
             {
-                if (Main.npc[targetNPC].life <= Main.npc[targetNPC].lifeMax / 4)
+                if ((Main.npc[targetNPC].life <= Main.npc[targetNPC].lifeMax / 4 && IsNPCTouchingItem(ModContent.NPCType<WFCnidrion>(), ModContent.ItemType<Cnidrisnack>())) || IsNPCTouchingItem(ModContent.NPCType<WFCnidrion>(), ModContent.ItemType<SuperCnidrisnack>()))
                 {
                     Main.npc[targetNPC].ai[0] = 5f;
                     Main.npc[targetNPC].ai[1] = 0f;
