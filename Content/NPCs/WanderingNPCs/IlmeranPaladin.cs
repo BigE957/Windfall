@@ -198,7 +198,6 @@ namespace Windfall.Content.NPCs.WanderingNPCs
 
         public override void AddShops()
         {
-            int desertScoogQuestIndex = QuestSystem.QuestLog.FindIndex(quest => quest.Name == "ScoogHunt");
             new NPCShop(Type)
                 .Add<AmidiasSpark>()
                 .Add<Cnidrisnack>()
