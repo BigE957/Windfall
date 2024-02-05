@@ -32,7 +32,7 @@ namespace Windfall.Content.Items.Utility
         {
             if (!NPC.AnyNPCs(ModContent.NPCType<IlmeranPaladin>()) && !NPC.AnyNPCs(ModContent.NPCType<IlmeranPaladinKnocked>()) && player.ZoneDesert)
             {
-                Projectile.NewProjectile(null, new Vector2(player.Center.X - 80 * player.direction, player.Center.Y + Main.rand.Next(150, 200)), new Vector2(0, -8), ModContent.ProjectileType<IlmeranPaladinDig>(), 0, 0);
+                Projectile.NewProjectile(null, new Vector2(player.Center.X - 80 * player.direction, player.Center.Y + Main.rand.Next(250, 300)), new Vector2(0, -8), ModContent.ProjectileType<IlmeranPaladinDig>(), 0, 0);
             }
             return true;
         }
