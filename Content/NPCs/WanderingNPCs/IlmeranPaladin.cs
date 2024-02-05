@@ -20,6 +20,7 @@ using CalamityMod.Projectiles.Rogue;
 using Windfall.Content.Items.Weapons.Misc;
 using Windfall.Common.Systems;
 using Windfall.Content.Items.Fishing;
+using Windfall.Content.Items.Utility;
 
 namespace Windfall.Content.NPCs.WanderingNPCs
 {
@@ -202,6 +203,7 @@ namespace Windfall.Content.NPCs.WanderingNPCs
                 .Add<AmidiasSpark>()
                 .Add<Cnidrisnack>()
                 .Add<AncientIlmeranRod>(WindfallConditions.ScoogHunt1ActiveOrCompleted)
+                .Add<IlmeranHorn>(WindfallConditions.ScoogHunt1Completed)
                 .Register();
         }
 

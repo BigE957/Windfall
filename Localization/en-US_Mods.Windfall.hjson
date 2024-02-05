@@ -17,7 +17,7 @@ Dialogue: {
 		ScoogHuntDialogueEnd: Well now, that sure was quite the fight, wasn't it! You fought like a real paladin out there! Almost reminds me of the days before the Incineration.
 		ShuckinClamsDialogueStart: With the Desert Scourge now laid to rest, it's now much safer to reach the Sunken Sea. Its a place dear to my heart, as the sole remnant of my people's kingdom. It holds many relics of Ilmeris' past, and I ask you to seek them out. Clams just love to gobble up anything they can find, but with this, you can open them right up and get at their treasure. Good luck on this treasure hunt! May fortune favor you.
 		ShuckinClamsDialogueDuring: Crack open five clams for me. They've managed to gobble up plenty of relics from Ilmeris' prime. You're sure to find some valuable treasures within their maws.
-		ShuckinClamsDialogueEnd: That's quite the haul you've got there! Looks like the shucking expedition was a success. Feel free to keep that knife, and feel free to keep shucking away if you please. Though, if you're up for it, there's something even bigger to shuck.		
+		ShuckinClamsDialogueEnd: That's quite the haul you've got there! Looks like the shucking expedition was a success. Feel free to keep that knife, and feel free to keep shucking away if you please. Though, if you're up for it, there's something even bigger to shuck.
 		ClamHuntDialogueStart: Alright, you're a pretty good clam shucker, so I'm gonna need you to shuck one of the biggest clams there is. I'm sure you've seen it lying around during your time at the Sunken Sea, and I'm willing to bet it's a treasure trove for Ilmeran relics! Go give it a good shucking for me!
 		ClamHuntDialogueDuring: You just gotta hang around in the Sunken Sea a while, and that giant clam is sure to turn up. Then, you can give it a good shucking.
 		ClamHuntDialogueEnd: I can't believe it! King Amidias wasin that clam the whole time?! Thank you for the help, I'm certain if they were here, the entirety of Ilmeris would be ever grateful to you!
@@ -210,6 +210,11 @@ Items: {
 				Resets all Quest Data on use
 				'''
 		}
+
+		SuperCnidrisnack: {
+			DisplayName: Super Cnidrisnack
+			Tooltip: "Not even the most defiant of Cnidrions can resist its taste!"
+		}
 	}
 
 	Utility: {
@@ -220,6 +225,10 @@ Items: {
 				Stores charge that can be used to instantly charge Arsenal Weapons.
 				Right click this item while holding an Arsenal Weapon to charge it!
 				'''
+		}
+		IlmeranHorn: {
+			DisplayName: Ilmeran Horn
+			Tooltip: "Echos a sound burned into the memory of all Ilmeran Paladins"
 		}
 	}
 
@@ -247,10 +256,16 @@ Items: {
 
 	Tools: {
 		IlmeranKnife: {
-			DisplayName: Ilmeran Knife
-			Tooltip: ""
+			DisplayName: Ilmeran Shucker
+			Tooltip:
+				'''
+				A tool used by Ilmeran tradesmen to force open even the largest of clams
+				Use on Clams to shuck them, causing them to drop what they have hidden inside
+				'''
 		}
 	}
+
+	
 }
 
 NPCs: {
@@ -269,7 +284,8 @@ Projectiles: {
 	Other.DraeDashDropPod.DisplayName: Drae-Dash Drop Pod
 	CnidrisnackThrow.DisplayName: Cnidrisnack
 	AncientIlmeranBobber.DisplayName: Ancient Ilmeran Bobber
-	IlmeranPaladinDig.DisplayName: Ilmeran Paladin Dig
+	IlmeranPaladinDig.DisplayName: Ilmeran Paladin
+	SuperCnidrisnackThrow.DisplayName: Super Cnidrisnack Throw
 }
 
 JournalContents: {
