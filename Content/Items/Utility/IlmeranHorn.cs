@@ -20,8 +20,8 @@ namespace Windfall.Content.Items.Utility
         public override void SetDefaults()
         {
             Item.useAnimation = Item.useTime = 60*3;
-            Item.width = 28;
-            Item.height = 24;
+            Item.width = 42;
+            Item.height = 32;
             Item.useStyle = ItemUseStyleID.HoldUp;
             Item.value = CalamityGlobalItem.Rarity2BuyPrice;
             Item.rare = ItemRarityID.Green;

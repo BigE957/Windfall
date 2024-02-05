@@ -29,8 +29,8 @@ namespace Windfall.Content.Items.Fishing
 
         public override void SetDefaults()
         {
-            Item.width = 24;
-            Item.height = 28;
+            Item.width = 48;
+            Item.height = 40;
             Item.useAnimation = 8;
             Item.useTime = 8;
             Item.useStyle = ItemUseStyleID.Swing;
