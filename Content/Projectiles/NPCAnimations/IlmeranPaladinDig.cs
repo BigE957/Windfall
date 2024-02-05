@@ -1,5 +1,6 @@
 ﻿using CalamityMod.Particles;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,7 +16,7 @@ namespace Windfall.Content.Projectiles.NPCAnimations
 {
     public class IlmeranPaladinDig : ModProjectile, ILocalizedModType
     {
-        public override string Texture => "Windfall/Assets/NPCs/WanderingNPCs/IlmeranPaladin";
+        public override string Texture => "Windfall/Assets/Projectiles/NPCAnimations/IlmeranPaladinDig";
 
         public bool InsideTiles = false;
         public bool PostExitTiles = false;
@@ -28,7 +29,7 @@ namespace Windfall.Content.Projectiles.NPCAnimations
         }
         public override void SetDefaults()
         {
-            Projectile.width = 18;
+            Projectile.width = 26;
             Projectile.height = 40;
             Projectile.tileCollide = false;
             Projectile.ignoreWater = true;
@@ -88,6 +89,21 @@ namespace Windfall.Content.Projectiles.NPCAnimations
                 }
                 Projectile.active = false;
             }
+        }
+        public override bool PreDraw(ref Color lightColor)
+        {
+            Color color = Lighting.GetColor(Projectile.Center.ToTileCoordinates16().ToPoint());
+            Texture2D value = ModContent.Request<Texture2D>(Texture).Value;
+            Vector2 vector = Projectile.Center - Main.screenPosition;
+            Rectangle value2 = new(0, 0, value.Width, value.Height);
+            Vector2 vector2 = Projectile.Size / 2;
+            SpriteEffects spriteEffects = SpriteEffects.None;
+            if (Projectile.spriteDirection == -1)
+            {
+                spriteEffects = SpriteEffects.FlipHorizontally;
+            }
+            Main.EntitySpriteDraw(value, vector, (Rectangle?)value2, color, Projectile.rotation, vector2, Projectile.scale, spriteEffects, 0);
+            return false;
         }
         public override void DrawBehind(int index, List<int> behindNPCsAndTiles, List<int> behindNPCs, List<int> behindProjectiles, List<int> overPlayers, List<int> overWiresUI)
         {
