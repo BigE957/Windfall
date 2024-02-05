@@ -41,7 +41,7 @@ public class WorldCataclysm : ModNPC
             NPC.scale *= 1.2f;
         NPC.defense = CalamityWorld.death ? 15 : 10;
         NPC.DR_NERD(CalamityWorld.death ? 0.225f : 0.15f);
-        NPC.LifeMaxNERB(11000, 13200, 80000);
+        NPC.LifeMaxNERB(11000 + 9200, 13200 + 11025, 80000 + 80000);
         double HPBoost = CalamityConfig.Instance.BossHealthBoost * 0.01;
         NPC.lifeMax += (int)(NPC.lifeMax * HPBoost);
         NPC.aiStyle = -1;
