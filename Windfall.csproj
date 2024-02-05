@@ -10,6 +10,7 @@
   <ItemGroup>
     <None Remove="Assets\Items\Debug\DraeDashGiftCard.png" />
     <None Remove="Assets\Items\Debug\TheZoomer.png" />
+    <None Remove="Assets\Items\Tools\IlmeranKnife.png" />
     <None Remove="Assets\Items\Weapons\Misc\Cnidrisnack.png" />
     <None Remove="Assets\Items\Weapons\Misc\Cnidrisnack_glow.png" />
     <None Remove="Content\Items\Journals\JournalAerie.png" />

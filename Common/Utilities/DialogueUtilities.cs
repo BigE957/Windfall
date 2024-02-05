@@ -13,6 +13,9 @@ namespace Windfall.Common.Utilities
         {
             "CnidrionHunt",
             "ScoogHunt",
+            "ShuckinClams",
+            "ClamHunt",
+            "ScoogHunt2",
         };
         public static void QuestDialogueHelper(NPC npc)
         {
