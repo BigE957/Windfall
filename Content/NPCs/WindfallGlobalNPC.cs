@@ -22,6 +22,9 @@ namespace Windfall.Content.NPCs
 
             if (npc.type == calamity.Find<ModNPC>("DesertScourgeHead").Type)
                 QuestSystem.IncrementQuestProgress(QuestSystem.QuestLog.FindIndex(quest => quest.Name == "ScoogHunt"), 0);
+
+            if (npc.type == calamity.Find<ModNPC>("AquaticScourgeHead").Type)
+                QuestSystem.IncrementQuestProgress(QuestSystem.QuestLog.FindIndex(quest => quest.Name == "ScoogHunt2"), 0);
         }
         public override void OnSpawn(NPC npc, IEntitySource source)
         {
