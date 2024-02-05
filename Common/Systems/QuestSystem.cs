@@ -8,6 +8,7 @@ using Terraria;
 using Terraria.ModLoader;
 using Terraria.ModLoader.IO;
 using Windfall.Content.Items.Fishing;
+using Windfall.Content.Items.Tools;
 using Windfall.Content.Items.Weapons.Misc;
 using Windfall.Content.Projectiles.Fishing;
 
@@ -82,6 +83,8 @@ namespace Windfall.Common.Systems
             {
                 CreateQuest("CnidrionHunt", new List<string>{"Pacify 5 Cnidrions"}, new List<int>{5}, true, new List<QuestItem>{ new QuestItem { Type = ModContent.ItemType<Cnidrisnack>(), Stack = 5 } }, new List<QuestItem>{ new QuestItem { Type = ModContent.ItemType<CnidrionBanner>(), Stack = 4 }, new QuestItem {Type = ModContent.ItemType<AmidiasSpark>(), Stack = 1} }),
                 CreateQuest("ScoogHunt", new List<string>{"Defeat Desert Scourge"}, new List<int>{1}, true, new List<QuestItem>{ new QuestItem { Type = ModContent.ItemType<AncientIlmeranRod>(), Stack = 1 }, new QuestItem { Type = ModContent.ItemType<Cnidrisnack>(), Stack = 5 } }, new List<QuestItem>{ new QuestItem { Type = ModContent.ItemType<DesertScourgeTrophy>(), Stack = 1 } }),
+                CreateQuest("ShuckinClams", new List<string>{"Shuck 5 Clams"}, new List<int>{5}, true, new List<QuestItem>{ new QuestItem { Type = ModContent.ItemType<IlmeranKnife>(), Stack = 1 } }, new List<QuestItem>{ new QuestItem { Type = ModContent.ItemType<ClamBanner>(), Stack = 4 } }),
+                CreateQuest("ClamHunt", new List<string>{"Defeat the Giant Clam"}, new List<int>{1}, true, null, new List<QuestItem>{ new QuestItem { Type = ModContent.ItemType<GiantClamTrophy>(), Stack = 1 } }),
                 CreateQuest("ScoogHunt2", new List<string>{"Defeat Aquatic Scourge"}, new List<int>{1}, Main.hardMode, null, new List<QuestItem>{ new QuestItem { Type = ModContent.ItemType<AquaticScourgeTrophy>(), Stack = 1 } }),
 
             };
