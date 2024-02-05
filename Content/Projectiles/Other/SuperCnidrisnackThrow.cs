@@ -8,7 +8,7 @@ namespace Windfall.Content.Projectiles.Other
 {
     public class SuperCnidrisnackThrow : ModProjectile
     {
-        public override string Texture => "Windfall/Assets/Items/Weapons/Misc/Cnidrisnack";
+        public override string Texture => "Windfall/Assets/Items/Weapons/Misc/SuperCnidrisnack";
         public override void SetDefaults()
         {
             Projectile.width = Projectile.height = 16;
@@ -31,7 +31,7 @@ namespace Windfall.Content.Projectiles.Other
             int height = texture.Height;
             int drawStart = height * Projectile.frame;
             Vector2 origin = Projectile.Center;
-            Main.EntitySpriteDraw(ModContent.Request<Texture2D>("Windfall/Assets/Items/Weapons/Misc/Cnidrisnack_Glow").Value, new Vector2(Projectile.Center.X - Main.screenPosition.X, Projectile.Center.Y - Main.screenPosition.Y), new Microsoft.Xna.Framework.Rectangle?(new Rectangle(0, drawStart, texture.Width, height)), Color.White * Projectile.Opacity, Projectile.rotation, origin, Projectile.scale, SpriteEffects.None, 0);
+            Main.EntitySpriteDraw(ModContent.Request<Texture2D>("Windfall/Assets/Items/Weapons/Misc/SuperCnidrisnack_Glow").Value, new Vector2(Projectile.Center.X - Main.screenPosition.X, Projectile.Center.Y - Main.screenPosition.Y), new Microsoft.Xna.Framework.Rectangle?(new Rectangle(0, drawStart, texture.Width, height)), Color.White * Projectile.Opacity, Projectile.rotation, origin, Projectile.scale, SpriteEffects.None, 0);
 
         }
     }
