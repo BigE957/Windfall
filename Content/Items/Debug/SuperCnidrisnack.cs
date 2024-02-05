@@ -31,7 +31,8 @@ namespace Windfall.Content.Items.Debug
             Item.maxStack = 99;
             Item.bait = 25;
 
-            Item.width = Item.height = 16;
+            Item.width = 32;
+            Item.height = 34;
             Item.useStyle = ItemUseStyleID.Swing;
             Item.UseSound = SoundID.Item7;
             Item.value = CalamityGlobalItem.Rarity7BuyPrice;
@@ -47,7 +48,7 @@ namespace Windfall.Content.Items.Debug
             spriteBatch.Draw
             (
                 texture,
-                new Vector2(Item.Center.X - Main.screenPosition.X, Item.Center.Y - 8 - Main.screenPosition.Y),
+                new Vector2(Item.Center.X - Main.screenPosition.X, Item.Center.Y - Main.screenPosition.Y),
                 new Rectangle(0, 0, texture.Width, texture.Height),
                 Color.White,
                 rotation,

@@ -15,13 +15,13 @@ namespace Windfall.Content.Items.Utility
         public new string LocalizationCategory => "Items.Utility";
         public override string Texture => "Windfall/Assets/Items/Utility/IlmeranHorn";
 
-        public static readonly SoundStyle UseSound = new("Windfall/Assets/Sounds/Items/IlmeranHorn");
+        public static readonly SoundStyle UseSound = new("Windfall/Sounds/Items/IlmeranHorn");
 
         public override void SetDefaults()
         {
-            Item.useAnimation = Item.useTime = 60;
-            Item.width = 28;
-            Item.height = 24;
+            Item.useAnimation = Item.useTime = 60*3;
+            Item.width = 42;
+            Item.height = 32;
             Item.useStyle = ItemUseStyleID.HoldUp;
             Item.value = CalamityGlobalItem.Rarity2BuyPrice;
             Item.rare = ItemRarityID.Green;

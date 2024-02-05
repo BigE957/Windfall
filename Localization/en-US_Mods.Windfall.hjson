@@ -3,27 +3,27 @@
 Dialogue: {
 	IlmeranPaladin: {
 		StandardDialogue1: The desert will show you no mercy. Stay strong!
-		StandardDialogue2: Where could that sea horse have gotten off to...
-		StandardDialogue3: Care to rest a moment with me? This heat is exhausting; I know.
-		SandstormDialogue: The wind is howling most fiercely... Be warned, the creatures here have been stirred into a frenzy!
-		NoSandstormDialogue: The winds are calm... These sands can still be beautiful despite the regret they carry.
+		StandardDialogue2: Where could that sea horse have gotten off to...?
+		StandardDialogue3: Care to rest a moment with me? This heat is exhausting.
+		SandstormDialogue: The wind is howling most fiercely... Be warned, the creatures here are just as fierce!
+		NoSandstormDialogue: The breeze is calm... Somehow, these sands can still be beautiful despite all the regret they carry.
 		SavedDialogue: Geez... Was almost a goner there. Thanks for the rescue!
-		NoQuestDialogue: You've done all I could ask of you. Come back later, and maybe I'll have something more for you to do.
-		CnidrionHuntDialogueStart: Ever since the Incineration, the poor Cnidrion have been stirred into a frenzy! Would you do me a favor and lend me a hand in calming the poor guys down? All you gotta do is toss them one of these after you've tired them out a bit. Cnidrisnacks are their favorite! Once they've had one, they're sure to calm down, might even take a liking towards you. If you could handle 5 that'd be a real big help.
-		CnidrionHuntDialogueDuring: Those Cnidrions aren't gonna calm themselves down! Toss them a Cnidrisnack once they've been tuckered out, and they'll calm right down! If you can take care of 5 that'd be perfect.
+		NoQuestDialogue: You've done all I could ask of you. Come back later, and maybe I'll have an adventure to send you on.
+		CnidrionHuntDialogueStart: Ever since the Incineration, the poor Cnidrion have been stirred into a frenzy! Would you do me a favor and lend me a hand in calming the poor guys down? All you have to do is toss them one of these after you've tired them out a bit. Candied Plankton are their favourite treats! Once they've had one, they're sure to calm down, and might even take a liking towards you! If you could handle three that'd be just swell.
+		CnidrionHuntDialogueDuring: Those Cnidrions aren't gonna calm themselves down! Toss them a Candied Plankton once they've been tuckered out, and they'll calm right down! If you can take care of three that'd be perfect.
 		CnidrionHuntDialogueEnd: Nice work! Are those lick marks I see on you? Guess you're quite the Cnidrion tamer. You might've made a good paladin yourself!
 		ScoogHuntDialogueStart: I think you've proven yourself to be quite capable; perhaps even enough to lend me a hand in a real hunt. I'm sure you've felt the tremors below the sands. Take this, and you'll be able to lure out its source. Though be prepared for a fight once it surfaces.
 		ScoogHuntDialogueDuring: Just cast that line, and then we'll wait for her to surface. It can be a bit unnerving, I know.
-		ScoogHuntDialogueEnd: Well now, that sure was quite the fight, wasn't it! You fought like a real paladin out there! Almost reminds me of the days before the Incineration.
-		ShuckinClamsDialogueStart: With the Desert Scourge now laid to rest, it's now much safer to reach the Sunken Sea. Its a place dear to my heart, as the sole remnant of my people's kingdom. It holds many relics of Ilmeris' past, and I ask you to seek them out. Clams just love to gobble up anything they can find, but with this, you can open them right up and get at their treasure. Good luck on this treasure hunt! May fortune favor you.
-		ShuckinClamsDialogueDuring: Crack open five clams for me. They've managed to gobble up plenty of relics from Ilmeris' prime. You're sure to find some valuable treasures within their maws.
-		ShuckinClamsDialogueEnd: That's quite the haul you've got there! Looks like the shucking expedition was a success. Feel free to keep that knife, and feel free to keep shucking away if you please. Though, if you're up for it, there's something even bigger to shuck.
-		ClamHuntDialogueStart: Alright, you're a pretty good clam shucker, so I'm gonna need you to shuck one of the biggest clams there is. I'm sure you've seen it lying around during your time at the Sunken Sea, and I'm willing to bet it's a treasure trove for Ilmeran relics! Go give it a good shucking for me!
-		ClamHuntDialogueDuring: You just gotta hang around in the Sunken Sea a while, and that giant clam is sure to turn up. Then, you can give it a good shucking.
-		ClamHuntDialogueEnd: I can't believe it! King Amidias wasin that clam the whole time?! Thank you for the help, I'm certain if they were here, the entirety of Ilmeris would be ever grateful to you!
-		ScoogHunt2DialogueStart: Hey, nice to see you again! I've made quite the discovery since we last spoke... Apparently, there's another still living Scourge! However, its living in arguably even worse conditions than the former: The Sulphurous Sea. I feel bad for the poor thing, and I ask you lay it to rest as you did the first. That fishing rod I gave you should still be just as useful for luring it out of hiding!
-		ScoogHunt2DialogueDuring: Cast that rod I gave you into the Sulphurous Sea, and the other scourge'll come out just like the last. Though be ready for an even more dangerous fight!
-		ScoogHunt2DialogueEnd: Well done! I'm happy to know that the Scourges are at last resting peacefully, free from the torturous lives forced upon them by the Incineration. As always, I'm impressed by your skills. You've gone above and beyond as an Paladin, and made certain the King won't regret his decision.
+		ScoogHuntDialogueEnd: Well now, that sure was quite the fight, wasn't it! You fought like a real Paladin out there! Almost reminds me of the days before the Incineration...
+		ShuckinClamsDialogueStart: With the Desert Scourge now laid to rest, it's now much safer to reach the Sunken Sea. Its a place dear to my heart, as the sole remnant of my people's kingdom. It holds many relics of Ilmeris' past... may I ask you to seek them out? Clams just love to gobble up anything they can find, but with this, you can open them right up and get at their treasure. Good luck!
+		ShuckinClamsDialogueDuring: Crack open eight clams for me. They've managed to gobble up plenty of relics from Ilmeris' prime. You're sure to find some valuable treasures within their maws.
+		ShuckinClamsDialogueEnd: That's quite the haul you've got there! Looks like your shucking expedition was a success. Feel free to keep that knife and keep shucking away if you please. Though, if you're up for it... there's something even bigger you can shuck.
+		ClamHuntDialogueStart: Alright, you're a pretty good clam shucker, so I'm gonna need you to shuck one of the biggest clams there is. I'm sure you've seen it lying around during your time at the Sunken Sea, and I'm willing to bet it's a treasure trove of Ilmeran relics! Go give it a good shucking for me, and see what you can recover!
+		ClamHuntDialogueDuring: You just have to hang around in the Sunken Sea a while, and that giant clam is sure to turn up. Then, you can give it a good shucking.
+		ClamHuntDialogueEnd: I can't believe it! King Amidias was in that clam the whole time?! Thank you for the help, I'm certain if they were still here, the entirety of Ilmeris would be singing their praises!
+		ScoogHunt2DialogueStart: Hey, nice to see you again! I've made quite the discovery since we last spoke... Apparently, there's another still living Scourge! However, its in even worse condition than our friendly Desert scourge: The Sulphurous Sea. I feel bad for the poor thing, and I ask you lay it to rest as you did the first. That fishing rod I gave you should still be able to lure it out of hiding. Good luck!
+		ScoogHunt2DialogueDuring: Cast the rod I gave you into the Sulphurous Sea, and the other scourge will come out just like the last. Though be wary, it's likely far stronger than the last scourge.
+		ScoogHunt2DialogueEnd: Well done! I'm happy to know that the Scourges are at last resting peacefully, free from the suffering they had endured fromm the Incineration. As always, I'm impressed by your skills. You've gone above and beyond as an Paladin, and made certain the King won't regret his decision.
 	}
 
 	CalPotionSeller: {
@@ -50,11 +50,6 @@ Items: {
 
 		ProfanedWastesLore: {
 			DisplayName: The Profaned Wastes
-			Tooltip: ""
-		}
-
-		IllmerisLore: {
-			DisplayName: Illmeris
 			Tooltip: ""
 		}
 
@@ -222,20 +217,20 @@ Items: {
 			DisplayName: Voltaic Accumulator
 			Tooltip:
 				'''
-				Stores charge that can be used to instantly charge Arsenal Weapons.
+				Stores charge that can be used to instantly charge Arsenal Weapons
 				Right click this item while holding an Arsenal Weapon to charge it!
 				'''
 		}
 
 		IlmeranHorn: {
 			DisplayName: Ilmeran Horn
-			Tooltip: Echos a sound burned into the memory of all Ilmeran Paladins
+			Tooltip: Echoes a sound burned deep into the memory of all Ilmeran Paladins
 		}
 	}
 
 	Placeables: {
 		DatabaseTerminalItem: {
-			DisplayName: Database Terminal Item
+			DisplayName: Database Terminal
 			Tooltip:
 				'''
 				An advanced terminal that grants access to Draedon's Database
@@ -261,7 +256,7 @@ Items: {
 			Tooltip:
 				'''
 				A tool used by Ilmeran tradesmen to force open even the largest of clams
-				Use on Clams to shuck them, causing them to drop what they have hidden inside
+				Use on Clams to shuck them, forcing them to spit out any treasures they may have eaten
 				'''
 		}
 	}
@@ -288,7 +283,7 @@ Projectiles: {
 }
 
 JournalContents: {
-	Forest: "    Today marks the beginning of my journey across these expansive lands I’ve called my home. For all my life, I’ve lived within these forests. I’ve carved out a simple, peaceful life for myself, in a world where peace seems to get rarer each day. Now as I’ve grown older, a longing has grown deep inside my heart. I want to see. I want to know. I’ve heard so much from travellers and passersby of the wonders they have seen. The aurora’s of the tundras, the ruins of Ilmeris, the verdant fauna of the jungles, and so, so much more. I write this now as a farewell to the life I once knew, and as the beginning of my chronicling of this journey I am soon to set off on. Goodbye, I shall hold onto the memories I’ve made here with each step I take."
+	Forest: Today marks the beginning of my journey across these expansive lands I’ve called my home. For all my life, I’ve lived within these forests. I’ve carved out a simple, peaceful life for myself, in a world where peace seems to get rarer each day. Now as I’ve grown older, a longing has grown deep inside my heart. I want to see. I want to know. I’ve heard so much from travellers and passersby of the wonders they have seen. The aurora’s of the tundras, the ruins of Ilmeris, the verdant fauna of the jungles, and so, so much more. I write this now as a farewell to the life I once knew, and as the beginning of my chronicling of this journey I am soon to set off on. Goodbye, I shall hold onto the memories I’ve made here with each step I take.
 	Tundra:
 		'''
 		    I’ve always heard stories of the unnatural, eternal winter of the tundra, but only now do I see it for myself. The snowfall is mesmerising, it is something I have only witnessed on rare occasions back home, but here it seems to be near constant. I’ve had the pleasure of encountering a few of this region’s native wildlife, Penguins. Such cute little things they are, and they are quite friendly. One even came up to me and let me pet him!
@@ -309,8 +304,8 @@ JournalContents: {
 
 		    Even then, we had yet to reach the ruins themselves! My friend and his great steed led me there. The ruins were of an outpost placed in the lowest depths of Ilmeris. Its purpose, the paladin explained to me, was to protect the kingdom from threats which lie even further below. These ruins are now the place these two called home, though they spent most of their time on the surface. Even though their kingdom has long been gone, they still hold onto their duty to protect what remains of it. They’re dedication is admirable, and I shall hold these two in my memory as I continue forth on my travels.
 		'''
-	Corruption: "    After my exploration of Ilmeris, I’ll admit, I wasn’t looking forward to this next place. I intend to make my stay in this place brief. The Corruption, as it is now known, was once the site of a great battle. Little of what took place during this war is known now, but what is remembered is that the evils vanquished here formed into this foul, abominable sickness upon the earth. The horrors which call this place their home are as frightful as they are deadly. I shan’t stay here a moment longer."
-	Crimson: "    After my exploration of Ilmeris, I’ll admit, I wasn’t looking forward to this next place. I intend to make my stay in this place brief. The Crimson, as it is now known, was once the site of a great battle. Little of what took place during this war is known now, but what is remembered is that the blood shed here formed into this foul, abominable sickness upon the earth. The horrors which call this place their home are as frightful as they are deadly. I shan’t stay here a moment longer."
+	Corruption: After my exploration of Ilmeris, I’ll admit, I wasn’t looking forward to this next place. I intend to make my stay in this place brief. The Corruption, as it is now known, was once the site of a great battle. Little of what took place during this war is known now, but what is remembered is that the evils vanquished here formed into this foul, abominable sickness upon the earth. The horrors which call this place their home are as frightful as they are deadly. I shan’t stay here a moment longer.
+	Crimson: After my exploration of Ilmeris, I’ll admit, I wasn’t looking forward to this next place. I intend to make my stay in this place brief. The Crimson, as it is now known, was once the site of a great battle. Little of what took place during this war is known now, but what is remembered is that the blood shed here formed into this foul, abominable sickness upon the earth. The horrors which call this place their home are as frightful as they are deadly. I shan’t stay here a moment longer.
 	Jungle:
 		'''
 		    With haste to escape those lands most foul, I next headed somewhere far greener. I had heard much of the beauty the Jungles held from explorers and adventurers, but to see the colourful menagary of fauna in person was a completely different experience. Their words had failed to describe the beauty of such a place, and I doubt mine will either.
@@ -325,12 +320,12 @@ JournalContents: {
 
 		    I still think of you often. I wonder, do you see me now, from wherever it is that you rest? Have you followed me on this journey? I hold it in my heart that you have. I hope you are proud of how far I’ve come. I hope you’ll follow me to this journey’s end… Ah… I mustn’t dwell too long. Farewell, till we meet again, my friend.
 		'''
-	Dungeon: "    I’ve stumbled upon a strange structure in the midst of my travels. It is quite unlike anything I’ve ever seen. It gives off a most foul odour, the scent of death. I warrilly approached its entrance, tall pillars lined my path. Strangely, I found an old man wandering about its entrance. I called out to him, but as he turned to face me, I could tell something was off. The way he walked towards me, even for an elder, was strange, almost… puppet-like? As he finally reached speaking distance, he froze, then suddenly began shouting, demanding I flee. Now let me tell you, fleeing is exactly what I did. I ran like my life depended on it! I’m actually still quite sure it did."
-	Sulphur: "    What a strange place. I suppose it is true that often the most tragic of things can still often be the most beautiful. While I cannot deny the horror of what has taken place here, there is still something gorgeous here. These noxious, teal waters still glimmer the same as any other, possibly even more so. The steam and gases which on a rarity burst from the depths are a wonder. Truly there is no place in this world quite like this one. Were its denizens not so dangerous, I’d have liked to spend some more time here."
-	Aerie1: "    When I set forth on this journey, oh so long ago, there was one place, above all others, that I desired to step foot in: the Dragon’s Aerie. What a storied place indeed! The long abandoned home of the Dragons! To think, such mythical beasts once roamed this place, and so commonly at that! To at last step foot here is indeed a dream come true. The air here is quite thin, but I’ll gladly put up with it. The landscape is painted a golden orange, and the tree pierce the heavens! It's as if I’m standing within a piece of art! This place is covered head to toe in ruins older than Ilmeris, probably some of the oldest still standing! These ancient carvings… They depict humans and dragons alike. Was there once a time where the two of our species coexisted? I have oh, so many questions!"
-	Aerie2: "    Today I stumbled upon my greatest discovery yet, some sort of mausoleum. However, these graves… They’re massive! They must indeed belong to the dragons! There are so many… Further in I more carvings, and what they depicted was most fascinating. They depicted a grand battle among the stars in which a mighty dragon battled against… the Moon? What a strange story. It seems this mausoleum holds those who died in that battle. I could likely spend an eternity exploring just these vast halls. Perhaps one day I might document each dragon who lays here. However, I see no sign of the dragon depicted in the mural… It doesn’t show his death either… Perhaps I might find more about this legend if I continue my exploration."
-	Aerie3: "    I have climbed the great mountain which lies at the Aerie’s centre, and it is here I find what I can only describe as a marvel. It is a skeleton, the fossils of an ancient dragon preserved to perfection. Judging by its shape, this is the dragon I saw depicted in the mausoleum’s mural… the Dragon King… I cannot help but wonder what must’ve transpired here… The land here seems almost scorched, burnt by... something. A battle perhaps? Though this skeleton positioning makes that seem unlikely… Every discovery I’ve made here seems only to raise more questions…"
-	Aerie4: "    (Last Part TBA)"
+	Dungeon: I’ve stumbled upon a strange structure in the midst of my travels. It is quite unlike anything I’ve ever seen. It gives off a most foul odour, the scent of death. I warrilly approached its entrance, tall pillars lined my path. Strangely, I found an old man wandering about its entrance. I called out to him, but as he turned to face me, I could tell something was off. The way he walked towards me, even for an elder, was strange, almost… puppet-like? As he finally reached speaking distance, he froze, then suddenly began shouting, demanding I flee. Now let me tell you, fleeing is exactly what I did. I ran like my life depended on it! I’m actually still quite sure it did.
+	Sulphur: What a strange place. I suppose it is true that often the most tragic of things can still often be the most beautiful. While I cannot deny the horror of what has taken place here, there is still something gorgeous here. These noxious, teal waters still glimmer the same as any other, possibly even more so. The steam and gases which on a rarity burst from the depths are a wonder. Truly there is no place in this world quite like this one. Were its denizens not so dangerous, I’d have liked to spend some more time here.
+	Aerie1: When I set forth on this journey, oh so long ago, there was one place, above all others, that I desired to step foot in: the Dragon’s Aerie. What a storied place indeed! The long abandoned home of the Dragons! To think, such mythical beasts once roamed this place, and so commonly at that! To at last step foot here is indeed a dream come true. The air here is quite thin, but I’ll gladly put up with it. The landscape is painted a golden orange, and the tree pierce the heavens! It's as if I’m standing within a piece of art! This place is covered head to toe in ruins older than Ilmeris, probably some of the oldest still standing! These ancient carvings… They depict humans and dragons alike. Was there once a time where the two of our species coexisted? I have oh, so many questions!
+	Aerie2: Today I stumbled upon my greatest discovery yet, some sort of mausoleum. However, these graves… They’re massive! They must indeed belong to the dragons! There are so many… Further in I more carvings, and what they depicted was most fascinating. They depicted a grand battle among the stars in which a mighty dragon battled against… the Moon? What a strange story. It seems this mausoleum holds those who died in that battle. I could likely spend an eternity exploring just these vast halls. Perhaps one day I might document each dragon who lays here. However, I see no sign of the dragon depicted in the mural… It doesn’t show his death either… Perhaps I might find more about this legend if I continue my exploration.
+	Aerie3: I have climbed the great mountain which lies at the Aerie’s centre, and it is here I find what I can only describe as a marvel. It is a skeleton, the fossils of an ancient dragon preserved to perfection. Judging by its shape, this is the dragon I saw depicted in the mausoleum’s mural… the Dragon King… I cannot help but wonder what must’ve transpired here… The land here seems almost scorched, burnt by... something. A battle perhaps? Though this skeleton positioning makes that seem unlikely… Every discovery I’ve made here seems only to raise more questions…
+	Aerie4: (Last Part TBA)
 }
 
 LoreItems: {

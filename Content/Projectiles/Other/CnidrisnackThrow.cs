@@ -12,7 +12,8 @@ namespace Windfall.Content.Projectiles.Other
         public override string Texture => "Windfall/Assets/Items/Weapons/Misc/Cnidrisnack";
         public override void SetDefaults()
         {
-            Projectile.width = Projectile.height = 16;
+            Projectile.width = 38;
+            Projectile.height = 40;
             Projectile.DamageType = DamageClass.Default;
             Projectile.friendly = true;
             Projectile.penetrate = 1;

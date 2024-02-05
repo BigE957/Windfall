@@ -13,8 +13,8 @@ namespace Windfall.Content.Projectiles.Fishing
         public override string Texture => "Windfall/Assets/Projectiles/Fishing/AncientIlmeranBobber";
         public override void SetDefaults()
         {
-            Projectile.width = 14;
-            Projectile.height = 14;
+            Projectile.width = 18;
+            Projectile.height = 30;
             Projectile.aiStyle = ProjAIStyleID.Bobber;
             Projectile.bobber = true;
             Projectile.penetrate = -1;
