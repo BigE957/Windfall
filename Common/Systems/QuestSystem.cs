@@ -81,8 +81,8 @@ namespace Windfall.Common.Systems
             List<Quest> list = new()
             {
                 CreateQuest("CnidrionHunt", new List<string>{"Pacify 5 Cnidrions"}, new List<int>{5}, true, new List<QuestItem>{ new QuestItem { Type = ModContent.ItemType<Cnidrisnack>(), Stack = 5 } }, new List<QuestItem>{ new QuestItem { Type = ModContent.ItemType<CnidrionBanner>(), Stack = 4 }, new QuestItem {Type = ModContent.ItemType<AmidiasSpark>(), Stack = 1} }),
-                CreateQuest("ScoogHunt", new List<string>{"Defeat Desert Scourge"}, new List<int>{1}, QuestLog[0].Completed == true, new List<QuestItem>{ new QuestItem { Type = ModContent.ItemType<AncientIlmeranRod>(), Stack = 1 }, new QuestItem { Type = ModContent.ItemType<Cnidrisnack>(), Stack = 5 } }, new List<QuestItem>{ new QuestItem { Type = ModContent.ItemType<DesertScourgeTrophy>(), Stack = 1 } })
-                CreateQuest("ScoogHunt2", new List<string>{"Defeat Aquatic Scourge"}, new List<int>{1}, QuestLog[0].Completed == true && Main.hardMode, null, new List<QuestItem>{ new QuestItem { Type = ModContent.ItemType<AquaticScourgeTrophy>(), Stack = 1 } })
+                CreateQuest("ScoogHunt", new List<string>{"Defeat Desert Scourge"}, new List<int>{1}, QuestLog[0].Completed == true, new List<QuestItem>{ new QuestItem { Type = ModContent.ItemType<AncientIlmeranRod>(), Stack = 1 }, new QuestItem { Type = ModContent.ItemType<Cnidrisnack>(), Stack = 5 } }, new List<QuestItem>{ new QuestItem { Type = ModContent.ItemType<DesertScourgeTrophy>(), Stack = 1 } }),
+                CreateQuest("ScoogHunt2", new List<string>{"Defeat Aquatic Scourge"}, new List<int>{1}, QuestLog[0].Completed == true && Main.hardMode, null, new List<QuestItem>{ new QuestItem { Type = ModContent.ItemType<AquaticScourgeTrophy>(), Stack = 1 } }),
 
             };
             return list;
