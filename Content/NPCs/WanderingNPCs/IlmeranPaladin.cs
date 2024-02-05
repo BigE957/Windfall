@@ -16,9 +16,10 @@ using Microsoft.Xna.Framework;
 using Terraria.GameContent.Events;
 using Windfall.Common.Utilities;
 using Terraria.DataStructures;
-using CalamityMod.Projectiles.Melee;
 using CalamityMod.Projectiles.Rogue;
 using Windfall.Content.Items.Weapons.Misc;
+using Windfall.Common.Systems;
+using Windfall.Content.Items.Fishing;
 
 namespace Windfall.Content.NPCs.WanderingNPCs
 {
@@ -197,9 +198,11 @@ namespace Windfall.Content.NPCs.WanderingNPCs
 
         public override void AddShops()
         {
+            int desertScoogQuestIndex = QuestSystem.QuestLog.FindIndex(quest => quest.Name == "ScoogHunt");
             new NPCShop(Type)
                 .Add<AmidiasSpark>()
                 .Add<Cnidrisnack>()
+                .Add<AncientIlmeranRod>(WindfallConditions.ScoogHunt1ActiveOrCompleted)
                 .Register();
         }
 
