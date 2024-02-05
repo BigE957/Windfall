@@ -25,7 +25,7 @@ namespace Windfall.Content.Projectiles.NPCAnimations
 
         public override void SetStaticDefaults()
         {
-            Main.projFrames[Type] = 25;
+            Main.projFrames[Type] = 1;
         }
         public override void SetDefaults()
         {

@@ -213,7 +213,7 @@ Items: {
 
 		SuperCnidrisnack: {
 			DisplayName: Super Cnidrisnack
-			Tooltip: "Not even the most defiant of Cnidrions can resist its taste!"
+			Tooltip: Not even the most defiant of Cnidrions can resist its taste!
 		}
 	}
 
@@ -226,9 +226,10 @@ Items: {
 				Right click this item while holding an Arsenal Weapon to charge it!
 				'''
 		}
+
 		IlmeranHorn: {
 			DisplayName: Ilmeran Horn
-			Tooltip: "Echos a sound burned into the memory of all Ilmeran Paladins"
+			Tooltip: Echos a sound burned into the memory of all Ilmeran Paladins
 		}
 	}
 
@@ -264,8 +265,6 @@ Items: {
 				'''
 		}
 	}
-
-	
 }
 
 NPCs: {
