@@ -7,13 +7,15 @@ using Terraria.ID;
 using Terraria.ModLoader;
 using Terraria;
 using Windfall.Content.Projectiles.Other;
+using CalamityMod.Items.Ammo;
+using CalamityMod.Projectiles.Ranged;
 
 namespace Windfall.Content.Items.Debug
 {
     public class SuperCnidrisnack : ModItem, ILocalizedModType
     {
         public new string LocalizationCategory => "Items.Debug";
-        public override string Texture => "Windfall/Assets/Items/Weapons/Misc/Cnidrisnack";
+        public override string Texture => "Windfall/Assets/Items/Debug/SuperCnidrisnack";
 
         public override void SetDefaults()
         {
@@ -25,7 +27,7 @@ namespace Windfall.Content.Items.Debug
             Item.autoReuse = false;
             Item.consumable = true;
             Item.shootSpeed = 14f;
-            Item.shoot = ModContent.ProjectileType<CnidrisnackThrow>();
+            Item.shoot = ModContent.ProjectileType<SuperCnidrisnackThrow>();
             Item.maxStack = 99;
             Item.bait = 25;
 
@@ -41,7 +43,7 @@ namespace Windfall.Content.Items.Debug
         }
         public override void PostDrawInWorld(SpriteBatch spriteBatch, Color lightColor, Color alphaColor, float rotation, float scale, int whoAmI)
         {
-            Texture2D texture = ModContent.Request<Texture2D>("Windfall/Assets/Items/Weapons/Misc/Cnidrisnack_Glow", AssetRequestMode.ImmediateLoad).Value;
+            Texture2D texture = ModContent.Request<Texture2D>("Windfall/Assets/Items/Debug/SuperCnidrisnack_Glow", AssetRequestMode.ImmediateLoad).Value;
             spriteBatch.Draw
             (
                 texture,
