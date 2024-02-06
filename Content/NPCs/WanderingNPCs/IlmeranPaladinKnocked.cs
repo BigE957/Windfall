@@ -61,10 +61,10 @@ namespace Windfall.Content.NPCs.WanderingNPCs
         public override void AddShops()
         {
             new NPCShop(Type)
-                .Add<AmidiasSpark>()
-                .Add<Cnidrisnack>()
-                .Add<AncientIlmeranRod>(WindfallConditions.ScoogHunt1ActiveOrCompleted)
-                .Add<IlmeranHorn>(WindfallConditions.ScoogHunt1Completed)
+                .AddWithCustomValue<AmidiasSpark>(5000)
+                .AddWithCustomValue<Cnidrisnack>(50)
+                .AddWithCustomValue<AncientIlmeranRod>(1000, WindfallConditions.ScoogHunt1ActiveOrCompleted)
+                .AddWithCustomValue<IlmeranHorn>(2000, WindfallConditions.ScoogHunt1Completed)
                 .Register();
         }
 

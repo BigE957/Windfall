@@ -22,6 +22,7 @@ using Windfall.Common.Systems;
 using Windfall.Content.Items.Fishing;
 using Windfall.Content.Items.Utility;
 using CalamityMod.NPCs.DesertScourge;
+using CalamityMod;
 
 namespace Windfall.Content.NPCs.WanderingNPCs
 {
@@ -200,10 +201,10 @@ namespace Windfall.Content.NPCs.WanderingNPCs
         public override void AddShops()
         {
             new NPCShop(Type)
-                .Add<AmidiasSpark>()
-                .Add<Cnidrisnack>()
-                .Add<AncientIlmeranRod>(WindfallConditions.ScoogHunt1ActiveOrCompleted)
-                .Add<IlmeranHorn>(WindfallConditions.ScoogHunt1Completed)
+                .AddWithCustomValue<AmidiasSpark>(50000)
+                .AddWithCustomValue<Cnidrisnack>(500)
+                .AddWithCustomValue<AncientIlmeranRod>(10000, WindfallConditions.ScoogHunt1ActiveOrCompleted)
+                .AddWithCustomValue<IlmeranHorn>(20000, WindfallConditions.ScoogHunt1Completed)
                 .Register();
         }
 
