@@ -8,8 +8,9 @@ using CalamityMod;
 using CalamityMod.NPCs.Crags;
 using CalamityMod.Dusts;
 using Windfall.Content.NPCs.WorldEvents;
+using Windfall.Common.Systems.WorldEvents;
 
-namespace Windfall.Content.WorldEvents.CalClone
+namespace Windfall.Content.Projectiles.WorldEvents
 {
     public class CalCloneProj : ModProjectile
     {

@@ -9,13 +9,7 @@ using CalamityMod;
 using Terraria.ID;
 using CalamityMod.Dusts;
 using CalamityMod.Projectiles.Melee;
-using CalamityMod.Items.Weapons.Rogue;
 using Terraria.Audio;
-using Microsoft.Xna.Framework.Input;
-using Terraria.DataStructures;
-using Windfall.Content.WorldEvents.CalClone;
-using CalamityMod.Items.Weapons.Ranged;
-using CalamityMod.Projectiles.Ranged;
 
 namespace Windfall.Content.Projectiles.Melee
 {
