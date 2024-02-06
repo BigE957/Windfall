@@ -305,6 +305,7 @@ Projectiles: {
 	AncientIlmeranBobber.DisplayName: Ancient Ilmeran Bobber
 	IlmeranPaladinDig.DisplayName: Ilmeran Paladin
 	SuperCnidrisnackThrow.DisplayName: Super Cnidrisnack Throw
+	PostEvil2Statis.DisplayName: Statis
 }
 
 JournalContents: {
