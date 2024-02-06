@@ -9,26 +9,28 @@ using CalamityMod.NPCs.Crags;
 using CalamityMod.Dusts;
 using Windfall.Content.NPCs.WorldEvents;
 using Windfall.Common.Systems.WorldEvents;
+using Windfall.Common.Utilities;
 
 namespace Windfall.Content.Projectiles.WorldEvents
 {
     public class CalCloneProj : ModProjectile
     {
         //nabs some sounds from Calamity
-        public static readonly SoundStyle DashSound = new("CalamityMod/Sounds/Custom/SCalSounds/SCalDash");
-        public static readonly SoundStyle CalCloneTeleport = new("CalamityMod/Sounds/Custom/SCalSounds/BrimstoneHellblastSound");
-        public static readonly SoundStyle BrotherSummon = new("CalamityMod/Sounds/Custom/SCalSounds/BrimstoneBigShoot");
+        private static readonly SoundStyle DashSound = new("CalamityMod/Sounds/Custom/SCalSounds/SCalDash");
+        private static readonly SoundStyle Teleport = new("CalamityMod/Sounds/Custom/SCalSounds/BrimstoneHellblastSound");
+        private static readonly SoundStyle BrotherSummon = new("CalamityMod/Sounds/Custom/SCalSounds/BrimstoneBigShoot");
         //ai states define what our projectile should be doing
-        public enum AIState
+        private enum AIState
         {
+            Spawning,
             WaitingForPlayer,
             Shocked,
             Summoning,
             Fleeing,
         }
-        public float i = 0f;
+        private float i = 0f;
         //defines CurrentAI and how it interacts with Projectile.ai
-        public AIState CurrentAI
+        private AIState CurrentAI
         {
             get => (AIState)Projectile.ai[0];
             set => Projectile.ai[0] = (int)value;
@@ -62,7 +64,7 @@ namespace Windfall.Content.Projectiles.WorldEvents
                     Dust d = Dust.NewDustPerfect(Projectile.Center, DustID.Blood, speed * 5, Scale: 1.5f);
                     d.noGravity = true;
                 }
-                SoundEngine.PlaySound(CalCloneTeleport, Projectile.Center);
+                SoundEngine.PlaySound(Teleport, Projectile.Center);
                 Projectile.Kill();
             }
 
@@ -80,6 +82,12 @@ namespace Windfall.Content.Projectiles.WorldEvents
 
             switch (CurrentAI)
             {
+                case AIState.Spawning:
+                    if (Utilities.AlignProjectileWithGround(Main.projectile[Projectile.whoAmI]))
+                        Projectile.position.Y = closestPlayer.position.Y;
+                    CurrentAI = AIState.WaitingForPlayer;
+                    break;
+                    
                 case AIState.WaitingForPlayer:
                     //waits until the player is close by
                     if (Projectile.WithinRange(closestPlayer.Center, 320f))
@@ -196,7 +204,7 @@ namespace Windfall.Content.Projectiles.WorldEvents
                             Dust d = Dust.NewDustPerfect(Projectile.Center, DustID.Blood, speed * 5, Scale: 1.5f);
                             d.noGravity = true;
                         }
-                        SoundEngine.PlaySound(CalCloneTeleport, Projectile.Center);
+                        SoundEngine.PlaySound(Teleport, Projectile.Center);
                         Projectile.Kill();
                     }
                     else if (i == 31)
@@ -207,11 +215,6 @@ namespace Windfall.Content.Projectiles.WorldEvents
                     }
                     break;
             }
-        }
-        public override bool OnTileCollide(Vector2 oldVelocity)
-        {
-            Projectile.position.Y -= 16;
-            return false;
         }
     }
 }

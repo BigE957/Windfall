@@ -25,5 +25,39 @@ namespace Windfall.Common.Utilities
                 return v;
             return result.ToWorldCoordinates();
         }
+        public static bool AlignProjectileWithGround(Projectile Projectile)
+        {
+            bool InsideTiles = Collision.SolidCollision(Projectile.position, Projectile.width, Projectile.height);
+            int i;
+            if (InsideTiles)
+                for (i = 0; i < 200; i++)
+                {
+                    InsideTiles = Collision.SolidCollision(Projectile.position, Projectile.width, Projectile.height);
+                    if (InsideTiles)
+                    {
+                        Projectile.position.Y -= 1;
+                    }
+                    else
+                    {
+                        Projectile.position.Y += 1;
+                        return true;
+                    }
+                }
+            else
+                for (i = 0; i < 200; i++)
+                {
+                    InsideTiles = Collision.SolidCollision(Projectile.position, Projectile.width, Projectile.height);
+                    if (InsideTiles)
+                    {
+                        Projectile.position.Y -= 1;
+                        return true;
+                    }
+                    else
+                    {
+                        Projectile.position.Y += 1;
+                    }
+                }
+            return false;
+        }
     }
 }
