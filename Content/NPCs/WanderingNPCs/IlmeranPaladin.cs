@@ -242,7 +242,6 @@ namespace Windfall.Content.NPCs.WanderingNPCs
         {
             multiplier = 12f;
             randomOffset = 2f;
-            // SparklingBall is not affected by gravity, so gravityCorrection is left alone.
         }
     }
 }

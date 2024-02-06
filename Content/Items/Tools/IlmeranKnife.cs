@@ -79,6 +79,11 @@ namespace Windfall.Content.Items.Tools
                             QuestSystem.IncrementQuestProgress(questIndex, 0);
                     }
             }
+            if(target.type == ModContent.NPCType<PrismBack>())
+            {
+                if(Main.rand.NextBool(3))
+                    Item.NewItem(Item.GetSource_DropAsItem(), target.Center, target.Size,ModContent.ItemType<PrismShard>(), Main.rand.Next(3, 5));
+            }
         }
     }
 }
