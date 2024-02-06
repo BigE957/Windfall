@@ -21,6 +21,7 @@ using Windfall.Content.Items.Weapons.Misc;
 using Windfall.Common.Systems;
 using Windfall.Content.Items.Fishing;
 using Windfall.Content.Items.Utility;
+using CalamityMod.NPCs.DesertScourge;
 
 namespace Windfall.Content.NPCs.WanderingNPCs
 {
@@ -91,7 +92,6 @@ namespace Windfall.Content.NPCs.WanderingNPCs
             NPC.DeathSound = SoundID.NPCDeath1;
             NPC.knockBackResist = 0.5f;
             NPC.ai[1] = 0;
-
             AnimationType = NPCID.Guide;
         }
         public override void OnSpawn(IEntitySource source)
@@ -205,6 +205,18 @@ namespace Windfall.Content.NPCs.WanderingNPCs
                 .Add<AncientIlmeranRod>(WindfallConditions.ScoogHunt1ActiveOrCompleted)
                 .Add<IlmeranHorn>(WindfallConditions.ScoogHunt1Completed)
                 .Register();
+        }
+
+        public override bool CheckActive()
+        {
+            if (NPC.AnyNPCs(ModContent.NPCType<DesertScourgeHead>()))
+            {
+                return false;
+            }
+            else
+            {
+                return true;
+            }
         }
 
         public override void TownNPCAttackStrength(ref int damage, ref float knockback)
