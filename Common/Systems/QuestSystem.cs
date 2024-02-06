@@ -1,4 +1,5 @@
-﻿using CalamityMod.Items.Accessories;
+﻿using CalamityMod;
+using CalamityMod.Items.Accessories;
 using CalamityMod.Items.Placeables.Banners;
 using CalamityMod.Items.Placeables.Furniture.Trophies;
 using System;
@@ -8,6 +9,7 @@ using Terraria;
 using Terraria.ModLoader;
 using Terraria.ModLoader.IO;
 using Windfall.Content.Items.Fishing;
+using Windfall.Content.Items.SummonItems;
 using Windfall.Content.Items.Tools;
 using Windfall.Content.Items.Weapons.Misc;
 using Windfall.Content.Projectiles.Fishing;
@@ -81,11 +83,60 @@ namespace Windfall.Common.Systems
         {
             List<Quest> list = new()
             {
-                CreateQuest("CnidrionHunt", new List<string>{"Pacify 3 Cnidrions"}, new List<int>{3}, true, new List<QuestItem>{ new QuestItem { Type = ModContent.ItemType<Cnidrisnack>(), Stack = 5 } }, new List<QuestItem>{ new QuestItem { Type = ModContent.ItemType<CnidrionBanner>(), Stack = 4 }, new QuestItem {Type = ModContent.ItemType<AmidiasSpark>(), Stack = 1} }),
-                CreateQuest("ScoogHunt", new List<string>{"Defeat Desert Scourge"}, new List<int>{1}, true, new List<QuestItem>{ new QuestItem { Type = ModContent.ItemType<AncientIlmeranRod>(), Stack = 1 }, new QuestItem { Type = ModContent.ItemType<Cnidrisnack>(), Stack = 5 } }, new List<QuestItem>{ new QuestItem { Type = ModContent.ItemType<DesertScourgeTrophy>(), Stack = 1 } }),
-                CreateQuest("ShuckinClams", new List<string>{"Shuck 8 Clams"}, new List<int>{8}, true, new List<QuestItem>{ new QuestItem { Type = ModContent.ItemType<IlmeranKnife>(), Stack = 1 } }, new List<QuestItem>{ new QuestItem { Type = ModContent.ItemType<ClamBanner>(), Stack = 4 } }),
-                CreateQuest("ClamHunt", new List<string>{"Defeat the Giant Clam"}, new List<int>{1}, true, null, new List<QuestItem>{ new QuestItem { Type = ModContent.ItemType<GiantClamTrophy>(), Stack = 1 } }),
-                CreateQuest("ScoogHunt2", new List<string>{"Defeat Aquatic Scourge"}, new List<int>{1}, Main.hardMode, null, new List<QuestItem>{ new QuestItem { Type = ModContent.ItemType<AquaticScourgeTrophy>(), Stack = 1 } }),
+                CreateQuest
+                (
+                    "CnidrionHunt", 
+                    new List<string>{"Pacify 3 Cnidrions"}, 
+                    new List<int>{3}, 
+                    true, 
+                    new List<QuestItem>{ new QuestItem { Type = ModContent.ItemType<Cnidrisnack>(), Stack = 5 } }, 
+                    new List<QuestItem>{ new QuestItem { Type = ModContent.ItemType<CnidrionBanner>(), Stack = 4 }, new QuestItem {Type = ModContent.ItemType<AmidiasSpark>(), Stack = 1} }
+                ),
+                CreateQuest
+                (
+                    "ScoogHunt", 
+                    new List<string>{"Defeat Desert Scourge"}, 
+                    new List<int>{1}, 
+                    true, 
+                    new List<QuestItem>{ new QuestItem { Type = ModContent.ItemType<AncientIlmeranRod>(), Stack = 1 }, new QuestItem { Type = ModContent.ItemType<Cnidrisnack>(), Stack = 5 } }, 
+                    new List<QuestItem>{ new QuestItem { Type = ModContent.ItemType<DesertScourgeTrophy>(), Stack = 1 } }
+                ),
+                CreateQuest
+                (
+                    "ShuckinClams", 
+                    new List<string>{"Shuck 8 Clams"}, 
+                    new List<int>{8}, 
+                    true, 
+                    new List<QuestItem>{ new QuestItem { Type = ModContent.ItemType<IlmeranKnife>(), Stack = 1 } }, 
+                    new List<QuestItem>{ new QuestItem { Type = ModContent.ItemType<ClamBanner>(), Stack = 4 } }
+                ),
+                CreateQuest
+                (
+                    "ClamHunt", 
+                    new List<string>{"Defeat the Giant Clam"}, 
+                    new List<int>{1}, 
+                    true, 
+                    null, 
+                    new List<QuestItem>{ new QuestItem { Type = ModContent.ItemType<GiantClamTrophy>(), Stack = 1 } }
+                ),
+                CreateQuest
+                (
+                    "ScoogHunt2", 
+                    new List<string>{"Defeat Aquatic Scourge"}, 
+                    new List<int>{1}, 
+                    Main.hardMode, 
+                    null, 
+                    new List<QuestItem>{ new QuestItem { Type = ModContent.ItemType<AquaticScourgeTrophy>(), Stack = 1 } }
+                ),
+                CreateQuest
+                (
+                    "SlimeGodHunt", 
+                    new List<string>{"Defeat Slime God"}, 
+                    new List<int>{1}, 
+                    DownedBossSystem.downedHiveMind || DownedBossSystem.downedPerforator, 
+                    new List<QuestItem>{ new QuestItem { Type = ModContent.ItemType<RuneOfGula>(), Stack = 1 } }, 
+                    new List<QuestItem>{ new QuestItem { Type = ModContent.ItemType<SlimeGodTrophy>(), Stack = 1 } }
+                ),
 
             };
             return list;

@@ -24,7 +24,7 @@ namespace Windfall.Content.NPCs
                 QuestSystem.IncrementQuestProgress(QuestSystem.QuestLog.FindIndex(quest => quest.Name == "ClamHunt"), 0);
 
             if (npc.type == calamity.Find<ModNPC>("SlimeGodCore").Type)
-                QuestSystem.IncrementQuestProgress(QuestSystem.QuestLog.FindIndex(quest => quest.Name == "SlimeGodHunt"), 0);
+                QuestSystem.IncrementQuestProgress(QuestSystem.QuestLog.FindIndex(quest => quest.Name == "SlimeGodHuntth"), 0);
 
             if (npc.type == calamity.Find<ModNPC>("AquaticScourgeHead").Type)
                 QuestSystem.IncrementQuestProgress(QuestSystem.QuestLog.FindIndex(quest => quest.Name == "ScoogHunt2"), 0);

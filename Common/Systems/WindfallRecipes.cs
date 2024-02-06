@@ -2,6 +2,7 @@
 using Terraria.ModLoader;
 using CalamityMod.Items.Materials;
 using CalamityMod.Items.SummonItems;
+using CalamityMod.Items.PermanentBoosters;
 
 namespace Windfall.Common.Systems
 {
@@ -23,6 +24,10 @@ namespace Windfall.Common.Systems
                 if (recipe.HasResult(ModContent.ItemType<EyeofDesolation>()))
                 {
                     recipe.AddIngredient(ModContent.ItemType<AshesofCalamity>(), 5);
+                }
+                if (recipe.HasResult(ModContent.ItemType<OverloadedSludge>()))
+                {
+                    recipe.AddIngredient(ModContent.ItemType<PurifiedGel>(), 5);
                 }
             }
         }
