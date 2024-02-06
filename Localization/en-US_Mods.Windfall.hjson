@@ -252,11 +252,12 @@ Items: {
 
 	Tools: {
 		IlmeranKnife: {
-			DisplayName: Ilmeran Shucker
+			DisplayName: Ilmeran Carving Knife
 			Tooltip:
 				'''
-				A tool used by Ilmeran tradesmen to force open even the largest of clams
+				A tool used by Ilmeran tradesmen for a variety of purposes 
 				Use on Clams to shuck them, forcing them to spit out any treasures they may have eaten
+				Use on Prism-Backs to carve Prism Shards off of them
 				'''
 		}
 	}
