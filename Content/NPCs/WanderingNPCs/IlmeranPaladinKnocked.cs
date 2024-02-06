@@ -1,10 +1,14 @@
 ﻿using CalamityMod;
 using CalamityMod.Items.Accessories;
+using CalamityMod.NPCs.DesertScourge;
 using Terraria;
 using Terraria.ID;
 using Terraria.Localization;
 using Terraria.ModLoader;
 using Windfall.Common.Utilities;
+using Windfall.Content.Items.Fishing;
+using Windfall.Content.Items.Utility;
+using Windfall.Content.Items.Weapons.Misc;
 
 namespace Windfall.Content.NPCs.WanderingNPCs
 {
@@ -58,7 +62,22 @@ namespace Windfall.Content.NPCs.WanderingNPCs
         {
             new NPCShop(Type)
                 .Add<AmidiasSpark>()
+                .Add<Cnidrisnack>()
+                .Add<AncientIlmeranRod>(WindfallConditions.ScoogHunt1ActiveOrCompleted)
+                .Add<IlmeranHorn>(WindfallConditions.ScoogHunt1Completed)
                 .Register();
+        }
+
+        public override bool CheckActive()
+        {
+            if (NPC.AnyNPCs(ModContent.NPCType<DesertScourgeHead>()))
+            {
+                return false;
+            }
+            else
+            {
+                return true;
+            }
         }
     }
 }
