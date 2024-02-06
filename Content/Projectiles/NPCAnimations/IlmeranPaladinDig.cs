@@ -18,10 +18,9 @@ namespace Windfall.Content.Projectiles.NPCAnimations
     {
         public override string Texture => "Windfall/Assets/Projectiles/NPCAnimations/IlmeranPaladinDig";
 
-        public bool InsideTiles = false;
-        public bool PostExitTiles = false;
-        public static readonly SoundStyle Emerge = new("Windfall/Assets/Sounds/NPCs/PaladinEmerge");
-
+        private bool InsideTiles = false;
+        private bool PostExitTiles = false;
+        private static readonly SoundStyle Emerge = new("Windfall/Assets/Sounds/NPCs/PaladinEmerge");
 
         public override void SetStaticDefaults()
         {
@@ -67,7 +66,7 @@ namespace Windfall.Content.Projectiles.NPCAnimations
             }
             if (Projectile.Center.Y < Main.player[Projectile.owner].Center.Y)
             {
-                NPC.NewNPC(null, (int)Projectile.Center.X, (int)Projectile.Center.Y, ModContent.NPCType<IlmeranPaladin>(), 0, Projectile.velocity.Y, Projectile.direction);
+                NPC.NewNPC(NPC.GetSource_NaturalSpawn(), (int)Projectile.Center.X, (int)Projectile.Center.Y, ModContent.NPCType<IlmeranPaladin>(), 0, Projectile.velocity.Y, Projectile.direction);
                 if (PostExitTiles == false)
                 {
                     PostExitTiles = true;

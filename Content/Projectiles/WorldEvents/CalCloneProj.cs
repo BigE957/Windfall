@@ -85,6 +85,7 @@ namespace Windfall.Content.Projectiles.WorldEvents
                 case AIState.Spawning:
                     if (Utilities.AlignProjectileWithGround(Main.projectile[Projectile.whoAmI]))
                         Projectile.position.Y = closestPlayer.position.Y;
+                    Projectile.position.Y += 16;
                     CurrentAI = AIState.WaitingForPlayer;
                     break;
                     
