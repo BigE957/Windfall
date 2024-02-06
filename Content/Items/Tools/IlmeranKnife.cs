@@ -82,7 +82,10 @@ namespace Windfall.Content.Items.Tools
             if(target.type == ModContent.NPCType<PrismBack>() || target.type == ModContent.NPCType<BlindedAngler>())
             {
                 if(Main.rand.NextBool(3))
-                    Item.NewItem(Item.GetSource_DropAsItem(), target.Center, target.Size,ModContent.ItemType<PrismShard>(), Main.rand.Next(3, 5));
+                    if(target.type == ModContent.NPCType<PrismBack>())
+                        Item.NewItem(Item.GetSource_DropAsItem(), target.Center, target.Size,ModContent.ItemType<PrismShard>(), Main.rand.Next(3, 5));
+                    else
+                        Item.NewItem(Item.GetSource_DropAsItem(), target.Center, target.Size, ModContent.ItemType<PrismShard>(), Main.rand.Next(5, 8));
             }
         }
     }
