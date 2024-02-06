@@ -9,8 +9,8 @@ Dialogue: {
 		NoSandstormDialogue: The breeze is calm... Somehow, these sands can still be beautiful despite all the regret they carry.
 		SavedDialogue: Geez... Was almost a goner there. Thanks for the rescue!
 		NoQuestDialogue: You've done all I could ask of you. Come back later, and maybe I'll have an adventure to send you on.
-		CnidrionHuntDialogueStart: Ever since the Incineration, the poor Cnidrion have been stirred into a frenzy! Would you do me a favor and lend me a hand in calming the poor guys down? All you have to do is toss them one of these after you've tired them out a bit. Candied Plankton are their favourite treats! Once they've had one, they're sure to calm down, and might even take a liking towards you! If you could handle three that'd be just swell.
-		CnidrionHuntDialogueDuring: Those Cnidrions aren't gonna calm themselves down! Toss them a Candied Plankton once they've been tuckered out, and they'll calm right down! If you can take care of three that'd be perfect.
+		CnidrionHuntDialogueStart: Ever since the Incineration, the poor Cnidrion have been stirred into a frenzy! Would you do me a favor and lend me a hand in calming the poor guys down? All you have to do is toss them one of these after you've tired them out a bit. Cnidri-Snacks are their favourite treats! Once they've had one, they're sure to calm down, and might even take a liking towards you! If you could handle three that'd be just swell.
+		CnidrionHuntDialogueDuring: Those Cnidrions aren't gonna calm themselves down! Toss them a Cnidri-Snack once they've been tuckered out, and they'll calm right down! If you can take care of three that'd be perfect.
 		CnidrionHuntDialogueEnd: Nice work! Are those lick marks I see on you? Guess you're quite the Cnidrion tamer. You might've made a good paladin yourself!
 		ScoogHuntDialogueStart: I think you've proven yourself to be quite capable; perhaps even enough to lend me a hand in a real hunt. I'm sure you've felt the tremors below the sands. Take this, and you'll be able to lure out its source. Though be prepared for a fight once it surfaces.
 		ScoogHuntDialogueDuring: Just cast that line, and then we'll wait for her to surface. It can be a bit unnerving, I know.
@@ -163,7 +163,7 @@ Items: {
 
 		Misc: {
 			Cnidrisnack: {
-				DisplayName: Cnidrisnack
+				DisplayName: Cnidri-Snack
 				Tooltip: A Cnidrion's favorite treat!
 			}
 		}
@@ -207,7 +207,7 @@ Items: {
 		}
 
 		SuperCnidrisnack: {
-			DisplayName: Super Cnidrisnack
+			DisplayName: Super Cnidri-Snack
 			Tooltip: Not even the most defiant of Cnidrions can resist its taste!
 		}
 	}
