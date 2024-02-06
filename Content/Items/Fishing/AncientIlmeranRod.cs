@@ -3,6 +3,7 @@ using CalamityMod.Items;
 using CalamityMod.NPCs.DesertScourge;
 using CalamityMod.World;
 using Microsoft.Xna.Framework;
+using System;
 using Terraria;
 using Terraria.Audio;
 using Terraria.ID;
@@ -239,7 +240,11 @@ namespace Windfall.Content.Items.Fishing
         internal static void PaladinMessage(string text, NPC Paladin)
         {
             Rectangle location = new((int)Paladin.Center.X, (int)Paladin.Center.Y, Paladin.width, Paladin.width);
-            CombatText.NewText(location, Color.SandyBrown, text, true);
+            CombatText MyDialogue = Main.combatText[CombatText.NewText(location, Color.SandyBrown, text, true)];
+            if (MyDialogue.text.Length > 50)
+            {
+                MyDialogue.lifeTime += (5 * (MyDialogue.text.Length - 50));
+            }
         }
         
     }
