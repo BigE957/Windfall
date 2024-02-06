@@ -63,6 +63,5 @@
   <ItemGroup>
     <Folder Include="Assets\Items\Fishing\" />
     <Folder Include="Assets\NPCs\Enemies\" />
-    <Folder Include="Content\WorldEvents\CalClone\" />
   </ItemGroup>
 </Project>

@@ -58,9 +58,9 @@ namespace Windfall.Content.World
                 }
             }
 
-            Point placementPoint = new Point(placementPositionX, placementPositionY + 4);
+            Point placementPoint = new(placementPositionX, placementPositionY + 4);
 
-            Vector2 schematicSize = new Vector2(schematic.GetLength(0), schematic.GetLength(1));
+            Vector2 schematicSize = new(schematic.GetLength(0), schematic.GetLength(1));
             SchematicAnchor anchorType = SchematicAnchor.BottomCenter;
 
             bool place = true;
@@ -72,7 +72,7 @@ namespace Windfall.Content.World
 
         public static void FillWanderersChest(Chest chest, int Type, bool place)
         {
-            List<ChestItem> contents = new List<ChestItem>()
+            List<ChestItem> contents = new()
             {
                 new ChestItem(ModContent.ItemType<JournalForest>(), 1),
                 new ChestItem(ItemID.Binoculars, 1),

@@ -4,6 +4,8 @@ using Terraria;
 using Microsoft.Xna.Framework;
 using Windfall.Common.Systems;
 using Windfall.Common.Utilities;
+using Windfall.Content.NPCs.WanderingNPCs;
+using CalamityMod;
 
 namespace Windfall.Common.Utilities
 {
@@ -17,18 +19,33 @@ namespace Windfall.Common.Utilities
             "ClamHunt",
             "ScoogHunt2",
         };
+        private static readonly List<string> RoninQuests = new()
+        {
+            "SlimeGodHunt",
+        };
         public static void QuestDialogueHelper(NPC npc)
         {
             int index = -1;
             string npcName = npc.TypeName.Replace(" ", "");
+            List<string> MyQuests = null;
+
             if (npcName == "IlmeranPaladin" || npcName == "IlmeranPaladinKnocked")
             {
                 npcName = "IlmeranPaladin";
-                bool success = false;
-                for (int i = 0; i < PaladinQuests.Count; i++) 
+                MyQuests = PaladinQuests;
+            }
+            else if (npcName == "LoneRonin")
+            {
+                MyQuests = RoninQuests;
+            }
+
+            bool success = false;
+            if (MyQuests != null)
+            {               
+                for (int i = 0; i < MyQuests.Count; i++)
                 {
-                    index = QuestSystem.QuestLog.FindIndex(quest => quest.Name == PaladinQuests[i]);
-                    if(index != -1)
+                    index = QuestSystem.QuestLog.FindIndex(quest => quest.Name == MyQuests[i]);
+                    if (index != -1)
                     {
                         if ((!QuestSystem.QuestLog[index].Completed || QuestSystem.QuestLog[index].Active) && QuestSystem.QuestLog[index].Unlocked)
                         {
@@ -37,7 +54,7 @@ namespace Windfall.Common.Utilities
                         }
                     }
                 }
-                if (!success) 
+                if (!success)
                 {
                     index = -1;
                 }
@@ -92,7 +109,15 @@ namespace Windfall.Common.Utilities
             }
             else
             {
-                Main.npcChatText = Language.GetOrRegister($"Mods.{nameof(Windfall)}.Dialogue.{npcName}.NoQuestDialogue").Value;
+                if(npcName == "LoneRonin" && !(DownedBossSystem.downedHiveMind || DownedBossSystem.downedPerforator))
+                {
+                    Main.npcChatText = Language.GetOrRegister($"Mods.{nameof(Windfall)}.Dialogue.{npcName}.LilBitchDialogue").Value;
+                }
+                else
+                {
+                    Main.npcChatText = Language.GetOrRegister($"Mods.{nameof(Windfall)}.Dialogue.{npcName}.NoQuestDialogue").Value;
+
+                }
             }
         }
     }

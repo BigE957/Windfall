@@ -26,7 +26,7 @@ using CalamityMod;
 
 namespace Windfall.Content.NPCs.WanderingNPCs
 {
-    public class IlmeranPaladin : ModNPC
+    public class LoneRonin : ModNPC
     {
         private static Profiles.StackedNPCProfile NPCProfile;
         public override string Texture => "Windfall/Assets/NPCs/WanderingNPCs/IlmeranPaladin";
@@ -119,18 +119,15 @@ namespace Windfall.Content.NPCs.WanderingNPCs
 			BestiaryDatabaseNPCsPopulator.CommonTags.SpawnConditions.Biomes.Desert,
 
 			// Sets your NPC's flavor text in the bestiary.
-			new FlavorTextBestiaryInfoElement("One of few to have survived the Incineration of Ilmeris, this paladin wanders the remnants of his home; keeping an eternal vigil over his sacred home."),
+			new FlavorTextBestiaryInfoElement("One of the last surviving Onyx Kinsmen, Statis narrowly escaped death at the hands of the Devourer. Thanks to a bargain with Signus, Statis has returned, but his motives now are a mystery..."),
         });
         }
 
         public override void HitEffect(NPC.HitInfo hit)
         {
-            // "Knocks out" the Ilmeran Paladin when the NPC is killed.
             if (Main.netMode != NetmodeID.Server && NPC.life <= 0)
             {
-                NPC.life = NPC.lifeMax;
-                NPC.velocity = new Vector2(0, 0);
-                NPC.Transform(ModContent.NPCType<IlmeranPaladinKnocked>());
+                //Add disappear effect here
             }
         }
 
@@ -142,15 +139,13 @@ namespace Windfall.Content.NPCs.WanderingNPCs
         public override List<string> SetNPCNameList()
         {
             return new List<string> {
-            "Haakor",
-            "Riley",
-            "John",
+            "Statis",
         };
         }
 
         public override float SpawnChance(NPCSpawnInfo spawnInfo)
         {
-            if (spawnInfo.Player.ZoneDesert)
+            if ((spawnInfo.Player.ZoneCorrupt || spawnInfo.Player.ZoneCrimson) && NPC.downedBoss2)
             {
                 return 0.34f;
             }
@@ -160,26 +155,15 @@ namespace Windfall.Content.NPCs.WanderingNPCs
         public override string GetChat()
         {
             WeightedRandom<string> chat = new();
-
-            // These are things that the NPC has a chance of telling you when you talk to it.
-            if (NPC.ai[1] == 1)
-            {
-                NPC.ai[1] = 0;
-                return Language.GetOrRegister($"Mods.{nameof(Windfall)}.Dialogue.IlmeranPaladin.SavedDialogue").Value;
-            }
-            else if (Sandstorm.Happening)
-                chat.Add(Language.GetOrRegister($"Mods.{nameof(Windfall)}.Dialogue.IlmeranPaladin.SandstormDialogue").Value);
-            else
-                chat.Add(Language.GetOrRegister($"Mods.{nameof(Windfall)}.Dialogue.IlmeranPaladin.NoSandstormDialogue").Value);
-            chat.Add(Language.GetOrRegister($"Mods.{nameof(Windfall)}.Dialogue.IlmeranPaladin.StandardDialogue1").Value);
-            chat.Add(Language.GetOrRegister($"Mods.{nameof(Windfall)}.Dialogue.IlmeranPaladin.StandardDialogue2").Value);
-            chat.Add(Language.GetOrRegister($"Mods.{nameof(Windfall)}.Dialogue.IlmeranPaladin.StandardDialogue3").Value);
-            return chat; // chat is implicitly cast to a string.
+            chat.Add(Language.GetOrRegister($"Mods.{nameof(Windfall)}.Dialogue.LoneRonin.StandardDialogue1").Value);
+            chat.Add(Language.GetOrRegister($"Mods.{nameof(Windfall)}.Dialogue.LoneRonin.StandardDialogue2").Value);
+            chat.Add(Language.GetOrRegister($"Mods.{nameof(Windfall)}.Dialogue.LoneRonin.StandardDialogue3").Value);
+            return chat;
         }
 
         public override void SetChatButtons(ref string button, ref string button2)
-        { // What the chat buttons are when you open up the chat UI
-            button = Language.GetTextValue("LegacyInterface.28"); //This is the key to the word "Shop"
+        {
+            button = "Something";
             button2 = "Quest";
         }
 
@@ -187,22 +171,12 @@ namespace Windfall.Content.NPCs.WanderingNPCs
         {
             if (firstButton)
             {
-                shop = "Shop";
+                Main.npcChatText = "Sorry! Out of Order! Come back later!";
             }
             else
             {
                 Utilities.QuestDialogueHelper(Main.npc[NPC.whoAmI]);
             }
-        }
-
-        public override void AddShops()
-        {
-            new NPCShop(Type)
-                .AddWithCustomValue<AmidiasSpark>(50000)
-                .AddWithCustomValue<Cnidrisnack>(500)
-                .AddWithCustomValue<AncientIlmeranRod>(10000, WindfallConditions.ScoogHunt1ActiveOrCompleted)
-                .AddWithCustomValue<IlmeranHorn>(20000, WindfallConditions.ScoogHunt1Completed)
-                .Register();
         }
 
         public override bool CheckActive()
@@ -220,18 +194,18 @@ namespace Windfall.Content.NPCs.WanderingNPCs
         public override void TownNPCAttackStrength(ref int damage, ref float knockback)
         {
             damage = 10;
-            knockback = 4f;
+            knockback = 2f;
         }
 
         public override void TownNPCAttackCooldown(ref int cooldown, ref int randExtraCooldown)
         {
-            cooldown = 30;
-            randExtraCooldown = 30;
+            cooldown = 10;
+            randExtraCooldown = 20;
         }
 
         public override void TownNPCAttackProj(ref int projType, ref int attackDelay)
         {
-            projType = ModContent.ProjectileType<ScourgeoftheDesertProj>();
+            projType = ModContent.ProjectileType<CosmicKunaiProj>();
             attackDelay = 1;
         }
 
