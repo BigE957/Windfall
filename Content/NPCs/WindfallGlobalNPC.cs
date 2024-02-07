@@ -1,8 +1,11 @@
-﻿using Terraria;
+﻿using CalamityMod;
+using Microsoft.Xna.Framework;
+using Terraria;
 using Terraria.DataStructures;
 using Terraria.ModLoader;
 using Windfall.Common.Systems;
 using Windfall.Content.NPCs.Enemies;
+using Windfall.Content.Projectiles.NPCAnimations;
 
 namespace Windfall.Content.NPCs
 {
@@ -11,6 +14,7 @@ namespace Windfall.Content.NPCs
         public override void OnKill(NPC npc)
         {
             Mod calamity = ModLoader.GetMod("CalamityMod");
+            Mod windfall = Windfall.Instance;
             if (npc.type == calamity.Find<ModNPC>("Cnidrion").Type || npc.type == ModContent.NPCType<WFCnidrion>())
                 DownedNPCSystem.downedCnidrion = true;
 
@@ -22,6 +26,9 @@ namespace Windfall.Content.NPCs
             
             if (npc.type == calamity.Find<ModNPC>("GiantClam").Type)
                 QuestSystem.IncrementQuestProgress(QuestSystem.QuestLog.FindIndex(quest => quest.Name == "ClamHunt"), 0);
+
+            if ((npc.type == calamity.Find<ModNPC>("HiveMind").Type && DownedBossSystem.downedHiveMind) || (npc.type == calamity.Find<ModNPC>("PerforatorHive").Type && DownedBossSystem.downedPerforator))
+                SpawnWorldEventProjectile(ModContent.ProjectileType<StatisProj>());
 
             if (npc.type == calamity.Find<ModNPC>("SlimeGodCore").Type)
                 QuestSystem.IncrementQuestProgress(QuestSystem.QuestLog.FindIndex(quest => quest.Name == "SlimeGodHuntth"), 0);
@@ -37,6 +44,10 @@ namespace Windfall.Content.NPCs
             Mod calamity = ModLoader.GetMod("CalamityMod");
             if (npc.type == calamity.Find<ModNPC>("Cnidrion").Type)
                 npc.Transform(ModContent.NPCType<WFCnidrion>());
+        }
+        internal  static void SpawnWorldEventProjectile(int type)
+        {
+            Projectile.NewProjectileDirect(Projectile.GetSource_NaturalSpawn(), new Vector2(Main.player[0].Center.X + 100, Main.player[0].Center.Y), Vector2.Zero, type, 0, 0);
         }
     }
 }

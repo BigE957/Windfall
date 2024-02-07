@@ -92,6 +92,7 @@ namespace Windfall.Content.NPCs.WanderingNPCs
             NPC.HitSound = SoundID.NPCHit1;
             NPC.DeathSound = SoundID.NPCDeath1;
             NPC.knockBackResist = 0.5f;
+            NPC.rarity = 1;
             NPC.ai[1] = 0;
             AnimationType = NPCID.Guide;
         }

@@ -41,9 +41,9 @@ Dialogue: {
 		StandardDialogue3: What a foul place... A shame I'm stuck dredging through this filth.
 		LilBitchDialogue: Sorry, I'm not sure someone of your strength could do much to help.
 		NoQuestDialogue: You've done quite well. For now, I'd say we've earned some rest.
-		SlimeGodHuntDialogueStart: Good job putting that... thing, down. An amalgamation of deific essence such as that could have become quite the threat if given the opportunity. Speaking of, I'd like to ask for your help in dealing with another deity: the Slime God. I've been hunting him for quite a while, but my former master is far too wary of me. Take this, if you're the one who uses it, I bet he'll come out of hiding to reclaim it. I trust your strength, put an end to that coward once and for all.
-		SlimeGodHuntDialogueDuring: If you use the Rune of Gula, the Slime God will surely come out of hiding to reclaim it. He'll be far less wary of you than I. Though I'm confident you have the strength to best that pathetic excuse for a deity.
-		SlimeGodHuntDialogueEnd: I see... The coward is as snide as ever, fleeing your battle. However, defeating its two creations will set it back a great deal in whatever it was planning. You've done well, and I'm certain another opportunity to face it will come our way.
+		SlimeGodHuntDialogueStart: Ah, wonderful! I knew you I saw something in you. To business then. The deity in question is the Slime God. I've been hunting him for quite a while, but my former master is far too wary of me. Any time I get on his trail, he flees like the coward he is. Take this, if you're the one who uses it, I bet he'll come out of hiding to reclaim it. He'll be underestimating you. Use that to your advantage.
+		SlimeGodHuntDialogueDuring: If you use the Rune of Gula, the Slime God will surely come out of hiding to reclaim it. He'll be far less wary of you than I, a fatal mistake. I trust your strength, put an end to that coward once and for all.
+		SlimeGodHuntDialogueEnd: I see... The coward is as snide as ever, escaping yet another confrontation. However, defeating his creations is a victory in its own right; setting it back a great deal in whatever he was planning. You've done well, and I'm certain another opportunity to face him will come our way. So don't let his escape get you down.
 	}
 }
 
@@ -305,7 +305,7 @@ Projectiles: {
 	AncientIlmeranBobber.DisplayName: Ancient Ilmeran Bobber
 	IlmeranPaladinDig.DisplayName: Ilmeran Paladin
 	SuperCnidrisnackThrow.DisplayName: Super Cnidrisnack Throw
-	PostEvil2Statis.DisplayName: Statis
+	StatisProj.DisplayName: Statis
 }
 
 JournalContents: {

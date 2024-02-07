@@ -46,7 +46,7 @@ namespace Windfall.Content.Projectiles.WorldEvents
         {
             Projectile.width = 50;
             Projectile.height = 60;
-            Projectile.tileCollide = true;
+            Projectile.tileCollide = false;
             Projectile.ignoreWater = true;
             Projectile.netImportant = true;
             Projectile.penetrate = -1;
@@ -83,9 +83,8 @@ namespace Windfall.Content.Projectiles.WorldEvents
             switch (CurrentAI)
             {
                 case AIState.Spawning:
-                    if (Utilities.AlignProjectileWithGround(Main.projectile[Projectile.whoAmI]))
-                        Projectile.position.Y = closestPlayer.position.Y;
-                    Projectile.position.Y += 16;
+                    Utilities.AlignProjectileWithGround(Main.projectile[Projectile.whoAmI]);
+                    Projectile.position.Y -= 24;
                     CurrentAI = AIState.WaitingForPlayer;
                     break;
                     

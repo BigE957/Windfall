@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using CalamityMod.Dusts;
 using Microsoft.Xna.Framework;
 using Terraria;
 using Terraria.Audio;
@@ -14,15 +15,14 @@ using Windfall.Content.NPCs.WanderingNPCs;
 
 namespace Windfall.Content.Projectiles.NPCAnimations
 {
-    public class PostEvil2Statis : ModProjectile, ILocalizedModType
+    public class StatisProj : ModProjectile, ILocalizedModType
     {
         public override string Texture => "Windfall/Assets/Projectiles/NPCAnimations/IlmeranPaladinDig";
-        private bool InsideTiles = false;
         private static readonly SoundStyle Teleport = new("CalamityMod/Sounds/Custom/SCalSounds/BrimstoneHellblastSound");
 
         private enum AIState
         {
-            Chilling,
+            SpawnDelay,
             Yapping,
             TurnToNPC,
         }
@@ -43,10 +43,13 @@ namespace Windfall.Content.Projectiles.NPCAnimations
         }
         internal static List<dialogue> StatisDialogue = new()
         { 
-            new dialogue {text = "Howdy!" , delay = 4},
-            new dialogue {text = "I'm Statis!" , delay = 4},
-            new dialogue {text = "Statis the Lone Ronin!" , delay = 4},
-
+            new dialogue {text = "Quite the display..." , delay = 1},
+            new dialogue {text = "I'll admit I hadn't thought you'd survive that... thing. Let alone defeat it." , delay = 3},
+            new dialogue {text = "Even in such a state, the might of the deities is ever formidable..." , delay = 3},
+            new dialogue {text = "An amalgamation of deific essence such as that could have become quite the threat if given the opportunity." , delay = 3},
+            new dialogue {text = "Speaking of, there's another of the deities whom I've been hunting." , delay = 3},
+            new dialogue {text = "Your help might just prove invaluably in putting a stop to it." , delay = 3},
+            new dialogue {text = "If you'd be willing, I'd be ever thankful." , delay = 3},
         };
         int dialogueCounter = 0;
         public override void SetStaticDefaults()
@@ -68,29 +71,29 @@ namespace Windfall.Content.Projectiles.NPCAnimations
         }
         public override void OnSpawn(IEntitySource source)
         {
-            int i;
             Player closestPlayer = Main.player[Player.FindClosest(Projectile.Center, 1, 1)];
             
-            if (Utilities.AlignProjectileWithGround(Main.projectile[Projectile.whoAmI]))
+            if (!Utilities.AlignProjectileWithGround(Main.projectile[Projectile.whoAmI]))
                 Projectile.position.Y = closestPlayer.position.Y;
 
-            for (i = 0; i < 50; i++)
-            {
-                Vector2 speed = Main.rand.NextVector2Circular(1.5f, 2f);
-                Dust d = Dust.NewDustPerfect(Projectile.Center, DustID.Blood, speed * 5, Scale: 1.5f);
-                d.noGravity = true;
-            }
-            SoundEngine.PlaySound(Teleport, Projectile.Center);
-            Projectile.alpha = 0;
+            Projectile.spriteDirection = Projectile.direction = (closestPlayer.Center.X > Projectile.Center.X).ToDirectionInt() * -1;
         }
         public override void AI()
         {
             switch (CurrentAI)
             {
-                case AIState.Chilling:
-                    if(counter == 60)
+                case AIState.SpawnDelay:
+                    if(counter == 60 * 4)
                     {
                         dialogueCounter = 0;
+                        for (int i = 0; i < 75; i++)
+                        {
+                            Vector2 speed = Main.rand.NextVector2Circular(1.5f, 2f);
+                            Dust d = Dust.NewDustPerfect(Projectile.Center, (int)CalamityDusts.PurpleCosmilite, speed * 4, Scale: 1.5f);
+                            d.noGravity = true;
+                        }
+                        SoundEngine.PlaySound(Teleport, Projectile.Center);
+                        Projectile.alpha = 0;
                         CurrentAI = AIState.Yapping;
                     }
                     break;
@@ -105,14 +108,14 @@ namespace Windfall.Content.Projectiles.NPCAnimations
                     {
                         Delay += StatisDialogue[i].delay;
                     }
-                    if (counter == (60 * (Delay)))
+                    if (counter == (60 * 4) + (60 * Delay))
                     {                       
                         StatisMessage(StatisDialogue[dialogueCounter].text, Main.projectile[Projectile.whoAmI]);
                         dialogueCounter++;
                     }
                     break;
                 case AIState.TurnToNPC:
-                    NPC.NewNPC(NPC.GetSource_NaturalSpawn(), (int)Projectile.Center.X, (int)Projectile.Center.Y, ModContent.NPCType<IlmeranPaladin>(), 0, Projectile.velocity.Y, Projectile.direction);
+                    NPC.NewNPC(NPC.GetSource_NaturalSpawn(), (int)Projectile.Center.X, (int)Projectile.Bottom.Y, ModContent.NPCType<LoneRonin>(), 0, Projectile.velocity.Y, Projectile.direction);
                     Projectile.active = false;
                     break;
 
