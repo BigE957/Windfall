@@ -94,6 +94,7 @@ namespace Windfall.Content.NPCs.WanderingNPCs
             NPC.knockBackResist = 0.5f;
             NPC.ai[1] = 0;
             AnimationType = NPCID.Guide;
+            NPC.rarity = 1;
         }
         public override void OnSpawn(IEntitySource source)
         {
