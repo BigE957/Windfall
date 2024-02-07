@@ -35,11 +35,18 @@ namespace Windfall.Common.Utilities
                     InsideTiles = Collision.SolidCollision(Projectile.position, Projectile.width, Projectile.height);
                     if (InsideTiles)
                     {
-                        Projectile.position.Y -= 1;
+                        Projectile.position.Y -= 16;
                     }
                     else
                     {
-                        Projectile.position.Y += 1;
+                        for(i = 0; i < 16; i++)
+                        {
+                            InsideTiles = Collision.SolidCollision(Projectile.position, Projectile.width, Projectile.height);
+                            if (InsideTiles)
+                                break;
+                            Projectile.position.Y++;
+                        }
+                        Projectile.position.Y--;
                         return true;
                     }
                 }
@@ -49,12 +56,19 @@ namespace Windfall.Common.Utilities
                     InsideTiles = Collision.SolidCollision(Projectile.position, Projectile.width, Projectile.height);
                     if (InsideTiles)
                     {
-                        Projectile.position.Y -= 1;
+                        for (i = 0; i < 16; i++)
+                        {
+                            InsideTiles = Collision.SolidCollision(Projectile.position, Projectile.width, Projectile.height);
+                            if (!InsideTiles)
+                                break;
+                            Projectile.position.Y--;
+                        }
+                        Projectile.position.Y++;
                         return true;
                     }
                     else
                     {
-                        Projectile.position.Y += 1;
+                        Projectile.position.Y += 16;
                     }
                 }
             return false;
