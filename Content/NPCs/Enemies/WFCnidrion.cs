@@ -40,7 +40,7 @@ namespace Windfall.Content.NPCs.Enemies
             NPC.HitSound = SoundID.NPCHit12;
             NPC.DeathSound = SoundID.NPCDeath18;
             NPC.rarity = 2;
-            Banner = NPC.type;
+            Banner = ModContent.NPCType<Cnidrion>();
             BannerItem = ModContent.ItemType<CnidrionBanner>();
             NPC.Calamity().VulnerableToCold = true;
             NPC.Calamity().VulnerableToSickness = true;
