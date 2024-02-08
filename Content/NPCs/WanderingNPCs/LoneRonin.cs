@@ -88,7 +88,7 @@ namespace Windfall.Content.NPCs.WanderingNPCs
             NPC.aiStyle = 7;
             NPC.damage = 10;
             NPC.defense = 15;
-            NPC.lifeMax = 400,000;
+            NPC.lifeMax = 400000;
             NPC.HitSound = SoundID.NPCHit1;
             NPC.DeathSound = SoundID.NPCDeath1;
             NPC.knockBackResist = 0.5f;
