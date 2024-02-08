@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Terraria;
+using Terraria.ID;
 using Terraria.ModLoader;
 using Terraria.ModLoader.IO;
 using Windfall.Content.Items.Fishing;
@@ -136,6 +137,24 @@ namespace Windfall.Common.Systems
                     DownedBossSystem.downedHiveMind || DownedBossSystem.downedPerforator, 
                     new List<QuestItem>{ new QuestItem { Type = ModContent.ItemType<RuneOfGula>(), Stack = 1 } }, 
                     new List<QuestItem>{ new QuestItem { Type = ModContent.ItemType<SlimeGodTrophy>(), Stack = 1 } }
+                ),
+                CreateQuest
+                (
+                    "CrystalSearch",
+                    new List<string>{"Find a Gelatine Crystal"},
+                    new List<int>{1},
+                    Main.hardMode,
+                    null,
+                    new List<QuestItem>{ new QuestItem { Type = ItemID.PixieDust, Stack = 25 }, new QuestItem { Type = ItemID.UnicornHorn, Stack = 3 }, new QuestItem { Type = ItemID.PinkGel, Stack = 10 } }
+                ),
+                CreateQuest
+                (
+                    "QueenSlimeHunt",
+                    new List<string>{"Defeat Queen Slime"},
+                    new List<int>{1},
+                    true,
+                    null,
+                    new List<QuestItem>{ new QuestItem { Type = ItemID.QueenSlimeTrophy, Stack = 1 } }
                 ),
 
             };

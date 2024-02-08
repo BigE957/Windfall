@@ -22,6 +22,8 @@ namespace Windfall.Common.Utilities
         private static readonly List<string> RoninQuests = new()
         {
             "SlimeGodHunt",
+            "CrystalSearch",
+            "QueenSlimeHunt",
         };
         public static void QuestDialogueHelper(NPC npc)
         {

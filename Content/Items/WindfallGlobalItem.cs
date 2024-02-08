@@ -5,6 +5,7 @@ using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Threading.Tasks;
 using Terraria;
+using Terraria.ID;
 using Terraria.ModLoader;
 using Windfall.Common.Systems;
 using Windfall.Content.Items.Journals;
@@ -41,6 +42,12 @@ namespace Windfall.Content.Items
         {
             TooltipLine tooltipLine = new(Windfall.Instance, "JournalPage", "Use to add this page to your Wanderer's Journal");
             tooltips.Add(tooltipLine);
+        }
+        public override bool OnPickup(Item item, Player player)
+        {
+            if(item.type == ItemID.QueenSlimeCrystal)
+                QuestSystem.IncrementQuestProgress(QuestSystem.QuestLog.FindIndex(quest => quest.Name == "CrystalHunt"), 0);
+            return true;
         }
     }
 }

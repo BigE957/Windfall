@@ -6,6 +6,7 @@ using Terraria.ModLoader;
 using Windfall.Common.Systems;
 using Windfall.Content.NPCs.Enemies;
 using Windfall.Content.Projectiles.NPCAnimations;
+using Terraria.ID;
 
 namespace Windfall.Content.NPCs
 {
@@ -32,6 +33,9 @@ namespace Windfall.Content.NPCs
 
             if (npc.type == calamity.Find<ModNPC>("SlimeGodCore").Type)
                 QuestSystem.IncrementQuestProgress(QuestSystem.QuestLog.FindIndex(quest => quest.Name == "SlimeGodHuntth"), 0);
+
+            if (npc.type == NPCID.QueenSlimeBoss)
+                QuestSystem.IncrementQuestProgress(QuestSystem.QuestLog.FindIndex(quest => quest.Name == "QueenSlimeHunt"), 0);
 
             if (npc.type == calamity.Find<ModNPC>("AquaticScourgeHead").Type)
                 QuestSystem.IncrementQuestProgress(QuestSystem.QuestLog.FindIndex(quest => quest.Name == "ScoogHunt2"), 0);
