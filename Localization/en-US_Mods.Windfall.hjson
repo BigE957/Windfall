@@ -46,10 +46,10 @@ Dialogue: {
 		SlimeGodHuntDialogueEnd: I see... The coward is as snide as ever, escaping yet another confrontation. However, defeating his creations is a victory in its own right; setting it back a great deal in whatever he was planning. You've done well, and I'm certain another opportunity to face him will come our way. So don't let his escape get you down.
 		CrystalSearchDialogueStart: Well geez... Things sure have changed since we last met, huh? Its as if godly essence has been pumped into the veins of this world. I'm certain this is something my former master plans to take advantage of... Search the depths of these new lands, and if you find any evidence of him, bring it back to me.
 		CrystalSearchDialogueDuring: The crystals that grow so frequently in the Hallow may be of interest to my former master. See if any look out of place, and bring back what you find.
-		CrystalSearchDialogueEnd: Ah, now what's this? This crystals beating with the power of the Slime God... This cannot be good. If this is still connected to my former master, then he knows you have it, and I'm certain he'll be eager for a rematch with whatever power he gained from the Hallow. If he does show himself, show no mercy.
-		QueenSlimeHuntDialogueStart:
-		QueenSlimeHuntDialogueDuring:
-		QueenSlimeHuntDialogueEnd:
+		CrystalSearchDialogueEnd: Ah, now what's this? This crystals beating with the power of the Slime God... This cannot be good. If this is still connected to my former master, then he knows you have it, and I doubt he plans to just leave you be after the beating you gave him.
+		QueenSlimeHuntDialogueStart: How about we take the fight to him then. I'm certain he'll be eager for a rematch with whatever power he gained from the Hallow. Just holding that thing in the Hallow might do the trick, or perhaps the Rune of Gula as well. Either way, show him no mercy. He isn't the only one who's grown stronger since your last battle. Good luck.
+		QueenSlimeHuntDialogueDuring: Show that filthy slime no mercy. While he may now wield the powers of Hallow, you too have grown in strength since your last battle with him.
+		QueenSlimeHuntDialogueEnd: So it is done at last. Funny how even after everything, I've wound up helping in the tyrant's dirty work. Regardless, I'm happy to know my master's schemes may now never come to fruition. You've done well this day, and succeeded where many have failed.
 	}
 }
 
