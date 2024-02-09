@@ -42,7 +42,7 @@ Dialogue: {
 	CalPotionSeller: {
 		PotionSellerDialogue1: Hey there, traveller. You wanna see some one-of-a-kind potions? I brewed them myself!
 		PotionSellerDialogue2: Alone on a Friday night? I've got a potion to fix that!
-		PotionSellerdDialogue3: *clink clink* Sorry about the noise, who knew carrying potions in your coat would be so hard? The movies made it seem so easy... Wanna buy some?
+		PotionSellerdDialogue3: *clink clink* Sorry about the noise, who knew carrying potions in your coat would be so hard? Wanna take some off my hands for me?
 		StandardDialogue1: You looking for something?
 		StandardDialogue2: Haha, back for more are ya?
 		StandardDialogue3: I won't give you potions, but I'll definitely give you another whooping!
