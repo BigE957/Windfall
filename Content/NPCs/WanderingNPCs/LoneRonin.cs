@@ -23,6 +23,8 @@ using Windfall.Content.Items.Fishing;
 using Windfall.Content.Items.Utility;
 using CalamityMod.NPCs.DesertScourge;
 using CalamityMod;
+using CalamityMod.Items.Armor.Victide;
+using CalamityMod.Items.Armor.Statigel;
 
 namespace Windfall.Content.NPCs.WanderingNPCs
 {
@@ -155,6 +157,7 @@ namespace Windfall.Content.NPCs.WanderingNPCs
 
         public override string GetChat()
         {
+            Player player = Main.player[Main.myPlayer];
             WeightedRandom<string> chat = new();
             chat.Add(Language.GetOrRegister($"Mods.{nameof(Windfall)}.Dialogue.LoneRonin.StandardDialogue1").Value);
             chat.Add(Language.GetOrRegister($"Mods.{nameof(Windfall)}.Dialogue.LoneRonin.StandardDialogue2").Value);
@@ -164,12 +167,18 @@ namespace Windfall.Content.NPCs.WanderingNPCs
                 chat.Add(Language.GetOrRegister($"Mods.{nameof(Windfall)}.Dialogue.LoneRonin.PreQueenSlimeDialogue1").Value);
                 chat.Add(Language.GetOrRegister($"Mods.{nameof(Windfall)}.Dialogue.LoneRonin.PreQueenSlimeDialogue2").Value);
             }
-            if(Main.player[Main.myPlayer].ZoneCorrupt || Main.player[Main.myPlayer].ZoneCrimson)
+            if(player.ZoneCorrupt || player.ZoneCrimson)
             {
                 chat.Add(Language.GetOrRegister($"Mods.{nameof(Windfall)}.Dialogue.LoneRonin.EvilbiomeDialogue1").Value);
                 chat.Add(Language.GetOrRegister($"Mods.{nameof(Windfall)}.Dialogue.LoneRonin.EvilbiomeDialogue2").Value);
             }
-            return chat;
+            if (player.Calamity().statigelSet || (WearingStatigelHelmet(player) && player.armor[11].type == ModContent.ItemType<StatigelArmor>() && player.armor[12].type == ModContent.ItemType<StatigelGreaves>()))
+            {
+                chat.Add(Language.GetOrRegister($"Mods.{nameof(Windfall)}.Dialogue.LoneRonin.StatigelDialogue1").Value);
+                chat.Add(Language.GetOrRegister($"Mods.{nameof(Windfall)}.Dialogue.LoneRonin.StatigelDialogue2").Value);
+            }
+
+                return chat;
         }
 
         public override void SetChatButtons(ref string button, ref string button2)
@@ -224,6 +233,13 @@ namespace Windfall.Content.NPCs.WanderingNPCs
         {
             multiplier = 12f;
             randomOffset = 2f;
+        }
+        private static bool WearingStatigelHelmet(Player player)
+        {
+            Item hat = player.armor[10];
+            if (hat.type == ModContent.ItemType <StatigelHeadMagic>() || hat.type == ModContent.ItemType<StatigelHeadMelee>() || hat.type == ModContent.ItemType<StatigelHeadRanged>() || hat.type == ModContent.ItemType<StatigelHeadRogue>() || hat.type == ModContent.ItemType<StatigelHeadSummon>())
+                return true;
+            return false;
         }
     }
 }

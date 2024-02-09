@@ -57,6 +57,8 @@ Dialogue: {
 		PreQueenSlimeDialogue2: Whatever it is the Slime God is planning, it cannot be good. While he may be but a shell of his former self, he holds the potential to become so much more...
 		EvilbiomeDialogue1: What a foul place... A shame I'm stuck dredging through this filth.
 		EvilBiomeDialogue2: The horrors left in the wake of Yharim's crusade are seen most clearly here. Has that man no conscious? No care for the consequences of his actions?
+		StatigelDialogue1: Hah! Turning the Slime God's ooze into armor. Onyx Kinsmen garb no less! How ironic!
+		StatigelDialogue2: Taking on the mantle of an Onyx Kinsmen? This counterfeit won't exactly get you far in that regard...
 		#NPC Quest Dialogue
 		LilBitchDialogue: Sorry, I'm not sure someone of your strength could do much to help.
 		NoQuestDialogue: You've done quite well. For now, I'd say we've earned some rest.
