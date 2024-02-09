@@ -29,7 +29,7 @@ namespace Windfall.Content.NPCs.WanderingNPCs
     public class LoneRonin : ModNPC
     {
         private static Profiles.StackedNPCProfile NPCProfile;
-        public override string Texture => "Windfall/Assets/NPCs/WanderingNPCs/IlmeranPaladin";
+        public override string Texture => "Windfall/Assets/NPCs/WanderingNPCs/LoneRonin";
 
         public override void SetStaticDefaults()
         {

@@ -17,7 +17,7 @@ namespace Windfall.Content.Projectiles.NPCAnimations
 {
     public class StatisProj : ModProjectile, ILocalizedModType
     {
-        public override string Texture => "Windfall/Assets/Projectiles/NPCAnimations/IlmeranPaladinDig";
+        public override string Texture => "Windfall/Assets/Projectiles/NPCAnimations/LoneRoninTeleport";
         private static readonly SoundStyle Teleport = new("CalamityMod/Sounds/Custom/SCalSounds/BrimstoneHellblastSound");
 
         private enum AIState
@@ -75,6 +75,7 @@ namespace Windfall.Content.Projectiles.NPCAnimations
             
             if (!Utilities.AlignProjectileWithGround(Main.projectile[Projectile.whoAmI]))
                 Projectile.position.Y = closestPlayer.position.Y;
+            Projectile.position.Y -= 3;
         }
         public override void AI()
         {
