@@ -2,12 +2,18 @@
 
 Dialogue: {
 	IlmeranPaladin: {
+		#NPC Chat Dialogue
 		StandardDialogue1: The desert will show you no mercy. Stay strong!
 		StandardDialogue2: Where could that sea horse have gotten off to...?
 		StandardDialogue3: Care to rest a moment with me? This heat is exhausting.
 		SandstormDialogue: The wind is howling most fiercely... Be warned, the creatures here are just as fierce!
 		NoSandstormDialogue: The breeze is calm... Somehow, these sands can still be beautiful despite all the regret they carry.
 		SavedDialogue: Geez... Was almost a goner there. Thanks for the rescue!
+		LookingFamiliar1: Hey now! Are you copying me?!
+		LookingFamiliar2: Well... I imitation is the sincerest form of flattery.
+		LookingIlmeran1: Hoho! If I didn't know better, I might've mistaken you for one of my fellow Paladins!
+		LookingIlmeran2: Looking good! Its nice to see Ilmeran culture flourishing once more.
+		#NPC Quest Dialogue
 		NoQuestDialogue: You've done all I could ask of you. Come back later, and maybe I'll have an adventure to send you on.
 		CnidrionHuntDialogueStart: Ever since the Incineration, the poor Cnidrion have been stirred into a frenzy! Would you do me a favor and lend me a hand in calming the poor guys down? All you have to do is toss them one of these after you've tired them out a bit. Cnidri-Snacks are their favourite treats! Once they've had one, they're sure to calm down, and might even take a liking towards you! If you could handle three that'd be just swell.
 		CnidrionHuntDialogueDuring: Those Cnidrions aren't gonna calm themselves down! Toss them a Cnidri-Snack once they've been tuckered out, and they'll calm right down! If you can take care of three that'd be perfect.
@@ -36,9 +42,11 @@ Dialogue: {
 	}
 
 	LoneRonin: {
+		#NPC Chat Dialogue
 		StandardDialogue1: My former master has been here... Where could that coward have fled now?
 		StandardDialogue2: Can I help you?
 		StandardDialogue3: What a foul place... A shame I'm stuck dredging through this filth.
+		#NPC Quest Dialogue
 		LilBitchDialogue: Sorry, I'm not sure someone of your strength could do much to help.
 		NoQuestDialogue: You've done quite well. For now, I'd say we've earned some rest.
 		SlimeGodHuntDialogueStart: Ah, wonderful! I knew you I saw something in you. To business then. The deity in question is the Slime God. I've been hunting him for quite a while, but my former master is far too wary of me. Any time I get on his trail, he flees like the coward he is. Take this, if you're the one who uses it, I bet he'll come out of hiding to reclaim it. He'll be underestimating you. Use that to your advantage.

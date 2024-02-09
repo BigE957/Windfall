@@ -23,6 +23,8 @@ using Windfall.Content.Items.Fishing;
 using Windfall.Content.Items.Utility;
 using CalamityMod.NPCs.DesertScourge;
 using CalamityMod;
+using CalamityMod.CalPlayer;
+using CalamityMod.Items.Armor.Victide;
 
 namespace Windfall.Content.NPCs.WanderingNPCs
 {
@@ -143,9 +145,9 @@ namespace Windfall.Content.NPCs.WanderingNPCs
         public override List<string> SetNPCNameList()
         {
             return new List<string> {
-            "Haakor",
-            "Riley",
-            "John",
+            "Nasser",
+            "Zaysan",
+            "Saimaa",
         };
         }
 
@@ -160,6 +162,7 @@ namespace Windfall.Content.NPCs.WanderingNPCs
 
         public override string GetChat()
         {
+            Player player = Main.player[Main.myPlayer];
             WeightedRandom<string> chat = new();
 
             // These are things that the NPC has a chance of telling you when you talk to it.
@@ -168,10 +171,24 @@ namespace Windfall.Content.NPCs.WanderingNPCs
                 NPC.ai[1] = 0;
                 return Language.GetOrRegister($"Mods.{nameof(Windfall)}.Dialogue.IlmeranPaladin.SavedDialogue").Value;
             }
-            else if (Sandstorm.Happening)
+
+            if (Sandstorm.Happening)
                 chat.Add(Language.GetOrRegister($"Mods.{nameof(Windfall)}.Dialogue.IlmeranPaladin.SandstormDialogue").Value);
             else
                 chat.Add(Language.GetOrRegister($"Mods.{nameof(Windfall)}.Dialogue.IlmeranPaladin.NoSandstormDialogue").Value);
+            
+            if(player.Calamity().victideSet || (WearingVictideHelmet(player) && player.armor[11].type == ModContent.ItemType<VictideBreastplate>() && player.armor[12].type == ModContent.ItemType<VictideGreaves>()))
+                if(player.armor[0].type == ModContent.ItemType<VictideHeadMagic>())
+                {
+                    chat.Add(Language.GetOrRegister($"Mods.{nameof(Windfall)}.Dialogue.IlmeranPaladin.LookingFamiliar1").Value);
+                    chat.Add(Language.GetOrRegister($"Mods.{nameof(Windfall)}.Dialogue.IlmeranPaladin.LookingFamiliar2").Value);
+                }
+                else
+                {
+                    chat.Add(Language.GetOrRegister($"Mods.{nameof(Windfall)}.Dialogue.IlmeranPaladin.LookingIlmeran1").Value);
+                    chat.Add(Language.GetOrRegister($"Mods.{nameof(Windfall)}.Dialogue.IlmeranPaladin.LookingIlmeran2").Value);
+                }
+
             chat.Add(Language.GetOrRegister($"Mods.{nameof(Windfall)}.Dialogue.IlmeranPaladin.StandardDialogue1").Value);
             chat.Add(Language.GetOrRegister($"Mods.{nameof(Windfall)}.Dialogue.IlmeranPaladin.StandardDialogue2").Value);
             chat.Add(Language.GetOrRegister($"Mods.{nameof(Windfall)}.Dialogue.IlmeranPaladin.StandardDialogue3").Value);
@@ -240,6 +257,13 @@ namespace Windfall.Content.NPCs.WanderingNPCs
         {
             multiplier = 12f;
             randomOffset = 2f;
+        }
+        private static bool WearingVictideHelmet(Player player)
+        {
+            Item hat = player.armor[10];
+            if (hat.type == ModContent.ItemType<VictideHeadMagic>() || hat.type == ModContent.ItemType<VictideHeadMelee>() || hat.type == ModContent.ItemType<VictideHeadRanged>() || hat.type == ModContent.ItemType<VictideHeadRogue>() || hat.type == ModContent.ItemType<VictideHeadSummon>())
+                return true;
+            return false;
         }
     }
 }
