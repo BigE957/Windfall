@@ -5,7 +5,7 @@ Dialogue: {
 		#NPC Chat Dialogue
 		StandardDialogue1: The desert will show you no mercy. Stay strong!
 		StandardDialogue2: Where could that sea horse have gotten off to...?
-		StandardDialogue3: Care to rest a moment with me? This heat is exhausting.
+		StandardDialogue3: Care to rest a moment with me? I'm sure we both could use a rest.
 		SandstormDialogue: The wind is howling most fiercely... Be warned, the creatures here are just as fierce!
 		NoSandstormDialogue: The breeze is calm... Somehow, these sands can still be beautiful despite all the regret they carry.
 		SavedDialogue: Geez... Was almost a goner there. Thanks for the rescue!
@@ -15,6 +15,10 @@ Dialogue: {
 		LookingIlmeran2: Looking good! Its nice to see Ilmeran culture flourishing once more.
 		Amidias1: I'm so glad the King is doing well! Thank you again for your help. If he has any need of me, just let me know!
 		Amidias2: So the King has moved into your little settlement? Perhaps I should consider paying the both of you a visit.
+		Daytime1: The sun's burning hot as ever... Might wanna find some shade.
+		Daytime2: Its hard to believe this was once a dazzling ocean... Now all that's left is sand and a bitter wind.
+		Nighttime1: The desert can actually be quite peaceful on nights like this... And the tempature's actually bearable.
+		Nighttime2: I remember how the stars used to reflect on the Ilmeran Sea... What a sight it truly was...
 		#NPC Quest Dialogue
 		NoQuestDialogue: You've done all I could ask of you. Come back later, and maybe I'll have an adventure to send you on.
 		CnidrionHuntDialogueStart: Ever since the Incineration, the poor Cnidrion have been stirred into a frenzy! Would you do me a favor and lend me a hand in calming the poor guys down? All you have to do is toss them one of these after you've tired them out a bit. Cnidri-Snacks are their favourite treats! Once they've had one, they're sure to calm down, and might even take a liking towards you! If you could handle three that'd be just swell.
