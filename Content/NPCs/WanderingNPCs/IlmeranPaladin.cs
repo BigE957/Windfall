@@ -25,6 +25,7 @@ using CalamityMod.NPCs.DesertScourge;
 using CalamityMod;
 using CalamityMod.CalPlayer;
 using CalamityMod.Items.Armor.Victide;
+using CalamityMod.NPCs.TownNPCs;
 
 namespace Windfall.Content.NPCs.WanderingNPCs
 {
@@ -188,6 +189,12 @@ namespace Windfall.Content.NPCs.WanderingNPCs
                     chat.Add(Language.GetOrRegister($"Mods.{nameof(Windfall)}.Dialogue.IlmeranPaladin.LookingIlmeran1").Value);
                     chat.Add(Language.GetOrRegister($"Mods.{nameof(Windfall)}.Dialogue.IlmeranPaladin.LookingIlmeran2").Value);
                 }
+            int King = NPC.FindFirstNPC(ModContent.NPCType<SEAHOE>());
+            if(King != -1) 
+            {
+                chat.Add(Language.GetOrRegister($"Mods.{nameof(Windfall)}.Dialogue.IlmeranPaladin.Amidias1").Value);
+                chat.Add(Language.GetOrRegister($"Mods.{nameof(Windfall)}.Dialogue.IlmeranPaladin.Amidias2").Value);
+            }
 
             chat.Add(Language.GetOrRegister($"Mods.{nameof(Windfall)}.Dialogue.IlmeranPaladin.StandardDialogue1").Value);
             chat.Add(Language.GetOrRegister($"Mods.{nameof(Windfall)}.Dialogue.IlmeranPaladin.StandardDialogue2").Value);

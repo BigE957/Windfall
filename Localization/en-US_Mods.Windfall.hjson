@@ -13,6 +13,8 @@ Dialogue: {
 		LookingFamiliar2: Well... I imitation is the sincerest form of flattery.
 		LookingIlmeran1: Hoho! If I didn't know better, I might've mistaken you for one of my fellow Paladins!
 		LookingIlmeran2: Looking good! Its nice to see Ilmeran culture flourishing once more.
+		Amidias1: I'm so glad the King is doing well! Thank you again for your help. If he has any need of me, just let me know!
+		Amidias2: So the King has moved into your little settlement? Perhaps I should consider paying the both of you a visit.
 		#NPC Quest Dialogue
 		NoQuestDialogue: You've done all I could ask of you. Come back later, and maybe I'll have an adventure to send you on.
 		CnidrionHuntDialogueStart: Ever since the Incineration, the poor Cnidrion have been stirred into a frenzy! Would you do me a favor and lend me a hand in calming the poor guys down? All you have to do is toss them one of these after you've tired them out a bit. Cnidri-Snacks are their favourite treats! Once they've had one, they're sure to calm down, and might even take a liking towards you! If you could handle three that'd be just swell.
