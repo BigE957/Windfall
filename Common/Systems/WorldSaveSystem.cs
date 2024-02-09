@@ -15,6 +15,8 @@ namespace Windfall.Common.Systems
         public static bool CloneRevealed = false;
         public static bool ScoogFished = false;
 
+        public static int paladinChats = 0;
+
         public static List<string> CreditDataNames;
         public static List<int> CreditDataCredits;
         public override void ClearWorld()
@@ -39,6 +41,8 @@ namespace Windfall.Common.Systems
 
             CreditDataNames = (List<string>)tag.GetList<string>("CreditDataNames");
             CreditDataCredits = (List<int>)tag.GetList<int>("CreditDataCredits");
+
+            paladinChats = tag.GetInt("paladinChats");
         }
 
         public override void SaveWorldData(TagCompound tag)
@@ -50,6 +54,8 @@ namespace Windfall.Common.Systems
 
             tag["CreditDataNames"] = CreditDataNames;
             tag["CreditDataCredits"] = CreditDataCredits;
+
+            tag["paladinChats"] = paladinChats;
         }
     }
 }

@@ -3,6 +3,7 @@
 Dialogue: {
 	IlmeranPaladin: {
 		#NPC Chat Dialogue
+		FirstChat: Why, hello there! You don't look like the type to frequent these parts. Anything I can do for you?
 		StandardDialogue1: The desert will show you no mercy. Stay strong!
 		StandardDialogue2: Where could that sea horse have gotten off to...?
 		StandardDialogue3: Care to rest a moment with me? I'm sure we both could use a rest.

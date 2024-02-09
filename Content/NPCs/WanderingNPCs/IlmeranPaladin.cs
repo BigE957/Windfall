@@ -147,8 +147,6 @@ namespace Windfall.Content.NPCs.WanderingNPCs
         {
             return new List<string> {
             "Nasser",
-            "Zaysan",
-            "Saimaa",
         };
         }
 
@@ -160,13 +158,15 @@ namespace Windfall.Content.NPCs.WanderingNPCs
             }
             return 0f;
         }
-
         public override string GetChat()
         {
             Player player = Main.player[Main.myPlayer];
             WeightedRandom<string> chat = new();
 
             // These are things that the NPC has a chance of telling you when you talk to it.
+            if(WorldSaveSystem.paladinChats == 0)
+                return Language.GetOrRegister($"Mods.{nameof(Windfall)}.Dialogue.IlmeranPaladin.FirstChat").Value;
+
             if (NPC.ai[1] == 1)
             {
                 NPC.ai[1] = 0;
@@ -208,6 +208,9 @@ namespace Windfall.Content.NPCs.WanderingNPCs
             chat.Add(Language.GetOrRegister($"Mods.{nameof(Windfall)}.Dialogue.IlmeranPaladin.StandardDialogue1").Value);
             chat.Add(Language.GetOrRegister($"Mods.{nameof(Windfall)}.Dialogue.IlmeranPaladin.StandardDialogue2").Value);
             chat.Add(Language.GetOrRegister($"Mods.{nameof(Windfall)}.Dialogue.IlmeranPaladin.StandardDialogue3").Value);
+
+            WorldSaveSystem.paladinChats++;
+
             return chat; // chat is implicitly cast to a string.
         }
 
