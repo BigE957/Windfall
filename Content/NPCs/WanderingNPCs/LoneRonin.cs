@@ -159,12 +159,22 @@ namespace Windfall.Content.NPCs.WanderingNPCs
             chat.Add(Language.GetOrRegister($"Mods.{nameof(Windfall)}.Dialogue.LoneRonin.StandardDialogue1").Value);
             chat.Add(Language.GetOrRegister($"Mods.{nameof(Windfall)}.Dialogue.LoneRonin.StandardDialogue2").Value);
             chat.Add(Language.GetOrRegister($"Mods.{nameof(Windfall)}.Dialogue.LoneRonin.StandardDialogue3").Value);
+            if (!NPC.downedQueenSlime)
+            {
+                chat.Add(Language.GetOrRegister($"Mods.{nameof(Windfall)}.Dialogue.LoneRonin.PreQueenSlimeDialogue1").Value);
+                chat.Add(Language.GetOrRegister($"Mods.{nameof(Windfall)}.Dialogue.LoneRonin.PreQueenSlimeDialogue2").Value);
+            }
+            if(Main.player[Main.myPlayer].ZoneCorrupt || Main.player[Main.myPlayer].ZoneCrimson)
+            {
+                chat.Add(Language.GetOrRegister($"Mods.{nameof(Windfall)}.Dialogue.LoneRonin.EvilbiomeDialogue1").Value);
+                chat.Add(Language.GetOrRegister($"Mods.{nameof(Windfall)}.Dialogue.LoneRonin.EvilbiomeDialogue2").Value);
+            }
             return chat;
         }
 
         public override void SetChatButtons(ref string button, ref string button2)
         {
-            button = "Something";
+            button = "Techniques";
             button2 = "Quest";
         }
 
@@ -172,7 +182,7 @@ namespace Windfall.Content.NPCs.WanderingNPCs
         {
             if (firstButton)
             {
-                Main.npcChatText = "Sorry! Out of Order! Come back later!";
+                Main.npcChatText = "Perhaps in the future I'll teach you some of my techniques.";
             }
             else
             {

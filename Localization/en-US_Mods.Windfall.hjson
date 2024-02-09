@@ -50,9 +50,13 @@ Dialogue: {
 
 	LoneRonin: {
 		#NPC Chat Dialogue
-		StandardDialogue1: My former master has been here... Where could that coward have fled now?
-		StandardDialogue2: Can I help you?
-		StandardDialogue3: What a foul place... A shame I'm stuck dredging through this filth.
+		StandardDialogue1: I wonder if he's alright... Oh, can I help you?
+		StandardDialogue2: The lands seem far quieter these days, but we must remain ever vigilant.
+		StandardDialogue3: Sometimes its better to let go of the past, rather than incessantly cling to it. I sometimes wonder how things would have played out had people just accepted change. How many lives would have been spared?
+		PreQueenSlimeDialogue1: My former master has been here... Where could that coward have fled now?
+		PreQueenSlimeDialogue2: Whatever it is the Slime God is planning, it cannot be good. While he may be but a shell of his former self, he holds the potential to become so much more...
+		EvilbiomeDialogue1: What a foul place... A shame I'm stuck dredging through this filth.
+		EvilBiomeDialogue2: The horrors left in the wake of Yharim's crusade are seen most clearly here. Has that man no conscious? No care for the consequences of his actions?
 		#NPC Quest Dialogue
 		LilBitchDialogue: Sorry, I'm not sure someone of your strength could do much to help.
 		NoQuestDialogue: You've done quite well. For now, I'd say we've earned some rest.
