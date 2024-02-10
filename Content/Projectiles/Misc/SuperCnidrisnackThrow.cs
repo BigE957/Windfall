@@ -4,7 +4,7 @@ using Terraria;
 using Terraria.ModLoader;
 using Windfall.Content.Items.Debug;
 
-namespace Windfall.Content.Projectiles.Other
+namespace Windfall.Content.Projectiles.Misc
 {
     public class SuperCnidrisnackThrow : ModProjectile
     {

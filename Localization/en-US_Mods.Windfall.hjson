@@ -75,8 +75,12 @@ Dialogue: {
 }
 
 UI: {
-	WanderersCabin: Building a Cabin...
-	ChestAdditions: Filling chests even more!
+	WorldGen: {
+		WanderersCabin: Building a Cabin...
+		ChestAdditions: Filling chests even more!
+	}
+
+	Cooldowns.ParryWeapon: Weapon Parry Cooldown
 }
 
 Items: {
@@ -311,6 +315,11 @@ Items: {
 				'''
 		}
 	}
+
+	ParryBlade: {
+		Tooltip: ""
+		DisplayName: Parry Blade
+	}
 }
 
 NPCs: {
@@ -333,6 +342,9 @@ Projectiles: {
 	IlmeranPaladinDig.DisplayName: Ilmeran Paladin
 	SuperCnidrisnackThrow.DisplayName: Super Cnidrisnack Throw
 	StatisProj.DisplayName: Statis
+	StatiParry.DisplayName: Stati Parry
+	ParryBladeProj.DisplayName: Parry Blade Proj
+	Melee.ParryBladeProj.DisplayName: Parry Blade Proj
 }
 
 JournalContents: {
@@ -458,4 +470,11 @@ LoreItems: {
 		and I could feel his loyal embers fade with my growing despondence… It seems the time for our battle draws near, 
 		and it shall be from atop this mountain that we together witness the end of a cruel world.
 		'''
+}
+
+Buffs: {
+	PerfectFlow: {
+		DisplayName: Perfect Flow
+		Description: Mods.Windfall.Buffs.PerfectFlow.Description
+	}
 }

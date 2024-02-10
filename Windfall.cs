@@ -15,6 +15,9 @@ namespace Windfall
             base.Unload();
             Instance = null;
         }
-
+        public override void PostSetupContent()
+        {
+            ModLoader.GetMod("CalamityMod").Call("RegisterModCooldowns", this);
+        }
     }
 }

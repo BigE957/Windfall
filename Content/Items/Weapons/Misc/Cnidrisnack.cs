@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
-using Windfall.Content.Projectiles.Other;
+using Windfall.Content.Projectiles.Misc;
 
 namespace Windfall.Content.Items.Weapons.Misc
 {

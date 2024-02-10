@@ -24,7 +24,7 @@ namespace Windfall.Common.Systems
             {
                 tasks.Insert(WanderersIndex + 2, new PassLegacy("Wanderers Cabin", (progress, config) =>
                 {
-                    progress.Message = Language.GetOrRegister("Mods.Windfall.UI.WanderersCabin").Value;
+                    progress.Message = Language.GetOrRegister("Mods.Windfall.UI.WorldGen.WanderersCabin").Value;
                     WanderersCabin.PlaceWanderersCabin(GenVars.structures);
                 }));
             }

@@ -6,9 +6,9 @@ using Microsoft.Xna.Framework;
 using Terraria.ID;
 using Terraria.ModLoader;
 using Terraria;
-using Windfall.Content.Projectiles.Other;
 using CalamityMod.Items.Ammo;
 using CalamityMod.Projectiles.Ranged;
+using Windfall.Content.Projectiles.Misc;
 
 namespace Windfall.Content.Items.Debug
 {

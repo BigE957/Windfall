@@ -8,6 +8,7 @@
     <LangVersion>latest</LangVersion>
   </PropertyGroup>
   <ItemGroup>
+    <None Remove="Assets\Buffs\PerfectFlow.png" />
     <None Remove="Assets\Items\Debug\DraeDashGiftCard.png" />
     <None Remove="Assets\Items\Debug\TheZoomer.png" />
     <None Remove="Assets\Items\Tools\IlmeranKnife.png" />
@@ -17,6 +18,10 @@
     <None Remove="Assets\NPCs\WanderingNPCs\LoneRonin.png" />
     <None Remove="Assets\Projectiles\NPCAnimations\IlmeranPaladinDig.png" />
     <None Remove="Assets\Projectiles\NPCAnimations\LoneRoninTeleport.png" />
+    <None Remove="Content\Buffs\Cooldowns\ParryWeapon.png" />
+    <None Remove="Content\Buffs\Cooldowns\ParryWeaponOutline.png" />
+    <None Remove="Content\Buffs\Cooldowns\ParryWeaponOverlay.png" />
+    <None Remove="Content\Buffs\Weapons\PerfectFlow.png" />
     <None Remove="Content\Items\Journals\JournalAerie.png" />
     <None Remove="Content\Items\Journals\JournalCompilation.png" />
     <None Remove="Content\Items\Journals\JournalCorruption.png" />
