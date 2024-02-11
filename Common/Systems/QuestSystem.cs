@@ -4,7 +4,7 @@ using CalamityMod.Items.Placeables.Banners;
 using CalamityMod.Items.Placeables.Furniture.Trophies;
 using System;
 using System.Collections.Generic;
-using System.Linq;
+using Microsoft.Xna.Framework;
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
@@ -13,7 +13,6 @@ using Windfall.Content.Items.Fishing;
 using Windfall.Content.Items.SummonItems;
 using Windfall.Content.Items.Tools;
 using Windfall.Content.Items.Weapons.Misc;
-using Windfall.Content.Projectiles.Fishing;
 
 namespace Windfall.Common.Systems
 {
@@ -131,6 +130,15 @@ namespace Windfall.Common.Systems
                 ),
                 CreateQuest
                 (
+                    "ParryIntro",
+                    new List<string>{"Land 5 successful parries."},
+                    new List<int>{1},
+                    true,
+                    new List<QuestItem>{ new QuestItem { Type = ModContent.ItemType<ParryBlade>(), Stack = 1 } },
+                    new List<QuestItem>{ new QuestItem { Type = ItemID.FrogLeg, Stack = 1 } }
+                ),
+                CreateQuest
+                (
                     "SlimeGodHunt", 
                     new List<string>{"Defeat Slime God"}, 
                     new List<int>{1}, 
@@ -209,6 +217,11 @@ namespace Windfall.Common.Systems
                 Quest temp = QuestLog[questIndex];
                 temp.Completed = true;
                 QuestLog[questIndex] = temp;
+            }
+            Main.NewText("Quest Progress: " + QuestLog[questIndex].ObjectiveProgress[0], Color.Yellow);
+            if (QuestLog[questIndex].Completed)
+            {
+                Main.NewText($"Quest Complete!", Color.Yellow);
             }
         }
         public static void ToggleQuestActive(int questIndex)

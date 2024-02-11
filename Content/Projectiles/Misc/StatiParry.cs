@@ -7,6 +7,7 @@ using Terraria.ModLoader;
 using CalamityMod;
 using Windfall.Content.Buffs.Cooldowns;
 using Windfall.Content.Buffs.Weapons;
+using Windfall.Common.Systems;
 
 namespace Windfall.Content.Projectiles.Misc
 {
@@ -29,10 +30,12 @@ namespace Windfall.Content.Projectiles.Misc
         }
         public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
         {
+            
             Player owner = Main.player[Projectile.owner];
             if(owner.Calamity().cooldowns.ContainsKey(ParryWeapon.ID))
                 owner.Calamity().cooldowns[ParryWeapon.ID].timeLeft = 0;
             owner.AddBuff(ModContent.BuffType<PerfectFlow>(), 5 * 60);
+            QuestSystem.IncrementQuestProgress(QuestSystem.QuestLog.FindIndex(quest => quest.Name == "ParryIntro"), 0);
         }
         public override void OnKill(int timeLeft)
         {

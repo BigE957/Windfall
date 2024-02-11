@@ -46,11 +46,6 @@ namespace Windfall.Common.Systems
                                 }
                             }
                             QuestSystem.IncrementQuestProgress(index, 0);
-                            Main.NewText("Quest Progress: " + QuestSystem.QuestLog[index].ObjectiveProgress[0], Color.Yellow);
-                            if (QuestSystem.QuestLog[index].Completed)
-                            {
-                                Main.NewText($"Quest Complete!", Color.Yellow);
-                            }
                         }
                     }
                 }

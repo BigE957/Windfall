@@ -14,6 +14,7 @@ namespace Windfall.Common.Systems
         public static List<bool> JournalsCollected = new(13);
         public static bool CloneRevealed = false;
         public static bool ScoogFished = false;
+        public static bool MechanicCultistsEncountered = false;
 
         public static int paladinChats = 0;
 
@@ -23,6 +24,7 @@ namespace Windfall.Common.Systems
         {
             CloneRevealed = false;
             ScoogFished = false;
+            MechanicCultistsEncountered = false;
 
             for (int i = 0; i < JournalsCollected.Count; i++)
             {
@@ -36,6 +38,7 @@ namespace Windfall.Common.Systems
         {
             CloneRevealed = tag.GetBool("CloneRevealed");
             ScoogFished = tag.GetBool("ScoogFished");
+            MechanicCultistsEncountered = tag.GetBool("MechanicCultistsEncountered");
 
             JournalsCollected = (List<bool>)tag.GetList<bool>("JournalsCollected");
 
@@ -49,6 +52,7 @@ namespace Windfall.Common.Systems
         {
             tag["CloneRevealed"] = CloneRevealed;
             tag["ScoogFished"] = ScoogFished;
+            tag["MechanicCultistsEncountered"] = MechanicCultistsEncountered;
 
             tag["JournalsCollected"] = JournalsCollected;
 
