@@ -58,7 +58,7 @@ Dialogue: {
 		EvilbiomeDialogue1: What a foul place... A shame I'm stuck dredging through this filth.
 		EvilBiomeDialogue2: The horrors left in the wake of Yharim's crusade are seen most clearly here. Has that man no conscious? No care for the consequences of his actions?
 		StatigelDialogue1: Hah! Turning the Slime God's ooze into armor. Onyx Kinsmen garb no less! How ironic!
-		StatigelDialogue2: Taking on the mantle of an Onyx Kinsmen? This counterfeit won't exactly get you far in that regard...
+		StatigelDialogue2: Taking on the mantle of an Onyx Kinsmen? This counterfeit armor won't exactly get you far in that regard...
 		#NPC Quest Dialogue
 		LilBitchDialogue: Sorry, I'm not sure someone of your strength could do much to help.
 		NoQuestDialogue: You've done quite well. For now, I'd say we've earned some rest.
@@ -78,9 +78,13 @@ Dialogue: {
 
 	LunarCult: {
 		MechanicShedInitial: Mind explaining what exactly you're doing here?
-		MechanicShedWhoAreWe: Just a small group keeping an eye on things. None of your business, really.
+		MechanicShedWhoAreWe: Just a small group keeping an eye on things. Not sure if its any of your business though.
+		MechanicShedWannaJoin: We are actually open to new members. Perhaps if we meet again you might get such an opportuity.
+		MechanicShedNuhUh: What?! No, nothing of the sort. Don't know what would give you that idea...
 		MechanicShedExploringHuh: Just exploring, huh? Why's exploring involve snooping around abandoned buildings?
-		MechanicShedEnd: Hm, fine. You're free to go.
+		MechanicShedFairEnough: Hmm, alright. That seems fair enough. Just don't go snooping around where you don't belong, alright?
+		MechanicShedSomethingBad: Well, we wouldn't want anything bad happening to you now would we? You never know who roams these parts. Being all alone in a dilapitaed cabin? Sounds like a recipe for disaster if you ask me.
+		MechanicShedEnd: Hm, well you seem to be just fine. You're free to go.
 	}
 }
 
@@ -341,7 +345,7 @@ NPCs: {
 	WFCnidrion.DisplayName: Cnidrion
 	IlmeranPaladinKnocked.DisplayName: Unconscious Ilmeran Paladin
 	LoneRonin.DisplayName: Lone Ronin
-	LunarCultistArcher.DisplayName: Lunar Cultist Archer
+	LunarCultistArcher.DisplayName: ???
 }
 
 Projectiles: {

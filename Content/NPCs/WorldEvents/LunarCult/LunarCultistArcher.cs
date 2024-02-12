@@ -77,10 +77,24 @@ namespace Windfall.Content.NPCs.WanderingNPCs
                     }
                     break;
                 case DialogueState.ExploringHuh:
-                    CurrentDialogue = DialogueState.End;
+                    if (firstButton)
+                    {
+                        CurrentDialogue = DialogueState.FairEnough;
+                    }
+                    else
+                    {
+                        CurrentDialogue = DialogueState.SomethingBad;
+                    }
                     break;
                 case DialogueState.WhoAreWe:
-                    CurrentDialogue = DialogueState.End;
+                    if (firstButton)
+                    {
+                        CurrentDialogue = DialogueState.WannaJoin;
+                    }
+                    else
+                    {
+                        CurrentDialogue = DialogueState.NuhUh;
+                    }
                     break;
                 case DialogueState.End:
                     foreach (NPC npc in Main.npc.Where(n => n.type == NPC.type && n.active))
@@ -93,6 +107,9 @@ namespace Windfall.Content.NPCs.WanderingNPCs
                         }
                         npc.active = false;
                     }
+                    break;
+                default:
+                    CurrentDialogue = DialogueState.End;
                     break;
             }
             Main.npcChatText = Language.GetOrRegister($"Mods.{nameof(Windfall)}.Dialogue.LunarCult.MechanicShed{CurrentDialogue}").Value;
@@ -110,9 +127,25 @@ namespace Windfall.Content.NPCs.WanderingNPCs
                     button = "Sounds interesting.";
                     button2 = "So... a cult?";
                     break;
+                case DialogueState.WannaJoin:
+                    button = "I'll keep that in mind!";
+                    button2 = "No thanks...";
+                    break;
+                case DialogueState.NuhUh:
+                    button = "I guess that makes sense.";
+                    button2 = "Surely...";
+                    break;
                 case DialogueState.ExploringHuh:
                     button = "Just looking for supplies.";
                     button2 = "What's it matter to you?";
+                    break;
+                case DialogueState.FairEnough:
+                    button = "Can do.";
+                    button2 = "Fine.";
+                    break;
+                case DialogueState.SomethingBad:
+                    button = "You might be right.";
+                    button2 = "Are you...?";
                     break;
                 case DialogueState.End:
                     button = "Thank you.";
