@@ -75,6 +75,13 @@ Dialogue: {
 		QueenSlimeHuntDialogueDuring: Show that filthy slime no mercy. While he may now wield the powers of Hallow, you too have grown in strength since your last battle with him.
 		QueenSlimeHuntDialogueEnd: So it is done at last. Funny how even after everything, I've wound up helping in the tyrant's dirty work. Regardless, I'm happy to know my master's schemes may now never come to fruition. You've done well this day, and succeeded where many have failed.
 	}
+
+	LunarCult: {
+		MechanicShedInitial: Mind explaining what exactly you're doing here?
+		MechanicShedWhoAreWe: Just a small group keeping an eye on things. None of your business, really.
+		MechanicShedExploringHuh: Just exploring, huh? Why's exploring involve snooping around abandoned buildings?
+		MechanicShedEnd: Hm, fine. You're free to go.
+	}
 }
 
 UI: {
@@ -334,6 +341,7 @@ NPCs: {
 	WFCnidrion.DisplayName: Cnidrion
 	IlmeranPaladinKnocked.DisplayName: Unconscious Ilmeran Paladin
 	LoneRonin.DisplayName: Lone Ronin
+	LunarCultistArcher.DisplayName: Lunar Cultist Archer
 }
 
 Projectiles: {
