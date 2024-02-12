@@ -19,9 +19,10 @@ namespace Windfall.Content.Tiles
         {
             Tile myTile = Main.tile[new Point(i, j)];
             Chest chest = null;
+            //detects if what was right clicked was a chest
             if (myTile.TileType == TileID.Containers)
             {
-                //Main.NewText($"Chest Opened!", Color.Yellow);
+                //checks all chests and sees if any of their coordinates line up with the tile that was right clicked
                 for (int chestIndex = 0; chestIndex < Main.maxChests; chestIndex++)
                 {
                     chest = Main.chest[chestIndex];
@@ -43,9 +44,10 @@ namespace Windfall.Content.Tiles
                     }
                 }
             }
+            //if what was right clicked is a chest, we use that chest
             if (chest != null)
             {
-
+                //chest the opened chest to see if it is the Mechanic's Cabin Chest, and if true, begins the Lunar Cult World Event
                 if (Utilities.ChestContains(chest, ItemID.Toolbox) != -1)
                 {
                     if (!WorldSaveSystem.MechanicCultistsEncountered)
