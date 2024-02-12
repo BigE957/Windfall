@@ -27,7 +27,7 @@ using CalamityMod.Dusts;
 using Terraria.ModLoader.IO;
 using Windfall.Common.Systems;
 
-namespace Windfall.Content.NPCs.WorldEvents
+namespace Windfall.Content.NPCs.WorldEvents.CalClone
 {
     public class WanderingCalClone : ModNPC
     {

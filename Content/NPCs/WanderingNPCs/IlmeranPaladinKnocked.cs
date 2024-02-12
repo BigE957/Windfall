@@ -37,10 +37,8 @@ namespace Windfall.Content.NPCs.WanderingNPCs
 
             AnimationType = NPCID.BartenderUnconscious;
         }
-        public override bool CanChat()
-        {
-            return true;
-        }
+        public override bool CanChat() => true;
+
         public override string GetChat()
         {
             NPC.Transform(ModContent.NPCType<IlmeranPaladin>());

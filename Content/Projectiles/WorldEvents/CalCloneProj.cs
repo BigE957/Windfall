@@ -7,9 +7,9 @@ using Terraria.Audio;
 using CalamityMod;
 using CalamityMod.NPCs.Crags;
 using CalamityMod.Dusts;
-using Windfall.Content.NPCs.WorldEvents;
 using Windfall.Common.Systems.WorldEvents;
 using Windfall.Common.Utilities;
+using Windfall.Content.NPCs.WorldEvents.CalClone;
 
 namespace Windfall.Content.Projectiles.WorldEvents
 {
@@ -28,7 +28,6 @@ namespace Windfall.Content.Projectiles.WorldEvents
             Summoning,
             Fleeing,
         }
-        private float i = 0f;
         //defines CurrentAI and how it interacts with Projectile.ai
         private AIState CurrentAI
         {
@@ -36,6 +35,7 @@ namespace Windfall.Content.Projectiles.WorldEvents
             set => Projectile.ai[0] = (int)value;
         }
         public override string Texture => "Windfall/Assets/NPCs/WorldEvents/WanderingCalClone";
+        private float i = 0f;
         public override void SetStaticDefaults()
         {
             // DisplayName.SetDefault("Calamitas");

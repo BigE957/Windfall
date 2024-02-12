@@ -31,7 +31,7 @@ using Mono.Cecil;
 using Terraria.Chat;
 using Windfall.Common.Systems;
 
-namespace Windfall.Content.NPCs.WorldEvents
+namespace Windfall.Content.NPCs.WorldEvents.CalClone
 {
     public class WanderingPotionSeller : ModNPC
     {

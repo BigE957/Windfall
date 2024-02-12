@@ -14,6 +14,7 @@
     <None Remove="Assets\Items\Tools\IlmeranKnife.png" />
     <None Remove="Assets\Items\Utility\IlmeranHorn.png" />
     <None Remove="Assets\Items\Weapons\Misc\Cnidrisnack.png" />
+    <None Remove="Assets\NPCs\Enemies\LunarCultistArcher.png" />
     <None Remove="Assets\NPCs\WanderingNPCs\IlmeranPaladin.png" />
     <None Remove="Assets\NPCs\WanderingNPCs\LoneRonin.png" />
     <None Remove="Assets\Projectiles\NPCAnimations\IlmeranPaladinDig.png" />

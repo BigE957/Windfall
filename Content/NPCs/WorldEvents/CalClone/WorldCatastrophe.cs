@@ -15,7 +15,7 @@ using CalamityMod.NPCs.CalClone;
 using Windfall.Content.Items.Weapons.Melee;
 using Windfall.Common.Systems;
 
-namespace Windfall.Content.NPCs.WorldEvents;
+namespace Windfall.Content.NPCs.WorldEvents.CalClone;
 
 public class WorldCatastrophe : ModNPC
 {
