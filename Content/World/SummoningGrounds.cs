@@ -11,37 +11,26 @@ using static CalamityMod.Schematics.SchematicManager;
 using Terraria.ModLoader;
 using Windfall.Content.Items.Journals;
 using Windfall.Common.Systems;
+using Windfall.Common.Systems.WorldEvents;
 
 namespace Windfall.Content.World
 {
-    public struct ChestItem
+    public static class SummoningGrounds
     {
-        internal int Type;
-
-        internal int Stack;
-
-        internal ChestItem(int type, int stack)
+        public static void PlaceSummoningGrounds(StructureMap structures)
         {
-            Type = type;
-            Stack = stack;
-        }
-    }
-    public static class WanderersCabin
-    {
-        public static void PlaceWanderersCabin(StructureMap structures)
-        {
-            string mapKey = "Wanderers Cabin";
+            string mapKey = "Summoning Grounds";
             SchematicMetaTile[,] schematic = WFSchematicManager.TileMaps[mapKey];
 
-            bool desertLeft = Main.dungeonX < Main.maxTilesX / 2;
+            bool DungeonLeft = Main.dungeonX < Main.maxTilesX / 2;
 
             int placementPositionX;
-            if (!desertLeft)
-                placementPositionX = WorldGen.genRand.Next(Main.spawnTileX - 400, Main.spawnTileX - 100);
+            if (!DungeonLeft)
+                placementPositionX = WorldGen.genRand.Next(Main.dungeonX - 400, Main.dungeonX - 100);
             else
-                placementPositionX = WorldGen.genRand.Next(Main.spawnTileX + 100, Main.spawnTileX + 400);
+                placementPositionX = WorldGen.genRand.Next(Main.dungeonX + 100, Main.dungeonX + 400);
 
-            int placementPositionY = (int)Main.worldSurface - (Main.maxTilesY / 6 + 50);
+            int placementPositionY = (int)Main.worldSurface - (Main.maxTilesY / 6 + 200);
 
             bool foundValidGround = false;
             int attempts = 0;
@@ -58,28 +47,25 @@ namespace Windfall.Content.World
                 }
             }
 
-            Point placementPoint = new(placementPositionX, placementPositionY + 5);
+            Point placementPoint = new(placementPositionX, placementPositionY);
+
+            //EyeCultistsSpawnSystem.GroundsLocation = placementPoint;
 
             Vector2 schematicSize = new(schematic.GetLength(0), schematic.GetLength(1));
             SchematicAnchor anchorType = SchematicAnchor.BottomCenter;
 
             bool place = true;
-            PlaceSchematic(mapKey, placementPoint, anchorType, ref place, new Action<Chest, int, bool>(FillWanderersChest));
+            PlaceSchematic(mapKey, placementPoint, anchorType, ref place, new Action<Chest, int, bool>(FillSummoningGroundsChest));
 
             Rectangle protectionArea = CalamityUtils.GetSchematicProtectionArea(schematic, placementPoint, anchorType);
             CalamityUtils.AddProtectedStructure(protectionArea, 30);
         }
 
-        private static void FillWanderersChest(Chest chest, int Type, bool place)
+        private static void FillSummoningGroundsChest(Chest chest, int Type, bool place)
         {
             List<ChestItem> contents = new()
             {
-                new ChestItem(ModContent.ItemType<JournalForest>(), 1),
-                new ChestItem(ItemID.Binoculars, 1),
-                new ChestItem(ItemID.HermesBoots, 1),
-                new ChestItem(ItemID.SwiftnessPotion, WorldGen.genRand.Next(1, 3)),
-                new ChestItem(ItemID.SpelunkerPotion, WorldGen.genRand.Next(1, 3)),
-                new ChestItem(ItemID.GoldCoin, WorldGen.genRand.Next(1, 3)),
+                new ChestItem(ModContent.ItemType<JournalDungeon>(), 1),
             };
 
             for (int i = 0; i < contents.Count; i++)

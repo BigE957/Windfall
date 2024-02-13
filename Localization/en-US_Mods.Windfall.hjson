@@ -77,6 +77,7 @@ Dialogue: {
 	}
 
 	LunarCult: {
+		#Mechanic Shed Dialogue
 		MechanicShedInitial: Mind explaining what exactly you're doing here?
 		MechanicShedWhoAreWe: Just a small group keeping an eye on things. Not sure if its any of your business though.
 		MechanicShedWannaJoin: We are actually open to new members. Perhaps if we meet again you might get such an opportuity.
@@ -85,12 +86,18 @@ Dialogue: {
 		MechanicShedFairEnough: Hmm, alright. That seems fair enough. Just don't go snooping around where you don't belong, alright?
 		MechanicShedSomethingBad: Well, we wouldn't want anything bad happening to you now would we? You never know who roams these parts. Being all alone in a dilapitaed cabin? Sounds like a recipe for disaster if you ask me.
 		MechanicShedEnd: Hm, well you seem to be just fine. You're free to go.
+		#Ocular Cult Dialogue
+		OcularDevoteeInitial: Ah, welcome traveller! You arrive at just the right moment! The bishop said one like you would arrive... Join us and witness something spectacular!
+		OcularDevoteeSomethingAmazing: Yes, yes. Something truly amazing! Long have we prepared for this moment. A communion with an ancient thing. Knowledge like no other shall soon be at our fingertips!
+		OcularDevoteeTheBishop: Yes, the Bishop! He has brought together our small group, and he has prepared long for this moment. A kind man, you will like him, I'm sure!
+		OcularDevoteeEnd: Speak with the Bishop, there at the altar. He can tell you more than I.
 	}
 }
 
 UI: {
 	WorldGen: {
 		WanderersCabin: Building a Cabin...
+		SummoningGrounds: Constructing an occult ritual site...
 		ChestAdditions: Filling chests even more!
 	}
 
@@ -346,6 +353,8 @@ NPCs: {
 	IlmeranPaladinKnocked.DisplayName: Unconscious Ilmeran Paladin
 	LoneRonin.DisplayName: Lone Ronin
 	LunarCultistArcher.DisplayName: ???
+	LunarCultistDevotee.DisplayName: Lunar Cultist Devotee
+	LunarBishop.DisplayName: Lunar Bishop
 }
 
 Projectiles: {

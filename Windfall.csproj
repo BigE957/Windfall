@@ -17,6 +17,8 @@
     <None Remove="Assets\NPCs\Enemies\LunarCultistArcher.png" />
     <None Remove="Assets\NPCs\WanderingNPCs\IlmeranPaladin.png" />
     <None Remove="Assets\NPCs\WanderingNPCs\LoneRonin.png" />
+    <None Remove="Assets\NPCs\WorldEvents\LunarBishop.png" />
+    <None Remove="Assets\NPCs\WorldEvents\LunarCultistDevotee.png" />
     <None Remove="Assets\Projectiles\NPCAnimations\IlmeranPaladinDig.png" />
     <None Remove="Assets\Projectiles\NPCAnimations\LoneRoninTeleport.png" />
     <None Remove="Content\Buffs\Cooldowns\ParryWeapon.png" />

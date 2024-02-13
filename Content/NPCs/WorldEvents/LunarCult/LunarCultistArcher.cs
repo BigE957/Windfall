@@ -1,15 +1,9 @@
 ﻿using Microsoft.Xna.Framework;
 using CalamityMod;
-using CalamityMod.Items.Accessories;
-using CalamityMod.NPCs.DesertScourge;
 using Terraria;
 using Terraria.ID;
 using Terraria.Localization;
 using Terraria.ModLoader;
-using Windfall.Common.Utilities;
-using Windfall.Content.Items.Fishing;
-using Windfall.Content.Items.Utility;
-using Windfall.Content.Items.Weapons.Misc;
 using System.Linq;
 
 namespace Windfall.Content.NPCs.WanderingNPCs
@@ -116,7 +110,6 @@ namespace Windfall.Content.NPCs.WanderingNPCs
         }
         public override void SetChatButtons(ref string button, ref string button2)
         {
-
             switch (CurrentDialogue)
             {
                 case DialogueState.Initial:
@@ -152,6 +145,10 @@ namespace Windfall.Content.NPCs.WanderingNPCs
                     button2 = "Finally...";
                     break;
             }
+        }
+        public override bool CheckActive()
+        {
+            return false;
         }
     }
 }

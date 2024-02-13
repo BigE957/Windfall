@@ -9,7 +9,7 @@ namespace Windfall.Common.Systems.WorldEvents
 {
     public class CalCloneSpawnSystem : ModSystem
     {
-        public enum SystemState
+        internal enum SystemState
         {
             CheckReqs,
             CheckChance,
@@ -21,7 +21,7 @@ namespace Windfall.Common.Systems.WorldEvents
         internal double timeTillSpawn;
         internal int cragsTimer;
 
-        public SystemState State = SystemState.CheckReqs;
+        internal SystemState State = SystemState.CheckReqs;
 
         public override void PreUpdateWorld()
         {

@@ -75,7 +75,7 @@ namespace Windfall.Content.Tiles
                 Dust d = Dust.NewDustPerfect(Cultist2Coords, DustID.GoldFlame, speed * 3, Scale: 1.5f);
                 d.noGravity = true;
             }
-            NPC.NewNPCDirect(Entity.GetSource_NaturalSpawn(), Cultist2Coords, ModContent.NPCType<LunarCultistArcher>(), 0, 2);
+            NPC.NewNPCDirect(Entity.GetSource_NaturalSpawn(), Cultist2Coords, ModContent.NPCType<LunarCultistArcher>(), 0, 1);
 
         }
     }

@@ -12,6 +12,8 @@ namespace Windfall.Common.Systems
     {
         internal const string WanderersCabinKey = "Wanderers Cabin";
         internal const string WanderersCabinKeyFilename = "Content/Schematics/WanderersCabin.csch";
+        internal const string SummoningGroundsKey = "Summoning Grounds";
+        internal const string SummoningGroundsKeyFilename = "Content/Schematics/SummoningGrounds.csch";
         internal static Dictionary<string, SchematicMetaTile[,]> TileMaps =>
             typeof(SchematicManager).GetField("TileMaps", Utilities.Utilities.UniversalBindingFlags).GetValue(null) as Dictionary<string, SchematicMetaTile[,]>;
 
@@ -23,6 +25,7 @@ namespace Windfall.Common.Systems
         public override void OnModLoad()
         {
             TileMaps["Wanderers Cabin"] = LoadWindfallSchematic("Content/Schematics/WanderersCabin.csch");
+            TileMaps["Summoning Grounds"] = LoadWindfallSchematic("Content/Schematics/SummoningGrounds.csch");
 
         }
         public static SchematicMetaTile[,] LoadWindfallSchematic(string filename)
