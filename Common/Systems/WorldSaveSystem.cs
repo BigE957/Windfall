@@ -22,17 +22,7 @@ namespace Windfall.Common.Systems
         public static List<int> CreditDataCredits;
         public override void ClearWorld()
         {
-            CloneRevealed = false;
-            ScoogFished = false;
-            MechanicCultistsEncountered = false;
-
-            for (int i = 0; i < JournalsCollected.Count; i++)
-            {
-                JournalsCollected[i] = false;
-            }
-
-            CreditDataNames = new List<string>();
-            CreditDataCredits = new List<int>();
+            ResetWorldData();
         }
         public override void LoadWorldData(TagCompound tag)
         {
@@ -60,6 +50,20 @@ namespace Windfall.Common.Systems
             tag["CreditDataCredits"] = CreditDataCredits;
 
             tag["paladinChats"] = paladinChats;
+        }
+        public static void ResetWorldData()
+        {
+            CloneRevealed = false;
+            ScoogFished = false;
+            MechanicCultistsEncountered = false;
+
+            for (int i = 0; i < JournalsCollected.Count; i++)
+            {
+                JournalsCollected[i] = false;
+            }
+
+            CreditDataNames = new List<string>();
+            CreditDataCredits = new List<int>();
         }
     }
 }
