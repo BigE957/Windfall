@@ -2,8 +2,8 @@
 using Terraria;
 using Terraria.ModLoader;
 using Microsoft.Xna.Framework;
-using Windfall.Content.Projectiles.WorldEvents;
 using static Windfall.Common.Utilities.Utilities;
+using Windfall.Content.Projectiles.NPCAnimations;
 
 namespace Windfall.Common.Systems.WorldEvents
 {

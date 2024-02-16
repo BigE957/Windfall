@@ -11,7 +11,7 @@ using Windfall.Common.Systems.WorldEvents;
 using Windfall.Common.Utilities;
 using Windfall.Content.NPCs.WorldEvents.CalClone;
 
-namespace Windfall.Content.Projectiles.WorldEvents
+namespace Windfall.Content.Projectiles.NPCAnimations
 {
     public class CalCloneProj : ModProjectile
     {
@@ -87,7 +87,7 @@ namespace Windfall.Content.Projectiles.WorldEvents
                     Projectile.position.Y -= 24;
                     CurrentAI = AIState.WaitingForPlayer;
                     break;
-                    
+
                 case AIState.WaitingForPlayer:
                     //waits until the player is close by
                     if (Projectile.WithinRange(closestPlayer.Center, 320f))
