@@ -1,12 +1,8 @@
 ﻿using CalamityMod;
-using System;
-using Microsoft.Xna.Framework;
 using Terraria.ID;
 using Terraria.Localization;
 using Terraria;
 using Terraria.ModLoader;
-using Microsoft.Xna.Framework.Graphics;
-using Terraria.GameContent;
 
 namespace Windfall.Content.NPCs.WorldEvents.LunarCult
 {
@@ -89,7 +85,7 @@ namespace Windfall.Content.NPCs.WorldEvents.LunarCult
                     break;
                 case DialogueState.End:
                     button = "Goodbye!";
-                    button2 = "Finally.";
+                    button2 = "Took long enough...";
                     break;
             }
         }

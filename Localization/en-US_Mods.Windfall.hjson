@@ -281,12 +281,12 @@ Items: {
 
 		WorldsEnd: {
 			DisplayName: Worlds End
-			Tooltip: "Resets all World Save Data on use"
+			Tooltip: Resets all World Save Data on use
 		}
 
 		DungeonLocationChecker: {
 			DisplayName: Dungeon Detector
-			Tooltip: "Tells you where your dungeon is, and spawns a lil guy there!"
+			Tooltip: Tells you where your dungeon is, and spawns a lil guy there!
 		}
 	}
 
@@ -353,8 +353,8 @@ Items: {
 	}
 
 	ParryBlade: {
-		DisplayName: Statis' Knife
-		Tooltip: "A blade capable of reflecting projectiles"
+		DisplayName: Onyx Knife
+		Tooltip: A blade capable of reflecting projectiles
 	}
 }
 
