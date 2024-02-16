@@ -86,11 +86,16 @@ Dialogue: {
 		MechanicShedFairEnough: Hmm, alright. That seems fair enough. Just don't go snooping around where you don't belong, alright?
 		MechanicShedSomethingBad: Well, we wouldn't want anything bad happening to you now would we? You never know who roams these parts. Being all alone in a dilapitaed cabin? Sounds like a recipe for disaster if you ask me.
 		MechanicShedEnd: Hm, well you seem to be just fine. You're free to go.
-		#Ocular Cult Dialogue
+		#Ocular Cult Dialogue (scrapped)
 		OcularDevoteeInitial: Ah, welcome traveller! You arrive at just the right moment! The bishop said one like you would arrive... Join us and witness something spectacular!
 		OcularDevoteeSomethingAmazing: Yes, yes. Something truly amazing! Long have we prepared for this moment. A communion with an ancient thing. Knowledge like no other shall soon be at our fingertips!
 		OcularDevoteeTheBishop: Yes, the Bishop! He has brought together our small group, and he has prepared long for this moment. A kind man, you will like him, I'm sure!
 		OcularDevoteeEnd: Speak with the Bishop, there at the altar. He can tell you more than I.
+		#Post-Skeletron Dialogue
+		DungeonBishopInitial: Your success against our guardian was... Unexpected. It was meant to keep out intruders forevermore... However... issues have crept up since it was raised. Perhaps by opening our home to others, they might at last be laid to rest.
+		DungeonBishopGuardian: Yes, that construct was made to serve as this dungeon's guardian. That old man became its vessel after trespassing upon our sanctum. Worry not, with the guardian now dead, the man should return to his former self, despite what things might've seemed.
+		DungeonBishopIssues: Yes... Our sanctum become something of a dungeon in recent years. However those it once held have now long since passed, and this site's had an adverse effect upon their souls. Now, its crawling with their reanimated remains. If you'd do us a favor and clean it out a bit, we'd be ever in your debt.
+		DungeonBishopEnd: Now then, enough talk. Till we meet again, wayward traveller. Perhaps our paths might cross again.
 	}
 }
 
@@ -273,6 +278,16 @@ Items: {
 			DisplayName: Super Cnidri-Snack
 			Tooltip: Not even the most defiant of Cnidrions can resist its taste!
 		}
+
+		WorldsEnd: {
+			DisplayName: Worlds End
+			Tooltip: "Resets all World Save Data on use"
+		}
+
+		DungeonLocationChecker: {
+			DisplayName: Dungeon Detector
+			Tooltip: "Tells you where your dungeon is, and spawns a lil guy there!"
+		}
 	}
 
 	Utility: {
@@ -338,8 +353,8 @@ Items: {
 	}
 
 	ParryBlade: {
-		Tooltip: ""
-		DisplayName: Parry Blade
+		DisplayName: Statis' Knife
+		Tooltip: "A blade capable of reflecting projectiles"
 	}
 }
 
@@ -364,11 +379,19 @@ Projectiles: {
 	CnidrisnackThrow.DisplayName: Cnidrisnack
 	AncientIlmeranBobber.DisplayName: Ancient Ilmeran Bobber
 	IlmeranPaladinDig.DisplayName: Ilmeran Paladin
-	SuperCnidrisnackThrow.DisplayName: Super Cnidrisnack Throw
+	SuperCnidrisnackThrow.DisplayName: Super Cnidrisnack
 	StatisProj.DisplayName: Statis
-	StatiParry.DisplayName: Stati Parry
-	ParryBladeProj.DisplayName: Parry Blade Proj
-	Melee.ParryBladeProj.DisplayName: Parry Blade Proj
+	StatiParry.DisplayName: Parry!
+	ParryBladeProj.DisplayName: Parry Blade
+	Melee.ParryBladeProj.DisplayName: Parry Blade
+	LunarBishopProj.DisplayName: Lunar Bishop
+}
+
+Buffs: {
+	PerfectFlow: {
+		DisplayName: Perfect Flow
+		Description: Prefection breeds perfection...
+	}
 }
 
 JournalContents: {
@@ -494,11 +517,4 @@ LoreItems: {
 		and I could feel his loyal embers fade with my growing despondence… It seems the time for our battle draws near, 
 		and it shall be from atop this mountain that we together witness the end of a cruel world.
 		'''
-}
-
-Buffs: {
-	PerfectFlow: {
-		DisplayName: Perfect Flow
-		Description: Mods.Windfall.Buffs.PerfectFlow.Description
-	}
 }
