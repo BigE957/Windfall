@@ -184,7 +184,7 @@ namespace Windfall.Content.NPCs.WanderingNPCs
         public override void SetChatButtons(ref string button, ref string button2)
         {
             button = "Techniques";
-            button2 = "Quest";
+            button2 = Language.GetTextValue("LegacyInterface.64");
         }
 
         public override void OnChatButtonClicked(bool firstButton, ref string shop)
