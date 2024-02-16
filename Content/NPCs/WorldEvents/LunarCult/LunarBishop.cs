@@ -1,13 +1,12 @@
 ﻿using CalamityMod;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using Microsoft.Xna.Framework;
 using Terraria.ID;
 using Terraria.Localization;
 using Terraria;
 using Terraria.ModLoader;
+using Microsoft.Xna.Framework.Graphics;
+using Terraria.GameContent;
 
 namespace Windfall.Content.NPCs.WorldEvents.LunarCult
 {
@@ -16,20 +15,16 @@ namespace Windfall.Content.NPCs.WorldEvents.LunarCult
         private enum DialogueState
         {
             Initial,
-            SomethingAmazing,
-            TheBishop,
+            Guardian,
+            Issues,
             End
         }
-        private DialogueState CurrentDialogue
-        {
-            get => (DialogueState)NPC.ai[1];
-            set => NPC.ai[1] = (int)value;
-        }
+        private DialogueState CurrentDialogue = 0;
         public override string Texture => "Windfall/Assets/NPCs/WorldEvents/LunarBishop";
         public override void SetStaticDefaults()
         {
             this.HideFromBestiary();
-            NPCID.Sets.ActsLikeTownNPC[Type] = true;
+            //NPCID.Sets.ActsLikeTownNPC[Type] = true;
             Main.npcFrameCount[Type] = 1;
             NPCID.Sets.NoTownNPCHappiness[Type] = true;
         }
@@ -46,14 +41,12 @@ namespace Windfall.Content.NPCs.WorldEvents.LunarCult
             NPC.DeathSound = SoundID.NPCDeath1;
             NPC.knockBackResist = 1f;
             NPC.immortal = true;
-
-            AnimationType = NPCID.BartenderUnconscious;
         }
         public override bool CanChat() => true;
 
         public override string GetChat()
         {
-            return Language.GetOrRegister($"Mods.{nameof(Windfall)}.Dialogue.LunarCult.OcularDevotee{CurrentDialogue}").Value;
+            return Language.GetOrRegister($"Mods.{nameof(Windfall)}.Dialogue.LunarCult.DungeonBishop{CurrentDialogue}").Value;
         }
         public override void OnChatButtonClicked(bool firstButton, ref string shop)
         {
@@ -62,11 +55,11 @@ namespace Windfall.Content.NPCs.WorldEvents.LunarCult
                 case DialogueState.Initial:
                     if (firstButton)
                     {
-                        CurrentDialogue = DialogueState.SomethingAmazing;
+                        CurrentDialogue = DialogueState.Guardian;
                     }
                     else
                     {
-                        CurrentDialogue = DialogueState.TheBishop;
+                        CurrentDialogue = DialogueState.Issues;
                     }
                     break;
                 case DialogueState.End:
@@ -76,33 +69,29 @@ namespace Windfall.Content.NPCs.WorldEvents.LunarCult
                     CurrentDialogue = DialogueState.End;
                     break;
             }
-            Main.npcChatText = Language.GetOrRegister($"Mods.{nameof(Windfall)}.Dialogue.LunarCult.OcularDevotee{CurrentDialogue}").Value;
+            Main.npcChatText = Language.GetOrRegister($"Mods.{nameof(Windfall)}.Dialogue.LunarCult.DungeonBishop{CurrentDialogue}").Value;
         }
         public override void SetChatButtons(ref string button, ref string button2)
         {
             switch (CurrentDialogue)
             {
                 case DialogueState.Initial:
-                    button = "What are you doing?";
-                    button2 = "The Bishop?";
+                    button = "Your guardian?";
+                    button2 = "What issues?";
                     break;
-                case DialogueState.SomethingAmazing:
-                    button = "Interesting.";
-                    button2 = "That sounds...";
+                case DialogueState.Guardian:
+                    button = "That's a relief.";
+                    button2 = "You cursed him...?";
                     break;
-                case DialogueState.TheBishop:
-                    button = "I'll keep that in mind!";
-                    button2 = "No thanks...";
+                case DialogueState.Issues:
+                    button = "I'll see what I can do.";
+                    button2 = "No promises.";
                     break;
                 case DialogueState.End:
-                    button = "Alright.";
-                    button2 = "If you say so...";
+                    button = "Goodbye!";
+                    button2 = "Finally.";
                     break;
             }
-        }
-        public override bool CheckActive()
-        {
-            return false;
         }
     }
 }
