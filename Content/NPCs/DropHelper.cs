@@ -5,6 +5,7 @@ using CalamityMod;
 using Windfall.Content.Items.Journals;
 using Windfall.Content.Items.Lore;
 using Windfall.Common.Systems;
+using Terraria.GameContent.ItemDropRules;
 
 namespace Windfall.Content.NPCs
 {
@@ -13,6 +14,11 @@ namespace Windfall.Content.NPCs
         [JITWhenModsEnabled("CalamityMod")]
         public override void ModifyNPCLoot(NPC npc, NPCLoot npcLoot)
         {
+            if(npc.type == NPCID.DarkCaster) 
+            {
+                npcLoot.Add(ItemDropRule.Common(ItemID.WaterBolt, 10));
+            }
+
             Mod calamity = ModLoader.GetMod("CalamityMod");
             if (npc.type == calamity.Find<ModNPC>("Cnidrion").Type)
             {
