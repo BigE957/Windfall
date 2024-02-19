@@ -6,6 +6,11 @@ using Windfall.Common.Systems;
 using Windfall.Common.Utilities;
 using Windfall.Content.NPCs.WanderingNPCs;
 using CalamityMod;
+using System.Linq;
+using System;
+using Terraria.ID;
+using Terraria.ModLoader;
+using Windfall.Content.NPCs.TravellingNPCs;
 
 namespace Windfall.Common.Utilities
 {
@@ -121,6 +126,74 @@ namespace Windfall.Common.Utilities
 
                 }
             }
+        }
+        public static QuestItem CollectorQuestDialogueHelper(NPC npc, ref bool QuestComplete, QuestItem CurrentQuestItem)
+        {
+            string NPCPath = null;
+            List<QuestItem> MyQuestItems = null;
+            if (npc.type == ModContent.NPCType<TravellingCultist>())
+            {
+                NPCPath = "LunarCult.TravellingCultist";
+                MyQuestItems = QuestSystem.TravellingCultistQuestItems;
+            }
+            int index = -1;
+            if (!QuestComplete)
+            {
+                bool questActive = true;
+                if (CurrentQuestItem.Stack == 0)
+                {
+                    index = Main.rand.Next(0, MyQuestItems.Count);
+                    CurrentQuestItem = MyQuestItems[index];
+                    questActive = false;
+                }
+                else
+                {
+                    index = MyQuestItems.IndexOf(CurrentQuestItem);
+                }
+                string ItemName = ContentSamples.ItemsByType[CurrentQuestItem.Type].Name.Replace(" ", "");
+
+                if (!questActive)
+                {
+                    questActive = true;
+                    Main.npcChatText = Language.GetOrRegister($"Mods.{nameof(Windfall)}.Dialogue.{NPCPath}.{ItemName}Start").Value;
+                }
+                else
+                {
+                    Player player = Main.player[Main.myPlayer];
+                    foreach (Item item in player.inventory.Where(n => n.type == CurrentQuestItem.Type))
+                    {
+                        if (item.stack >= CurrentQuestItem.Stack)
+                        {
+                            item.stack -= CurrentQuestItem.Stack;
+                            QuestComplete = true;
+                        }
+                        else
+                        {
+                            Main.npcChatText = "I'll need more than this... About " + CurrentQuestItem.Stack + " should be enough.";
+                            return new(0,0);
+                        }
+
+                    }
+                    if (QuestComplete)
+                    {
+
+                        Main.npcChatText = Language.GetOrRegister($"Mods.{nameof(Windfall)}.Dialogue.{NPCPath}.{ItemName}End").Value;
+                        Item.NewItem(npc.GetSource_GiftOrReward(), player.Center, Vector2.Zero, ItemID.DungeonFishingCrateHard);
+                        CurrentQuestItem = new(0, 0);
+                        questActive = false;
+                        index = -1;
+                    }
+                    else
+                    {
+                        Main.npcChatText = Language.GetOrRegister($"Mods.{nameof(Windfall)}.Dialogue.{NPCPath}.{ItemName}During").Value;
+                    }
+                }
+            }
+            else
+            {
+                Main.npcChatText = Language.GetOrRegister($"Mods.{nameof(Windfall)}.Dialogue.{NPCPath}.NoQuest").Value;
+            }
+            return CurrentQuestItem;
         }
     }
 }

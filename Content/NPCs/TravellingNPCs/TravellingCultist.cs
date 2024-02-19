@@ -14,8 +14,7 @@ using Terraria.Localization;
 using Terraria.ModLoader;
 using Terraria.Utilities;
 using Windfall.Common.Systems;
-using Windfall.Content.Items.Quests;
-using static Windfall.Common.Systems.QuestSystem;
+using static Windfall.Common.Utilities.Utilities;
 
 namespace Windfall.Content.NPCs.TravellingNPCs
 {
@@ -215,81 +214,14 @@ namespace Windfall.Content.NPCs.TravellingNPCs
         }
         public static QuestItem QuestArtifact = new(0,0);
 
-        internal bool QuestComplete = false;
-        internal int index = -1;
+        public static bool QuestComplete = false;
+
 
         public override void OnChatButtonClicked(bool firstButton, ref string shop)
         {
             if (firstButton)
             {
-                if (!QuestComplete)
-                {
-                    bool questActive = true;
-                    if (QuestArtifact.Stack == 0)
-                    {
-                        index = Main.rand.Next(0, DungeonTreasures.Count);
-                        QuestArtifact = DungeonTreasures[index];
-                        questActive = false;
-                    }
-                    else
-                    {
-                        index = DungeonTreasures.IndexOf(QuestArtifact);
-                    }
-                    string ItemName = "lol";
-                    switch (index)
-                    {
-                        case 0:
-                            ItemName = "Bone";
-                            break;
-                        case 1:
-                            ItemName = "WaterBolt";
-                            break;
-                        case 2:
-                            ItemName = "Insignia";
-                            break;
-                    }
-
-                    if (!questActive)
-                    {
-                        questActive = true;
-                        Main.npcChatText = Language.GetOrRegister($"Mods.{nameof(Windfall)}.Dialogue.LunarCult.TravellingCultist.{ItemName}Start").Value;
-                    }
-                    else
-                    {
-                        Player player = Main.player[Main.myPlayer];
-                        foreach (Item item in player.inventory.Where(n => n.type == QuestArtifact.Type))
-                        {
-                            if(item.stack >= QuestArtifact.Stack)
-                            {
-                                item.stack -= QuestArtifact.Stack;
-                                QuestComplete = true;
-                            }
-                            else
-                            {       
-                                Main.npcChatText = "I'll need more than this... About " + QuestArtifact.Stack + " should be enough.";
-                                return;
-                            }
-                            
-                        }
-                        if (QuestComplete)
-                        {
-
-                            Main.npcChatText = Language.GetOrRegister($"Mods.{nameof(Windfall)}.Dialogue.LunarCult.TravellingCultist.{ItemName}End").Value;
-                            Item.NewItem(Entity.GetSource_GiftOrReward(), player.Center, Vector2.Zero, ItemID.DungeonFishingCrateHard);
-                            QuestArtifact = new(0, 0);
-                            questActive = false;
-                            index = -1;
-                        }
-                        else
-                        {
-                            Main.npcChatText = Language.GetOrRegister($"Mods.{nameof(Windfall)}.Dialogue.LunarCult.TravellingCultist.{ItemName}During").Value;
-                        }
-                    }
-                }
-                else
-                {
-                    Main.npcChatText = Language.GetOrRegister($"Mods.{nameof(Windfall)}.Dialogue.LunarCult.TravellingCultist.NoQuest").Value;
-                }
+                QuestArtifact = CollectorQuestDialogueHelper(Main.npc[NPC.whoAmI], ref QuestComplete, QuestArtifact);
             }
         }
         public override void AI()

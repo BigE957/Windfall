@@ -111,9 +111,9 @@ Dialogue: {
 			WaterBoltStart: I hear those Dark Casters carry tend to carry with them a magic tome. I'd be curious to figure out the origin of these tomes, and if they hold any connection to the Lunar Cult.
 			WaterBoltDuring: The tome is said to carry with it potent water magic. Why would the Lunar Cult care for such simple forms of magic though...
 			WaterBoltEnd: Ah! You found it! That does indeed look like the right tome, and considering its age, I can imagine it fitting in the hands of those casters nicely. Thank you! I'll let you know if I find any connection between this and the cult.
-			InsigniaStart: Many of the skeletons which wander that decrepit Dungeon were once devoted soldiers of the Gods; imprisoned within there during the Godseeker's crusade. I'd bet the insignia they bear might still hold some of the deific essence they were gifted. If you get me some, they may prove helpful in combating the Lunar Cult.
-			InsigniaDuring: Those skeletons are quite angry about their eternal imprisonment within the Dungeon. So don't expect them to part with their patrons' tokens so easilly. If you can get me just five, that should suffice.
-			InsigniaEnd: Oh, perfect! Yes, I can sense the faint traces of deific essence on these... Perhaps the latent power of the Gods might be what we need to stand a chance against the Lunar Cult!
+			DeificInsigniaStart: Many of the skeletons which wander that decrepit Dungeon were once devoted soldiers of the Gods; imprisoned within there during the Godseeker's crusade. I'd bet the insignia they bear might still hold some of the deific essence they were gifted. If you get me some, they may prove helpful in combating the Lunar Cult.
+			DeificInsigniaDuring: Those skeletons are quite angry about their eternal imprisonment within the Dungeon. So don't expect them to part with their patrons' tokens so easilly. If you can get me just five, that should suffice.
+			DeificInsigniaEnd: Oh, perfect! Yes, I can sense the faint traces of deific essence on these... Perhaps the latent power of the Gods might be what we need to stand a chance against the Lunar Cult!
 		}
 	}
 }
@@ -379,7 +379,7 @@ Items: {
 	Quest: {
 		DeificInsignia: {
 			DisplayName: Deific Insignia
-			Tooltip: "A worn sigil of the gods"
+			Tooltip: A worn sigil of the gods
 		}
 	}
 }
