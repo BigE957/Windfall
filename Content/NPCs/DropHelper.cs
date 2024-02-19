@@ -6,6 +6,9 @@ using Windfall.Content.Items.Journals;
 using Windfall.Content.Items.Lore;
 using Windfall.Common.Systems;
 using Terraria.GameContent.ItemDropRules;
+using Windfall.Common.Utilities;
+using Windfall.Content.Items.Quests;
+using Windfall.Content.NPCs.TravellingNPCs;
 
 namespace Windfall.Content.NPCs
 {
@@ -18,7 +21,10 @@ namespace Windfall.Content.NPCs
             {
                 npcLoot.Add(ItemDropRule.Common(ItemID.WaterBolt, 10));
             }
-
+            if(npc.type == NPCID.AngryBones || npc.type == NPCID.AngryBonesBig || npc.type == NPCID.AngryBonesBigHelmet || npc.type == NPCID.AngryBonesBigMuscle) 
+            {
+                npcLoot.AddIf(() => TravellingCultist.QuestArtifact.Type == ModContent.ItemType<DeificInsignia>() && NPC.AnyNPCs(ModContent.NPCType<TravellingCultist>()), ModContent.ItemType<DeificInsignia>(), 5);
+            }
             Mod calamity = ModLoader.GetMod("CalamityMod");
             if (npc.type == calamity.Find<ModNPC>("Cnidrion").Type)
             {

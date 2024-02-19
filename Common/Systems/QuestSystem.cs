@@ -13,6 +13,8 @@ using Windfall.Content.Items.Fishing;
 using Windfall.Content.Items.SummonItems;
 using Windfall.Content.Items.Tools;
 using Windfall.Content.Items.Weapons.Misc;
+using Windfall.Content.Items.Quests;
+using Windfall.Content.NPCs.TravellingNPCs;
 
 namespace Windfall.Common.Systems
 {
@@ -28,7 +30,7 @@ namespace Windfall.Common.Systems
             Stack = stack;
         }
     }
-    public class QuestSystem : ModSystem
+    public partial class QuestSystem : ModSystem
     {
         public struct Quest
         {
@@ -55,20 +57,29 @@ namespace Windfall.Common.Systems
             }
         }
         public static List<Quest> QuestLog = InitializedQuestLog();
-        public static List<int> Nums;
+        
+        public static readonly List<QuestItem> DungeonTreasures = new()
+        {
+            new QuestItem(ItemID.Bone, 50),
+            new QuestItem(ItemID.WaterBolt, 1),
+            new QuestItem(ModContent.ItemType<DeificInsignia>(), 5),
+        };
 
         public override void ClearWorld()
         {
             QuestLog = InitializedQuestLog();
+            TravellingCultist.QuestArtifact = new(0, 0);
         }
         public override void LoadWorldData(TagCompound tag)
         {
             QuestLog = (List<Quest>)tag.GetList<Quest>("QuestLog");
             EnsureQuestLogUpToDate(InitializedQuestLog());
+            TravellingCultist.QuestArtifact = tag.Get<QuestItem>("CultistQuestItem");
         }
         public override void SaveWorldData(TagCompound tag)
         {
             tag["QuestLog"] = QuestLog;
+            tag["CultistQuestItem"] = TravellingCultist.QuestArtifact;
         }
         internal static Quest CreateQuest(string Name, List<string> Objectives, List<int> ObjectiveRequirements, bool Unlocked, List<QuestItem> QuestGifts = null, List<QuestItem> QuestRewards = null)
         {
@@ -89,8 +100,8 @@ namespace Windfall.Common.Systems
                     new List<string>{"Pacify 3 Cnidrions"}, 
                     new List<int>{3}, 
                     true, 
-                    new List<QuestItem>{ new QuestItem { Type = ModContent.ItemType<Cnidrisnack>(), Stack = 5 } }, 
-                    new List<QuestItem>{ new QuestItem { Type = ModContent.ItemType<CnidrionBanner>(), Stack = 4 }, new QuestItem {Type = ModContent.ItemType<AmidiasSpark>(), Stack = 1} }
+                    new List<QuestItem>{ new QuestItem (ModContent.ItemType<Cnidrisnack>(), 5 ) }, 
+                    new List<QuestItem>{ new QuestItem (ModContent.ItemType<CnidrionBanner>(), 4), new QuestItem ( ModContent.ItemType<AmidiasSpark>(), 1) }
                 ),
                 CreateQuest
                 (
@@ -98,8 +109,8 @@ namespace Windfall.Common.Systems
                     new List<string>{"Defeat Desert Scourge"}, 
                     new List<int>{1}, 
                     true, 
-                    new List<QuestItem>{ new QuestItem { Type = ModContent.ItemType<AncientIlmeranRod>(), Stack = 1 }, new QuestItem { Type = ModContent.ItemType<Cnidrisnack>(), Stack = 5 } }, 
-                    new List<QuestItem>{ new QuestItem { Type = ModContent.ItemType<DesertScourgeTrophy>(), Stack = 1 } }
+                    new List<QuestItem>{ new QuestItem (ModContent.ItemType<AncientIlmeranRod>(), 1 ), new QuestItem (ModContent.ItemType<Cnidrisnack>(), 5 ) }, 
+                    new List<QuestItem>{ new QuestItem (ModContent.ItemType<DesertScourgeTrophy>(), 1 ) }
                 ),
                 CreateQuest
                 (
@@ -107,8 +118,8 @@ namespace Windfall.Common.Systems
                     new List<string>{"Shuck 8 Clams"}, 
                     new List<int>{8}, 
                     true, 
-                    new List<QuestItem>{ new QuestItem { Type = ModContent.ItemType<IlmeranKnife>(), Stack = 1 } }, 
-                    new List<QuestItem>{ new QuestItem { Type = ModContent.ItemType<ClamBanner>(), Stack = 4 } }
+                    new List<QuestItem>{ new QuestItem (ModContent.ItemType<IlmeranKnife>(), 1 )}, 
+                    new List<QuestItem>{ new QuestItem (ModContent.ItemType < IlmeranKnife >(), 1) }
                 ),
                 CreateQuest
                 (
@@ -117,7 +128,7 @@ namespace Windfall.Common.Systems
                     new List<int>{1}, 
                     true, 
                     null, 
-                    new List<QuestItem>{ new QuestItem { Type = ModContent.ItemType<GiantClamTrophy>(), Stack = 1 } }
+                    new List<QuestItem>{ new QuestItem (ModContent.ItemType<GiantClamTrophy>(), 1 ) }
                 ),
                 CreateQuest
                 (
@@ -126,7 +137,7 @@ namespace Windfall.Common.Systems
                     new List<int>{1}, 
                     Main.hardMode, 
                     null, 
-                    new List<QuestItem>{ new QuestItem { Type = ModContent.ItemType<AquaticScourgeTrophy>(), Stack = 1 } }
+                    new List<QuestItem>{ new QuestItem (ModContent.ItemType<AquaticScourgeTrophy>(), 1 ) }
                 ),
                 CreateQuest
                 (
@@ -134,8 +145,8 @@ namespace Windfall.Common.Systems
                     new List<string>{"Land 5 successful parries."},
                     new List<int>{1},
                     true,
-                    new List<QuestItem>{ new QuestItem { Type = ModContent.ItemType<ParryBlade>(), Stack = 1 } },
-                    new List<QuestItem>{ new QuestItem { Type = ItemID.FrogLeg, Stack = 1 } }
+                    new List<QuestItem>{ new QuestItem (ModContent.ItemType<ParryBlade>(), 1 ) },
+                    new List<QuestItem>{ new QuestItem (ItemID.FrogLeg, 1 ) }
                 ),
                 CreateQuest
                 (
@@ -143,8 +154,8 @@ namespace Windfall.Common.Systems
                     new List<string>{"Defeat Slime God"}, 
                     new List<int>{1}, 
                     DownedBossSystem.downedHiveMind || DownedBossSystem.downedPerforator, 
-                    new List<QuestItem>{ new QuestItem { Type = ModContent.ItemType<RuneOfGula>(), Stack = 1 } }, 
-                    new List<QuestItem>{ new QuestItem { Type = ModContent.ItemType<SlimeGodTrophy>(), Stack = 1 } }
+                    new List<QuestItem>{ new QuestItem (ModContent.ItemType<RuneOfGula>(), 1 ) }, 
+                    new List<QuestItem>{ new QuestItem (ModContent.ItemType<SlimeGodTrophy>(), 1 ) }
                 ),
                 CreateQuest
                 (
@@ -153,7 +164,7 @@ namespace Windfall.Common.Systems
                     new List<int>{1},
                     Main.hardMode,
                     null,
-                    new List<QuestItem>{ new QuestItem { Type = ItemID.PixieDust, Stack = 25 }, new QuestItem { Type = ItemID.UnicornHorn, Stack = 3 }, new QuestItem { Type = ItemID.PinkGel, Stack = 10 } }
+                    new List<QuestItem>{ new QuestItem (ItemID.PixieDust,  25 ), new QuestItem (ItemID.UnicornHorn, 3 ), new QuestItem (ItemID.PinkGel, 10 ) }
                 ),
                 CreateQuest
                 (
@@ -162,7 +173,7 @@ namespace Windfall.Common.Systems
                     new List<int>{1},
                     true,
                     null,
-                    new List<QuestItem>{ new QuestItem { Type = ItemID.QueenSlimeTrophy, Stack = 1 } }
+                    new List<QuestItem>{ new QuestItem (ItemID.QueenSlimeTrophy, 1 ) }
                 ),
 
             };

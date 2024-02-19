@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Terraria;
 using Terraria.ModLoader;
 using Terraria.ModLoader.IO;
+using Windfall.Content.NPCs.TravellingNPCs;
 
 namespace Windfall.Common.Systems
 {

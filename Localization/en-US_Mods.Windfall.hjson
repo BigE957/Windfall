@@ -77,25 +77,44 @@ Dialogue: {
 	}
 
 	LunarCult: {
-		#Mechanic Shed Dialogue
-		MechanicShedInitial: Mind explaining what exactly you're doing here?
-		MechanicShedWhoAreWe: Just a small group keeping an eye on things. Not sure if its any of your business though.
-		MechanicShedWannaJoin: We are actually open to new members. Perhaps if we meet again you might get such an opportuity.
-		MechanicShedNuhUh: What?! No, nothing of the sort. Don't know what would give you that idea...
-		MechanicShedExploringHuh: Just exploring, huh? Why's exploring involve snooping around abandoned buildings?
-		MechanicShedFairEnough: Hmm, alright. That seems fair enough. Just don't go snooping around where you don't belong, alright?
-		MechanicShedSomethingBad: Well, we wouldn't want anything bad happening to you now would we? You never know who roams these parts. Being all alone in a dilapitaed cabin? Sounds like a recipe for disaster if you ask me.
-		MechanicShedEnd: Hm, well you seem to be just fine. You're free to go.
-		#Ocular Cult Dialogue (scrapped)
-		OcularDevoteeInitial: Ah, welcome traveller! You arrive at just the right moment! The bishop said one like you would arrive... Join us and witness something spectacular!
-		OcularDevoteeSomethingAmazing: Yes, yes. Something truly amazing! Long have we prepared for this moment. A communion with an ancient thing. Knowledge like no other shall soon be at our fingertips!
-		OcularDevoteeTheBishop: Yes, the Bishop! He has brought together our small group, and he has prepared long for this moment. A kind man, you will like him, I'm sure!
-		OcularDevoteeEnd: Speak with the Bishop, there at the altar. He can tell you more than I.
-		#Post-Skeletron Dialogue
-		DungeonBishopInitial: Your success against our guardian was... Unexpected. It was meant to keep out intruders forevermore... However... issues have crept up since it was raised. Perhaps by opening our home to others, they might at last be laid to rest.
-		DungeonBishopGuardian: Yes, that construct was made to serve as this dungeon's guardian. That old man became its vessel after trespassing upon our sanctum. Worry not, with the guardian now dead, the man should return to his former self, despite what things might've seemed.
-		DungeonBishopIssues: Yes... Our sanctum become something of a dungeon in recent years. However those it once held have now long since passed, and this site's had an adverse effect upon their souls. Now, its crawling with their reanimated remains. If you'd do us a favor and clean it out a bit, we'd be ever in your debt.
-		DungeonBishopEnd: Now then, enough talk. Till we meet again, wayward traveller. Perhaps our paths might cross again.
+		MechanicShed: {
+			Initial: Mind explaining what exactly you're doing here?
+			WhoAreWe: Just a small group keeping an eye on things. Not sure if its any of your business though.
+			WannaJoin: We are actually open to new members. Perhaps if we meet again you might get such an opportuity.
+			NuhUh: What?! No, nothing of the sort. Don't know what would give you that idea...
+			ExploringHuh: Just exploring, huh? Why's exploring involve snooping around abandoned buildings?
+			FairEnough: Hmm, alright. That seems fair enough. Just don't go snooping around where you don't belong, alright?
+			SomethingBad: Well, we wouldn't want anything bad happening to you now would we? You never know who roams these parts. Being all alone in a dilapitaed cabin? Sounds like a recipe for disaster if you ask me.
+			End: Hm, well you seem to be just fine. You're free to go.
+		}
+
+		OcularDevotee: {
+			Initial: Ah, welcome traveller! You arrive at just the right moment! The bishop said one like you would arrive... Join us and witness something spectacular!
+			SomethingAmazing: Yes, yes. Something truly amazing! Long have we prepared for this moment. A communion with an ancient thing. Knowledge like no other shall soon be at our fingertips!
+			TheBishop: Yes, the Bishop! He has brought together our small group, and he has prepared long for this moment. A kind man, you will like him, I'm sure!
+			End: Speak with the Bishop, there at the altar. He can tell you more than I.
+		}
+
+		DungeonBishop: {
+			Initial: Your success against our guardian was... Unexpected. It was meant to keep out intruders forevermore... However... issues have crept up since it was raised. Perhaps by opening our home to others, they might at last be laid to rest.
+			Guardian: Yes, that construct was made to serve as this dungeon's guardian. That old man became its vessel after trespassing upon our sanctum. Worry not, with the guardian now dead, the man should return to his former self, despite what things might've seemed.
+			Issues: Yes... Our sanctum become something of a dungeon in recent years. However those it once held have now long since passed, and this site's had an adverse effect upon their souls. Now, its crawling with their reanimated remains. If you'd do us a favor and clean it out a bit, we'd be ever in your debt.
+			End: Now then, enough talk. Till we meet again, wayward traveller. Perhaps our paths might cross again.
+		}
+
+		TravellingCultist: {
+			Standard1: Do I stand out...?
+			NoQuest: You've done a great job! I'll be back when I next need you.
+			BoneStart: The bones found in the Dungeon have been filled with the occult power of the Lunar Cult over the years. Bring me enough of them, and I might be able to learn more about how exactly their hexes work!
+			BoneDuring: Pretty much all of the undead you'll find in the Dungeon are prime sources for the accursed bones we're looking for. About 50 should be enough. Only hard part is getting their owners to part with them, haha.
+			BoneEnd: Yes, these'll do nicely! I'd uh... Wash your hands after handling this many... With holy water... Actually maybe get a full on baptism... Sorry.
+			WaterBoltStart: I hear those Dark Casters carry tend to carry with them a magic tome. I'd be curious to figure out the origin of these tomes, and if they hold any connection to the Lunar Cult.
+			WaterBoltDuring: The tome is said to carry with it potent water magic. Why would the Lunar Cult care for such simple forms of magic though...
+			WaterBoltEnd: Ah! You found it! That does indeed look like the right tome, and considering its age, I can imagine it fitting in the hands of those casters nicely. Thank you! I'll let you know if I find any connection between this and the cult.
+			InsigniaStart: Many of the skeletons which wander that decrepit Dungeon were once devoted soldiers of the Gods; imprisoned within there during the Godseeker's crusade. I'd bet the insignia they bear might still hold some of the deific essence they were gifted. If you get me some, they may prove helpful in combating the Lunar Cult.
+			InsigniaDuring: Those skeletons are quite angry about their eternal imprisonment within the Dungeon. So don't expect them to part with their patrons' tokens so easilly. If you can get me just five, that should suffice.
+			InsigniaEnd: Oh, perfect! Yes, I can sense the faint traces of deific essence on these... Perhaps the latent power of the Gods might be what we need to stand a chance against the Lunar Cult!
+		}
 	}
 }
 
@@ -356,6 +375,13 @@ Items: {
 		DisplayName: Onyx Knife
 		Tooltip: A blade capable of reflecting projectiles
 	}
+
+	Quest: {
+		DeificInsignia: {
+			DisplayName: Deific Insignia
+			Tooltip: "A worn sigil of the gods"
+		}
+	}
 }
 
 NPCs: {
@@ -370,6 +396,7 @@ NPCs: {
 	LunarCultistArcher.DisplayName: ???
 	LunarCultistDevotee.DisplayName: Lunar Cultist Devotee
 	LunarBishop.DisplayName: Lunar Bishop
+	TravellingCultist.DisplayName: Travelling Cultist
 }
 
 Projectiles: {
