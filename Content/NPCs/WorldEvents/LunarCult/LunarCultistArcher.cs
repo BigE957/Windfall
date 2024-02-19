@@ -54,7 +54,7 @@ namespace Windfall.Content.NPCs.WanderingNPCs
 
         public override string GetChat()
         {
-            return Language.GetOrRegister($"Mods.{nameof(Windfall)}.Dialogue.LunarCult.MechanicShed.{CurrentDialogue}").Value;
+            return Language.GetOrRegister($"Mods.{nameof(Windfall)}.Dialogue.LunarCult.MechanicShed{CurrentDialogue}").Value;
         }
         public override void OnChatButtonClicked(bool firstButton, ref string shop)
         {
@@ -106,7 +106,7 @@ namespace Windfall.Content.NPCs.WanderingNPCs
                     CurrentDialogue = DialogueState.End;
                     break;
             }
-            Main.npcChatText = Language.GetOrRegister($"Mods.{nameof(Windfall)}.Dialogue.LunarCult.MechanicShed.{CurrentDialogue}").Value;
+            Main.npcChatText = Language.GetOrRegister($"Mods.{nameof(Windfall)}.Dialogue.LunarCult.MechanicShed{CurrentDialogue}").Value;
         }
         public override void SetChatButtons(ref string button, ref string button2)
         {
