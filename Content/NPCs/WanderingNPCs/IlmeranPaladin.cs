@@ -167,13 +167,13 @@ namespace Windfall.Content.NPCs.WanderingNPCs
             if (NPC.ai[1] == 1)
             {
                 NPC.ai[1] = 0;
-                return Language.GetOrRegister($"Mods.{nameof(Windfall)}.Dialogue.IlmeranPaladin.SavedDialogue").Value;
+                return Language.GetOrRegister($"Mods.{nameof(Windfall)}.Dialogue.IlmeranPaladin.Saved").Value;
             }
 
             if (Sandstorm.Happening)
-                chat.Add(Language.GetOrRegister($"Mods.{nameof(Windfall)}.Dialogue.IlmeranPaladin.SandstormDialogue").Value);
+                chat.Add(Language.GetOrRegister($"Mods.{nameof(Windfall)}.Dialogue.IlmeranPaladin.Sandstorm").Value);
             else
-                chat.Add(Language.GetOrRegister($"Mods.{nameof(Windfall)}.Dialogue.IlmeranPaladin.NoSandstormDialogue").Value);
+                chat.Add(Language.GetOrRegister($"Mods.{nameof(Windfall)}.Dialogue.IlmeranPaladin.NoSandstorm").Value);
             
             if(player.Calamity().victideSet || (WearingVictideHelmet(player) && player.armor[11].type == ModContent.ItemType<VictideBreastplate>() && player.armor[12].type == ModContent.ItemType<VictideGreaves>()))
                 if(player.armor[0].type == ModContent.ItemType<VictideHeadMagic>())
@@ -202,9 +202,9 @@ namespace Windfall.Content.NPCs.WanderingNPCs
                 chat.Add(Language.GetOrRegister($"Mods.{nameof(Windfall)}.Dialogue.IlmeranPaladin.Nighttime1").Value);
                 chat.Add(Language.GetOrRegister($"Mods.{nameof(Windfall)}.Dialogue.IlmeranPaladin.Nighttime2").Value);
             }
-            chat.Add(Language.GetOrRegister($"Mods.{nameof(Windfall)}.Dialogue.IlmeranPaladin.StandardDialogue1").Value);
-            chat.Add(Language.GetOrRegister($"Mods.{nameof(Windfall)}.Dialogue.IlmeranPaladin.StandardDialogue2").Value);
-            chat.Add(Language.GetOrRegister($"Mods.{nameof(Windfall)}.Dialogue.IlmeranPaladin.StandardDialogue3").Value);
+            chat.Add(Language.GetOrRegister($"Mods.{nameof(Windfall)}.Dialogue.IlmeranPaladin.Standard1").Value);
+            chat.Add(Language.GetOrRegister($"Mods.{nameof(Windfall)}.Dialogue.IlmeranPaladin.Standard2").Value);
+            chat.Add(Language.GetOrRegister($"Mods.{nameof(Windfall)}.Dialogue.IlmeranPaladin.Standard3").Value);
 
             WorldSaveSystem.paladinChats++;
 

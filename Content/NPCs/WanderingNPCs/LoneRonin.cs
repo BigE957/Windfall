@@ -159,23 +159,23 @@ namespace Windfall.Content.NPCs.WanderingNPCs
         {
             Player player = Main.player[Main.myPlayer];
             WeightedRandom<string> chat = new();
-            chat.Add(Language.GetOrRegister($"Mods.{nameof(Windfall)}.Dialogue.LoneRonin.StandardDialogue1").Value);
-            chat.Add(Language.GetOrRegister($"Mods.{nameof(Windfall)}.Dialogue.LoneRonin.StandardDialogue2").Value);
-            chat.Add(Language.GetOrRegister($"Mods.{nameof(Windfall)}.Dialogue.LoneRonin.StandardDialogue3").Value);
+            chat.Add(Language.GetOrRegister($"Mods.{nameof(Windfall)}.Dialogue.LoneRonin.Standard1").Value);
+            chat.Add(Language.GetOrRegister($"Mods.{nameof(Windfall)}.Dialogue.LoneRonin.Standard2").Value);
+            chat.Add(Language.GetOrRegister($"Mods.{nameof(Windfall)}.Dialogue.LoneRonin.Standard3").Value);
             if (!NPC.downedQueenSlime)
             {
-                chat.Add(Language.GetOrRegister($"Mods.{nameof(Windfall)}.Dialogue.LoneRonin.PreQueenSlimeDialogue1").Value);
-                chat.Add(Language.GetOrRegister($"Mods.{nameof(Windfall)}.Dialogue.LoneRonin.PreQueenSlimeDialogue2").Value);
+                chat.Add(Language.GetOrRegister($"Mods.{nameof(Windfall)}.Dialogue.LoneRonin.PreQueenSlime1").Value);
+                chat.Add(Language.GetOrRegister($"Mods.{nameof(Windfall)}.Dialogue.LoneRonin.PreQueenSlime2").Value);
             }
             if(player.ZoneCorrupt || player.ZoneCrimson)
             {
-                chat.Add(Language.GetOrRegister($"Mods.{nameof(Windfall)}.Dialogue.LoneRonin.EvilbiomeDialogue1").Value);
-                chat.Add(Language.GetOrRegister($"Mods.{nameof(Windfall)}.Dialogue.LoneRonin.EvilbiomeDialogue2").Value);
+                chat.Add(Language.GetOrRegister($"Mods.{nameof(Windfall)}.Dialogue.LoneRonin.Evilbiome1").Value);
+                chat.Add(Language.GetOrRegister($"Mods.{nameof(Windfall)}.Dialogue.LoneRonin.Evilbiome2").Value);
             }
             if (player.Calamity().statigelSet || (WearingStatigelHelmet(player) && player.armor[11].type == ModContent.ItemType<StatigelArmor>() && player.armor[12].type == ModContent.ItemType<StatigelGreaves>()))
             {
-                chat.Add(Language.GetOrRegister($"Mods.{nameof(Windfall)}.Dialogue.LoneRonin.StatigelDialogue1").Value);
-                chat.Add(Language.GetOrRegister($"Mods.{nameof(Windfall)}.Dialogue.LoneRonin.StatigelDialogue2").Value);
+                chat.Add(Language.GetOrRegister($"Mods.{nameof(Windfall)}.Dialogue.LoneRonin.Statigel1").Value);
+                chat.Add(Language.GetOrRegister($"Mods.{nameof(Windfall)}.Dialogue.LoneRonin.Statigel2").Value);
             }
 
                 return chat;

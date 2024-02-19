@@ -4,12 +4,12 @@ Dialogue: {
 	IlmeranPaladin: {
 		#NPC Chat Dialogue
 		FirstChat: Why, hello there! You don't look like the type to frequent these parts. Anything I can do for you?
-		StandardDialogue1: The desert will show you no mercy. Stay strong!
-		StandardDialogue2: Where could that sea horse have gotten off to...?
-		StandardDialogue3: Care to rest a moment with me? I'm sure we both could use a rest.
-		SandstormDialogue: The wind is howling most fiercely... Be warned, the creatures here are just as fierce!
-		NoSandstormDialogue: The breeze is calm... Somehow, these sands can still be beautiful despite all the regret they carry.
-		SavedDialogue: Geez... Was almost a goner there. Thanks for the rescue!
+		Standard1: The desert will show you no mercy. Stay strong!
+		Standard2: Where could that sea horse have gotten off to...?
+		Standard3: Care to rest a moment with me? I'm sure we both could use a rest.
+		Sandstorm: The wind is howling most fiercely... Be warned, the creatures here are just as fierce!
+		NoSandstorm: The breeze is calm... Somehow, these sands can still be beautiful despite all the regret they carry.
+		Saved: Geez... Was almost a goner there. Thanks for the rescue!
 		LookingFamiliar1: Hey now! Are you copying me?!
 		LookingFamiliar2: Well... I imitation is the sincerest form of flattery.
 		LookingIlmeran1: Hoho! If I didn't know better, I might've mistaken you for one of my fellow Paladins!
@@ -20,60 +20,60 @@ Dialogue: {
 		Daytime2: Its hard to believe this was once a dazzling ocean... Now all that's left is sand and a bitter wind.
 		Nighttime1: The desert can actually be quite peaceful on nights like this... And the tempature's actually bearable.
 		Nighttime2: I remember how the stars used to reflect on the Ilmeran Sea... What a sight it truly was...
-		#NPC Quest Dialogue
-		NoQuestDialogue: You've done all I could ask of you. Come back later, and maybe I'll have an adventure to send you on.
-		CnidrionHuntDialogueStart: Ever since the Incineration, the poor Cnidrion have been stirred into a frenzy! Would you do me a favor and lend me a hand in calming the poor guys down? All you have to do is toss them one of these after you've tired them out a bit. Cnidri-Snacks are their favourite treats! Once they've had one, they're sure to calm down, and might even take a liking towards you! If you could handle three that'd be just swell.
-		CnidrionHuntDialogueDuring: Those Cnidrions aren't gonna calm themselves down! Toss them a Cnidri-Snack once they've been tuckered out, and they'll calm right down! If you can take care of three that'd be perfect.
-		CnidrionHuntDialogueEnd: Nice work! Are those lick marks I see on you? Guess you're quite the Cnidrion tamer. You might've made a good paladin yourself!
-		ScoogHuntDialogueStart: I think you've proven yourself to be quite capable; perhaps even enough to lend me a hand in a real hunt. I'm sure you've felt the tremors below the sands. Take this, and you'll be able to lure out its source. Though be prepared for a fight once it surfaces.
-		ScoogHuntDialogueDuring: Just cast that line, and then we'll wait for her to surface. It can be a bit unnerving, I know.
-		ScoogHuntDialogueEnd: Well now, that sure was quite the fight, wasn't it! You fought like a real Paladin out there! Almost reminds me of the days before the Incineration...
-		ShuckinClamsDialogueStart: With the Desert Scourge now laid to rest, it's now much safer to reach the Sunken Sea. Its a place dear to my heart, as the sole remnant of my people's kingdom. It holds many relics of Ilmeris' past... may I ask you to seek them out? Clams just love to gobble up anything they can find, but with this, you can open them right up and get at their treasure. Good luck!
-		ShuckinClamsDialogueDuring: Crack open eight clams for me. They've managed to gobble up plenty of relics from Ilmeris' prime. You're sure to find some valuable treasures within their maws.
-		ShuckinClamsDialogueEnd: That's quite the haul you've got there! Looks like your shucking expedition was a success. Feel free to keep that knife and keep shucking away if you please. Though, if you're up for it... there's something even bigger you can shuck.
-		ClamHuntDialogueStart: Alright, you're a pretty good clam shucker, so I'm gonna need you to shuck one of the biggest clams there is. I'm sure you've seen it lying around during your time at the Sunken Sea, and I'm willing to bet it's a treasure trove of Ilmeran relics! Go give it a good shucking for me, and see what you can recover!
-		ClamHuntDialogueDuring: You just have to hang around in the Sunken Sea a while, and that giant clam is sure to turn up. Then, you can give it a good shucking.
-		ClamHuntDialogueEnd: I can't believe it! King Amidias was in that clam the whole time?! Thank you for the help, I'm certain if they were still here, the entirety of Ilmeris would be singing their praises!
-		ScoogHunt2DialogueStart: Hey, nice to see you again! I've made quite the discovery since we last spoke... Apparently, there's another still living Scourge! However, its in even worse condition than our friendly Desert scourge: The Sulphurous Sea. I feel bad for the poor thing, and I ask you lay it to rest as you did the first. That fishing rod I gave you should still be able to lure it out of hiding. Good luck!
-		ScoogHunt2DialogueDuring: Cast the rod I gave you into the Sulphurous Sea, and the other scourge will come out just like the last. Though be wary, it's likely far stronger than the last scourge.
-		ScoogHunt2DialogueEnd: Well done! I'm happy to know that the Scourges are at last resting peacefully, free from the suffering they had endured fromm the Incineration. As always, I'm impressed by your skills. You've gone above and beyond as an Paladin, and made certain the King won't regret his decision.
+		#NPC Quest 
+		NoQuest: You've done all I could ask of you. Come back later, and maybe I'll have an adventure to send you on.
+		CnidrionHuntStart: Ever since the Incineration, the poor Cnidrion have been stirred into a frenzy! Would you do me a favor and lend me a hand in calming the poor guys down? All you have to do is toss them one of these after you've tired them out a bit. Cnidri-Snacks are their favourite treats! Once they've had one, they're sure to calm down, and might even take a liking towards you! If you could handle three that'd be just swell.
+		CnidrionHuntDuring: Those Cnidrions aren't gonna calm themselves down! Toss them a Cnidri-Snack once they've been tuckered out, and they'll calm right down! If you can take care of three that'd be perfect.
+		CnidrionHuntEnd: Nice work! Are those lick marks I see on you? Guess you're quite the Cnidrion tamer. You might've made a good paladin yourself!
+		ScoogHuntStart: I think you've proven yourself to be quite capable; perhaps even enough to lend me a hand in a real hunt. I'm sure you've felt the tremors below the sands. Take this, and you'll be able to lure out its source. Though be prepared for a fight once it surfaces.
+		ScoogHuntDuring: Just cast that line, and then we'll wait for her to surface. It can be a bit unnerving, I know.
+		ScoogHuntEnd: Well now, that sure was quite the fight, wasn't it! You fought like a real Paladin out there! Almost reminds me of the days before the Incineration...
+		ShuckinClamsStart: With the Desert Scourge now laid to rest, it's now much safer to reach the Sunken Sea. Its a place dear to my heart, as the sole remnant of my people's kingdom. It holds many relics of Ilmeris' past... may I ask you to seek them out? Clams just love to gobble up anything they can find, but with this, you can open them right up and get at their treasure. Good luck!
+		ShuckinClamsDuring: Crack open eight clams for me. They've managed to gobble up plenty of relics from Ilmeris' prime. You're sure to find some valuable treasures within their maws.
+		ShuckinClamsEnd: That's quite the haul you've got there! Looks like your shucking expedition was a success. Feel free to keep that knife and keep shucking away if you please. Though, if you're up for it... there's something even bigger you can shuck.
+		ClamHuntStart: Alright, you're a pretty good clam shucker, so I'm gonna need you to shuck one of the biggest clams there is. I'm sure you've seen it lying around during your time at the Sunken Sea, and I'm willing to bet it's a treasure trove of Ilmeran relics! Go give it a good shucking for me, and see what you can recover!
+		ClamHuntDuring: You just have to hang around in the Sunken Sea a while, and that giant clam is sure to turn up. Then, you can give it a good shucking.
+		ClamHuntEnd: I can't believe it! King Amidias was in that clam the whole time?! Thank you for the help, I'm certain if they were still here, the entirety of Ilmeris would be singing their praises!
+		ScoogHunt2Start: Hey, nice to see you again! I've made quite the discovery since we last spoke... Apparently, there's another still living Scourge! However, its in even worse condition than our friendly Desert scourge: The Sulphurous Sea. I feel bad for the poor thing, and I ask you lay it to rest as you did the first. That fishing rod I gave you should still be able to lure it out of hiding. Good luck!
+		ScoogHunt2During: Cast the rod I gave you into the Sulphurous Sea, and the other scourge will come out just like the last. Though be wary, it's likely far stronger than the last scourge.
+		ScoogHunt2End: Well done! I'm happy to know that the Scourges are at last resting peacefully, free from the suffering they had endured fromm the Incineration. As always, I'm impressed by your skills. You've gone above and beyond as an Paladin, and made certain the King won't regret his decision.
 	}
 
 	CalPotionSeller: {
-		PotionSellerDialogue1: Hey there, traveller. You wanna see some one-of-a-kind potions? I brewed them myself!
-		PotionSellerDialogue2: Alone on a Friday night? I've got a potion to fix that!
-		PotionSellerdDialogue3: *clink clink* Sorry about the noise, who knew carrying potions in your coat would be so hard? Wanna take some off my hands for me?
-		StandardDialogue1: You looking for something?
-		StandardDialogue2: Haha, back for more are ya?
-		StandardDialogue3: I won't give you potions, but I'll definitely give you another whooping!
+		PotionSeller1: Hey there, traveller. You wanna see some one-of-a-kind potions? I brewed them myself!
+		PotionSeller2: Alone on a Friday night? I've got a potion to fix that!
+		PotionSellerd3: *clink clink* Sorry about the noise, who knew carrying potions in your coat would be so hard? Wanna take some off my hands for me?
+		Standard1: You looking for something?
+		Standard2: Haha, back for more are ya?
+		Standard3: I won't give you potions, but I'll definitely give you another whooping!
 	}
 
 	LoneRonin: {
 		#NPC Chat Dialogue
-		StandardDialogue1: I wonder if he's alright... Oh, can I help you?
-		StandardDialogue2: The lands seem far quieter these days, but we must remain ever vigilant.
-		StandardDialogue3: Sometimes its better to let go of the past, rather than incessantly cling to it. I sometimes wonder how things would have played out had people just accepted change. How many lives would have been spared?
-		PreQueenSlimeDialogue1: My former master has been here... Where could that coward have fled now?
-		PreQueenSlimeDialogue2: Whatever it is the Slime God is planning, it cannot be good. While he may be but a shell of his former self, he holds the potential to become so much more...
-		EvilbiomeDialogue1: What a foul place... A shame I'm stuck dredging through this filth.
-		EvilBiomeDialogue2: The horrors left in the wake of Yharim's crusade are seen most clearly here. Has that man no conscious? No care for the consequences of his actions?
-		StatigelDialogue1: Hah! Turning the Slime God's ooze into armor. Onyx Kinsmen garb no less! How ironic!
-		StatigelDialogue2: Taking on the mantle of an Onyx Kinsmen? This counterfeit armor won't exactly get you far in that regard...
-		#NPC Quest Dialogue
-		LilBitchDialogue: Sorry, I'm not sure someone of your strength could do much to help.
-		NoQuestDialogue: You've done quite well. For now, I'd say we've earned some rest.
-		ParryIntroDialogueStart: So you're interested. Good. However, if you wish to aid me, you'll need to prove yourself further. Take this, its a blade passed down through my clan. With it, you'll be able to repel any projectile thrown your way. If, of course, you have the skill to wield it properly. Once you've mastered this blade, our hunt can begin.
-		ParryIntroDialogueDuring: Simply repelling a projectile is only the start of this weapon's potential. You can even return that projectile to its sender. They never see it coming. Do that five times, and you'll have proven yourself.
-		ParryIntrotDialogueEnd: Well done! I knew you I saw something in you. Your skills are beginning to look like those of an Onyx Kinsman. You've more than proven yourself. When you're ready, we can begin our hunt.
-		SlimeGodHuntDialogueStart: To business then. Our prey is a deity; one who I've been aiming to bring down for some time: the Slime God. I've been tracking him for quite a while, but my former master is far too wary of me. Any time I get on his trail, he flees like the coward he is. Take this, if you're the one who uses it, I bet he'll come out of hiding to reclaim it. He'll be underestimating you. Use that to your advantage.
-		SlimeGodHuntDialogueDuring: If you use the Rune of Gula, the Slime God will surely come out of hiding to reclaim it. He'll be far less wary of you than I, a fatal mistake. I trust your strength, put an end to that coward once and for all.
-		SlimeGodHuntDialogueEnd: I see... The coward is as snide as ever, escaping yet another confrontation. However, defeating his creations is a victory in its own right; setting it back a great deal in whatever he was planning. You've done well, and I'm certain another opportunity to face him will come our way. So don't let his escape get you down.
-		CrystalSearchDialogueStart: Well geez... Things sure have changed since we last met, huh? Its as if godly essence has been pumped into the veins of this world. I'm certain this is something my former master plans to take advantage of... Search the depths of these new lands, and if you find any evidence of him, bring it back to me.
-		CrystalSearchDialogueDuring: The crystals that grow so frequently in the Hallow may be of interest to my former master. See if any look out of place, and bring back what you find.
-		CrystalSearchDialogueEnd: Ah, now what's this? This crystals beating with the power of the Slime God... This cannot be good. If this is still connected to my former master, then he knows you have it, and I doubt he plans to just leave you be after the beating you gave him.
-		QueenSlimeHuntDialogueStart: How about we take the fight to him then. I'm certain he'll be eager for a rematch with whatever power he gained from the Hallow. Just holding that thing in the Hallow might do the trick, or perhaps the Rune of Gula as well. Either way, show him no mercy. He isn't the only one who's grown stronger since your last battle. Good luck.
-		QueenSlimeHuntDialogueDuring: Show that filthy slime no mercy. While he may now wield the powers of Hallow, you too have grown in strength since your last battle with him.
-		QueenSlimeHuntDialogueEnd: So it is done at last. Funny how even after everything, I've wound up helping in the tyrant's dirty work. Regardless, I'm happy to know my master's schemes may now never come to fruition. You've done well this day, and succeeded where many have failed.
+		Standard1: I wonder if he's alright... Oh, can I help you?
+		Standard2: The lands seem far quieter these days, but we must remain ever vigilant.
+		Standard3: Sometimes its better to let go of the past, rather than incessantly cling to it. I sometimes wonder how things would have played out had people just accepted change. How many lives would have been spared?
+		PreQueenSlime1: My former master has been here... Where could that coward have fled now?
+		PreQueenSlime2: Whatever it is the Slime God is planning, it cannot be good. While he may be but a shell of his former self, he holds the potential to become so much more...
+		Evilbiome1: What a foul place... A shame I'm stuck dredging through this filth.
+		EvilBiome2: The horrors left in the wake of Yharim's crusade are seen most clearly here. Has that man no conscious? No care for the consequences of his actions?
+		Statigel1: Hah! Turning the Slime God's ooze into armor. Onyx Kinsmen garb no less! How ironic!
+		Statigel2: Taking on the mantle of an Onyx Kinsmen? This counterfeit armor won't exactly get you far in that regard...
+		#NPC Quest 
+		LilBitch: Sorry, I'm not sure someone of your strength could do much to help.
+		NoQuest: You've done quite well. For now, I'd say we've earned some rest.
+		ParryIntroStart: So you're interested. Good. However, if you wish to aid me, you'll need to prove yourself further. Take this, its a blade passed down through my clan. With it, you'll be able to repel any projectile thrown your way. If, of course, you have the skill to wield it properly. Once you've mastered this blade, our hunt can begin.
+		ParryIntroDuring: Simply repelling a projectile is only the start of this weapon's potential. You can even return that projectile to its sender. They never see it coming. Do that five times, and you'll have proven yourself.
+		ParryIntrotEnd: Well done! I knew you I saw something in you. Your skills are beginning to look like those of an Onyx Kinsman. You've more than proven yourself. When you're ready, we can begin our hunt.
+		SlimeGodHuntStart: To business then. Our prey is a deity; one who I've been aiming to bring down for some time: the Slime God. I've been tracking him for quite a while, but my former master is far too wary of me. Any time I get on his trail, he flees like the coward he is. Take this, if you're the one who uses it, I bet he'll come out of hiding to reclaim it. He'll be underestimating you. Use that to your advantage.
+		SlimeGodHuntDuring: If you use the Rune of Gula, the Slime God will surely come out of hiding to reclaim it. He'll be far less wary of you than I, a fatal mistake. I trust your strength, put an end to that coward once and for all.
+		SlimeGodHuntEnd: I see... The coward is as snide as ever, escaping yet another confrontation. However, defeating his creations is a victory in its own right; setting it back a great deal in whatever he was planning. You've done well, and I'm certain another opportunity to face him will come our way. So don't let his escape get you down.
+		CrystalSearchStart: Well geez... Things sure have changed since we last met, huh? Its as if godly essence has been pumped into the veins of this world. I'm certain this is something my former master plans to take advantage of... Search the depths of these new lands, and if you find any evidence of him, bring it back to me.
+		CrystalSearchDuring: The crystals that grow so frequently in the Hallow may be of interest to my former master. See if any look out of place, and bring back what you find.
+		CrystalSearchEnd: Ah, now what's this? This crystals beating with the power of the Slime God... This cannot be good. If this is still connected to my former master, then he knows you have it, and I doubt he plans to just leave you be after the beating you gave him.
+		QueenSlimeHuntStart: How about we take the fight to him then. I'm certain he'll be eager for a rematch with whatever power he gained from the Hallow. Just holding that thing in the Hallow might do the trick, or perhaps the Rune of Gula as well. Either way, show him no mercy. He isn't the only one who's grown stronger since your last battle. Good luck.
+		QueenSlimeHuntDuring: Show that filthy slime no mercy. While he may now wield the powers of Hallow, you too have grown in strength since your last battle with him.
+		QueenSlimeHuntEnd: So it is done at last. Funny how even after everything, I've wound up helping in the tyrant's dirty work. Regardless, I'm happy to know my master's schemes may now never come to fruition. You've done well this day, and succeeded where many have failed.
 	}
 
 	LunarCult: {
