@@ -170,7 +170,7 @@ namespace Windfall.Common.Utilities
                         else
                         {
                             Main.npcChatText = "I'll need more than this... About " + CurrentQuestItem.Stack + " should be enough.";
-                            return new(0,0);
+                            return CurrentQuestItem;
                         }
 
                     }
