@@ -58,7 +58,7 @@ namespace Windfall.Common.Systems
         }
         public static List<Quest> QuestLog = InitializedQuestLog();
         
-        public static readonly List<QuestItem> DungeonTreasures = new()
+        public static readonly List<QuestItem> TravellingCultistQuestItems = new()
         {
             new QuestItem(ItemID.Bone, 50),
             new QuestItem(ItemID.WaterBolt, 1),
@@ -69,17 +69,20 @@ namespace Windfall.Common.Systems
         {
             QuestLog = InitializedQuestLog();
             TravellingCultist.QuestArtifact = new(0, 0);
+            TravellingCultist.QuestComplete = false;
         }
         public override void LoadWorldData(TagCompound tag)
         {
             QuestLog = (List<Quest>)tag.GetList<Quest>("QuestLog");
             EnsureQuestLogUpToDate(InitializedQuestLog());
             TravellingCultist.QuestArtifact = tag.Get<QuestItem>("CultistQuestItem");
+            TravellingCultist.QuestComplete = tag.GetBool("CultsitQuestComplete");
         }
         public override void SaveWorldData(TagCompound tag)
         {
             tag["QuestLog"] = QuestLog;
             tag["CultistQuestItem"] = TravellingCultist.QuestArtifact;
+            tag["CultsitQuestComplete"] = TravellingCultist.QuestComplete;
         }
         internal static Quest CreateQuest(string Name, List<string> Objectives, List<int> ObjectiveRequirements, bool Unlocked, List<QuestItem> QuestGifts = null, List<QuestItem> QuestRewards = null)
         {
