@@ -77,7 +77,6 @@ namespace Windfall.Common.Utilities
                         if (QuestSystem.QuestLog[index].QuestGifts != null)
                         {
                             var entitySource = npc.GetSource_GiftOrReward();
-                            Main.npcChatCornerItem = QuestSystem.QuestLog[index].QuestGifts[0].Type;
                             for (int i = 0; i < QuestSystem.QuestLog[index].QuestGifts.Count; i++)
                             {
                                 Main.LocalPlayer.QuickSpawnItem(entitySource, QuestSystem.QuestLog[index].QuestGifts[i].Type, QuestSystem.QuestLog[index].QuestGifts[i].Stack);
@@ -89,8 +88,9 @@ namespace Windfall.Common.Utilities
                     else
                     {
                         Main.npcChatText = Language.GetOrRegister($"Mods.{nameof(Windfall)}.Dialogue.{npcName}.{QuestSystem.QuestLog[index].Name}During").Value;
-                        Main.npcChatCornerItem = QuestSystem.QuestLog[index].QuestGifts[0].Type;
+                        
                     }
+                    Main.npcChatCornerItem = QuestSystem.QuestLog[index].QuestGifts[0].Type;
                 }
                 else
                 {
@@ -159,6 +159,7 @@ namespace Windfall.Common.Utilities
                 {
                     questActive = true;
                     Main.npcChatText = Language.GetOrRegister($"Mods.{nameof(Windfall)}.Dialogue.{NPCPath}.{ItemName}Start").Value;
+
                 }
                 else
                 {
@@ -191,6 +192,8 @@ namespace Windfall.Common.Utilities
                         Main.npcChatText = Language.GetOrRegister($"Mods.{nameof(Windfall)}.Dialogue.{NPCPath}.{ItemName}During").Value;
                     }
                 }
+                if(questActive)
+                    Main.npcChatCornerItem = CurrentQuestItem.Type;
             }
             else
             {
