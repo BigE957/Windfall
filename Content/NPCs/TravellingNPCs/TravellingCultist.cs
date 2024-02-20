@@ -206,7 +206,7 @@ namespace Windfall.Content.NPCs.TravellingNPCs
         {
             WeightedRandom<string> chat = new WeightedRandom<string>();
             chat.Add(Language.GetOrRegister($"Mods.{nameof(Windfall)}.Dialogue.LunarCult.TravellingCultist.Standard1").Value);
-            if(CurrentDialogueState == DialogueStates.Quests1 || CurrentDialogueState == DialogueStates.Quests2)
+            if(CurrentDialogueState == DialogueStates.Quests1)
                 return chat;
             else
                 return Language.GetOrRegister($"Mods.{nameof(Windfall)}.Dialogue.LunarCult.TravellingCultist.{CurrentDialogueState}").Value;
@@ -227,7 +227,6 @@ namespace Windfall.Content.NPCs.TravellingNPCs
             ImIn,
             Quests1,
             PostPlantInitial,
-            Quests2,
         }
 
         private DialogueStates CurrentDialogueState
@@ -238,7 +237,7 @@ namespace Windfall.Content.NPCs.TravellingNPCs
 
         public override void SetChatButtons(ref string button, ref string button2)
         {
-            if(CurrentDialogueState == DialogueStates.Quests1 || CurrentDialogueState == DialogueStates.Quests2)
+            if(CurrentDialogueState == DialogueStates.Quests1)
                 button = Language.GetTextValue("LegacyInterface.64");
             else
             {
@@ -273,12 +272,9 @@ namespace Windfall.Content.NPCs.TravellingNPCs
         }
         public override void OnChatButtonClicked(bool firstButton, ref string shop)
         {
-            if (firstButton && (CurrentDialogueState == DialogueStates.Quests1 || CurrentDialogueState == DialogueStates.Quests2))
+            if (firstButton && CurrentDialogueState == DialogueStates.Quests1)
             {
-                if (CurrentDialogueState == DialogueStates.Quests1)
-                    QuestArtifact = CollectorQuestDialogueHelper(Main.npc[NPC.whoAmI], ref QuestComplete, QuestArtifact); //will eventually utilize the reach parameter once Post-Plantera quest items are added
-                else
-                    QuestArtifact = CollectorQuestDialogueHelper(Main.npc[NPC.whoAmI], ref QuestComplete, QuestArtifact);
+                QuestArtifact = CollectorQuestDialogueHelper(Main.npc[NPC.whoAmI], ref QuestComplete, QuestArtifact); //will eventually utilize the reach parameter once Post-Plantera quest items are added
                 return;
             }
             switch (CurrentDialogueState)
@@ -308,10 +304,7 @@ namespace Windfall.Content.NPCs.TravellingNPCs
                     CurrentDialogueState = DialogueStates.ImIn;
                     break;
                 default:
-                    if(CurrentDialogueState == DialogueStates.ImIn)
-                        CurrentDialogueState = DialogueStates.Quests1;
-                    else
-                        CurrentDialogueState = DialogueStates.Quests2;
+                    CurrentDialogueState = DialogueStates.Quests1;
                     Main.CloseNPCChatOrSign();
                     break;
             }
