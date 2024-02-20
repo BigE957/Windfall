@@ -204,7 +204,7 @@ namespace Windfall.Content.NPCs.TravellingNPCs
         }
         public override string GetChat()
         {
-            if (CurrentDialogueState == DialogueStates.Quests1)
+            if (CurrentDialogueState != DialogueStates.Quests1)
                 return Language.GetOrRegister($"Mods.{nameof(Windfall)}.Dialogue.LunarCult.TravellingCultist.{CurrentDialogueState}").Value;
             WeightedRandom<string> chat = new();
 
