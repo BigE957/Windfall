@@ -204,12 +204,18 @@ namespace Windfall.Content.NPCs.TravellingNPCs
         }
         public override string GetChat()
         {
-            WeightedRandom<string> chat = new WeightedRandom<string>();
-            chat.Add(Language.GetOrRegister($"Mods.{nameof(Windfall)}.Dialogue.LunarCult.TravellingCultist.Standard1").Value);
-            if(CurrentDialogueState == DialogueStates.Quests1)
-                return chat;
-            else
+            if (CurrentDialogueState == DialogueStates.Quests1)
                 return Language.GetOrRegister($"Mods.{nameof(Windfall)}.Dialogue.LunarCult.TravellingCultist.{CurrentDialogueState}").Value;
+            WeightedRandom<string> chat = new();
+
+            chat.Add(Language.GetOrRegister($"Mods.{nameof(Windfall)}.Dialogue.LunarCult.TravellingCultist.Standard1").Value);
+            chat.Add(Language.GetOrRegister($"Mods.{nameof(Windfall)}.Dialogue.LunarCult.TravellingCultist.Standard2").Value);
+            chat.Add(Language.GetOrRegister($"Mods.{nameof(Windfall)}.Dialogue.LunarCult.TravellingCultist.Standard3").Value);
+            if (NPC.AnyNPCs(NPCID.Mechanic))
+                chat.Add(Language.GetOrRegister($"Mods.{nameof(Windfall)}.Dialogue.LunarCult.TravellingCultist.Mechanic").Value);
+            if (NPC.AnyNPCs(NPCID.Clothier))
+                chat.Add(Language.GetOrRegister($"Mods.{nameof(Windfall)}.Dialogue.LunarCult.TravellingCultist.Clothier").Value);
+            return chat;
         }
    
         public static QuestItem QuestArtifact = new(0,0);

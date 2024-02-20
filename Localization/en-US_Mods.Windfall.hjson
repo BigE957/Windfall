@@ -105,6 +105,11 @@ Dialogue: {
 		TravellingCultist: {
 			#NPC General Chat Dialogue
 			Standard1: Do I stand out...?
+			Standard2: I always get the feeling I'm being watched...
+			Standard3: The Lunar Cult grows stronger with each passing day... I hope there's something we can do.
+			Mechanic: That poor woman... kidnapped and locked within the Dungeon. Its a miracle she's still alive.
+			Clothier: That poor old man... cursed to house the Cult's guardian. Their cruelty knows no bounds.
+			AnyDungeonNPC: The Lunar Cult has hurt so many... I'm glad you at least came to their aid.
 			#NPC Conversation Dialogue
 			Initial: Hello! Would you be able to point me to whoever's in charge around here?
 			Weird: Oh! My mask! Don't worry. Despite its appearance I'm not actually with those cultists. Well... That's not entirely true... Though I really should only speak about this with the person who runs this little place.
