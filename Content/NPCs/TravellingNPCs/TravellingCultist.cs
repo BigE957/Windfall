@@ -206,24 +206,117 @@ namespace Windfall.Content.NPCs.TravellingNPCs
         {
             WeightedRandom<string> chat = new WeightedRandom<string>();
             chat.Add(Language.GetOrRegister($"Mods.{nameof(Windfall)}.Dialogue.LunarCult.TravellingCultist.Standard1").Value);
-            return chat;
+            if(CurrentDialogueState == DialogueStates.Quests1 || CurrentDialogueState == DialogueStates.Quests2)
+                return chat;
+            else
+                return Language.GetOrRegister($"Mods.{nameof(Windfall)}.Dialogue.LunarCult.TravellingCultist.{CurrentDialogueState}").Value;
         }
-        public override void SetChatButtons(ref string button, ref string button2)
-        {
-            button = Language.GetTextValue("LegacyInterface.64");
-        }
+   
         public static QuestItem QuestArtifact = new(0,0);
 
         public static bool QuestComplete = false;
 
-
-        public override void OnChatButtonClicked(bool firstButton, ref string shop)
+        internal enum DialogueStates
         {
-            if (firstButton)
+            Initial,
+            Weird,
+            ThatsYou,
+            TheCult,
+            HowYouKnow,
+            HowToHelp,
+            ImIn,
+            Quests1,
+            PostPlantInitial,
+            Quests2,
+        }
+
+        private DialogueStates CurrentDialogueState
+        {
+            get => (DialogueStates)WorldSaveSystem.cultistChatState;
+            set => WorldSaveSystem.cultistChatState = (int)value;
+        }
+
+        public override void SetChatButtons(ref string button, ref string button2)
+        {
+            if(CurrentDialogueState == DialogueStates.Quests1 || CurrentDialogueState == DialogueStates.Quests2)
+                button = Language.GetTextValue("LegacyInterface.64");
+            else
             {
-                QuestArtifact = CollectorQuestDialogueHelper(Main.npc[NPC.whoAmI], ref QuestComplete, QuestArtifact);
+                switch (CurrentDialogueState)
+                {
+                    case (DialogueStates.Initial):
+                        button = "That's me!";
+                        button2 = "You look... odd...";
+                        break;
+                    case (DialogueStates.Weird):
+                        button = "That's me!";
+                        break;
+                    case (DialogueStates.ThatsYou):
+                        button = "What's the problem?";
+                        break;
+                    case (DialogueStates.TheCult):
+                        button = "How can I help?";
+                        button2 = "How do you know?";
+                        break;
+                    case (DialogueStates.HowYouKnow):
+                        button = "How can I help?";
+                        break;
+                    case (DialogueStates.HowToHelp):
+                        button = "I'll help!";
+                        break;
+                    case (DialogueStates.ImIn):
+                        button = "Will do!";
+                        break;
+                }
+                Main.npcChatText = Language.GetOrRegister($"Mods.{nameof(Windfall)}.Dialogue.LunarCult.TravellingCultist.{CurrentDialogueState}").Value;
             }
         }
+        public override void OnChatButtonClicked(bool firstButton, ref string shop)
+        {
+            if (firstButton && (CurrentDialogueState == DialogueStates.Quests1 || CurrentDialogueState == DialogueStates.Quests2))
+            {
+                if (CurrentDialogueState == DialogueStates.Quests1)
+                    QuestArtifact = CollectorQuestDialogueHelper(Main.npc[NPC.whoAmI], ref QuestComplete, QuestArtifact); //will eventually utilize the reach parameter once Post-Plantera quest items are added
+                else
+                    QuestArtifact = CollectorQuestDialogueHelper(Main.npc[NPC.whoAmI], ref QuestComplete, QuestArtifact);
+                return;
+            }
+            switch (CurrentDialogueState)
+            {
+                case (DialogueStates.Initial):
+                    if(firstButton)
+                        CurrentDialogueState = DialogueStates.ThatsYou;
+                    else
+                        CurrentDialogueState = DialogueStates.Weird;
+                    break;
+                case (DialogueStates.Weird):
+                    CurrentDialogueState = DialogueStates.ThatsYou;
+                    break;
+                case (DialogueStates.ThatsYou):
+                    CurrentDialogueState = DialogueStates.TheCult;
+                    break;
+                case (DialogueStates.TheCult):
+                    if (firstButton)
+                        CurrentDialogueState = DialogueStates.HowToHelp;
+                    else
+                        CurrentDialogueState = DialogueStates.HowYouKnow;
+                    break;
+                case (DialogueStates.HowYouKnow):
+                    CurrentDialogueState = DialogueStates.HowToHelp;
+                    break;
+                case (DialogueStates.HowToHelp):
+                    CurrentDialogueState = DialogueStates.ImIn;
+                    break;
+                default:
+                    if(CurrentDialogueState == DialogueStates.ImIn)
+                        CurrentDialogueState = DialogueStates.Quests1;
+                    else
+                        CurrentDialogueState = DialogueStates.Quests2;
+                    Main.CloseNPCChatOrSign();
+                    break;
+            }
+        }
+
         public override void AI()
         {
             NPC.homeless = true; // Make sure it stays homeless

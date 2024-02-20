@@ -127,7 +127,7 @@ namespace Windfall.Common.Utilities
                 }
             }
         }
-        public static QuestItem CollectorQuestDialogueHelper(NPC npc, ref bool QuestComplete, QuestItem CurrentQuestItem)
+        public static QuestItem CollectorQuestDialogueHelper(NPC npc, ref bool QuestComplete, QuestItem CurrentQuestItem, int reach = -1)
         {
             string NPCPath = null;
             List<QuestItem> MyQuestItems = null;
@@ -142,7 +142,10 @@ namespace Windfall.Common.Utilities
                 bool questActive = true;
                 if (CurrentQuestItem.Stack == 0)
                 {
-                    index = Main.rand.Next(0, MyQuestItems.Count);
+                    if(reach == -1)
+                        index = Main.rand.Next(0, MyQuestItems.Count);
+                    else
+                        index = Main.rand.Next(0, reach);
                     CurrentQuestItem = MyQuestItems[index];
                     questActive = false;
                 }

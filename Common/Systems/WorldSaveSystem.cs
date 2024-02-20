@@ -18,6 +18,7 @@ namespace Windfall.Common.Systems
         public static bool MechanicCultistsEncountered = false;
 
         public static int paladinChats = 0;
+        public static int cultistChatState = 0;
 
         public static List<string> CreditDataNames;
         public static List<int> CreditDataCredits;
@@ -37,6 +38,7 @@ namespace Windfall.Common.Systems
             CreditDataCredits = (List<int>)tag.GetList<int>("CreditDataCredits");
 
             paladinChats = tag.GetInt("paladinChats");
+            cultistChatState = tag.GetInt("TravelCultistChatState");
         }
 
         public override void SaveWorldData(TagCompound tag)
@@ -51,6 +53,7 @@ namespace Windfall.Common.Systems
             tag["CreditDataCredits"] = CreditDataCredits;
 
             tag["paladinChats"] = paladinChats;
+            tag["TravelCultistChatState"] = cultistChatState;
         }
         public static void ResetWorldData()
         {
@@ -65,6 +68,9 @@ namespace Windfall.Common.Systems
 
             CreditDataNames = new List<string>();
             CreditDataCredits = new List<int>();
+
+            paladinChats = 0;
+            cultistChatState = 0;
         }
     }
 }
