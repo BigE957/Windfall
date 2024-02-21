@@ -5,6 +5,8 @@ using Terraria.ID;
 using Terraria.Localization;
 using Terraria.ModLoader;
 using System.Linq;
+using static Windfall.Common.Utilities.Utilities;
+using System.Collections.Generic;
 
 namespace Windfall.Content.NPCs.WanderingNPCs
 {
@@ -56,95 +58,72 @@ namespace Windfall.Content.NPCs.WanderingNPCs
         {
             return Language.GetOrRegister($"Mods.{nameof(Windfall)}.Dialogue.LunarCult.MechanicShed.{CurrentDialogue}").Value;
         }
+        private List<dialogueDirections> MyDialogue = new()
+        {
+            new dialogueDirections()
+            {
+                MyPos = (int)DialogueState.Initial,
+                Button1 = new(){name = "Your guardian?", heading = (int)DialogueState.ExploringHuh},
+                Button2 = new(){name = "What issues?", heading = (int)DialogueState.WhoAreWe},
+            },
+            new dialogueDirections()
+            {
+                MyPos = (int)DialogueState.ExploringHuh,
+                Button1 = new(){name = "That's a relief.", heading = (int)DialogueState.FairEnough},
+                Button2 = new(){name = "You cursed him...?", heading = (int)DialogueState.SomethingBad},
+            },
+            new dialogueDirections()
+            {
+                MyPos = (int)DialogueState.WhoAreWe,
+                Button1 = new(){name = "I'll see what I can do.", heading = (int)DialogueState.WannaJoin},
+                Button2 = new(){name = "No promises.", heading = (int)DialogueState.NuhUh},
+            },
+            new dialogueDirections()
+            {
+                MyPos = (int)DialogueState.End,
+                Button1 = new(){name = "Goodbye!", heading = (int)DialogueState.End},
+                Button2 = new(){name = "Took long enough...", heading = (int)DialogueState.NuhUh},
+            },
+            new dialogueDirections()
+            {
+                MyPos = (int)DialogueState.WannaJoin,
+                Button1 = new(){name = "I'll keep that in mind!", heading = (int)DialogueState.End},
+                Button2 = new(){name = "No thanks...", heading = (int)DialogueState.End},
+            },
+            new dialogueDirections()
+            {
+                MyPos = (int)DialogueState.NuhUh,
+                Button1 = new(){name = "I guess that makes sense.", heading = (int)DialogueState.End},
+                Button2 = new(){name = "Surely...", heading = (int)DialogueState.End},
+            },
+            new dialogueDirections()
+            {
+                MyPos = (int)DialogueState.FairEnough,
+                Button1 = new(){name = "Can do.", heading = (int)DialogueState.End},
+                Button2 = new(){name = "Fine.", heading = (int)DialogueState.End},
+            },
+            new dialogueDirections()
+            {
+                MyPos = (int)DialogueState.SomethingBad,
+                Button1 = new(){name = "You might be right.", heading = (int)DialogueState.End},
+                Button2 = new(){name = "Are you...?", heading = (int)DialogueState.End},
+            },
+            new dialogueDirections()
+            {
+                MyPos = (int)DialogueState.SomethingBad,
+                Button1 = new(){name = "Thank you.", heading = -1},
+                Button2 = new(){name = "Finally...", heading = -1},
+                end = true
+            },
+        };
         public override void OnChatButtonClicked(bool firstButton, ref string shop)
         {
-            switch (CurrentDialogue)
-            {
-                case DialogueState.Initial:
-                    if (firstButton)
-                    {
-                        CurrentDialogue = DialogueState.ExploringHuh;
-                    }
-                    else
-                    {
-                        CurrentDialogue = DialogueState.WhoAreWe;
-                    }
-                    break;
-                case DialogueState.ExploringHuh:
-                    if (firstButton)
-                    {
-                        CurrentDialogue = DialogueState.FairEnough;
-                    }
-                    else
-                    {
-                        CurrentDialogue = DialogueState.SomethingBad;
-                    }
-                    break;
-                case DialogueState.WhoAreWe:
-                    if (firstButton)
-                    {
-                        CurrentDialogue = DialogueState.WannaJoin;
-                    }
-                    else
-                    {
-                        CurrentDialogue = DialogueState.NuhUh;
-                    }
-                    break;
-                case DialogueState.End:
-                    foreach (NPC npc in Main.npc.Where(n => n.type == NPC.type && n.active))
-                    {
-                        for (int i = 0; i < 50; i++)
-                        {
-                            Vector2 speed = Main.rand.NextVector2Circular(1.5f, 2f);
-                            Dust d = Dust.NewDustPerfect(npc.Center, DustID.GoldFlame, speed * 3, Scale: 1.5f);
-                            d.noGravity = true;
-                        }
-                        npc.active = false;
-                    }
-                    break;
-                default:
-                    CurrentDialogue = DialogueState.End;
-                    break;
-            }
+            CurrentDialogue = (DialogueState)GetNPCConversation(MyDialogue, (int)CurrentDialogue, firstButton);
             Main.npcChatText = Language.GetOrRegister($"Mods.{nameof(Windfall)}.Dialogue.LunarCult.MechanicShed.{CurrentDialogue}").Value;
         }
         public override void SetChatButtons(ref string button, ref string button2)
         {
-            switch (CurrentDialogue)
-            {
-                case DialogueState.Initial:
-                    button = "I'm just exploring.";
-                    button2 = "Who are you?";
-                    break;
-                case DialogueState.WhoAreWe:
-                    button = "Sounds interesting.";
-                    button2 = "So... a cult?";
-                    break;
-                case DialogueState.WannaJoin:
-                    button = "I'll keep that in mind!";
-                    button2 = "No thanks...";
-                    break;
-                case DialogueState.NuhUh:
-                    button = "I guess that makes sense.";
-                    button2 = "Surely...";
-                    break;
-                case DialogueState.ExploringHuh:
-                    button = "Just looking for supplies.";
-                    button2 = "What's it matter to you?";
-                    break;
-                case DialogueState.FairEnough:
-                    button = "Can do.";
-                    button2 = "Fine.";
-                    break;
-                case DialogueState.SomethingBad:
-                    button = "You might be right.";
-                    button2 = "Are you...?";
-                    break;
-                case DialogueState.End:
-                    button = "Thank you.";
-                    button2 = "Finally...";
-                    break;
-            }
+            SetConversationButtons(MyDialogue, (int)CurrentDialogue, ref button, ref button2);
         }
         public override bool CheckActive()
         {

@@ -3,6 +3,9 @@ using Terraria.ID;
 using Terraria.Localization;
 using Terraria;
 using Terraria.ModLoader;
+using static Windfall.Common.Utilities.Utilities;
+using static Windfall.Content.NPCs.TravellingNPCs.TravellingCultist;
+using System.Collections.Generic;
 
 namespace Windfall.Content.NPCs.WorldEvents.LunarCult
 {
@@ -44,50 +47,42 @@ namespace Windfall.Content.NPCs.WorldEvents.LunarCult
         {
             return Language.GetOrRegister($"Mods.{nameof(Windfall)}.Dialogue.LunarCult.DungeonBishop.{CurrentDialogue}").Value;
         }
+        private List<dialogueDirections> MyDialogue = new()
+        {
+            new dialogueDirections()
+            {
+                MyPos = (int)DialogueState.Initial,
+                Button1 = new(){name = "Your guardian?", heading = (int)DialogueState.Guardian},
+                Button2 = new(){name = "What issues?", heading = (int)DialogueState.Issues},
+            },
+            new dialogueDirections()
+            {
+                MyPos = (int)DialogueState.Guardian,
+                Button1 = new(){name = "That's a relief.", heading = (int)DialogueState.End},
+                Button2 = new(){name = "You cursed him...?", heading = (int)DialogueState.End},
+            },
+            new dialogueDirections()
+            {
+                MyPos = (int)DialogueState.Issues,
+                Button1 = new(){name = "I'll see what I can do.", heading = (int)DialogueState.End},
+                Button2 = new(){name = "No promises.", heading = (int)DialogueState.End},
+            },
+            new dialogueDirections()
+            {
+                MyPos = (int)DialogueState.End,
+                Button1 = new(){name = "Goodbye!", heading = (int)DialogueState.End},
+                Button2 = new(){name = "Took long enough...", heading = (int)DialogueState.End},
+                end = true
+            },
+        };
         public override void OnChatButtonClicked(bool firstButton, ref string shop)
         {
-            switch (CurrentDialogue)
-            {
-                case DialogueState.Initial:
-                    if (firstButton)
-                    {
-                        CurrentDialogue = DialogueState.Guardian;
-                    }
-                    else
-                    {
-                        CurrentDialogue = DialogueState.Issues;
-                    }
-                    break;
-                case DialogueState.End:
-                    Main.CloseNPCChatOrSign();
-                    break;
-                default:
-                    CurrentDialogue = DialogueState.End;
-                    break;
-            }
+            CurrentDialogue = (DialogueState)GetNPCConversation(MyDialogue, (int)CurrentDialogue, firstButton);
             Main.npcChatText = Language.GetOrRegister($"Mods.{nameof(Windfall)}.Dialogue.LunarCult.DungeonBishop.{CurrentDialogue}").Value;
         }
         public override void SetChatButtons(ref string button, ref string button2)
         {
-            switch (CurrentDialogue)
-            {
-                case DialogueState.Initial:
-                    button = "Your guardian?";
-                    button2 = "What issues?";
-                    break;
-                case DialogueState.Guardian:
-                    button = "That's a relief.";
-                    button2 = "You cursed him...?";
-                    break;
-                case DialogueState.Issues:
-                    button = "I'll see what I can do.";
-                    button2 = "No promises.";
-                    break;
-                case DialogueState.End:
-                    button = "Goodbye!";
-                    button2 = "Took long enough...";
-                    break;
-            }
+            SetConversationButtons(MyDialogue, (int)CurrentDialogue, ref button, ref button2);
         }
     }
 }
