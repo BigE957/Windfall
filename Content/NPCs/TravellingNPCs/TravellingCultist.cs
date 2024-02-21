@@ -1,11 +1,9 @@
 ﻿using CalamityMod;
 using CalamityMod.Projectiles.Magic;
-using CalamityMod.Projectiles.Rogue;
 using Microsoft.Xna.Framework;
 using System.Collections.Generic;
 using System.Linq;
 using Terraria;
-using Terraria.Chat;
 using Terraria.DataStructures;
 using Terraria.GameContent;
 using Terraria.GameContent.Bestiary;
@@ -31,8 +29,8 @@ namespace Windfall.Content.NPCs.TravellingNPCs
 
         NPCID.Sets.NPCBestiaryDrawModifiers drawModifiers = new()
         {
-            Velocity = 1f, // Draws the NPC in the bestiary as if its walking +1 tiles in the x direction
-            Direction = 1 // -1 is left and 1 is right. NPCs are drawn facing the left by default but ExamplePerson will be drawn facing the right
+            Velocity = 1f,
+            Direction = 1 
         };
 
         public override bool PreAI()
@@ -40,7 +38,6 @@ namespace Windfall.Content.NPCs.TravellingNPCs
             if ((!Main.dayTime || Main.time >= despawnTime) && !IsNpcOnscreen(NPC.Center)) // If it's past the despawn time and the NPC isn't onscreen
             {
                 // Here we despawn the NPC and send a message stating that the NPC has despawned
-                // LegacyMisc.35 is {0) has departed!
                 CalamityUtils.DisplayLocalizedText("The Strange Cultist has departed!", new(50, 125, 255));
                 NPC.active = false;
                 NPC.netSkip = -1;
@@ -53,27 +50,20 @@ namespace Windfall.Content.NPCs.TravellingNPCs
 
         public static void UpdateTravelingMerchant()
         {
-            bool travelerIsThere = (NPC.FindFirstNPC(ModContent.NPCType<TravellingCultist>()) != -1); // Find a Merchant if there's one spawned in the world
+            bool travelerIsThere = (NPC.FindFirstNPC(ModContent.NPCType<TravellingCultist>()) != -1); 
 
-            // Main.time is set to 0 each morning, and only for one update. Sundialling will never skip past time 0 so this is the place for 'on new day' code
             if (Main.dayTime && Main.time == 0)
             {
-                // insert code here to change the spawn chance based on other conditions (say, NPCs which have arrived, or milestones the player has passed)
-                // You can also add a day counter here to prevent the merchant from possibly spawning multiple days in a row.
-
-                // NPC won't spawn today if it stayed all night
                 if (!travelerIsThere && Main.rand.NextBool(4))
-                { // 4 = 25% Chance
-                  // Here we can make it so the NPC doesn't spawn at the EXACT same time every time it does spawn
-                    spawnTime = GetRandomSpawnTime(5400, 8100); // minTime = 6:00am, maxTime = 7:30am
+                { 
+                    spawnTime = GetRandomSpawnTime(5400, 8100);
                 }
                 else
                 {
-                    spawnTime = double.MaxValue; // no spawn today
+                    spawnTime = double.MaxValue;
                 }
             }
 
-            // Spawn the traveler if the spawn conditions are met (time of day, no events, no sundial)
             if (!travelerIsThere && CanSpawnNow())
             {
                 int newTraveler = NPC.NewNPC(Terraria.Entity.GetSource_TownSpawn(), Main.spawnTileX * 16, Main.spawnTileY * 16, ModContent.NPCType<TravellingCultist>(), 1); // Spawning at the world spawn
@@ -85,7 +75,6 @@ namespace Windfall.Content.NPCs.TravellingNPCs
                 // Prevents the traveler from spawning again the same day
                 spawnTime = double.MaxValue;
 
-                // Announce that the traveler has spawned in!
                 string key = ("A " + traveler.FullName + " has arrived!");
                 Color messageColor = new(50, 125, 255);
                 CalamityUtils.DisplayLocalizedText(key, messageColor);
@@ -101,7 +90,7 @@ namespace Windfall.Content.NPCs.TravellingNPCs
             // can't spawn if the sundial is active
             if (Main.IsFastForwardingTime())
                 return false;
-
+            //progression locks
             if (!Main.hardMode || NPC.downedAncientCultist)
                 return false;
             // can spawn if daytime, and between the spawn and despawn times
@@ -140,19 +129,19 @@ namespace Windfall.Content.NPCs.TravellingNPCs
             NPCID.Sets.ExtraFramesCount[Type] = 9;
             NPCID.Sets.AttackFrameCount[Type] = 4;
             NPCID.Sets.DangerDetectRange[Type] = 60;
-            NPCID.Sets.AttackType[Type] = 2; // Swings a weapon. This NPC attacks in roughly the same manner as Stylist
+            NPCID.Sets.AttackType[Type] = 2;
             NPCID.Sets.AttackTime[Type] = 12;
             NPCID.Sets.AttackAverageChance[Type] = 1;
             NPCID.Sets.HatOffsetY[Type] = 4;
             NPCID.Sets.ShimmerTownTransform[Type] = false;
-            NPCID.Sets.NoTownNPCHappiness[Type] = true; // Prevents the happiness button
+            NPCID.Sets.NoTownNPCHappiness[Type] = true; 
             //NPCID.Sets.FaceEmote[Type] = ModContent.EmoteBubbleType<TravellingCultist>();
 
             // Influences how the NPC looks in the Bestiary
             NPCID.Sets.NPCBestiaryDrawModifiers drawModifiers = new NPCID.Sets.NPCBestiaryDrawModifiers()
             {
-                Velocity = 2f, // Draws the NPC in the bestiary as if its walking +2 tiles in the x direction
-                Direction = -1 // -1 is left and 1 is right.
+                Velocity = 2f, 
+                Direction = -1 
             };
 
             NPCID.Sets.NPCBestiaryDrawOffset.Add(Type, drawModifiers);
@@ -186,7 +175,7 @@ namespace Windfall.Content.NPCs.TravellingNPCs
         }
         public override bool CanTownNPCSpawn(int numTownNPCs)
         {
-            return false; // This should always be false, because we spawn in the Traveling Merchant manually
+            return false; 
         }
 
         public override ITownNPCProfile TownNPCProfile()
@@ -300,7 +289,7 @@ namespace Windfall.Content.NPCs.TravellingNPCs
             
             if (firstButton && CurrentDialogue == DialogueState.Quests1)
             {
-                QuestArtifact = CollectorQuestDialogueHelper(Main.npc[NPC.whoAmI], ref QuestComplete, QuestArtifact); //will eventually utilize the reach parameter once Post-Plantera quest items are added
+                QuestArtifact = CollectorQuestDialogueHelper(Main.npc[NPC.whoAmI], ref QuestComplete, QuestArtifact); 
                 return;
             }
             CurrentDialogue = (DialogueState)GetNPCConversation(MyDialogue, (int)CurrentDialogue, firstButton);
@@ -309,7 +298,7 @@ namespace Windfall.Content.NPCs.TravellingNPCs
 
         public override void AI()
         {
-            NPC.homeless = true; // Make sure it stays homeless
+            NPC.homeless = true; 
         }
         public override void TownNPCAttackStrength(ref int damage, ref float knockback)
         {

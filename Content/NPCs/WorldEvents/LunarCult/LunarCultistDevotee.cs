@@ -1,11 +1,8 @@
-﻿using Microsoft.Xna.Framework;
-using CalamityMod;
+﻿using CalamityMod;
 using Terraria;
 using Terraria.ID;
 using Terraria.Localization;
 using Terraria.ModLoader;
-using System.Linq;
-using CalamityMod.NPCs.DesertScourge;
 using static Windfall.Common.Utilities.Utilities;
 using System.Collections.Generic;
 

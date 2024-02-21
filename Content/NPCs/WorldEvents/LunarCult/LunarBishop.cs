@@ -4,7 +4,6 @@ using Terraria.Localization;
 using Terraria;
 using Terraria.ModLoader;
 using static Windfall.Common.Utilities.Utilities;
-using static Windfall.Content.NPCs.TravellingNPCs.TravellingCultist;
 using System.Collections.Generic;
 
 namespace Windfall.Content.NPCs.WorldEvents.LunarCult
