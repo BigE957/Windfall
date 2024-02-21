@@ -18,7 +18,6 @@
     <None Remove="Assets\NPCs\Enemies\LunarCultistArcher.png" />
     <None Remove="Assets\NPCs\TravellingNPCs\TravellingCultist.png" />
     <None Remove="Assets\NPCs\TravellingNPCs\TravellingCultist_Head.png" />
-    <None Remove="Assets\NPCs\TravellingNPCs\TravellingCultist_Party.png" />
     <None Remove="Assets\NPCs\WanderingNPCs\IlmeranPaladin.png" />
     <None Remove="Assets\NPCs\WanderingNPCs\LoneRonin.png" />
     <None Remove="Assets\NPCs\WorldEvents\LunarBishop.png" />

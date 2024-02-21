@@ -147,7 +147,7 @@ namespace Windfall.Content.NPCs.TravellingNPCs
             NPCID.Sets.NPCBestiaryDrawOffset.Add(Type, drawModifiers);
 
             NPCProfile = new Profiles.StackedNPCProfile(
-                new Profiles.DefaultNPCProfile(Texture, NPCHeadLoader.GetHeadSlot(HeadTexture), Texture + "_Party")
+                new Profiles.DefaultNPCProfile(Texture, NPCHeadLoader.GetHeadSlot(HeadTexture))
             );
         }
         public override void SetDefaults()
@@ -169,13 +169,9 @@ namespace Windfall.Content.NPCs.TravellingNPCs
         }
         public override void SetBestiary(BestiaryDatabase database, BestiaryEntry bestiaryEntry)
         {
-            // We can use AddRange instead of calling Add multiple times in order to add multiple items at once
             bestiaryEntry.Info.AddRange(new IBestiaryInfoElement[] {
-			// Sets the preferred biomes of this town NPC listed in the bestiary.
-			// With Town NPCs, you usually set this to what biome it likes the most in regards to NPC happiness.
 			BestiaryDatabaseNPCsPopulator.CommonTags.SpawnConditions.Biomes.Surface,
 
-			// Sets your NPC's flavor text in the bestiary.
 			new FlavorTextBestiaryInfoElement("A strange fellow who's recently begun showing up out of nowhere. He claims to want to fight against the Lunar Cult, but can he really be trusted...?"),
         });
         }
