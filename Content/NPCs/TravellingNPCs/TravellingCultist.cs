@@ -271,9 +271,8 @@ namespace Windfall.Content.NPCs.TravellingNPCs
             new dialogueDirections()
             {
                 MyPos = (int)DialogueState.ImIn,
-                Button1 = new(){name = "Will do!", heading = (int)DialogueState.Quests1},
+                Button1 = new(){name = "Will do!", heading = (int)DialogueState.Quests1, end = true},
                 Button2 = null,
-                end = true
             },
         };
 

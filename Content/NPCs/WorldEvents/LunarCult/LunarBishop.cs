@@ -69,9 +69,8 @@ namespace Windfall.Content.NPCs.WorldEvents.LunarCult
             new dialogueDirections()
             {
                 MyPos = (int)DialogueState.End,
-                Button1 = new(){name = "Goodbye!", heading = (int)DialogueState.End},
-                Button2 = new(){name = "Took long enough...", heading = (int)DialogueState.End},
-                end = true
+                Button1 = new(){name = "Goodbye!", heading = (int)DialogueState.End, end = true},
+                Button2 = new(){name = "Took long enough...", heading = (int)DialogueState.End, end = true},
             },
         };
         public override void OnChatButtonClicked(bool firstButton, ref string shop)

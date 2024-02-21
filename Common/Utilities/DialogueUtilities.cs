@@ -35,13 +35,13 @@ namespace Windfall.Common.Utilities
         {
             public string name;
             public int heading;
+            public bool end = false;
         }
         public struct dialogueDirections
         {
             public int MyPos;
             public dialogueButton Button1;
             public dialogueButton? Button2;
-            public bool end = false;
 
             public dialogueDirections()
             { }
@@ -228,12 +228,18 @@ namespace Windfall.Common.Utilities
         public static int GetNPCConversation(List<dialogueDirections> MyDialogue, int CurrentDialogue, bool firstButton)
         {
             dialogueDirections myDirections = MyDialogue.Find(n => n.MyPos == (int)CurrentDialogue);
-            if (myDirections.end)
-                Main.CloseNPCChatOrSign();
             if (firstButton)
+            {
+                if (myDirections.Button1.end)
+                    Main.CloseNPCChatOrSign();
                 return myDirections.Button1.heading;
+            }
             else if (myDirections.Button2 != null)
-                return myDirections.Button2.Value.heading;          
+            {
+                if (myDirections.Button2.Value.end)
+                    Main.CloseNPCChatOrSign();
+                return myDirections.Button2.Value.heading;
+            }
             return -1;
         }
     }

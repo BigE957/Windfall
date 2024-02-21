@@ -109,9 +109,8 @@ namespace Windfall.Content.NPCs.WanderingNPCs
             new dialogueDirections()
             {
                 MyPos = (int)DialogueState.SomethingBad,
-                Button1 = new(){name = "Thank you.", heading = -1},
-                Button2 = new(){name = "Finally...", heading = -1},
-                end = true
+                Button1 = new(){name = "Thank you.", heading = -1, end = true},
+                Button2 = new(){name = "Finally...", heading = -1, end = true},
             },
         };
         public override void OnChatButtonClicked(bool firstButton, ref string shop)
