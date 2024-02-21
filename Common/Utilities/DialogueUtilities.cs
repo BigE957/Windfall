@@ -36,15 +36,15 @@ namespace Windfall.Common.Utilities
             public string name;
             public int heading;
             public bool end = false;
+
+            public dialogueButton()
+            {}
         }
         public struct dialogueDirections
         {
             public int MyPos;
             public dialogueButton Button1;
             public dialogueButton? Button2;
-
-            public dialogueDirections()
-            { }
         }
 
         public static void QuestDialogueHelper(NPC npc)
@@ -220,14 +220,14 @@ namespace Windfall.Common.Utilities
         }
         public static void SetConversationButtons(List<dialogueDirections> MyDialogue, int CurrentDialogue, ref string button, ref string button2)
         {
-            dialogueDirections myDirections = MyDialogue.Find(n => n.MyPos == (int)CurrentDialogue);
+            dialogueDirections myDirections = MyDialogue.Find(n => n.MyPos == CurrentDialogue);
             button = myDirections.Button1.name;
             if (myDirections.Button2 != null)
                 button2 = myDirections.Button2.Value.name;
         }
         public static int GetNPCConversation(List<dialogueDirections> MyDialogue, int CurrentDialogue, bool firstButton)
         {
-            dialogueDirections myDirections = MyDialogue.Find(n => n.MyPos == (int)CurrentDialogue);
+            dialogueDirections myDirections = MyDialogue.Find(n => n.MyPos == CurrentDialogue);
             if (firstButton)
             {
                 if (myDirections.Button1.end)

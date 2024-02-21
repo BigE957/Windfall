@@ -46,7 +46,7 @@ namespace Windfall.Content.NPCs.WorldEvents.LunarCult
         {
             return Language.GetOrRegister($"Mods.{nameof(Windfall)}.Dialogue.LunarCult.DungeonBishop.{CurrentDialogue}").Value;
         }
-        private List<dialogueDirections> MyDialogue = new()
+        private readonly List<dialogueDirections> MyDialogue = new()
         {
             new dialogueDirections()
             {

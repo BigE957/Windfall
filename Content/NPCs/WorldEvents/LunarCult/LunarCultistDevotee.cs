@@ -52,7 +52,7 @@ namespace Windfall.Content.NPCs.WanderingNPCs
         {
             return Language.GetOrRegister($"Mods.{nameof(Windfall)}.Dialogue.LunarCult.OcularDevotee.{CurrentDialogue}").Value;
         }
-        private List<dialogueDirections> MyDialogue = new()
+        private readonly List<dialogueDirections> MyDialogue = new()
         {
             new dialogueDirections()
             {

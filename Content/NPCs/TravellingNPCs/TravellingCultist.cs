@@ -230,7 +230,7 @@ namespace Windfall.Content.NPCs.TravellingNPCs
             get => (DialogueState)WorldSaveSystem.cultistChatState;
             set => WorldSaveSystem.cultistChatState = (int)value;
         }
-        internal List<dialogueDirections> MyDialogue = new()
+        private readonly List<dialogueDirections> MyDialogue = new()
         {
             new dialogueDirections()
             {

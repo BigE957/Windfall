@@ -56,7 +56,7 @@ namespace Windfall.Content.NPCs.WanderingNPCs
         {
             return Language.GetOrRegister($"Mods.{nameof(Windfall)}.Dialogue.LunarCult.MechanicShed.{CurrentDialogue}").Value;
         }
-        private List<dialogueDirections> MyDialogue = new()
+        private readonly List<dialogueDirections> MyDialogue = new()
         {
             new dialogueDirections()
             {
