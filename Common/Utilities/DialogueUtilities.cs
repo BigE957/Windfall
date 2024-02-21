@@ -7,7 +7,7 @@ using Windfall.Common.Utilities;
 using Windfall.Content.NPCs.WanderingNPCs;
 using CalamityMod;
 using System.Linq;
-using System;
+using static System.Collections.IEnumerable;
 using Terraria.ID;
 using Terraria.ModLoader;
 using Windfall.Content.NPCs.TravellingNPCs;
@@ -26,10 +26,27 @@ namespace Windfall.Common.Utilities
         };
         private static readonly List<string> RoninQuests = new()
         {
+            "ParryIntro",
             "SlimeGodHunt",
             "CrystalSearch",
             "QueenSlimeHunt",
         };
+        public struct dialogueButton
+        {
+            public string name;
+            public int heading;
+        }
+        public struct dialogueDirections
+        {
+            public int MyPos;
+            public dialogueButton Button1;
+            public dialogueButton? Button2;
+            public bool end = false;
+
+            public dialogueDirections()
+            { }
+        }
+
         public static void QuestDialogueHelper(NPC npc)
         {
             int index = -1;
@@ -200,6 +217,24 @@ namespace Windfall.Common.Utilities
                 Main.npcChatText = Language.GetOrRegister($"Mods.{nameof(Windfall)}.Dialogue.{NPCPath}.NoQuest").Value;
             }
             return CurrentQuestItem;
+        }
+        public static void SetConversationButtons(List<dialogueDirections> MyDialogue, int CurrentDialogue, ref string button, ref string button2)
+        {
+            dialogueDirections myDirections = MyDialogue.Find(n => n.MyPos == (int)CurrentDialogue);
+            button = myDirections.Button1.name;
+            if (myDirections.Button2 != null)
+                button2 = myDirections.Button2.Value.name;
+        }
+        public static int GetNPCConversation(List<dialogueDirections> MyDialogue, int CurrentDialogue, bool firstButton)
+        {
+            dialogueDirections myDirections = MyDialogue.Find(n => n.MyPos == (int)CurrentDialogue);
+            if (myDirections.end)
+                Main.CloseNPCChatOrSign();
+            if (firstButton)
+                return myDirections.Button1.heading;
+            else if (myDirections.Button2 != null)
+                return myDirections.Button2.Value.heading;          
+            return -1;
         }
     }
 }
