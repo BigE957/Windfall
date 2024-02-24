@@ -32,7 +32,16 @@ namespace Windfall.Content.Projectiles.NPCAnimations
         internal override SoundStyle SpawnSound => new("CalamityMod/Sounds/Custom/SCalSounds/BrimstoneHellblastSound");
         internal override int NPCType => ModContent.NPCType<LoneRonin>();
         internal override Color TextColor => Color.DeepPink;
-
+        internal override void DoOnSpawn()
+        {
+            for (int i = 0; i < 75; i++)
+            {
+                Vector2 speed = Main.rand.NextVector2Circular(1.5f, 2f);
+                Dust d = Dust.NewDustPerfect(Projectile.Center, (int)CalamityDusts.PurpleCosmilite, speed * 4, Scale: 1.5f);
+                d.noGravity = true;
+            }
+            SoundEngine.PlaySound(SpawnSound, Projectile.Center);
+        }
         public override void SetStaticDefaults()
         {
             Main.projFrames[Type] = 1;
