@@ -110,6 +110,7 @@ Dialogue: {
 			Mechanic: That poor woman... kidnapped and locked within the Dungeon. Its a miracle she's still alive.
 			Clothier: That poor old man... cursed to house the Cult's guardian. Their cruelty knows no bounds.
 			AnyDungeonNPC: The Lunar Cult has hurt so many... I'm glad you at least came to their aid.
+			Skeletron: I'm still impressed you managed to take down the Dungeon's guardian. I was there for the ritual that raised it... Such a grotesque thing... I'm glad the world is at last rid of it.
 			#NPC Conversation Dialogue
 			Initial: Hello! Would you be able to point me to whoever's in charge around here?
 			Weird: Oh! My mask! Don't worry. Despite its appearance I'm not actually with those cultists. Well... That's not entirely true... Though I really should only speak about this with the person who runs this little place.
@@ -141,6 +142,7 @@ UI: {
 	}
 
 	Cooldowns.ParryWeapon: Weapon Parry Cooldown
+	Notifications.Eidolon: Yo good shit bro
 }
 
 Items: {
@@ -176,7 +178,7 @@ Items: {
 		}
 
 		IlmerisLore: {
-			DisplayName: Ilmeris Lore
+			DisplayName: Ilmeris
 			Tooltip: ""
 		}
 	}
@@ -412,6 +414,7 @@ NPCs: {
 	LunarCultistDevotee.DisplayName: Lunar Cultist Devotee
 	LunarBishop.DisplayName: Lunar Bishop
 	TravellingCultist.DisplayName: Travelling Cultist
+	TheOrator.DisplayName: The Orator
 }
 
 Projectiles: {
@@ -427,6 +430,8 @@ Projectiles: {
 	ParryBladeProj.DisplayName: Parry Blade
 	Melee.ParryBladeProj.DisplayName: Parry Blade
 	LunarBishopProj.DisplayName: Lunar Bishop
+	OratorProj.DisplayName: Orator Proj
+	OratorEntourageSpawner.DisplayName: Orator Entourage Spawner
 }
 
 Buffs: {

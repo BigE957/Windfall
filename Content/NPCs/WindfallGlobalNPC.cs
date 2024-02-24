@@ -8,6 +8,7 @@ using Windfall.Content.NPCs.Enemies;
 using Windfall.Content.Projectiles.NPCAnimations;
 using Terraria.ID;
 using Windfall.Content.NPCs.WorldEvents.LunarCult;
+using Windfall.Content.Projectiles.Other;
 
 namespace Windfall.Content.NPCs
 {
@@ -33,7 +34,7 @@ namespace Windfall.Content.NPCs
                 SpawnWorldEventProjectile(ModContent.ProjectileType<StatisProj>(), 100);
 
             if (npc.type == NPCID.SkeletronHead && !NPC.downedBoss3)
-                Projectile.NewProjectile(Entity.GetSource_NaturalSpawn(), new Vector2((int)Main.dungeonX, (int)Main.dungeonY).ToWorldCoordinates(), Vector2.Zero, ModContent.ProjectileType<LunarBishopProj>(), 0, 0);
+                Projectile.NewProjectile(Entity.GetSource_NaturalSpawn(), new Vector2((int)Main.dungeonX, (int)Main.dungeonY).ToWorldCoordinates(), Vector2.Zero, ModContent.ProjectileType<LunarBishopProj>(), 0, 0, -1, 1);
 
             if (npc.type == calamity.Find<ModNPC>("SlimeGodCore").Type)
                 QuestSystem.IncrementQuestProgress(QuestSystem.QuestLog.FindIndex(quest => quest.Name == "SlimeGodHunt"), 0);
@@ -46,6 +47,8 @@ namespace Windfall.Content.NPCs
 
             if (npc.type == calamity.Find<ModNPC>("LeviathanStart").Type)
                 DownedNPCSystem.downedSirenLure = true;
+            if(npc.type == NPCID.Plantera && !NPC.downedPlantBoss)
+                Projectile.NewProjectile(Entity.GetSource_NaturalSpawn(), Main.player[0].Center, Vector2.Zero, ModContent.ProjectileType<OratorEntourageSpawner>(), 0, 0);
         }
         public override void OnSpawn(NPC npc, IEntitySource source)
         {

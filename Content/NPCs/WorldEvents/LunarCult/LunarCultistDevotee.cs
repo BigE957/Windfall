@@ -1,10 +1,13 @@
-﻿using CalamityMod;
+﻿using Microsoft.Xna.Framework;
+using CalamityMod;
 using Terraria;
 using Terraria.ID;
 using Terraria.Localization;
 using Terraria.ModLoader;
 using static Windfall.Common.Utilities.Utilities;
 using System.Collections.Generic;
+using Terraria.DataStructures;
+using Terraria.Audio;
 
 namespace Windfall.Content.NPCs.WanderingNPCs
 {
@@ -23,6 +26,7 @@ namespace Windfall.Content.NPCs.WanderingNPCs
             set => NPC.ai[1] = (int)value;
         }
         public override string Texture => "Windfall/Assets/NPCs/WorldEvents/LunarCultistDevotee";
+        internal SoundStyle SpawnSound => new("CalamityMod/Sounds/Custom/SCalSounds/BrimstoneHellblastSound");
         public override void SetStaticDefaults()
         {
             this.HideFromBestiary();
@@ -46,8 +50,38 @@ namespace Windfall.Content.NPCs.WanderingNPCs
 
             AnimationType = NPCID.CultistDevote;
         }
-        public override bool CanChat() => true;
-
+        public override void OnSpawn(IEntitySource source)
+        {
+            if (NPC.ai[0] == 0)
+            {
+                AnimationType = NPCID.BartenderUnconscious;
+                NPC.frame.Y = (NPC.height+2) * 3;
+                NPC.alpha = 255;
+                if (AlignNPCWithGround(Main.npc[NPC.whoAmI]))
+                {
+                    NPC.position.Y -= 6;
+                    NPC.alpha = 0;
+                    for (int i = 0; i < 50; i++)
+                    {
+                        Vector2 speed = Main.rand.NextVector2Circular(1.5f, 2f);
+                        Dust d = Dust.NewDustPerfect(NPC.Center, DustID.GoldFlame, speed * 3, Scale: 1.5f);
+                        d.noGravity = true;
+                    }
+                    SoundEngine.PlaySound(SpawnSound, NPC.Center);
+                }
+                else
+                {
+                    NPC.active = false;
+                }
+            }
+        }
+        public override bool CanChat()
+        {
+            if (NPC.ai[0] == 0)
+                return false;
+            else
+                return true;
+        }
         public override string GetChat()
         {
             return Language.GetOrRegister($"Mods.{nameof(Windfall)}.Dialogue.LunarCult.OcularDevotee.{CurrentDialogue}").Value;

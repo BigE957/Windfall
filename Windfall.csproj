@@ -22,8 +22,11 @@
     <None Remove="Assets\NPCs\WanderingNPCs\LoneRonin.png" />
     <None Remove="Assets\NPCs\WorldEvents\LunarBishop.png" />
     <None Remove="Assets\NPCs\WorldEvents\LunarCultistDevotee.png" />
+    <None Remove="Assets\NPCs\WorldEvents\TheOrator.png" />
+    <None Remove="Assets\NPCs\WorldEvents\TheOrator_Head.png" />
     <None Remove="Assets\Projectiles\NPCAnimations\IlmeranPaladinDig.png" />
     <None Remove="Assets\Projectiles\NPCAnimations\LoneRoninTeleport.png" />
+    <None Remove="Assets\UI\EidolonTablet\EidolonTabletBig.png" />
     <None Remove="Content\Buffs\Cooldowns\ParryWeapon.png" />
     <None Remove="Content\Buffs\Cooldowns\ParryWeaponOutline.png" />
     <None Remove="Content\Buffs\Cooldowns\ParryWeaponOverlay.png" />

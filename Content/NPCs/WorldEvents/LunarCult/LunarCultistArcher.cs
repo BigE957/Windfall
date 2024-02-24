@@ -1,10 +1,14 @@
-﻿using CalamityMod;
+﻿using Microsoft.Xna.Framework;
+using CalamityMod;
 using Terraria;
 using Terraria.ID;
 using Terraria.Localization;
 using Terraria.ModLoader;
 using static Windfall.Common.Utilities.Utilities;
 using System.Collections.Generic;
+using Terraria.DataStructures;
+using System.Linq;
+using Terraria.Audio;
 
 namespace Windfall.Content.NPCs.WanderingNPCs
 {
@@ -27,6 +31,7 @@ namespace Windfall.Content.NPCs.WanderingNPCs
             set => NPC.ai[1] = (int)value;
         }
         public override string Texture => "Windfall/Assets/NPCs/WorldEvents/LunarCultistArcher";
+        internal SoundStyle SpawnSound => new("CalamityMod/Sounds/Custom/SCalSounds/BrimstoneHellblastSound");
         public override void SetStaticDefaults()
         {
             this.HideFromBestiary();
@@ -50,8 +55,36 @@ namespace Windfall.Content.NPCs.WanderingNPCs
 
             AnimationType = NPCID.BartenderUnconscious;
         }
-        public override bool CanChat() => true;
-
+        public override void OnSpawn(IEntitySource source)
+        {
+            if (NPC.ai[0] == 0)
+            {
+                NPC.alpha = 255;
+                if (AlignNPCWithGround(Main.npc[NPC.whoAmI]))
+                {
+                    NPC.position.Y -= 6;
+                    NPC.alpha = 0;
+                    for (int i = 0; i < 50; i++)
+                    {
+                        Vector2 speed = Main.rand.NextVector2Circular(1.5f, 2f);
+                        Dust d = Dust.NewDustPerfect(NPC.Center, DustID.GoldFlame, speed * 3, Scale: 1.5f);
+                        d.noGravity = true;
+                    }
+                    SoundEngine.PlaySound(SpawnSound, NPC.Center);
+                }
+                else
+                {
+                    NPC.active = false;
+                }
+            }
+        }
+        public override bool CanChat()
+        {
+            if (NPC.ai[0] == 0)
+                return false;
+            else
+                return true;
+        }
         public override string GetChat()
         {
             return Language.GetOrRegister($"Mods.{nameof(Windfall)}.Dialogue.LunarCult.MechanicShed.{CurrentDialogue}").Value;
@@ -116,7 +149,23 @@ namespace Windfall.Content.NPCs.WanderingNPCs
         public override void OnChatButtonClicked(bool firstButton, ref string shop)
         {
             CurrentDialogue = (DialogueState)GetNPCConversation(MyDialogue, (int)CurrentDialogue, firstButton);
-            Main.npcChatText = Language.GetOrRegister($"Mods.{nameof(Windfall)}.Dialogue.LunarCult.MechanicShed.{CurrentDialogue}").Value;
+            if (CurrentDialogue == DialogueState.End)
+            {
+                foreach (NPC npc in Main.npc.Where(n => n.type == NPC.type && n.active))
+                {
+                    for (int i = 0; i < 50; i++)
+                    {
+                        Vector2 speed = Main.rand.NextVector2Circular(1.5f, 2f);
+                        Dust d = Dust.NewDustPerfect(npc.Center, DustID.GoldFlame, speed * 3, Scale: 1.5f);
+                        d.noGravity = true;
+                    }
+                    npc.active = false;
+                }
+            }
+            else
+            {
+                Main.npcChatText = Language.GetOrRegister($"Mods.{nameof(Windfall)}.Dialogue.LunarCult.MechanicShed.{CurrentDialogue}").Value;
+            }
         }
         public override void SetChatButtons(ref string button, ref string button2)
         {
