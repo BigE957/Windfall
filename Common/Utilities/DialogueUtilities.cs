@@ -59,9 +59,7 @@ namespace Windfall.Common.Utilities
                 MyQuests = PaladinQuests;
             }
             else if (npcName == "LoneRonin")
-            {
                 MyQuests = RoninQuests;
-            }
 
             bool success = false;
             if (MyQuests != null)
@@ -70,13 +68,11 @@ namespace Windfall.Common.Utilities
                 {
                     index = QuestSystem.QuestLog.FindIndex(quest => quest.Name == MyQuests[i]);
                     if (index != -1)
-                    {
                         if ((!QuestSystem.QuestLog[index].Completed || QuestSystem.QuestLog[index].Active) && QuestSystem.QuestLog[index].Unlocked)
                         {
                             success = true;
                             break;
                         }
-                    }
                 }
                 if (!success)
                 {
@@ -95,18 +91,12 @@ namespace Windfall.Common.Utilities
                         {
                             var entitySource = npc.GetSource_GiftOrReward();
                             for (int i = 0; i < QuestSystem.QuestLog[index].QuestGifts.Count; i++)
-                            {
                                 Main.LocalPlayer.QuickSpawnItem(entitySource, QuestSystem.QuestLog[index].QuestGifts[i].Type, QuestSystem.QuestLog[index].QuestGifts[i].Stack);
-                            }
                         }
-
                         QuestSystem.ToggleQuestActive(index);
                     }
                     else
-                    {
                         Main.npcChatText = Language.GetOrRegister($"Mods.{nameof(Windfall)}.Dialogue.{npcName}.{QuestSystem.QuestLog[index].Name}During").Value;
-                        
-                    }
                     Main.npcChatCornerItem = QuestSystem.QuestLog[index].QuestGifts[0].Type;
                 }
                 else
@@ -117,9 +107,7 @@ namespace Windfall.Common.Utilities
 
                         var entitySource = npc.GetSource_GiftOrReward();
                         for (int i = 0; i < QuestSystem.QuestLog[index].QuestRewards.Count; i++)
-                        {
                             Main.LocalPlayer.QuickSpawnItem(entitySource, QuestSystem.QuestLog[index].QuestRewards[i].Type, QuestSystem.QuestLog[index].QuestRewards[i].Stack);
-                        }
 
                         QuestSystem.ToggleQuestActive(index);
                     }
@@ -127,21 +115,16 @@ namespace Windfall.Common.Utilities
                     {
                         //Technically, this point should never be reached, as the conditions required are what we check for in the above
                         Main.npcChatText = Language.GetOrRegister($"Mods.{nameof(Windfall)}.Dialogue.{npcName}.NoQuest").Value;
-                        Main.NewText("An index is being used despite being both Inactive and Completed.", Color.Yellow);
+                        Main.NewText("An index is being used despite being both Inactive and Completed. Please report this and send your log.txt.", Color.Yellow);
                     }
                 }
             }
             else
             {
                 if(npcName == "LoneRonin" && !(DownedBossSystem.downedHiveMind || DownedBossSystem.downedPerforator))
-                {
                     Main.npcChatText = Language.GetOrRegister($"Mods.{nameof(Windfall)}.Dialogue.{npcName}.LilBitch").Value;
-                }
                 else
-                {
                     Main.npcChatText = Language.GetOrRegister($"Mods.{nameof(Windfall)}.Dialogue.{npcName}.NoQuest").Value;
-
-                }
             }
         }
         public static QuestItem CollectorQuestDialogueHelper(NPC npc, ref bool QuestComplete, QuestItem CurrentQuestItem, int reach = -1)
@@ -205,17 +188,13 @@ namespace Windfall.Common.Utilities
                         index = -1;
                     }
                     else
-                    {
                         Main.npcChatText = Language.GetOrRegister($"Mods.{nameof(Windfall)}.Dialogue.{NPCPath}.{ItemName}During").Value;
-                    }
                 }
                 if(questActive)
                     Main.npcChatCornerItem = CurrentQuestItem.Type;
             }
             else
-            {
                 Main.npcChatText = Language.GetOrRegister($"Mods.{nameof(Windfall)}.Dialogue.{NPCPath}.NoQuest").Value;
-            }
             return CurrentQuestItem;
         }
         public static void SetConversationButtons(List<dialogueDirections> MyDialogue, int CurrentDialogue, ref string button, ref string button2)

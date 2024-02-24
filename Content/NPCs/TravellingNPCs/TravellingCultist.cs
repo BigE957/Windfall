@@ -53,16 +53,10 @@ namespace Windfall.Content.NPCs.TravellingNPCs
             bool travelerIsThere = (NPC.FindFirstNPC(ModContent.NPCType<TravellingCultist>()) != -1); 
 
             if (Main.dayTime && Main.time == 0)
-            {
                 if (!travelerIsThere && Main.rand.NextBool(4))
-                { 
                     spawnTime = GetRandomSpawnTime(5400, 8100);
-                }
                 else
-                {
                     spawnTime = double.MaxValue;
-                }
-            }
 
             if (!travelerIsThere && CanSpawnNow())
             {
@@ -91,7 +85,7 @@ namespace Windfall.Content.NPCs.TravellingNPCs
             if (Main.IsFastForwardingTime())
                 return false;
             //progression locks
-            if (!Main.hardMode || NPC.downedAncientCultist)
+            if (!Main.hardMode || !NPC.downedBoss3 || NPC.downedAncientCultist)
                 return false;
             // can spawn if daytime, and between the spawn and despawn times
             return Main.dayTime && Main.time >= spawnTime && Main.time < despawnTime;
@@ -107,13 +101,8 @@ namespace Windfall.Content.NPCs.TravellingNPCs
             int h = NPC.sHeight + NPC.safeRangeY * 2;
             Rectangle npcScreenRect = new Rectangle((int)center.X - w / 2, (int)center.Y - h / 2, w, h);
             foreach (Player player in Main.player)
-            {
-                // If any player is close enough to the traveling merchant, it will prevent the npc from despawning
                 if (player.active && player.getRect().Intersects(npcScreenRect))
-                {
                     return true;
-                }
-            }
             return false;
         }
 
@@ -201,10 +190,16 @@ namespace Windfall.Content.NPCs.TravellingNPCs
             chat.Add(Language.GetOrRegister($"Mods.{nameof(Windfall)}.Dialogue.LunarCult.TravellingCultist.Standard1").Value);
             chat.Add(Language.GetOrRegister($"Mods.{nameof(Windfall)}.Dialogue.LunarCult.TravellingCultist.Standard2").Value);
             chat.Add(Language.GetOrRegister($"Mods.{nameof(Windfall)}.Dialogue.LunarCult.TravellingCultist.Standard3").Value);
-            if (NPC.AnyNPCs(NPCID.Mechanic))
-                chat.Add(Language.GetOrRegister($"Mods.{nameof(Windfall)}.Dialogue.LunarCult.TravellingCultist.Mechanic").Value);
-            if (NPC.AnyNPCs(NPCID.Clothier))
-                chat.Add(Language.GetOrRegister($"Mods.{nameof(Windfall)}.Dialogue.LunarCult.TravellingCultist.Clothier").Value);
+            if (NPC.AnyNPCs(NPCID.Mechanic) || NPC.AnyNPCs(NPCID.Clothier))
+            {
+                chat.Add(Language.GetOrRegister($"Mods.{nameof(Windfall)}.Dialogue.LunarCult.TravellingCultist.AnyDungeonNPC").Value);
+                if (NPC.AnyNPCs(NPCID.Mechanic))
+                    chat.Add(Language.GetOrRegister($"Mods.{nameof(Windfall)}.Dialogue.LunarCult.TravellingCultist.Mechanic").Value);
+                if (NPC.AnyNPCs(NPCID.Clothier))
+                    chat.Add(Language.GetOrRegister($"Mods.{nameof(Windfall)}.Dialogue.LunarCult.TravellingCultist.Clothier").Value);
+            }
+            if(NPC.downedBoss3)
+                chat.Add(Language.GetOrRegister($"Mods.{nameof(Windfall)}.Dialogue.LunarCult.TravellingCultist.Skeletron").Value);
             return chat;
         }
    
