@@ -25,8 +25,8 @@ namespace Windfall.Content.Projectiles.NPCAnimations
             new dialogue {text = "...and we have you to thank for that." , delay = 4},
             new dialogue {text = "However soon, that won't matter." , delay = 3},
             new dialogue {text = "None of this will." , delay = 2},
-            new dialogue {text = "We invite you to partake in the Fruit of Knowledge." , delay = 3},
-            new dialogue {text = "That you might come to see the light buried within the dark." , delay = 3},
+            new dialogue {text = "We invite you to partake in the Fruit of our Knowledge." , delay = 3},
+            new dialogue {text = "That you might come to see the Light buried within the Dark." , delay = 3},
             new dialogue {text = "We will be waiting." , delay = 3},
         };
         internal override SoundStyle SpawnSound => new("CalamityMod/Sounds/Custom/SCalSounds/BrimstoneHellblastSound");
