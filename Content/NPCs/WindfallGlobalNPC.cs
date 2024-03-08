@@ -9,6 +9,7 @@ using Windfall.Content.Projectiles.NPCAnimations;
 using Terraria.ID;
 using Windfall.Content.NPCs.WorldEvents.LunarCult;
 using Windfall.Content.Projectiles.Other;
+using CalamityMod.NPCs;
 
 namespace Windfall.Content.NPCs
 {
