@@ -139,6 +139,7 @@ UI: {
 		WanderersCabin: Building a Cabin...
 		SummoningGrounds: Constructing an occult ritual site...
 		ChestAdditions: Filling chests even more!
+		LunarHideouts: Constructing occult temples below the earth...
 	}
 
 	Cooldowns.ParryWeapon: Weapon Parry Cooldown
@@ -340,6 +341,26 @@ Items: {
 			DisplayName: Ilmeran Horn
 			Tooltip: Echoes a sound burned deep into the memory of all Ilmeran Paladins
 		}
+
+		SolarHideoutSeeker: {
+			DisplayName: Solar Hideout Seeker
+			Tooltip: ""
+		}
+
+		NebulaHideoutSeeker: {
+			DisplayName: Nebula Hideout Seeker
+			Tooltip: ""
+		}
+
+		StardustHideoutSeeker: {
+			DisplayName: Stardust Hideout Seeker
+			Tooltip: ""
+		}
+
+		VortexHideoutSeeker: {
+			DisplayName: Vortex Hideout Seeker
+			Tooltip: ""
+		}
 	}
 
 	Placeables: {
@@ -397,6 +418,11 @@ Items: {
 		DeificInsignia: {
 			DisplayName: Deific Insignia
 			Tooltip: A worn sigil of the gods
+		}
+
+		WFEidolonTablet: {
+			DisplayName: W F Eidolon Tablet
+			Tooltip: ""
 		}
 	}
 }
