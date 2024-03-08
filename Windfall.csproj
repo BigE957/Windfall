@@ -24,6 +24,7 @@
     <None Remove="Assets\NPCs\WorldEvents\LunarCultistDevotee.png" />
     <None Remove="Assets\NPCs\WorldEvents\TheOrator.png" />
     <None Remove="Assets\NPCs\WorldEvents\TheOrator_Head.png" />
+    <None Remove="Assets\NPCs\WorldEvents\WanderingPotionSeller.png" />
     <None Remove="Assets\Projectiles\NPCAnimations\IlmeranPaladinDig.png" />
     <None Remove="Assets\Projectiles\NPCAnimations\LoneRoninTeleport.png" />
     <None Remove="Assets\UI\EidolonTablet\EidolonTabletBig.png" />

@@ -1,14 +1,9 @@
 ﻿using CalamityMod.Items;
-using System;
 using Microsoft.Xna.Framework;
 using Terraria;
 using Terraria.Audio;
 using Terraria.ID;
 using Terraria.ModLoader;
-using Windfall.Content.NPCs.WanderingNPCs;
-using Windfall.Content.Projectiles.NPCAnimations;
-using Terraria.ModLoader.IO;
-using CalamityMod;
 using Windfall.Common.Systems;
 
 namespace Windfall.Content.Items.Utility
