@@ -16,7 +16,7 @@ namespace Windfall.Content.Items.Utility
     public class NebulaHideoutSeeker : ModItem, ILocalizedModType
     {
         public new string LocalizationCategory => "Items.Utility";
-        public override string Texture => "Windfall/Assets/Items/Utility/IlmeranHorn";
+        public override string Texture => "CalamityMod/Items/LabFinders/OnyxSeekingMechanism";
 
         public static readonly SoundStyle UseSound = new("Windfall/Assets/Sounds/Items/IlmeranHorn");
 
