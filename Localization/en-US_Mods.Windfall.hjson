@@ -134,7 +134,7 @@ Dialogue: {
 
 		Recruits: {
 			Tirith: {
-				Initial: Hi!
+				Initial: Hi, I'm Tirith!
 				End: Bye!
 				RecruitSuccess: Sure, I'll join your thingie!
 				RecruitFailed: Nah, fuck your thingie!
@@ -143,7 +143,7 @@ Dialogue: {
 			}
 
 			Vivian: {
-				Initial: Hi!
+				Initial: 10 Bodies.
 				End: Bye!
 				RecruitSuccess: Sure, I'll join your thingie!
 				RecruitFailed: Nah, fuck your thingie!
@@ -152,7 +152,7 @@ Dialogue: {
 			}
 
 			Tania: {
-				Initial: Hi!
+				Initial: Hi, I'm Tania!
 				End: Bye!
 				RecruitSuccess: Sure, I'll join your thingie!
 				RecruitFailed: Nah, fuck your thingie!
@@ -161,7 +161,7 @@ Dialogue: {
 			}
 
 			Doro: {
-				Initial: Hi!
+				Initial: Hi, I'm Doro!
 				End: Bye!
 				RecruitSuccess: Sure, I'll join your thingie!
 				RecruitFailed: Nah, fuck your thingie!
@@ -170,7 +170,7 @@ Dialogue: {
 			}
 
 			Skylar: {
-				Initial: Hi!
+				Initial: Hi, I'm Skylar!
 				End: Bye!
 				RecruitSuccess: Sure, I'll join your thingie!
 				RecruitFailed: Nah, fuck your thingie!
@@ -179,7 +179,7 @@ Dialogue: {
 			}
 
 			Jamie: {
-				Initial: Hi!
+				Initial: Hi, I'm Jamie!
 				End: Bye!
 				RecruitSuccess: Sure, I'll join your thingie!
 				RecruitFailed: Nah, fuck your thingie!

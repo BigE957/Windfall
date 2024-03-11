@@ -54,7 +54,7 @@ namespace Windfall.Content.NPCs.WorldEvents.LunarCult
         private DialogueState CurrentDialogue;
         public bool chattable = false;
         private List<dialogueDirections> MyDialogue;
-        private bool Recruitable = false;
+        public bool Recruitable = false;
         public override void SetStaticDefaults()
         {
             this.HideFromBestiary();
@@ -69,7 +69,7 @@ namespace Windfall.Content.NPCs.WorldEvents.LunarCult
             NPCID.Sets.HatOffsetY[Type] = 4;
             NPCID.Sets.ShimmerTownTransform[Type] = false;
             NPCID.Sets.NoTownNPCHappiness[Type] = true;
-            //NPCID.Sets.FaceEmote[Type] = ModContent.EmoteBubbleType<TravellingCultist>();
+            //NPCID.Sets.FaceEmote[Type] = ModContent.EmoteBubbleType<RecruitableLunarCultist>();
 
             // Influences how the NPC looks in the Bestiary
             NPCID.Sets.NPCBestiaryDrawModifiers drawModifiers = new()
@@ -129,7 +129,32 @@ namespace Windfall.Content.NPCs.WorldEvents.LunarCult
             if(chattable)
             {
                 AnimationType = NPCID.Stylist;
-                NPC.aiStyle = 7;
+                NPC.aiStyle = 7;                
+            }
+            else
+            {
+                NPC.GivenName = MyName.ToString();
+                switch (MyName)
+                {
+                    case (RecruitNames.Tirith):
+                        MyDialogue = TirithDialogue;
+                        break;
+                    case (RecruitNames.Vivian):
+                        MyDialogue = VivianDialogue;
+                        break;
+                    case (RecruitNames.Tania):
+                        MyDialogue = TaniaDialogue;
+                        break;
+                    case (RecruitNames.Doro):
+                        MyDialogue = DoroDialogue;
+                        break;
+                    case (RecruitNames.Skylar):
+                        MyDialogue = SkylarDialogue;
+                        break;
+                    case (RecruitNames.Jamie):
+                        MyDialogue = JamieDialogue;
+                        break;
+                }
             }
         }
         public override bool CanChat()
@@ -139,10 +164,8 @@ namespace Windfall.Content.NPCs.WorldEvents.LunarCult
             else
                 return true;
         }
-        public override string GetChat()
-        {
-            return Language.GetOrRegister($"Mods.{nameof(Windfall)}.Dialogue.LunarCult.Recruits.{MyName}.{CurrentDialogue}").Value;
-        }
+        public override string GetChat() => Language.GetOrRegister($"Mods.{nameof(Windfall)}.Dialogue.LunarCult.Recruits.{MyName}.{CurrentDialogue}").Value;
+
         #region DialoguePaths
         private readonly List<dialogueDirections> TirithDialogue = new()
         {
@@ -260,26 +283,33 @@ namespace Windfall.Content.NPCs.WorldEvents.LunarCult
         }
         public override void SetChatButtons(ref string button, ref string button2)
         {
-            if (CurrentDialogue == DialogueState.RecruitSuccess)
-                button = "Awesome!";
-            else if (CurrentDialogue == DialogueState.RecruitFailed)
-                button = "Aw man...";
-            else if(CurrentDialogue == DialogueState.Recruited)
-                button = "Cool!";
-            else if (CurrentDialogue == DialogueState.Unrecruited)
-                button = "Okay...";
-            else
+            switch (CurrentDialogue)
             {
-                SetConversationButtons(MyDialogue, (int)CurrentDialogue, ref button, ref button2);
-                if (CurrentDialogue == DialogueState.End)
-                {
-                    button2 = "Recruit";
-                }
+                case DialogueState.RecruitSuccess:
+                    button = "Awesome!";
+                    break;
+                case DialogueState.RecruitFailed:
+                    button = "Aw man...";
+                    break;
+                case DialogueState.Recruited:
+                    button = "Cool!";
+                    break;
+                case DialogueState.Unrecruited:
+                    button = "Okay...";
+                    break;
+                default:
+                    SetConversationButtons(MyDialogue, (int)CurrentDialogue, ref button, ref button2);
+                    if (CurrentDialogue == DialogueState.End)
+                        button2 = "Recruit";
+                    break;
             }
         }
+
         public override bool CheckActive()
         {
-            return false;
+            if (!chattable)
+                return false;
+            return true;
         }
         public override void TownNPCAttackStrength(ref int damage, ref float knockback)
         {

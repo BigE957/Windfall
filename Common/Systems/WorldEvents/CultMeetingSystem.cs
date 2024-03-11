@@ -1,5 +1,4 @@
-﻿using CalamityMod;
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
 using System;
 using System.Collections.Generic;
 using Terraria;
@@ -9,7 +8,6 @@ using Terraria.ModLoader.IO;
 using Windfall.Content.NPCs.WorldEvents.LunarCult;
 using Terraria.ID;
 using Terraria.Audio;
-using System.Linq;
 
 namespace Windfall.Common.Systems.WorldEvents
 {
@@ -148,22 +146,22 @@ namespace Windfall.Common.Systems.WorldEvents
                             }
                         }
 
-                        CurrentMeetingTopic = MeetingTopic.Jelqing; // (MeetingTopic)AvailableTopics[Main.rand.Next(AvailableTopics.Count)]; 
+                        CurrentMeetingTopic = MeetingTopic.Jelqing; //(MeetingTopic)AvailableTopics[Main.rand.Next(AvailableTopics.Count)]; Actual Code
                         AvailableTopics.Remove((int)CurrentMeetingTopic);
 
                         NPCIndexs = new List<int>
                         {
-                            NPC.NewNPC(Entity.GetSource_None(), ActiveHideoutCoords.X, ActiveHideoutCoords.Y, ModContent.NPCType<LunarBishop>()),
-                            NPC.NewNPC(Entity.GetSource_None(), ActiveHideoutCoords.X - 240, ActiveHideoutCoords.Y, ModContent.NPCType<RecruitableLunarCultist>()),
-                            NPC.NewNPC(Entity.GetSource_None(), ActiveHideoutCoords.X - 120, ActiveHideoutCoords.Y, ModContent.NPCType<RecruitableLunarCultist>()),
-                            NPC.NewNPC(Entity.GetSource_None(), ActiveHideoutCoords.X + 120, ActiveHideoutCoords.Y, ModContent.NPCType<RecruitableLunarCultist>()),
-                            NPC.NewNPC(Entity.GetSource_None(), ActiveHideoutCoords.X + 240, ActiveHideoutCoords.Y, ModContent.NPCType<RecruitableLunarCultist>()),
+                            NPC.NewNPC(Entity.GetSource_None(), ActiveHideoutCoords.X, ActiveHideoutCoords.Y - 2, ModContent.NPCType<LunarBishop>()),
+                            NPC.NewNPC(Entity.GetSource_None(), ActiveHideoutCoords.X - 240, ActiveHideoutCoords.Y + 100, ModContent.NPCType<RecruitableLunarCultist>()),
+                            NPC.NewNPC(Entity.GetSource_None(), ActiveHideoutCoords.X - 140, ActiveHideoutCoords.Y + 100, ModContent.NPCType<RecruitableLunarCultist>()),
+                            NPC.NewNPC(Entity.GetSource_None(), ActiveHideoutCoords.X + 140, ActiveHideoutCoords.Y + 100, ModContent.NPCType<RecruitableLunarCultist>()),
+                            NPC.NewNPC(Entity.GetSource_None(), ActiveHideoutCoords.X + 240, ActiveHideoutCoords.Y + 100, ModContent.NPCType<RecruitableLunarCultist>()),
                         };
 
-                        //Choose which characters are at this meeting based on the Topic
+                        #region Character Setup
                         switch (CurrentMeetingTopic)
                         {
-                            case (MeetingTopic.Jelqing):
+                            case MeetingTopic.Jelqing:
                                 foreach (int k in NPCIndexs)
                                 {
                                     NPC npc = Main.npc[k];
@@ -173,21 +171,27 @@ namespace Windfall.Common.Systems.WorldEvents
                                         {
                                             case 1:
                                                 Recruit.MyName = RecruitableLunarCultist.RecruitNames.Tirith;
+                                                Recruit.Recruitable = true;
+                                                Recruit.NPC.direction = -1;
                                                 break;
                                             case 2:
                                                 Recruit.MyName = RecruitableLunarCultist.RecruitNames.Vivian;
+                                                Recruit.NPC.direction = -1;
                                                 break;
                                             case 3:
                                                 Recruit.MyName = RecruitableLunarCultist.RecruitNames.Doro;
+                                                Recruit.NPC.direction = 1;
                                                 break;
                                             case 4:
                                                 Recruit.MyName = RecruitableLunarCultist.RecruitNames.Jamie;
+                                                Recruit.NPC.direction = 1;
                                                 break;
                                         }
                                     }
                                 }
                                 break;
                         }
+                        #endregion
                         MeetingTimer = 0;
                     }
                     else
@@ -202,7 +206,7 @@ namespace Windfall.Common.Systems.WorldEvents
                         float PlayerDistFromHideout = new Vector2(mainPlayer.Center.X - ActiveHideoutCoords.X, mainPlayer.Center.Y - ActiveHideoutCoords.Y).Length();
                         if (Active)
                         {
-                            //Cult Meeting Code goes here:
+                            #region Meeting Dialogue
                             CombatText Text;
 
                             NPC Bishop = Main.npc[NPCIndexs[0]];
@@ -219,7 +223,7 @@ namespace Windfall.Common.Systems.WorldEvents
 
                             switch (CurrentMeetingTopic)
                             {
-                                case (MeetingTopic.Jelqing):
+                                case MeetingTopic.Jelqing:
                                     switch (MeetingTimer)
                                     {
                                         case 1:
@@ -238,33 +242,30 @@ namespace Windfall.Common.Systems.WorldEvents
                                             Text = Main.combatText[CombatText.NewText(BishopLocation, Color.Blue, "NOT POSSIBLE.", true)];
                                             break;
                                         case 10 * 60:
-                                            Text = Main.combatText[CombatText.NewText(Cultist21Location, Color.Blue, "What if I don't... have a dick...?", true)];
+                                            Text = Main.combatText[CombatText.NewText(Cultist21Location, Color.Red, "What if I don't... have a dick...?", true)];
                                             break;
                                         case 12 * 60:
                                             Text = Main.combatText[CombatText.NewText(BishopLocation, Color.Blue, "SHUT UP!", true)];
                                             break;
                                         case 14 * 60:
                                             Text = Main.combatText[CombatText.NewText(BishopLocation, Color.Blue, "Meeting over.", true)];
+                                            break;
+                                        case 15 * 60:
                                             State = SystemState.End;
                                             break;
                                     }
                                     break;
-                                case (MeetingTopic.Gooning):
+                                case MeetingTopic.Gooning:
                                     break;
-                                case (MeetingTopic.Mewing):
+                                case MeetingTopic.Mewing:
 
                                     break;
                             }
-
+                            #endregion
                             MeetingTimer++;
                         }
                         else if (PlayerDistFromHideout < 300f)
-                        {
-                            Main.NewText("You've arrived!", Color.Blue);
                             Active = true;
-                        }
-                        else
-                            Main.NewText("Too far!", Color.Blue);
                     }
                     break;
                 case SystemState.End:
@@ -290,6 +291,7 @@ namespace Windfall.Common.Systems.WorldEvents
                             }
                         }
                     }
+                    Main.NewText("The Lunar Cult Meeting has ended...", Color.Blue);
                     OnCooldown = true;
                     State = SystemState.CheckReqs;
                     break;
