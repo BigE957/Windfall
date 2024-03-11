@@ -33,8 +33,8 @@ namespace Windfall.Common.Utilities
         };
         public struct dialogueButton
         {
-            public string name;
-            public int heading;
+            public string name = "";
+            public int heading = -1;
             public bool end = false;
 
             public dialogueButton()

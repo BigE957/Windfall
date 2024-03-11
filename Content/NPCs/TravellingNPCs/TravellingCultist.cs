@@ -220,7 +220,7 @@ namespace Windfall.Content.NPCs.TravellingNPCs
             PostPlantInitial,
         }
 
-        private DialogueState CurrentDialogue
+        private static DialogueState CurrentDialogue
         {
             get => (DialogueState)WorldSaveSystem.cultistChatState;
             set => WorldSaveSystem.cultistChatState = (int)value;

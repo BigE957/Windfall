@@ -23,7 +23,7 @@ namespace Windfall.Content.NPCs.WorldEvents.LunarCult
         }
         private DialogueState CurrentDialogue = 0;
         public override string Texture => "Windfall/Assets/NPCs/WorldEvents/LunarBishop";
-        internal SoundStyle SpawnSound => new("CalamityMod/Sounds/Custom/SCalSounds/BrimstoneHellblastSound");
+        internal static SoundStyle SpawnSound => new("CalamityMod/Sounds/Custom/SCalSounds/BrimstoneHellblastSound");
         public override void SetStaticDefaults()
         {
             this.HideFromBestiary();
