@@ -3,15 +3,12 @@ using CalamityMod.Schematics;
 using Microsoft.Xna.Framework;
 using System;
 using Terraria;
-using Terraria.ID;
-using Terraria.IO;
 using Terraria.WorldBuilding;
 using System.Collections.Generic;
 using static CalamityMod.Schematics.SchematicManager;
 using Terraria.ModLoader;
 using Windfall.Content.Items.Journals;
 using Windfall.Common.Systems;
-using Windfall.Common.Systems.WorldEvents;
 
 namespace Windfall.Content.World
 {
@@ -30,7 +27,7 @@ namespace Windfall.Content.World
             else
                 placementPositionX = WorldGen.genRand.Next(Main.dungeonX + 100, Main.dungeonX + 400);
 
-            int placementPositionY = (int)Main.worldSurface - (Main.maxTilesY / 6 + 200);
+            int placementPositionY = (int)Main.worldSurface - (Main.maxTilesY / 6);
 
             bool foundValidGround = false;
             int attempts = 0;
