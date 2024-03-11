@@ -30,6 +30,7 @@ namespace Windfall.Common.Systems
                 }));
             }
             */
+
             // Wanderers Cabin
             int WanderersIndex = tasks.FindIndex(genpass => genpass.Name.Equals("Sunflowers"));
             if (WanderersIndex != -1)

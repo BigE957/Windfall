@@ -13,18 +13,11 @@ using Terraria.ModLoader;
 using Terraria.Utilities;
 using Terraria;
 using Microsoft.Xna.Framework;
-using Terraria.GameContent.Events;
 using Terraria.DataStructures;
 using CalamityMod;
-using CalamityMod.NPCs.CeaselessVoid;
 using CalamityMod.NPCs.CalClone;
-using CalamityMod.NPCs.SupremeCalamitas;
 using Terraria.Audio;
-using CalamityMod.NPCs;
-using Humanizer;
-using CalamityMod.NPCs.TownNPCs;
 using CalamityMod.Dusts;
-using Terraria.ModLoader.IO;
 using Windfall.Common.Systems;
 
 namespace Windfall.Content.NPCs.WorldEvents.CalClone

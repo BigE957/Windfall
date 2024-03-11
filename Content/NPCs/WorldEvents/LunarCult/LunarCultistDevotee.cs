@@ -26,7 +26,7 @@ namespace Windfall.Content.NPCs.WanderingNPCs
             set => NPC.ai[1] = (int)value;
         }
         public override string Texture => "Windfall/Assets/NPCs/WorldEvents/LunarCultistDevotee";
-        internal SoundStyle SpawnSound => new("CalamityMod/Sounds/Custom/SCalSounds/BrimstoneHellblastSound");
+        internal static SoundStyle SpawnSound => new("CalamityMod/Sounds/Custom/SCalSounds/BrimstoneHellblastSound");
         public override void SetStaticDefaults()
         {
             this.HideFromBestiary();
