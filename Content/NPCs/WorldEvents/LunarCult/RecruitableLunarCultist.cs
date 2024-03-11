@@ -71,6 +71,7 @@ namespace Windfall.Content.NPCs.WorldEvents.LunarCult
             set => NPC.ai[2] = (int)value;
         }
         private List<dialogueDirections> MyDialogue;
+        private bool Recruitable = false;
         public override void SetStaticDefaults()
         {
             Main.npcFrameCount[Type] = 25;
@@ -154,9 +155,7 @@ namespace Windfall.Content.NPCs.WorldEvents.LunarCult
         }
         public override string GetChat()
         {
-            string dialogueOption = CurrentDialogue.ToString().Replace(MyName.ToString(), "");
-
-            return Language.GetOrRegister($"Mods.{nameof(Windfall)}.Dialogue.LunarCult.Recruits.{MyName}.{dialogueOption}").Value;
+            return Language.GetOrRegister($"Mods.{nameof(Windfall)}.Dialogue.LunarCult.Recruits.{MyName}.{CurrentDialogue}").Value;
         }
         #region DialoguePaths
         private readonly List<dialogueDirections> TirithDialogue = new()
@@ -246,18 +245,17 @@ namespace Windfall.Content.NPCs.WorldEvents.LunarCult
         #endregion
         public override void OnChatButtonClicked(bool firstButton, ref string shop)
         {
-            if (CurrentDialogue.ToString().Contains("End") && !firstButton)
+            if (CurrentDialogue == DialogueState.End && !firstButton)
             {
-                //Recruiting Code goes here (tldr: if the recruit is recruitable, then do the recruiting)
-                CalamityUtils.DisplayLocalizedText("Recruitting Attempted!", Color.Yellow);
-                CurrentDialogue = DialogueState.RecruitSuccess;
-
-                if(CurrentDialogue == DialogueState.RecruitSuccess && !CultMeetingSystem.Recruits.Contains((int)MyName))
+                if(Recruitable)
                 {
-                    CultMeetingSystem.Recruits.Add((int)MyName);
+                    CurrentDialogue = DialogueState.RecruitSuccess;
+                    if (!CultMeetingSystem.Recruits.Contains((int)MyName))
+                        CultMeetingSystem.Recruits.Add((int)MyName);
                 }
-
-                Main.npcChatText = Language.GetOrRegister($"Mods.{nameof(Windfall)}.Dialogue.LunarCult.Recruits.{MyName}.RecruitSuccess").Value;
+                else
+                    CurrentDialogue = DialogueState.RecruitFailed;
+                Main.npcChatText = Language.GetOrRegister($"Mods.{nameof(Windfall)}.Dialogue.LunarCult.Recruits.{MyName}.{CurrentDialogue}").Value;
             }
             else if (CurrentDialogue == DialogueState.RecruitFailed || CurrentDialogue == DialogueState.RecruitSuccess)
             {
@@ -283,7 +281,7 @@ namespace Windfall.Content.NPCs.WorldEvents.LunarCult
             else
             {
                 SetConversationButtons(MyDialogue, (int)CurrentDialogue, ref button, ref button2);
-                if (CurrentDialogue.ToString().Contains("End"))
+                if (CurrentDialogue == DialogueState.End)
                 {
                     button2 = "Recruit";
                 }
