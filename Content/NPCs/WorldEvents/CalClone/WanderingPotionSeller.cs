@@ -236,5 +236,9 @@ namespace Windfall.Content.NPCs.WorldEvents.CalClone
         {
             return false;
         }
+        public override void FindFrame(int frameHeight)
+        {
+            NPC.spriteDirection = NPC.direction;
+        }
     }
 }
