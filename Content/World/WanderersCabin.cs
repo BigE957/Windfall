@@ -41,7 +41,7 @@ namespace Windfall.Content.World
             else
                 placementPositionX = WorldGen.genRand.Next(Main.spawnTileX + 100, Main.spawnTileX + 400);
 
-            int placementPositionY = (int)Main.worldSurface - (Main.maxTilesY / 6 + 50);
+            int placementPositionY = (int)Main.worldSurface - (Main.maxTilesY / 6);
 
             bool foundValidGround = false;
             int attempts = 0;
