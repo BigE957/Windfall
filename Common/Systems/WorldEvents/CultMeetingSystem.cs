@@ -153,8 +153,8 @@ namespace Windfall.Common.Systems.WorldEvents
                         {
                             NPC.NewNPC(Entity.GetSource_None(), ActiveHideoutCoords.X, ActiveHideoutCoords.Y - 2, ModContent.NPCType<LunarBishop>()),
                             NPC.NewNPC(Entity.GetSource_None(), ActiveHideoutCoords.X - 240, ActiveHideoutCoords.Y + 100, ModContent.NPCType<RecruitableLunarCultist>()),
-                            NPC.NewNPC(Entity.GetSource_None(), ActiveHideoutCoords.X - 140, ActiveHideoutCoords.Y + 100, ModContent.NPCType<RecruitableLunarCultist>()),
-                            NPC.NewNPC(Entity.GetSource_None(), ActiveHideoutCoords.X + 140, ActiveHideoutCoords.Y + 100, ModContent.NPCType<RecruitableLunarCultist>()),
+                            NPC.NewNPC(Entity.GetSource_None(), ActiveHideoutCoords.X - 130, ActiveHideoutCoords.Y + 100, ModContent.NPCType<RecruitableLunarCultist>()),
+                            NPC.NewNPC(Entity.GetSource_None(), ActiveHideoutCoords.X + 130, ActiveHideoutCoords.Y + 100, ModContent.NPCType<RecruitableLunarCultist>()),
                             NPC.NewNPC(Entity.GetSource_None(), ActiveHideoutCoords.X + 240, ActiveHideoutCoords.Y + 100, ModContent.NPCType<RecruitableLunarCultist>()),
                         };
 
