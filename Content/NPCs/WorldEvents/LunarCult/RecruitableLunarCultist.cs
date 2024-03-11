@@ -9,7 +9,8 @@ using System.Collections.Generic;
 using Terraria.DataStructures;
 using Terraria.Audio;
 using Terraria.GameContent;
-using Windfall.Common.Systems;
+using CalamityMod.Projectiles.Magic;
+using Windfall.Common.Systems.WorldEvents;
 
 namespace Windfall.Content.NPCs.WorldEvents.LunarCult
 {
@@ -17,7 +18,6 @@ namespace Windfall.Content.NPCs.WorldEvents.LunarCult
     {
         public override string Texture => "Windfall/Assets/NPCs/TravellingNPCs/TravellingCultist";
         internal static SoundStyle SpawnSound => new("CalamityMod/Sounds/Custom/SCalSounds/BrimstoneHellblastSound");
-        private static Profiles.StackedNPCProfile NPCProfile;
         private enum RecruitNames
         {
             Tirith,
@@ -27,11 +27,7 @@ namespace Windfall.Content.NPCs.WorldEvents.LunarCult
             Skylar,
             Jamie,
         }
-        private RecruitNames MyName
-        {
-            get => (RecruitNames)NPC.ai[0];
-            set => NPC.ai[0] = (int)value;
-        }
+        private RecruitNames MyName;
         private enum DialogueState
         {
             //General Use
@@ -55,25 +51,14 @@ namespace Windfall.Content.NPCs.WorldEvents.LunarCult
             //Jamie
 
         }
-        private DialogueState CurrentDialogue
-        {
-            get => (DialogueState)NPC.ai[1];
-            set => NPC.ai[1] = (int)value;
-        }
-        private enum AiState
-        {
-            Listening,
-            Chattable,
-        }
-        private AiState MyAiState
-        {
-            get => (AiState)NPC.ai[2];
-            set => NPC.ai[2] = (int)value;
-        }
+        private DialogueState CurrentDialogue;
+        public bool chattable = false;
         private List<dialogueDirections> MyDialogue;
         private bool Recruitable = false;
         public override void SetStaticDefaults()
         {
+            this.HideFromBestiary();
+            NPCID.Sets.ActsLikeTownNPC[Type] = true;
             Main.npcFrameCount[Type] = 25;
             NPCID.Sets.ExtraFramesCount[Type] = 9;
             NPCID.Sets.AttackFrameCount[Type] = 4;
@@ -87,24 +72,18 @@ namespace Windfall.Content.NPCs.WorldEvents.LunarCult
             //NPCID.Sets.FaceEmote[Type] = ModContent.EmoteBubbleType<TravellingCultist>();
 
             // Influences how the NPC looks in the Bestiary
-            NPCID.Sets.NPCBestiaryDrawModifiers drawModifiers = new NPCID.Sets.NPCBestiaryDrawModifiers()
+            NPCID.Sets.NPCBestiaryDrawModifiers drawModifiers = new()
             {
                 Velocity = 1f,
                 Direction = 1
             };
-
-            NPCID.Sets.NPCBestiaryDrawOffset.Add(Type, drawModifiers);
-
-            NPCProfile = new Profiles.StackedNPCProfile(
-                new Profiles.DefaultNPCProfile(Texture, NPCHeadLoader.GetHeadSlot(HeadTexture))
-            );
         }
         public override void SetDefaults()
         {
             NPC.friendly = true; // NPC Will not attack player
             NPC.width = 18;
             NPC.height = 40;
-            NPC.aiStyle = 0;
+            NPC.aiStyle = -1;
             NPC.damage = 0;
             NPC.defense = 0;
             NPC.lifeMax = 400;
@@ -117,7 +96,6 @@ namespace Windfall.Content.NPCs.WorldEvents.LunarCult
         }
         public override void OnSpawn(IEntitySource source)
         {
-            MyAiState = AiState.Chattable;
             NPC.GivenName = MyName.ToString();
             switch (MyName)
             {
@@ -140,15 +118,23 @@ namespace Windfall.Content.NPCs.WorldEvents.LunarCult
                     MyDialogue = JamieDialogue;
                     break;
             }
-            if (MyAiState == 0)
+            if (chattable == false)
             {
                 AnimationType = NPCID.BartenderUnconscious;
                 NPC.frame.Y = 0;
             }
         }
+        public override void AI()
+        {
+            if(chattable)
+            {
+                AnimationType = NPCID.Stylist;
+                NPC.aiStyle = 7;
+            }
+        }
         public override bool CanChat()
         {
-            if (MyAiState == 0)
+            if (!chattable)
                 return false;
             else
                 return true;
@@ -257,7 +243,7 @@ namespace Windfall.Content.NPCs.WorldEvents.LunarCult
                     CurrentDialogue = DialogueState.RecruitFailed;
                 Main.npcChatText = Language.GetOrRegister($"Mods.{nameof(Windfall)}.Dialogue.LunarCult.Recruits.{MyName}.{CurrentDialogue}").Value;
             }
-            else if (CurrentDialogue == DialogueState.RecruitFailed || CurrentDialogue == DialogueState.RecruitSuccess)
+            else if (CurrentDialogue == DialogueState.RecruitFailed || CurrentDialogue == DialogueState.RecruitSuccess || CurrentDialogue == DialogueState.Recruited || CurrentDialogue == DialogueState.Unrecruited)
             {
                 if (CurrentDialogue == DialogueState.RecruitFailed)
                     CurrentDialogue = DialogueState.Unrecruited;
@@ -278,6 +264,10 @@ namespace Windfall.Content.NPCs.WorldEvents.LunarCult
                 button = "Awesome!";
             else if (CurrentDialogue == DialogueState.RecruitFailed)
                 button = "Aw man...";
+            else if(CurrentDialogue == DialogueState.Recruited)
+                button = "Cool!";
+            else if (CurrentDialogue == DialogueState.Unrecruited)
+                button = "Okay...";
             else
             {
                 SetConversationButtons(MyDialogue, (int)CurrentDialogue, ref button, ref button2);
@@ -290,6 +280,21 @@ namespace Windfall.Content.NPCs.WorldEvents.LunarCult
         public override bool CheckActive()
         {
             return false;
+        }
+        public override void TownNPCAttackStrength(ref int damage, ref float knockback)
+        {
+            damage = 20;
+            knockback = 4f;
+        }
+        public override void TownNPCAttackCooldown(ref int cooldown, ref int randExtraCooldown)
+        {
+            cooldown = 15;
+            randExtraCooldown = 8;
+        }
+        public override void TownNPCAttackProj(ref int projType, ref int attackDelay)
+        {
+            projType = ModContent.ProjectileType<PhantasmalFuryProj>();
+            attackDelay = 1;
         }
     }
 }

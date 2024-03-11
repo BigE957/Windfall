@@ -49,8 +49,7 @@ namespace Windfall.Content.NPCs.WorldEvents.LunarCult
         {
             if (NPC.ai[0] == 0)
                 return false;
-            else
-                return true;
+            return true;
         }
         public override void OnSpawn(IEntitySource source)
         {
@@ -114,6 +113,12 @@ namespace Windfall.Content.NPCs.WorldEvents.LunarCult
         public override void SetChatButtons(ref string button, ref string button2)
         {
             SetConversationButtons(MyDialogue, (int)CurrentDialogue, ref button, ref button2);
+        }
+        public override bool CheckActive()
+        {
+            if (NPC.ai[0] == 0)
+                return false;
+            return true;
         }
     }
 }
