@@ -8,15 +8,15 @@ using static Windfall.Common.Utilities.Utilities;
 using System.Collections.Generic;
 using Terraria.DataStructures;
 using Terraria.Audio;
-using Terraria.GameContent;
 using CalamityMod.Projectiles.Magic;
 using Windfall.Common.Systems.WorldEvents;
+using Microsoft.Xna.Framework.Graphics;
 
 namespace Windfall.Content.NPCs.WorldEvents.LunarCult
 {
     public class RecruitableLunarCultist : ModNPC
     {
-        public override string Texture => "Windfall/Assets/NPCs/TravellingNPCs/TravellingCultist";
+        public override string Texture => "Windfall/Assets/NPCs/WorldEvents/Recruits/Recruits_Cultist";
         internal static SoundStyle SpawnSound => new("CalamityMod/Sounds/Custom/SCalSounds/BrimstoneHellblastSound");
         public enum RecruitNames
         {
@@ -82,7 +82,7 @@ namespace Windfall.Content.NPCs.WorldEvents.LunarCult
         {
             NPC.friendly = true; // NPC Will not attack player
             NPC.width = 18;
-            NPC.height = 40;
+            NPC.height = 42;
             NPC.aiStyle = -1;
             NPC.damage = 0;
             NPC.defense = 0;
@@ -325,6 +325,24 @@ namespace Windfall.Content.NPCs.WorldEvents.LunarCult
         {
             projType = ModContent.ProjectileType<PhantasmalFuryProj>();
             attackDelay = 1;
+        }
+        public override void FindFrame(int frameHeight)
+        {
+            NPC.frame.Width = 37;
+            NPC.frame.Height = frameHeight;
+            NPC.frame.X = NPC.frame.Width * (int)MyName;
+        }
+        public override bool PreDraw(SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor)
+        {
+            SpriteEffects direction = SpriteEffects.None;
+            if (NPC.spriteDirection == -1)
+                direction = SpriteEffects.FlipHorizontally;
+            Texture2D texture = ModContent.Request<Texture2D>("Windfall/Assets/NPCs/WorldEvents/Recruits/Recruits_Cultist").Value;
+            Vector2 drawPosition = NPC.Center - Main.screenPosition + Vector2.UnitY * NPC.gfxOffY;
+            Vector2 origin = NPC.frame.Size() * 0.5f;
+
+            Main.spriteBatch.Draw(texture, drawPosition, NPC.frame, drawColor * NPC.Opacity, NPC.rotation, origin, NPC.scale, direction, 0f);
+            return false;
         }
     }
 }
