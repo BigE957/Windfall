@@ -45,14 +45,11 @@ namespace Windfall.Content.NPCs.WorldEvents.CalClone
 #pragma warning restore CS0649 // Field 'WanderingPotionSeller.NPCProfile' is never assigned to, and will always have its default value null
         public override string Texture => "Windfall/Assets/NPCs/WorldEvents/WanderingPotionSeller";
 
-
         // the time of day the traveler will spawn (double.MaxValue for no spawn). Saved and loaded with the world in TravelingMerchantSystem
         public static double spawnTime = double.MaxValue;
         public override void SetStaticDefaults()
         {
             Main.npcFrameCount[Type] = 25; // The amount of frames the NPC has
-
-            Main.npcFrameCount[NPC.type] = 27;
             NPCID.Sets.ExtraFramesCount[NPC.type] = 9;
             NPCID.Sets.AttackFrameCount[NPC.type] = 4;
             NPCID.Sets.DangerDetectRange[Type] = 700; // The amount of pixels away from the center of the npc that it tries to attack enemies.
@@ -88,8 +85,8 @@ namespace Windfall.Content.NPCs.WorldEvents.CalClone
         {
             NPC.townNPC = true;
             NPC.friendly = true; // NPC Will not attack player
-            NPC.width = 18;
-            NPC.height = 40;
+            NPC.width = 36;
+            NPC.height = 52;
             NPC.aiStyle = 7;
             NPC.damage = 10;
             NPC.defense = 15;
@@ -126,7 +123,7 @@ namespace Windfall.Content.NPCs.WorldEvents.CalClone
         {
             base.OnSpawn(source);
             string key = "A Potion Seller has arrived!";
-            Color messageColor = new Color(50, 125, 255);
+            Color messageColor = new(50, 125, 255);
             CalamityUtils.DisplayLocalizedText(key, messageColor);
         }
         public override bool PreAI()
@@ -143,7 +140,7 @@ namespace Windfall.Content.NPCs.WorldEvents.CalClone
                 }
                 SoundEngine.PlaySound(CalCloneTeleport, NPC.Center);
                 string key = "A Potion Seller has departed!";
-                Color messageColor = new Color(50, 125, 255);
+                Color messageColor = new(50, 125, 255);
                 CalamityUtils.DisplayLocalizedText(key, messageColor);
                 NPC.active = false;
                 NPC.netSkip = -1;
@@ -154,12 +151,12 @@ namespace Windfall.Content.NPCs.WorldEvents.CalClone
         }
         public override string GetChat()
         {
-            WeightedRandom<string> chat = new WeightedRandom<string>();
+            WeightedRandom<string> chat = new();
 
             // These are things that the NPC has a chance of telling you when you talk to it.
-            chat.Add(Language.GetOrRegister($"Mods.{nameof(Windfall)}.Dialogue.CalPotionSeller.PotionSellerDialogue1").Value);
-            chat.Add(Language.GetOrRegister($"Mods.{nameof(Windfall)}.Dialogue.CalPotionSeller.PotionSellerDialogue2").Value);
-            chat.Add(Language.GetOrRegister($"Mods.{nameof(Windfall)}.Dialogue.CalPotionSeller.PotionSellerDialogue3").Value);
+            chat.Add(Language.GetOrRegister($"Mods.{nameof(Windfall)}.Dialogue.CalPotionSeller.PotionSeller1").Value);
+            chat.Add(Language.GetOrRegister($"Mods.{nameof(Windfall)}.Dialogue.CalPotionSeller.PotionSeller2").Value);
+            chat.Add(Language.GetOrRegister($"Mods.{nameof(Windfall)}.Dialogue.CalPotionSeller.PotionSeller3").Value);
 
             return chat; // chat is implicitly cast to a string.
         }
