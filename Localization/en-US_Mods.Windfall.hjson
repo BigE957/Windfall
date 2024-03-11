@@ -131,6 +131,62 @@ Dialogue: {
 			DeificInsigniaDuring: Those skeletons are quite angry about their eternal imprisonment within the Dungeon. So don't expect them to part with their patrons' tokens so easilly. If you can get me just five, that should suffice.
 			DeificInsigniaEnd: Oh, perfect! Yes, I can sense the faint traces of deific essence on these... Perhaps the latent power of the Gods might be what we need to stand a chance against the Lunar Cult!
 		}
+
+		Recruits: {
+			Tirith: {
+				Initial: Hi!
+				End: Bye!
+				RecruitSuccess: Sure, I'll join your thingie!
+				RecruitFailed: Nah, fuck your thingie!
+				Recruited: Can't wait to help out!
+				Unrecruited: Leave me alone, weirdo...
+			}
+
+			Vivian: {
+				Initial: Hi!
+				End: Bye!
+				RecruitSuccess: Sure, I'll join your thingie!
+				RecruitFailed: Nah, fuck your thingie!
+				Recruited: Can't wait to help out!
+				Unrecruited: Leave me alone, weirdo...
+			}
+
+			Tania: {
+				Initial: Hi!
+				End: Bye!
+				RecruitSuccess: Sure, I'll join your thingie!
+				RecruitFailed: Nah, fuck your thingie!
+				Recruited: Can't wait to help out!
+				Unrecruited: Leave me alone, weirdo...
+			}
+
+			Doro: {
+				Initial: Hi!
+				End: Bye!
+				RecruitSuccess: Sure, I'll join your thingie!
+				RecruitFailed: Nah, fuck your thingie!
+				Recruited: Can't wait to help out!
+				Unrecruited: Leave me alone, weirdo...
+			}
+
+			Skylar: {
+				Initial: Hi!
+				End: Bye!
+				RecruitSuccess: Sure, I'll join your thingie!
+				RecruitFailed: Nah, fuck your thingie!
+				Recruited: Can't wait to help out!
+				Unrecruited: Leave me alone, weirdo...
+			}
+
+			Jamie: {
+				Initial: Hi!
+				End: Bye!
+				RecruitSuccess: Sure, I'll join your thingie!
+				RecruitFailed: Nah, fuck your thingie!
+				Recruited: Can't wait to help out!
+				Unrecruited: Leave me alone, weirdo...
+			}
+		}
 	}
 }
 
@@ -441,6 +497,7 @@ NPCs: {
 	LunarBishop.DisplayName: Lunar Bishop
 	TravellingCultist.DisplayName: Travelling Cultist
 	TheOrator.DisplayName: The Orator
+	RecruitableLunarCultist.DisplayName: Recruitable Lunar Cultist
 }
 
 Projectiles: {

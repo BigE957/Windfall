@@ -16,12 +16,16 @@ namespace Windfall.Common.Systems
         public static Point NebulaHideoutLocation;
         public static Point StardustHideoutLocation;
 
+        public static List<int> Recruits = new List<int>();
+
         public override void ClearWorld()
         {
             SolarHideoutLocation = new(-1, -1);
             VortexHideoutLocation = new(-1, -1);
             NebulaHideoutLocation = new(-1, -1);
             StardustHideoutLocation = new(-1, -1);
+
+            Recruits = new List<int>();
         }
         public override void LoadWorldData(TagCompound tag)
         {
@@ -29,6 +33,8 @@ namespace Windfall.Common.Systems
             VortexHideoutLocation = tag.Get<Point>("VortexHideoutLocation");
             NebulaHideoutLocation = tag.Get<Point>("NebulaHideoutLocation");
             StardustHideoutLocation = tag.Get<Point>("StardustHideoutLocation");
+
+            Recruits = (List<int>)tag.GetList<int>("Recruits");
         }
         public override void SaveWorldData(TagCompound tag)
         {
@@ -36,6 +42,8 @@ namespace Windfall.Common.Systems
             tag["VortexHideoutLocation"] = VortexHideoutLocation;
             tag["NebulaHideoutLocation"] = NebulaHideoutLocation;
             tag["StardustHideoutLocation"] = StardustHideoutLocation;
+
+            tag["Recruits"] = Recruits;
         }
     }
 }
