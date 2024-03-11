@@ -18,7 +18,7 @@ namespace Windfall.Content.NPCs.WorldEvents.LunarCult
     {
         public override string Texture => "Windfall/Assets/NPCs/TravellingNPCs/TravellingCultist";
         internal static SoundStyle SpawnSound => new("CalamityMod/Sounds/Custom/SCalSounds/BrimstoneHellblastSound");
-        private enum RecruitNames
+        public enum RecruitNames
         {
             Tirith,
             Vivian,
@@ -27,7 +27,7 @@ namespace Windfall.Content.NPCs.WorldEvents.LunarCult
             Skylar,
             Jamie,
         }
-        private RecruitNames MyName;
+        public RecruitNames MyName;
         private enum DialogueState
         {
             //General Use

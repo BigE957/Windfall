@@ -5,15 +5,11 @@ using System.Collections.Generic;
 using Terraria;
 using Terraria.ModLoader;
 using static Windfall.Common.Utilities.Utilities;
-using Windfall.Content.Projectiles.NPCAnimations;
 using Terraria.ModLoader.IO;
 using Windfall.Content.NPCs.WorldEvents.LunarCult;
-using Microsoft.CodeAnalysis.CSharp.Syntax;
-using Microsoft.CodeAnalysis;
-using static System.Net.Mime.MediaTypeNames;
 using Terraria.ID;
 using Terraria.Audio;
-using CalamityMod.NPCs.SunkenSea;
+using System.Linq;
 
 namespace Windfall.Common.Systems.WorldEvents
 {
@@ -26,6 +22,8 @@ namespace Windfall.Common.Systems.WorldEvents
 
         public static List<int> Recruits = new();
 
+        private static List<int> AvailableTopics = new();
+
         public override void ClearWorld()
         {
             SolarHideoutLocation = new(-1, -1);
@@ -34,6 +32,8 @@ namespace Windfall.Common.Systems.WorldEvents
             StardustHideoutLocation = new(-1, -1);
 
             Recruits = new List<int>();
+
+            AvailableTopics = new();
         }
         public override void LoadWorldData(TagCompound tag)
         {
@@ -43,6 +43,8 @@ namespace Windfall.Common.Systems.WorldEvents
             StardustHideoutLocation = tag.Get<Point>("StardustHideoutLocation");
 
             Recruits = (List<int>)tag.GetList<int>("Recruits");
+
+            AvailableTopics = (List<int>)tag.GetList<int>("AvailableTopics");
         }
         public override void SaveWorldData(TagCompound tag)
         {
@@ -52,6 +54,8 @@ namespace Windfall.Common.Systems.WorldEvents
             tag["StardustHideoutLocation"] = StardustHideoutLocation;
 
             tag["Recruits"] = Recruits;
+
+            tag["AvailableTopics"] = AvailableTopics;
         }
 
         private enum SystemState
@@ -135,12 +139,55 @@ namespace Windfall.Common.Systems.WorldEvents
                         }
                         ActiveHideoutCoords.X *= 16;
                         ActiveHideoutCoords.Y *= 16;
-                        CurrentMeetingTopic = MeetingTopic.Jelqing; //(MeetingTopic)Main.rand.Next(MeetingTopic.GetNames(typeof(MeetingTopic)).Length);
+
+                        if(AvailableTopics.Count == 0)
+                        {
+                            for(int h = 0; h < MeetingTopic.GetNames(typeof(MeetingTopic)).Length; h++)
+                            {
+                                AvailableTopics.Add(h);
+                            }
+                        }
+
+                        CurrentMeetingTopic = MeetingTopic.Jelqing; // (MeetingTopic)AvailableTopics[Main.rand.Next(AvailableTopics.Count)]; 
+                        AvailableTopics.Remove((int)CurrentMeetingTopic);
+
                         NPCIndexs = new List<int>
                         {
                             NPC.NewNPC(Entity.GetSource_None(), ActiveHideoutCoords.X, ActiveHideoutCoords.Y, ModContent.NPCType<LunarBishop>()),
-                            NPC.NewNPC(Entity.GetSource_None(), ActiveHideoutCoords.X - 120, ActiveHideoutCoords.Y, ModContent.NPCType<RecruitableLunarCultist>())
+                            NPC.NewNPC(Entity.GetSource_None(), ActiveHideoutCoords.X - 240, ActiveHideoutCoords.Y, ModContent.NPCType<RecruitableLunarCultist>()),
+                            NPC.NewNPC(Entity.GetSource_None(), ActiveHideoutCoords.X - 120, ActiveHideoutCoords.Y, ModContent.NPCType<RecruitableLunarCultist>()),
+                            NPC.NewNPC(Entity.GetSource_None(), ActiveHideoutCoords.X + 120, ActiveHideoutCoords.Y, ModContent.NPCType<RecruitableLunarCultist>()),
+                            NPC.NewNPC(Entity.GetSource_None(), ActiveHideoutCoords.X + 240, ActiveHideoutCoords.Y, ModContent.NPCType<RecruitableLunarCultist>()),
                         };
+
+                        //Choose which characters are at this meeting based on the Topic
+                        switch (CurrentMeetingTopic)
+                        {
+                            case (MeetingTopic.Jelqing):
+                                foreach (int k in NPCIndexs)
+                                {
+                                    NPC npc = Main.npc[k];
+                                    if (npc.ModNPC is RecruitableLunarCultist Recruit && npc.type == ModContent.NPCType<RecruitableLunarCultist>())
+                                    {
+                                        switch (k)
+                                        {
+                                            case 1:
+                                                Recruit.MyName = RecruitableLunarCultist.RecruitNames.Tirith;
+                                                break;
+                                            case 2:
+                                                Recruit.MyName = RecruitableLunarCultist.RecruitNames.Vivian;
+                                                break;
+                                            case 3:
+                                                Recruit.MyName = RecruitableLunarCultist.RecruitNames.Doro;
+                                                break;
+                                            case 4:
+                                                Recruit.MyName = RecruitableLunarCultist.RecruitNames.Jamie;
+                                                break;
+                                        }
+                                    }
+                                }
+                                break;
+                        }
                         MeetingTimer = 0;
                     }
                     else
@@ -157,16 +204,22 @@ namespace Windfall.Common.Systems.WorldEvents
                         {
                             //Cult Meeting Code goes here:
                             CombatText Text;
+
                             NPC Bishop = Main.npc[NPCIndexs[0]];
                             NPC Cultist1 = Main.npc[NPCIndexs[1]];
-                            //NPC Cultist2 = Main.npc[NPCIndexs[2]];
-                            //NPC Cultist3 = Main.npc[NPCIndexs[3]];
-                            //NPC Cultist4 = Main.npc[NPCIndexs[4]];
+                            NPC Cultist2 = Main.npc[NPCIndexs[2]];
+                            NPC Cultist3 = Main.npc[NPCIndexs[3]];
+                            NPC Cultist4 = Main.npc[NPCIndexs[4]];
+
+                            Rectangle BishopLocation = new((int)Bishop.Center.X, (int)Bishop.Center.Y, Bishop.width, Bishop.width);
+                            Rectangle Cultist1Location = new((int)Cultist1.Center.X, (int)Cultist1.Center.Y, Cultist1.width, Cultist1.width);
+                            Rectangle Cultist21Location = new((int)Cultist2.Center.X, (int)Cultist2.Center.Y, Cultist2.width, Cultist2.width);
+                            Rectangle Cultist3Location = new((int)Cultist3.Center.X, (int)Cultist3.Center.Y, Cultist3.width, Cultist3.width);
+                            Rectangle Cultist4Location = new((int)Cultist4.Center.X, (int)Cultist4.Center.Y, Cultist4.width, Cultist4.width);
+
                             switch (CurrentMeetingTopic)
                             {
                                 case (MeetingTopic.Jelqing):
-                                    Rectangle BishopLocation = new((int)Bishop.Center.X, (int)Bishop.Center.Y, Bishop.width, Bishop.width);
-                                    Rectangle Cultist1Location = new((int)Cultist1.Center.X, (int)Cultist1.Center.Y, Cultist1.width, Cultist1.width);
                                     switch (MeetingTimer)
                                     {
                                         case 1:
@@ -179,12 +232,18 @@ namespace Windfall.Common.Systems.WorldEvents
                                             Text = Main.combatText[CombatText.NewText(BishopLocation, Color.Blue, "Jelq often!", true)];
                                             break;
                                         case 6 * 60:
-                                            Text = Main.combatText[CombatText.NewText(Cultist1Location, Color.Blue, "Uh... What if my dick gets too big?", true)];
+                                            Text = Main.combatText[CombatText.NewText(Cultist1Location, Color.Yellow, "Uh... What if my dick gets too big?", true)];
                                             break;
                                         case 8 * 60:
                                             Text = Main.combatText[CombatText.NewText(BishopLocation, Color.Blue, "NOT POSSIBLE.", true)];
                                             break;
                                         case 10 * 60:
+                                            Text = Main.combatText[CombatText.NewText(Cultist21Location, Color.Blue, "What if I don't... have a dick...?", true)];
+                                            break;
+                                        case 12 * 60:
+                                            Text = Main.combatText[CombatText.NewText(BishopLocation, Color.Blue, "SHUT UP!", true)];
+                                            break;
+                                        case 14 * 60:
                                             Text = Main.combatText[CombatText.NewText(BishopLocation, Color.Blue, "Meeting over.", true)];
                                             State = SystemState.End;
                                             break;
