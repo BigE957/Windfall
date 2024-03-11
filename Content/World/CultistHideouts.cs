@@ -6,13 +6,6 @@ using Terraria;
 using Terraria.WorldBuilding;
 using static CalamityMod.Schematics.SchematicManager;
 using Windfall.Common.Systems;
-using CalamityMod.Tiles.SunkenSea;
-using CalamityMod.Walls;
-using System.Collections.Generic;
-using System.Linq;
-using Terraria.ID;
-using Terraria.ModLoader;
-using CalamityMod.World;
 using static Terraria.WorldGen;
 using Windfall.Common.Systems.WorldEvents;
 
