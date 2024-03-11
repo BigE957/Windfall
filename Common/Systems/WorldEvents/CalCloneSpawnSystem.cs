@@ -9,7 +9,7 @@ namespace Windfall.Common.Systems.WorldEvents
 {
     public class CalCloneSpawnSystem : ModSystem
     {
-        internal enum SystemState
+        private enum SystemState
         {
             CheckReqs,
             CheckChance,
@@ -17,11 +17,12 @@ namespace Windfall.Common.Systems.WorldEvents
         }
         //used to stop Calamitas from spawning regardless of other conditions. serves as a cooldown so she only spawns once a night
         internal int CalDown = 1;
-        public static bool cragsCal;
-        internal double timeTillSpawn;
-        internal int cragsTimer;
 
-        internal SystemState State = SystemState.CheckReqs;
+        public static bool cragsCal;
+        private double timeTillSpawn;
+        private int cragsTimer;
+
+        private SystemState State = SystemState.CheckReqs;
 
         public override void PreUpdateWorld()
         {
@@ -31,19 +32,14 @@ namespace Windfall.Common.Systems.WorldEvents
             {
                 case SystemState.CheckReqs:
                     if (mainPlayer.ZoneUnderworldHeight)
-                    {
                         if (!Main.hardMode || !mainPlayer.Calamity().ZoneCalamity || CalDown == 1 || CalamityUtils.AnyBossNPCS())
                         {
                             if (!mainPlayer.Calamity().ZoneCalamity)
-                            {
                                 //resets the cooldown when outside of the crags.
                                 CalDown = 0;
-                            }
                             break;
                         }
-                    }
                     else
-                    {
                         if (!Main.hardMode || Main.dayTime || CalDown == 1 || CalamityUtils.AnyBossNPCS())
                         {
                             if (Main.dayTime)
@@ -53,14 +49,12 @@ namespace Windfall.Common.Systems.WorldEvents
                             }
                             break;
                         }
-                    }
-                    State = SystemState.CheckChance;
+                        else
+                            State = SystemState.CheckChance;
                     break;
                 case SystemState.CheckChance:
                     if (Main.rand.NextBool(5))
-                    {
                         State = SystemState.Spawn;
-                    }
                     else
                     {
                         CalDown = 1;
@@ -88,7 +82,6 @@ namespace Windfall.Common.Systems.WorldEvents
                     else
                     {
                         if (cragsCal)
-                        {
                             if (!mainPlayer.Calamity().ZoneCalamity || CalamityUtils.AnyBossNPCS())
                             {
                                 Main.NewText("Something calamitous has vanished...", Color.Red);
@@ -96,9 +89,7 @@ namespace Windfall.Common.Systems.WorldEvents
                                 CalDown = 1;
                                 break;
                             }
-                        }
                         else
-                        {
                             if (Main.dayTime || CalamityUtils.AnyBossNPCS())
                             {
                                 Main.NewText("Something calamitous has vanished...", Color.Red);
@@ -106,7 +97,6 @@ namespace Windfall.Common.Systems.WorldEvents
                                 CalDown = 1;
                                 break;
                             }
-                        }
                     }
                     if (!cragsCal)
                     {
@@ -116,13 +106,9 @@ namespace Windfall.Common.Systems.WorldEvents
                             //sets the spawn location 
                             Vector2 CalCloneSpawnLocation;
                             if (mainPlayer.direction == 1)
-                            {
                                 CalCloneSpawnLocation.X = mainPlayer.Center.X + 1000f;
-                            }
                             else
-                            {
                                 CalCloneSpawnLocation.X = mainPlayer.Center.X - 1000f;
-                            }
 
                             CalCloneSpawnLocation.Y = mainPlayer.Center.Y;
                             //multiplayer shenanaganry: spawns the projectile for all players
@@ -148,13 +134,9 @@ namespace Windfall.Common.Systems.WorldEvents
                             //sets the spawn location 
                             Vector2 CalCloneSpawnLocation;
                             if (mainPlayer.direction == 1)
-                            {
                                 CalCloneSpawnLocation.X = mainPlayer.Center.X + 1000f;
-                            }
                             else
-                            {
                                 CalCloneSpawnLocation.X = mainPlayer.Center.X - 1000f;
-                            }
 
                             CalCloneSpawnLocation.Y = mainPlayer.Center.Y;
                             //multiplayer shenanaganry: spawns the projectile for all players

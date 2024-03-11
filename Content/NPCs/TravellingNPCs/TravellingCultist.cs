@@ -99,7 +99,7 @@ namespace Windfall.Content.NPCs.TravellingNPCs
         {
             int w = NPC.sWidth + NPC.safeRangeX * 2;
             int h = NPC.sHeight + NPC.safeRangeY * 2;
-            Rectangle npcScreenRect = new Rectangle((int)center.X - w / 2, (int)center.Y - h / 2, w, h);
+            Rectangle npcScreenRect = new((int)center.X - w / 2, (int)center.Y - h / 2, w, h);
             foreach (Player player in Main.player)
                 if (player.active && player.getRect().Intersects(npcScreenRect))
                     return true;
@@ -127,7 +127,7 @@ namespace Windfall.Content.NPCs.TravellingNPCs
             //NPCID.Sets.FaceEmote[Type] = ModContent.EmoteBubbleType<TravellingCultist>();
 
             // Influences how the NPC looks in the Bestiary
-            NPCID.Sets.NPCBestiaryDrawModifiers drawModifiers = new NPCID.Sets.NPCBestiaryDrawModifiers()
+            NPCID.Sets.NPCBestiaryDrawModifiers drawModifiers = new()
             {
                 Velocity = 1f, 
                 Direction = 1 

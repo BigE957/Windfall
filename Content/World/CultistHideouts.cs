@@ -14,6 +14,7 @@ using Terraria.ID;
 using Terraria.ModLoader;
 using CalamityMod.World;
 using static Terraria.WorldGen;
+using Windfall.Common.Systems.WorldEvents;
 
 namespace Windfall.Content.World
 {

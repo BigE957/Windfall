@@ -4,7 +4,7 @@ using Terraria;
 using Terraria.Audio;
 using Terraria.ID;
 using Terraria.ModLoader;
-using Windfall.Common.Systems;
+using Windfall.Common.Systems.WorldEvents;
 
 namespace Windfall.Content.Items.Utility
 {

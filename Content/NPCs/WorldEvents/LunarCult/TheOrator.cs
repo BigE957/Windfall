@@ -22,7 +22,7 @@ namespace Windfall.Content.NPCs.WorldEvents.LunarCult
         public override void SetStaticDefaults()
         {
             this.HideFromBestiary();
-            //NPCID.Sets.ActsLikeTownNPC[Type] = true;
+            NPCID.Sets.ActsLikeTownNPC[Type] = true;
             Main.npcFrameCount[Type] = 1;
             NPCID.Sets.NoTownNPCHappiness[Type] = true;
         }
