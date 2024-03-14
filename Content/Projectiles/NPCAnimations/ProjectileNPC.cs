@@ -108,6 +108,7 @@ namespace Windfall.Content.Projectiles.NPCAnimations
             {
                 MyDialogue.lifeTime = 60 + MyDialogue.text.Length;
             }
+            MyDialogue.crit = false;
         }
         internal virtual void DoOnSpawn() { }
         internal virtual void DoBeforeDespawn(){}
