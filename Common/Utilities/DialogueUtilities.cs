@@ -219,7 +219,7 @@ namespace Windfall.Common.Utilities
                     Main.CloseNPCChatOrSign();
                 return myDirections.Button2.Value.heading;
             }
-            return -1;
+            return CurrentDialogue;
         }
     }
 }

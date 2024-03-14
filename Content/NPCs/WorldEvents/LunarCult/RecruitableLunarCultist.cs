@@ -11,6 +11,8 @@ using Terraria.Audio;
 using CalamityMod.Projectiles.Magic;
 using Windfall.Common.Systems.WorldEvents;
 using Microsoft.Xna.Framework.Graphics;
+using CalamityMod.Projectiles.Ranged;
+using CalamityMod.Projectiles.Rogue;
 
 namespace Windfall.Content.NPCs.WorldEvents.LunarCult
 {
@@ -30,26 +32,62 @@ namespace Windfall.Content.NPCs.WorldEvents.LunarCult
         public RecruitNames MyName;
         private enum DialogueState
         {
-            //General Use
-            Initial,
-            End,
+            #region General Use
+            CurrentEventsInitial,
+            CurrentEventsGoodEnd,
+            CurrentEventsBadEnd,
+            
+
             RecruitSuccess,
-            RecruitFailed,
             Recruited,
-            Unrecruited
+            Recruitable,
+            Unrecruited,
+            #endregion
 
-            //Tirith
+            #region Tirith
+            CurrentEventsScary,
+            CurrentEventsReassurance,
+            CurrentEventsWhyBother,
+            CurrentEventsExciting,
+            CurrentEventsTrue,
+            CurrentEventsHappy,
+            #endregion
 
-            //Vivian
+            #region Vivian
+            CurrentEventsSorry,
+            CurrentEventsAzafure,
+            CurrentEventsNow,
+            CurrentEventsWhatHappened,
+            CurrentEventsKnowledge,
+            CurrentEventsExample,
+            CurrentEventsFuture,
+            #endregion
 
-            //Tania
+            #region Tania
 
-            //Doro
+            #endregion
 
-            //Skylar
+            #region Doro
+            CurrentEventsNotSure,
+            CurrentEventsNoClue,
+            CurrentEventsFaith,
+            CurrentEventsTellUs,
+            CurrentEventsThatsOkay,
+            CurrentEventsNotNeeded,
+            #endregion
 
-            //Jamie
+            #region Skylar
 
+            #endregion
+
+            #region Jamie
+            CurrentEventsMetHim,
+            CurrentEventsVivian,
+            CurrentEventsSpeeches,
+            CurrentEventsWho,
+            CurrentEventsThing,
+            CurrentEventsComeFrom,
+            #endregion
         }
         private DialogueState CurrentDialogue;
         public bool chattable = false;
@@ -82,7 +120,7 @@ namespace Windfall.Content.NPCs.WorldEvents.LunarCult
         {
             NPC.friendly = true; // NPC Will not attack player
             NPC.width = 18;
-            NPC.height = 42;
+            NPC.height = 46;
             NPC.aiStyle = -1;
             NPC.damage = 0;
             NPC.defense = 0;
@@ -164,145 +202,349 @@ namespace Windfall.Content.NPCs.WorldEvents.LunarCult
             else
                 return true;
         }
-        public override string GetChat() => Language.GetOrRegister($"Mods.{nameof(Windfall)}.Dialogue.LunarCult.Recruits.{MyName}.{CurrentDialogue}").Value;
+        public override string GetChat()
+        {
+            if (CurrentDialogue != DialogueState.Unrecruited && CurrentDialogue != DialogueState.RecruitSuccess && CurrentDialogue != DialogueState.Recruitable && CurrentDialogue != DialogueState.Recruited)
+                return Language.GetOrRegister($"Mods.{nameof(Windfall)}.Dialogue.LunarCult.Recruits.{MyName}.{CultMeetingSystem.CurrentMeetingTopic}.{CurrentDialogue.ToString().Remove(0, CultMeetingSystem.CurrentMeetingTopic.ToString().Length)}").Value;
+            else
+                return Language.GetOrRegister($"Mods.{nameof(Windfall)}.Dialogue.LunarCult.Recruits.{MyName}.{CurrentDialogue}").Value;
+        }
 
-        #region DialoguePaths
+        #region Dialogue Paths
         private readonly List<dialogueDirections> TirithDialogue = new()
         {
+            #region Reused Dialogue
             new dialogueDirections()
             {
-                MyPos = (int)DialogueState.Initial,
-                Button1 = new(){name = "Hey!", heading = (int)DialogueState.End},
-                Button2 = new(){name = "Hello...?", heading = (int)DialogueState.End},
+                MyPos = (int)DialogueState.Recruitable,
+                Button1 = new(){name = "Happy to help!", heading = (int)DialogueState.Recruitable, end = true},
             },
             new dialogueDirections()
             {
-                MyPos = (int)DialogueState.End,
-                Button1 = new(){name = "Later!", heading = -1, end = true},
+                MyPos = (int)DialogueState.RecruitSuccess,
+                Button1 = new(){name = "Sounds good!", heading = (int)DialogueState.Recruited, end = true},
             },
+            new dialogueDirections()
+            {
+                MyPos = (int)DialogueState.Recruited,
+                Button1 = new(){name = "Right-", heading = (int)DialogueState.Recruited, end = true},
+            },
+            new dialogueDirections()
+            {
+                MyPos = (int)DialogueState.Unrecruited,
+                Button1 = new(){name = "Your welcome.", heading = (int)DialogueState.Unrecruited, end = true},
+            },            
+            #endregion
+
+            #region Current Events
+            new dialogueDirections()
+            {
+                MyPos = (int)DialogueState.CurrentEventsInitial,
+                Button1 = new(){name = "Kinda scary...", heading = (int)DialogueState.CurrentEventsScary},
+                Button2 = new(){name = "Quite exciting!", heading = (int)DialogueState.CurrentEventsExciting},
+            },
+            new dialogueDirections()
+            {
+                MyPos = (int)DialogueState.CurrentEventsScary,
+                Button1 = new(){name = "It'll be okay.", heading = (int)DialogueState.CurrentEventsReassurance},
+                Button2 = new(){name = "Why bother then?", heading = (int)DialogueState.CurrentEventsWhyBother},
+            },
+            new dialogueDirections()
+            {
+                MyPos = (int)DialogueState.CurrentEventsExciting,
+                Button1 = new(){name = "That's true.", heading = (int)DialogueState.CurrentEventsTrue},
+                Button2 = new(){name = "You should be happy!", heading = (int)DialogueState.CurrentEventsHappy},
+            },
+            new dialogueDirections()
+            {
+                MyPos = (int)DialogueState.CurrentEventsReassurance,
+                Button1 = new(){name = "Of course!", heading = (int)DialogueState.CurrentEventsBadEnd},
+                Button2 = new(){name = "I dont know...", heading = (int)DialogueState.CurrentEventsGoodEnd},
+            },
+            new dialogueDirections()
+            {
+                MyPos = (int)DialogueState.CurrentEventsWhyBother,
+                Button1 = new(){name = "Yeah!", heading = (int)DialogueState.CurrentEventsGoodEnd},
+                Button2 = new(){name = "That's up to you.", heading = (int)DialogueState.CurrentEventsGoodEnd},
+            },
+            new dialogueDirections()
+            {
+                MyPos = (int)DialogueState.CurrentEventsTrue,
+                Button1 = new(){name = "That's understandable.", heading = (int)DialogueState.CurrentEventsGoodEnd},
+                Button2 = new(){name = "Be strong.", heading = (int)DialogueState.CurrentEventsBadEnd},
+            },
+            new dialogueDirections()
+            {
+                MyPos = (int)DialogueState.CurrentEventsHappy,
+                Button1 = new(){name = "That's the spirit!", heading = (int)DialogueState.CurrentEventsBadEnd},
+                Button2 = new(){name = "Hang on-", heading = (int)DialogueState.CurrentEventsBadEnd},
+            },
+            new dialogueDirections()
+            {
+                MyPos = (int)DialogueState.CurrentEventsGoodEnd,
+                Button1 = new(){name = "Hell yeah!", heading = (int)DialogueState.Recruitable, end = true},
+            },
+            new dialogueDirections()
+            {
+                MyPos = (int)DialogueState.CurrentEventsBadEnd,
+                Button1 = new(){name = "Your welcome.", heading = (int)DialogueState.Unrecruited, end = true},
+            },
+            new dialogueDirections()
+            {
+                MyPos = (int)DialogueState.Unrecruited,
+                Button1 = new(){name = "Likewise.", heading = (int)DialogueState.Unrecruited, end = true},
+            },
+            #endregion
         };
         private readonly List<dialogueDirections> VivianDialogue = new()
         {
+            #region Reused Dialogue
             new dialogueDirections()
             {
-                MyPos = (int)DialogueState.Initial,
-                Button1 = new(){name = "Hey!", heading = (int)DialogueState.End},
-                Button2 = new(){name = "Hello...?", heading = (int)DialogueState.End},
+                MyPos = (int)DialogueState.Unrecruited,
+                Button1 = new(){name = "Later!", heading = (int)DialogueState.Unrecruited, end = true},
+            },
+            #endregion
+
+            #region Current Events
+            new dialogueDirections()
+            {
+                MyPos = (int)DialogueState.CurrentEventsInitial,
+                Button1 = new(){name = "Oh, sorry.", heading = (int)DialogueState.CurrentEventsSorry},
             },
             new dialogueDirections()
             {
-                MyPos = (int)DialogueState.End,
-                Button1 = new(){name = "Later!", heading = -1, end = true},
+                MyPos = (int)DialogueState.CurrentEventsSorry,
+                Button1 = new(){name = "Are you from Azafure?", heading = (int)DialogueState.CurrentEventsAzafure},
+                Button2 = new(){name = "Knowledge?", heading = (int)DialogueState.CurrentEventsKnowledge},
             },
+            new dialogueDirections()
+            {
+                MyPos = (int)DialogueState.CurrentEventsAzafure,
+                Button1 = new(){name = "How about now?", heading = (int)DialogueState.CurrentEventsNow},
+                Button2 = new(){name = "What happened to Azafure?", heading = (int)DialogueState.CurrentEventsWhatHappened},
+            },
+            new dialogueDirections()
+            {
+                MyPos = (int)DialogueState.CurrentEventsKnowledge,
+                Button1 = new(){name = "Such as...?", heading = (int)DialogueState.CurrentEventsExample},
+                Button2 = new(){name = "What's going to happen now?", heading = (int)DialogueState.CurrentEventsFuture},
+            },
+            new dialogueDirections()
+            {
+                MyPos = (int)DialogueState.CurrentEventsNow,
+                Button1 = new(){name = "That's nice to hear!", heading = (int)DialogueState.CurrentEventsBadEnd},
+            },
+            new dialogueDirections()
+            {
+                MyPos = (int)DialogueState.CurrentEventsWhatHappened,
+                Button1 = new(){name = "Wow...", heading = (int)DialogueState.CurrentEventsBadEnd},
+            },
+            new dialogueDirections()
+            {
+                MyPos = (int)DialogueState.CurrentEventsExample,
+                Button1 = new(){name = "Sorry to hear that...", heading = (int)DialogueState.CurrentEventsBadEnd},
+            },
+            new dialogueDirections()
+            {
+                MyPos = (int)DialogueState.CurrentEventsFuture,
+                Button1 = new(){name = "I see...", heading = (int)DialogueState.CurrentEventsBadEnd},
+            },
+            new dialogueDirections()
+            {
+                MyPos = (int)DialogueState.CurrentEventsBadEnd,
+                Button1 = new(){name = "Later!", heading = (int)DialogueState.Unrecruited, end = true},
+            },
+            #endregion
         };
         private readonly List<dialogueDirections> TaniaDialogue = new()
         {
             new dialogueDirections()
             {
-                MyPos = (int)DialogueState.Initial,
-                Button1 = new(){name = "Hey!", heading = (int)DialogueState.End},
-                Button2 = new(){name = "Hello...?", heading = (int)DialogueState.End},
+                MyPos = (int)DialogueState.CurrentEventsInitial,
+                Button1 = new(){name = "Hey!", heading = (int)DialogueState.CurrentEventsBadEnd},
+                Button2 = new(){name = "Hello...?", heading = (int)DialogueState.CurrentEventsBadEnd},
             },
             new dialogueDirections()
             {
-                MyPos = (int)DialogueState.End,
-                Button1 = new(){name = "Later!", heading = -1, end = true},
+                MyPos = (int)DialogueState.CurrentEventsBadEnd,
+                Button1 = new(){name = "Later!", heading = (int)DialogueState.Unrecruited, end = true},
             },
         };
         private readonly List<dialogueDirections> DoroDialogue = new()
         {
+            #region Reused Dialogue
             new dialogueDirections()
             {
-                MyPos = (int)DialogueState.Initial,
-                Button1 = new(){name = "Hey!", heading = (int)DialogueState.End},
-                Button2 = new(){name = "Hello...?", heading = (int)DialogueState.End},
+                MyPos = (int)DialogueState.Recruitable,
+                Button1 = new(){name = "Glad to hear!", heading = (int)DialogueState.Recruitable, end = true},
             },
             new dialogueDirections()
             {
-                MyPos = (int)DialogueState.End,
-                Button1 = new(){name = "Later!", heading = -1, end = true},
+                MyPos = (int)DialogueState.RecruitSuccess,
+                Button1 = new(){name = "Thank you.", heading = (int)DialogueState.Recruited, end = true},
             },
+            new dialogueDirections()
+            {
+                MyPos = (int)DialogueState.Recruited,
+                Button1 = new(){name = "Fair...", heading = (int)DialogueState.Recruited, end = true},
+            },
+            new dialogueDirections()
+            {
+                MyPos = (int)DialogueState.Unrecruited,
+                Button1 = new(){name = "For sure!", heading = (int)DialogueState.Unrecruited, end = true},
+            },            
+            #endregion
+            
+            #region Current Events
+            new dialogueDirections()
+            {
+                MyPos = (int)DialogueState.CurrentEventsInitial,
+                Button1 = new(){name = "I'm not sure...", heading = (int)DialogueState.CurrentEventsNotSure},
+                Button2 = new(){name = "They'll tell us.", heading = (int)DialogueState.CurrentEventsTellUs},
+            },
+            new dialogueDirections()
+            {
+                MyPos = (int)DialogueState.CurrentEventsNotSure,
+                Button1 = new(){name = "No clue...", heading = (int)DialogueState.CurrentEventsNoClue},
+                Button2 = new(){name = "Faith?", heading = (int)DialogueState.CurrentEventsFaith},
+            },
+            new dialogueDirections()
+            {
+                MyPos = (int)DialogueState.CurrentEventsNoClue,
+                Button1 = new(){name = "That's true.", heading = (int)DialogueState.CurrentEventsGoodEnd},
+                Button2 = new(){name = "You should be happy!", heading = (int)DialogueState.CurrentEventsGoodEnd},
+            },
+            new dialogueDirections()
+            {
+                MyPos = (int)DialogueState.CurrentEventsFaith,
+                Button1 = new(){name = "Uh...", heading = (int)DialogueState.CurrentEventsBadEnd},
+                Button2 = new(){name = "Yeah.", heading = (int)DialogueState.CurrentEventsBadEnd},
+            },
+            new dialogueDirections()
+            {
+                MyPos = (int)DialogueState.CurrentEventsTellUs,
+                Button1 = new(){name = "That's okay.", heading = (int)DialogueState.CurrentEventsThatsOkay},
+                Button2 = new(){name = "Maybe they don't need you?", heading = (int)DialogueState.CurrentEventsNotNeeded},
+            },
+            new dialogueDirections()
+            {
+                MyPos = (int)DialogueState.CurrentEventsThatsOkay,
+                Button1 = new(){name = "That's understandable.", heading = (int)DialogueState.CurrentEventsGoodEnd},
+                Button2 = new(){name = "Be strong.", heading = (int)DialogueState.CurrentEventsBadEnd},
+            },
+            new dialogueDirections()
+            {
+                MyPos = (int)DialogueState.CurrentEventsNotNeeded,
+                Button1 = new(){name = "It'll do you good.", heading = (int)DialogueState.CurrentEventsGoodEnd},
+                Button2 = new(){name = "Up to you.", heading = (int)DialogueState.CurrentEventsGoodEnd},
+            },
+            new dialogueDirections()
+            {
+                MyPos = (int)DialogueState.CurrentEventsGoodEnd,
+                Button1 = new(){name = "Hell yeah!", heading = (int)DialogueState.Recruitable, end = true},
+            },
+            new dialogueDirections()
+            {
+                MyPos = (int)DialogueState.CurrentEventsBadEnd,
+                Button1 = new(){name = "Same!", heading = (int)DialogueState.Unrecruited, end = true},
+            },
+            #endregion
         };
         private readonly List<dialogueDirections> SkylarDialogue = new()
         {
             new dialogueDirections()
             {
-                MyPos = (int)DialogueState.Initial,
-                Button1 = new(){name = "Hey!", heading = (int)DialogueState.End},
-                Button2 = new(){name = "Hello...?", heading = (int)DialogueState.End},
+                MyPos = (int)DialogueState.CurrentEventsInitial,
+                Button1 = new(){name = "Hey!", heading = (int)DialogueState.CurrentEventsBadEnd},
+                Button2 = new(){name = "Hello...?", heading = (int)DialogueState.CurrentEventsBadEnd},
             },
             new dialogueDirections()
             {
-                MyPos = (int)DialogueState.End,
-                Button1 = new(){name = "Later!", heading = -1, end = true},
+                MyPos = (int)DialogueState.CurrentEventsBadEnd,
+                Button1 = new(){name = "Later!", heading = (int)DialogueState.Unrecruited, end = true},
             },
         };
         private readonly List<dialogueDirections> JamieDialogue = new()
         {
+            #region Reused Dialogue
             new dialogueDirections()
             {
-                MyPos = (int)DialogueState.Initial,
-                Button1 = new(){name = "Hey!", heading = (int)DialogueState.End},
-                Button2 = new(){name = "Hello...?", heading = (int)DialogueState.End},
+                MyPos = (int)DialogueState.Unrecruited,
+                Button1 = new(){name = "See ya!", heading = (int)DialogueState.Unrecruited, end = true},
+            },
+            #endregion
+
+            #region Current Events
+            new dialogueDirections()
+            {
+                MyPos = (int)DialogueState.CurrentEventsInitial,
+                Button1 = new(){name = "Yeah, I met him.", heading = (int)DialogueState.CurrentEventsMetHim},
+                Button2 = new(){name = "Who?", heading = (int)DialogueState.CurrentEventsWho},
             },
             new dialogueDirections()
             {
-                MyPos = (int)DialogueState.End,
-                Button1 = new(){name = "Later!", heading = -1, end = true},
+                MyPos = (int)DialogueState.CurrentEventsMetHim,
+                Button1 = new(){name = "Vivian?", heading = (int)DialogueState.CurrentEventsVivian},
+                Button2 = new(){name = "He gives speeches?", heading = (int)DialogueState.CurrentEventsSpeeches},
             },
+            new dialogueDirections()
+            {
+                MyPos = (int)DialogueState.CurrentEventsWho,
+                Button1 = new(){name = "Thing?", heading = (int)DialogueState.CurrentEventsThing},
+                Button2 = new(){name = "Where does he come from?", heading = (int)DialogueState.CurrentEventsComeFrom},
+            },
+            new dialogueDirections()
+            {
+                MyPos = (int)DialogueState.CurrentEventsVivian,
+                Button1 = new(){name = "Interesting.", heading = (int)DialogueState.CurrentEventsBadEnd},
+            },
+            new dialogueDirections()
+            {
+                MyPos = (int)DialogueState.CurrentEventsSpeeches,
+                Button1 = new(){name = "Yeah.", heading = (int)DialogueState.CurrentEventsBadEnd},
+                Button2 = new(){name = "Really?", heading = (int)DialogueState.CurrentEventsBadEnd},
+            },
+            new dialogueDirections()
+            {
+                MyPos = (int)DialogueState.CurrentEventsThing,
+                Button1 = new(){name = "I see...", heading = (int)DialogueState.CurrentEventsBadEnd},
+            },
+            new dialogueDirections()
+            {
+                MyPos = (int)DialogueState.CurrentEventsComeFrom,
+                Button1 = new(){name = "Gotcha...", heading = (int)DialogueState.CurrentEventsBadEnd},
+            },
+            new dialogueDirections()
+            {
+                MyPos = (int)DialogueState.CurrentEventsBadEnd,
+                Button1 = new(){name = "Thanks!", heading = (int)DialogueState.Unrecruited, end = true},
+            },
+            #endregion
         };
         #endregion
         public override void OnChatButtonClicked(bool firstButton, ref string shop)
         {
-            if (CurrentDialogue == DialogueState.End && !firstButton)
+            if ((CurrentDialogue == DialogueState.CurrentEventsGoodEnd || CurrentDialogue == DialogueState.Recruitable) && !firstButton && Recruitable)
             {
-                if(Recruitable)
-                {
-                    CurrentDialogue = DialogueState.RecruitSuccess;
-                    if (!CultMeetingSystem.Recruits.Contains((int)MyName))
-                        CultMeetingSystem.Recruits.Add((int)MyName);
-                }
-                else
-                    CurrentDialogue = DialogueState.RecruitFailed;
-                Main.npcChatText = Language.GetOrRegister($"Mods.{nameof(Windfall)}.Dialogue.LunarCult.Recruits.{MyName}.{CurrentDialogue}").Value;
-            }
-            else if (CurrentDialogue == DialogueState.RecruitFailed || CurrentDialogue == DialogueState.RecruitSuccess || CurrentDialogue == DialogueState.Recruited || CurrentDialogue == DialogueState.Unrecruited)
-            {
-                if (CurrentDialogue == DialogueState.RecruitFailed)
-                    CurrentDialogue = DialogueState.Unrecruited;
-                else if (CurrentDialogue == DialogueState.RecruitSuccess)
-                    CurrentDialogue = DialogueState.Recruited;
-                Main.CloseNPCChatOrSign();
+                if (!CultMeetingSystem.Recruits.Contains((int)MyName))
+                    CultMeetingSystem.Recruits.Add((int)MyName);
+                CurrentDialogue = DialogueState.RecruitSuccess;
             }
             else
             {
                 CurrentDialogue = (DialogueState)GetNPCConversation(MyDialogue, (int)CurrentDialogue, firstButton);
-
-                Main.npcChatText = Language.GetOrRegister($"Mods.{nameof(Windfall)}.Dialogue.LunarCult.Recruits.{MyName}.{CurrentDialogue}").Value;
             }
+            if (CurrentDialogue != DialogueState.Unrecruited && CurrentDialogue != DialogueState.RecruitSuccess && CurrentDialogue != DialogueState.Recruitable && CurrentDialogue != DialogueState.Recruited)
+                Main.npcChatText = Language.GetOrRegister($"Mods.{nameof(Windfall)}.Dialogue.LunarCult.Recruits.{MyName}.{CultMeetingSystem.CurrentMeetingTopic}.{CurrentDialogue.ToString().Remove(0, CultMeetingSystem.CurrentMeetingTopic.ToString().Length)}").Value;
+            else
+                Main.npcChatText = Language.GetOrRegister($"Mods.{nameof(Windfall)}.Dialogue.LunarCult.Recruits.{MyName}.{CurrentDialogue}").Value;
         }
         public override void SetChatButtons(ref string button, ref string button2)
         {
-            switch (CurrentDialogue)
-            {
-                case DialogueState.RecruitSuccess:
-                    button = "Awesome!";
-                    break;
-                case DialogueState.RecruitFailed:
-                    button = "Aw man...";
-                    break;
-                case DialogueState.Recruited:
-                    button = "Cool!";
-                    break;
-                case DialogueState.Unrecruited:
-                    button = "Okay...";
-                    break;
-                default:
-                    SetConversationButtons(MyDialogue, (int)CurrentDialogue, ref button, ref button2);
-                    if (CurrentDialogue == DialogueState.End)
-                        button2 = "Recruit";
-                    break;
-            }
+            SetConversationButtons(MyDialogue, (int)CurrentDialogue, ref button, ref button2);
+            if (CurrentDialogue == DialogueState.CurrentEventsGoodEnd || CurrentDialogue == DialogueState.Recruitable)
+                button2 = "Recruit";
         }
 
         public override bool CheckActive()
@@ -323,7 +565,27 @@ namespace Windfall.Content.NPCs.WorldEvents.LunarCult
         }
         public override void TownNPCAttackProj(ref int projType, ref int attackDelay)
         {
-            projType = ModContent.ProjectileType<PhantasmalFuryProj>();
+            switch (MyName)
+            {
+                case (RecruitNames.Tirith):
+                    projType = ProjectileID.LostSoulFriendly;
+                    break;
+                case (RecruitNames.Vivian):
+                    projType = ModContent.ProjectileType<BrimstoneBolt>();
+                    break;
+                case (RecruitNames.Tania):
+                    projType = ProjectileID.Typhoon;
+                    break;
+                case (RecruitNames.Doro):
+                    projType = ModContent.ProjectileType<Brick>();
+                    break;
+                case (RecruitNames.Skylar):
+                    projType = ProjectileID.FrostBoltSword;
+                    break;
+                case (RecruitNames.Jamie):
+                    projType = ProjectileID.ThrowingKnife;
+                    break;
+            }
             attackDelay = 1;
         }
         public override void FindFrame(int frameHeight)

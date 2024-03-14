@@ -65,18 +65,18 @@ namespace Windfall.Common.Systems.WorldEvents
         }
         private SystemState State = SystemState.CheckReqs;
 
-        private bool OnCooldown = true;
-        private bool Active = false;
-        private Point ActiveHideoutCoords = new(-1, -1);
-        private int MeetingTimer = -1;
-        private enum MeetingTopic
+        private static bool OnCooldown = true;
+        private static bool Active = false;
+        private static Point ActiveHideoutCoords = new(-1, -1);
+        private static int MeetingTimer = -1;
+        public enum MeetingTopic
         {
-            Jelqing,
+            CurrentEvents,
             Gooning,
             Mewing
         }
-        private MeetingTopic CurrentMeetingTopic;
-        private List<int> NPCIndexs = new();
+        public static MeetingTopic CurrentMeetingTopic;
+        private static List<int> NPCIndexs = new();
         private static SoundStyle TeleportSound => new("CalamityMod/Sounds/Custom/SCalSounds/BrimstoneHellblastSound");
 
         public override void PreUpdateWorld()
@@ -146,7 +146,7 @@ namespace Windfall.Common.Systems.WorldEvents
                             }
                         }
 
-                        CurrentMeetingTopic = MeetingTopic.Jelqing; //(MeetingTopic)AvailableTopics[Main.rand.Next(AvailableTopics.Count)]; Actual Code
+                        CurrentMeetingTopic = MeetingTopic.CurrentEvents; //(MeetingTopic)AvailableTopics[Main.rand.Next(AvailableTopics.Count)]; Actual Code
                         AvailableTopics.Remove((int)CurrentMeetingTopic);
 
                         NPCIndexs = new List<int>
@@ -161,7 +161,7 @@ namespace Windfall.Common.Systems.WorldEvents
                         #region Character Setup
                         switch (CurrentMeetingTopic)
                         {
-                            case MeetingTopic.Jelqing:
+                            case MeetingTopic.CurrentEvents:
                                 foreach (int k in NPCIndexs)
                                 {
                                     NPC npc = Main.npc[k];
@@ -172,19 +172,22 @@ namespace Windfall.Common.Systems.WorldEvents
                                             case 1:
                                                 Recruit.MyName = RecruitableLunarCultist.RecruitNames.Tirith;
                                                 Recruit.Recruitable = true;
-                                                Recruit.NPC.direction = -1;
+                                                Recruit.NPC.direction = 1;
                                                 break;
                                             case 2:
                                                 Recruit.MyName = RecruitableLunarCultist.RecruitNames.Vivian;
-                                                Recruit.NPC.direction = -1;
+                                                Recruit.Recruitable = false;
+                                                Recruit.NPC.direction = 1;
                                                 break;
                                             case 3:
                                                 Recruit.MyName = RecruitableLunarCultist.RecruitNames.Doro;
-                                                Recruit.NPC.direction = 1;
+                                                Recruit.Recruitable = true;
+                                                Recruit.NPC.direction = -1;
                                                 break;
                                             case 4:
                                                 Recruit.MyName = RecruitableLunarCultist.RecruitNames.Jamie;
-                                                Recruit.NPC.direction = 1;
+                                                Recruit.Recruitable = false;
+                                                Recruit.NPC.direction = -1;
                                                 break;
                                         }
                                     }
@@ -217,40 +220,76 @@ namespace Windfall.Common.Systems.WorldEvents
 
                             Rectangle BishopLocation = new((int)Bishop.Center.X, (int)Bishop.Center.Y, Bishop.width, Bishop.width);
                             Rectangle Cultist1Location = new((int)Cultist1.Center.X, (int)Cultist1.Center.Y, Cultist1.width, Cultist1.width);
-                            Rectangle Cultist21Location = new((int)Cultist2.Center.X, (int)Cultist2.Center.Y, Cultist2.width, Cultist2.width);
+                            Rectangle Cultist2Location = new((int)Cultist2.Center.X, (int)Cultist2.Center.Y, Cultist2.width, Cultist2.width);
                             Rectangle Cultist3Location = new((int)Cultist3.Center.X, (int)Cultist3.Center.Y, Cultist3.width, Cultist3.width);
                             Rectangle Cultist4Location = new((int)Cultist4.Center.X, (int)Cultist4.Center.Y, Cultist4.width, Cultist4.width);
 
                             switch (CurrentMeetingTopic)
                             {
-                                case MeetingTopic.Jelqing:
+                                case MeetingTopic.CurrentEvents:
                                     switch (MeetingTimer)
                                     {
                                         case 1:
-                                            Text = Main.combatText[CombatText.NewText(BishopLocation, Color.Blue, "Howdy!", true)];
+                                            Text = DisplayMessage(BishopLocation, Color.Blue, "Greetings!");
                                             break;
-                                        case 1 * 60:
-                                            Text = Main.combatText[CombatText.NewText(BishopLocation, Color.Blue, "Jelqing is very poggers!", true)];
+                                        case 90:
+                                            Text = DisplayMessage(BishopLocation, Color.Blue, "Let us begin");
                                             break;
                                         case 3 * 60:
-                                            Text = Main.combatText[CombatText.NewText(BishopLocation, Color.Blue, "Jelq often!", true)];
+                                            Text = DisplayMessage(BishopLocation, Color.Blue, "I'm sure you are all aware of some... recent developments.");
                                             break;
                                         case 6 * 60:
-                                            Text = Main.combatText[CombatText.NewText(Cultist1Location, Color.Yellow, "Uh... What if my dick gets too big?", true)];
+                                            Text = DisplayMessage(Cultist1Location, Color.Yellow, "Yeah, what's going on? Things seem crazy right now...");
                                             break;
                                         case 8 * 60:
-                                            Text = Main.combatText[CombatText.NewText(BishopLocation, Color.Blue, "NOT POSSIBLE.", true)];
+                                            Text = DisplayMessage(BishopLocation, Color.Blue, "The end of our journey together is fast approaching!");
                                             break;
                                         case 10 * 60:
-                                            Text = Main.combatText[CombatText.NewText(Cultist21Location, Color.Red, "What if I don't... have a dick...?", true)];
+                                            Text = Main.combatText[CombatText.NewText(Cultist1Location, Color.Yellow, "!?", true)];
+                                            DisplayMessage(Cultist2Location, Color.Red, "!?");
+                                            DisplayMessage(Cultist3Location, Color.Brown, "?");
+                                            DisplayMessage(Cultist4Location, Color.Orange, "!?");
                                             break;
                                         case 12 * 60:
-                                            Text = Main.combatText[CombatText.NewText(BishopLocation, Color.Blue, "SHUT UP!", true)];
+                                            Text = DisplayMessage(BishopLocation, Color.Blue, "Yes! Our goals are quickly becoming in reach.");
                                             break;
                                         case 14 * 60:
-                                            Text = Main.combatText[CombatText.NewText(BishopLocation, Color.Blue, "Meeting over.", true)];
+                                            Text = DisplayMessage(BishopLocation, Color.Blue, "The time shall come when all of you will be called upon to play your part.");
                                             break;
-                                        case 15 * 60:
+                                        case 16 * 60:
+                                            Text = DisplayMessage(Cultist3Location, Color.Brown, "Uhm... What are our 'parts'?");
+                                            break;
+                                        case 18 * 60:
+                                            Text = DisplayMessage(BishopLocation, Color.Blue, "That will be revealed to you in due time.");
+                                            break;
+                                        case 20 * 60:
+                                            Text = DisplayMessage(Cultist3Location, Color.Brown, "Oh... Okay.");
+                                            break;
+                                        case 22 * 60:
+                                            Text = DisplayMessage(Cultist2Location, Color.Red, "Does this mean we've learned all there is to learn?");
+                                            break;
+                                        case 24 * 60:
+                                            Text = DisplayMessage(BishopLocation, Color.Blue, "Not at all. In the coming days, much more shall be revealed to you.");
+                                            break;
+                                        case 26 * 60:
+                                            Text = DisplayMessage(Cultist2Location, Color.Red, "I see...");
+                                            break;
+                                        case 28 * 60:
+                                            Text = DisplayMessage(Cultist4Location, Color.Orange, "Will we see the Orator?");
+                                            break;
+                                        case 30 * 60:
+                                            Text = DisplayMessage(BishopLocation, Color.Blue, "It is very possible he might grace us with his prescence as the time nears.");
+                                            break;
+                                        case 32 * 60:
+                                            Text = DisplayMessage(Cultist4Location, Color.Orange, "Awesome!");
+                                            break;
+                                        case 34 * 60:
+                                            Text = DisplayMessage(BishopLocation, Color.Blue, "Hold steady your faith. It shall very soon be rewarded.");
+                                            break;
+                                        case 36 * 60:
+                                            Text = DisplayMessage(BishopLocation, Color.Blue, "Until we next meet.");
+                                            break;
+                                        case 37 * 60:
                                             State = SystemState.End;
                                             break;
                                     }
@@ -296,6 +335,11 @@ namespace Windfall.Common.Systems.WorldEvents
                     State = SystemState.CheckReqs;
                     break;
             }
+        }
+        internal static CombatText DisplayMessage(Rectangle location, Color color, string text)
+        {
+            CombatText MyDialogue = Main.combatText[CombatText.NewText(location, color, text, true)];
+            return MyDialogue;
         }
     }
 }

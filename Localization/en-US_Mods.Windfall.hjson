@@ -134,57 +134,102 @@ Dialogue: {
 
 		Recruits: {
 			Tirith: {
-				Initial: Hi, I'm Tirith!
-				End: Bye!
-				RecruitSuccess: Sure, I'll join your thingie!
-				RecruitFailed: Nah, fuck your thingie!
-				Recruited: Can't wait to help out!
-				Unrecruited: Leave me alone, weirdo...
+				CurrentEvents: {
+					Initial: That was... Quite the meeting today, huh.
+					Scary: I know right?! Its scary how quickly things can change, and I was just beginning to settle into this whole thing too. I really don't know how to keep up...
+					Reassurance: You think so? Perhaps I'm worrying over nothing. This is good news after all, right? Once we succeed, everything will be better.
+					WhyBother: You make a fair point... If I'm unhappy with this life, I can always just leave. I'm back on my feet now. I don't need to keep up with this stuff if I don't want to.
+					Exciting: I guess...? I don't know... I'm not really sure how to feel right now to be honest. This is... quite big news to just drop out of nowhere, right?
+					True: I mean like, couldn't they have given us more of a warning? They're always so vague with these things... It can get hard to hold onto my faith when it keeps being tested like this...
+					Happy: I mean... No, you're right. This is good news. Once we succeed, everything will be better. That's what the Orator promised us, and I shouldn't doubt that he'll deliver.
+					GoodEnd: Thank you for telling me that. I'm not sure I'd have figured this out on my own. I don't need this... between you and me, cult, any more. I'm done here!
+					BadEnd: Yes, I just need to remain faithful. Our reward for these trials shall soon be upon us. Thank you. I really needed to be reminded of that.
+				}
+
+				Recruitable: Thanks again for that talk. My eyes feel... opened now? Haha, maybe that's weird.
+				RecruitSuccess: Oh my... The Lunar Cult... They're really planning something like that? I'll help if I can. I'll be in touch!
+				Recruited: Let's not talk about this... here, okay?
+				Unrecruited: Good talking to you!
 			}
 
 			Vivian: {
-				Initial: 10 Bodies.
-				End: Bye!
+				CurrentEvents: {
+					Initial: I guess I'll hang around a little longer... If they've got more to offer- Hey! What the hell do you want?
+					Sorry: Ah... It's fine. I shouldn't have blown up like that. Did you want something?
+					Azafure: I suppose where I come from is quite obvious, huh. Yeah, I managed to get out of there before things went south; wasn't pretty from what I've heard. Its a bit sad to think about, but I think I'm happier now than I was living there. It's a nice change of pace.
+					Now: Life on the surface is very much an improvement from Azafure if you ask me. I'd never seen so much green in my life, and don't get me started on the sky. Its like an everchanging painting... I doubt I could go back to a life underground. Funny, considering we're here right now.
+					WhatHappened: You don't know? I thought the story was common knowledge these days. Azafure was razed by the Brimstone Witch during Yharim's Crusade; that's all you really need to know.
+					Knowledge: Oh yeah, I've been taught a few things by the higher ups around here, mostly about magic. They have some... unorthodox methods, but my magic has certainly improved thanks to them. I'm eager to see what more they have in store...
+					Example: Well, for one, they really helped me hone in my Brimstone magic. Once I told them about it, they took quite an interest in me... Maybe something to do with a certain well known Brimstone magic user. Its kinda annoying always being associated with her...
+					Future: We'll see I suppose. I know the higher ups have something big in the works, though they're often light on the details. I don't exactly mind though. They're offering more than enough to keep me around.
+					BadEnd: Well, this was a nice chat, but I really should be going. Unlike some people here, I've got a life outside of this stuff.
+				}
+
+				Recruitable: You're pretty pog!
 				RecruitSuccess: Sure, I'll join your thingie!
-				RecruitFailed: Nah, fuck your thingie!
 				Recruited: Can't wait to help out!
-				Unrecruited: Leave me alone, weirdo...
+				Unrecruited: See you around.
 			}
 
 			Tania: {
-				Initial: Hi, I'm Tania!
-				End: Bye!
+				???: {
+					Initial: Hi, I'm Tania!
+					BadEnd: Bye!
+				}
+
+				Recruitable: You're pretty pog!
 				RecruitSuccess: Sure, I'll join your thingie!
-				RecruitFailed: Nah, fuck your thingie!
 				Recruited: Can't wait to help out!
 				Unrecruited: Leave me alone, weirdo...
 			}
 
 			Doro: {
-				Initial: Hi, I'm Doro!
-				End: Bye!
-				RecruitSuccess: Sure, I'll join your thingie!
-				RecruitFailed: Nah, fuck your thingie!
-				Recruited: Can't wait to help out!
-				Unrecruited: Leave me alone, weirdo...
+				CurrentEvents: {
+					Initial: Hey uh, you know what's going on? I'm still kinda confused...
+					NotSure: Really...? Does no one get what's going on around here? How do they run this place...
+					NoClue: I don't really know what I'm still doing here... If things like this keep happening, I might just leave.
+					Faith: Hmm... I suppose you're right. Just gotta remain faithful. That's what they always say, and we're nearing the end I guess. I can hold out a little longer.
+					TellUs: So we just... wait around? I don't know... I wanna know what I'm meant to do, y'know?
+					ThatsOkay: I suppose a break doesn't hurt every now and then. I'm not very used to relaxing.
+					NotNeeded: You think so? I guess if we're near the end, they might not need my help... Maybe it's about time I moved onto something else...
+					GoodEnd: Yeah, you're right! I gotta take charge of things! I'm outta here!
+					BadEnd: Nice talking to you. Hope to see you around!
+				}
+
+				Recruitable: I feel like big things are coming my way now. This is great!
+				RecruitSuccess: Oh my... That's no good. This things a cult? I'll help you out if I can.
+				Recruited: Might not be a good call to talk about this here...
+				Unrecruited: I'll see you around!
 			}
 
 			Skylar: {
-				Initial: Hi, I'm Skylar!
-				End: Bye!
+				???: {
+					Initial: Hi, I'm Skylar!
+					BadEnd: Bye!
+				}
+
+				Recruitable: You're pretty pog!
 				RecruitSuccess: Sure, I'll join your thingie!
-				RecruitFailed: Nah, fuck your thingie!
 				Recruited: Can't wait to help out!
 				Unrecruited: Leave me alone, weirdo...
 			}
 
 			Jamie: {
-				Initial: Hi, I'm Jamie!
-				End: Bye!
+				CurrentEvents: {
+					Initial: I can't wait to see the Orator again! He's so cool right? Wait, you're new around here... You know the Orator, right?
+					MetHim: You met him personally?! No way! You and Vivian are so lucky... I've only seen him during his speeches. I can't believe he spoke to you directly! I hope he talks to me someday...
+					Vivian: Yeah, they're the one with the flower in their hair. They're kinda spooky if you ask me, all dark and brooding. I don't know what the Orator sees in them. Maybe their magic caught his interest? I don't know.
+					Speeches: Yeah. Once in a blue moon he'll deliver a speech like that bishop did himself. Those are always my favorite speeches. If you ask me, the bishops could really learn a thing or two from him. Their speeches are kinda boring...
+					Who: What?! You don't know who the Orator is? He's like... The leader of this whole thing. He's so awesome and cool... I'm so excited that we'll be seeing more of him soon! I hear he's also SUPER powerful! Though I've never seen him fight anybody... Gosh, what I'd give to see that!
+					Thing: Hmm... I'm not really sure what I'd call us. We're a group of people who wanna make the world a better place. The Orator knows just how to do it. Apparently he's able to commune with 'Dark Gods'. So cool, right? I know how 'Dark God' sound, but they aren't actually evil or anything. The Orator says they want to help us achieve a better future, and with our help, they can make it happen!
+					ComeFrom: Oh, you mean't like that... Uh... No one really knows. His identity is a total mystery. Doesn't matter to me though; just makes him that much cooler!
+					BadEnd: Well, hope I was able to help you out, new guy! I gotta get going. Hope to see you again!
+				}
+
+				Recruitable: You're pretty pog!
 				RecruitSuccess: Sure, I'll join your thingie!
-				RecruitFailed: Nah, fuck your thingie!
 				Recruited: Can't wait to help out!
-				Unrecruited: Leave me alone, weirdo...
+				Unrecruited: See you later, new guy!
 			}
 		}
 	}
