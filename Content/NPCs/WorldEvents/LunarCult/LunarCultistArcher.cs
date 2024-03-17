@@ -59,6 +59,7 @@ namespace Windfall.Content.NPCs.WanderingNPCs
         {
             if (NPC.ai[0] == 0)
             {
+                NPC.GivenName = "Lunar Cultist Archer";
                 NPC.alpha = 255;
                 Vector2 oldPos = NPC.position;
                 NPC.position.Y = GetSurfacePositionFrom(NPC.position).Y - NPC.height - 8;

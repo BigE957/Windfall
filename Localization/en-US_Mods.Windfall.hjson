@@ -544,17 +544,17 @@ Items: {
 		}
 
 		WFEidolonTablet: {
-			DisplayName: W F Eidolon Tablet
-			Tooltip: ""
+			DisplayName: Eidolon Tablet
+			Tooltip: "A tablet used by the Lunar Cult for covert communications."
 		}
 
 		PrimalLightShard: {
-			DisplayName: Primal Light Shard
+			DisplayName: Primordial Light Shard
 			Tooltip: ""
 		}
 
 		RitualFrags: {
-			DisplayName: Ritual Frags
+			DisplayName: Ritual Fragments
 			Tooltip: ""
 		}
 	}
@@ -574,7 +574,7 @@ NPCs: {
 	LunarBishop.DisplayName: Lunar Bishop
 	TravellingCultist.DisplayName: Travelling Cultist
 	TheOrator.DisplayName: The Orator
-	RecruitableLunarCultist.DisplayName: Recruitable Lunar Cultist
+	RecruitableLunarCultist.DisplayName: Goober
 }
 
 Projectiles: {
