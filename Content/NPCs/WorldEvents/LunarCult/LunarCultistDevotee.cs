@@ -57,22 +57,16 @@ namespace Windfall.Content.NPCs.WanderingNPCs
                 AnimationType = NPCID.BartenderUnconscious;
                 NPC.frame.Y = (NPC.height+2) * 3;
                 NPC.alpha = 255;
-                if (AlignNPCWithGround(Main.npc[NPC.whoAmI]))
+                NPC.position.Y = GetGroundPositionFrom(NPC.position).Y - NPC.height - 2;
+                NPC.position.Y -= 6;
+                NPC.alpha = 0;
+                for (int i = 0; i < 50; i++)
                 {
-                    NPC.position.Y -= 6;
-                    NPC.alpha = 0;
-                    for (int i = 0; i < 50; i++)
-                    {
-                        Vector2 speed = Main.rand.NextVector2Circular(1.5f, 2f);
-                        Dust d = Dust.NewDustPerfect(NPC.Center, DustID.GoldFlame, speed * 3, Scale: 1.5f);
-                        d.noGravity = true;
-                    }
-                    SoundEngine.PlaySound(SpawnSound, NPC.Center);
+                    Vector2 speed = Main.rand.NextVector2Circular(1.5f, 2f);
+                    Dust d = Dust.NewDustPerfect(NPC.Center, DustID.GoldFlame, speed * 3, Scale: 1.5f);
+                    d.noGravity = true;
                 }
-                else
-                {
-                    NPC.active = false;
-                }
+                SoundEngine.PlaySound(SpawnSound, NPC.Center);
             }
         }
         public override bool CanChat()

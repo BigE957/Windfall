@@ -47,8 +47,7 @@ namespace Windfall.Content.Projectiles.NPCAnimations
         {
             Player closestPlayer = Main.player[Player.FindClosest(Projectile.Center, 1, 1)];
 
-            if (!Utilities.AlignProjectileWithGround(Main.projectile[Projectile.whoAmI]))
-                Projectile.position.Y = closestPlayer.position.Y;
+            Projectile.position.Y = Utilities.GetSurfacePositionFrom(Projectile.position).Y - Projectile.height - 8;
         }
         int finalDelay = 0;
         public override void AI()
@@ -105,10 +104,7 @@ namespace Windfall.Content.Projectiles.NPCAnimations
             Rectangle location = new((int)projectile.Center.X, (int)projectile.Center.Y, projectile.width, projectile.width);
             CombatText MyDialogue = Main.combatText[CombatText.NewText(location, color, text, true)];
             if (MyDialogue.text.Length > 50)
-            {
                 MyDialogue.lifeTime = 60 + MyDialogue.text.Length;
-            }
-            MyDialogue.crit = false;
         }
         internal virtual void DoOnSpawn() { }
         internal virtual void DoBeforeDespawn(){}

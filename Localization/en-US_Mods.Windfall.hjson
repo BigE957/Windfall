@@ -101,7 +101,7 @@ Dialogue: {
 			Issues: Yes... Our sanctum become something of a dungeon in recent years. However those it once held have now long since passed, and this site's had an adverse effect upon their souls. Now, its crawling with their reanimated remains. If you'd do us a favor and clean it out a bit, we'd be ever in your debt.
 			End: Now then, enough talk. Till we meet again, wayward traveller. Perhaps our paths might cross again.
 		}
-		
+
 		TravellingCultist: {
 			Chat: {
 				Standard1: Do I stand out...?
@@ -138,6 +138,7 @@ Dialogue: {
 				Tablet: Oh? That would be an Eidolon Tablet. Its used for communication between Lunar Cult members. I'd keep it on you. It'll likely act as your signal for when and where the cult is meeting.
 				Thanks: Happy to help! Let me know how your efforts go!
 			}
+
 			Quests: {
 				NoQuest: You've done a great job! I'll be back when I next need you.
 				#Dungeon Quests
@@ -150,7 +151,6 @@ Dialogue: {
 				DeificInsigniaStart: Many of the skeletons which wander that decrepit Dungeon were once devoted soldiers of the Gods; imprisoned within there during the Godseeker's crusade. I'd bet the insignia they bear might still hold some of the deific essence they were gifted. If you get me some, they may prove helpful in combating the Lunar Cult.
 				DeificInsigniaDuring: Those skeletons are quite angry about their eternal imprisonment within the Dungeon. So don't expect them to part with their patrons' tokens so easilly. If you can get me just five, that should suffice.
 				DeificInsigniaEnd: Oh, perfect! Yes, I can sense the faint traces of deific essence on these... Perhaps the latent power of the Gods might be what we need to stand a chance against the Lunar Cult!
-				#Final Quests
 			}
 		}
 
@@ -545,6 +545,16 @@ Items: {
 
 		WFEidolonTablet: {
 			DisplayName: W F Eidolon Tablet
+			Tooltip: ""
+		}
+
+		PrimalLightShard: {
+			DisplayName: Primal Light Shard
+			Tooltip: ""
+		}
+
+		RitualFrags: {
+			DisplayName: Ritual Frags
 			Tooltip: ""
 		}
 	}

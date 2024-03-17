@@ -83,7 +83,7 @@ namespace Windfall.Content.Projectiles.NPCAnimations
             switch (CurrentAI)
             {
                 case AIState.Spawning:
-                    Utilities.AlignProjectileWithGround(Main.projectile[Projectile.whoAmI]);
+                    Projectile.position.Y = Utilities.GetGroundPositionFrom(Projectile.position).Y - Projectile.height - 8;
                     Projectile.position.Y -= 24;
                     CurrentAI = AIState.WaitingForPlayer;
                     break;
