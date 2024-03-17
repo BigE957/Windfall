@@ -46,10 +46,14 @@ namespace Windfall.Content.NPCs
             if (npc.type == calamity.Find<ModNPC>("AquaticScourgeHead").Type)
                 QuestSystem.IncrementQuestProgress(QuestSystem.QuestLog.FindIndex(quest => quest.Name == "ScoogHunt2"), 0);
 
+            if (npc.type == NPCID.Plantera && !NPC.downedPlantBoss)
+            {
+                Projectile.NewProjectile(Entity.GetSource_NaturalSpawn(), npc.Center, Vector2.Zero, ModContent.ProjectileType<OratorEntourageSpawner>(), 0, 0);
+                WorldSaveSystem.PlanteraJustDowned = true;
+            }
+
             if (npc.type == calamity.Find<ModNPC>("LeviathanStart").Type)
                 DownedNPCSystem.downedSirenLure = true;
-            if(npc.type == NPCID.Plantera && !NPC.downedPlantBoss)
-                Projectile.NewProjectile(Entity.GetSource_NaturalSpawn(), Main.player[0].Center, Vector2.Zero, ModContent.ProjectileType<OratorEntourageSpawner>(), 0, 0);
         }
         public override void OnSpawn(NPC npc, IEntitySource source)
         {
@@ -59,7 +63,7 @@ namespace Windfall.Content.NPCs
         }
         internal  static void SpawnWorldEventProjectile(int type, int xOffSet)
         {
-            Projectile.NewProjectileDirect(Projectile.GetSource_NaturalSpawn(), new Vector2(Main.player[0].Center.X + xOffSet, Main.player[0].Center.Y), Vector2.Zero, type, 0, 0);
+            Projectile.NewProjectileDirect(Entity.GetSource_NaturalSpawn(), new Vector2(Main.player[0].Center.X + xOffSet, Main.player[0].Center.Y), Vector2.Zero, type, 0, 0);
         }
     }
 }

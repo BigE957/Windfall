@@ -1,12 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Terraria;
+﻿using System.Collections.Generic;
 using Terraria.ModLoader;
 using Terraria.ModLoader.IO;
-using Windfall.Content.NPCs.TravellingNPCs;
 
 namespace Windfall.Common.Systems
 {
@@ -16,6 +10,7 @@ namespace Windfall.Common.Systems
         public static bool CloneRevealed = false;
         public static bool ScoogFished = false;
         public static bool MechanicCultistsEncountered = false;
+        public static bool PlanteraJustDowned = false;
 
         public static int paladinChats = 0;
         public static int cultistChatState = 0;
@@ -31,6 +26,7 @@ namespace Windfall.Common.Systems
             CloneRevealed = tag.GetBool("CloneRevealed");
             ScoogFished = tag.GetBool("ScoogFished");
             MechanicCultistsEncountered = tag.GetBool("MechanicCultistsEncountered");
+            PlanteraJustDowned = tag.GetBool("PlanteraJustDowned");
 
             JournalsCollected = (List<bool>)tag.GetList<bool>("JournalsCollected");
 
@@ -46,6 +42,7 @@ namespace Windfall.Common.Systems
             tag["CloneRevealed"] = CloneRevealed;
             tag["ScoogFished"] = ScoogFished;
             tag["MechanicCultistsEncountered"] = MechanicCultistsEncountered;
+            tag["PlanteraJustDowned"] = PlanteraJustDowned;
 
             tag["JournalsCollected"] = JournalsCollected;
 
@@ -60,6 +57,7 @@ namespace Windfall.Common.Systems
             CloneRevealed = false;
             ScoogFished = false;
             MechanicCultistsEncountered = false;
+            PlanteraJustDowned = false;
 
             for (int i = 0; i < JournalsCollected.Count; i++)
             {

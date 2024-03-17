@@ -25,8 +25,6 @@ namespace Windfall.Content.NPCs.TravellingNPCs
 
         public const double despawnTime = 48600.0;
         public static double spawnTime = double.MaxValue;
-        public static NPC FindNPC(int npcType) => Main.npc.FirstOrDefault(npc => npc.type == npcType && npc.active);
-
         private static Profiles.StackedNPCProfile NPCProfile;
 
         NPCID.Sets.NPCBestiaryDrawModifiers drawModifiers = new()
@@ -48,17 +46,19 @@ namespace Windfall.Content.NPCs.TravellingNPCs
             }
             return true;
         }
-
         public static void UpdateTravelingMerchant()
         {
-            bool travelerIsThere = (NPC.FindFirstNPC(ModContent.NPCType<TravellingCultist>()) != -1); 
+            bool travelerIsThere = (NPC.FindFirstNPC(ModContent.NPCType<TravellingCultist>()) != -1);
 
             if (Main.dayTime && Main.time == 0)
-                if (!travelerIsThere && Main.rand.NextBool(4))
+                if (!travelerIsThere && (Main.rand.NextBool(4) || WorldSaveSystem.PlanteraJustDowned))
+                {
                     spawnTime = GetRandomSpawnTime(5400, 8100);
+                    WorldSaveSystem.PlanteraJustDowned = false;
+                }
                 else
                     spawnTime = double.MaxValue;
-
+                
             if (!travelerIsThere && CanSpawnNow())
             {
                 int newTraveler = NPC.NewNPC(Terraria.Entity.GetSource_TownSpawn(), Main.spawnTileX * 16, Main.spawnTileY * 16, ModContent.NPCType<TravellingCultist>(), 1); // Spawning at the world spawn
