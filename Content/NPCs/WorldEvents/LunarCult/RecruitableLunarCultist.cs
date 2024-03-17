@@ -8,7 +8,6 @@ using static Windfall.Common.Utilities.Utilities;
 using System.Collections.Generic;
 using Terraria.DataStructures;
 using Terraria.Audio;
-using CalamityMod.Projectiles.Magic;
 using Windfall.Common.Systems.WorldEvents;
 using Microsoft.Xna.Framework.Graphics;
 using CalamityMod.Projectiles.Ranged;
