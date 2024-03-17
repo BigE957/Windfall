@@ -12,6 +12,8 @@ using Terraria.Localization;
 using Terraria.ModLoader;
 using Terraria.Utilities;
 using Windfall.Common.Systems;
+using Windfall.Common.Systems.WorldEvents;
+using Windfall.Content.NPCs.WorldEvents.LunarCult;
 using static Windfall.Common.Utilities.Utilities;
 
 namespace Windfall.Content.NPCs.TravellingNPCs
@@ -44,7 +46,6 @@ namespace Windfall.Content.NPCs.TravellingNPCs
                 NPC.life = 0;
                 return false;
             }
-
             return true;
         }
 
@@ -74,7 +75,6 @@ namespace Windfall.Content.NPCs.TravellingNPCs
                 CalamityUtils.DisplayLocalizedText(key, messageColor);
             }
         }
-
         private static bool CanSpawnNow()
         {
             // can't spawn if any events are running
@@ -105,13 +105,7 @@ namespace Windfall.Content.NPCs.TravellingNPCs
                     return true;
             return false;
         }
-
-        public static double GetRandomSpawnTime(double minTime, double maxTime)
-        {
-            // A simple formula to get a random time between two chosen times
-            return (maxTime - minTime) * Main.rand.NextDouble() + minTime;
-        }
-
+        public static double GetRandomSpawnTime(double minTime, double maxTime) => (maxTime - minTime) * Main.rand.NextDouble() + minTime;
         public override void SetStaticDefaults()
         {
             Main.npcFrameCount[Type] = 25;
@@ -164,15 +158,8 @@ namespace Windfall.Content.NPCs.TravellingNPCs
 			new FlavorTextBestiaryInfoElement("A strange fellow who's recently begun showing up out of nowhere. He claims to want to fight against the Lunar Cult, but can he really be trusted...?"),
         });
         }
-        public override bool CanTownNPCSpawn(int numTownNPCs)
-        {
-            return false; 
-        }
-
-        public override ITownNPCProfile TownNPCProfile()
-        {
-            return NPCProfile;
-        }
+        public override bool CanTownNPCSpawn(int numTownNPCs) => false;
+        public override ITownNPCProfile TownNPCProfile() => NPCProfile;
         public override List<string> SetNPCNameList()
         {
             return new List<string>() {
@@ -181,32 +168,8 @@ namespace Windfall.Content.NPCs.TravellingNPCs
                 "Suspicious Looking Cultist",
             };
         }
-        public override string GetChat()
-        {
-            if (CurrentDialogue != DialogueState.Quests1)
-                return Language.GetOrRegister($"Mods.{nameof(Windfall)}.Dialogue.LunarCult.TravellingCultist.{CurrentDialogue}").Value;
-            WeightedRandom<string> chat = new();
-
-            chat.Add(Language.GetOrRegister($"Mods.{nameof(Windfall)}.Dialogue.LunarCult.TravellingCultist.Standard1").Value);
-            chat.Add(Language.GetOrRegister($"Mods.{nameof(Windfall)}.Dialogue.LunarCult.TravellingCultist.Standard2").Value);
-            chat.Add(Language.GetOrRegister($"Mods.{nameof(Windfall)}.Dialogue.LunarCult.TravellingCultist.Standard3").Value);
-            if (NPC.AnyNPCs(NPCID.Mechanic) || NPC.AnyNPCs(NPCID.Clothier))
-            {
-                chat.Add(Language.GetOrRegister($"Mods.{nameof(Windfall)}.Dialogue.LunarCult.TravellingCultist.AnyDungeonNPC").Value);
-                if (NPC.AnyNPCs(NPCID.Mechanic))
-                    chat.Add(Language.GetOrRegister($"Mods.{nameof(Windfall)}.Dialogue.LunarCult.TravellingCultist.Mechanic").Value);
-                if (NPC.AnyNPCs(NPCID.Clothier))
-                    chat.Add(Language.GetOrRegister($"Mods.{nameof(Windfall)}.Dialogue.LunarCult.TravellingCultist.Clothier").Value);
-            }
-            if(NPC.downedBoss3)
-                chat.Add(Language.GetOrRegister($"Mods.{nameof(Windfall)}.Dialogue.LunarCult.TravellingCultist.Skeletron").Value);
-            return chat;
-        }
-   
         public static QuestItem QuestArtifact = new(0,0);
-
         public static bool QuestComplete = false;
-
         private enum DialogueState
         {
             Initial,
@@ -217,16 +180,48 @@ namespace Windfall.Content.NPCs.TravellingNPCs
             HowToHelp,
             ImIn,
             Quests1,
-            PostPlantInitial,
+            //post-plantera convo
+            Initial2,
+            Orator,
+            Meeting,
+            HelpThem,
+            HowCanI,
+            Doneish,
+            Tablet,
+            Thanks,
+            Quests2,
         }
-
         private static DialogueState CurrentDialogue
         {
             get => (DialogueState)WorldSaveSystem.cultistChatState;
             set => WorldSaveSystem.cultistChatState = (int)value;
         }
+        public override string GetChat()
+        {
+            if (CurrentDialogue != DialogueState.Quests1 || CurrentDialogue != DialogueState.Quests2)
+                return Language.GetOrRegister($"Mods.{nameof(Windfall)}.Dialogue.LunarCult.TravellingCultist.Conversation.{CurrentDialogue}").Value;
+            WeightedRandom<string> chat = new();
+
+            chat.Add(Language.GetOrRegister($"Mods.{nameof(Windfall)}.Dialogue.LunarCult.TravellingCultist.Chat.Standard1").Value);
+            chat.Add(Language.GetOrRegister($"Mods.{nameof(Windfall)}.Dialogue.LunarCult.TravellingCultist.Chat.Standard2").Value);
+            chat.Add(Language.GetOrRegister($"Mods.{nameof(Windfall)}.Dialogue.LunarCult.TravellingCultist.Chat.Standard3").Value);
+            if (NPC.AnyNPCs(NPCID.Mechanic) || NPC.AnyNPCs(NPCID.Clothier))
+            {
+                chat.Add(Language.GetOrRegister($"Mods.{nameof(Windfall)}.Dialogue.LunarCult.TravellingCultist.Chat.AnyDungeonNPC").Value);
+                if (NPC.AnyNPCs(NPCID.Mechanic))
+                    chat.Add(Language.GetOrRegister($"Mods.{nameof(Windfall)}.Dialogue.LunarCult.TravellingCultist.Chat.Mechanic").Value);
+                if (NPC.AnyNPCs(NPCID.Clothier))
+                    chat.Add(Language.GetOrRegister($"Mods.{nameof(Windfall)}.Dialogue.LunarCult.TravellingCultist.Chat.Clothier").Value);
+            }
+            if (NPC.downedBoss3)
+                chat.Add(Language.GetOrRegister($"Mods.{nameof(Windfall)}.Dialogue.LunarCult.TravellingCultist.Chat.Skeletron").Value);
+            for (int i = 0; i < CultMeetingSystem.Recruits.Count; i++)
+                chat.Add(Language.GetOrRegister($"Mods.{nameof(Windfall)}.Dialogue.LunarCult.TravellingCultist.Chat.{(RecruitableLunarCultist.RecruitNames)i}").Value);
+            return chat;
+        }
         private readonly List<dialogueDirections> MyDialogue = new()
         {
+            #region Initial Conversation
             new dialogueDirections()
             {
                 MyPos = (int)DialogueState.Initial,
@@ -269,32 +264,81 @@ namespace Windfall.Content.NPCs.TravellingNPCs
                 Button1 = new(){name = "Will do!", heading = (int)DialogueState.Quests1, end = true},
                 Button2 = null,
             },
-        };
+            #endregion
 
+            #region Post-Plantera Conversation
+            new dialogueDirections()
+            {
+                MyPos = (int)DialogueState.Initial2,
+                Button1 = new(){name = "Meetings?", heading = (int)DialogueState.Meeting},
+                Button2 = new(){name = "The Orator?", heading = (int)DialogueState.Orator},
+            },
+            new dialogueDirections()
+            {
+                MyPos = (int)DialogueState.Meeting,
+                Button1 = new(){name = "Can we help them?", heading = (int)DialogueState.HelpThem},
+                Button2 = null,
+            },
+            new dialogueDirections()
+            {
+                MyPos = (int)DialogueState.Orator,
+                Button1 = new(){name = "Can we help them?", heading = (int)DialogueState.HelpThem},
+                Button2 = null,
+            },
+            new dialogueDirections()
+            {
+                MyPos = (int)DialogueState.HelpThem,
+                Button1 = new(){name = "How would I do that?", heading = (int)DialogueState.HowCanI},
+                Button2 = null,
+            },
+            new dialogueDirections()
+            {
+                MyPos = (int)DialogueState.HowCanI,
+                Button1 = new(){name = "I see...", heading = (int)DialogueState.Doneish},
+                Button2 = null,
+            },
+            new dialogueDirections()
+            {
+                MyPos = (int)DialogueState.Doneish,
+                Button1 = new(){name = "Oh, this tablet...?", heading = (int)DialogueState.Tablet},
+                Button2 = null,
+            },
+            new dialogueDirections()
+            {
+                MyPos = (int)DialogueState.Tablet,
+                Button1 = new(){name = "Thanks!", heading = (int)DialogueState.Thanks},
+                Button2 = null,
+            },
+            new dialogueDirections()
+            {
+                MyPos = (int)DialogueState.Thanks,
+                Button1 = new(){name = "Bye!", heading = (int)DialogueState.Quests2, end = true},
+                Button2 = null,
+            },
+            #endregion
+        };
         public override void SetChatButtons(ref string button, ref string button2)
         {
-            if(CurrentDialogue == DialogueState.Quests1)
+            if(CurrentDialogue == DialogueState.Quests1 || CurrentDialogue == DialogueState.Quests2)
                 button = Language.GetTextValue("LegacyInterface.64");
             else
-            {
                 SetConversationButtons(MyDialogue, (int)CurrentDialogue, ref button, ref button2);
-            }
         }
         public override void OnChatButtonClicked(bool firstButton, ref string shop)
         {
-            
-            if (firstButton && CurrentDialogue == DialogueState.Quests1)
+            if (firstButton && (CurrentDialogue == DialogueState.Quests1 || CurrentDialogue == DialogueState.Quests2))
             {
                 QuestArtifact = CollectorQuestDialogueHelper(Main.npc[NPC.whoAmI], ref QuestComplete, QuestArtifact); 
                 return;
             }
             CurrentDialogue = (DialogueState)GetNPCConversation(MyDialogue, (int)CurrentDialogue, firstButton);
-            Main.npcChatText = Language.GetOrRegister($"Mods.{nameof(Windfall)}.Dialogue.LunarCult.TravellingCultist.{CurrentDialogue}").Value;
+            Main.npcChatText = Language.GetOrRegister($"Mods.{nameof(Windfall)}.Dialogue.LunarCult.TravellingCultist.Conversation.{CurrentDialogue}").Value;
         }
-
         public override void AI()
         {
-            NPC.homeless = true; 
+            NPC.homeless = true;
+            if (CurrentDialogue == DialogueState.Quests1 && NPC.downedPlantBoss)
+                CurrentDialogue = DialogueState.Initial2;
         }
         public override void TownNPCAttackStrength(ref int damage, ref float knockback)
         {
