@@ -60,8 +60,15 @@ namespace Windfall.Content.NPCs.WanderingNPCs
             if (NPC.ai[0] == 0)
             {
                 NPC.alpha = 255;
-                NPC.position.Y = GetGroundPositionFrom(NPC.position).Y - NPC.height - 2;
-                NPC.position.Y -= 6;
+                Vector2 oldPos = NPC.position;
+                NPC.position.Y = GetSurfacePositionFrom(NPC.position).Y - NPC.height - 8;
+                float altY = 0;
+                for (int i = 0; i < 16; i++)
+                {
+                    altY = GetSurfacePositionFrom(new Vector2(oldPos.X + i, oldPos.Y - 64)).Y - NPC.height - 8;
+                    if (altY < NPC.position.Y)
+                        NPC.position.Y = altY;
+                }
                 NPC.alpha = 0;
                 for (int i = 0; i < 50; i++)
                 {

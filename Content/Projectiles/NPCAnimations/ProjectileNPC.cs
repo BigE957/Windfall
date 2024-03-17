@@ -45,9 +45,15 @@ namespace Windfall.Content.Projectiles.NPCAnimations
         internal virtual int DespawnDelay => 0;
         public override void OnSpawn(IEntitySource source)
         {
-            Player closestPlayer = Main.player[Player.FindClosest(Projectile.Center, 1, 1)];
-
+            Vector2 oldPos = Projectile.position;
             Projectile.position.Y = Utilities.GetSurfacePositionFrom(Projectile.position).Y - Projectile.height - 8;
+            float altY = 0;
+            for (int i = 0; i < 16; i++)
+            {
+                altY = Utilities.GetSurfacePositionFrom(new Vector2(oldPos.X + i, oldPos.Y - 64)).Y - Projectile.height - 8;
+                if (altY < Projectile.position.Y)
+                    Projectile.position.Y = altY;
+            }
         }
         int finalDelay = 0;
         public override void AI()
