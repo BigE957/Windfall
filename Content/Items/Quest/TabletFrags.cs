@@ -11,7 +11,7 @@ namespace Windfall.Content.Items.Quests
         {
             Item.width = 22;
             Item.height = 24;
-            Item.rare = ItemRarityID.Green;
+            Item.rare = ItemRarityID.Quest;
             Item.maxStack = 99;
         }
     }

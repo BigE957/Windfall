@@ -12,6 +12,7 @@
     <None Remove="Assets\Items\Debug\DraeDashGiftCard.png" />
     <None Remove="Assets\Items\Debug\TheZoomer.png" />
     <None Remove="Assets\Items\Quest\DeificInsignia.png" />
+    <None Remove="Assets\Items\Quest\DraconicBone.png" />
     <None Remove="Assets\Items\Tools\IlmeranKnife.png" />
     <None Remove="Assets\Items\Utility\IlmeranHorn.png" />
     <None Remove="Assets\Items\Weapons\Misc\Cnidrisnack.png" />
