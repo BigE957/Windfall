@@ -3,7 +3,7 @@ using Terraria.ModLoader;
 
 namespace Windfall.Content.Items.Quests
 {
-    public class RitualFrags : ModItem, ILocalizedModType
+    public class TabletFrags : ModItem, ILocalizedModType
     {
         public new string LocalizationCategory => "Items.Quest";
         public override string Texture => "Windfall/Assets/Items/Quest/DeificInsignia";

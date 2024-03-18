@@ -21,9 +21,7 @@ namespace Windfall.Common.Systems
     public struct QuestItem
     {
         internal int Type;
-
         internal int Stack = 1;
-
         internal QuestItem(int type, int stack)
         {
             Type = type;
@@ -58,11 +56,17 @@ namespace Windfall.Common.Systems
         }
         public static List<Quest> QuestLog = InitializedQuestLog();
         
-        public static readonly List<QuestItem> TravellingCultistQuestItems = new()
+        public static readonly List<QuestItem> DungeonQuestItems = new()
         {
             new QuestItem(ItemID.Bone, 50),
             new QuestItem(ItemID.WaterBolt, 1),
             new QuestItem(ModContent.ItemType<DeificInsignia>(), 5),
+        };
+        public static readonly List<QuestItem> RitualQuestItems = new()
+        {
+            new QuestItem(ModContent.ItemType<TabletFrags>(), 1),
+            new QuestItem(ModContent.ItemType<DraconicBone>(), 1),
+            new QuestItem(ModContent.ItemType<PrimalLightShards>(), 1),
         };
 
         public override void ClearWorld()
@@ -70,6 +74,7 @@ namespace Windfall.Common.Systems
             QuestLog = InitializedQuestLog();
             TravellingCultist.QuestArtifact = new(0, 0);
             TravellingCultist.QuestComplete = false;
+            TravellingCultist.RitualQuestProgress = 0;
         }
         public override void LoadWorldData(TagCompound tag)
         {
@@ -77,12 +82,14 @@ namespace Windfall.Common.Systems
             EnsureQuestLogUpToDate(InitializedQuestLog());
             TravellingCultist.QuestArtifact = tag.Get<QuestItem>("CultistQuestItem");
             TravellingCultist.QuestComplete = tag.GetBool("CultsitQuestComplete");
+            TravellingCultist.RitualQuestProgress = tag.GetInt("RitualQuestProgress")
         }
         public override void SaveWorldData(TagCompound tag)
         {
             tag["QuestLog"] = QuestLog;
             tag["CultistQuestItem"] = TravellingCultist.QuestArtifact;
             tag["CultsitQuestComplete"] = TravellingCultist.QuestComplete;
+            tag["RitualQuestProgress"] = TravellingCultist.RitualQuestProgress;
         }
         internal static Quest CreateQuest(string Name, List<string> Objectives, List<int> ObjectiveRequirements, bool Unlocked, List<QuestItem> QuestGifts = null, List<QuestItem> QuestRewards = null)
         {

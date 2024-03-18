@@ -170,6 +170,7 @@ namespace Windfall.Content.NPCs.TravellingNPCs
         }
         public static QuestItem QuestArtifact = new(0,0);
         public static bool QuestComplete = false;
+        public static int RitualQuestProgress = 0;
         private enum DialogueState
         {
             Initial,
@@ -190,6 +191,14 @@ namespace Windfall.Content.NPCs.TravellingNPCs
             Tablet,
             Thanks,
             Quests2,
+            //All recruited dialogue
+            Initial3,
+            Sealing,
+            UhOh,
+            Dragons,
+            Fovos,
+            Why,
+            Quests3,
         }
         private static DialogueState CurrentDialogue
         {
@@ -316,6 +325,15 @@ namespace Windfall.Content.NPCs.TravellingNPCs
                 Button2 = null,
             },
             #endregion
+
+            #region All Recruited Conversation
+            new dialogueDirections()
+            {
+                MyPos = (int)DialogueState.Initial3,
+                Button1 = new(){name = "Meetings?", heading = (int)DialogueState.Meeting},
+                Button2 = new(){name = "The Orator?", heading = (int)DialogueState.Orator},
+            }
+            #endregion
         };
         public override void SetChatButtons(ref string button, ref string button2)
         {
@@ -326,9 +344,18 @@ namespace Windfall.Content.NPCs.TravellingNPCs
         }
         public override void OnChatButtonClicked(bool firstButton, ref string shop)
         {
-            if (firstButton && (CurrentDialogue == DialogueState.Quests1 || CurrentDialogue == DialogueState.Quests2))
+            if (firstButton && CurrentDialogue.ToString().Contains("Quests"))
             {
-                QuestArtifact = CollectorQuestDialogueHelper(Main.npc[NPC.whoAmI], ref QuestComplete, QuestArtifact); 
+                if (CurrentDialogue == DialogueState.Quests3)
+                {
+                    if (QuestArtifact.Stack == 0)
+                        QuestArtifact = QuestSystem.RitualQuestItems[RitualQuestProgress];
+                    QuestArtifact = CollectorQuestDialogueHelper(Main.npc[NPC.whoAmI], ref QuestComplete, QuestArtifact, QuestSystem.RitualQuestItems);
+                    if (QuestArtifact.Stack == 0)
+                        RitualQuestProgress++;
+                }
+                else
+                    QuestArtifact = CollectorQuestDialogueHelper(Main.npc[NPC.whoAmI], ref QuestComplete, QuestArtifact, QuestSystem.DungeonQuestItems);
                 return;
             }
             CurrentDialogue = (DialogueState)GetNPCConversation(MyDialogue, (int)CurrentDialogue, firstButton);

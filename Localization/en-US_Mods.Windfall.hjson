@@ -137,6 +137,14 @@ Dialogue: {
 				Doneish: This might just be our best way to deal a real blow to the Lunar Cult! Best of luck with your efforts. Is there anything else I can help you with?
 				Tablet: Oh? That would be an Eidolon Tablet. Its used for communication between Lunar Cult members. I'd keep it on you. It'll likely act as your signal for when and where the cult is meeting.
 				Thanks: Happy to help! Let me know how your efforts go!
+				#All Recruited Convo
+				Initial3: Why hello! I have some very good news. I've found our way to put a stop to the Lunar Cult's plans once and for all! Another of my confidants within the Lunar Cult brought me a tome with some of the Lunar Cult's most powerful rituals; including a Sealing Ritual!
+				Sealing: Yes, its a ritual that dates back to the Draconic Era. Legend has that those devoted to the Dragons were given this ritual to maintain the seal placed upon an entity known as Fovos. I believe this Fovos is the 'Dark God' that the Lunar Cult seeks to bring to our world, and if they succeed... the world as we know it may cease to be.
+				UhOh: Indeed! It says here that the ritual was meant to be performed once every hundred years to maintain the seal, however I think the demise of the Dragons led to this never being carried out. By performing it now, we may be able to cut off the Lunar Cult's connection to Fovos, and stop them from being able to unseal it!
+				Dragons: You don't know of the Dragons? They were once the protectors and keepers of this world. They defended the world from Fovos when it first arrived, and managed to seal it away; though not without great casualties. Soon after, the remaining Dragons were hunted to extinction by humans who sought to claim their Auric power. Now the Lunar Cult threatens to free Fovos, and along with it, threaten the fate of the world once more.
+				Fovos: Ah, you haven't heard the tales of Fovos. It was long ago that this galactic terror threatened our world, and if not for the Dragons, our world would have certainly been doomed. The Dragons sealed Fovos within the Moon, where its lied dormant ever since. However now the Lunar Cult threatens to free Fovos, and along with it, threaten the fate of the world once more.
+				Why: That's something I was never able to find out... The Orator's motives are a mystery to all it seems. However all that matters now is the dire situation we find ourselves in, and the solution we now hold.
+				WhatNext: The ritual requires a few things... In the coming days I'll task you with collecting the required materials for the ritual. For now, sit tight. I'll need to look over these texts further to be sure of everything required.
 			}
 
 			Quests: {
@@ -151,6 +159,16 @@ Dialogue: {
 				DeificInsigniaStart: Many of the skeletons which wander that decrepit Dungeon were once devoted soldiers of the Gods; imprisoned within there during the Godseeker's crusade. I'd bet the insignia they bear might still hold some of the deific essence they were gifted. If you get me some, they may prove helpful in combating the Lunar Cult.
 				DeificInsigniaDuring: Those skeletons are quite angry about their eternal imprisonment within the Dungeon. So don't expect them to part with their patrons' tokens so easilly. If you can get me just five, that should suffice.
 				DeificInsigniaEnd: Oh, perfect! Yes, I can sense the faint traces of deific essence on these... Perhaps the latent power of the Gods might be what we need to stand a chance against the Lunar Cult!
+				#Ritual Quests
+				TabletFragsStart:
+				TabletFragsDuring:
+				TabletFragsEnd:
+				DraconicBoneStart:
+				DraconicBoneDuring:
+				DraconicBoneEnd:
+				PrimalLightStart:
+				PrimalLightDuring:
+				PrimalLightEnd:
 			}
 		}
 

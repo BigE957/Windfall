@@ -3,7 +3,7 @@ using Terraria.ModLoader;
 
 namespace Windfall.Content.Items.Quests
 {
-    public class PrimalLightShard : ModItem, ILocalizedModType
+    public class DraconicBone : ModItem, ILocalizedModType
     {
         public new string LocalizationCategory => "Items.Quest";
         public override string Texture => "Windfall/Assets/Items/Quest/DeificInsignia";
