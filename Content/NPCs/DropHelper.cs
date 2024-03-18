@@ -71,6 +71,21 @@ namespace Windfall.Content.NPCs
                 npcLoot.AddConditionalPerPlayer(() => !NPC.downedQueenSlime, ModContent.ItemType<HallowLore>(), desc: CalamityMod.DropHelper.FirstKillText);
 
             }
+            if (npc.type == NPCID.Golem)
+            {
+                npcLoot.AddConditionalPerPlayer(() => !NPC.downedGolemBoss, ModContent.ItemType<TabletFrags>(), desc: CalamityMod.DropHelper.FirstKillText);
+
+            }
+            if (npc.type == NPCID.DukeFishron)
+            {
+                npcLoot.AddConditionalPerPlayer(() => !NPC.downedFishron, ModContent.ItemType<DraconicBone>(), desc: CalamityMod.DropHelper.FirstKillText);
+
+            }
+            if (npc.type == NPCID.HallowBoss)
+            {
+                npcLoot.AddConditionalPerPlayer(() => !NPC.downedEmpressOfLight, ModContent.ItemType<PrimalLightShards>(), desc: CalamityMod.DropHelper.FirstKillText);
+
+            }
             if (npc.type == calamity.Find<ModNPC>("ProfanedGuardianCommander").Type)
             {
                 npcLoot.AddConditionalPerPlayer(() => !DownedBossSystem.downedGuardians, ModContent.ItemType<ProfanedWastesLore>(), desc: CalamityMod.DropHelper.FirstKillText);
