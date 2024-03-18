@@ -575,6 +575,11 @@ Items: {
 			DisplayName: Ritual Fragments
 			Tooltip: ""
 		}
+
+		DraconicBone: {
+			DisplayName: Fishron Bone
+			Tooltip: "The bone of a Draconic Offshoot. While lacking any real Draconic power, it still holds the genetic heritage of the Dragons."
+		}
 	}
 }
 
