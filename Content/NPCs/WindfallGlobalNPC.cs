@@ -60,6 +60,8 @@ namespace Windfall.Content.NPCs
             Mod calamity = ModLoader.GetMod("CalamityMod");
             if (npc.type == calamity.Find<ModNPC>("Cnidrion").Type)
                 npc.Transform(ModContent.NPCType<WFCnidrion>());
+            if (npc.type == NPCID.CultistArcherBlue || npc.type == NPCID.CultistDevote)
+                npc.active = false;
         }
         internal  static void SpawnWorldEventProjectile(int type, int xOffSet)
         {
