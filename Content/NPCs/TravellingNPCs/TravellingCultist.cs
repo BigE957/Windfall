@@ -2,7 +2,6 @@
 using CalamityMod.Projectiles.Magic;
 using Microsoft.Xna.Framework;
 using System.Collections.Generic;
-using System.Linq;
 using Terraria;
 using Terraria.DataStructures;
 using Terraria.GameContent;
@@ -199,6 +198,8 @@ namespace Windfall.Content.NPCs.TravellingNPCs
             Fovos,
             Why,
             Quests3,
+            //Ritual Dialogue
+            RitualTime,
         }
         private static DialogueState CurrentDialogue
         {
@@ -366,6 +367,8 @@ namespace Windfall.Content.NPCs.TravellingNPCs
             NPC.homeless = true;
             if (CurrentDialogue == DialogueState.Quests1 && NPC.downedPlantBoss)
                 CurrentDialogue = DialogueState.Initial2;
+            if (RitualQuestProgress > 2 && CurrentDialogue == DialogueState.Quests3)
+                CurrentDialogue = DialogueState.RitualTime;
         }
         public override void TownNPCAttackStrength(ref int damage, ref float knockback)
         {
