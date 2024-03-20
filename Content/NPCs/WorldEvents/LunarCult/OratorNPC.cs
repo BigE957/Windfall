@@ -8,7 +8,7 @@ using System.Collections.Generic;
 
 namespace Windfall.Content.NPCs.WorldEvents.LunarCult
 {
-    public class TheOrator : ModNPC
+    public class OratorNPC : ModNPC
     {
         private enum DialogueState
         {
