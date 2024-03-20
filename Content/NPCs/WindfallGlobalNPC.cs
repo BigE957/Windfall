@@ -63,7 +63,7 @@ namespace Windfall.Content.NPCs
             if (npc.type == NPCID.CultistArcherBlue || npc.type == NPCID.CultistDevote)
                 npc.active = false;
         }
-        internal  static void SpawnWorldEventProjectile(int type, int xOffSet)
+        private static void SpawnWorldEventProjectile(int type, int xOffSet)
         {
             Projectile.NewProjectileDirect(Entity.GetSource_NaturalSpawn(), new Vector2(Main.player[0].Center.X + xOffSet, Main.player[0].Center.Y), Vector2.Zero, type, 0, 0);
         }
