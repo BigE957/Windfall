@@ -149,6 +149,7 @@ Dialogue: {
 
 			Quests: {
 				NoQuest: You've done a great job! I'll be back when I next need you.
+
 				Dungeon: {
 					BoneStart: The bones found in the Dungeon have been filled with the occult power of the Lunar Cult over the years. Bring me enough of them, and I might be able to learn more about how exactly their hexes work!
 					BoneDuring: Pretty much all of the undead you'll find in the Dungeon are prime sources for the accursed bones we're looking for. About 50 should be enough. Only hard part is getting their owners to part with them, haha.
@@ -160,6 +161,7 @@ Dialogue: {
 					DeificInsigniaDuring: Those skeletons are quite angry about their eternal imprisonment within the Dungeon. So don't expect them to part with their patrons' tokens so easilly. If you can get me just five, that should suffice.
 					DeificInsigniaEnd: Oh, perfect! Yes, I can sense the faint traces of deific essence on these... Perhaps the latent power of the Gods might be what we need to stand a chance against the Lunar Cult!
 				}
+
 				Ritual: {
 					TabletFragsStart: Alright, the first thing we'll need is a tablet, which'll act as the ritual's vessel. The lihizahrds are well versed in rituals such as these; I'm certain they have the materials required to create such a tablet. I've heard tell of an idol they house within that temple. I'm certain they spared no expense in its creation; such materials would be exactly what we're looking for!
 					TabletFragsDuring: I'm not telling you to smash their ancient idol and bring me some pieces of it... Buuuuuut if something horrible were to happen to that golem unexpectedly, we may as well put its parts to good use, right?
@@ -565,12 +567,12 @@ Items: {
 
 		WFEidolonTablet: {
 			DisplayName: Eidolon Tablet
-			Tooltip: "A tablet used by the Lunar Cult for covert communications."
+			Tooltip: A tablet used by the Lunar Cult for covert communications.
 		}
 
 		PrimalLightShard: {
 			DisplayName: Primordial Light Shard
-			Tooltip: 
+			Tooltip:
 				'''
 				A fragment of Primordial Light; even one so small contains great power.
 				Whispers echo around you at the slightest touch of it...
@@ -579,12 +581,22 @@ Items: {
 
 		RitualFrags: {
 			DisplayName: Ritual Fragments
-			Tooltip: "The fragments of an ancient tablet used in rites long forgotten."
+			Tooltip: The fragments of an ancient tablet used in rites long forgotten.
 		}
 
 		DraconicBone: {
 			DisplayName: Fishron Bone
-			Tooltip: "The bone of a Draconic Offshoot. While lacking any Auric influence, it still holds the genetic heritage of the Dragons."
+			Tooltip: The bone of a Draconic Offshoot. While lacking any Auric influence, it still holds the genetic heritage of the Dragons.
+		}
+
+		PrimalLightShards: {
+			DisplayName: Primal Light Shards
+			Tooltip: ""
+		}
+
+		TabletFrags: {
+			DisplayName: Tablet Frags
+			Tooltip: ""
 		}
 	}
 }
@@ -604,6 +616,7 @@ NPCs: {
 	TravellingCultist.DisplayName: Travelling Cultist
 	TheOrator.DisplayName: The Orator
 	RecruitableLunarCultist.DisplayName: Goober
+	OratorNPC.DisplayName: Orator N P C
 }
 
 Projectiles: {
@@ -621,6 +634,7 @@ Projectiles: {
 	LunarBishopProj.DisplayName: Lunar Bishop
 	OratorProj.DisplayName: Orator Proj
 	OratorEntourageSpawner.DisplayName: Orator Entourage Spawner
+	HideoutSeeker.DisplayName: Hideout Seeker
 }
 
 Buffs: {

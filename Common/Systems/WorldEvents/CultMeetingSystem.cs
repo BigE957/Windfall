@@ -8,6 +8,9 @@ using Terraria.ModLoader.IO;
 using Windfall.Content.NPCs.WorldEvents.LunarCult;
 using Terraria.ID;
 using Terraria.Audio;
+using CalamityMod.Systems;
+using CalamityMod;
+using Windfall.Content.Items.Quest;
 
 namespace Windfall.Common.Systems.WorldEvents
 {
@@ -67,7 +70,7 @@ namespace Windfall.Common.Systems.WorldEvents
 
         private static bool OnCooldown = true;
         private static bool Active = false;
-        private static Point ActiveHideoutCoords = new(-1, -1);
+        public static Point ActiveHideoutCoords = new(-1, -1);
         private static int MeetingTimer = -1;
         public enum MeetingTopic
         {
@@ -103,9 +106,7 @@ namespace Windfall.Common.Systems.WorldEvents
                     }
                 case SystemState.CheckChance:
                     if (Main.rand.NextBool(5))
-                    {
                         State = SystemState.Spawn;
-                    }
                     else
                     {
                         OnCooldown = true;
@@ -119,32 +120,33 @@ namespace Windfall.Common.Systems.WorldEvents
                         switch(i)
                         {
                             case 0:
-                                Main.NewText("A Lunar Cult Meeting has begun at the Solar Hideout!", Color.Blue);
                                 ActiveHideoutCoords = SolarHideoutLocation;
                                 break;
                             case 1:
-                                Main.NewText("A Lunar Cult Meeting has begun at the Vortex Hideout!", Color.Blue);
                                 ActiveHideoutCoords = VortexHideoutLocation;
                                 break;
                             case 2:
-                                Main.NewText("A Lunar Cult Meeting has begun at the Nebula Hideout!", Color.Blue);
                                 ActiveHideoutCoords = NebulaHideoutLocation;
                                 break;
                             case 3:
-                                Main.NewText("A Lunar Cult Meeting has begun at the Stardust Hideout!", Color.Blue);
                                 ActiveHideoutCoords = StardustHideoutLocation;
                                 break;
                         }
                         ActiveHideoutCoords.X *= 16;
                         ActiveHideoutCoords.Y *= 16;
 
-                        if(AvailableTopics.Count == 0)
+                        foreach (Player player in Main.player)
                         {
-                            for(int h = 0; h < MeetingTopic.GetNames(typeof(MeetingTopic)).Length; h++)
+                            if (player.InventoryHas(ModContent.ItemType<WFEidolonTablet>()))
                             {
-                                AvailableTopics.Add(h);
+                                Main.NewText("The Eidolon Tablet begins to hum...", Color.Cyan);
+                                break;
                             }
                         }
+
+                        if(AvailableTopics.Count == 0)
+                            for(int h = 0; h < MeetingTopic.GetNames(typeof(MeetingTopic)).Length; h++)
+                                AvailableTopics.Add(h);
 
                         CurrentMeetingTopic = MeetingTopic.CurrentEvents; //(MeetingTopic)AvailableTopics[Main.rand.Next(AvailableTopics.Count)]; Actual Code
                         AvailableTopics.Remove((int)CurrentMeetingTopic);
@@ -201,7 +203,7 @@ namespace Windfall.Common.Systems.WorldEvents
                     {
                         if (Main.dayTime)
                         {
-                            Main.NewText("The Lunar Cult Meeting has ended...", Color.Blue);
+                            ActiveHideoutCoords = new(-1, -1);
                             State = SystemState.CheckReqs;
                             OnCooldown = true;
                             break;
@@ -325,12 +327,10 @@ namespace Windfall.Common.Systems.WorldEvents
                         else if (npc.type == ModContent.NPCType<RecruitableLunarCultist>())
                         {
                             if (npc.ModNPC is RecruitableLunarCultist Recruit)
-                            {
                                 Recruit.chattable = true;
-                            }
                         }
                     }
-                    Main.NewText("The Lunar Cult Meeting has ended...", Color.Blue);
+                    ActiveHideoutCoords = new(-1, -1);
                     OnCooldown = true;
                     State = SystemState.CheckReqs;
                     break;

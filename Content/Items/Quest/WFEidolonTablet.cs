@@ -1,10 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Microsoft.Xna.Framework;
+using Terraria;
+using Terraria.DataStructures;
 using Terraria.ID;
 using Terraria.ModLoader;
+using Windfall.Content.Projectiles.Other;
 
 namespace Windfall.Content.Items.Quest
 {
@@ -17,10 +16,11 @@ namespace Windfall.Content.Items.Quest
             Item.width = 20;
             Item.height = 20;
             Item.rare = ItemRarityID.Cyan;
-            Item.useAnimation = 10;
-            Item.useTime = 10;
-            Item.useStyle = ItemUseStyleID.HoldUp;
-            Item.consumable = false;
+            Item.useAnimation = 20;
+            Item.useTime = 20;
+            Item.useStyle = ItemUseStyleID.Shoot;
+            Item.shoot = ModContent.ProjectileType<HideoutSeeker>();
+            Item.shootSpeed = 20f;
         }
     }
 }
