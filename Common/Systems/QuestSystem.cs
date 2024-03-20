@@ -82,7 +82,7 @@ namespace Windfall.Common.Systems
             EnsureQuestLogUpToDate(InitializedQuestLog());
             TravellingCultist.QuestArtifact = tag.Get<QuestItem>("CultistQuestItem");
             TravellingCultist.QuestComplete = tag.GetBool("CultsitQuestComplete");
-            TravellingCultist.RitualQuestProgress = tag.GetInt("RitualQuestProgress")
+            TravellingCultist.RitualQuestProgress = tag.GetInt("RitualQuestProgress");
         }
         public override void SaveWorldData(TagCompound tag)
         {
