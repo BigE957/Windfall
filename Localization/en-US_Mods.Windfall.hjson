@@ -571,10 +571,10 @@ Items: {
 		PrimalLightShard: {
 			DisplayName: Primordial Light Shard
 			Tooltip: 
-				''
+				'''
 				A fragment of Primordial Light; even one so small contains great power.
 				Whispers echo around you at the slightest touch of it...
-				''
+				'''
 		}
 
 		RitualFrags: {
