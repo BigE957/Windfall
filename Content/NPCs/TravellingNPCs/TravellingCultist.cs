@@ -195,7 +195,7 @@ namespace Windfall.Content.NPCs.TravellingNPCs
             Sealing,
             UhOh,
             Dragons,
-            Fovos,
+            MoonLord,
             Why,
             Quests3,
             //Ritual Dialogue
