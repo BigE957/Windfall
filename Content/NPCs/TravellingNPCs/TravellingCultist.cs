@@ -29,7 +29,7 @@ namespace Windfall.Content.NPCs.TravellingNPCs
         NPCID.Sets.NPCBestiaryDrawModifiers drawModifiers = new()
         {
             Velocity = 1f,
-            Direction = 1 
+            Direction = 1
         };
 
         public override bool PreAI()
@@ -57,7 +57,7 @@ namespace Windfall.Content.NPCs.TravellingNPCs
                 }
                 else
                     spawnTime = double.MaxValue;
-                
+
             if (!travelerIsThere && CanSpawnNow())
             {
                 int newTraveler = NPC.NewNPC(Terraria.Entity.GetSource_TownSpawn(), Main.spawnTileX * 16, Main.spawnTileY * 16, ModContent.NPCType<TravellingCultist>(), 1); // Spawning at the world spawn
@@ -116,14 +116,14 @@ namespace Windfall.Content.NPCs.TravellingNPCs
             NPCID.Sets.AttackAverageChance[Type] = 1;
             NPCID.Sets.HatOffsetY[Type] = 4;
             NPCID.Sets.ShimmerTownTransform[Type] = false;
-            NPCID.Sets.NoTownNPCHappiness[Type] = true; 
+            NPCID.Sets.NoTownNPCHappiness[Type] = true;
             //NPCID.Sets.FaceEmote[Type] = ModContent.EmoteBubbleType<TravellingCultist>();
 
             // Influences how the NPC looks in the Bestiary
             NPCID.Sets.NPCBestiaryDrawModifiers drawModifiers = new()
             {
-                Velocity = 1f, 
-                Direction = 1 
+                Velocity = 1f,
+                Direction = 1
             };
 
             NPCID.Sets.NPCBestiaryDrawOffset.Add(Type, drawModifiers);
@@ -152,9 +152,9 @@ namespace Windfall.Content.NPCs.TravellingNPCs
         public override void SetBestiary(BestiaryDatabase database, BestiaryEntry bestiaryEntry)
         {
             bestiaryEntry.Info.AddRange(new IBestiaryInfoElement[] {
-			BestiaryDatabaseNPCsPopulator.CommonTags.SpawnConditions.Biomes.Surface,
+            BestiaryDatabaseNPCsPopulator.CommonTags.SpawnConditions.Biomes.Surface,
 
-			new FlavorTextBestiaryInfoElement("A strange fellow who's recently begun showing up out of nowhere. He claims to want to fight against the Lunar Cult, but can he really be trusted...?"),
+            new FlavorTextBestiaryInfoElement("A strange fellow who's recently begun showing up out of nowhere. He claims to want to fight against the Lunar Cult, but can he really be trusted...?"),
         });
         }
         public override bool CanTownNPCSpawn(int numTownNPCs) => false;
@@ -167,7 +167,7 @@ namespace Windfall.Content.NPCs.TravellingNPCs
                 "Suspicious Looking Cultist",
             };
         }
-        public static QuestItem QuestArtifact = new(0,0);
+        public static QuestItem QuestArtifact = new(0, 0);
         public static bool QuestComplete = false;
         public static int RitualQuestProgress = 0;
         private enum DialogueState
@@ -197,6 +197,7 @@ namespace Windfall.Content.NPCs.TravellingNPCs
             Dragons,
             MoonLord,
             Why,
+            WhatNext,
             Quests3,
             //Ritual Dialogue
             RitualTime,
@@ -229,6 +230,7 @@ namespace Windfall.Content.NPCs.TravellingNPCs
                 chat.Add(Language.GetOrRegister($"Mods.{nameof(Windfall)}.Dialogue.LunarCult.TravellingCultist.Chat.{(RecruitableLunarCultist.RecruitNames)i}").Value);
             return chat;
         }
+
         private readonly List<dialogueDirections> MyDialogue = new()
         {
             #region Initial Conversation
@@ -331,11 +333,45 @@ namespace Windfall.Content.NPCs.TravellingNPCs
             new dialogueDirections()
             {
                 MyPos = (int)DialogueState.Initial3,
-                Button1 = new(){name = "Meetings?", heading = (int)DialogueState.Meeting},
-                Button2 = new(){name = "The Orator?", heading = (int)DialogueState.Orator},
-            }
+                Button1 = new(){name = "Sealing Ritual?", heading = (int)DialogueState.Sealing},
+                Button2 = null,
+            },
+            new dialogueDirections()
+            {
+                MyPos = (int)DialogueState.Sealing,
+                Button1 = new(){name = "Uh oh...", heading = (int)DialogueState.UhOh},
+                Button2 = null,
+            },
+            new dialogueDirections()
+            {
+                MyPos = (int)DialogueState.UhOh,
+                Button1 = new(){name = "Uh oh...", heading = (int)DialogueState.Dragons},
+                Button2 = new(){name = "Uh oh...", heading = (int)DialogueState.MoonLord},
+            },
+            new dialogueDirections()
+            {
+                MyPos = (int)DialogueState.Dragons,
+                Button1 = new(){name = "Why?", heading = (int)DialogueState.Why},
+            },
+            new dialogueDirections()
+            {
+                MyPos = (int)DialogueState.MoonLord,
+                Button1 = new(){name = "Why?", heading = (int)DialogueState.Why},
+            },
+            new dialogueDirections()
+            {
+                MyPos = (int)DialogueState.Why,
+                Button1 = new(){name = "What's next?", heading = (int)DialogueState.WhatNext},
+            },
+            new dialogueDirections()
+            {
+                MyPos = (int)DialogueState.WhatNext,
+                Button1 = new(){name = "Understood.", heading = (int)DialogueState.Quests3, end = true},
+                Button2 = new(){name = "Good luck!", heading = (int)DialogueState.Quests3, end = true},
+            },
             #endregion
-        };
+        };        
+
         public override void SetChatButtons(ref string button, ref string button2)
         {
             if(CurrentDialogue == DialogueState.Quests1 || CurrentDialogue == DialogueState.Quests2)
@@ -365,10 +401,8 @@ namespace Windfall.Content.NPCs.TravellingNPCs
         public override void AI()
         {
             NPC.homeless = true;
-            if (CurrentDialogue == DialogueState.Quests1 && NPC.downedPlantBoss)
-                CurrentDialogue = DialogueState.Initial2;
-            if (RitualQuestProgress > 2 && CurrentDialogue == DialogueState.Quests3)
-                CurrentDialogue = DialogueState.RitualTime;
+            if (MilestoneMet(CurrentDialogue))
+                CurrentDialogue++;
         }
         public override void TownNPCAttackStrength(ref int damage, ref float knockback)
         {
@@ -385,5 +419,6 @@ namespace Windfall.Content.NPCs.TravellingNPCs
             projType = ModContent.ProjectileType<PhantasmalFuryProj>();
             attackDelay = 1;
         }
+        private static bool MilestoneMet(DialogueState CurrentDialogue) => (CurrentDialogue == DialogueState.Quests1 && NPC.downedPlantBoss) || (CurrentDialogue == DialogueState.Quests2 && CultMeetingSystem.Recruits.Count > 2) || (CurrentDialogue == DialogueState.Quests3 && RitualQuestProgress > 2);
     }
 }
