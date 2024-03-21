@@ -42,7 +42,7 @@ namespace Windfall.Content.NPCs.WanderingNPCs
         public override string GetChat()
         {
             NPC.Transform(ModContent.NPCType<IlmeranPaladin>());
-            return Language.GetOrRegister($"Mods.{nameof(Windfall)}.Dialogue.IlmeranPaladin.Saved").Value; // chat is implicitly cast to a string.
+            return Language.GetOrRegister($"Mods.{nameof(Windfall)}.Dialogue.IlmeranPaladin.Chat.Saved").Value; // chat is implicitly cast to a string.
         }
         public override void OnChatButtonClicked(bool firstButton, ref string shop)
         {

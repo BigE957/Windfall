@@ -25,6 +25,7 @@ using CalamityMod.NPCs.DesertScourge;
 using CalamityMod;
 using CalamityMod.Items.Armor.Victide;
 using CalamityMod.Items.Armor.Statigel;
+using CalamityMod.NPCs.HiveMind;
 
 namespace Windfall.Content.NPCs.WanderingNPCs
 {
@@ -32,11 +33,9 @@ namespace Windfall.Content.NPCs.WanderingNPCs
     {
         private static Profiles.StackedNPCProfile NPCProfile;
         public override string Texture => "Windfall/Assets/NPCs/WanderingNPCs/LoneRonin";
-
         public override void SetStaticDefaults()
         {
             Main.npcFrameCount[Type] = 25; // The amount of frames the NPC has
-
             NPCID.Sets.ExtraFramesCount[Type] = 9; // Generally for Town NPCs, but this is how the NPC does extra things such as sitting in a chair and talking to other NPCs.
             NPCID.Sets.AttackFrameCount[Type] = 4;
             NPCID.Sets.DangerDetectRange[Type] = 700; // The amount of pixels away from the center of the npc that it tries to attack enemies.
@@ -46,25 +45,13 @@ namespace Windfall.Content.NPCs.WanderingNPCs
             NPCID.Sets.AttackAverageChance[Type] = 30;
             NPCID.Sets.HatOffsetY[Type] = 4; // For when a party is active, the party hat spawns at a Y offset.
             NPCID.Sets.ShimmerTownTransform[NPC.type] = false; // This set says that the Town NPC has a Shimmered form. Otherwise, the Town NPC will become transparent when touching Shimmer like other enemies.
-
-            //This sets entry is the most important part of this NPC. Since it is true, it tells the game that we want this NPC to act like a town NPC without ACTUALLY being one.
-            //What that means is: the NPC will have the AI of a town NPC, will attack like a town NPC, and have a shop (or any other additional functionality if you wish) like a town NPC.
-            //However, the NPC will not have their head displayed on the map, will de-spawn when no players are nearby or the world is closed, and will spawn like any other NPC.
             NPCID.Sets.ActsLikeTownNPC[Type] = true;
-
-            // This prevents the happiness button
             NPCID.Sets.NoTownNPCHappiness[Type] = true;
-
-            //To reiterate, since this NPC isn't technically a town NPC, we need to tell the game that we still want this NPC to have a custom/randomized name when they spawn.
-            //In order to do this, we simply make this hook return true, which will make the game call the TownNPCName method when spawning the NPC to determine the NPC's name.
             NPCID.Sets.SpawnsWithCustomName[Type] = true;
 
             // Connects this NPC with a custom emote.
             // This makes it when the NPC is in the world, other NPCs will "talk about him".
             //NPCID.Sets.FaceEmote[Type] = ModContent.EmoteBubbleType<ExampleBoneMerchantEmote>();
-
-            //The vanilla Bone Merchant cannot interact with doors (open or close them, specifically), but if you want your NPC to be able to interact with them despite this,
-            //uncomment this line below.
             NPCID.Sets.AllowDoorInteraction[Type] = true;
 
             // Influences how the NPC looks in the Bestiary
@@ -81,7 +68,6 @@ namespace Windfall.Content.NPCs.WanderingNPCs
             //new Profiles.DefaultNPCProfile(Texture + "_Shimmer", -1)
             );
         }
-
         public override void SetDefaults()
         {
             NPC.friendly = true; // NPC Will not attack player
@@ -102,17 +88,9 @@ namespace Windfall.Content.NPCs.WanderingNPCs
         {
             NPC.velocity = new Vector2(0, NPC.ai[0]);
             if (NPC.ai[1] != 0)
-            {
                 NPC.spriteDirection = NPC.direction = (int)NPC.ai[1] * -1;
-            }
         }
-
-        //Make sure to allow your NPC to chat, since being "like a town NPC" doesn't automatically allow for chatting.
-        public override bool CanChat()
-        {
-            return true;
-        }
-
+        public override bool CanChat() => true;
         public override void SetBestiary(BestiaryDatabase database, BestiaryEntry bestiaryEntry)
         {
             // We can use AddRange instead of calling Add multiple times in order to add multiple items at once
@@ -126,16 +104,8 @@ namespace Windfall.Content.NPCs.WanderingNPCs
         });
         }
 
-        public override ITownNPCProfile TownNPCProfile()
-        {
-            return NPCProfile;
-        }
-        public override List<string> SetNPCNameList()
-        {
-            return new List<string> {
-            "Erahim",
-        };
-        }
+        public override ITownNPCProfile TownNPCProfile() => NPCProfile;
+        public override List<string> SetNPCNameList() => new(){"Erahim"};
 
         public override float SpawnChance(NPCSpawnInfo spawnInfo)
         {
@@ -150,76 +120,55 @@ namespace Windfall.Content.NPCs.WanderingNPCs
         {
             Player player = Main.player[Main.myPlayer];
             WeightedRandom<string> chat = new();
-            chat.Add(Language.GetOrRegister($"Mods.{nameof(Windfall)}.Dialogue.LoneRonin.Standard1").Value);
-            chat.Add(Language.GetOrRegister($"Mods.{nameof(Windfall)}.Dialogue.LoneRonin.Standard2").Value);
-            chat.Add(Language.GetOrRegister($"Mods.{nameof(Windfall)}.Dialogue.LoneRonin.Standard3").Value);
+            chat.Add(Language.GetOrRegister($"Mods.{nameof(Windfall)}.Dialogue.{nameof(GodseekerKnight)}.Chat.Standard1").Value);
+            chat.Add(Language.GetOrRegister($"Mods.{nameof(Windfall)}.Dialogue.{nameof(GodseekerKnight)}.Chat.Standard2").Value);
+            chat.Add(Language.GetOrRegister($"Mods.{nameof(Windfall)}.Dialogue.{nameof(GodseekerKnight)}.Chat.Standard3").Value);
             if (!NPC.downedQueenSlime)
             {
-                chat.Add(Language.GetOrRegister($"Mods.{nameof(Windfall)}.Dialogue.LoneRonin.SlimeGod1").Value);
-                chat.Add(Language.GetOrRegister($"Mods.{nameof(Windfall)}.Dialogue.LoneRonin.SlimeGod2").Value);
+                chat.Add(Language.GetOrRegister($"Mods.{nameof(Windfall)}.Dialogue.{nameof(GodseekerKnight)}.Chat.SlimeGod1").Value);
+                chat.Add(Language.GetOrRegister($"Mods.{nameof(Windfall)}.Dialogue.{nameof(GodseekerKnight)}.Chat.SlimeGod2").Value);
             }
             if(player.ZoneCorrupt || player.ZoneCrimson)
             {
-                chat.Add(Language.GetOrRegister($"Mods.{nameof(Windfall)}.Dialogue.LoneRonin.Evilbiome1").Value);
-                chat.Add(Language.GetOrRegister($"Mods.{nameof(Windfall)}.Dialogue.LoneRonin.Evilbiome2").Value);
+                chat.Add(Language.GetOrRegister($"Mods.{nameof(Windfall)}.Dialogue.{nameof(GodseekerKnight)}.Chat.Evilbiome1").Value);
+                chat.Add(Language.GetOrRegister($"Mods.{nameof(Windfall)}.Dialogue.{nameof(GodseekerKnight)}.Chat.Evilbiome2").Value);
             }
             if (player.Calamity().statigelSet || (WearingStatigelHelmet(player) && player.armor[11].type == ModContent.ItemType<StatigelArmor>() && player.armor[12].type == ModContent.ItemType<StatigelGreaves>()))
             {
-                chat.Add(Language.GetOrRegister($"Mods.{nameof(Windfall)}.Dialogue.LoneRonin.Statigel1").Value);
-                chat.Add(Language.GetOrRegister($"Mods.{nameof(Windfall)}.Dialogue.LoneRonin.Statigel2").Value);
+                chat.Add(Language.GetOrRegister($"Mods.{nameof(Windfall)}.Dialogue.{nameof(GodseekerKnight)}.Chat.Statigel1").Value);
+                chat.Add(Language.GetOrRegister($"Mods.{nameof(Windfall)}.Dialogue.{nameof(GodseekerKnight)}.Chat.Statigel2").Value);
             }
-
-                return chat;
+            return chat;
         }
-
         public override void SetChatButtons(ref string button, ref string button2)
         {
             button = "Techniques";
             button2 = Language.GetTextValue("LegacyInterface.64");
         }
-
         public override void OnChatButtonClicked(bool firstButton, ref string shop)
         {
             if (firstButton)
-            {
                 Main.npcChatText = "Perhaps in the future I'll teach you some of my techniques.";
-            }
             else
-            {
                 Utilities.QuestDialogueHelper(Main.npc[NPC.whoAmI]);
-            }
         }
 
-        public override bool CheckActive()
-        {
-            if (NPC.AnyNPCs(ModContent.NPCType<DesertScourgeHead>()))
-            {
-                return false;
-            }
-            else
-            {
-                return true;
-            }
-        }
-
+        public override bool CheckActive() => !NPC.AnyNPCs(ModContent.NPCType<HiveMind>());
         public override void TownNPCAttackStrength(ref int damage, ref float knockback)
         {
             damage = 10;
             knockback = 2f;
         }
-
         public override void TownNPCAttackCooldown(ref int cooldown, ref int randExtraCooldown)
         {
             cooldown = 10;
             randExtraCooldown = 20;
         }
-
         public override void TownNPCAttackProj(ref int projType, ref int attackDelay)
         {
             projType = ModContent.ProjectileType<CosmicKunaiProj>();
             attackDelay = 1;
         }
-
         public override void TownNPCAttackProjSpeed(ref float multiplier, ref float gravityCorrection, ref float randomOffset)
         {
             multiplier = 12f;
