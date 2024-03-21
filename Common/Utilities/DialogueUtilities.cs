@@ -82,7 +82,7 @@ namespace Windfall.Common.Utilities
                 {
                     if (!QuestSystem.QuestLog[index].Active)
                     {
-                        Main.npcChatText = Language.GetOrRegister($"Mods.{nameof(Windfall)}.Dialogue.{npcName}.{QuestSystem.QuestLog[index].Name}Start").Value;
+                        Main.npcChatText = Language.GetOrRegister($"Mods.{nameof(Windfall)}.Dialogue.{npcName}.Quests.{QuestSystem.QuestLog[index].Name}Start").Value;
 
                         if (QuestSystem.QuestLog[index].QuestGifts != null)
                         {
@@ -93,14 +93,14 @@ namespace Windfall.Common.Utilities
                         QuestSystem.ToggleQuestActive(index);
                     }
                     else
-                        Main.npcChatText = Language.GetOrRegister($"Mods.{nameof(Windfall)}.Dialogue.{npcName}.{QuestSystem.QuestLog[index].Name}During").Value;
+                        Main.npcChatText = Language.GetOrRegister($"Mods.{nameof(Windfall)}.Dialogue.{npcName}.Quests.{QuestSystem.QuestLog[index].Name}During").Value;
                     Main.npcChatCornerItem = QuestSystem.QuestLog[index].QuestGifts[0].Type;
                 }
                 else
                 {
                     if (QuestSystem.QuestLog[index].Active)
                     {
-                        Main.npcChatText = Language.GetOrRegister($"Mods.{nameof(Windfall)}.Dialogue.{npcName}.{QuestSystem.QuestLog[index].Name}End").Value;
+                        Main.npcChatText = Language.GetOrRegister($"Mods.{nameof(Windfall)}.Dialogue.{npcName}.Quests.{QuestSystem.QuestLog[index].Name}End").Value;
 
                         var entitySource = npc.GetSource_GiftOrReward();
                         for (int i = 0; i < QuestSystem.QuestLog[index].QuestRewards.Count; i++)
@@ -111,7 +111,7 @@ namespace Windfall.Common.Utilities
                     else
                     {
                         //Technically, this point should never be reached, as the conditions required are what we check for in the above
-                        Main.npcChatText = Language.GetOrRegister($"Mods.{nameof(Windfall)}.Dialogue.{npcName}.NoQuest").Value;
+                        Main.npcChatText = Language.GetOrRegister($"Mods.{nameof(Windfall)}.Dialogue.{npcName}.Quests.NoQuest").Value;
                         Main.NewText("An index is being used despite being both Inactive and Completed. Please report this and send your log.txt.", Color.Yellow);
                     }
                 }
@@ -119,9 +119,9 @@ namespace Windfall.Common.Utilities
             else
             {
                 if(npcName == "LoneRonin" && !(DownedBossSystem.downedHiveMind || DownedBossSystem.downedPerforator))
-                    Main.npcChatText = Language.GetOrRegister($"Mods.{nameof(Windfall)}.Dialogue.{npcName}.LilBitch").Value;
+                    Main.npcChatText = Language.GetOrRegister($"Mods.{nameof(Windfall)}.Dialogue.{npcName}.Quests.LilBitch").Value;
                 else
-                    Main.npcChatText = Language.GetOrRegister($"Mods.{nameof(Windfall)}.Dialogue.{npcName}.NoQuest").Value;
+                    Main.npcChatText = Language.GetOrRegister($"Mods.{nameof(Windfall)}.Dialogue.{npcName}.Quests.NoQuest").Value;
             }
         }
         public static QuestItem CollectorQuestDialogueHelper(NPC npc, ref bool QuestComplete, QuestItem CurrentQuestItem, List<QuestItem> MyQuestItems)
