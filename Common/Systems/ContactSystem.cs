@@ -65,7 +65,7 @@ namespace Windfall.Common.Systems
                 {                   
                     Vector2 vectorFromPlayerToMouse = Main.MouseWorld - owner.Center;
                     SoundEngine.PlaySound(Parry, owner.Center);
-                    Projectile.NewProjectile(Entity.GetSource_NaturalSpawn(), target.Center, vectorFromPlayerToMouse.SafeNormalize(Vector2.UnitX) * 30, ModContent.ProjectileType<StatiParry>(), target.damage * 10, 0.5f);
+                    Projectile.NewProjectile(Entity.GetSource_NaturalSpawn(), target.Center, vectorFromPlayerToMouse.SafeNormalize(Vector2.UnitX) * 30, ModContent.ProjectileType<ParryProj>(), target.damage * 10, 0.5f);
                     target.active = false;
                     Main.projectile[myProjectile].active = false;
                 }

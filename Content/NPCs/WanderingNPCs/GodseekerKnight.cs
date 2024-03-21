@@ -28,7 +28,7 @@ using CalamityMod.Items.Armor.Statigel;
 
 namespace Windfall.Content.NPCs.WanderingNPCs
 {
-    public class LoneRonin : ModNPC
+    public class GodseekerKnight : ModNPC
     {
         private static Profiles.StackedNPCProfile NPCProfile;
         public override string Texture => "Windfall/Assets/NPCs/WanderingNPCs/LoneRonin";
@@ -119,30 +119,21 @@ namespace Windfall.Content.NPCs.WanderingNPCs
             bestiaryEntry.Info.AddRange(new IBestiaryInfoElement[] {
 			// Sets the preferred biomes of this town NPC listed in the bestiary.
 			// With Town NPCs, you usually set this to what biome it likes the most in regards to NPC happiness.
-			BestiaryDatabaseNPCsPopulator.CommonTags.SpawnConditions.Biomes.Desert,
+			BestiaryDatabaseNPCsPopulator.CommonTags.SpawnConditions.Biomes.Jungle,
 
 			// Sets your NPC's flavor text in the bestiary.
-			new FlavorTextBestiaryInfoElement("One of the last surviving Onyx Kinsmen, Statis narrowly escaped death at the hands of the Devourer. Thanks to a bargain with Signus, Statis has returned, but his motives now are a mystery..."),
+			new FlavorTextBestiaryInfoElement("The Godseeker Knights were once the most feared warriors across the lands. Now, few still remain agter the collapse of Yharim's empire. Those who remain however, still hold a fierce loyalty to their master, and still carry out their duty to eradicate the gods."),
         });
-        }
-
-        public override void HitEffect(NPC.HitInfo hit)
-        {
-            if (Main.netMode != NetmodeID.Server && NPC.life <= 0)
-            {
-                //Add disappear effect here
-            }
         }
 
         public override ITownNPCProfile TownNPCProfile()
         {
             return NPCProfile;
         }
-
         public override List<string> SetNPCNameList()
         {
             return new List<string> {
-            "Statis",
+            "Erahim",
         };
         }
 
@@ -164,8 +155,8 @@ namespace Windfall.Content.NPCs.WanderingNPCs
             chat.Add(Language.GetOrRegister($"Mods.{nameof(Windfall)}.Dialogue.LoneRonin.Standard3").Value);
             if (!NPC.downedQueenSlime)
             {
-                chat.Add(Language.GetOrRegister($"Mods.{nameof(Windfall)}.Dialogue.LoneRonin.PreQueenSlime1").Value);
-                chat.Add(Language.GetOrRegister($"Mods.{nameof(Windfall)}.Dialogue.LoneRonin.PreQueenSlime2").Value);
+                chat.Add(Language.GetOrRegister($"Mods.{nameof(Windfall)}.Dialogue.LoneRonin.SlimeGod1").Value);
+                chat.Add(Language.GetOrRegister($"Mods.{nameof(Windfall)}.Dialogue.LoneRonin.SlimeGod2").Value);
             }
             if(player.ZoneCorrupt || player.ZoneCrimson)
             {

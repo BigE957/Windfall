@@ -1,22 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System.Collections.Generic;
 using CalamityMod.Dusts;
 using Microsoft.Xna.Framework;
 using Terraria;
 using Terraria.Audio;
-using Terraria.DataStructures;
 using Terraria.ID;
 using Terraria.ModLoader;
-using Windfall.Common.Systems;
-using Windfall.Common.Utilities;
 using Windfall.Content.NPCs.WanderingNPCs;
-using Windfall.Content.NPCs.WorldEvents.LunarCult;
 
 namespace Windfall.Content.Projectiles.NPCAnimations
 {
-    public class StatisProj : ProjectileNPC, ILocalizedModType
+    public class SeekerKnightProj : ProjectileNPC, ILocalizedModType
     {
         public override string Texture => "Windfall/Assets/Projectiles/NPCAnimations/LoneRoninTeleport";
         internal override List<dialogue> MyDialogue => new()
@@ -26,18 +19,18 @@ namespace Windfall.Content.Projectiles.NPCAnimations
             new dialogue {text = "Even in such a state, the might of the deities is ever formidable..." , delay = 3},
             new dialogue {text = "Such a thing could have become quite the threat if given the opportunity." , delay = 3},
             new dialogue {text = "Speaking of, there's another of the deities whom I've been hunting." , delay = 3},
-            new dialogue {text = "Your help might just prove invaluably in putting a stop to it." , delay = 3},
+            new dialogue {text = "Your help might just prove invaluable in putting a stop to them." , delay = 3},
             new dialogue {text = "If you'd be willing, I'd be ever thankful." , delay = 3},
         };
         internal override SoundStyle SpawnSound => new("CalamityMod/Sounds/Custom/SCalSounds/BrimstoneHellblastSound");
-        internal override int NPCType => ModContent.NPCType<LoneRonin>();
-        internal override Color TextColor => Color.DeepPink;
+        internal override int NPCType => ModContent.NPCType<GodseekerKnight>();
+        internal override Color TextColor => Color.Gold;
         internal override void DoOnSpawn()
         {
             for (int i = 0; i < 75; i++)
             {
                 Vector2 speed = Main.rand.NextVector2Circular(1.5f, 2f);
-                Dust d = Dust.NewDustPerfect(Projectile.Center, (int)CalamityDusts.PurpleCosmilite, speed * 4, Scale: 1.5f);
+                Dust d = Dust.NewDustPerfect(Projectile.Center, DustID.Pixie, speed * 4, Scale: 1.5f);
                 d.noGravity = true;
             }
             SoundEngine.PlaySound(SpawnSound, Projectile.Center);

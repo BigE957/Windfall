@@ -11,7 +11,7 @@ using Windfall.Common.Systems;
 
 namespace Windfall.Content.Projectiles.Misc
 {
-    public class StatiParry : ModProjectile, ILocalizedModType
+    public class ParryProj : ModProjectile, ILocalizedModType
     {
         public override string Texture => "CalamityMod/Projectiles/Summon/SlimePuppet";
 
