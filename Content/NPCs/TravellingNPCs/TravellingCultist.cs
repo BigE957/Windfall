@@ -374,7 +374,7 @@ namespace Windfall.Content.NPCs.TravellingNPCs
 
         public override void SetChatButtons(ref string button, ref string button2)
         {
-            if(CurrentDialogue == DialogueState.Quests1 || CurrentDialogue == DialogueState.Quests2)
+            if(CurrentDialogue.ToString().Contains("Quests"))
                 button = Language.GetTextValue("LegacyInterface.64");
             else
                 SetConversationButtons(MyDialogue, (int)CurrentDialogue, ref button, ref button2);
