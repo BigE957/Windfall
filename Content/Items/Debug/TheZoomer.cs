@@ -8,6 +8,7 @@ using Terraria.Localization;
 using Terraria.ModLoader;
 using Terraria;
 using Windfall.Common.Systems;
+using Windfall.Common.Utilities;
 
 namespace Windfall.Items.Debug
 {
@@ -48,7 +49,7 @@ namespace Windfall.Items.Debug
         //}
         public override void HoldItem(Player player)
         {
-            if(zooming)
+            if (zooming)
             {
                 zoom += 0.1f;
                 ZoomSystem.SetZoomEffect(zoom);

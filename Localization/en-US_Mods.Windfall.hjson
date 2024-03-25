@@ -21,6 +21,7 @@ Dialogue: {
 			Nighttime1: The desert can actually be quite peaceful on nights like this... And the tempature's actually bearable.
 			Nighttime2: I remember how the stars used to reflect on the Ilmeran Sea... What a sight it truly was...
 		}
+
 		Quests: {
 			NoQuest: You've done all I could ask of you. Come back later, and maybe I'll have an adventure to send you on.
 			CnidrionHuntStart: Ever since the Incineration, the poor Cnidrion have been stirred into a frenzy! Would you do me a favor and lend me a hand in calming the poor guys down? All you have to do is toss them one of these after you've tired them out a bit. Cnidri-Snacks are their favourite treats! Once they've had one, they're sure to calm down, and might even take a liking towards you! If you could handle three that'd be just swell.
@@ -44,7 +45,7 @@ Dialogue: {
 	CalPotionSeller: {
 		PotionSeller1: Hey there, traveller. You wanna see some one-of-a-kind potions? I brewed them myself!
 		PotionSeller2: Alone on a Friday night? I've got a potion to fix that!
-		PotionSellerd3: *clink clink* Sorry about the noise, who knew carrying potions in your coat would be so hard? Wanna take some off my hands for me?
+		PotionSeller3: *clink clink* Sorry about the noise, who knew carrying potions in your coat would be so hard? Wanna take some off my hands for me?
 		Standard1: You looking for something?
 		Standard2: Haha, back for more are ya?
 		Standard3: I won't give you potions, but I'll definitely give you another whooping!
@@ -62,6 +63,7 @@ Dialogue: {
 			Statigel1: Hah! Turning the Slime God's ooze into armor... Onyx Kinsmen garb no less! How ironic!
 			Statigel2: Despite their foolishness, the Onyx Kinsmen were skilled in their crafts. A few of their clan could probably give me a run for my money!
 		}
+
 		Quests: {
 			LilBitch: Sorry, I'm not sure someone of your strength could do much to help.
 			NoQuest: You've done quite well. For now, I'd say we've earned some rest.
@@ -556,6 +558,11 @@ Items: {
 				Such power will attract its former bearer
 				'''
 		}
+
+		RuneOfGnosi: {
+			DisplayName: Rune Of Gnosi
+			Tooltip: ""
+		}
 	}
 
 	ParryBlade: {
@@ -621,6 +628,7 @@ NPCs: {
 	TheOrator.DisplayName: The Orator
 	RecruitableLunarCultist.DisplayName: Goober
 	OratorNPC.DisplayName: Orator N P C
+	GodseekerKnight.DisplayName: Godseeker Knight
 }
 
 Projectiles: {
@@ -639,6 +647,8 @@ Projectiles: {
 	OratorProj.DisplayName: Orator Proj
 	OratorEntourageSpawner.DisplayName: Orator Entourage Spawner
 	HideoutSeeker.DisplayName: Hideout Seeker
+	ParryProj.DisplayName: Parry Proj
+	SeekerKnightProj.DisplayName: Seeker Knight Proj
 }
 
 Buffs: {

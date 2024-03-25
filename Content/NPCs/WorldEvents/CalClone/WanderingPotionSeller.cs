@@ -1,35 +1,17 @@
-﻿using CalamityMod.Items.Accessories;
-using Microsoft.Xna.Framework.Graphics;
-using System;
+﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Terraria.GameContent.Bestiary;
-using Terraria.GameContent;
-using Terraria.ID;
-using Terraria.Localization;
-using Terraria.ModLoader;
-using Terraria.Utilities;
 using Terraria;
+using Terraria.Audio;
+using Terraria.ID;
+using Terraria.ModLoader;
+using Terraria.GameContent;
+using Terraria.Localization;
+using Terraria.Utilities;
 using Microsoft.Xna.Framework;
-using Terraria.GameContent.Events;
 using Terraria.DataStructures;
 using CalamityMod;
-using CalamityMod.NPCs.CeaselessVoid;
-using CalamityMod.NPCs.CalClone;
-using CalamityMod.NPCs.SupremeCalamitas;
-using Terraria.Audio;
-using CalamityMod.NPCs;
-using Humanizer;
-using CalamityMod.NPCs.TownNPCs;
-using CalamityMod.Dusts;
-using Terraria.ModLoader.IO;
-using CalamityMod.NPCs.Crags;
-using static Terraria.GameContent.Animations.IL_Actions.NPCs;
-using Mono.Cecil;
-using Terraria.Chat;
 using Windfall.Common.Systems;
+using Windfall.Common.Utilities;
 
 namespace Windfall.Content.NPCs.WorldEvents.CalClone
 {
@@ -42,6 +24,7 @@ namespace Windfall.Content.NPCs.WorldEvents.CalClone
         /// </summary>
         private static Profiles.StackedNPCProfile NPCProfile;
         public override string Texture => "Windfall/Assets/NPCs/WorldEvents/WanderingPotionSeller";
+        private static SoundStyle Jumpscare => new("Windfall/Assets/Sounds/NPCs/Jumpscare");
 
         // the time of day the traveler will spawn (double.MaxValue for no spawn). Saved and loaded with the world in TravelingMerchantSystem
         public static double spawnTime = double.MaxValue;
@@ -57,25 +40,9 @@ namespace Windfall.Content.NPCs.WorldEvents.CalClone
             NPCID.Sets.AttackAverageChance[Type] = 30;
             NPCID.Sets.HatOffsetY[Type] = 4; // For when a party is active, the party hat spawns at a Y offset.
             NPCID.Sets.ShimmerTownTransform[NPC.type] = false; // This set says that the Town NPC has a Shimmered form. Otherwise, the Town NPC will become transparent when touching Shimmer like other enemies.
-
-            //This sets entry is the most important part of this NPC. Since it is true, it tells the game that we want this NPC to act like a town NPC without ACTUALLY being one.
-            //What that means is: the NPC will have the AI of a town NPC, will attack like a town NPC, and have a shop (or any other additional functionality if you wish) like a town NPC.
-            //However, the NPC will not have their head displayed on the map, will de-spawn when no players are nearby or the world is closed, and will spawn like any other NPC.
             NPCID.Sets.ActsLikeTownNPC[Type] = true;
-
-            // This prevents the happiness button
             NPCID.Sets.NoTownNPCHappiness[Type] = true;
-
-            //To reiterate, since this NPC isn't technically a town NPC, we need to tell the game that we still want this NPC to have a custom/randomized name when they spawn.
-            //In order to do this, we simply make this hook return true, which will make the game call the TownNPCName method when spawning the NPC to determine the NPC's name.
             NPCID.Sets.SpawnsWithCustomName[Type] = true;
-
-            // Connects this NPC with a custom emote.
-            // This makes it when the NPC is in the world, other NPCs will "talk about him".
-            //NPCID.Sets.FaceEmote[Type] = ModContent.EmoteBubbleType<ExampleBoneMerchantEmote>();
-
-            //The vanilla Bone Merchant cannot interact with doors (open or close them, specifically), but if you want your NPC to be able to interact with them despite this,
-            //uncomment this line below.
             NPCID.Sets.AllowDoorInteraction[Type] = true;
         }
 
@@ -95,10 +62,10 @@ namespace Windfall.Content.NPCs.WorldEvents.CalClone
 
             AnimationType = NPCID.Guide;
         }
-
-        //Make sure to allow your NPC to chat, since being "like a town NPC" doesn't automatically allow for chatting.
         public override bool CanChat()
         {
+            if(NPC.aiStyle == 0)
+                return false;
             return true;
         }
 
@@ -110,11 +77,7 @@ namespace Windfall.Content.NPCs.WorldEvents.CalClone
         {
             //If any player is underground and has an example item in their inventory, the example bone merchant will have a slight chance to spawn.
             if (spawnInfo.Player.townNPCs > 2f && !DownedBossSystem.downedCalamitasClone && NPC.downedMechBoss1 && NPC.downedMechBoss2 && NPC.downedMechBoss3 && !Main.dayTime && WorldSaveSystem.CloneRevealed && !NPC.AnyNPCs(ModContent.NPCType<WanderingPotionSeller>()) && !NPC.AnyNPCs(ModContent.NPCType<WanderingCalClone>()))
-            {
                 return 0.1f;
-            }
-
-            //Else, the example bone merchant will not spawn if the above conditions are not met.
             return 0f;
         }
         public override void OnSpawn(IEntitySource source)
@@ -173,8 +136,8 @@ namespace Windfall.Content.NPCs.WorldEvents.CalClone
         }
         public static readonly SoundStyle CalCloneTeleport = new("CalamityMod/Sounds/Custom/SCalSounds/BrimstoneHellblastSound");
 
-        internal int aiCounter = 0;
-
+        private int aiCounter = 0;
+        private float zoom = 0;
         public override void AI()
         {
             NPC.homeless = true;
@@ -186,9 +149,24 @@ namespace Windfall.Content.NPCs.WorldEvents.CalClone
                     string key = "Well...";
                     Color messageColor = Color.Orange;
                     CalamityUtils.DisplayLocalizedText(key, messageColor);
+                    zoom = 0;
                 }
-                else if (aiCounter == 60)
+                else if (aiCounter < 120)
                 {
+                    
+                    Vector2 LerpLocation = Vector2.Zero;
+                    if (aiCounter < 100)
+                        zoom = MathHelper.Lerp(zoom, 1, 0.075f);
+                    else
+                        zoom = 1;
+                    ZoomSystem.SetZoomEffect(zoom);
+                    Main.LocalPlayer.Windfall_Camera().ScreenFocusPosition = new(NPC.Center.X - 2, NPC.Center.Y - 8);
+                    Main.LocalPlayer.Windfall_Camera().ScreenFocusInterpolant = zoom;
+                }
+                else if (aiCounter == 120)
+                {
+                    ZoomSystem.SetZoomEffect(50);
+                    Main.LocalPlayer.Windfall_Camera().ScreenFocusPosition = NPC.Center;
                     for (int i = 0; i < 50; i++)
                     {
                         Vector2 speed = Main.rand.NextVector2Circular(1.5f, 2f);
@@ -196,7 +174,8 @@ namespace Windfall.Content.NPCs.WorldEvents.CalClone
                         d.noGravity = true;
                     }
                     SoundEngine.PlaySound(CalCloneTeleport, NPC.Center);
-                    NPC.NewNPC(null, (int)NPC.Center.X - 4 * NPC.spriteDirection, (int)NPC.Center.Y + 12, ModContent.NPCType<WanderingCalClone>(), 0, 1f);
+                    NPC.NewNPC(NPC.GetSource_FromAI(), (int)NPC.Center.X * NPC.spriteDirection, (int)NPC.Center.Y + 12, ModContent.NPCType<WanderingCalClone>(), 0, 1f);
+                    SoundEngine.PlaySound(Jumpscare, NPC.Center);
                     NPC.active = false;
                 }
 
