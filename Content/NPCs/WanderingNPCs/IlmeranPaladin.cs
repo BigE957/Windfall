@@ -93,7 +93,7 @@ namespace Windfall.Content.NPCs.WanderingNPCs
 			BestiaryDatabaseNPCsPopulator.CommonTags.SpawnConditions.Biomes.Desert,
 
 			// Sets your NPC's flavor text in the bestiary.
-			new FlavorTextBestiaryInfoElement("One of few to have survived the Incineration of Ilmeris, this paladin wanders the remnants of his home; keeping an eternal vigil over his sacred home."),
+			new FlavorTextBestiaryInfoElement((string)Language.GetOrRegister($"Mods.{nameof(Windfall)}.Dialogue.{nameof(IlmeranPaladin)}.Bestiary")),
         });
         }
 

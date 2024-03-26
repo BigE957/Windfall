@@ -100,7 +100,7 @@ namespace Windfall.Content.NPCs.WanderingNPCs
 			BestiaryDatabaseNPCsPopulator.CommonTags.SpawnConditions.Biomes.Jungle,
 
 			// Sets your NPC's flavor text in the bestiary.
-			new FlavorTextBestiaryInfoElement("The Godseeker Knights were once the most feared warriors across the lands. Now, few still remain agter the collapse of Yharim's empire. Those who remain however, still hold a fierce loyalty to their master, and still carry out their duty to eradicate the gods."),
+			new FlavorTextBestiaryInfoElement((string)Language.GetOrRegister($"Mods.{nameof(Windfall)}.Dialogue.{nameof(GodseekerKnight)}.Bestiary")),
         });
         }
 
@@ -142,13 +142,13 @@ namespace Windfall.Content.NPCs.WanderingNPCs
         }
         public override void SetChatButtons(ref string button, ref string button2)
         {
-            button = "Techniques";
+            button = Language.GetOrRegister($"Mods.{nameof(Windfall)}.Dialogue.Buttons.{nameof(GodseekerKnight)}.Techniques").Value;
             button2 = Language.GetTextValue("LegacyInterface.64");
         }
         public override void OnChatButtonClicked(bool firstButton, ref string shop)
         {
             if (firstButton)
-                Main.npcChatText = "Perhaps in the future I'll teach you some of my techniques.";
+                Main.npcChatText = Language.GetOrRegister($"Mods.{nameof(Windfall)}.Dialogue.{nameof(GodseekerKnight)}.Chat.WorkingOnIt").Value;
             else
                 Utilities.QuestDialogueHelper(Main.npc[NPC.whoAmI]);
         }

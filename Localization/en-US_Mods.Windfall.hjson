@@ -52,8 +52,10 @@ Dialogue: {
 	}
 
 	GodseekerKnight: {
+		Bestiary: The Godseeker Knights were once the most feared warriors across the lands. Now, few still remain agter the collapse of Yharim's empire. Those who remain however, still hold a fierce loyalty to their master, and still carry out their duty to eradicate the gods.
 		Chat: {
-			Standard1: I wonder if he's alright... Oh, can I help you?
+			WorkingOnIt: Perhaps in the future I'll teach you some of my techniques.
+			Standard1: The world has nearly been cleansed of the gods. To think our goal is finally in reach...
 			Standard2: The lands seem far quieter these days, but we must remain ever vigilant.
 			Standard3: Sometimes its better to let go of the past, rather than incessantly cling to it. I sometimes wonder how things would have played out had people just accepted change. How many lives would have been spared?
 			SlimeGod1: The Slime God has been here... Where could that coward have fled now?
@@ -61,7 +63,7 @@ Dialogue: {
 			Evilbiome1: What a foul place... A shame I'm stuck dredging through this filth.
 			EvilBiome2: This stain upon the land is the result of a great many gods' demise. It was the early days of our crusade... We had no idea the horrors a god's death would leave behind... I hope one day we might rectify this grave mistake.
 			Statigel1: Hah! Turning the Slime God's ooze into armor... Onyx Kinsmen garb no less! How ironic!
-			Statigel2: Despite their foolishness, the Onyx Kinsmen were skilled in their crafts. A few of their clan could probably give me a run for my money!
+			Statigel2: Despite their foolish worship, the Onyx Kinsmen were skilled in their crafts. A few of their clan could probably have given me a run for my money!
 		}
 
 		Quests: {
@@ -102,10 +104,15 @@ Dialogue: {
 		}
 
 		DungeonBishop: {
-			Initial: Your success against our guardian was... Unexpected. It was meant to keep out intruders forevermore... However... issues have crept up since it was raised. Perhaps by opening our home to others, they might at last be laid to rest.
-			Guardian: Yes, that construct was made to serve as this dungeon's guardian. That old man became its vessel after trespassing upon our sanctum. Worry not, with the guardian now dead, the man should return to his former self, despite what things might've seemed.
-			Issues: Yes... Our sanctum become something of a dungeon in recent years. However those it once held have now long since passed, and this site's had an adverse effect upon their souls. Now, its crawling with their reanimated remains. If you'd do us a favor and clean it out a bit, we'd be ever in your debt.
-			End: Now then, enough talk. Till we meet again, wayward traveller. Perhaps our paths might cross again.
+			Conversation: {
+				Initial: Your success against our guardian was... Unexpected. It was meant to keep out intruders forevermore... However... issues have crept up since it was raised. Perhaps by opening our home to others, they might at last be laid to rest.
+				Guardian: Yes, that construct was made to serve as this dungeon's guardian. That old man became its vessel after trespassing upon our sanctum. Worry not, with the guardian now dead, the man should return to his former self, despite what things might've seemed.
+				Issues: Yes... Our sanctum become something of a dungeon in recent years. However those it once held have now long since passed, and this site's had an adverse effect upon their souls. Now, its crawling with their reanimated remains. If you'd do us a favor and clean it out a bit, we'd be ever in your debt.
+				End: Now then, enough talk. Till we meet again, wayward traveller. Perhaps our paths might cross again.
+			}
+			WorldText: {
+				
+			}
 		}
 
 		TravellingCultist: {
@@ -281,6 +288,11 @@ Dialogue: {
 				Recruited: Can't wait to help out!
 				Unrecruited: See you later, new guy!
 			}
+		}
+	}
+	Buttons: {
+		GodseekerKnight: {
+			Techniques: Techniques
 		}
 	}
 }
