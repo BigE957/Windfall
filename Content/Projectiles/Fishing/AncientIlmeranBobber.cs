@@ -14,7 +14,7 @@ namespace Windfall.Content.Projectiles.Fishing
         public override void SetDefaults()
         {
             Projectile.width = 18;
-            Projectile.height = 30;
+            Projectile.height = 18;
             Projectile.aiStyle = ProjAIStyleID.Bobber;
             Projectile.bobber = true;
             Projectile.penetrate = -1;
