@@ -21,8 +21,8 @@
     <None Remove="Assets\NPCs\Enemies\LunarCultistArcher.png" />
     <None Remove="Assets\NPCs\TravellingNPCs\TravellingCultist.png" />
     <None Remove="Assets\NPCs\TravellingNPCs\TravellingCultist_Head.png" />
+    <None Remove="Assets\NPCs\WanderingNPCs\GodseekerKnight.png" />
     <None Remove="Assets\NPCs\WanderingNPCs\IlmeranPaladin.png" />
-    <None Remove="Assets\NPCs\WanderingNPCs\LoneRonin.png" />
     <None Remove="Assets\NPCs\WorldEvents\Recruits\Doro.png" />
     <None Remove="Assets\NPCs\WorldEvents\Recruits\Doro_Head.png" />
     <None Remove="Assets\NPCs\WorldEvents\Recruits\Jamie.png" />

@@ -32,7 +32,7 @@ namespace Windfall.Content.NPCs.WanderingNPCs
     public class GodseekerKnight : ModNPC
     {
         private static Profiles.StackedNPCProfile NPCProfile;
-        public override string Texture => "Windfall/Assets/NPCs/WanderingNPCs/LoneRonin";
+        public override string Texture => "Windfall/Assets/NPCs/WanderingNPCs/GodseekerKnight";
         public override void SetStaticDefaults()
         {
             Main.npcFrameCount[Type] = 25; // The amount of frames the NPC has
