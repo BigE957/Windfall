@@ -11,6 +11,7 @@ using Terraria.Audio;
 using CalamityMod.Systems;
 using CalamityMod;
 using Windfall.Content.Items.Quest;
+using System.Diagnostics.Metrics;
 
 namespace Windfall.Common.Systems.WorldEvents
 {
@@ -80,8 +81,8 @@ namespace Windfall.Common.Systems.WorldEvents
         }
         public static MeetingTopic CurrentMeetingTopic;
         private static List<int> NPCIndexs = new();
+        private static float zoom = 0;
         private static SoundStyle TeleportSound => new("CalamityMod/Sounds/Custom/SCalSounds/BrimstoneHellblastSound");
-
         public override void PreUpdateWorld()
         {
             Player mainPlayer = Main.player[0];
@@ -139,12 +140,12 @@ namespace Windfall.Common.Systems.WorldEvents
                         {
                             if (player.InventoryHas(ModContent.ItemType<WFEidolonTablet>()))
                             {
-                                Main.NewText("The Eidolon Tablet begins to hum...", Color.Cyan);
+                                Main.NewText("The Selenic Tablet begins to hum...", Color.Cyan);
                                 break;
                             }
                         }
-
-                        if(AvailableTopics.Count == 0)
+                        zoom = 0;
+                        if (AvailableTopics.Count == 0)
                             for(int h = 0; h < MeetingTopic.GetNames(typeof(MeetingTopic)).Length; h++)
                                 AvailableTopics.Add(h);
 
@@ -174,22 +175,22 @@ namespace Windfall.Common.Systems.WorldEvents
                                             case 1:
                                                 Recruit.MyName = RecruitableLunarCultist.RecruitNames.Tirith;
                                                 Recruit.Recruitable = true;
-                                                Recruit.NPC.direction = 1;
+                                                npc.direction = 1;
                                                 break;
                                             case 2:
                                                 Recruit.MyName = RecruitableLunarCultist.RecruitNames.Vivian;
                                                 Recruit.Recruitable = false;
-                                                Recruit.NPC.direction = 1;
+                                                npc.direction = 1;
                                                 break;
                                             case 3:
                                                 Recruit.MyName = RecruitableLunarCultist.RecruitNames.Doro;
                                                 Recruit.Recruitable = true;
-                                                Recruit.NPC.direction = -1;
+                                                npc.direction = -1;
                                                 break;
                                             case 4:
                                                 Recruit.MyName = RecruitableLunarCultist.RecruitNames.Jamie;
                                                 Recruit.Recruitable = false;
-                                                Recruit.NPC.direction = -1;
+                                                npc.direction = -1;
                                                 break;
                                         }
                                     }
@@ -206,7 +207,14 @@ namespace Windfall.Common.Systems.WorldEvents
                             ActiveHideoutCoords = new(-1, -1);
                             State = SystemState.CheckReqs;
                             OnCooldown = true;
-                            break;
+                            foreach (int k in NPCIndexs)
+                            {
+                                NPC npc = Main.npc[k];
+                                if (npc.type == ModContent.NPCType<RecruitableLunarCultist>())
+                                    npc.active = false;
+                                else if (npc.type == ModContent.NPCType<LunarBishop>())
+                                    npc.active = false;
+                            }
                         }
                         float PlayerDistFromHideout = new Vector2(mainPlayer.Center.X - ActiveHideoutCoords.X, mainPlayer.Center.Y - ActiveHideoutCoords.Y).Length();
                         if (Active)
@@ -299,10 +307,19 @@ namespace Windfall.Common.Systems.WorldEvents
                                 case MeetingTopic.Gooning:
                                     break;
                                 case MeetingTopic.Mewing:
-
                                     break;
                             }
                             #endregion
+
+                            Vector2 LerpLocation = Vector2.Zero;
+                            if (MeetingTimer < 100)
+                                zoom = MathHelper.Lerp(zoom, 0.4f, 0.075f);
+                            else
+                                zoom = 0.4f;
+                            ZoomSystem.SetZoomEffect(zoom);
+                            Main.LocalPlayer.Windfall_Camera().ScreenFocusPosition = new(ActiveHideoutCoords.X, ActiveHideoutCoords.Y - 150);
+                            Main.LocalPlayer.Windfall_Camera().ScreenFocusInterpolant = zoom;
+
                             MeetingTimer++;
                         }
                         else if (PlayerDistFromHideout < 300f)

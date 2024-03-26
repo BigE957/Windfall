@@ -120,7 +120,6 @@ namespace Windfall.Content.NPCs.WorldEvents.LunarCult
             NPC.friendly = true; // NPC Will not attack player
             NPC.width = 18;
             NPC.height = 46;
-            NPC.aiStyle = -1;
             NPC.damage = 0;
             NPC.defense = 0;
             NPC.lifeMax = 400;
@@ -159,6 +158,13 @@ namespace Windfall.Content.NPCs.WorldEvents.LunarCult
             {
                 AnimationType = NPCID.BartenderUnconscious;
                 NPC.frame.Y = 0;
+
+                NPC Bishop = Main.npc[NPC.FindFirstNPC(ModContent.NPCType<LunarBishop>())];
+                if (Bishop != null)
+                    if (NPC.position.X < Bishop.position.X)
+                        NPC.direction = -1;
+                    else 
+                        NPC.direction = 1;
             }
         }
         public override void AI()
@@ -592,6 +598,8 @@ namespace Windfall.Content.NPCs.WorldEvents.LunarCult
             NPC.frame.Width = 37;
             NPC.frame.Height = frameHeight;
             NPC.frame.X = NPC.frame.Width * (int)MyName;
+            if(!chattable)
+                NPC.spriteDirection = NPC.direction;
         }
         public override bool PreDraw(SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor)
         {
