@@ -1,17 +1,5 @@
-﻿using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
-using Terraria;
-using Terraria.ID;
-using Terraria.ModLoader;
-using Terraria.Audio;
-using CalamityMod.NPCs.ExoMechs.Thanatos;
-using System.Collections.Generic;
-using CalamityMod;
+﻿using CalamityMod.NPCs.ExoMechs.Thanatos;
 using CalamityMod.Projectiles.Summon;
-using Windfall.Content.Items.Utility;
-using Steamworks;
-using System.Linq;
-using System;
 using Windfall.Content.UI.DraedonsDatabase;
 
 namespace Windfall.Content.Projectiles.Other

@@ -1,15 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using Terraria;
-using Terraria.Audio;
-using Terraria.ID;
-using Terraria.ModLoader;
-using Terraria.GameContent;
-using Terraria.Localization;
-using Terraria.Utilities;
-using Microsoft.Xna.Framework;
-using Terraria.DataStructures;
-using CalamityMod;
+﻿using Terraria.Utilities;
 using Windfall.Common.Systems;
 using Windfall.Common.Utilities;
 
@@ -64,7 +53,7 @@ namespace Windfall.Content.NPCs.WorldEvents.CalClone
         }
         public override bool CanChat()
         {
-            if(NPC.aiStyle == 0)
+            if (NPC.aiStyle == 0)
                 return false;
             return true;
         }
@@ -153,10 +142,9 @@ namespace Windfall.Content.NPCs.WorldEvents.CalClone
                 }
                 else if (aiCounter < 120)
                 {
-                    
-                    Vector2 LerpLocation = Vector2.Zero;
+
                     if (aiCounter < 100)
-                        zoom = MathHelper.Lerp(zoom, 1, 0.075f);
+                        zoom = Lerp(zoom, 1, 0.075f);
                     else
                         zoom = 1;
                     ZoomSystem.SetZoomEffect(zoom);

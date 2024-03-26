@@ -1,13 +1,7 @@
 ﻿using CalamityMod.Items.Placeables.Banners;
-using CalamityMod;
-using Terraria.ID;
-using Terraria;
-using Terraria.ModLoader;
 using CalamityMod.NPCs.NormalNPCs;
 using CalamityMod.Projectiles.Enemy;
 using CalamityMod.World;
-using System;
-using Microsoft.Xna.Framework;
 
 namespace Windfall.Content.NPCs.Enemies
 {

@@ -1,16 +1,4 @@
-﻿using Microsoft.Xna.Framework;
-using CalamityMod;
-using Terraria;
-using Terraria.ID;
-using Terraria.Localization;
-using Terraria.ModLoader;
-using static Windfall.Common.Utilities.Utilities;
-using System.Collections.Generic;
-using Terraria.DataStructures;
-using System.Linq;
-using Terraria.Audio;
-
-namespace Windfall.Content.NPCs.WanderingNPCs
+﻿namespace Windfall.Content.NPCs.WanderingNPCs
 {
     public class LunarCultistArcher : ModNPC
     {

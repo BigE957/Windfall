@@ -1,15 +1,7 @@
-﻿using CalamityMod;
-using Microsoft.Xna.Framework;
-using Terraria;
-using Terraria.DataStructures;
-using Terraria.ModLoader;
-using Windfall.Common.Systems;
+﻿using Windfall.Common.Systems;
 using Windfall.Content.NPCs.Enemies;
 using Windfall.Content.Projectiles.NPCAnimations;
-using Terraria.ID;
-using Windfall.Content.NPCs.WorldEvents.LunarCult;
 using Windfall.Content.Projectiles.Other;
-using CalamityMod.NPCs;
 
 namespace Windfall.Content.NPCs
 {
@@ -27,7 +19,7 @@ namespace Windfall.Content.NPCs
 
             if (npc.type == calamity.Find<ModNPC>("DesertScourgeHead").Type)
                 QuestSystem.IncrementQuestProgress(QuestSystem.QuestLog.FindIndex(quest => quest.Name == "ScoogHunt"), 0);
-            
+
             if (npc.type == calamity.Find<ModNPC>("GiantClam").Type)
                 QuestSystem.IncrementQuestProgress(QuestSystem.QuestLog.FindIndex(quest => quest.Name == "ClamHunt"), 0);
 

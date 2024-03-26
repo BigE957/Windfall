@@ -1,13 +1,9 @@
-﻿using CalamityMod;
-using CalamityMod.Schematics;
-using Microsoft.Xna.Framework;
-using System;
-using Terraria;
+﻿using CalamityMod.Schematics;
 using Terraria.WorldBuilding;
-using static CalamityMod.Schematics.SchematicManager;
 using Windfall.Common.Systems;
-using static Terraria.WorldGen;
 using Windfall.Common.Systems.WorldEvents;
+using static CalamityMod.Schematics.SchematicManager;
+using static Terraria.WorldGen;
 
 namespace Windfall.Content.World
 {
@@ -17,7 +13,7 @@ namespace Windfall.Content.World
         {
             string mapKey = "Solar Hideout";
             int placementPositionX = Main.spawnTileX - 2400;
-            
+
             Point placementPoint = PlaceHideout(structures, placementPositionX, mapKey);
             CultMeetingSystem.SolarHideoutLocation = placementPoint;
         }

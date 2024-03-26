@@ -1,9 +1,4 @@
-﻿using CalamityMod;
-using Microsoft.Xna.Framework;
-using Terraria;
-using Terraria.ModLoader;
-
-namespace Windfall.Content.Players
+﻿namespace Windfall.Common.Players
 {
     public class CameraEffectsPlayer : ModPlayer
     {

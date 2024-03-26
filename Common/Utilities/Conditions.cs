@@ -1,8 +1,4 @@
-﻿using CalamityMod;
-using System.Linq;
-using Terraria;
-using Terraria.ModLoader;
-using Windfall.Content.Items.Quests;
+﻿using Windfall.Content.Items.Quests;
 using Windfall.Content.NPCs.TravellingNPCs;
 using static Windfall.Common.Systems.QuestSystem;
 

@@ -1,9 +1,4 @@
-﻿using CalamityMod.Items.Fishing.FishingRods;
-using CalamityMod;
-using Microsoft.Xna.Framework;
-using Terraria.ID;
-using Terraria.ModLoader;
-using Windfall.Content.Items.Fishing;
+﻿using Windfall.Content.Items.Fishing;
 
 namespace Windfall.Content.Projectiles.Fishing
 {

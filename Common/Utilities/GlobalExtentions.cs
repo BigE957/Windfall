@@ -1,7 +1,6 @@
-﻿using Terraria;
+﻿using Windfall.Common.Players;
 using Windfall.Content.Items;
 using Windfall.Content.NPCs;
-using Windfall.Content.Players;
 using Windfall.Content.Projectiles;
 
 namespace Windfall.Common.Utilities

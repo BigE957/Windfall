@@ -1,12 +1,8 @@
-﻿using CalamityMod.Items.Materials;
-using Terraria.ID;
-using Terraria.ModLoader;
-using Terraria;
-using CalamityMod.CustomRecipes;
+﻿using CalamityMod.CustomRecipes;
+using CalamityMod.Items;
+using CalamityMod.Items.Materials;
 using CalamityMod.Items.Placeables;
 using CalamityMod.Items.Placeables.DraedonStructures;
-using CalamityMod.Items;
-using System.Collections.Generic;
 using CalamityMod.Rarities;
 using Windfall.Content.Tiles.Special;
 

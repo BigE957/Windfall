@@ -1,11 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Terraria.ModLoader;
-
-namespace Windfall.Content.Players
+﻿namespace Windfall.Common.Players
 {
     public class WindfallPlayer : ModPlayer
     {

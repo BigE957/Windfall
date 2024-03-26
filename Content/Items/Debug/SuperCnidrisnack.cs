@@ -1,13 +1,4 @@
 ﻿using CalamityMod.Items;
-using Microsoft.Xna.Framework.Graphics;
-using ReLogic.Content;
-using System;
-using Microsoft.Xna.Framework;
-using Terraria.ID;
-using Terraria.ModLoader;
-using Terraria;
-using CalamityMod.Items.Ammo;
-using CalamityMod.Projectiles.Ranged;
 using Windfall.Content.Projectiles.Misc;
 
 namespace Windfall.Content.Items.Debug

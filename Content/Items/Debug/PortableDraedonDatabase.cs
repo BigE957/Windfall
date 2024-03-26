@@ -1,7 +1,4 @@
-﻿using Terraria.ID;
-using Terraria.ModLoader;
-using Terraria;
-using CalamityMod.Rarities;
+﻿using CalamityMod.Rarities;
 using Windfall.Content.UI.DraedonsDatabase;
 
 namespace Windfall.Items.Debug

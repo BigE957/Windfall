@@ -1,8 +1,4 @@
-﻿using CalamityMod;
-using Terraria;
-using Terraria.ID;
-using Terraria.WorldBuilding;
-using Windfall.Common.Utilities;
+﻿using Terraria.WorldBuilding;
 
 namespace Windfall.Common.Utilities
 {

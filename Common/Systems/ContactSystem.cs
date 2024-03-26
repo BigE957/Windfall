@@ -1,16 +1,7 @@
-﻿using Terraria;
-using Terraria.ModLoader;
-using Microsoft.Xna.Framework;
-using System.Linq;
-using Terraria.ID;
-using Terraria.Audio;
+﻿using Windfall.Content.Items.Debug;
 using Windfall.Content.Items.Weapons.Misc;
 using Windfall.Content.NPCs.Enemies;
-using Windfall.Content.Items.Debug;
 using Windfall.Content.Projectiles.Misc;
-using Windfall.Content.Buffs.Cooldowns;
-using CalamityMod.Cooldowns;
-using CalamityMod;
 
 namespace Windfall.Common.Systems
 {
@@ -62,7 +53,7 @@ namespace Windfall.Common.Systems
             {
                 Projectile target = Main.projectile[targetProjectile];
                 if (owner.immune == false && target.velocity != Vector2.Zero && target.damage > 0)
-                {                   
+                {
                     Vector2 vectorFromPlayerToMouse = Main.MouseWorld - owner.Center;
                     SoundEngine.PlaySound(Parry, owner.Center);
                     Projectile.NewProjectile(Entity.GetSource_NaturalSpawn(), target.Center, vectorFromPlayerToMouse.SafeNormalize(Vector2.UnitX) * 30, ModContent.ProjectileType<ParryProj>(), target.damage * 10, 0.5f);

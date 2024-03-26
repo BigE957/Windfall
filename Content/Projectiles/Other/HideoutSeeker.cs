@@ -1,16 +1,4 @@
-﻿using CalamityMod;
-using Microsoft.Xna.Framework;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Terraria;
-using Terraria.DataStructures;
-using Terraria.ID;
-using Terraria.ModLoader;
-using Windfall.Common.Systems.WorldEvents;
-using static Windfall.Common.Systems.WorldEvents.CultMeetingSystem;
+﻿using static Windfall.Common.Systems.WorldEvents.CultMeetingSystem;
 
 namespace Windfall.Content.Projectiles.Other
 {
@@ -27,7 +15,7 @@ namespace Windfall.Content.Projectiles.Other
             Projectile.tileCollide = false;
             Projectile.timeLeft = 200;
         }
-        public override void AI() 
+        public override void AI()
         {
             if (ActiveHideoutCoords != new Point(-1, -1))
             {

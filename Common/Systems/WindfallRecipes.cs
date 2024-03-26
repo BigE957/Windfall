@@ -1,8 +1,5 @@
-﻿using Terraria;
-using Terraria.ModLoader;
-using CalamityMod.Items.Materials;
+﻿using CalamityMod.Items.Materials;
 using CalamityMod.Items.SummonItems;
-using CalamityMod.Items.PermanentBoosters;
 
 namespace Windfall.Common.Systems
 {

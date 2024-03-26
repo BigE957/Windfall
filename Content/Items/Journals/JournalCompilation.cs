@@ -1,11 +1,6 @@
-﻿using Terraria;
-using Terraria.Audio;
-using Terraria.ID;
-using Terraria.Localization;
-using Terraria.ModLoader;
-using static Windfall.Content.UI.WanderersJournals.JournalFullUIState;
+﻿using Windfall.Common.Systems;
 using Windfall.Content.UI.WanderersJournals;
-using Windfall.Common.Systems;
+using static Windfall.Content.UI.WanderersJournals.JournalFullUIState;
 
 namespace Windfall.Content.Items.Journals
 {

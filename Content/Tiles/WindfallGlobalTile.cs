@@ -1,13 +1,4 @@
-﻿using Microsoft.Xna.Framework;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Terraria;
-using Terraria.ID;
-using Terraria.ModLoader;
-using Windfall.Common.Systems;
+﻿using Windfall.Common.Systems;
 using Windfall.Common.Utilities;
 using Windfall.Content.NPCs.WanderingNPCs;
 

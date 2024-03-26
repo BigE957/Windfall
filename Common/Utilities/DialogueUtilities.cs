@@ -1,12 +1,4 @@
-﻿using System.Collections.Generic;
-using Terraria.Localization;
-using Terraria;
-using Microsoft.Xna.Framework;
-using Windfall.Common.Systems;
-using CalamityMod;
-using System.Linq;
-using Terraria.ID;
-using Terraria.ModLoader;
+﻿using Windfall.Common.Systems;
 using Windfall.Content.NPCs.TravellingNPCs;
 
 namespace Windfall.Common.Utilities
@@ -35,7 +27,7 @@ namespace Windfall.Common.Utilities
             public bool end = false;
 
             public dialogueButton()
-            {}
+            { }
         }
         public struct dialogueDirections
         {
@@ -60,7 +52,7 @@ namespace Windfall.Common.Utilities
 
             bool success = false;
             if (MyQuests != null)
-            {               
+            {
                 for (int i = 0; i < MyQuests.Count; i++)
                 {
                     index = QuestSystem.QuestLog.FindIndex(quest => quest.Name == MyQuests[i]);
@@ -118,7 +110,7 @@ namespace Windfall.Common.Utilities
             }
             else
             {
-                if(npcName == "LoneRonin" && !(DownedBossSystem.downedHiveMind || DownedBossSystem.downedPerforator))
+                if (npcName == "LoneRonin" && !(DownedBossSystem.downedHiveMind || DownedBossSystem.downedPerforator))
                     Main.npcChatText = Language.GetOrRegister($"Mods.{nameof(Windfall)}.Dialogue.{npcName}.Quests.LilBitch").Value;
                 else
                     Main.npcChatText = Language.GetOrRegister($"Mods.{nameof(Windfall)}.Dialogue.{npcName}.Quests.NoQuest").Value;
@@ -129,7 +121,7 @@ namespace Windfall.Common.Utilities
             string Path = null;
             if (npc.type == ModContent.NPCType<TravellingCultist>())
             {
-                if(QuestSystem.RitualQuestItems.Contains(CurrentQuestItem))
+                if (QuestSystem.RitualQuestItems.Contains(CurrentQuestItem))
                     Path = "LunarCult.TravellingCultist.Ritual";
                 else
                     Path = "LunarCult.TravellingCultist.Dungeon";
@@ -140,7 +132,7 @@ namespace Windfall.Common.Utilities
                 bool questActive = true;
                 if (CurrentQuestItem.Stack == 0)
                 {
-                    index = Main.rand.Next(0, MyQuestItems.Count);                    
+                    index = Main.rand.Next(0, MyQuestItems.Count);
                     CurrentQuestItem = MyQuestItems[index];
                     questActive = false;
                 }
@@ -183,7 +175,7 @@ namespace Windfall.Common.Utilities
                     else
                         Main.npcChatText = Language.GetOrRegister($"Mods.{nameof(Windfall)}.Dialogue.{Path}.{ItemName}During").Value;
                 }
-                if(questActive)
+                if (questActive)
                     Main.npcChatCornerItem = CurrentQuestItem.Type;
             }
             else

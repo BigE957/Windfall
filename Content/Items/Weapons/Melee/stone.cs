@@ -1,7 +1,3 @@
-using Terraria;
-using Terraria.ID;
-using Terraria.ModLoader;
-
 namespace Windfall.Content.Items.Weapons.Melee
 {
     public class stone : ModItem, ILocalizedModType

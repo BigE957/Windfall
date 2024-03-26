@@ -1,17 +1,5 @@
-﻿using Terraria.UI;
-using Microsoft.Xna.Framework;
-using System;
-using Microsoft.Xna.Framework.Graphics;
-using ReLogic.Content;
-using Terraria;
-using Terraria.Audio;
-using Terraria.GameContent;
-using Terraria.ID;
-using Terraria.Localization;
-using Terraria.ModLoader;
-using System.Collections.Generic;
-using System.Linq;
-using Terraria.GameContent.UI.Elements;
+﻿using Terraria.GameContent.UI.Elements;
+using Terraria.UI;
 using Windfall.Common.Systems;
 
 namespace Windfall.Content.UI.WanderersJournals

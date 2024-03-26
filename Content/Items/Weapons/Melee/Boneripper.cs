@@ -1,9 +1,4 @@
-﻿using Terraria.ID;
-using Terraria.ModLoader;
-using CalamityMod.Items;
-using CalamityMod.Items.Weapons.Melee;
-using Microsoft.Xna.Framework.Graphics;
-using Microsoft.Xna.Framework;
+﻿using CalamityMod.Items;
 using Windfall.Content.Projectiles.Melee;
 
 namespace Windfall.Content.Items.Weapons.Melee

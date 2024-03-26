@@ -1,10 +1,6 @@
-﻿using System.Collections.Generic;
-using Terraria.ModLoader;
-using CalamityMod.Schematics;
-using System.IO;
-using static CalamityMod.Schematics.SchematicManager;
+﻿using CalamityMod.Schematics;
 using System.Reflection;
-using Windfall.Common.Utilities;
+using static CalamityMod.Schematics.SchematicManager;
 
 namespace Windfall.Common.Systems
 {

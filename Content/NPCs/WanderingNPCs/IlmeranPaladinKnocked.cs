@@ -1,10 +1,5 @@
-﻿using CalamityMod;
-using CalamityMod.Items.Accessories;
+﻿using CalamityMod.Items.Accessories;
 using CalamityMod.NPCs.DesertScourge;
-using Terraria;
-using Terraria.ID;
-using Terraria.Localization;
-using Terraria.ModLoader;
 using Windfall.Common.Utilities;
 using Windfall.Content.Items.Fishing;
 using Windfall.Content.Items.Utility;

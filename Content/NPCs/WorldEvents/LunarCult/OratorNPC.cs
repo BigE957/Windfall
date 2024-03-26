@@ -1,12 +1,4 @@
-﻿using CalamityMod;
-using Terraria.ID;
-using Terraria.Localization;
-using Terraria;
-using Terraria.ModLoader;
-using static Windfall.Common.Utilities.Utilities;
-using System.Collections.Generic;
-
-namespace Windfall.Content.NPCs.WorldEvents.LunarCult
+﻿namespace Windfall.Content.NPCs.WorldEvents.LunarCult
 {
     public class OratorNPC : ModNPC
     {

@@ -1,7 +1,4 @@
-﻿using Terraria.ID;
-using Terraria.ModLoader;
-
-namespace Windfall.Content.Items.Quests
+﻿namespace Windfall.Content.Items.Quests
 {
     public class PrimalLightShards : ModItem, ILocalizedModType
     {

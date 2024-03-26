@@ -1,28 +1,16 @@
 ﻿using CalamityMod.Items.Accessories;
-using Microsoft.Xna.Framework.Graphics;
-using System;
-using System.Collections.Generic;
-using Terraria.GameContent.Bestiary;
-using Terraria.GameContent;
-using Terraria.ID;
-using Terraria.Localization;
-using Terraria.ModLoader;
-using Terraria.Utilities;
-using Terraria;
-using Microsoft.Xna.Framework;
-using Terraria.GameContent.Events;
-using Windfall.Common.Utilities;
-using Terraria.DataStructures;
+using CalamityMod.Items.Armor.Victide;
+using CalamityMod.NPCs.DesertScourge;
+using CalamityMod.NPCs.TownNPCs;
 using CalamityMod.Projectiles.Rogue;
-using Windfall.Content.Items.Weapons.Misc;
+using Terraria.GameContent.Bestiary;
+using Terraria.GameContent.Events;
+using Terraria.Utilities;
 using Windfall.Common.Systems;
+using Windfall.Common.Utilities;
 using Windfall.Content.Items.Fishing;
 using Windfall.Content.Items.Utility;
-using CalamityMod.NPCs.DesertScourge;
-using CalamityMod;
-using CalamityMod.CalPlayer;
-using CalamityMod.Items.Armor.Victide;
-using CalamityMod.NPCs.TownNPCs;
+using Windfall.Content.Items.Weapons.Misc;
 
 namespace Windfall.Content.NPCs.WanderingNPCs
 {
@@ -83,7 +71,7 @@ namespace Windfall.Content.NPCs.WanderingNPCs
             if (NPC.ai[1] != 0)
                 NPC.spriteDirection = NPC.direction = (int)NPC.ai[1] * -1;
         }
-        public override bool CanChat() =>true;
+        public override bool CanChat() => true;
         public override void SetBestiary(BestiaryDatabase database, BestiaryEntry bestiaryEntry)
         {
             // We can use AddRange instead of calling Add multiple times in order to add multiple items at once
@@ -108,7 +96,7 @@ namespace Windfall.Content.NPCs.WanderingNPCs
             }
         }
         public override ITownNPCProfile TownNPCProfile() => NPCProfile;
-        public override List<string> SetNPCNameList() => new(){"Nasser"};
+        public override List<string> SetNPCNameList() => new() { "Nasser" };
         public override float SpawnChance(NPCSpawnInfo spawnInfo)
         {
             if (spawnInfo.Player.ZoneDesert)
@@ -119,7 +107,7 @@ namespace Windfall.Content.NPCs.WanderingNPCs
         {
             Player player = Main.player[Main.myPlayer];
             WeightedRandom<string> chat = new();
-            if(WorldSaveSystem.paladinChats == 0)
+            if (WorldSaveSystem.paladinChats == 0)
                 return Language.GetOrRegister($"Mods.{nameof(Windfall)}.Dialogue.IlmeranPaladin.Chat.FirstChat").Value;
             if (NPC.ai[1] == 1)
             {
@@ -129,9 +117,9 @@ namespace Windfall.Content.NPCs.WanderingNPCs
             if (Sandstorm.Happening)
                 chat.Add(Language.GetOrRegister($"Mods.{nameof(Windfall)}.Dialogue.IlmeranPaladin.Chat.Sandstorm").Value);
             else
-                chat.Add(Language.GetOrRegister($"Mods.{nameof(Windfall)}.Dialogue.IlmeranPaladin.Chat.NoSandstorm").Value);            
-            if(player.Calamity().victideSet || (WearingVictideHelmet(player) && player.armor[11].type == ModContent.ItemType<VictideBreastplate>() && player.armor[12].type == ModContent.ItemType<VictideGreaves>()))
-                if(player.armor[0].type == ModContent.ItemType<VictideHeadMagic>())
+                chat.Add(Language.GetOrRegister($"Mods.{nameof(Windfall)}.Dialogue.IlmeranPaladin.Chat.NoSandstorm").Value);
+            if (player.Calamity().victideSet || (WearingVictideHelmet(player) && player.armor[11].type == ModContent.ItemType<VictideBreastplate>() && player.armor[12].type == ModContent.ItemType<VictideGreaves>()))
+                if (player.armor[0].type == ModContent.ItemType<VictideHeadMagic>())
                 {
                     chat.Add(Language.GetOrRegister($"Mods.{nameof(Windfall)}.Dialogue.IlmeranPaladin.Chat.LookingFamiliar1").Value);
                     chat.Add(Language.GetOrRegister($"Mods.{nameof(Windfall)}.Dialogue.IlmeranPaladin.Chat.LookingFamiliar2").Value);
@@ -141,7 +129,7 @@ namespace Windfall.Content.NPCs.WanderingNPCs
                     chat.Add(Language.GetOrRegister($"Mods.{nameof(Windfall)}.Dialogue.IlmeranPaladin.Chat.LookingIlmeran1").Value);
                     chat.Add(Language.GetOrRegister($"Mods.{nameof(Windfall)}.Dialogue.IlmeranPaladin.Chat.LookingIlmeran2").Value);
                 }
-            if(NPC.FindFirstNPC(ModContent.NPCType<SEAHOE>()) != -1) 
+            if (NPC.FindFirstNPC(ModContent.NPCType<SEAHOE>()) != -1)
             {
                 chat.Add(Language.GetOrRegister($"Mods.{nameof(Windfall)}.Dialogue.IlmeranPaladin.Chat.Amidias1").Value);
                 chat.Add(Language.GetOrRegister($"Mods.{nameof(Windfall)}.Dialogue.IlmeranPaladin.Chat.Amidias2").Value);
@@ -163,7 +151,7 @@ namespace Windfall.Content.NPCs.WanderingNPCs
             return chat;
         }
         public override void SetChatButtons(ref string button, ref string button2)
-        { 
+        {
             button = Language.GetTextValue("LegacyInterface.28"); //This is the key to the word "Shop"
             button2 = Language.GetTextValue("LegacyInterface.64"); //This is the key to the word "Quest"
         }

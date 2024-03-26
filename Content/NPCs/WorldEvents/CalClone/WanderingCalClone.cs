@@ -1,25 +1,7 @@
-﻿using CalamityMod.Items.Accessories;
-using Microsoft.Xna.Framework.Graphics;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Terraria.GameContent.Bestiary;
-using Terraria.GameContent;
-using Terraria.ID;
-using Terraria.Localization;
-using Terraria.ModLoader;
-using Terraria.Utilities;
-using Terraria;
-using Microsoft.Xna.Framework;
-using Terraria.DataStructures;
-using CalamityMod;
+﻿using CalamityMod.Dusts;
 using CalamityMod.NPCs.CalClone;
-using Terraria.Audio;
-using CalamityMod.Dusts;
+using Terraria.Utilities;
 using Windfall.Common.Systems;
-using Windfall.Content.Players;
 using Windfall.Common.Utilities;
 
 namespace Windfall.Content.NPCs.WorldEvents.CalClone

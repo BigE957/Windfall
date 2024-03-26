@@ -1,21 +1,9 @@
 ﻿using CalamityMod.Dusts;
-using CalamityMod.DataStructures;
+using CalamityMod.NPCs;
 using CalamityMod.NPCs.CalClone;
 using CalamityMod.NPCs.SupremeCalamitas;
-using CalamityMod.NPCs;
 using CalamityMod.Projectiles.Boss;
 using CalamityMod.World;
-using CalamityMod;
-using Microsoft.Xna.Framework;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Terraria.Audio;
-using Terraria.ID;
-using Terraria.ModLoader;
-using Terraria;
 using Windfall.Common.Systems;
 
 namespace Windfall.Content.NPCs

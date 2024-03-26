@@ -1,12 +1,3 @@
-using System.Collections.Generic;
-using Microsoft.Xna.Framework;
-using System.Linq;
-using Terraria;
-using Terraria.ID;
-using Terraria.Localization;
-using Terraria.ModLoader;
-
-
 namespace Windfall.Content.Items.Lore
 {
     public class DragonsAerieLore : ModItem, ILocalizedModType

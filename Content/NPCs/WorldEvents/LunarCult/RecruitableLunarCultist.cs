@@ -1,17 +1,6 @@
-﻿using Microsoft.Xna.Framework;
-using CalamityMod;
-using Terraria;
-using Terraria.ID;
-using Terraria.Localization;
-using Terraria.ModLoader;
-using static Windfall.Common.Utilities.Utilities;
-using System.Collections.Generic;
-using Terraria.DataStructures;
-using Terraria.Audio;
-using Windfall.Common.Systems.WorldEvents;
-using Microsoft.Xna.Framework.Graphics;
-using CalamityMod.Projectiles.Ranged;
+﻿using CalamityMod.Projectiles.Ranged;
 using CalamityMod.Projectiles.Rogue;
+using Windfall.Common.Systems.WorldEvents;
 
 namespace Windfall.Content.NPCs.WorldEvents.LunarCult
 {
@@ -35,7 +24,7 @@ namespace Windfall.Content.NPCs.WorldEvents.LunarCult
             CurrentEventsInitial,
             CurrentEventsGoodEnd,
             CurrentEventsBadEnd,
-            
+
 
             RecruitSuccess,
             Recruited,
@@ -163,16 +152,16 @@ namespace Windfall.Content.NPCs.WorldEvents.LunarCult
                 if (Bishop != null)
                     if (NPC.position.X < Bishop.position.X)
                         NPC.direction = -1;
-                    else 
+                    else
                         NPC.direction = 1;
             }
         }
         public override void AI()
         {
-            if(chattable)
+            if (chattable)
             {
                 AnimationType = NPCID.Stylist;
-                NPC.aiStyle = 7;                
+                NPC.aiStyle = 7;
             }
             else
             {
@@ -597,7 +586,7 @@ namespace Windfall.Content.NPCs.WorldEvents.LunarCult
             NPC.frame.Width = 37;
             NPC.frame.Height = frameHeight;
             NPC.frame.X = NPC.frame.Width * (int)MyName;
-            if(!chattable)
+            if (!chattable)
                 NPC.spriteDirection = NPC.direction;
         }
         public override bool PreDraw(SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor)

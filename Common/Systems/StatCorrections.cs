@@ -1,19 +1,4 @@
-﻿using CalamityMod.World;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Terraria;
-using Terraria.ModLoader;
-using CalamityMod.DataStructures;
-using CalamityMod;
-using System.Reflection;
-using System.Runtime.InteropServices;
-using Terraria.GameContent;
-using Windfall.Content.NPCs.WorldEvents;
-using CalamityMod.Buffs.DamageOverTime;
-using CalamityMod.Buffs.StatDebuffs;
+﻿using System.Runtime.InteropServices;
 
 namespace Windfall.Common.Systems
 {

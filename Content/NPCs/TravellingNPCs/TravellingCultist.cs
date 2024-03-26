@@ -1,19 +1,9 @@
-﻿using CalamityMod;
-using CalamityMod.Projectiles.Magic;
-using Microsoft.Xna.Framework;
-using System.Collections.Generic;
-using Terraria;
-using Terraria.DataStructures;
-using Terraria.GameContent;
+﻿using CalamityMod.Projectiles.Magic;
 using Terraria.GameContent.Bestiary;
-using Terraria.ID;
-using Terraria.Localization;
-using Terraria.ModLoader;
 using Terraria.Utilities;
 using Windfall.Common.Systems;
 using Windfall.Common.Systems.WorldEvents;
 using Windfall.Content.NPCs.WorldEvents.LunarCult;
-using static Windfall.Common.Utilities.Utilities;
 
 namespace Windfall.Content.NPCs.TravellingNPCs
 {
@@ -370,11 +360,11 @@ namespace Windfall.Content.NPCs.TravellingNPCs
                 Button2 = new(){name = "Good luck!", heading = (int)DialogueState.Quests3, end = true},
             },
             #endregion
-        };        
+        };
 
         public override void SetChatButtons(ref string button, ref string button2)
         {
-            if(CurrentDialogue.ToString().Contains("Quests"))
+            if (CurrentDialogue.ToString().Contains("Quests"))
                 button = Language.GetTextValue("LegacyInterface.64");
             else
                 SetConversationButtons(MyDialogue, (int)CurrentDialogue, ref button, ref button2);

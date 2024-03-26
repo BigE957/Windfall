@@ -1,12 +1,7 @@
-﻿using Terraria.ModLoader;
-using Terraria;
-using Terraria.ID;
-using CalamityMod;
+﻿using Terraria.GameContent.ItemDropRules;
+using Windfall.Common.Systems;
 using Windfall.Content.Items.Journals;
 using Windfall.Content.Items.Lore;
-using Windfall.Common.Systems;
-using Terraria.GameContent.ItemDropRules;
-using Windfall.Common.Utilities;
 using Windfall.Content.Items.Quests;
 using Windfall.Content.NPCs.TravellingNPCs;
 
@@ -17,11 +12,11 @@ namespace Windfall.Content.NPCs
         [JITWhenModsEnabled("CalamityMod")]
         public override void ModifyNPCLoot(NPC npc, NPCLoot npcLoot)
         {
-            if(npc.type == NPCID.DarkCaster) 
+            if (npc.type == NPCID.DarkCaster)
             {
                 npcLoot.Add(ItemDropRule.Common(ItemID.WaterBolt, 10));
             }
-            if(npc.type == NPCID.AngryBones || npc.type == NPCID.AngryBonesBig || npc.type == NPCID.AngryBonesBigHelmet || npc.type == NPCID.AngryBonesBigMuscle) 
+            if (npc.type == NPCID.AngryBones || npc.type == NPCID.AngryBonesBig || npc.type == NPCID.AngryBonesBigHelmet || npc.type == NPCID.AngryBonesBigMuscle)
             {
                 npcLoot.AddIf(() => TravellingCultist.QuestArtifact.Type == ModContent.ItemType<DeificInsignia>() && NPC.AnyNPCs(ModContent.NPCType<TravellingCultist>()), ModContent.ItemType<DeificInsignia>(), 5);
             }

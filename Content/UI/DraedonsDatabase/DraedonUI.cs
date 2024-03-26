@@ -1,19 +1,9 @@
-﻿using Microsoft.Xna.Framework.Graphics;
-using ReLogic.Content;
-using Terraria.UI;
-using Terraria;
-using Terraria.ModLoader;
+﻿using CalamityMod.Items.Placeables.DraedonStructures;
 using Terraria.GameContent.UI.Elements;
-using Microsoft.Xna.Framework;
-using System;
-using Terraria.GameContent;
-using Terraria.ID;
-using CalamityMod.Items.Placeables.DraedonStructures;
-using System.Linq;
-using System.Collections.Generic;
+using Terraria.UI;
+using Windfall.Common.Systems;
 using Windfall.Content.Items.Utility;
 using Windfall.Content.Projectiles.Other;
-using Windfall.Common.Systems;
 
 namespace Windfall.Content.UI.DraedonsDatabase
 {

@@ -1,8 +1,4 @@
-﻿using Terraria.ID;
-using Terraria.ModLoader;
-using Terraria;
-using CalamityMod.Rarities;
-using Windfall.Common.Systems;
+﻿using Windfall.Common.Systems;
 
 namespace Windfall.Items.Debug
 {

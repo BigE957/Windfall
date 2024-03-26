@@ -1,10 +1,7 @@
-﻿using CalamityMod.Items.Tools;
-using Terraria.ID;
-using Terraria.ModLoader;
-using Terraria;
-using CalamityMod.Items.SummonItems;
-using Windfall.Content.Items.Journals;
+﻿using CalamityMod.Items.SummonItems;
+using CalamityMod.Items.Tools;
 using Windfall.Common.Utilities;
+using Windfall.Content.Items.Journals;
 
 namespace Windfall.Content.World
 {

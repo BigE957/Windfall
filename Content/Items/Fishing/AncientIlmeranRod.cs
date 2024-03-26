@@ -1,22 +1,14 @@
 ﻿using CalamityMod.Events;
 using CalamityMod.Items;
+using CalamityMod.NPCs.AquaticScourge;
 using CalamityMod.NPCs.DesertScourge;
 using CalamityMod.World;
-using Microsoft.Xna.Framework;
-using System;
-using Terraria;
-using Terraria.Audio;
-using Terraria.ID;
-using Terraria.ModLoader;
-using Windfall.Content.Projectiles.Fishing;
-using Windfall.Content.Projectiles.NPCAnimations;
-using Windfall.Content.NPCs.WanderingNPCs;
 using Windfall.Common.Systems;
-using System.Collections.Generic;
-using CalamityMod;
-using CalamityMod.NPCs.AquaticScourge;
 using Windfall.Common.Systems.WorldEvents;
 using Windfall.Common.Utilities;
+using Windfall.Content.NPCs.WanderingNPCs;
+using Windfall.Content.Projectiles.Fishing;
+using Windfall.Content.Projectiles.NPCAnimations;
 
 namespace Windfall.Content.Items.Fishing
 {
@@ -135,7 +127,7 @@ namespace Windfall.Content.Items.Fishing
                         if (scoogCounter > 60 * 6)
                         {
                             if (scoogCounter < (60 * 5) + 100)
-                                zoom = MathHelper.Lerp(zoom, 0.4f, 0.075f);
+                                zoom = Lerp(zoom, 0.4f, 0.075f);
                             else
                                 zoom = 0.4f;
                             ZoomSystem.SetZoomEffect(zoom);

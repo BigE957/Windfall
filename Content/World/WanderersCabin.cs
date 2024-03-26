@@ -1,16 +1,8 @@
-﻿using CalamityMod;
-using CalamityMod.Schematics;
-using Microsoft.Xna.Framework;
-using System;
-using Terraria;
-using Terraria.ID;
-using Terraria.IO;
+﻿using CalamityMod.Schematics;
 using Terraria.WorldBuilding;
-using System.Collections.Generic;
-using static CalamityMod.Schematics.SchematicManager;
-using Terraria.ModLoader;
-using Windfall.Content.Items.Journals;
 using Windfall.Common.Systems;
+using Windfall.Content.Items.Journals;
+using static CalamityMod.Schematics.SchematicManager;
 
 namespace Windfall.Content.World
 {

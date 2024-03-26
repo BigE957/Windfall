@@ -1,15 +1,5 @@
 ﻿using CalamityMod.Events;
-using CalamityMod.Items.Materials;
 using CalamityMod.NPCs.SlimeGod;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Terraria.Audio;
-using Terraria.ID;
-using Terraria;
-using Terraria.ModLoader;
 
 namespace Windfall.Content.Items.SummonItems
 {

@@ -1,13 +1,12 @@
 ﻿using CalamityMod.Items;
-using Windfall.Content.NPCs.WanderingNPCs;
-using Windfall.Content.Projectiles.NPCAnimations;
+using Windfall.Common.Systems.WorldEvents;
 
-namespace Windfall.Content.Items.Utility
+namespace Windfall.Content.Items.Debug.Seekers
 {
-    public class IlmeranHorn : ModItem, ILocalizedModType
+    public class VortexHideoutSeeker : ModItem, ILocalizedModType
     {
         public new string LocalizationCategory => "Items.Utility";
-        public override string Texture => "Windfall/Assets/Items/Utility/IlmeranHorn";
+        public override string Texture => "CalamityMod/Items/LabFinders/GreenSeekingMechanism";
 
         public static readonly SoundStyle UseSound = new("Windfall/Assets/Sounds/Items/IlmeranHorn");
 
@@ -24,10 +23,7 @@ namespace Windfall.Content.Items.Utility
         }
         public override bool? UseItem(Player player)
         {
-            if (!NPC.AnyNPCs(ModContent.NPCType<IlmeranPaladin>()) && !NPC.AnyNPCs(ModContent.NPCType<IlmeranPaladinKnocked>()) && player.ZoneDesert)
-            {
-                Projectile.NewProjectile(null, new Vector2(player.Center.X - 80 * player.direction, player.Center.Y + Main.rand.Next(250, 300)), new Vector2(0, -8), ModContent.ProjectileType<IlmeranPaladinDig>(), 0, 0);
-            }
+            Main.NewText($"You are {player.position.X / 16 - CultMeetingSystem.VortexHideoutLocation.X}, {player.position.Y / 16 - CultMeetingSystem.VortexHideoutLocation.Y} from the Vortex Hideout.", Color.Yellow);
             return true;
         }
     }

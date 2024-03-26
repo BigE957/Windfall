@@ -1,9 +1,4 @@
-﻿using CalamityMod.Items.Weapons.Rogue;
-using Microsoft.Xna.Framework.Graphics;
-using Microsoft.Xna.Framework;
-using Terraria;
-using Terraria.ModLoader;
-using Windfall.Content.Items.Weapons.Misc;
+﻿using Windfall.Content.Items.Weapons.Misc;
 
 namespace Windfall.Content.Projectiles.Misc
 {

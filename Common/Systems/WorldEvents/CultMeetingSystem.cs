@@ -1,17 +1,6 @@
-﻿using Microsoft.Xna.Framework;
-using System;
-using System.Collections.Generic;
-using Terraria;
-using Terraria.ModLoader;
-using static Windfall.Common.Utilities.Utilities;
-using Terraria.ModLoader.IO;
-using Windfall.Content.NPCs.WorldEvents.LunarCult;
-using Terraria.ID;
-using Terraria.Audio;
-using CalamityMod.Systems;
-using CalamityMod;
+﻿using Terraria.ModLoader.IO;
 using Windfall.Content.Items.Quest;
-using System.Diagnostics.Metrics;
+using Windfall.Content.NPCs.WorldEvents.LunarCult;
 
 namespace Windfall.Common.Systems.WorldEvents
 {
@@ -116,9 +105,9 @@ namespace Windfall.Common.Systems.WorldEvents
                     break;
                 case SystemState.Spawn:
                     if (MeetingTimer == -1)
-                    {                       
+                    {
                         int i = Main.rand.Next(3);
-                        switch(i)
+                        switch (i)
                         {
                             case 0:
                                 ActiveHideoutCoords = SolarHideoutLocation;
@@ -146,7 +135,7 @@ namespace Windfall.Common.Systems.WorldEvents
                         }
                         zoom = 0;
                         if (AvailableTopics.Count == 0)
-                            for(int h = 0; h < MeetingTopic.GetNames(typeof(MeetingTopic)).Length; h++)
+                            for (int h = 0; h < MeetingTopic.GetNames(typeof(MeetingTopic)).Length; h++)
                                 AvailableTopics.Add(h);
 
                         CurrentMeetingTopic = MeetingTopic.CurrentEvents; //(MeetingTopic)AvailableTopics[Main.rand.Next(AvailableTopics.Count)]; Actual Code
@@ -311,7 +300,7 @@ namespace Windfall.Common.Systems.WorldEvents
                             }
                             #endregion
                             if (MeetingTimer < 100)
-                                zoom = MathHelper.Lerp(zoom, 0.4f, 0.075f);
+                                zoom = Lerp(zoom, 0.4f, 0.075f);
                             else
                                 zoom = 0.4f;
                             ZoomSystem.SetZoomEffect(zoom);

@@ -1,12 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using CalamityMod.Dusts;
-using CalamityMod.Items.SummonItems;
-using Microsoft.Xna.Framework;
-using Terraria;
-using Terraria.Audio;
-using Terraria.ID;
-using Terraria.ModLoader;
+﻿using CalamityMod.Dusts;
 using Windfall.Content.Items.Quest;
 using Windfall.Content.NPCs.WanderingNPCs;
 using Windfall.Content.NPCs.WorldEvents.LunarCult;
@@ -66,7 +58,7 @@ namespace Windfall.Content.Projectiles.NPCAnimations
                 Vector2 speed = Main.rand.NextVector2Circular(1.5f, 2f);
                 Dust d = Dust.NewDustPerfect(Projectile.Center, (int)CalamityDusts.Ectoplasm, speed * 2, Scale: 1.5f);
                 d.noGravity = true;
-            }   
+            }
         }
         internal override int DespawnDelay => 60 * 3;
         public override void SetStaticDefaults()

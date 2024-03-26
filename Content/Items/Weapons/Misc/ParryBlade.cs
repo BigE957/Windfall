@@ -1,11 +1,6 @@
-﻿using CalamityMod.Cooldowns;
-using Terraria;
-using Terraria.ID;
-using Terraria.ModLoader;
-using Windfall.Content.Projectiles.Misc;
-using CalamityMod;
+﻿using Windfall.Common.Utilities;
 using Windfall.Content.Buffs.Cooldowns;
-using Windfall.Common.Utilities;
+using Windfall.Content.Projectiles.Misc;
 
 
 namespace Windfall.Content.Items.Weapons.Misc
@@ -18,7 +13,7 @@ namespace Windfall.Content.Items.Weapons.Misc
             Item.damage = 8;
             Item.knockBack = 4f;
             Item.useStyle = ItemUseStyleID.Rapier; // Makes the player do the proper arm motion
-            Item.useAnimation = Item.useTime = 8; 
+            Item.useAnimation = Item.useTime = 8;
             Item.width = 32;
             Item.height = 32;
             Item.UseSound = SoundID.Item1;

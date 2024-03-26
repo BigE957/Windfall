@@ -1,16 +1,4 @@
-﻿using Microsoft.Xna.Framework;
-using System.IO.Pipelines;
-using Terraria;
-using Terraria.DataStructures;
-using Terraria.ID;
-using Terraria.Localization;
-using Terraria.ModLoader;
-using Terraria.ObjectData;
-using Terraria.Enums;
-using CalamityMod;
-using CalamityMod.Tiles.DraedonStructures;
-using Microsoft.Xna.Framework.Input;
-using Microsoft.Xna.Framework.Graphics;
+﻿using Terraria.Enums;
 using Windfall.Content.UI.DraedonsDatabase;
 
 namespace Windfall.Content.Tiles.Special

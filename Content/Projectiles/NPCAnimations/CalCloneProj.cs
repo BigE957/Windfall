@@ -1,12 +1,5 @@
-﻿using Terraria;
-using Terraria.ModLoader;
-using Microsoft.Xna.Framework;
-using System;
-using Terraria.ID;
-using Terraria.Audio;
-using CalamityMod;
+﻿using CalamityMod.Dusts;
 using CalamityMod.NPCs.Crags;
-using CalamityMod.Dusts;
 using Windfall.Common.Systems.WorldEvents;
 using Windfall.Common.Utilities;
 using Windfall.Content.NPCs.WorldEvents.CalClone;

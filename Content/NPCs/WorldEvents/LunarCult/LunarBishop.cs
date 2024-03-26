@@ -1,16 +1,4 @@
-﻿using Microsoft.Xna.Framework;
-using CalamityMod;
-using Terraria.ID;
-using Terraria.Localization;
-using Terraria;
-using Terraria.ModLoader;
-using static Windfall.Common.Utilities.Utilities;
-using System.Collections.Generic;
-using Terraria.DataStructures;
-using Windfall.Common.Utilities;
-using Terraria.Audio;
-
-namespace Windfall.Content.NPCs.WorldEvents.LunarCult
+﻿namespace Windfall.Content.NPCs.WorldEvents.LunarCult
 {
     public class LunarBishop : ModNPC
     {
@@ -73,7 +61,7 @@ namespace Windfall.Content.NPCs.WorldEvents.LunarCult
                     d.noGravity = true;
                 }
                 SoundEngine.PlaySound(SpawnSound, NPC.Center);
-            }           
+            }
         }
         public override string GetChat()
         {

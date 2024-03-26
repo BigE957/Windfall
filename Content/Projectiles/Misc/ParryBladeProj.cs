@@ -1,18 +1,5 @@
-﻿using Microsoft.Xna.Framework;
-using System;
-using System.Collections.Generic;
-using Terraria.Enums;
-using Terraria.ModLoader;
-using Terraria;
-using CalamityMod.Buffs.StatBuffs;
+﻿using CalamityMod.Projectiles.BaseProjectiles;
 using Windfall.Content.Buffs.Weapons;
-using Terraria.DataStructures;
-using CalamityMod;
-using Windfall.Content.Buffs.Cooldowns;
-using Windfall.Content.Players;
-using Windfall.Common.Utilities;
-using CalamityMod.Cooldowns;
-using CalamityMod.Projectiles.BaseProjectiles;
 
 namespace Windfall.Content.Projectiles.Misc
 {

@@ -1,17 +1,11 @@
-﻿using CalamityMod.Items.Materials;
-using CalamityMod.Items;
-using Microsoft.Xna.Framework;
-using Terraria.ID;
-using Terraria;
-using Terraria.ModLoader;
-using CalamityMod.NPCs.SunkenSea;
-using System.Collections.Generic;
-using System;
-using CalamityMod.Items.Placeables;
-using CalamityMod.Items.Weapons.Rogue;
+﻿using CalamityMod.Items;
 using CalamityMod.Items.Accessories;
-using CalamityMod.Items.Weapons.Melee;
 using CalamityMod.Items.Armor.Victide;
+using CalamityMod.Items.Materials;
+using CalamityMod.Items.Placeables;
+using CalamityMod.Items.Weapons.Melee;
+using CalamityMod.Items.Weapons.Rogue;
+using CalamityMod.NPCs.SunkenSea;
 using System.Reflection;
 using Windfall.Common.Systems;
 
@@ -50,7 +44,7 @@ namespace Windfall.Content.Items.Tools
         {
             Item.damage = 1;
             Item.knockBack = 0.5f;
-            Item.useAnimation =  Item.useTime = 9;
+            Item.useAnimation = Item.useTime = 9;
 
             Item.DamageType = DamageClass.Melee;
             Item.width = 30;
@@ -65,11 +59,11 @@ namespace Windfall.Content.Items.Tools
 
         public override void OnHitNPC(Player player, NPC target, NPC.HitInfo hit, int damageDone)
         {
-            if(target.ModNPC is Clam clam && target.type == ModContent.NPCType<Clam>())
+            if (target.ModNPC is Clam clam && target.type == ModContent.NPCType<Clam>())
             {
                 FieldInfo ClamHitAmountFieldInfo = typeof(Clam).GetField("hitAmount", BindingFlags.NonPublic | BindingFlags.Instance);
-                if(ClamHitAmountFieldInfo != null)
-                    if((int)ClamHitAmountFieldInfo.GetValue(clam) != 3)
+                if (ClamHitAmountFieldInfo != null)
+                    if ((int)ClamHitAmountFieldInfo.GetValue(clam) != 3)
                     {
                         int index = Main.rand.Next(0, ClamLootPool.Count - 1);
                         Item.NewItem(Item.GetSource_DropAsItem(), target.Center, target.Size, ClamLootPool[index].Type, Main.rand.Next(ClamLootPool[index].MinStack, ClamLootPool[index].MaxStack));
@@ -79,11 +73,11 @@ namespace Windfall.Content.Items.Tools
                             QuestSystem.IncrementQuestProgress(questIndex, 0);
                     }
             }
-            if(target.type == ModContent.NPCType<PrismBack>() || target.type == ModContent.NPCType<BlindedAngler>())
+            if (target.type == ModContent.NPCType<PrismBack>() || target.type == ModContent.NPCType<BlindedAngler>())
             {
-                if(Main.rand.NextBool(3))
-                    if(target.type == ModContent.NPCType<PrismBack>())
-                        Item.NewItem(Item.GetSource_DropAsItem(), target.Center, target.Size,ModContent.ItemType<PrismShard>(), Main.rand.Next(3, 5));
+                if (Main.rand.NextBool(3))
+                    if (target.type == ModContent.NPCType<PrismBack>())
+                        Item.NewItem(Item.GetSource_DropAsItem(), target.Center, target.Size, ModContent.ItemType<PrismShard>(), Main.rand.Next(3, 5));
                     else
                         Item.NewItem(Item.GetSource_DropAsItem(), target.Center, target.Size, ModContent.ItemType<PrismShard>(), Main.rand.Next(5, 8));
             }

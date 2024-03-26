@@ -1,11 +1,4 @@
-﻿using System.Collections.Generic;
-using CalamityMod.Dusts;
-using Microsoft.Xna.Framework;
-using Terraria;
-using Terraria.Audio;
-using Terraria.ID;
-using Terraria.ModLoader;
-using Windfall.Content.NPCs.WanderingNPCs;
+﻿using Windfall.Content.NPCs.WanderingNPCs;
 
 namespace Windfall.Content.Projectiles.NPCAnimations
 {

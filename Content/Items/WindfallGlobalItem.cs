@@ -1,13 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Security.Cryptography.X509Certificates;
-using System.Text;
-using System.Threading.Tasks;
-using Terraria;
-using Terraria.ID;
-using Terraria.ModLoader;
-using Windfall.Common.Systems;
+﻿using Windfall.Common.Systems;
 using Windfall.Content.Items.Journals;
 
 namespace Windfall.Content.Items
@@ -45,7 +36,7 @@ namespace Windfall.Content.Items
         }
         public override bool OnPickup(Item item, Player player)
         {
-            if(item.type == ItemID.QueenSlimeCrystal)
+            if (item.type == ItemID.QueenSlimeCrystal)
                 QuestSystem.IncrementQuestProgress(QuestSystem.QuestLog.FindIndex(quest => quest.Name == "CrystalHunt"), 0);
             return true;
         }

@@ -1,16 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Terraria.ID;
-using Terraria.Localization;
-using Terraria.ModLoader;
-using Terraria;
+﻿using CalamityMod.Items;
 using CalamityMod.Rarities;
-using CalamityMod.Items;
-using CalamityMod;
-using Terraria.Audio;
 
 namespace Windfall.Content.Items.Utility
 {

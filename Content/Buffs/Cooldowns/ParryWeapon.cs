@@ -1,10 +1,4 @@
-﻿using CalamityMod;
-using CalamityMod.Cooldowns;
-using System;
-using System.Collections.Generic;
-using Microsoft.Xna.Framework;
-using Terraria.Localization;
-using Terraria;
+﻿using CalamityMod.Cooldowns;
 
 namespace Windfall.Content.Buffs.Cooldowns
 {

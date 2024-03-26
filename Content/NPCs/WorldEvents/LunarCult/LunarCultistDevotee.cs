@@ -1,15 +1,4 @@
-﻿using Microsoft.Xna.Framework;
-using CalamityMod;
-using Terraria;
-using Terraria.ID;
-using Terraria.Localization;
-using Terraria.ModLoader;
-using static Windfall.Common.Utilities.Utilities;
-using System.Collections.Generic;
-using Terraria.DataStructures;
-using Terraria.Audio;
-
-namespace Windfall.Content.NPCs.WanderingNPCs
+﻿namespace Windfall.Content.NPCs.WanderingNPCs
 {
     public class LunarCultistDevotee : ModNPC
     {
@@ -55,7 +44,7 @@ namespace Windfall.Content.NPCs.WanderingNPCs
             if (NPC.ai[0] == 0)
             {
                 AnimationType = NPCID.BartenderUnconscious;
-                NPC.frame.Y = (NPC.height+2) * 3;
+                NPC.frame.Y = (NPC.height + 2) * 3;
                 NPC.alpha = 255;
                 Vector2 oldPos = NPC.position;
                 NPC.position.Y = GetSurfacePositionFrom(NPC.position).Y - NPC.height - 8;

@@ -1,31 +1,9 @@
-﻿using CalamityMod.Items.Accessories;
-using Microsoft.Xna.Framework.Graphics;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Terraria.GameContent.Bestiary;
-using Terraria.GameContent;
-using Terraria.ID;
-using Terraria.Localization;
-using Terraria.ModLoader;
-using Terraria.Utilities;
-using Terraria;
-using Microsoft.Xna.Framework;
-using Terraria.GameContent.Events;
-using Windfall.Common.Utilities;
-using Terraria.DataStructures;
-using CalamityMod.Projectiles.Rogue;
-using Windfall.Content.Items.Weapons.Misc;
-using Windfall.Common.Systems;
-using Windfall.Content.Items.Fishing;
-using Windfall.Content.Items.Utility;
-using CalamityMod.NPCs.DesertScourge;
-using CalamityMod;
-using CalamityMod.Items.Armor.Victide;
-using CalamityMod.Items.Armor.Statigel;
+﻿using CalamityMod.Items.Armor.Statigel;
 using CalamityMod.NPCs.HiveMind;
+using CalamityMod.Projectiles.Rogue;
+using Terraria.GameContent.Bestiary;
+using Terraria.Utilities;
+using Windfall.Common.Utilities;
 
 namespace Windfall.Content.NPCs.WanderingNPCs
 {
@@ -105,7 +83,7 @@ namespace Windfall.Content.NPCs.WanderingNPCs
         }
 
         public override ITownNPCProfile TownNPCProfile() => NPCProfile;
-        public override List<string> SetNPCNameList() => new(){"Erahim"};
+        public override List<string> SetNPCNameList() => new() { "Erahim" };
 
         public override float SpawnChance(NPCSpawnInfo spawnInfo)
         {
@@ -128,7 +106,7 @@ namespace Windfall.Content.NPCs.WanderingNPCs
                 chat.Add(Language.GetOrRegister($"Mods.{nameof(Windfall)}.Dialogue.{nameof(GodseekerKnight)}.Chat.SlimeGod1").Value);
                 chat.Add(Language.GetOrRegister($"Mods.{nameof(Windfall)}.Dialogue.{nameof(GodseekerKnight)}.Chat.SlimeGod2").Value);
             }
-            if(player.ZoneCorrupt || player.ZoneCrimson)
+            if (player.ZoneCorrupt || player.ZoneCrimson)
             {
                 chat.Add(Language.GetOrRegister($"Mods.{nameof(Windfall)}.Dialogue.{nameof(GodseekerKnight)}.Chat.Evilbiome1").Value);
                 chat.Add(Language.GetOrRegister($"Mods.{nameof(Windfall)}.Dialogue.{nameof(GodseekerKnight)}.Chat.Evilbiome2").Value);
@@ -177,7 +155,7 @@ namespace Windfall.Content.NPCs.WanderingNPCs
         private static bool WearingStatigelHelmet(Player player)
         {
             Item hat = player.armor[10];
-            if (hat.type == ModContent.ItemType <StatigelHeadMagic>() || hat.type == ModContent.ItemType<StatigelHeadMelee>() || hat.type == ModContent.ItemType<StatigelHeadRanged>() || hat.type == ModContent.ItemType<StatigelHeadRogue>() || hat.type == ModContent.ItemType<StatigelHeadSummon>())
+            if (hat.type == ModContent.ItemType<StatigelHeadMagic>() || hat.type == ModContent.ItemType<StatigelHeadMelee>() || hat.type == ModContent.ItemType<StatigelHeadRanged>() || hat.type == ModContent.ItemType<StatigelHeadRogue>() || hat.type == ModContent.ItemType<StatigelHeadSummon>())
                 return true;
             return false;
         }

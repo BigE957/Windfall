@@ -1,9 +1,4 @@
-﻿using CalamityMod;
-using Terraria;
-using Terraria.ModLoader;
-using Microsoft.Xna.Framework;
-using static Windfall.Common.Utilities.Utilities;
-using Windfall.Content.Projectiles.NPCAnimations;
+﻿using Windfall.Content.Projectiles.NPCAnimations;
 
 namespace Windfall.Common.Systems.WorldEvents
 {
@@ -39,7 +34,7 @@ namespace Windfall.Common.Systems.WorldEvents
                                 CalDown = 0;
                             break;
                         }
-                    else
+                        else
                         if (!Main.hardMode || Main.dayTime || CalDown == 1 || CalamityUtils.AnyBossNPCS())
                         {
                             if (Main.dayTime)
@@ -89,7 +84,7 @@ namespace Windfall.Common.Systems.WorldEvents
                                 CalDown = 1;
                                 break;
                             }
-                        else
+                            else
                             if (Main.dayTime || CalamityUtils.AnyBossNPCS())
                             {
                                 Main.NewText("Something calamitous has vanished...", Color.Red);

@@ -1,15 +1,5 @@
-﻿using System.Collections.Generic;
-using CalamityMod.World;
-using CalamityMod.World.Planets;
-using Microsoft.Xna.Framework;
-using Terraria;
-using Terraria.GameContent.Generation;
-using Terraria.ID;
-using Terraria.ModLoader;
+﻿using Terraria.GameContent.Generation;
 using Terraria.WorldBuilding;
-using CalamityMod.Items.SummonItems;
-using static CalamityMod.World.CalamityWorld;
-using Terraria.Localization;
 using Windfall.Content.World;
 
 namespace Windfall.Common.Systems

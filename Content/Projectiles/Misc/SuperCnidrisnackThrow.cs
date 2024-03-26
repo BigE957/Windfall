@@ -1,8 +1,4 @@
-﻿using Microsoft.Xna.Framework.Graphics;
-using Microsoft.Xna.Framework;
-using Terraria;
-using Terraria.ModLoader;
-using Windfall.Content.Items.Debug;
+﻿using Windfall.Content.Items.Debug;
 
 namespace Windfall.Content.Projectiles.Misc
 {

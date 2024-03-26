@@ -1,10 +1,5 @@
-﻿using Terraria;
-using Microsoft.Xna.Framework;
-using CalamityMod.Rarities;
-using Terraria.ID;
-using Terraria.ModLoader;
+﻿using CalamityMod.Rarities;
 using Windfall.Content.Projectiles.Other;
-using Terraria.DataStructures;
 
 namespace Windfall.Items.Debug
 {

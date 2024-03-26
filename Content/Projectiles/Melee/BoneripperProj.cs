@@ -1,15 +1,7 @@
-﻿using Microsoft.Xna.Framework.Graphics;
-using Microsoft.Xna.Framework;
-using Terraria;
-using Terraria.Enums;
-using Terraria.ModLoader;
-using System;
-using CalamityMod.Buffs.DamageOverTime;
-using CalamityMod;
-using Terraria.ID;
+﻿using CalamityMod.Buffs.DamageOverTime;
 using CalamityMod.Dusts;
 using CalamityMod.Projectiles.Melee;
-using Terraria.Audio;
+using Terraria.Enums;
 
 namespace Windfall.Content.Projectiles.Melee
 {

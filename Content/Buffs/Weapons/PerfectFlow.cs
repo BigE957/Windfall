@@ -1,14 +1,4 @@
-﻿using System;
-using Microsoft.Xna.Framework;
-using ReLogic.Utilities;
-using Terraria;
-using Terraria.Audio;
-using Terraria.DataStructures;
-using Terraria.ModLoader;
-using Windfall.Common.Utilities;
-using CalamityMod;
-
-namespace Windfall.Content.Buffs.Weapons
+﻿namespace Windfall.Content.Buffs.Weapons
 {
     public class PerfectFlow : ModBuff
     {
@@ -24,7 +14,7 @@ namespace Windfall.Content.Buffs.Weapons
         {
             player.Windfall().PerfectFlow = true;
             if (Main.player[Main.myPlayer].buffTime[buffIndex] == 1)
-                player.AddCooldown(Cooldowns.ParryWeapon.ID, CalamityUtils.SecondsToFrames(30));
+                player.AddCooldown(Cooldowns.ParryWeapon.ID, SecondsToFrames(30));
         }
     }
 }

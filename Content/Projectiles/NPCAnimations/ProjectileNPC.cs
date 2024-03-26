@@ -1,12 +1,4 @@
-﻿using CalamityMod.Dusts;
-using Microsoft.Xna.Framework;
-using System;
-using System.Collections.Generic;
-using Terraria;
-using Terraria.Audio;
-using Terraria.DataStructures;
-using Terraria.ModLoader;
-using Windfall.Common.Utilities;
+﻿using Windfall.Common.Utilities;
 
 namespace Windfall.Content.Projectiles.NPCAnimations
 {
@@ -38,7 +30,7 @@ namespace Windfall.Content.Projectiles.NPCAnimations
         internal virtual SoundStyle SpawnSound => new();
         internal virtual int NPCType => 0;
         internal virtual Color TextColor => new();
-        internal virtual bool SpawnConditions(Player player) 
+        internal virtual bool SpawnConditions(Player player)
         {
             return true;
         }
@@ -91,7 +83,7 @@ namespace Windfall.Content.Projectiles.NPCAnimations
                     }
                     break;
                 case AIState.TurnToNPC:
-                    if(counter == finalDelay + 1)
+                    if (counter == finalDelay + 1)
                         DoBeforeDespawn();
                     if (counter >= finalDelay + DespawnDelay)
                     {
@@ -113,7 +105,7 @@ namespace Windfall.Content.Projectiles.NPCAnimations
                 MyDialogue.lifeTime = 60 + MyDialogue.text.Length;
         }
         internal virtual void DoOnSpawn() { }
-        internal virtual void DoBeforeDespawn(){}
-        internal virtual void DoOnDespawn(){}       
+        internal virtual void DoBeforeDespawn() { }
+        internal virtual void DoOnDespawn() { }
     }
 }

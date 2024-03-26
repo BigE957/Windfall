@@ -1,9 +1,4 @@
-﻿using Microsoft.Xna.Framework;
-using Terraria;
-using Terraria.DataStructures;
-using Terraria.ID;
-using Terraria.ModLoader;
-using Windfall.Content.Projectiles.Other;
+﻿using Windfall.Content.Projectiles.Other;
 
 namespace Windfall.Content.Items.Quest
 {

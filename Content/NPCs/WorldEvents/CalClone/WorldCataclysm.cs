@@ -2,18 +2,10 @@
 using CalamityMod.Dusts;
 using CalamityMod.Items.Placeables.Furniture.Trophies;
 using CalamityMod.Items.Weapons.Ranged;
-using CalamityMod.World;
-using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
-using Terraria;
-using Terraria.GameContent;
-using Terraria.ID;
-using Terraria.ModLoader;
-using System.IO;
-using CalamityMod;
 using CalamityMod.NPCs.CalClone;
-using Windfall.Content.Items.Weapons.Melee;
+using CalamityMod.World;
 using Windfall.Common.Systems;
+using Windfall.Content.Items.Weapons.Melee;
 
 namespace Windfall.Content.NPCs.WorldEvents.CalClone;
 

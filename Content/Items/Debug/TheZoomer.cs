@@ -1,14 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Terraria.ID;
-using Terraria.Localization;
-using Terraria.ModLoader;
-using Terraria;
-using Windfall.Common.Systems;
-using Windfall.Common.Utilities;
+﻿using Windfall.Common.Systems;
 
 namespace Windfall.Items.Debug
 {
@@ -29,7 +19,7 @@ namespace Windfall.Items.Debug
         }
         public override bool? UseItem(Player player)
         {
-            if(zooming)
+            if (zooming)
             {
                 zooming = false;
             }

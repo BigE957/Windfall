@@ -1,14 +1,4 @@
-﻿using CalamityMod;
-using System;
-using Microsoft.Xna.Framework;
-using Terraria.Audio;
-using Terraria.ID;
-using Terraria;
-using Terraria.ModLoader;
-using static Windfall.Common.Utilities.Utilities;
-using CalamityMod.Items.Weapons.Ranged;
-
-namespace Windfall.Common.Systems.WorldEvents
+﻿namespace Windfall.Common.Systems.WorldEvents
 {
     public class DesertScourgeRumbleSystem : ModSystem
     {
@@ -32,7 +22,7 @@ namespace Windfall.Common.Systems.WorldEvents
             switch (State)
             {
                 case SystemState.CheckReqs:
-                    if(mainPlayer.ZoneDesert && !DownedBossSystem.downedDesertScourge && !CalamityUtils.AnyBossNPCS() && cooldown == 0)
+                    if (mainPlayer.ZoneDesert && !DownedBossSystem.downedDesertScourge && !CalamityUtils.AnyBossNPCS() && cooldown == 0)
                     {
                         State = SystemState.CheckChance;
                     }
@@ -45,12 +35,12 @@ namespace Windfall.Common.Systems.WorldEvents
                 case SystemState.CheckChance:
                     if (Main.rand.NextBool(3) && cooldown == 0)
                     {
-                        cooldown = Main.rand.Next(-400, -200);                      
+                        cooldown = Main.rand.Next(-400, -200);
                     }
                     else if (cooldown < 0)
                     {
                         cooldown++;
-                        if(cooldown == 0)
+                        if (cooldown == 0)
                         {
                             shakeCounter = 0;
                             trueTimer = 0;
@@ -58,7 +48,7 @@ namespace Windfall.Common.Systems.WorldEvents
                             State = SystemState.Spawn;
                         }
                     }
-                    else 
+                    else
                     {
                         cooldown = 1;
                         State = SystemState.CheckReqs;
@@ -66,7 +56,7 @@ namespace Windfall.Common.Systems.WorldEvents
                     break;
                 case SystemState.Spawn:
                     ScoogShake(mainPlayer, trueTimer++, 135, Main.rand.NextBool(), 0.25f);
-                    if(trueTimer >= 270)
+                    if (trueTimer >= 270)
                         State = SystemState.CheckReqs;
                     break;
             }
@@ -76,7 +66,7 @@ namespace Windfall.Common.Systems.WorldEvents
         {
             shakeCounter = 0;
         }
-        
+
         public static void ScoogShake(Player target, int scoogTimer, int midpoint, bool leftSide, float volume)
         {
             float groundShakeTime = 270f;

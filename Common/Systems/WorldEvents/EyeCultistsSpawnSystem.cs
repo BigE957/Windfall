@@ -1,17 +1,4 @@
-﻿using Microsoft.Xna.Framework;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Terraria;
-using Terraria.ID;
-using Terraria.ModLoader;
-using Terraria.ModLoader.IO;
-using Windfall.Content.NPCs.WanderingNPCs;
-using Windfall.Content.NPCs.WorldEvents.LunarCult;
-
-namespace Windfall.Common.Systems.WorldEvents
+﻿namespace Windfall.Common.Systems.WorldEvents
 {
     public class EyeCultistsSpawnSystem : ModSystem
     {
