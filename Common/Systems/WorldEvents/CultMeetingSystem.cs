@@ -311,7 +311,6 @@ namespace Windfall.Common.Systems.WorldEvents
                             }
                             #endregion
 
-                            Vector2 LerpLocation = Vector2.Zero;
                             if (MeetingTimer < 100)
                                 zoom = MathHelper.Lerp(zoom, 0.4f, 0.075f);
                             else
