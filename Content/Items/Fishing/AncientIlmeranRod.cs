@@ -16,7 +16,6 @@ using System.Collections.Generic;
 using CalamityMod;
 using CalamityMod.NPCs.AquaticScourge;
 using Windfall.Common.Systems.WorldEvents;
-using Windfall.Common.Utilities;
 
 namespace Windfall.Content.Items.Fishing
 {
@@ -84,7 +83,6 @@ namespace Windfall.Content.Items.Fishing
         int scoogWait = 60;
         int dialogueCounter = 0;
         bool startLeft = false;
-        float zoom = 0;
         public override void HoldItem(Player player)
         {
             isCast = false;
@@ -104,7 +102,7 @@ namespace Windfall.Content.Items.Fishing
                     if (scoogCounter == 0)
                     {
                         DesertScourgeRumbleSystem.ResetShakeCounter();
-                        startLeft = Main.rand.NextBool();                        
+                        startLeft = Main.rand.NextBool();
                         if (WorldSaveSystem.ScoogFished)
                         {
                             scoogWait = Main.rand.Next(30, 31);
@@ -119,30 +117,16 @@ namespace Windfall.Content.Items.Fishing
                     scoogCounter++;
 
                     //Spawns Paladin after 5 Seconds
-                    if (scoogCounter == 60 * 5)
+                    if (scoogCounter == 60 * 5 && !NPC.AnyNPCs(ModContent.NPCType<IlmeranPaladin>()) && !NPC.AnyNPCs(ModContent.NPCType<IlmeranPaladinKnocked>()))
                     {
-                        zoom = 0;
-                        if (!NPC.AnyNPCs(ModContent.NPCType<IlmeranPaladin>()) && !NPC.AnyNPCs(ModContent.NPCType<IlmeranPaladinKnocked>()))
-                            Projectile.NewProjectile(null, new Vector2(player.Center.X - 80 * player.direction, player.Center.Y + 100), new Vector2(0, -8), ModContent.ProjectileType<IlmeranPaladinDig>(), 0, 0);                  
+                        Projectile.NewProjectile(null, new Vector2(player.Center.X - 80 * player.direction, player.Center.Y + 100), new Vector2(0, -8), ModContent.ProjectileType<IlmeranPaladinDig>(), 0, 0);
                     }
 
-                    //Ilmeran Paladin Dialogue during the wait for Desert Scourge                    
+                    //Ilmeran Paladin Dialogue during the wait for Desert Scourge
 
                     if (NPC.AnyNPCs(ModContent.NPCType<IlmeranPaladin>()))
                     {
                         NPC Paladin = Main.npc[NPC.FindFirstNPC(ModContent.NPCType<IlmeranPaladin>())];
-
-                        if (scoogCounter > 60 * 6)
-                        {
-                            if (scoogCounter < (60 * 5) + 100)
-                                zoom = MathHelper.Lerp(zoom, 0.4f, 0.075f);
-                            else
-                                zoom = 0.4f;
-                            ZoomSystem.SetZoomEffect(zoom);
-                            Main.LocalPlayer.Windfall_Camera().ScreenFocusPosition = Paladin.Center;
-                            Main.LocalPlayer.Windfall_Camera().ScreenFocusInterpolant = zoom;
-                        }
-
                         int Delay = 0;
                         if (!WorldSaveSystem.ScoogFished)
                         {
@@ -257,9 +241,9 @@ namespace Windfall.Content.Items.Fishing
         {
             Rectangle location = new((int)Paladin.Center.X, (int)Paladin.Center.Y, Paladin.width, Paladin.width);
             CombatText MyDialogue = Main.combatText[CombatText.NewText(location, Color.SandyBrown, text, true)];
-            if (MyDialogue.text.Length < 20)
+            if (MyDialogue.text.Length > 50)
             {
-                MyDialogue.lifeTime = 60;
+                MyDialogue.lifeTime += (5 * (MyDialogue.text.Length - 50));
             }
         }
         
