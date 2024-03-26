@@ -551,7 +551,6 @@ namespace Windfall.Content.NPCs.WorldEvents.LunarCult
             if (CurrentDialogue == DialogueState.CurrentEventsGoodEnd || CurrentDialogue == DialogueState.Recruitable)
                 button2 = "Recruit";
         }
-
         public override bool CheckActive()
         {
             if (!chattable)

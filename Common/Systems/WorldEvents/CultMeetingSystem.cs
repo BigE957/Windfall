@@ -249,7 +249,7 @@ namespace Windfall.Common.Systems.WorldEvents
                                             Text = DisplayMessage(BishopLocation, Color.Blue, "I'm sure you are all aware of some... recent developments.");
                                             break;
                                         case 6 * 60:
-                                            Text = DisplayMessage(Cultist1Location, Color.Yellow, "Yeah, what's going on? Things seem crazy right now...");
+                                            Text = DisplayMessage(Cultist1Location, Color.Yellow, "Yeah, what's really going on?!");
                                             break;
                                         case 8 * 60:
                                             Text = DisplayMessage(BishopLocation, Color.Blue, "The end of our journey together is fast approaching!");
