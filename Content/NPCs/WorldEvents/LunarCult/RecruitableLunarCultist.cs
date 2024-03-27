@@ -199,9 +199,9 @@ namespace Windfall.Content.NPCs.WorldEvents.LunarCult
         public override string GetChat()
         {
             if (CurrentDialogue != DialogueState.Unrecruited && CurrentDialogue != DialogueState.RecruitSuccess && CurrentDialogue != DialogueState.Recruitable && CurrentDialogue != DialogueState.Recruited)
-                return Language.GetOrRegister($"Mods.{nameof(Windfall)}.Dialogue.LunarCult.Recruits.{MyName}.{CultMeetingSystem.CurrentMeetingTopic}.{CurrentDialogue.ToString().Remove(0, CultMeetingSystem.CurrentMeetingTopic.ToString().Length)}").Value;
+                return GetWindfallTextValue($"Dialogue.LunarCult.Recruits.{MyName}.{CultMeetingSystem.CurrentMeetingTopic}.{CurrentDialogue.ToString().Remove(0, CultMeetingSystem.CurrentMeetingTopic.ToString().Length)}");
             else
-                return Language.GetOrRegister($"Mods.{nameof(Windfall)}.Dialogue.LunarCult.Recruits.{MyName}.{CurrentDialogue}").Value;
+                return GetWindfallTextValue($"Dialogue.LunarCult.Recruits.{MyName}.{CurrentDialogue}");
         }
 
         #region Dialogue Paths
@@ -530,9 +530,9 @@ namespace Windfall.Content.NPCs.WorldEvents.LunarCult
                 CurrentDialogue = (DialogueState)GetNPCConversation(MyDialogue, (int)CurrentDialogue, firstButton);
             }
             if (CurrentDialogue != DialogueState.Unrecruited && CurrentDialogue != DialogueState.RecruitSuccess && CurrentDialogue != DialogueState.Recruitable && CurrentDialogue != DialogueState.Recruited)
-                Main.npcChatText = Language.GetOrRegister($"Mods.{nameof(Windfall)}.Dialogue.LunarCult.Recruits.{MyName}.{CultMeetingSystem.CurrentMeetingTopic}.{CurrentDialogue.ToString().Remove(0, CultMeetingSystem.CurrentMeetingTopic.ToString().Length)}").Value;
+                Main.npcChatText = GetWindfallTextValue($"Dialogue.LunarCult.Recruits.{MyName}.{CultMeetingSystem.CurrentMeetingTopic}.{CurrentDialogue.ToString().Remove(0, CultMeetingSystem.CurrentMeetingTopic.ToString().Length)}");
             else
-                Main.npcChatText = Language.GetOrRegister($"Mods.{nameof(Windfall)}.Dialogue.LunarCult.Recruits.{MyName}.{CurrentDialogue}").Value;
+                Main.npcChatText = GetWindfallTextValue($"Dialogue.LunarCult.Recruits.{MyName}.{CurrentDialogue}");
         }
         public override void SetChatButtons(ref string button, ref string button2)
         {

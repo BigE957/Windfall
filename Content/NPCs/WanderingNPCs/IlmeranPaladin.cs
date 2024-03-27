@@ -81,7 +81,7 @@ namespace Windfall.Content.NPCs.WanderingNPCs
 			BestiaryDatabaseNPCsPopulator.CommonTags.SpawnConditions.Biomes.Desert,
 
 			// Sets your NPC's flavor text in the bestiary.
-			new FlavorTextBestiaryInfoElement((string)Language.GetOrRegister($"Mods.{nameof(Windfall)}.Dialogue.{nameof(IlmeranPaladin)}.Bestiary")),
+			new FlavorTextBestiaryInfoElement(GetWindfallTextValue($"Bestiary.{nameof(IlmeranPaladin)}")),
         });
         }
 
@@ -108,45 +108,45 @@ namespace Windfall.Content.NPCs.WanderingNPCs
             Player player = Main.player[Main.myPlayer];
             WeightedRandom<string> chat = new();
             if (WorldSaveSystem.paladinChats == 0)
-                return Language.GetOrRegister($"Mods.{nameof(Windfall)}.Dialogue.IlmeranPaladin.Chat.FirstChat").Value;
+                return GetWindfallTextValue($"Dialogue.IlmeranPaladin.Chat.FirstChat");
             if (NPC.ai[1] == 1)
             {
                 NPC.ai[1] = 0;
-                return Language.GetOrRegister($"Mods.{nameof(Windfall)}.Dialogue.IlmeranPaladin.Chat.Saved").Value;
+                return GetWindfallTextValue($"Dialogue.IlmeranPaladin.Chat.Saved");
             }
             if (Sandstorm.Happening)
-                chat.Add(Language.GetOrRegister($"Mods.{nameof(Windfall)}.Dialogue.IlmeranPaladin.Chat.Sandstorm").Value);
+                chat.Add(GetWindfallTextValue($"Dialogue.IlmeranPaladin.Chat.Sandstorm"));
             else
-                chat.Add(Language.GetOrRegister($"Mods.{nameof(Windfall)}.Dialogue.IlmeranPaladin.Chat.NoSandstorm").Value);
+                chat.Add(GetWindfallTextValue($"Dialogue.IlmeranPaladin.Chat.NoSandstorm"));
             if (player.Calamity().victideSet || (WearingVictideHelmet(player) && player.armor[11].type == ModContent.ItemType<VictideBreastplate>() && player.armor[12].type == ModContent.ItemType<VictideGreaves>()))
                 if (player.armor[0].type == ModContent.ItemType<VictideHeadMagic>())
                 {
-                    chat.Add(Language.GetOrRegister($"Mods.{nameof(Windfall)}.Dialogue.IlmeranPaladin.Chat.LookingFamiliar1").Value);
-                    chat.Add(Language.GetOrRegister($"Mods.{nameof(Windfall)}.Dialogue.IlmeranPaladin.Chat.LookingFamiliar2").Value);
+                    chat.Add(GetWindfallTextValue($"Dialogue.IlmeranPaladin.Chat.LookingFamiliar1"));
+                    chat.Add(GetWindfallTextValue($"Dialogue.IlmeranPaladin.Chat.LookingFamiliar2"));
                 }
                 else
                 {
-                    chat.Add(Language.GetOrRegister($"Mods.{nameof(Windfall)}.Dialogue.IlmeranPaladin.Chat.LookingIlmeran1").Value);
-                    chat.Add(Language.GetOrRegister($"Mods.{nameof(Windfall)}.Dialogue.IlmeranPaladin.Chat.LookingIlmeran2").Value);
+                    chat.Add(GetWindfallTextValue($"Dialogue.IlmeranPaladin.Chat.LookingIlmeran1"));
+                    chat.Add(GetWindfallTextValue($"Dialogue.IlmeranPaladin.Chat.LookingIlmeran2"));
                 }
             if (NPC.FindFirstNPC(ModContent.NPCType<SEAHOE>()) != -1)
             {
-                chat.Add(Language.GetOrRegister($"Mods.{nameof(Windfall)}.Dialogue.IlmeranPaladin.Chat.Amidias1").Value);
-                chat.Add(Language.GetOrRegister($"Mods.{nameof(Windfall)}.Dialogue.IlmeranPaladin.Chat.Amidias2").Value);
+                chat.Add(GetWindfallTextValue($"Dialogue.IlmeranPaladin.Chat.Amidias1"));
+                chat.Add(GetWindfallTextValue($"Dialogue.IlmeranPaladin.Chat.Amidias2"));
             }
             if (Main.dayTime)
             {
-                chat.Add(Language.GetOrRegister($"Mods.{nameof(Windfall)}.Dialogue.IlmeranPaladin.Chat.Daytime1").Value);
-                chat.Add(Language.GetOrRegister($"Mods.{nameof(Windfall)}.Dialogue.IlmeranPaladin.Chat.Daytime2").Value);
+                chat.Add(GetWindfallTextValue($"Dialogue.IlmeranPaladin.Chat.Daytime1"));
+                chat.Add(GetWindfallTextValue($"Dialogue.IlmeranPaladin.Chat.Daytime2"));
             }
             else
             {
-                chat.Add(Language.GetOrRegister($"Mods.{nameof(Windfall)}.Dialogue.IlmeranPaladin.Chat.Nighttime1").Value);
-                chat.Add(Language.GetOrRegister($"Mods.{nameof(Windfall)}.Dialogue.IlmeranPaladin.Chat.Nighttime2").Value);
+                chat.Add(GetWindfallTextValue($"Dialogue.IlmeranPaladin.Chat.Nighttime1"));
+                chat.Add(GetWindfallTextValue($"Dialogue.IlmeranPaladin.Chat.Nighttime2"));
             }
-            chat.Add(Language.GetOrRegister($"Mods.{nameof(Windfall)}.Dialogue.IlmeranPaladin.Chat.Standard1").Value);
-            chat.Add(Language.GetOrRegister($"Mods.{nameof(Windfall)}.Dialogue.IlmeranPaladin.Chat.Standard2").Value);
-            chat.Add(Language.GetOrRegister($"Mods.{nameof(Windfall)}.Dialogue.IlmeranPaladin.Chat.Standard3").Value);
+            chat.Add(GetWindfallTextValue($"Dialogue.IlmeranPaladin.Chat.Standard1"));
+            chat.Add(GetWindfallTextValue($"Dialogue.IlmeranPaladin.Chat.Standard2"));
+            chat.Add(GetWindfallTextValue($"Dialogue.IlmeranPaladin.Chat.Standard3"));
             WorldSaveSystem.paladinChats++;
             return chat;
         }

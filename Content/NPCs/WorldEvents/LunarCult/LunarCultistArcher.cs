@@ -77,7 +77,7 @@
         }
         public override string GetChat()
         {
-            return Language.GetOrRegister($"Mods.{nameof(Windfall)}.Dialogue.LunarCult.MechanicShed.{CurrentDialogue}").Value;
+            return GetWindfallTextValue($"Dialogue.LunarCult.MechanicShed.{CurrentDialogue}");
         }
         private readonly List<dialogueDirections> MyDialogue = new()
         {
@@ -154,7 +154,7 @@
             }
             else
             {
-                Main.npcChatText = Language.GetOrRegister($"Mods.{nameof(Windfall)}.Dialogue.LunarCult.MechanicShed.{CurrentDialogue}").Value;
+                Main.npcChatText = GetWindfallTextValue($"Dialogue.LunarCult.MechanicShed.{CurrentDialogue}");
             }
         }
         public override void SetChatButtons(ref string button, ref string button2)

@@ -52,7 +52,6 @@ Dialogue: {
 	}
 
 	GodseekerKnight: {
-		Bestiary: The Godseeker Knights were once the most feared warriors across the lands. Now, few still remain agter the collapse of Yharim's empire. Those who remain however, still hold a fierce loyalty to their master, and still carry out their duty to eradicate the gods.
 		Chat: {
 			WorkingOnIt: Perhaps in the future I'll teach you some of my techniques.
 			Standard1: The world has nearly been cleansed of the gods. To think our goal is finally in reach...
@@ -793,4 +792,9 @@ LoreItems: {
 		and I could feel his loyal embers fade with my growing despondence… It seems the time for our battle draws near, 
 		and it shall be from atop this mountain that we together witness the end of a cruel world.
 		'''
+}
+Bestiary: {
+	GodseekerKnight: The Godseeker Knights were once the most feared warriors across the lands. Now, few still remain agter the collapse of Yharim's empire. Those who remain however, still hold a fierce loyalty to their master, and still carry out their duty to eradicate the gods.
+	IlmeranPaladin: One of few to have survived the Incineration of Ilmeris, this paladin wanders the remnants of Ilmeris; keeping an eternal vigil over the sands of his former home.
+	TravellingCultist: A strange fellow who's recently begun showing up out of nowhere. He claims to want to fight against the Lunar Cult, but can he really be trusted...?
 }

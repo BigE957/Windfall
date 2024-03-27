@@ -74,7 +74,7 @@
         }
         public override string GetChat()
         {
-            return Language.GetOrRegister($"Mods.{nameof(Windfall)}.Dialogue.LunarCult.OcularDevotee.{CurrentDialogue}").Value;
+            return GetWindfallTextValue($"Dialogue.LunarCult.OcularDevotee.{CurrentDialogue}");
         }
         private readonly List<dialogueDirections> MyDialogue = new()
         {
@@ -106,7 +106,7 @@
         public override void OnChatButtonClicked(bool firstButton, ref string shop)
         {
             CurrentDialogue = (DialogueState)GetNPCConversation(MyDialogue, (int)CurrentDialogue, firstButton);
-            Main.npcChatText = Language.GetOrRegister($"Mods.{nameof(Windfall)}.Dialogue.LunarCult.OcularDevotee.{CurrentDialogue}").Value;
+            Main.npcChatText = GetWindfallTextValue($"Dialogue.LunarCult.OcularDevotee.{CurrentDialogue}");
         }
         public override void SetChatButtons(ref string button, ref string button2)
         {

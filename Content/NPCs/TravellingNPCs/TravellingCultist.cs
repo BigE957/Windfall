@@ -3,6 +3,8 @@ using Terraria.GameContent.Bestiary;
 using Terraria.Utilities;
 using Windfall.Common.Systems;
 using Windfall.Common.Systems.WorldEvents;
+using Windfall.Common.Utilities;
+using Windfall.Content.NPCs.WanderingNPCs;
 using Windfall.Content.NPCs.WorldEvents.LunarCult;
 
 namespace Windfall.Content.NPCs.TravellingNPCs
@@ -27,7 +29,7 @@ namespace Windfall.Content.NPCs.TravellingNPCs
             if ((!Main.dayTime || Main.time >= despawnTime) && !IsNpcOnscreen(NPC.Center)) // If it's past the despawn time and the NPC isn't onscreen
             {
                 // Here we despawn the NPC and send a message stating that the NPC has despawned
-                CalamityUtils.DisplayLocalizedText("The Strange Cultist has departed!", new(50, 125, 255));
+                DisplayLocalizedText("The" + NPC.FullName + " has departed!", new(50, 125, 255));
                 NPC.active = false;
                 NPC.netSkip = -1;
                 NPC.life = 0;
@@ -61,7 +63,7 @@ namespace Windfall.Content.NPCs.TravellingNPCs
 
                 string key = ("A " + traveler.FullName + " has arrived!");
                 Color messageColor = new(50, 125, 255);
-                CalamityUtils.DisplayLocalizedText(key, messageColor);
+                DisplayLocalizedText(key, messageColor);
             }
         }
         private static bool CanSpawnNow()
@@ -144,7 +146,7 @@ namespace Windfall.Content.NPCs.TravellingNPCs
             bestiaryEntry.Info.AddRange(new IBestiaryInfoElement[] {
             BestiaryDatabaseNPCsPopulator.CommonTags.SpawnConditions.Biomes.Surface,
 
-            new FlavorTextBestiaryInfoElement("A strange fellow who's recently begun showing up out of nowhere. He claims to want to fight against the Lunar Cult, but can he really be trusted...?"),
+            new FlavorTextBestiaryInfoElement(GetWindfallTextValue($"Bestiary.{nameof(TravellingCultist)}")),
         });
         }
         public override bool CanTownNPCSpawn(int numTownNPCs) => false;
@@ -200,24 +202,24 @@ namespace Windfall.Content.NPCs.TravellingNPCs
         public override string GetChat()
         {
             if (CurrentDialogue != DialogueState.Quests1 || CurrentDialogue != DialogueState.Quests2)
-                return Language.GetOrRegister($"Mods.{nameof(Windfall)}.Dialogue.LunarCult.TravellingCultist.Conversation.{CurrentDialogue}").Value;
+                return GetTextValue($"Dialogue.LunarCult.TravellingCultist.Conversation.{CurrentDialogue}");
             WeightedRandom<string> chat = new();
 
-            chat.Add(Language.GetOrRegister($"Mods.{nameof(Windfall)}.Dialogue.LunarCult.TravellingCultist.Chat.Standard1").Value);
-            chat.Add(Language.GetOrRegister($"Mods.{nameof(Windfall)}.Dialogue.LunarCult.TravellingCultist.Chat.Standard2").Value);
-            chat.Add(Language.GetOrRegister($"Mods.{nameof(Windfall)}.Dialogue.LunarCult.TravellingCultist.Chat.Standard3").Value);
+            chat.Add(GetTextValue("Dialogue.LunarCult.TravellingCultist.Chat.Standard1"));
+            chat.Add(GetTextValue("Dialogue.LunarCult.TravellingCultist.Chat.Standard2"));
+            chat.Add(GetTextValue("Dialogue.LunarCult.TravellingCultist.Chat.Standard3"));
             if (NPC.AnyNPCs(NPCID.Mechanic) || NPC.AnyNPCs(NPCID.Clothier))
             {
-                chat.Add(Language.GetOrRegister($"Mods.{nameof(Windfall)}.Dialogue.LunarCult.TravellingCultist.Chat.AnyDungeonNPC").Value);
+                chat.Add(GetTextValue("Dialogue.LunarCult.TravellingCultist.Chat.AnyDungeonNPC"));
                 if (NPC.AnyNPCs(NPCID.Mechanic))
-                    chat.Add(Language.GetOrRegister($"Mods.{nameof(Windfall)}.Dialogue.LunarCult.TravellingCultist.Chat.Mechanic").Value);
+                    chat.Add(GetTextValue("Dialogue.LunarCult.TravellingCultist.Chat.Mechanic"));
                 if (NPC.AnyNPCs(NPCID.Clothier))
-                    chat.Add(Language.GetOrRegister($"Mods.{nameof(Windfall)}.Dialogue.LunarCult.TravellingCultist.Chat.Clothier").Value);
+                    chat.Add(GetTextValue("Dialogue.LunarCult.TravellingCultist.Chat.Clothier"));
             }
             if (NPC.downedBoss3)
-                chat.Add(Language.GetOrRegister($"Mods.{nameof(Windfall)}.Dialogue.LunarCult.TravellingCultist.Chat.Skeletron").Value);
+                chat.Add(GetTextValue($"Dialogue.LunarCult.TravellingCultist.Chat.Skeletron"));
             for (int i = 0; i < CultMeetingSystem.Recruits.Count; i++)
-                chat.Add(Language.GetOrRegister($"Mods.{nameof(Windfall)}.Dialogue.LunarCult.TravellingCultist.Chat.{(RecruitableLunarCultist.RecruitNames)i}").Value);
+                chat.Add(GetTextValue($"Dialogue.LunarCult.TravellingCultist.Chat.{(RecruitableLunarCultist.RecruitNames)i}"));
             return chat;
         }
 
@@ -386,7 +388,7 @@ namespace Windfall.Content.NPCs.TravellingNPCs
                 return;
             }
             CurrentDialogue = (DialogueState)GetNPCConversation(MyDialogue, (int)CurrentDialogue, firstButton);
-            Main.npcChatText = Language.GetOrRegister($"Mods.{nameof(Windfall)}.Dialogue.LunarCult.TravellingCultist.Conversation.{CurrentDialogue}").Value;
+            Main.npcChatText = GetTextValue($"Dialogue.LunarCult.TravellingCultist.Conversation.{CurrentDialogue}");
         }
         public override void AI()
         {

@@ -91,32 +91,17 @@ namespace Windfall.Content.UI.WanderersJournals
         private void LoadPage()
         {
             if (WorldSaveSystem.JournalsCollected[PageNumber])
-            {
                 if ((JournalTypes)PageNumber == JournalTypes.Evil)
-                {
                     if (JournalUISystem.whichEvilJournal == "Crimson")
-                    {
-                        JournalText.JournalContents = Language.GetOrRegister($"Mods.{nameof(Windfall)}.JournalContents.Crimson").Value;
-                    }
+                        JournalText.JournalContents = GetWindfallTextValue($"JournalContents.Crimson");
                     else if (JournalUISystem.whichEvilJournal == "Corruption")
-                    {
-                        JournalText.JournalContents = Language.GetOrRegister($"Mods.{nameof(Windfall)}.JournalContents.Corruption").Value;
-                    }
+                        JournalText.JournalContents = GetWindfallTextValue($"JournalContents.Corruption");
                     else
-                    {
                         JournalText.JournalContents = "";
-                    }
-                }
                 else
-                {
-                    JournalText.JournalContents = Language.GetOrRegister($"Mods.{nameof(Windfall)}.JournalContents.{(JournalTypes)PageNumber}").Value;
-                }
-            }
+                    JournalText.JournalContents = GetWindfallTextValue($"JournalContents.{(JournalTypes)PageNumber}");
             else
-            {
                 JournalText.JournalContents = "";
-
-            }
             ModContent.GetInstance<JournalUISystem>().ShowJournalUI();
         }
     }
@@ -145,13 +130,11 @@ namespace Windfall.Content.UI.WanderersJournals
             int yScale = (int)(42 * yResolutionScale);
             int yScale2 = (int)(yOffsetPerLine * yResolutionScale);
             for (int i = 0; i < dialogLines.Count; i++)
-            {
                 if (dialogLines[i] != null)
                 {
                     int textDrawPositionY = yScale + i * yScale2 + (int)yPageTop;
                     Utils.DrawBorderStringFourWay(spriteBatch, FontAssets.ItemStack.Value, dialogLines[i], xPageTop, textDrawPositionY, Color.Black, Color.Tan, Vector2.Zero, 0.75f);
                 }
-            }
             if (isFullJournal)
             {
                 string pgNumStr = Convert.ToString(JournalFullUIState.PageNumber + 1);
@@ -159,5 +142,4 @@ namespace Windfall.Content.UI.WanderersJournals
             }
         }
     }
-
 }

@@ -78,7 +78,7 @@ namespace Windfall.Content.NPCs.WanderingNPCs
 			BestiaryDatabaseNPCsPopulator.CommonTags.SpawnConditions.Biomes.Jungle,
 
 			// Sets your NPC's flavor text in the bestiary.
-			new FlavorTextBestiaryInfoElement((string)Language.GetOrRegister($"Mods.{nameof(Windfall)}.Dialogue.{nameof(GodseekerKnight)}.Bestiary")),
+			new FlavorTextBestiaryInfoElement(GetWindfallTextValue($"Bestiary.{nameof(GodseekerKnight)}")),
         });
         }
 
@@ -88,9 +88,7 @@ namespace Windfall.Content.NPCs.WanderingNPCs
         public override float SpawnChance(NPCSpawnInfo spawnInfo)
         {
             if ((spawnInfo.Player.ZoneCorrupt || spawnInfo.Player.ZoneCrimson) && NPC.downedBoss2)
-            {
                 return 0.34f;
-            }
             return 0f;
         }
 
@@ -98,37 +96,37 @@ namespace Windfall.Content.NPCs.WanderingNPCs
         {
             Player player = Main.player[Main.myPlayer];
             WeightedRandom<string> chat = new();
-            chat.Add(Language.GetOrRegister($"Mods.{nameof(Windfall)}.Dialogue.{nameof(GodseekerKnight)}.Chat.Standard1").Value);
-            chat.Add(Language.GetOrRegister($"Mods.{nameof(Windfall)}.Dialogue.{nameof(GodseekerKnight)}.Chat.Standard2").Value);
-            chat.Add(Language.GetOrRegister($"Mods.{nameof(Windfall)}.Dialogue.{nameof(GodseekerKnight)}.Chat.Standard3").Value);
+            chat.Add(GetTextValue($"Dialogue.{nameof(GodseekerKnight)}.Chat.Standard1"));
+            chat.Add(GetTextValue($"Dialogue.{nameof(GodseekerKnight)}.Chat.Standard2"));
+            chat.Add(GetTextValue($"Dialogue.{nameof(GodseekerKnight)}.Chat.Standard3"));
             if (!NPC.downedQueenSlime)
             {
-                chat.Add(Language.GetOrRegister($"Mods.{nameof(Windfall)}.Dialogue.{nameof(GodseekerKnight)}.Chat.SlimeGod1").Value);
-                chat.Add(Language.GetOrRegister($"Mods.{nameof(Windfall)}.Dialogue.{nameof(GodseekerKnight)}.Chat.SlimeGod2").Value);
+                chat.Add(GetTextValue($"Dialogue.{nameof(GodseekerKnight)}.Chat.SlimeGod1"));
+                chat.Add(GetTextValue($"Dialogue.{nameof(GodseekerKnight)}.Chat.SlimeGod2"));
             }
             if (player.ZoneCorrupt || player.ZoneCrimson)
             {
-                chat.Add(Language.GetOrRegister($"Mods.{nameof(Windfall)}.Dialogue.{nameof(GodseekerKnight)}.Chat.Evilbiome1").Value);
-                chat.Add(Language.GetOrRegister($"Mods.{nameof(Windfall)}.Dialogue.{nameof(GodseekerKnight)}.Chat.Evilbiome2").Value);
+                chat.Add(GetTextValue($"Dialogue.{nameof(GodseekerKnight)}.Chat.Evilbiome1"));
+                chat.Add(GetTextValue($"Dialogue.{nameof(GodseekerKnight)}.Chat.Evilbiome2"));
             }
             if (player.Calamity().statigelSet || (WearingStatigelHelmet(player) && player.armor[11].type == ModContent.ItemType<StatigelArmor>() && player.armor[12].type == ModContent.ItemType<StatigelGreaves>()))
             {
-                chat.Add(Language.GetOrRegister($"Mods.{nameof(Windfall)}.Dialogue.{nameof(GodseekerKnight)}.Chat.Statigel1").Value);
-                chat.Add(Language.GetOrRegister($"Mods.{nameof(Windfall)}.Dialogue.{nameof(GodseekerKnight)}.Chat.Statigel2").Value);
+                chat.Add(GetTextValue($"Dialogue.{nameof(GodseekerKnight)}.Chat.Statigel1"));
+                chat.Add(GetTextValue($"Dialogue.{nameof(GodseekerKnight)}.Chat.Statigel2"));
             }
             return chat;
         }
         public override void SetChatButtons(ref string button, ref string button2)
         {
-            button = Language.GetOrRegister($"Mods.{nameof(Windfall)}.Dialogue.Buttons.{nameof(GodseekerKnight)}.Techniques").Value;
+            button = GetTextValue($"Dialogue.Buttons.{nameof(GodseekerKnight)}.Techniques");
             button2 = Language.GetTextValue("LegacyInterface.64");
         }
         public override void OnChatButtonClicked(bool firstButton, ref string shop)
         {
             if (firstButton)
-                Main.npcChatText = Language.GetOrRegister($"Mods.{nameof(Windfall)}.Dialogue.{nameof(GodseekerKnight)}.Chat.WorkingOnIt").Value;
+                Main.npcChatText = GetTextValue($"Dialogue.{nameof(GodseekerKnight)}.Chat.WorkingOnIt");
             else
-                Utilities.QuestDialogueHelper(Main.npc[NPC.whoAmI]);
+                QuestDialogueHelper(Main.npc[NPC.whoAmI]);
         }
 
         public override bool CheckActive() => !NPC.AnyNPCs(ModContent.NPCType<HiveMind>());
