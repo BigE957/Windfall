@@ -104,9 +104,9 @@ namespace Windfall.Content.NPCs.WorldEvents.CalClone
             WeightedRandom<string> chat = new();
 
             // These are things that the NPC has a chance of telling you when you talk to it.
-            chat.Add(Language.GetOrRegister($"Mods.{nameof(Windfall)}.Dialogue.CalPotionSeller.PotionSeller1").Value);
-            chat.Add(Language.GetOrRegister($"Mods.{nameof(Windfall)}.Dialogue.CalPotionSeller.PotionSeller2").Value);
-            chat.Add(Language.GetOrRegister($"Mods.{nameof(Windfall)}.Dialogue.CalPotionSeller.PotionSeller3").Value);
+            chat.Add(GetWindfallTextValue($"Dialogue.CalPotionSeller.PotionSeller1"));
+            chat.Add(GetWindfallTextValue($"Dialogue.CalPotionSeller.PotionSeller2"));
+            chat.Add(GetWindfallTextValue($"Dialogue.CalPotionSeller.PotionSeller3"));
 
             return chat; // chat is implicitly cast to a string.
         }

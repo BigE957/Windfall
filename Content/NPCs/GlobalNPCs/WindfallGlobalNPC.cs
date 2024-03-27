@@ -3,7 +3,7 @@ using Windfall.Content.NPCs.Enemies;
 using Windfall.Content.Projectiles.NPCAnimations;
 using Windfall.Content.Projectiles.Other;
 
-namespace Windfall.Content.NPCs
+namespace Windfall.Content.NPCs.GlobalNPCs
 {
     public class WindfallGlobalNPC : GlobalNPC
     {
@@ -23,11 +23,11 @@ namespace Windfall.Content.NPCs
             if (npc.type == calamity.Find<ModNPC>("GiantClam").Type)
                 QuestSystem.IncrementQuestProgress(QuestSystem.QuestLog.FindIndex(quest => quest.Name == "ClamHunt"), 0);
 
-            if ((npc.type == calamity.Find<ModNPC>("HiveMind").Type && !DownedBossSystem.downedHiveMind) || (npc.type == calamity.Find<ModNPC>("PerforatorHive").Type && !DownedBossSystem.downedPerforator))
+            if (npc.type == calamity.Find<ModNPC>("HiveMind").Type && !DownedBossSystem.downedHiveMind || npc.type == calamity.Find<ModNPC>("PerforatorHive").Type && !DownedBossSystem.downedPerforator)
                 SpawnWorldEventProjectile(ModContent.ProjectileType<SeekerKnightProj>(), 100);
 
             if (npc.type == NPCID.SkeletronHead && !NPC.downedBoss3)
-                Projectile.NewProjectile(Entity.GetSource_NaturalSpawn(), new Vector2((int)Main.dungeonX, (int)Main.dungeonY).ToWorldCoordinates(), Vector2.Zero, ModContent.ProjectileType<LunarBishopProj>(), 0, 0, -1, 1);
+                Projectile.NewProjectile(Entity.GetSource_NaturalSpawn(), new Vector2(Main.dungeonX, Main.dungeonY).ToWorldCoordinates(), Vector2.Zero, ModContent.ProjectileType<LunarBishopProj>(), 0, 0, -1, 1);
 
             if (npc.type == calamity.Find<ModNPC>("SlimeGodCore").Type)
                 QuestSystem.IncrementQuestProgress(QuestSystem.QuestLog.FindIndex(quest => quest.Name == "SlimeGodHunt"), 0);

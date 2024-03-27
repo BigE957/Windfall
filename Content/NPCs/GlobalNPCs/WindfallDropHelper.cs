@@ -5,9 +5,9 @@ using Windfall.Content.Items.Lore;
 using Windfall.Content.Items.Quests;
 using Windfall.Content.NPCs.TravellingNPCs;
 
-namespace Windfall.Content.NPCs
+namespace Windfall.Content.NPCs.GlobalNPCs
 {
-    public class DropHelper : GlobalNPC
+    public class WindfallDropHelper : GlobalNPC
     {
         [JITWhenModsEnabled("CalamityMod")]
         public override void ModifyNPCLoot(NPC npc, NPCLoot npcLoot)
