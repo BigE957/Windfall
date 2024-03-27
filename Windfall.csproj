@@ -88,6 +88,7 @@
   <ItemGroup>
     <Folder Include="Assets\Items\Fishing\" />
     <Folder Include="Assets\NPCs\Enemies\" />
+    <Folder Include="Assets\Sounds\Music\" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="CalamityMod">
