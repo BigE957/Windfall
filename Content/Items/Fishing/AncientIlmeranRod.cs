@@ -89,7 +89,6 @@ namespace Windfall.Content.Items.Fishing
                 }
             }
             if (isCast)
-            {
                 if (player.ZoneDesert && !NPC.AnyNPCs(ModContent.NPCType<DesertScourgeHead>()) && !BossRushEvent.BossRushActive)
                 {
                     //Determines how long the wait for Desert Scourge will be based on ScoogFished
@@ -137,20 +136,12 @@ namespace Windfall.Content.Items.Fishing
 
                         int Delay = 0;
                         if (!WorldSaveSystem.ScoogFished)
-                        {
                             for (int i = dialogueCounter; i >= 0; i--)
-                            {
                                 Delay += PaladinDialogue[i].delay;
-                            }
-                        }
                         else
-                        {
                             for (int i = dialogueCounter; i >= 17; i--)
-                            {
                                 Delay += PaladinDialogue[i].delay;
-                            }
 
-                        }
                         if (scoogCounter == (60 * (Delay)))
                         {
                             PaladinMessage(PaladinDialogue[dialogueCounter].text, Paladin);
@@ -162,24 +153,17 @@ namespace Windfall.Content.Items.Fishing
                     if (!WorldSaveSystem.ScoogFished)
                     {
                         if (scoogCounter >= 60 * 49 && scoogCounter <= 60 * 55)
-                        {
                             DesertScourgeRumbleSystem.ScoogShake(player, scoogCounter, 60 * 52, startLeft, 0.25f);
-                        }
-                        if (scoogCounter >= 60 * 60 && scoogCounter <= 60 * 65)
-                        {
+                        else if (scoogCounter >= 60 * 60 && scoogCounter <= 60 * 65)
                             DesertScourgeRumbleSystem.ScoogShake(player, scoogCounter, 60 * 65, !startLeft, 0.5f);
-                        }
+                        
                     }
                     else
                     {
                         if (scoogCounter >= 60 * 14 && scoogCounter <= 60 * 20)
-                        {
                             DesertScourgeRumbleSystem.ScoogShake(player, scoogCounter, 60 * 16, startLeft, 0.25f);
-                        }
-                        if (scoogCounter >= 60 * 22 && scoogCounter <= 60 * 28)
-                        {
+                        else if (scoogCounter >= 60 * 22 && scoogCounter <= 60 * 28)
                             DesertScourgeRumbleSystem.ScoogShake(player, scoogCounter, 60 * 28, !startLeft, 0.5f);
-                        }
                     }
 
                     //Spawns Desert Scourge after "scoogWait" seconds
@@ -226,23 +210,19 @@ namespace Windfall.Content.Items.Fishing
                             NetMessage.SendData(MessageID.SpawnBossUseLicenseStartEvent, -1, -1, null, player.whoAmI, ModContent.NPCType<AquaticScourgeHead>());
                     }
                 }
-            }
-            else
+            else if(scoogCounter != 0)
             {
-                if (scoogCounter != 0)
+                if (player.ZoneDesert && NPC.AnyNPCs(ModContent.NPCType<IlmeranPaladin>()) && !NPC.AnyNPCs(ModContent.NPCType<DesertScourgeHead>()))
                 {
-                    if (player.ZoneDesert && NPC.AnyNPCs(ModContent.NPCType<IlmeranPaladin>()) && !NPC.AnyNPCs(ModContent.NPCType<DesertScourgeHead>()))
-                    {
-                        NPC Paladin = Main.npc[NPC.FindFirstNPC(ModContent.NPCType<IlmeranPaladin>())];
-                        PaladinMessage("Oh, nevermind...", Paladin);
-                    }
-                    else if (NPC.AnyNPCs(ModContent.NPCType<AquaticScourgeHead>()))
-                    {
-                        NPC npc = Main.npc[NPC.FindFirstNPC(ModContent.NPCType<AquaticScourgeHead>())];
-                        npc.life = (int)(npc.lifeMax * 0.999);
-                    }
-                    scoogCounter = 0;
+                    NPC Paladin = Main.npc[NPC.FindFirstNPC(ModContent.NPCType<IlmeranPaladin>())];
+                    PaladinMessage("Oh, nevermind...", Paladin);
                 }
+                else if (NPC.AnyNPCs(ModContent.NPCType<AquaticScourgeHead>()))
+                {
+                    NPC npc = Main.npc[NPC.FindFirstNPC(ModContent.NPCType<AquaticScourgeHead>())];
+                    npc.life = (int)(npc.lifeMax * 0.999);
+                }
+                scoogCounter = 0;
             }
         }
         internal static void PaladinMessage(string text, NPC Paladin)
@@ -250,10 +230,7 @@ namespace Windfall.Content.Items.Fishing
             Rectangle location = new((int)Paladin.Center.X, (int)Paladin.Center.Y, Paladin.width, Paladin.width);
             CombatText MyDialogue = Main.combatText[CombatText.NewText(location, Color.SandyBrown, text, true)];
             if (MyDialogue.text.Length < 20)
-            {
                 MyDialogue.lifeTime = 60;
-            }
         }
-
     }
 }

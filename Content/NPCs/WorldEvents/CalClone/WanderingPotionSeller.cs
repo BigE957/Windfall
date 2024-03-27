@@ -137,7 +137,7 @@ namespace Windfall.Content.NPCs.WorldEvents.CalClone
                 {
                     string key = "Well...";
                     Color messageColor = Color.Orange;
-                    CalamityUtils.DisplayLocalizedText(key, messageColor);
+                    DisplayLocalizedText(key, messageColor);
                     zoom = 0;
                 }
                 else if (aiCounter < 120)
