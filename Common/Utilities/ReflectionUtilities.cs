@@ -4,7 +4,7 @@ using Terraria.ModLoader.Core;
 
 namespace Windfall.Common.Utilities
 {
-    public static partial class Utilities
+    public static partial class WindfallUtils
     {
         /// <summary>
         /// Binding flags that account for all access/local membership status.

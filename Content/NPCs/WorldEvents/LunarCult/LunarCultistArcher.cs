@@ -153,9 +153,7 @@
                 }
             }
             else
-            {
                 Main.npcChatText = GetWindfallTextValue($"Dialogue.LunarCult.MechanicShed.{CurrentDialogue}");
-            }
         }
         public override void SetChatButtons(ref string button, ref string button2)
         {

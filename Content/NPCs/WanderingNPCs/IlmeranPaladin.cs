@@ -160,7 +160,7 @@ namespace Windfall.Content.NPCs.WanderingNPCs
             if (firstButton)
                 shop = "Shop";
             else
-                Utilities.QuestDialogueHelper(Main.npc[NPC.whoAmI]);
+                WindfallUtils.QuestDialogueHelper(Main.npc[NPC.whoAmI]);
         }
         public override void AddShops()
         {

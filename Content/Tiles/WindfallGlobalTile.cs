@@ -39,7 +39,7 @@ namespace Windfall.Content.Tiles
             if (chest != null)
             {
                 //chest the opened chest to see if it is the Mechanic's Cabin Chest, and if true, begins the Lunar Cult World Event
-                if (Utilities.ChestContains(chest, ItemID.Toolbox) != -1)
+                if (WindfallUtils.ChestContains(chest, ItemID.Toolbox) != -1)
                 {
                     if (!WorldSaveSystem.MechanicCultistsEncountered)
                         cultistJumpscare(chest.x, chest.y);

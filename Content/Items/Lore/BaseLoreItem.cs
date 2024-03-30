@@ -1,6 +1,6 @@
 ﻿namespace Windfall.Content.Items.Lore
 {
-    public class BaseLoreItem : ModItem
+    public abstract class BaseLoreItem : ModItem
     {
         internal virtual string Key => null;
         internal virtual int Rarity => 0;

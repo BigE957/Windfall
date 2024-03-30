@@ -1,6 +1,6 @@
 ﻿namespace Windfall.Common.Utilities
 {
-    public static partial class Utilities
+    public static partial class WindfallUtils
     {
         /// <summary>
         /// Checks if a chest contains a given ItemType and returns that items index if it finds it. Otherwise, returns -1.

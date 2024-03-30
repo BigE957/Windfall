@@ -2,7 +2,7 @@
 
 namespace Windfall.Common.Utilities
 {
-    public static partial class Utilities
+    public static partial class WindfallUtils
     {
         public class ActiveAndNotActuated : GenCondition
         {

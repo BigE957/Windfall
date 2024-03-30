@@ -5,7 +5,7 @@ using Windfall.Content.Projectiles;
 
 namespace Windfall.Common.Utilities
 {
-    public static partial class Utilities
+    public static partial class WindfallUtils
     {
         public static CameraEffectsPlayer Windfall_Camera(this Player player) => player.GetModPlayer<CameraEffectsPlayer>();
         public static WindfallPlayer Windfall(this Player player) => player.GetModPlayer<WindfallPlayer>();

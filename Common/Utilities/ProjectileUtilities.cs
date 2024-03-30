@@ -1,6 +1,6 @@
 ﻿namespace Windfall.Common.Utilities
 {
-    public static partial class Utilities
+    public static partial class WindfallUtils
     {
         /// <summary>
         /// Summons a projectile of a specific type while also adjusting damage for vanilla spaghetti regarding hostile projectiles.

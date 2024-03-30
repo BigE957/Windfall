@@ -38,11 +38,11 @@ namespace Windfall.Content.Projectiles.NPCAnimations
         public override void OnSpawn(IEntitySource source)
         {
             Vector2 oldPos = Projectile.position;
-            Projectile.position.Y = Utilities.GetSurfacePositionFrom(Projectile.position).Y - Projectile.height - 8;
+            Projectile.position.Y = WindfallUtils.GetSurfacePositionFrom(Projectile.position).Y - Projectile.height - 8;
             float altY = 0;
             for (int i = 0; i < 16; i++)
             {
-                altY = Utilities.GetSurfacePositionFrom(new Vector2(oldPos.X + i, oldPos.Y - 64)).Y - Projectile.height - 8;
+                altY = WindfallUtils.GetSurfacePositionFrom(new Vector2(oldPos.X + i, oldPos.Y - 64)).Y - Projectile.height - 8;
                 if (altY < Projectile.position.Y)
                     Projectile.position.Y = altY;
             }

@@ -3,7 +3,7 @@ using Windfall.Content.NPCs.TravellingNPCs;
 
 namespace Windfall.Common.Utilities
 {
-    public static partial class Utilities
+    public static partial class WindfallUtils
     {
         private static readonly List<string> PaladinQuests = new()
         {

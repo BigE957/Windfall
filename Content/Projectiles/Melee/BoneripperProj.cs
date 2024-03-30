@@ -277,9 +277,7 @@ namespace Windfall.Content.Projectiles.Melee
         public override bool? Colliding(Rectangle projHitbox, Rectangle targetHitbox)
         {
             if (projHitbox.Intersects(targetHitbox))
-            {
                 return true;
-            }
 
             //float f = Projectile.rotation - MathF.PI / 4f * (float)Math.Sign(Projectile.velocity.X);
             //float collisionPoint = 0f;
