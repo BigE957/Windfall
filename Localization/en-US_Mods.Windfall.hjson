@@ -109,8 +109,8 @@ Dialogue: {
 				Issues: Yes... Our sanctum become something of a dungeon in recent years. However those it once held have now long since passed, and this site's had an adverse effect upon their souls. Now, its crawling with their reanimated remains. If you'd do us a favor and clean it out a bit, we'd be ever in your debt.
 				End: Now then, enough talk. Till we meet again, wayward traveller. Perhaps our paths might cross again.
 			}
+
 			WorldText: {
-				
 			}
 		}
 
@@ -289,11 +289,27 @@ Dialogue: {
 			}
 		}
 	}
-	Buttons: {
-		GodseekerKnight: {
-			Techniques: Techniques
+
+	Others: {
+		Merchant.PotionSeller: I don't know who that weirdo outside is, but I don't trust them! You should probably just stick to buying your potions from me.
+		PartyGirl.PotionSeller: Hope that potion seller decides to stick around; her potions are some of the best i've had in ages...
+		WitchDoctor.PotionSeller: I really must ask that potion seller how she does it... I might stand to learn a thing or two from here!
+		Truffle.PotionSeller: I hear there's some alchemist in town... Please tell me she won't be trying to turn me into a potion. I deal with enough as is...
+		TaxCollector.PotionSeller: That potion girl... She gives off a familiar presence, and not the good kind. I'd be cautious of her...
+		Dryad.PotionSeller: That new girl in town is quite the herbalist! Perhaps if she stays around I might be able to lend her a hand.
+		ArmsDealer.CalClone: Can you please get that... girl? -to leave. She keeps bugging me about imbuing my guns with Brimstone. My guns are fine as is thank you very much!
+		Cyborg.CalClone: That girl... She's part machine too just like me. I can't imagine what must've happened to her that's left her like this...
+		Nurse.CalClone: Not even I can fix whatever happened to that girl...
+		Golfer.CalClone: I tried to play a game of golf but that girl keeps setting my courses on fire. Can you get her to leave already...
+		Painter.CalClone: My poor paintings... She burned them... Every last one... I don't think I'm gonna recover from this...
+
+		Archmage: {
+			PotionSeller: There's something awfully familiar about that potion selller... I must be imagining things...
+			CalClone: What the fuck.
 		}
 	}
+
+	Buttons.GodseekerKnight.Techniques: Techniques
 }
 
 UI: {
@@ -640,6 +656,7 @@ NPCs: {
 	RecruitableLunarCultist.DisplayName: Goober
 	OratorNPC.DisplayName: Orator N P C
 	GodseekerKnight.DisplayName: Godseeker Knight
+	DarkSpawn.DisplayName: Dark Spawn
 }
 
 Projectiles: {
@@ -660,6 +677,10 @@ Projectiles: {
 	HideoutSeeker.DisplayName: Hideout Seeker
 	ParryProj.DisplayName: Parry Proj
 	SeekerKnightProj.DisplayName: Seeker Knight Proj
+	DarkMonster.DisplayName: Dark Monster
+	Checker.DisplayName: Checker
+	DarkGlob.DisplayName: Dark Glob
+	DarkBolt.DisplayName: Dark Bolt
 }
 
 Buffs: {
@@ -793,6 +814,7 @@ LoreItems: {
 		and it shall be from atop this mountain that we together witness the end of a cruel world.
 		'''
 }
+
 Bestiary: {
 	GodseekerKnight: The Godseeker Knights were once the most feared warriors across the lands. Now, few still remain agter the collapse of Yharim's empire. Those who remain however, still hold a fierce loyalty to their master, and still carry out their duty to eradicate the gods.
 	IlmeranPaladin: One of few to have survived the Incineration of Ilmeris, this paladin wanders the remnants of Ilmeris; keeping an eternal vigil over the sands of his former home.
