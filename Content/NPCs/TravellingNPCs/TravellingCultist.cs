@@ -217,7 +217,10 @@ namespace Windfall.Content.NPCs.TravellingNPCs
                     chat.Add(GetTextValue("Dialogue.LunarCult.TravellingCultist.Chat.Clothier"));
             }
             if (NPC.downedBoss3)
-                chat.Add(GetTextValue($"Dialogue.LunarCult.TravellingCultist.Chat.Skeletron"));
+                if(Main.rand.NextBool(10))
+                    chat.Add(GetTextValue($"Dialogue.LunarCult.TravellingCultist.Chat.SkeletronRare"));
+                else
+                    chat.Add(GetTextValue($"Dialogue.LunarCult.TravellingCultist.Chat.Skeletron"));
             for (int i = 0; i < CultMeetingSystem.Recruits.Count; i++)
                 chat.Add(GetTextValue($"Dialogue.LunarCult.TravellingCultist.Chat.{(RecruitableLunarCultist.RecruitNames)i}"));
             return chat;
@@ -337,18 +340,7 @@ namespace Windfall.Content.NPCs.TravellingNPCs
             new dialogueDirections()
             {
                 MyPos = (int)DialogueState.UhOh,
-                Button1 = new(){name = "Uh oh...", heading = (int)DialogueState.Dragons},
-                Button2 = new(){name = "Uh oh...", heading = (int)DialogueState.MoonLord},
-            },
-            new dialogueDirections()
-            {
-                MyPos = (int)DialogueState.Dragons,
-                Button1 = new(){name = "Why?", heading = (int)DialogueState.Why},
-            },
-            new dialogueDirections()
-            {
-                MyPos = (int)DialogueState.MoonLord,
-                Button1 = new(){name = "Why?", heading = (int)DialogueState.Why},
+                Button1 = new(){name = "Why are thye doing this?", heading = (int)DialogueState.Why},
             },
             new dialogueDirections()
             {

@@ -119,10 +119,10 @@ Dialogue: {
 				Standard1: Do I stand out...?
 				Standard2: I always get the feeling I'm being watched...
 				Standard3: The Lunar Cult grows stronger with each passing day... I hope there's something we can do.
-				Mechanic: That poor woman... kidnapped and locked within the Dungeon. If memory serves, the cult forced her to build a great many traps within the Dungeon to keep out intruders, and then, with her use at its end, they left her to die... Its a miracle she's still alive, and it's thanks to you.
-				Clothier: That poor old man... cursed to house the cult's guardian. Their cruelty knows no bounds.
-				AnyDungeonNPC: The Lunar Cult has hurt so many... I'm glad you at least came to their aid.
-				Skeletron: I'm still impressed you managed to take down the Dungeon's guardian. I was there for the ritual that raised it... Such a grotesque thing... I'm glad the world is at last rid of it.
+				Mechanic: That mechanic you have there... she seems familiar. No, no, I'm sure it's nothing.
+				Clothier: ... not much point in guarding such a haunted place anyways. Oh! You! Don't mind me, just thinking out loud.
+				Skeletron: I'm still impressed you managed to take down the Dungeon's guardian. I've heard the cultists who formed it were... very powerful. Very powerful indeed.
+				SkeletronRare: I'm still impressed you managed to take down the Dungeon's guardian. I've heard the cultists who formed it were... very powerful. Very powerful indeed... Handsome too... And quite humble.
 				Tirith: So Tirith has decided to join our cause. His story is a sad one, and the Lunar Cult recruited him at his very lowest... I'm glad he's no longer in their clutches.
 				Vivian: Ah, so you've recruited Vivian to our cause! I remember the cult taking a great interest in them due to their magical capabilities. I think the cult wished to have their own 'Supreme Witch' in the event Yharim ever set his sights on them. Though frankly, I doubt Vivian could ever reach the Supreme Witch's level of power.
 				Tania: Its good to see Tania. Despite the hardships she's endured, she's still as kind as ever. Its a shame the Lunar Cult sees such kindness as a weakness to be exploited.
@@ -138,7 +138,7 @@ Dialogue: {
 				ThatsYou: Oh?! Perfect! Nice to meet you! I've heard so much about you, and your heroics. I was wondering if you'd be willing to help me with a matter of grave importance.
 				TheCult: I'm sure you've encountered them by now: The Lunar Cult. Someone like you would certainly get their attention. They're planning something big, something that might threaten the entire world, and I need your help to stop them!
 				HowYouKnow: I've been keeping an eye on them for a while now, and as of late their movement has become bolder and bolder. I worry if they aren't stopped soon, they might just being about something catastrophic!
-				HowToHelp: For now, I just need you to investigate the Dungeon. The Lunar Cult has taken a great interest in the place, and I fear they might find something to further their goals. I'll stop by every so often with something for you to get me out of there. Better in our hands than in those of the Lunar Cult, and who knows, we may find something to help us stop them!
+				HowToHelp: For now, I just need you to investigate the Dungeon. Some of my... cohorts took up residence there for a while, and the retrieval of some of our possessions would go a long way in stopping the Lunar Cult. Though, do keep in mind that we abandoned it because of a particularly nasty haunting.
 				ImIn: Wonderful! Let me know when you want to take on your first mission, and I'll let you know what I need.
 				#Post-Plant Convo
 				Initial2: You were approached by the Lunar Cult? Oh my... That was the Orator, the Lunar Cult's leader. The fact he's invited you to the cult's meetings can't be good. However, it may be a opportunity to learn more about what the cult's plans...
@@ -147,10 +147,10 @@ Dialogue: {
 				HelpThem: Help them? Hmm... That might actually be a good idea! Try talking to the members after the meeting ends. Its possible you might find some who are doubting their faith, and you might just be able to convince them to join our cause!
 				HowCanI: During the meeting, keep an eye out for people who might seem to be doubting what's being said or seem dissatisfied with the current state. Those are the people you might be able to save. Then you just need to convince them to abandon the Lunar Cult.
 				Doneish: This might just be our best way to deal a real blow to the Lunar Cult! Best of luck with your efforts. Is there anything else I can help you with?
-				Tablet: Oh? That would be a Selenic Tablet. Its used for communication between Lunar Cult members. I'd keep it on you. It'll likely act as your signal for when and where the cult is meeting.
+				Tablet: Oh? What's this? A tablet... Well, I don't see any clues on the tablet itself, but it appears to be enchanted. Perhaps this is how they find their next meeting? Try to use it, though do be careful if it's a teleporter... don't want to be caught with your pants down doing such things.
 				Thanks: Happy to help! Do keep me informed with how your upcoming meetings go; best of luck!
 				#All Recruited Convo
-				Initial3: Why hello! I have some very good news. I've found our way to put a stop to the Lunar Cult's plans once and for all! Another of my confidants within the Lunar Cult brought me a tome with some of the Lunar Cult's most powerful rituals; including a Sealing Ritual!
+				Initial3:Why hello! I have some very good news. I've found our way to put a stop to the Lunar Cult's plans once and for all! Remember the friends I mentioned earlier? One of them just so happens to know of a ritual to seal away the very horrors they are trying to summon!
 				Sealing: Yes, its a ritual that dates back to the Draconic Era. Legend has that those devoted to the Dragons were given this ritual to maintain the seal placed upon their ancient foe. I believe this being is the 'Dark God' that the Lunar Cult seeks to bring to our world, and if they succeed... the world as we know it may cease to be.
 				UhOh: Indeed! It says here that the ritual was meant to be performed once every hundred years to maintain the seal, however I think the demise of the Dragons led to this never being carried out. By performing it now, we may be able to cut off the Lunar Cult's connection to this ancient foe, and stop them from being able to unseal it!
 				Dragons: You don't know of the Dragons? They were once the protectors and keepers of this world. They defended the world from a great and terrible threat, and managed to seal it away; though not without great casualties. Soon after, the remaining Dragons were hunted to extinction by humans who sought to claim their Auric power. Now the Lunar Cult threatens to free this terrible evil, and along with it, threaten the fate of the world once more.
@@ -163,27 +163,31 @@ Dialogue: {
 				NoQuest: You've done a great job! I'll be back when I next need you.
 
 				Dungeon: {
-					BoneStart: The bones found in the Dungeon have been filled with the occult power of the Lunar Cult over the years. Bring me enough of them, and I might be able to learn more about how exactly their hexes work!
+					BoneStart: Fun fact: The bones in the Dungeon are packed full of curses! If we can get enough of them, maybe we'll be able to figure out a spell to stop the Lunar Cult. Oh, and don't ask where they got the curses. You don't want to know.
 					BoneDuring: Pretty much all of the undead you'll find in the Dungeon are prime sources for the accursed bones we're looking for. About 50 should be enough. Only hard part is getting their owners to part with them, haha.
 					BoneEnd: Yes, these'll do nicely! I'd uh... Wash your hands after handling this many... With holy water... Actually maybe get a full on baptism... Sorry.
-					WaterBoltStart: I hear those Dark Casters carry tend to carry with them a magic tome. I'd be curious to figure out the origin of these tomes, and if they hold any connection to the Lunar Cult.
+					WaterBoltStart: 
+						'''
+						I hear those Dark Casters carry tend to carry with them a magic tome full of potent water magic. I'd be curious to figure out the origin of these tomes, and if they hold any connection to the Lunar Cult. I mean, how can you be dedicated to the moon and not use water magic?
+						Though, now that I think of it, why would the Lunar Cult care for something so trivial...
+						'''
 					WaterBoltDuring: The tome is said to carry with it potent water magic. Why would the Lunar Cult care for such simple forms of magic though...
 					WaterBoltEnd: Ah! You found it! That does indeed look like the right tome, and considering its age, I can imagine it fitting in the hands of those casters nicely. Thank you! I'll let you know if I find any connection between this and the cult.
 					DeificInsigniaStart: Many of the skeletons which wander that decrepit Dungeon were once devoted soldiers of the Gods; imprisoned within there during the Godseeker's crusade. I'd bet the insignia they bear might still hold some of the deific essence they were gifted. If you get me some, they may prove helpful in combating the Lunar Cult.
 					DeificInsigniaDuring: Those skeletons are quite angry about their eternal imprisonment within the Dungeon. So don't expect them to part with their patrons' tokens so easilly. If you can get me just five, that should suffice.
-					DeificInsigniaEnd: Oh, perfect! Yes, I can sense the faint traces of deific essence on these... Perhaps the latent power of the Gods might be what we need to stand a chance against the Lunar Cult!
+					DeificInsigniaEnd: Oh, perfect! Yes, these absolutely reek of deific essence... Though I loathe to handle the stuff, this might just give us an edge.
 				}
 
 				Ritual: {
-					TabletFragsStart: Alright, the first thing we'll need is a tablet, which'll act as the ritual's vessel. The lihizahrds are well versed in rituals such as these; I'm certain they have the materials required to create such a tablet. I've heard tell of an idol they house within that temple. I'm certain they spared no expense in its creation; such materials would be exactly what we're looking for!
-					TabletFragsDuring: I'm not telling you to smash their ancient idol and bring me some pieces of it... Buuuuuut if something horrible were to happen to that golem unexpectedly, we may as well put its parts to good use, right?
-					TabletFragsEnd: Ah, you got the materials! Yes... These should do perfectly for our tablet. Maybe lets not poke around the lhizahrds temple anymore though...
-					DraconicBoneStart: Okay, I've figured out the next thing we'll need, but uh... I'm not sure you'll like it. We need a Dragon. Well, not a whole dragon. It seems anything that has the genetics of a Dragon can be used. This piece will allow us to interact with the magic used by the dragons, and not be seen as enemies. The remains of even a draconic offshoot should do the trick, and I've heard that Fishrons are quite easy to lure with the right bait.
-					DraconicBoneDuring: If you're in need of bait, I believe Amidias may be able to lend you a hand. Then you just gotta head to the Ocean and get fishing! Shouldn't take too long for a Fishron to show herself...
-					DraconicBoneEnd: Oh my! What a specimen! This'll be perfect! Thank you again for the help! We're so close to being able to begin the Sealing Ritual. I'll let you know when I narrow down what we else we need.
-					PrimalLightStart: Good news! We need just one more thing before we're ready to begin the sealing ritual! Though... This may be the most difficult thing to acquire. Legend states that the Dragon King used the power of "the Primordial Light" to ultimately seal away the behemoth. There's only one entity I know of that might allow us to harness this power: the Empress of Light. Perhaps she holds something that might hold the power of this 'Primordial Light'...
-					PrimalLightDuring: I must warn you not to face the Empress during the day. Her power grows to a near limitless factor as light bathes the land. Facing her at night would be a far wiser choice.
-					PrimalLightEnd: Ah ha! This shard certainly holds a unique power. I think this might be what we're looking for! I'll need some time to finish preparing for the ritual, but I'll notify you once we're ready. I can taste our victory over the Lunar Cult.
+					TabletFragsStart: Alright, the first thing we'll need is a tablet, which'll act as the ritual's vessel. The Lihzahrds are well versed in rituals such as these; I'm certain they have the materials required to create such a tablet. No followers of the Gods would spare the slightest expense on their toys; I'm sure it'll have the materials we're looking for.
+					TabletFragsDuring: I'm not telling you to smash their ancient idol and bring me pieces of it... Buuuuuut if something horrible were to happen to that golem unexpectedly, I wouldn't be complaining... and it'd only be right to make something useful out of its parts, right?
+					TabletFragsEnd: Ah, you got the materials! Yes... These should do perfectly for our tablet. Maybe lets not poke around the Lihzahrds' temple anymore though... you look awfully banged up.
+					DraconicBoneStart: Alright, I've figured out the next thing we'll need, but uhh... I don't like it any more than you will. We need a Dragon. Well, not a whole dragon. It seems anything that has the genetics of a Dragon can be used. This piece will allow us to interact with the magic used by the dragons, and not be seen as enemies. The remains a draconic offshoot should do the trick, and I've heard that the noble Fishron is quite attracted to a particular type of bait.
+					DraconicBoneDuring: If you're in need of bait, I believe Amidias may be able to lend you a hand. Then you must simply cast the bait in the water. Shouldn't take too long for a Fishron to reveal herself to you...
+					DraconicBoneEnd: Oh my! What a marvel! How awful that something so beautiful had to die... Thank you again for the help. We're so close to being able to begin the Sealing Ritual. I'll let you know when I narrow down what we else we need. I do wonder, though, why the Dragons went through with this ritual when it cost one of their kind... I suppose they had no choice.
+					PrimalLightStart: Good news! We need just one more thing before we're ready to begin the sealing ritual! Though... This may be the most difficult thing to acquire. Legend states that the Dragon King used the power of "Primordial Light" to ultimately seal away the behemoth. There's only one entity I know of that might allow us to harness this power: the self-appointed "Empress of Light". Perhaps she holds something that would allow us to harness the power of the Light, as the Dragons' mighty King once did.
+					PrimalLightDuring: I must warn you not to face the Empress during the day. As light bathes the land, she too can harness Primordial Light. Facing her at night would be a far wiser choice.
+					PrimalLightEnd: Ah ha! This shard certainly holds a unique power. Its radiance... this must be what we're looking for! I'll need some time to finish preparing for the ritual, but I'll notify you once we're ready. I can taste our victory over the Lunar Cult.
 				}
 			}
 		}
