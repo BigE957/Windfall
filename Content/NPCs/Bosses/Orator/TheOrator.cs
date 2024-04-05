@@ -32,10 +32,11 @@ namespace Windfall.Content.NPCs.Bosses.TheOrator
             NPC.knockBackResist = 0f;
             NPC.noGravity = true;
             NPC.noTileCollide = true;
+            NPC.dontTakeDamage = true;
         }
-        private float forcefieldOpacity = 1f;
+        private float forcefieldOpacity = 0f;
         private int hitTimer = 0;
-        private float forcefieldScale = 1;
+        private float forcefieldScale = 0f;
 
         private static readonly int MonsterDamage = StatCorrections.ScaleProjectileDamage(Main.masterMode ? 360 : CalamityWorld.death ? 280 : CalamityWorld.revenge ? 268 : Main.expertMode ? 240 : 120);
         internal static readonly int GlobDamage = StatCorrections.ScaleProjectileDamage(Main.masterMode ? 260 : CalamityWorld.death ? 220 : CalamityWorld.revenge ? 180 : Main.expertMode ? 140 : 100);
@@ -62,6 +63,7 @@ namespace Windfall.Content.NPCs.Bosses.TheOrator
         }
         int aiCounter = 0;
         int attackCounter = 0;
+        bool dashing = false;
         Vector2 VectorToTarget = Vector2.Zero;
         public override bool PreAI()
         {
@@ -79,7 +81,6 @@ namespace Windfall.Content.NPCs.Bosses.TheOrator
                 NPC.direction = -1;
             NPC.spriteDirection = NPC.direction;
             Lighting.AddLight(NPC.Center, new Vector3(0.32f, 0.92f, 0.71f));
-
             switch (AIState)
             {
                 case States.Spawning:
@@ -94,6 +95,19 @@ namespace Windfall.Content.NPCs.Bosses.TheOrator
                         NPC.velocity.X--;
                     if (NPC.velocity.Length() > 15)
                         NPC.velocity = NPC.velocity.SafeNormalize(Vector2.Zero) * 15;
+
+                    if (aiCounter > 150)
+                    {
+                        forcefieldOpacity = Lerp(forcefieldOpacity, 1f, 0.08f);
+                        forcefieldScale = Lerp(forcefieldScale, 1f, 0.08f);
+                        if (forcefieldScale >= 0.99f)
+                        {
+                            NPC.dontTakeDamage = false;
+                            forcefieldOpacity = 1f;
+                            forcefieldScale = 1f;
+                        }
+                    }
+
                     if (aiCounter == 240)
                     {
                         aiCounter = -30;
@@ -408,7 +422,7 @@ namespace Windfall.Content.NPCs.Bosses.TheOrator
             float intensity = 35f / 35f;
 
             // Shield intensity is always high during invincibility, except during cast animations, so that she can be more easily seen.
-            if (NPC.immortal)
+            if (NPC.dontTakeDamage)
                 intensity = 0.75f + Math.Abs((float)Math.Cos(Main.GlobalTimeWrappedHourly * 1.7f)) * 0.1f;
 
             // Make the forcefield weaker in the second phase as a means of showing desparation.
@@ -429,7 +443,7 @@ namespace Windfall.Content.NPCs.Bosses.TheOrator
             opacity *= Lerp(1f, Max(1f - flickerPower, 0.56f), (float)Math.Pow(Math.Cos(Main.GlobalTimeWrappedHourly * Lerp(3f, 5f, flickerPower)), 24D));
 
             // During/prior to a charge the forcefield is always darker than usual and thus its intensity is also higher.
-            if (!NPC.dontTakeDamage)
+            if (!NPC.dontTakeDamage && dashing)
                 intensity = 1.1f;
 
             // Dampen the opacity and intensity slightly, to allow SCal to be more easily visible inside of the forcefield.
@@ -440,9 +454,9 @@ namespace Windfall.Content.NPCs.Bosses.TheOrator
             GameShaders.Misc["CalamityMod:SupremeShield"].UseImage1("Images/Misc/Perlin");
 
             Color forcefieldColor = Color.Black;
-            Color secondaryForcefieldColor = new Color(117, 255, 159) * 1.4f;
+            Color secondaryForcefieldColor = Color.PaleGreen;
 
-            if (!NPC.dontTakeDamage && 1 == 0)
+            if (!NPC.dontTakeDamage && dashing)
             {
                 forcefieldColor *= 0.25f;
                 secondaryForcefieldColor = Color.Lerp(secondaryForcefieldColor, Color.Black, 0.7f);
