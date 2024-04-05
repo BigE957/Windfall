@@ -4,7 +4,7 @@ namespace Windfall.Content.Items.Journals
 {
     public class JournalTundra : ModItem, ILocalizedModType
     {
-        public static readonly SoundStyle UseSound = new("Windfall/Sounds/Items/JournalPageTurn");
+        public static readonly SoundStyle UseSound = new("Windfall/Assets/Sounds/Items/JournalPageTurn");
         public new string LocalizationCategory => "Items.Journals";
         public override string Texture => "Windfall/Assets/Items/Journals/JournalTundra";
 
