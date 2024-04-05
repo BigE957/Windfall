@@ -28,6 +28,5 @@
                 line.Text = tooltip;
         }
         public override bool CanUseItem(Player player) => false;
-        public override Color? GetAlpha(Color lightColor) => LightColor;
     }
 }
