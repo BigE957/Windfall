@@ -134,16 +134,16 @@ Dialogue: {
 			Conversation: {
 				#First Convo
 				Initial: Hello! Would you be able to point me to whoever's in charge around here?
-				Weird: Oh! My mask! Don't worry. Despite its appearance I'm not actually with those cultists. Well... That's not entirely true... Though I really should only speak about this with the person who runs this little place.
-				ThatsYou: Oh?! Perfect! Nice to meet you! I've heard a lot about you, and your heroics. I was wondering if you'd be willing to help me with a matter of grave importance.
+				Weird: My robes? I just easilly get cold is all; would rather stay bundled up, haha. Anyways, I really need to speak with the person in charge of this little town. You know where I might find them?
+				ThatsYou: Oh?! Perfect! Nice to meet you! I've heard so much about you, and your heroics. I was wondering if you'd be willing to help me with a matter of grave importance.
 				TheCult: I'm sure you've encountered them by now: The Lunar Cult. Someone like you would certainly get their attention. They're planning something big, something that might threaten the entire world, and I need your help to stop them!
-				HowYouKnow: Well... To be honest, I used to be a member. I tried to figure out what they were up to myself, but they caught on to me. If I hadn't escaped, who knows what they might've done to me!
-				HowToHelp: For now, I just need you to investigate the Dungeon. Its their base of operation. I'll stop by every so often with something for you to get me out of there. By better understanding our enemy, we may find a way to beat them!
+				HowYouKnow: I've been keeping an eye on them for a while now, and as of late their movement has become bolder and bolder. I worry if they aren't stopped soon, they might just being about something catastrophic!
+				HowToHelp: For now, I just need you to investigate the Dungeon. The Lunar Cult has taken a great interest in the place, and I fear they might find something to further their goals. I'll stop by every so often with something for you to get me out of there. Better in our hands than in those of the Lunar Cult, and who knows, we may find something to help us stop them!
 				ImIn: Wonderful! Let me know when you want to take on your first mission, and I'll let you know what I need.
 				#Post-Plant Convo
 				Initial2: You were approached by the Lunar Cult? Oh my... That was the Orator, the Lunar Cult's leader. The fact he's invited you to the cult's meetings can't be good. However, it may be a opportunity to learn more about what the cult's plans...
-				Orator: The Orator is the mastermind of the entire Lunar Cult's operation. I was never able to piece together his true ambition; he was incredibly secretive even to us higher ranking members. His manipulations have strung along so many people... Its truly saddening.
-				Meeting: The cult's meetings are how the cult keeps its members galvanized and devoted to the cause. Seeing all the lies they feed those poor people was one of the many reasons I ultimately abandoned the Lunar Cult.
+				Orator: The Orator is the mastermind of the entire Lunar Cult's operation. I have yet to able to piece together his true ambition, but he's been dabling with dark forces for a very long time. His manipulations have strung along so many people... Its truly saddening.
+				Meeting: The cult's meetings are how the cult keeps its members galvanized and devoted to the cause. It's truly sickening what the Lunar Cult is willing to do in order to further their goals. I can't imagine how many lives have been forever ruined by their words alone.
 				HelpThem: Help them? Hmm... That might actually be a good idea! Try talking to the members after the meeting ends. Its possible you might find some who are doubting their faith, and you might just be able to convince them to join our cause!
 				HowCanI: During the meeting, keep an eye out for people who might seem to be doubting what's being said or seem dissatisfied with the current state. Those are the people you might be able to save. Then you just need to convince them to abandon the Lunar Cult.
 				Doneish: This might just be our best way to deal a real blow to the Lunar Cult! Best of luck with your efforts. Is there anything else I can help you with?
