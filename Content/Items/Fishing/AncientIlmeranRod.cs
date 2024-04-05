@@ -228,7 +228,7 @@ namespace Windfall.Content.Items.Fishing
         internal static void PaladinMessage(string text, NPC Paladin)
         {
             Rectangle location = new((int)Paladin.Center.X, (int)Paladin.Center.Y, Paladin.width, Paladin.width);
-            CombatText MyDialogue = Main.combatText[CombatText.NewText(location, Color.SandyBrown, text, true)];
+            CombatText MyDialogue = Main.combatText[CombatText.NewText(location, Color.SeaGreen, text, true)];
             if (MyDialogue.text.Length < 20)
                 MyDialogue.lifeTime = 60;
         }
