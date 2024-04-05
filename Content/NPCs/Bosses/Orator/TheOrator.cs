@@ -421,13 +421,8 @@ namespace Windfall.Content.NPCs.Bosses.TheOrator
             spriteBatch.EnterShaderRegion();
             float intensity = 35f / 35f;
 
-            // Shield intensity is always high during invincibility, except during cast animations, so that she can be more easily seen.
             if (NPC.dontTakeDamage)
                 intensity = 0.75f + Math.Abs((float)Math.Cos(Main.GlobalTimeWrappedHourly * 1.7f)) * 0.1f;
-
-            // Make the forcefield weaker in the second phase as a means of showing desparation.
-            if (NPC.ai[0] >= 3f)
-                intensity *= 0.6f;
 
             float lifeRatio = NPC.life / (float)NPC.lifeMax;
             float flickerPower = 0f;
@@ -442,11 +437,9 @@ namespace Windfall.Content.NPCs.Bosses.TheOrator
             float opacity = forcefieldOpacity;
             opacity *= Lerp(1f, Max(1f - flickerPower, 0.56f), (float)Math.Pow(Math.Cos(Main.GlobalTimeWrappedHourly * Lerp(3f, 5f, flickerPower)), 24D));
 
-            // During/prior to a charge the forcefield is always darker than usual and thus its intensity is also higher.
             if (!NPC.dontTakeDamage && dashing)
                 intensity = 1.1f;
 
-            // Dampen the opacity and intensity slightly, to allow SCal to be more easily visible inside of the forcefield.
             intensity *= 0.75f;
             opacity *= 0.75f;
 
