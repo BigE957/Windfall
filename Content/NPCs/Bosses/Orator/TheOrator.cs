@@ -187,9 +187,9 @@ namespace Windfall.Content.NPCs.Bosses.TheOrator
                         NPC.NewNPC(NPC.GetSource_FromThis(), (int)target.Center.X, (int)target.Center.Y - 350, ModContent.NPCType<DarkSpawn>());
                         attackCounter++;
                     }
-                    if (!NPC.AnyNPCs(ModContent.NPCType<DarkSpawn>()) && aiCounter < 660)
+                    if (!NPC.AnyNPCs(ModContent.NPCType<DarkSpawn>()) && aiCounter < 570)
                         aiCounter = 570;
-                    if (aiCounter >= 600)
+                    if (aiCounter >= 660)
                     {
                         aiCounter = -30;
                         SoundEngine.PlaySound(DashWarn);
