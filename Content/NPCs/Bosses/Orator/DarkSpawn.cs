@@ -2,6 +2,7 @@
 using CalamityMod.NPCs;
 using CalamityMod.NPCs.SunkenSea;
 using CalamityMod.World;
+using Windfall.Common.Systems;
 using Windfall.Content.Projectiles.Boss.Orator;
 
 namespace Windfall.Content.NPCs.Bosses.TheOrator
@@ -33,8 +34,8 @@ namespace Windfall.Content.NPCs.Bosses.TheOrator
             NPC.Calamity().VulnerableToElectricity = true;
             NPC.Calamity().VulnerableToWater = true;
         }
-        private float Acceleration = CalamityWorld.death ? 1f : CalamityWorld.revenge ? 0.9f : Main.expertMode ? 0.75f : 0.5f;
-        private int MaxSpeed = CalamityWorld.revenge ? 8 : 5;
+        private readonly float Acceleration = CalamityWorld.death ? 1f : CalamityWorld.revenge ? 0.9f : Main.expertMode ? 0.75f : 0.5f;
+        private readonly int MaxSpeed = CalamityWorld.revenge ? 8 : 5;
         enum AIState
         {
             Chasing,
@@ -82,12 +83,10 @@ namespace Windfall.Content.NPCs.Bosses.TheOrator
             }
             else
             {
-                //MaxSpeed = 12;
-                //Acceleration = 1f;
                 NPC boss = null;
                 if (NPC.FindFirstNPC(ModContent.NPCType<TheOrator>()) != -1)
                     boss = Main.npc[NPC.FindFirstNPC(ModContent.NPCType<TheOrator>())];
-                if (boss == null || (boss.ai[0] != 2 && boss.ai[0] != 0))
+                if (boss == null)
                 {
                     toTarget = target.Center - NPC.Center;
                     NPC.velocity -= toTarget.SafeNormalize(Vector2.UnitX);
@@ -100,12 +99,29 @@ namespace Windfall.Content.NPCs.Bosses.TheOrator
                             orator.noSpawnsEscape = false;
                     }
                 }
+                else if (boss.ai[0] != 2 && boss.ai[0] != 0)
+                {
+                    toTarget = boss.Center - NPC.Center;
+                    NPC.velocity += toTarget.SafeNormalize(Vector2.UnitX);
+                    if (NPC.velocity.Length() > 20)
+                        NPC.velocity = NPC.velocity.SafeNormalize(Vector2.Zero) * 20;
+                    NPC.rotation = (boss.Center - NPC.Center).ToRotation() + Pi;
+                    NPC.spriteDirection = NPC.direction * -1;
+                    if (NPC.Hitbox.Intersects(boss.Hitbox))
+                    {                       
+                        boss.life += boss.lifeMax / 100;
+                        CombatText.NewText(NPC.Hitbox, Color.LimeGreen, boss.lifeMax / 100);
+                        if (boss.ModNPC is TheOrator orator)
+                            orator.noSpawnsEscape = false;
+                        NPC.active = false;
+                    }
+                }
                 else
                 {
                     if (Main.rand.NextBool(50) && CurrentAI == AIState.Chasing && aiCounter >= 30 && (target.Center - NPC.Center).Length() < 400)
                     {
                         CurrentAI = AIState.Shooting;
-                        NPC.velocity = (target.Center - NPC.Center).SafeNormalize(Vector2.Zero) * -5;
+                        NPC.velocity = (target.Center - NPC.Center).SafeNormalize(Vector2.Zero) * -10;
                         Projectile.NewProjectile(Terraria.Entity.GetSource_NaturalSpawn(), NPC.Center, (target.Center - NPC.Center).SafeNormalize(Vector2.UnitX) * 20, ModContent.ProjectileType<DarkBolt>(), TheOrator.BoltDamage, 0);
                     }
                     switch (CurrentAI)

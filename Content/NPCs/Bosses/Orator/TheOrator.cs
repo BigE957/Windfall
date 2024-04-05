@@ -23,12 +23,10 @@ namespace Windfall.Content.NPCs.Bosses.TheOrator
             NPC.Size = new Vector2(150, 150);
             NPC.aiStyle = -1;
             //Values gotten from Lunatic Cultist. Subject to change.
-            NPC.defense = 30;
-            NPC.DR_NERD(0.15f);
+            NPC.DR_NERD(0.10f);
             NPC.LifeMaxNERB(Main.masterMode ? 153000 : Main.expertMode ? 120000 : 80000, 144000);
             NPC.npcSlots = 5f;
-            NPC.defense = 100;
-            NPC.lifeMax = 75000;
+            NPC.defense = 50;
             NPC.HitSound = HurtSound;
             NPC.DeathSound = SoundID.NPCDeath59;
             NPC.knockBackResist = 0f;
@@ -137,21 +135,21 @@ namespace Windfall.Content.NPCs.Bosses.TheOrator
                         }
                     }
                     VectorToTarget = target.Center - NPC.Center;
-                    if (aiCounter % 60 == 0)
-                    {
-                        Vector2 MyVector = VectorToTarget.RotatedBy(Pi / 4);
-                        Projectile.NewProjectile(Terraria.Entity.GetSource_NaturalSpawn(), NPC.Center, MyVector.SafeNormalize(Vector2.UnitX), ModContent.ProjectileType<DarkGlob>(), GlobDamage, 0f, -1, 0, 10);
-                        Projectile.NewProjectile(Terraria.Entity.GetSource_NaturalSpawn(), NPC.Center, MyVector.RotatedBy(Pi / 2f).SafeNormalize(Vector2.UnitX), ModContent.ProjectileType<DarkGlob>(), GlobDamage, 0f, -1, 0, 10);
-                        Projectile.NewProjectile(Terraria.Entity.GetSource_NaturalSpawn(), NPC.Center, MyVector.RotatedBy(Pi / -2f).SafeNormalize(Vector2.UnitX), ModContent.ProjectileType<DarkGlob>(), GlobDamage, 0f, -1, 0, 10);
-                        Projectile.NewProjectile(Terraria.Entity.GetSource_NaturalSpawn(), NPC.Center, Vector2.Zero, ModContent.ProjectileType<DarkGlob>(), GlobDamage, 0f);
-                    }
-                    else if (aiCounter % 30 == 0)
-                    {
-                        Vector2 MyVector = VectorToTarget.RotatedBy(-Pi / 4);
-                        Projectile.NewProjectile(Terraria.Entity.GetSource_NaturalSpawn(), NPC.Center, MyVector.SafeNormalize(Vector2.UnitX), ModContent.ProjectileType<DarkGlob>(), GlobDamage, 0f, -1, 0, 10);
-                        Projectile.NewProjectile(Terraria.Entity.GetSource_NaturalSpawn(), NPC.Center, MyVector.RotatedBy(Pi / 2f).SafeNormalize(Vector2.UnitX), ModContent.ProjectileType<DarkGlob>(), GlobDamage, 0f, -1, 0, 10);
-                        Projectile.NewProjectile(Terraria.Entity.GetSource_NaturalSpawn(), NPC.Center, MyVector.RotatedBy(Pi / -2f).SafeNormalize(Vector2.UnitX), ModContent.ProjectileType<DarkGlob>(), GlobDamage, 0f, -1, 0, 10);
-                        Projectile.NewProjectile(Terraria.Entity.GetSource_NaturalSpawn(), NPC.Center, Vector2.Zero, ModContent.ProjectileType<DarkGlob>(), GlobDamage, 0f);
+                    if (aiCounter % 30 == 0)
+                    {                       
+                        Projectile.NewProjectile(Terraria.Entity.GetSource_NaturalSpawn(), NPC.Center, VectorToTarget.SafeNormalize(Vector2.UnitX) * 10, ModContent.ProjectileType<DarkGlob>(), GlobDamage, 0f, -1, 0, 0.5f);
+                        Projectile.NewProjectile(Terraria.Entity.GetSource_NaturalSpawn(), NPC.Center, VectorToTarget.RotatedBy(Pi / 2f).SafeNormalize(Vector2.UnitX) * 10, ModContent.ProjectileType<DarkGlob>(), GlobDamage, 0f, -1, 0, 0.5f);
+                        Projectile.NewProjectile(Terraria.Entity.GetSource_NaturalSpawn(), NPC.Center, VectorToTarget.RotatedBy(Pi / -2f).SafeNormalize(Vector2.UnitX) * 10, ModContent.ProjectileType<DarkGlob>(), GlobDamage, 0f, -1, 0, 0.5f);
+                        Projectile.NewProjectile(Terraria.Entity.GetSource_NaturalSpawn(), NPC.Center, Vector2.Zero, ModContent.ProjectileType<DarkGlob>(), GlobDamage, 0f, -1, 0, 0, 0.5f);
+                        if (aiCounter % 90 == 0)
+                        {
+                            Vector2 MyVector = VectorToTarget.RotatedBy(Pi / 2);
+                            for (int i = 0; i < 18; i++)
+                            {
+                                Projectile.NewProjectile(Terraria.Entity.GetSource_NaturalSpawn(), NPC.Center, MyVector.SafeNormalize(Vector2.UnitX) * 20, ModContent.ProjectileType<DarkGlob>(), GlobDamage, 0f, -1, 0, 1f);
+                                MyVector = MyVector.RotatedBy(Pi / 18);
+                            }
+                        }
                     }
                     /*
                     if (aiCounter % 60 == 0)
@@ -189,7 +187,7 @@ namespace Windfall.Content.NPCs.Bosses.TheOrator
                         NPC.NewNPC(NPC.GetSource_FromThis(), (int)target.Center.X, (int)target.Center.Y - 350, ModContent.NPCType<DarkSpawn>());
                         attackCounter++;
                     }
-                    if (!NPC.AnyNPCs(ModContent.NPCType<DarkSpawn>()) && aiCounter < 570)
+                    if (!NPC.AnyNPCs(ModContent.NPCType<DarkSpawn>()) && aiCounter < 660)
                         aiCounter = 570;
                     if (aiCounter >= 600)
                     {
@@ -215,15 +213,15 @@ namespace Windfall.Content.NPCs.Bosses.TheOrator
                         if (aiCounter < NPC.ai[3] - 45)
                         {
                             VectorToTarget = target.Center - NPC.Center;
-                            NPC.velocity.X = (float)(30 * Math.Cos((double)aiCounter / 20));
-                            NPC.velocity.Y = (float)(20 * Math.Sin((double)aiCounter / 20));
+                            NPC.velocity.X = (float)(20 * Math.Cos((double)aiCounter / 25));
+                            NPC.velocity.Y = (float)(20 * Math.Sin((double)aiCounter / 25));
                             NPC.position += target.velocity;
                             if (aiCounter % 10 == 0)
-                            {
-                                if (CalamityWorld.revenge)
-                                    Projectile.NewProjectile(Terraria.Entity.GetSource_NaturalSpawn(), NPC.Center, Vector2.Zero, ModContent.ProjectileType<DarkGlob>(), GlobDamage, 0f);
+                            {                               
                                 Projectile.NewProjectile(Terraria.Entity.GetSource_NaturalSpawn(), NPC.Center, VectorToTarget.SafeNormalize(Vector2.UnitX) * 20, ModContent.ProjectileType<DarkBolt>(), BoltDamage, 0);
                             }
+                            if (CalamityWorld.revenge && aiCounter < NPC.ai[3] - 90)
+                                Projectile.NewProjectile(Terraria.Entity.GetSource_NaturalSpawn(), NPC.Center, VectorToTarget.SafeNormalize(Vector2.UnitX) * -15, ModContent.ProjectileType<DarkGlob>(), GlobDamage, 0f, -1, 0, 1f);
                         }
                         else if(aiCounter < NPC.ai[3])
                         {
@@ -250,7 +248,7 @@ namespace Windfall.Content.NPCs.Bosses.TheOrator
                                 Projectile.NewProjectile(Terraria.Entity.GetSource_NaturalSpawn(), NPC.Center, VectorToTarget.RotatedBy(Pi / -2f).SafeNormalize(Vector2.UnitX) * 20, ModContent.ProjectileType<DarkBolt>(), BoltDamage, 0f, -1, 0, -20);
                             else if (aiCounter % 5 == 0 && Main.expertMode)
                             {
-                                Projectile.NewProjectile(Terraria.Entity.GetSource_NaturalSpawn(), NPC.Center, Vector2.Zero, ModContent.ProjectileType<DarkGlob>(), 0, 0);
+                                Projectile.NewProjectile(Terraria.Entity.GetSource_NaturalSpawn(), NPC.Center, Vector2.Zero, ModContent.ProjectileType<DarkGlob>(), GlobDamage, 0f, -1, 0, 0.5f);
                                 if (CalamityWorld.revenge && (attackCounter == 2 && CalamityWorld.death || !CalamityWorld.death))
                                     Projectile.NewProjectile(Terraria.Entity.GetSource_NaturalSpawn(), NPC.Center, VectorToTarget.RotatedBy(Pi / 2f).SafeNormalize(Vector2.UnitX) * 20, ModContent.ProjectileType<DarkBolt>(), BoltDamage, 0f, -1, 0, -20);
                             }
@@ -302,9 +300,9 @@ namespace Windfall.Content.NPCs.Bosses.TheOrator
                             Projectile.NewProjectile(Terraria.Entity.GetSource_NaturalSpawn(), NPC.Center, VectorToTarget.RotatedBy(Pi / -2f).SafeNormalize(Vector2.UnitX) * 20, ModContent.ProjectileType<DarkBolt>(), BoltDamage, 0f, -1, 0, -20);
                         else if (aiCounter % 5 == 0 && Main.expertMode)
                         {
-                            Projectile.NewProjectile(Terraria.Entity.GetSource_NaturalSpawn(), NPC.Center, Vector2.Zero, ModContent.ProjectileType<DarkGlob>(), 0, 0);
+                            Projectile.NewProjectile(Terraria.Entity.GetSource_NaturalSpawn(), NPC.Center, VectorToTarget.RotatedBy(Pi / 2f).SafeNormalize(Vector2.UnitX) * 20, ModContent.ProjectileType<DarkBolt>(), BoltDamage, 0f, -1, 0, -20);
                             if (CalamityWorld.revenge)
-                                Projectile.NewProjectile(Terraria.Entity.GetSource_NaturalSpawn(), NPC.Center, VectorToTarget.RotatedBy(Pi / 2f).SafeNormalize(Vector2.UnitX) * 20, ModContent.ProjectileType<DarkBolt>(), BoltDamage, 0f, -1, 0, -20);
+                                Projectile.NewProjectile(Terraria.Entity.GetSource_NaturalSpawn(), NPC.Center, Vector2.Zero, ModContent.ProjectileType<DarkGlob>(), GlobDamage, 0f, -1, 0, 1f);
                         }
                         #endregion
 
@@ -338,12 +336,23 @@ namespace Windfall.Content.NPCs.Bosses.TheOrator
                         NPC.velocity.X--;
                     if (NPC.velocity.Length() > 15)
                         NPC.velocity = NPC.velocity.SafeNormalize(Vector2.Zero) * 15;
-                    if(aiCounter > 120 && NPC.Center.Y < target.Center.Y - 50 && aiCounter % 10 == 0)
+                    if(aiCounter > 120 && NPC.Center.Y < target.Center.Y - 50)
                     {
-                        Projectile.NewProjectile(Terraria.Entity.GetSource_NaturalSpawn(), NPC.Center, new Vector2((float)(10 * Math.Sin(aiCounter)), -10), ModContent.ProjectileType<DarkGlob>(), GlobDamage, 0f, -1, 1);
-                        Projectile.NewProjectile(Terraria.Entity.GetSource_NaturalSpawn(), NPC.Center, new Vector2((float)(-10 * Math.Sin(aiCounter)), -10), ModContent.ProjectileType<DarkGlob>(), GlobDamage, 0f, -1, 1);
-                        if(CalamityWorld.revenge && aiCounter % 20 == 0)
-                            Projectile.NewProjectile(Terraria.Entity.GetSource_NaturalSpawn(), NPC.Center, new Vector2(0, -10), ModContent.ProjectileType<DarkGlob>(), GlobDamage, 0f, -1, 1);
+                        if (aiCounter % 5 == 0)
+                        {
+                            //The Anti-Cheesers
+                            Projectile.NewProjectile(Terraria.Entity.GetSource_NaturalSpawn(), new Vector2(target.Center.X - 400, target.Center.Y - 600), new Vector2(Main.rand.NextFloat(-3f, -1), 0), ModContent.ProjectileType<DarkGlob>(), GlobDamage, 0f, -1, 1, 1f);
+                            Projectile.NewProjectile(Terraria.Entity.GetSource_NaturalSpawn(), new Vector2(target.Center.X + 400, target.Center.Y - 600), new Vector2(Main.rand.NextFloat(1, 3f), 0), ModContent.ProjectileType<DarkGlob>(), GlobDamage, 0f, -1, 1, 1f);
+                            
+                            if (aiCounter % 10 == 0)
+                            {
+                                Projectile.NewProjectile(Terraria.Entity.GetSource_NaturalSpawn(), NPC.Center, new Vector2((float)(10 * Math.Sin(aiCounter)), -10), ModContent.ProjectileType<DarkGlob>(), GlobDamage, 0f, -1, 1, 0.5f);
+                                Projectile.NewProjectile(Terraria.Entity.GetSource_NaturalSpawn(), NPC.Center, new Vector2((float)(-10 * Math.Sin(aiCounter)), -10), ModContent.ProjectileType<DarkGlob>(), GlobDamage, 0f, -1, 1, 0.5f);
+                                if (CalamityWorld.revenge && aiCounter % 20 == 0)
+                                    Projectile.NewProjectile(Terraria.Entity.GetSource_NaturalSpawn(), NPC.Center, new Vector2(0, -10), ModContent.ProjectileType<DarkGlob>(), GlobDamage, 0f, -1, 1, 0.5f);
+                            }
+                        }
+                        
                     }
                     if(aiCounter > 720)
                     {
