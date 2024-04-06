@@ -41,8 +41,8 @@
     <None Remove="Assets\NPCs\WorldEvents\Recruits\Vivian.png" />
     <None Remove="Assets\NPCs\WorldEvents\Recruits\Vivian_Head.png" />
     <None Remove="Assets\NPCs\WorldEvents\WanderingPotionSeller.png" />
+    <None Remove="Assets\Projectiles\NPCAnimations\GodseekerKnightProj.png" />
     <None Remove="Assets\Projectiles\NPCAnimations\IlmeranPaladinDig.png" />
-    <None Remove="Assets\Projectiles\NPCAnimations\LoneRoninTeleport.png" />
     <None Remove="Assets\UI\EidolonTablet\EidolonTabletBig.png" />
     <None Remove="Content\Buffs\Cooldowns\ParryWeapon.png" />
     <None Remove="Content\Buffs\Cooldowns\ParryWeaponOutline.png" />
@@ -94,6 +94,7 @@
     <Folder Include="Assets\Items\Fishing\" />
     <Folder Include="Assets\NPCs\Enemies\" />
     <Folder Include="Assets\Sounds\Music\" />
+    <Folder Include="Content\Items\Armor\Selenic\" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="CalamityMod">

@@ -1,4 +1,5 @@
-﻿using Windfall.Common.Utilities;
+﻿using Windfall.Common.Systems;
+using Windfall.Common.Utilities;
 
 namespace Windfall.Content.Projectiles.NPCAnimations
 {
@@ -21,12 +22,8 @@ namespace Windfall.Content.Projectiles.NPCAnimations
             set => Projectile.ai[1] = value;
         }
         int dialogueCounter = 0;
-        internal struct dialogue
-        {
-            internal string text;
-            internal int delay;
-        }
-        internal virtual List<dialogue> MyDialogue => new();
+        internal virtual string key => ""; 
+        internal virtual List<float> Delays => new();
         internal virtual SoundStyle SpawnSound => new();
         internal virtual int NPCType => 0;
         internal virtual Color TextColor => new();
@@ -34,7 +31,7 @@ namespace Windfall.Content.Projectiles.NPCAnimations
         {
             return true;
         }
-        internal virtual int DespawnDelay => 0;
+        internal virtual int DespawnDelay => 150;
         public override void OnSpawn(IEntitySource source)
         {
             Vector2 oldPos = Projectile.position;
@@ -48,6 +45,8 @@ namespace Windfall.Content.Projectiles.NPCAnimations
             }
         }
         int finalDelay = 0;
+        float zoom = 0;
+
         public override void AI()
         {
             Player closestPlayer = Main.player[Player.FindClosest(Projectile.Center, 1, 1)];
@@ -57,6 +56,7 @@ namespace Windfall.Content.Projectiles.NPCAnimations
                 case AIState.SpawnDelay:
                     if (counter >= 60 * 4 && SpawnConditions(closestPlayer))
                     {
+                        zoom = 0;
                         dialogueCounter = 0;
                         DoOnSpawn();
                         Projectile.alpha = 0;
@@ -65,20 +65,30 @@ namespace Windfall.Content.Projectiles.NPCAnimations
                     }
                     break;
                 case AIState.Yapping:
-                    if (MyDialogue.Count == dialogueCounter)
+                    if (counter > 60 * 4)
+                    {
+                        if (counter < (60 * 4) + 100)
+                            zoom = Lerp(zoom, 0.4f, 0.075f);
+                        else
+                            zoom = 0.4f;
+                        ZoomSystem.SetZoomEffect(zoom);
+                        Main.LocalPlayer.Windfall_Camera().ScreenFocusPosition = Projectile.Center;
+                        Main.LocalPlayer.Windfall_Camera().ScreenFocusInterpolant = zoom;
+                    }
+                    if (Delays.Count == dialogueCounter)
                     {
                         finalDelay = counter + 1;
                         CurrentAI = AIState.TurnToNPC;
                         break;
                     }
-                    int Delay = 0;
+                    float Delay = 0;
                     for (int i = dialogueCounter; i >= 0; i--)
                     {
-                        Delay += MyDialogue[i].delay;
+                        Delay += Delays[i];
                     }
                     if (counter == (60 * 4) + (60 * Delay))
                     {
-                        DisplayMessage(MyDialogue[dialogueCounter].text, Main.projectile[Projectile.whoAmI], TextColor);
+                        DisplayMessage($"{key}.{dialogueCounter}", Main.projectile[Projectile.whoAmI], TextColor);
                         dialogueCounter++;
                     }
                     break;
@@ -89,18 +99,24 @@ namespace Windfall.Content.Projectiles.NPCAnimations
                     {
                         DoOnDespawn();
                         if (NPCType != -1)
-                            NPC.NewNPC(NPC.GetSource_NaturalSpawn(), (int)Projectile.Center.X, (int)Projectile.Bottom.Y - 1, NPCType, 0, Projectile.velocity.Y, Projectile.direction);
+                            NPC.NewNPC(NPC.GetSource_NaturalSpawn(), (int)Projectile.Center.X, (int)Projectile.Bottom.Y - 1, NPCType, 0, Projectile.velocity.Y, Projectile.direction, 1);
                         Projectile.active = false;
+                    }
+                    else
+                    {
+                        ZoomSystem.SetZoomEffect(0.4f);
+                        Main.LocalPlayer.Windfall_Camera().ScreenFocusPosition = Projectile.Center;
+                        Main.LocalPlayer.Windfall_Camera().ScreenFocusInterpolant = 0.4f;
                     }
                     break;
 
             }
             counter++;
         }
-        internal static void DisplayMessage(string text, Projectile projectile, Color color)
+        internal static void DisplayMessage(string key, Projectile projectile, Color color)
         {
             Rectangle location = new((int)projectile.Center.X, (int)projectile.Center.Y, projectile.width, projectile.width);
-            CombatText MyDialogue = Main.combatText[CombatText.NewText(location, color, text, true)];
+            CombatText MyDialogue = Main.combatText[CombatText.NewText(location, color, GetWindfallTextValue($"Dialogue.{key}"), true)];
             if (MyDialogue.text.Length > 50)
                 MyDialogue.lifeTime = 60 + MyDialogue.text.Length;
         }
