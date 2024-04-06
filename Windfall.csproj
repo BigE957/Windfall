@@ -15,6 +15,7 @@
     <None Remove="Assets\Graphics\Metaballs\Empyrean_Metaball\Empyrean_Distortion_Layer3.png" />
     <None Remove="Assets\Items\Debug\DraeDashGiftCard.png" />
     <None Remove="Assets\Items\Debug\TheZoomer.png" />
+    <None Remove="Assets\Items\Lore\OraLore.png" />
     <None Remove="Assets\Items\Quest\DeificInsignia.png" />
     <None Remove="Assets\Items\Quest\DraconicBone.png" />
     <None Remove="Assets\Items\Quest\PrimalLightShards.png" />
