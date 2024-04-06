@@ -8,18 +8,19 @@ namespace Windfall.Content.Projectiles.NPCAnimations
     public class OratorProj : ProjectileNPC, ILocalizedModType
     {
         public override string Texture => "Windfall/Assets/NPCs/WorldEvents/TheOrator";
-        internal override List<dialogue> MyDialogue => new()
+        internal override string key => "LunarCult.TheOrator.WorldText.Post-Plant";
+        internal override List<float> Delays => new()
         {
-            new dialogue {text = "So... At last we meet." , delay = 1},
-            new dialogue {text = "We've been watching you keenly since you bested our guardian." , delay = 3},
-            new dialogue {text = "Now you've bested yet another soul-filled terror." , delay = 3},
-            new dialogue {text = "The delicate balance we've long worked to maintain is falling apart..." , delay = 3},
-            new dialogue {text = "...and we have you to thank for that." , delay = 4},
-            new dialogue {text = "However soon, that won't matter." , delay = 3},
-            new dialogue {text = "None of this will." , delay = 2},
-            new dialogue {text = "We invite you to partake in the Fruit of our Knowledge." , delay = 3},
-            new dialogue {text = "That you might come to see the Light buried within the Dark." , delay = 3},
-            new dialogue {text = "We will be waiting." , delay = 3},
+            1,
+            3,
+            3,
+            3,
+            4,
+            3,
+            2,
+            3,
+            3,
+            3,
         };
         internal override SoundStyle SpawnSound => new("CalamityMod/Sounds/Custom/SCalSounds/BrimstoneHellblastSound");
         internal override int NPCType => -1;

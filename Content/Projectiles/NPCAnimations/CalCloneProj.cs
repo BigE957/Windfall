@@ -204,7 +204,7 @@ namespace Windfall.Content.Projectiles.NPCAnimations
                     {
                         Color messageColor = Color.Orange;
                         Rectangle location = new((int)Projectile.Center.X, (int)Projectile.Center.Y, Projectile.width, Projectile.width);
-                        CombatText.NewText(location, messageColor, "Have fun you two~!", true);
+                        CombatText.NewText(location, messageColor, GetWindfallTextValue("Dialogue.CalClone.WorldText.Brothers"), true);
                     }
                     break;
             }

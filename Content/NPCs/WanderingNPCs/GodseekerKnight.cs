@@ -96,35 +96,35 @@ namespace Windfall.Content.NPCs.WanderingNPCs
         {
             Player player = Main.player[Main.myPlayer];
             WeightedRandom<string> chat = new();
-            chat.Add(GetTextValue($"Dialogue.{nameof(GodseekerKnight)}.Chat.Standard1"));
-            chat.Add(GetTextValue($"Dialogue.{nameof(GodseekerKnight)}.Chat.Standard2"));
-            chat.Add(GetTextValue($"Dialogue.{nameof(GodseekerKnight)}.Chat.Standard3"));
+            chat.Add(GetWindfallTextValue($"Dialogue.{nameof(GodseekerKnight)}.Chat.Standard1"));
+            chat.Add(GetWindfallTextValue($"Dialogue.{nameof(GodseekerKnight)}.Chat.Standard2"));
+            chat.Add(GetWindfallTextValue($"Dialogue.{nameof(GodseekerKnight)}.Chat.Standard3"));
             if (!NPC.downedQueenSlime)
             {
-                chat.Add(GetTextValue($"Dialogue.{nameof(GodseekerKnight)}.Chat.SlimeGod1"));
-                chat.Add(GetTextValue($"Dialogue.{nameof(GodseekerKnight)}.Chat.SlimeGod2"));
+                chat.Add(GetWindfallTextValue($"Dialogue.{nameof(GodseekerKnight)}.Chat.SlimeGod1"));
+                chat.Add(GetWindfallTextValue($"Dialogue.{nameof(GodseekerKnight)}.Chat.SlimeGod2"));
             }
             if (player.ZoneCorrupt || player.ZoneCrimson)
             {
-                chat.Add(GetTextValue($"Dialogue.{nameof(GodseekerKnight)}.Chat.Evilbiome1"));
-                chat.Add(GetTextValue($"Dialogue.{nameof(GodseekerKnight)}.Chat.Evilbiome2"));
+                chat.Add(GetWindfallTextValue($"Dialogue.{nameof(GodseekerKnight)}.Chat.Evilbiome1"));
+                chat.Add(GetWindfallTextValue($"Dialogue.{nameof(GodseekerKnight)}.Chat.Evilbiome2"));
             }
             if (player.Calamity().statigelSet || (WearingStatigelHelmet(player) && player.armor[11].type == ModContent.ItemType<StatigelArmor>() && player.armor[12].type == ModContent.ItemType<StatigelGreaves>()))
             {
-                chat.Add(GetTextValue($"Dialogue.{nameof(GodseekerKnight)}.Chat.Statigel1"));
-                chat.Add(GetTextValue($"Dialogue.{nameof(GodseekerKnight)}.Chat.Statigel2"));
+                chat.Add(GetWindfallTextValue($"Dialogue.{nameof(GodseekerKnight)}.Chat.Statigel1"));
+                chat.Add(GetWindfallTextValue($"Dialogue.{nameof(GodseekerKnight)}.Chat.Statigel2"));
             }
             return chat;
         }
         public override void SetChatButtons(ref string button, ref string button2)
         {
-            button = GetTextValue($"Dialogue.Buttons.{nameof(GodseekerKnight)}.Techniques");
+            button = GetWindfallTextValue($"Dialogue.Buttons.{nameof(GodseekerKnight)}.Techniques");
             button2 = Language.GetTextValue("LegacyInterface.64");
         }
         public override void OnChatButtonClicked(bool firstButton, ref string shop)
         {
             if (firstButton)
-                Main.npcChatText = GetTextValue($"Dialogue.{nameof(GodseekerKnight)}.Chat.WorkingOnIt");
+                Main.npcChatText = GetWindfallTextValue($"Dialogue.{nameof(GodseekerKnight)}.Chat.WorkingOnIt");
             else
                 QuestDialogueHelper(Main.npc[NPC.whoAmI]);
         }

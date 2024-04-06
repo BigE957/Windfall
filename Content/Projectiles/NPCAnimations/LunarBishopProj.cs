@@ -5,15 +5,16 @@ namespace Windfall.Content.Projectiles.NPCAnimations
     public class LunarBishopProj : ProjectileNPC, ILocalizedModType
     {
         public override string Texture => "Windfall/Assets/NPCs/WorldEvents/LunarBishop";
-        internal override List<dialogue> MyDialogue => new()
+        internal override string key => "LunarCult.DungeonBishop.WorldText";
+        internal override List<float> Delays => new()
         {
-            new dialogue {text = "What is this?" , delay = 1},
-            new dialogue {text = "Our guardian... defeated?" , delay = 3},
-            new dialogue {text = "Hm..." , delay = 3},
-            new dialogue {text = "Your actions have not gone unnoticed." , delay = 3},
-            new dialogue {text = "Enter our sanctum." , delay = 3},
-            new dialogue {text = "Learn our secrets." , delay = 2},
-            new dialogue {text = "Perhaps our paths might cross again." , delay = 2},
+            1,
+            3,
+            3,
+            3,
+            3,
+            2,
+            2,
         };
         internal override SoundStyle SpawnSound => new("CalamityMod/Sounds/Custom/SCalSounds/BrimstoneHellblastSound");
         internal override int NPCType => ModContent.NPCType<LunarBishop>();

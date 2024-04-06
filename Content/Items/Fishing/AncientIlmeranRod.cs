@@ -32,46 +32,33 @@ namespace Windfall.Content.Items.Fishing
         }
         internal bool isCast = false;
         internal int scoogCounter = 0;
-        internal struct dialogue
-        {
-            internal string text;
-            internal int delay;
-        }
-        internal static List<dialogue> PaladinDialogue = new()
+        internal static List<float> Delays = new()
         { 
             //First Time Dialogue
-            new dialogue {text = "Salutations!" , delay = 7},
-            new dialogue {text = "I see you've got your line cast...", delay = 4},
-            new dialogue {text = "You're ready for battle then.", delay = 3},
-            new dialogue {text = "Ah, this takes me back...", delay = 6},
-            new dialogue {text = "Hunting a Scourge was once a right of passage for Paladin's in training.", delay = 3},
-            new dialogue {text = "I still remember mine like it was yesterday...", delay = 3},
-            /*
-            new dialogue {text = "Its a real shame you won't get to see one in its prime, cause let me tell you...", delay = 5},
-            new dialogue {text = "The Scourges were some of the most magestic creatures the Ilmeran Sea had to offer.", delay = 3},
-            new dialogue {text = "Now all thats left of them is a dried husk, driven mad with hunger...", delay = 3},
-            */
-            new dialogue {text = "If you are to emerge victorious, you wouldn't be far off from being a paladin yourself.", delay = 5},
-            new dialogue {text = "It'd makes me happy to know I'm not the last...", delay = 3},
-            new dialogue {text = "However, to truly become a Paladin, you'd need to be recognized by the King.", delay = 3},
-            new dialogue {text = "And... Well...", delay = 3},
-            new dialogue {text = "No one knows what became of him after the Incineration...", delay = 2},
-            new dialogue {text = "I still hold out hope he may one day be found.", delay = 3},
-            new dialogue {text = "If he were to return, perhaps there'd be hope for-", delay = 3},
-            new dialogue {text = "?!", delay = 2},
-            new dialogue {text = "The Scourge draws near...", delay = 5},
-            new dialogue {text = "...ready yourself.", delay = 3},
-            //Marks end of this set of dialogue
-            new dialogue {text = "I should never say this :3", delay = 20},
-
+            7,
+            4,
+            3,
+            6,
+            3,
+            3,
+            5,
+            3,
+            3,
+            3,
+            2,
+            3,
+            3,
+            2,
+            5,
+            3,
+            20,
             //Subsequent Time Dialogue
-            new dialogue {text = "Alright!" , delay = 6},
-            new dialogue {text = "Let's give this another go." , delay = 3},
-            new dialogue {text = "?!" , delay = 6},
-            new dialogue {text = "Here she comes!" , delay = 3},
+            6,
+            3,
+            6,
+            3,
+            20,
 
-            //Here only for error checking
-            new dialogue {text = "YOU'RE OUT OF BOUNDS DUMBASS!!!", delay = 20},
         };
         int scoogWait = 60;
         int dialogueCounter = 0;
@@ -87,8 +74,11 @@ namespace Windfall.Content.Items.Fishing
                     isCast = true;
                     break;
                 }
+                else
+                    isCast = false;
             }
             if (isCast)
+            {
                 if (player.ZoneDesert && !NPC.AnyNPCs(ModContent.NPCType<DesertScourgeHead>()) && !BossRushEvent.BossRushActive)
                 {
                     //Determines how long the wait for Desert Scourge will be based on ScoogFished
@@ -134,17 +124,20 @@ namespace Windfall.Content.Items.Fishing
                             Main.LocalPlayer.Windfall_Camera().ScreenFocusInterpolant = zoom;
                         }
 
-                        int Delay = 0;
+                        float Delay = 0;
                         if (!WorldSaveSystem.ScoogFished)
                             for (int i = dialogueCounter; i >= 0; i--)
-                                Delay += PaladinDialogue[i].delay;
+                                Delay += Delays[i];
                         else
                             for (int i = dialogueCounter; i >= 17; i--)
-                                Delay += PaladinDialogue[i].delay;
+                                Delay += Delays[i];
 
                         if (scoogCounter == (60 * (Delay)))
                         {
-                            PaladinMessage(PaladinDialogue[dialogueCounter].text, Paladin);
+                            if (dialogueCounter >= 17)
+                                PaladinMessage($"Subsequent.{dialogueCounter - 17}", Paladin);
+                            else
+                                PaladinMessage($"Initial.{dialogueCounter}", Paladin);
                             dialogueCounter++;
                         }
                     }
@@ -156,7 +149,7 @@ namespace Windfall.Content.Items.Fishing
                             DesertScourgeRumbleSystem.ScoogShake(player, scoogCounter, 60 * 52, startLeft, 0.25f);
                         else if (scoogCounter >= 60 * 60 && scoogCounter <= 60 * 65)
                             DesertScourgeRumbleSystem.ScoogShake(player, scoogCounter, 60 * 65, !startLeft, 0.5f);
-                        
+
                     }
                     else
                     {
@@ -172,7 +165,7 @@ namespace Windfall.Content.Items.Fishing
                         if (NPC.AnyNPCs(ModContent.NPCType<IlmeranPaladin>()))
                         {
                             NPC Paladin = Main.npc[NPC.FindFirstNPC(ModContent.NPCType<IlmeranPaladin>())];
-                            PaladinMessage("En garde!!", Paladin);
+                            PaladinMessage("OnSpawn", Paladin);
                         }
                         WorldSaveSystem.ScoogFished = true;
                         SoundEngine.PlaySound(SoundID.Roar, player.Center);
@@ -210,12 +203,13 @@ namespace Windfall.Content.Items.Fishing
                             NetMessage.SendData(MessageID.SpawnBossUseLicenseStartEvent, -1, -1, null, player.whoAmI, ModContent.NPCType<AquaticScourgeHead>());
                     }
                 }
-            else if(scoogCounter != 0)
+            }
+            else if (scoogCounter != 0)
             {
                 if (player.ZoneDesert && NPC.AnyNPCs(ModContent.NPCType<IlmeranPaladin>()) && !NPC.AnyNPCs(ModContent.NPCType<DesertScourgeHead>()))
                 {
                     NPC Paladin = Main.npc[NPC.FindFirstNPC(ModContent.NPCType<IlmeranPaladin>())];
-                    PaladinMessage("Oh, nevermind...", Paladin);
+                    PaladinMessage("OnQuit", Paladin);
                 }
                 else if (NPC.AnyNPCs(ModContent.NPCType<AquaticScourgeHead>()))
                 {
@@ -225,10 +219,10 @@ namespace Windfall.Content.Items.Fishing
                 scoogCounter = 0;
             }
         }
-        internal static void PaladinMessage(string text, NPC Paladin)
+        internal static void PaladinMessage(string key, NPC Paladin)
         {
             Rectangle location = new((int)Paladin.Center.X, (int)Paladin.Center.Y, Paladin.width, Paladin.width);
-            CombatText MyDialogue = Main.combatText[CombatText.NewText(location, Color.SeaGreen, text, true)];
+            CombatText MyDialogue = Main.combatText[CombatText.NewText(location, Color.MediumSpringGreen, GetWindfallTextValue($"Dialogue.IlmeranPaladin.WorldText.DesertScourge.{key}"), true)];
             if (MyDialogue.text.Length < 20)
                 MyDialogue.lifeTime = 60;
         }

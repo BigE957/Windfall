@@ -35,13 +35,13 @@
         }
         public override bool CanChat()
         {
-            if (NPC.ai[0] == 0)
+            if (NPC.ai[2] == 0)
                 return false;
             return true;
         }
         public override void OnSpawn(IEntitySource source)
         {
-            if (NPC.ai[0] == 0)
+            if (NPC.ai[2] == 0)
             {
                 NPC.alpha = 255;
                 Vector2 oldPos = NPC.position;
@@ -105,7 +105,7 @@
         }
         public override bool CheckActive()
         {
-            if (NPC.ai[0] == 0)
+            if (NPC.ai[2] == 0)
                 return false;
             return true;
         }

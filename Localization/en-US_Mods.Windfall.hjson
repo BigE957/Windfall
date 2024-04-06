@@ -40,6 +40,42 @@ Dialogue: {
 			ScoogHunt2During: Cast the rod I gave you into the Sulphurous Sea, and the other scourge will come out just like the last. Though be wary, it's likely far stronger than the last scourge.
 			ScoogHunt2End: Well done! I'm happy to know that the Scourges are at last resting peacefully, free from the suffering they had endured fromm the Incineration. As always, I'm impressed by your skills. You've gone above and beyond as an Paladin, and made certain the King won't regret his decision.
 		}
+
+		WorldText: {
+			DesertScourge: {
+				Initial: {
+					0: Salutations!
+					1: I see you've got your line cast...
+					2: You're ready for battle then.
+					3: Ah, this takes me back...
+					4: Hunting a Scourge was once a right of passage for Paladin's in training.
+					5: I still remember mine like it was yesterday...
+					Cut1: Its a real shame you won't get to see one in its prime, cause let me tell you...
+					Cut2: The Scourges were some of the most magestic creatures the Ilmeran Sea had to offer.
+					Cut3: Now all thats left of them is a dried husk, driven mad with hunger...
+					6: If you are to emerge victorious, you wouldn't be far off from being a paladin yourself.
+					7: It'd makes me happy to know I'm not the last...
+					8: However, to truly become a Paladin, you'd need to be recognized by the King.
+					9: And... Well...
+					10: No one knows what became of him after the Incineration...
+					11: I still hold out hope he may one day be found.
+					12: If he were to return, perhaps there'd be hope for-
+					13: ?!
+					14: The Scourge draws near...
+					15: ...ready yourself.
+				}
+
+				Subsequent: {
+					0: Alright!
+					1: Let's give this another go.
+					2: ?!
+					3: Here she comes!
+				}
+
+				OnSpawn: En garde!!
+				OnQuit: Oh, nevermind...
+			}
+		}
 	}
 
 	CalPotionSeller: {
@@ -50,6 +86,8 @@ Dialogue: {
 		Standard2: Haha, back for more are ya?
 		Standard3: I won't give you potions, but I'll definitely give you another whooping!
 	}
+
+	CalClone.WorldText.Brothers: Have fun you two~!
 
 	GodseekerKnight: {
 		Chat: {
@@ -75,11 +113,21 @@ Dialogue: {
 			SlimeGodHuntDuring: If you use the Rune of Gula, the Slime God will surely come out of hiding to reclaim it. He'll be far less wary of you than I; a hopefully fatal mistake. I trust your strength, put an end to that coward once and for all.
 			SlimeGodHuntEnd: I see... The coward is as snide as ever, escaping yet another confrontation. However, defeating his creations is a victory in its own right; setting him back a great deal in whatever he was planning. You've done well, and I'm certain another opportunity to face him will come our way. So don't let his escape get you down.
 			CrystalSearchStart: Well geez... Things sure have changed since we last met, huh? Its as if godly essence has been pumped into the veins of this world. I'm certain this is something the Slime God plans to take advantage of... Search the depths of these new lands, and if you find any evidence of him, bring it back to me.
-			CrystalSearchDuring: The crystals that grow so frequently in the Hallow may be of interest to the Slime God. See if any look out of place, and bring back what you find.
+			CrystalSearchDuring: The crystals that grow so frequently in the Hallow may be of interest to the Slime God. See if any look out of place, and bring back what you find. Oh, and if you find whoever took down the Wall, give them a strong punch to the face for me, okay?
 			CrystalSearchEnd: Ah, now what's this? This crystals beating with the power of the Slime God... Is he... growing them? This cannot be good. If this is still connected to that filthy slime, then he knows you have it, and I doubt he plans to just leave you be after the beating you gave him.
 			QueenSlimeHuntStart: How about we take the fight to him then. I'm certain he'll be eager for a rematch with whatever power he gained from the Hallow. Just holding that thing in the Hallow might do the trick, or perhaps the Rune of Gula as well. Either way, show him no mercy! He isn't the only one who's grown stronger since your last battle. Good luck.
 			QueenSlimeHuntDuring: Show that filthy slime no mercy. While he may now wield the powers of Hallow, you too have grown in strength since your last battle with him.
 			QueenSlimeHuntEnd: So it is done at last. Even if my master has disappeared, I shall continue his work. We mustn't rest until this world is cleansed of the gods. This is an especially grand victory. The Slime God has evaded our efforts for years, and at last he has been crushed; his schemes never to come to fruition. You've done well this day, and succeeded where many have failed. I'd say this is well worth celebration!
+		}
+
+		WorldText: {
+			0: Quite the display...
+			1: I'll admit I hadn't thought you'd survive that... thing. Let alone defeat it.
+			2: Even in such a state, the might of the deities is ever formidable...
+			3: Such a thing could have become quite the threat if given the opportunity.
+			4: Speaking of, there's another of the deities whom I've been hunting.
+			5: Your help might just prove invaluable in putting a stop to them.
+			6: If you'd be willing, I'd be ever thankful.
 		}
 	}
 
@@ -111,6 +159,30 @@ Dialogue: {
 			}
 
 			WorldText: {
+				0: What is this?
+				1: Our guardian... defeated?
+				2: Hm...
+				3: Your actions have not gone unnoticed.
+				4: Enter our sanctum.
+				5: Learn our secrets.
+				6: Perhaps our paths might cross again.
+			}
+		}
+
+		TheOrator: {
+			WorldText: {
+				Post-Plant: {
+					0: So... At last we meet.
+					1: We've been watching you keenly since you bested our guardian.
+					2: Now you've bested yet another soul-filled terror.
+					3: The delicate balance we've long worked to maintain is falling apart...
+					4: ...and we have you to thank for that.
+					5: However soon, that won't matter.
+					6: None of this will.
+					7: We invite you to partake in the Fruit of our Knowledge.
+					8: That you might come to see the Light buried within the Dark.
+					9: We will be waiting.
+				}
 			}
 		}
 
@@ -591,7 +663,7 @@ Items: {
 		}
 
 		RuneOfGnosi: {
-			DisplayName: Rune Of Gnosi
+			DisplayName: Rune Of Gnosis
 			Tooltip: ""
 		}
 	}
