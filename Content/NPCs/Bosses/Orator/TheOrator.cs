@@ -6,6 +6,13 @@ using Windfall.Common.Systems;
 using Windfall.Content.Projectiles.Boss.Orator;
 using CalamityMod.NPCs.SupremeCalamitas;
 using Microsoft.Xna.Framework.Graphics;
+using CalamityMod.Items.LoreItems;
+using Windfall.Content.Items.Lore;
+using CalamityMod.Items.Placeables.Furniture.Trophies;
+using CalamityMod;
+using CalamityMod.Items.Armor.Vanity;
+using CalamityMod.Items.TreasureBags;
+using Terraria.GameContent.ItemDropRules;
 
 namespace Windfall.Content.NPCs.Bosses.TheOrator
 {
@@ -400,7 +407,33 @@ namespace Windfall.Content.NPCs.Bosses.TheOrator
                 dust.color = dust.type == dustStyle ? Color.LightGreen : default;
             }
             NPC.downedAncientCultist = true;
-            //WorldGen.TriggerLunarApocalypse();
+            WorldGen.TriggerLunarApocalypse();
+        }
+        public override void BossLoot(ref string name, ref int potionType)
+        {
+            potionType = ItemID.GreaterHealingPotion;
+        }
+        public override void ModifyNPCLoot(NPCLoot npcLoot)
+        {
+            npcLoot.Add(ItemID.LunarCraftingStation);
+
+            //Boss Bag
+            npcLoot.Add(ItemDropRule.BossBag(ItemID.CultistBossBag));
+
+            //Normal Only
+            var normalOnly = npcLoot.DefineNormalOnlyDropSet();
+            {
+                normalOnly.Add(ItemID.BossMaskCultist, 7);
+            }
+
+            // Trophy
+            npcLoot.Add(ItemID.AncientCultistTrophy, 10);
+
+            // Relic
+            npcLoot.DefineConditionalDropSet(DropHelper.RevAndMaster).Add(ItemID.LunaticCultistMasterTrophy);
+
+            //Lore
+            npcLoot.AddConditionalPerPlayer(() => !DownedNPCSystem.downedOrator, ModContent.ItemType<OraLore>(), desc: DropHelper.FirstKillText);
         }
         public override bool PreDraw(SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor)
         {
