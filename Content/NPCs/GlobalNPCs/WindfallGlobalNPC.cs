@@ -24,7 +24,7 @@ namespace Windfall.Content.NPCs.GlobalNPCs
                 QuestSystem.IncrementQuestProgress(QuestSystem.QuestLog.FindIndex(quest => quest.Name == "ClamHunt"), 0);
 
             if (npc.type == calamity.Find<ModNPC>("HiveMind").Type && !DownedBossSystem.downedHiveMind || npc.type == calamity.Find<ModNPC>("PerforatorHive").Type && !DownedBossSystem.downedPerforator)
-                SpawnWorldEventProjectile(ModContent.ProjectileType<SeekerKnightProj>(), 100);
+                SpawnWorldEventProjectile(ModContent.ProjectileType<GodseekerKnightProj>(), 100);
 
             if (npc.type == NPCID.SkeletronHead && !NPC.downedBoss3)
                 Projectile.NewProjectile(Entity.GetSource_NaturalSpawn(), new Vector2(Main.dungeonX, Main.dungeonY).ToWorldCoordinates(), Vector2.Zero, ModContent.ProjectileType<LunarBishopProj>(), 0, 0, -1, 1);

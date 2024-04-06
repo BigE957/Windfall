@@ -2,18 +2,19 @@
 
 namespace Windfall.Content.Projectiles.NPCAnimations
 {
-    public class SeekerKnightProj : ProjectileNPC, ILocalizedModType
+    public class GodseekerKnightProj : ProjectileNPC, ILocalizedModType
     {
-        public override string Texture => "Windfall/Assets/Projectiles/NPCAnimations/LoneRoninTeleport";
-        internal override List<dialogue> MyDialogue => new()
+        public override string Texture => "Windfall/Assets/Projectiles/NPCAnimations/GodseekerKnightProj";
+        internal override string key => "GodseekerKnight.WorldText";
+        internal override List<float> Delays => new()
         {
-            new dialogue {text = "Quite the display..." , delay = 1},
-            new dialogue {text = "I'll admit I hadn't thought you'd survive that... thing. Let alone defeat it." , delay = 3},
-            new dialogue {text = "Even in such a state, the might of the deities is ever formidable..." , delay = 3},
-            new dialogue {text = "Such a thing could have become quite the threat if given the opportunity." , delay = 3},
-            new dialogue {text = "Speaking of, there's another of the deities whom I've been hunting." , delay = 3},
-            new dialogue {text = "Your help might just prove invaluable in putting a stop to them." , delay = 3},
-            new dialogue {text = "If you'd be willing, I'd be ever thankful." , delay = 3},
+            1,
+            3,
+            3,
+            3,
+            3,
+            3,
+            3,
         };
         internal override SoundStyle SpawnSound => new("CalamityMod/Sounds/Custom/SCalSounds/BrimstoneHellblastSound");
         internal override int NPCType => ModContent.NPCType<GodseekerKnight>();
@@ -35,7 +36,7 @@ namespace Windfall.Content.Projectiles.NPCAnimations
         public override void SetDefaults()
         {
             Projectile.width = 26;
-            Projectile.height = 42;
+            Projectile.height = 50;
             Projectile.tileCollide = false;
             Projectile.ignoreWater = true;
             Projectile.netImportant = true;
