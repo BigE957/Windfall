@@ -106,7 +106,7 @@ namespace Windfall.Common.Systems.WorldEvents
                 case SystemState.Spawn:
                     if (MeetingTimer == -1)
                     {
-                        int i = Main.rand.Next(3);
+                        int i = Main.rand.Next(4);
                         switch (i)
                         {
                             case 0:
