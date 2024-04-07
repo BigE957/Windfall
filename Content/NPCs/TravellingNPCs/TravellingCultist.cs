@@ -192,7 +192,12 @@ namespace Windfall.Content.NPCs.TravellingNPCs
             WhatNext,
             Quests3,
             //Ritual Dialogue
-            RitualTime,
+            Initial4,
+            Where,
+            When,
+            WhatIDo,
+            SoundsGood,
+            QuestsEnd
         }
         private static DialogueState CurrentDialogue
         {
@@ -340,7 +345,7 @@ namespace Windfall.Content.NPCs.TravellingNPCs
             new dialogueDirections()
             {
                 MyPos = (int)DialogueState.UhOh,
-                Button1 = new(){name = "Why are thye doing this?", heading = (int)DialogueState.Why},
+                Button1 = new(){name = "Why are they doing this?", heading = (int)DialogueState.Why},
             },
             new dialogueDirections()
             {
@@ -352,6 +357,38 @@ namespace Windfall.Content.NPCs.TravellingNPCs
                 MyPos = (int)DialogueState.WhatNext,
                 Button1 = new(){name = "Understood.", heading = (int)DialogueState.Quests3, end = true},
                 Button2 = new(){name = "Good luck!", heading = (int)DialogueState.Quests3, end = true},
+            },
+            #endregion
+
+            #region Ritual Time Conversation
+            new dialogueDirections()
+            {
+                MyPos = (int)DialogueState.Initial4,
+                Button1 = new(){name = "Where is it?", heading = (int)DialogueState.Where},
+                Button2 = new(){name = "When is it?", heading = (int)DialogueState.When},
+            },
+            new dialogueDirections()
+            {
+                MyPos = (int)DialogueState.Where,
+                Button1 = new(){name = "What do I do?", heading = (int)DialogueState.WhatIDo},
+                Button2 = null,
+            },
+            new dialogueDirections()
+            {
+                MyPos = (int)DialogueState.When,
+                Button1 = new(){name = "What do I do?", heading = (int)DialogueState.WhatIDo},
+                Button2 = null,
+            },
+            new dialogueDirections()
+            {
+                MyPos = (int)DialogueState.WhatIDo,
+                Button1 = new(){name = "Sounds good!", heading = (int)DialogueState.SoundsGood},
+            },
+            new dialogueDirections()
+            {
+                MyPos = (int)DialogueState.WhatNext,
+                Button1 = new(){name = "Will do.", heading = (int)DialogueState.QuestsEnd, end = true},
+                Button2 = new(){name = "See you there!", heading = (int)DialogueState.QuestsEnd, end = true},
             },
             #endregion
         };
