@@ -122,9 +122,9 @@ namespace Windfall.Common.Utilities
             if (npc.type == ModContent.NPCType<TravellingCultist>())
             {
                 if (QuestSystem.RitualQuestItems.Contains(CurrentQuestItem))
-                    Path = "LunarCult.TravellingCultist.Ritual";
+                    Path = "LunarCult.TravellingCultist.Quests.Ritual";
                 else
-                    Path = "LunarCult.TravellingCultist.Dungeon";
+                    Path = "LunarCult.TravellingCultist.Quests.Dungeon";
             }
             int index = -1;
             if (!QuestComplete)

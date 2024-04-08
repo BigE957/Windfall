@@ -29,7 +29,7 @@ namespace Windfall.Content.NPCs.TravellingNPCs
             if ((!Main.dayTime || Main.time >= despawnTime) && !IsNpcOnscreen(NPC.Center)) // If it's past the despawn time and the NPC isn't onscreen
             {
                 // Here we despawn the NPC and send a message stating that the NPC has despawned
-                DisplayLocalizedText("The" + NPC.FullName + " has departed!", new(50, 125, 255));
+                DisplayLocalizedText("The " + NPC.FullName + " has departed!", new(50, 125, 255));
                 NPC.active = false;
                 NPC.netSkip = -1;
                 NPC.life = 0;
@@ -85,6 +85,8 @@ namespace Windfall.Content.NPCs.TravellingNPCs
         {
             QuestComplete = false;
             QuestArtifact = new(0, 0);
+            if (MilestoneMet(CurrentDialogue))
+                CurrentDialogue++;
         }
         private static bool IsNpcOnscreen(Vector2 center)
         {
@@ -197,7 +199,7 @@ namespace Windfall.Content.NPCs.TravellingNPCs
             When,
             WhatIDo,
             SoundsGood,
-            QuestsEnd
+            QuestsEnd,
         }
         private static DialogueState CurrentDialogue
         {
@@ -206,28 +208,28 @@ namespace Windfall.Content.NPCs.TravellingNPCs
         }
         public override string GetChat()
         {
-            if (CurrentDialogue != DialogueState.Quests1 || CurrentDialogue != DialogueState.Quests2)
-                return GetTextValue($"Dialogue.LunarCult.TravellingCultist.Conversation.{CurrentDialogue}");
+            if (!CurrentDialogue.ToString().Contains("Quests"))
+                return GetWindfallTextValue($"Dialogue.LunarCult.TravellingCultist.Conversation.{CurrentDialogue}");
             WeightedRandom<string> chat = new();
 
-            chat.Add(GetTextValue("Dialogue.LunarCult.TravellingCultist.Chat.Standard1"));
-            chat.Add(GetTextValue("Dialogue.LunarCult.TravellingCultist.Chat.Standard2"));
-            chat.Add(GetTextValue("Dialogue.LunarCult.TravellingCultist.Chat.Standard3"));
+            chat.Add(GetWindfallTextValue("Dialogue.LunarCult.TravellingCultist.Chat.Standard1"));
+            chat.Add(GetWindfallTextValue("Dialogue.LunarCult.TravellingCultist.Chat.Standard2"));
+            chat.Add(GetWindfallTextValue("Dialogue.LunarCult.TravellingCultist.Chat.Standard3"));
             if (NPC.AnyNPCs(NPCID.Mechanic) || NPC.AnyNPCs(NPCID.Clothier))
             {
-                chat.Add(GetTextValue("Dialogue.LunarCult.TravellingCultist.Chat.AnyDungeonNPC"));
+                chat.Add(GetWindfallTextValue("Dialogue.LunarCult.TravellingCultist.Chat.AnyDungeonNPC"));
                 if (NPC.AnyNPCs(NPCID.Mechanic))
-                    chat.Add(GetTextValue("Dialogue.LunarCult.TravellingCultist.Chat.Mechanic"));
+                    chat.Add(GetWindfallTextValue("Dialogue.LunarCult.TravellingCultist.Chat.Mechanic"));
                 if (NPC.AnyNPCs(NPCID.Clothier))
-                    chat.Add(GetTextValue("Dialogue.LunarCult.TravellingCultist.Chat.Clothier"));
+                    chat.Add(GetWindfallTextValue("Dialogue.LunarCult.TravellingCultist.Chat.Clothier"));
             }
             if (NPC.downedBoss3)
                 if(Main.rand.NextBool(10))
-                    chat.Add(GetTextValue($"Dialogue.LunarCult.TravellingCultist.Chat.SkeletronRare"));
+                    chat.Add(GetWindfallTextValue($"Dialogue.LunarCult.TravellingCultist.Chat.SkeletronRare"));
                 else
-                    chat.Add(GetTextValue($"Dialogue.LunarCult.TravellingCultist.Chat.Skeletron"));
+                    chat.Add(GetWindfallTextValue($"Dialogue.LunarCult.TravellingCultist.Chat.Skeletron"));
             for (int i = 0; i < CultMeetingSystem.Recruits.Count; i++)
-                chat.Add(GetTextValue($"Dialogue.LunarCult.TravellingCultist.Chat.{(RecruitableLunarCultist.RecruitNames)i}"));
+                chat.Add(GetWindfallTextValue($"Dialogue.LunarCult.TravellingCultist.Chat.{(RecruitableLunarCultist.RecruitNames)i}"));
             return chat;
         }
 
@@ -267,7 +269,7 @@ namespace Windfall.Content.NPCs.TravellingNPCs
             new dialogueDirections()
             {
                 MyPos = (int)DialogueState.HowToHelp,
-                Button1 = new(){name = "How can I help?", heading = (int)DialogueState.ImIn},
+                Button1 = new(){name = "I'm in.", heading = (int)DialogueState.ImIn},
                 Button2 = null,
             },
             new dialogueDirections()
@@ -386,7 +388,7 @@ namespace Windfall.Content.NPCs.TravellingNPCs
             },
             new dialogueDirections()
             {
-                MyPos = (int)DialogueState.WhatNext,
+                MyPos = (int)DialogueState.SoundsGood,
                 Button1 = new(){name = "Will do.", heading = (int)DialogueState.QuestsEnd, end = true},
                 Button2 = new(){name = "See you there!", heading = (int)DialogueState.QuestsEnd, end = true},
             },
@@ -417,13 +419,13 @@ namespace Windfall.Content.NPCs.TravellingNPCs
                 return;
             }
             CurrentDialogue = (DialogueState)GetNPCConversation(MyDialogue, (int)CurrentDialogue, firstButton);
-            Main.npcChatText = GetTextValue($"Dialogue.LunarCult.TravellingCultist.Conversation.{CurrentDialogue}");
+            Main.npcChatText = GetWindfallTextValue($"Dialogue.LunarCult.TravellingCultist.Conversation.{CurrentDialogue}");
         }
         public override void AI()
         {
             NPC.homeless = true;
-            if (MilestoneMet(CurrentDialogue))
-                CurrentDialogue++;
+            if (RitualQuestProgress == 3 && CurrentDialogue >= DialogueState.QuestsEnd)
+                RitualQuestProgress++;
         }
         public override void TownNPCAttackStrength(ref int damage, ref float knockback)
         {
@@ -440,6 +442,6 @@ namespace Windfall.Content.NPCs.TravellingNPCs
             projType = ModContent.ProjectileType<PhantasmalFuryProj>();
             attackDelay = 1;
         }
-        private static bool MilestoneMet(DialogueState CurrentDialogue) => (CurrentDialogue == DialogueState.Quests1 && NPC.downedPlantBoss) || (CurrentDialogue == DialogueState.Quests2 && CultMeetingSystem.Recruits.Count > 2) || (CurrentDialogue == DialogueState.Quests3 && RitualQuestProgress > 2);
+        private static bool MilestoneMet(DialogueState CurrentDialogue) => (CurrentDialogue == DialogueState.Quests1 && NPC.downedPlantBoss) || (CurrentDialogue == DialogueState.Quests2 && CultMeetingSystem.Recruits.Count > 1) || (CurrentDialogue == DialogueState.Quests3 && RitualQuestProgress >= 3) || (CurrentDialogue == DialogueState.QuestsEnd && RitualQuestProgress < 4);
     }
 }
