@@ -148,12 +148,15 @@ namespace Windfall.Content.NPCs.WorldEvents.LunarCult
                 AnimationType = NPCID.BartenderUnconscious;
                 NPC.frame.Y = 0;
 
-                NPC Bishop = Main.npc[NPC.FindFirstNPC(ModContent.NPCType<LunarBishop>())];
-                if (Bishop != null)
-                    if (NPC.position.X < Bishop.position.X)
-                        NPC.direction = -1;
-                    else
-                        NPC.direction = 1;
+                if (NPC.FindFirstNPC(ModContent.NPCType<LunarBishop>()) != -1)
+                {
+                    NPC Bishop = Main.npc[NPC.FindFirstNPC(ModContent.NPCType<LunarBishop>())];
+                    if (Bishop != null)
+                        if (NPC.position.X < Bishop.position.X)
+                            NPC.direction = -1;
+                        else
+                            NPC.direction = 1;
+                }
             }
         }
         public override void AI()
