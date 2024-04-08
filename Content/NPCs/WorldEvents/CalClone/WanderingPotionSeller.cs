@@ -135,9 +135,8 @@ namespace Windfall.Content.NPCs.WorldEvents.CalClone
                 aiCounter++;
                 if (aiCounter == 1)
                 {
-                    string key = "Well...";
                     Color messageColor = Color.Orange;
-                    DisplayLocalizedText(key, messageColor);
+                    DisplayLocalizedText("Mods.Windfall.Dialogue.CalPotionSeller.WorldText.Initial.Well", messageColor);
                     zoom = 0;
                 }
                 else if (aiCounter < 120)
@@ -162,7 +161,7 @@ namespace Windfall.Content.NPCs.WorldEvents.CalClone
                         d.noGravity = true;
                     }
                     SoundEngine.PlaySound(CalCloneTeleport, NPC.Center);
-                    NPC.NewNPC(NPC.GetSource_FromAI(), (int)NPC.Center.X * NPC.spriteDirection, (int)NPC.Center.Y + 12, ModContent.NPCType<WanderingCalClone>(), 0, 1f);
+                    NPC.NewNPC(NPC.GetSource_FromAI(), (int)NPC.Center.X, (int)NPC.Center.Y + 12, ModContent.NPCType<WanderingCalClone>(), 0, 1f);
                     SoundEngine.PlaySound(Jumpscare, NPC.Center);
                     NPC.active = false;
                 }

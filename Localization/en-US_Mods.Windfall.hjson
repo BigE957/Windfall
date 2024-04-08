@@ -85,6 +85,22 @@ Dialogue: {
 		Standard1: You looking for something?
 		Standard2: Haha, back for more are ya?
 		Standard3: I won't give you potions, but I'll definitely give you another whooping!
+
+		WorldText: {
+			Initial: {
+				Well: Well...
+				0: TOO BAD!
+				1: The only thing you’re getting from me is PAIN… and DEATH!
+				2: Cause I’m taking over this town! Then all your friends are gonna be MY FRIENDS!
+				3: MWAHAHAHAHA!!!
+			}
+
+			Subsequent: {
+				0: Fine then!
+				1: I’ll just beat you again!
+				2: MWAHAHAHAHA!!!
+			}
+		}
 	}
 
 	CalClone.WorldText.Brothers: Have fun you two~!
@@ -230,7 +246,7 @@ Dialogue: {
 				Why: That's something I was never able to find out... The Orator's motives are a mystery to all it seems. However, all that matters now is the dire situation we find ourselves in, and the solution we now hold.
 				WhatNext: The ritual requires a few things... In the coming days I'll task you with collecting the required materials for the ritual. For now, sit tight. I'll need to look over these texts further to be sure of everything required.
 				#Ritual Time Convo
-				Initial4: Splendid news! We're ready to begin the Sealing Ritual! I've gotten in contact with those you saved from the Lunar Cult, and they'll be the ones to help us carry out the ritual. 
+				Initial4: Splendid news! We're ready to begin the Sealing Ritual! I've gotten in contact with those you saved from the Lunar Cult, and they'll be the ones to help us carry out the ritual.
 				Where: It'll be held at the entrance to the Dungeon; that place's occult energies will prove useful in bringing out the full power of this ritual.
 				When: Our friends are already there, and waiting! Whenever you're ready, make your way over to the Dungeon, and we can begin.
 				WhatIDo: To be honest, you won't be playing a major role in the ritual itself; we've got that taken care of. I really want you around to watch our backs. A ritual of this scale may attract the undead of the Dungeon, or some other frightful monsters. Better to be on the safe side, and have a {1} of your prowess around.
@@ -238,9 +254,8 @@ Dialogue: {
 			}
 
 			Quests: {
-				NoQuest: You've done a great job! I'll be back when I next need you.
-
 				Dungeon: {
+					NoQuest: You've done a great job! I'll be back when I next need you.
 					BoneStart: Fun fact: The bones in the Dungeon are packed full of curses! If we can get enough of them, maybe we'll be able to figure out a spell to stop the Lunar Cult. Oh, and don't ask where they got the curses. You don't want to know.
 					BoneDuring: Pretty much all of the undead you'll find in the Dungeon are prime sources for the accursed bones we're looking for. About 50 should be enough. Only hard part is getting their owners to part with them, haha.
 					BoneEnd: Yes, these'll do nicely! I'd uh... Wash your hands after handling this many... With holy water... Actually maybe get a full on baptism... Sorry.
@@ -257,12 +272,13 @@ Dialogue: {
 				}
 
 				Ritual: {
+					NoQuest: You've done a great job! I'll be back when I find out what the next thing we need is.
 					TabletFragsStart: Alright, the first thing we'll need is a tablet, which'll act as the ritual's vessel. The Lihzahrds are well versed in rituals such as these; I'm certain they have the materials required to create such a tablet. No followers of the Gods would spare the slightest expense on their toys; I'm sure it'll have the materials we're looking for.
 					TabletFragsDuring: I'm not telling you to smash their ancient idol and bring me pieces of it... Buuuuuut if something horrible were to happen to that golem unexpectedly, I wouldn't be complaining... and it'd only be right to make something useful out of its parts, right?
 					TabletFragsEnd: Ah, you got the materials! Yes... These should do perfectly for our tablet. Maybe lets not poke around the Lihzahrds' temple anymore though... you look awfully banged up.
-					DraconicBoneStart: Alright, I've figured out the next thing we'll need, but uhh... I don't like it any more than you will. We need a Dragon. Well, not a whole dragon. It seems anything that has the genetics of a Dragon can be used. This piece will allow us to interact with the magic used by the dragons, and not be seen as enemies. The remains a draconic offshoot should do the trick, and I've heard that the noble Fishron is quite attracted to a particular type of bait.
-					DraconicBoneDuring: If you're in need of bait, I believe Amidias may be able to lend you a hand. Then you must simply cast the bait in the water. Shouldn't take too long for a Fishron to reveal herself to you...
-					DraconicBoneEnd: Oh my! What a marvel! How awful that something so beautiful had to die... Thank you again for the help. We're so close to being able to begin the Sealing Ritual. I'll let you know when I narrow down what we else we need. I do wonder, though, why the Dragons went through with this ritual when it cost one of their kind... I suppose they had no choice.
+					FishronBoneStart: Alright, I've figured out the next thing we'll need, but uhh... I don't like it any more than you will. We need a Dragon. Well, not a whole dragon. It seems anything that has the genetics of a Dragon can be used. This piece will allow us to interact with the magic used by the dragons, and not be seen as enemies. The remains a draconic offshoot should do the trick, and I've heard that the noble Fishron is quite attracted to a particular type of bait.
+					FishronBoneDuring: If you're in need of bait, I believe Amidias may be able to lend you a hand. Then you must simply cast the bait in the water. Shouldn't take too long for a Fishron to reveal herself to you...
+					FishronBoneEnd: Oh my! What a marvel! How awful that something so beautiful had to die... Thank you again for the help. We're so close to being able to begin the Sealing Ritual. I'll let you know when I narrow down what we else we need. I do wonder, though, why the Dragons went through with this ritual when it cost one of their kind... I suppose they had no choice.
 					PrimalLightStart: Good news! We need just one more thing before we're ready to begin the sealing ritual! Though... This may be the most difficult thing to acquire. Legend states that the Dragon King used the power of "Primordial Light" to ultimately seal away the behemoth. There's only one entity I know of that might allow us to harness this power: the self-appointed "Empress of Light". Perhaps she holds something that would allow us to harness the power of the Light, as the Dragons' mighty King once did.
 					PrimalLightDuring: I must warn you not to face the Empress during the day. As light bathes the land, she too can harness Primordial Light. Facing her at night would be a far wiser choice.
 					PrimalLightEnd: Ah ha! This shard certainly holds a unique power. Its radiance... this must be what we're looking for! I'll need some time to finish preparing for the ritual, but I'll notify you once we're ready. I can taste our victory over the Lunar Cult just over the horizon.
@@ -440,6 +456,11 @@ Items: {
 
 		IlmerisLore: {
 			DisplayName: Ilmeris
+			Tooltip: ""
+		}
+
+		OraLore: {
+			DisplayName: Ora Lore
 			Tooltip: ""
 		}
 	}
@@ -739,6 +760,7 @@ NPCs: {
 	OratorNPC.DisplayName: Orator N P C
 	GodseekerKnight.DisplayName: Godseeker Knight
 	DarkSpawn.DisplayName: Dark Spawn
+	SealingTablet.DisplayName: Sealing Tablet
 }
 
 Projectiles: {
@@ -763,6 +785,7 @@ Projectiles: {
 	Checker.DisplayName: Checker
 	DarkGlob.DisplayName: Dark Glob
 	DarkBolt.DisplayName: Dark Bolt
+	GodseekerKnightProj.DisplayName: Godseeker Knight Proj
 }
 
 Buffs: {

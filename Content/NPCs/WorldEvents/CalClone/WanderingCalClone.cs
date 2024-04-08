@@ -62,22 +62,14 @@ namespace Windfall.Content.NPCs.WorldEvents.CalClone
         }
 
         //Make sure to allow your NPC to chat, since being "like a town NPC" doesn't automatically allow for chatting.
-        public override bool CanChat()
-        {
-            return true;
-        }
+        public override bool CanChat() => true;
 
-        public override ITownNPCProfile TownNPCProfile()
-        {
-            return NPCProfile;
-        }
+        public override ITownNPCProfile TownNPCProfile() => NPCProfile;
         public override float SpawnChance(NPCSpawnInfo spawnInfo)
         {
             //If any player is underground and has an example item in their inventory, the example bone merchant will have a slight chance to spawn.
             if (spawnInfo.Player.townNPCs > 2f && !DownedBossSystem.downedCalamitasClone && NPC.downedMechBoss1 && NPC.downedMechBoss2 && NPC.downedMechBoss3 && WorldSaveSystem.CloneRevealed && !Main.dayTime && !NPC.AnyNPCs(ModContent.NPCType<WanderingPotionSeller>()) && !NPC.AnyNPCs(ModContent.NPCType<WanderingCalClone>()))
-            {
                 return 0.35f;
-            }
             //Else, the example bone merchant will not spawn if the above conditions are not met.
             return 0f;
         }
@@ -92,7 +84,7 @@ namespace Windfall.Content.NPCs.WorldEvents.CalClone
             {
                 string key = "Calamitas is back...";
                 Color messageColor = new(50, 125, 255);
-                CalamityUtils.DisplayLocalizedText(key, messageColor);
+                DisplayLocalizedText(key, messageColor);
             }
         }
         public override bool PreAI()
@@ -110,7 +102,7 @@ namespace Windfall.Content.NPCs.WorldEvents.CalClone
                 SoundEngine.PlaySound(CalCloneTeleport, NPC.Center);
                 string key = "Calamitas has left... finally.";
                 Color messageColor = new(50, 125, 255);
-                CalamityUtils.DisplayLocalizedText(key, messageColor);
+                DisplayLocalizedText(key, messageColor);
                 NPC.active = false;
                 NPC.netSkip = -1;
                 NPC.life = 0;
@@ -131,8 +123,8 @@ namespace Windfall.Content.NPCs.WorldEvents.CalClone
         }
 
         public override void SetChatButtons(ref string button, ref string button2)
-        { // What the chat buttons are when you open up the chat UI
-            button = "Challenge"; //This is the key to the word "Shop"
+        {
+            button = "Challenge"; 
         }
         public override void OnChatButtonClicked(bool firstButton, ref string shop)
         {
@@ -149,6 +141,7 @@ namespace Windfall.Content.NPCs.WorldEvents.CalClone
 
         internal int aiCounter = 59;
         int i = 20;
+        int dialogueCounter = 0;
         float CalCloneHoverY;
 
         public override void AI()
@@ -165,25 +158,22 @@ namespace Windfall.Content.NPCs.WorldEvents.CalClone
                         Main.LocalPlayer.Windfall_Camera().ScreenFocusPosition = NPC.Center;
                         Main.LocalPlayer.Windfall_Camera().ScreenFocusInterpolant = 1;
                     }
+                    string key = "Mods.Windfall.Dialogue.CalPotionSeller.WorldText.Initial.";
                     switch (aiCounter)
                     {
-                        case (90):
-                            string key; key = "TOO BAD!";
-                            CalamityUtils.DisplayLocalizedText(key, Color.Orange);
+                        case (90):                                                        
+                            DisplayLocalizedText(key + dialogueCounter++, Color.Orange);
                             break;
                         case (150):
-                            key = "The only thing you’re getting from me is PAIN… and DEATH!";
-                            CalamityUtils.DisplayLocalizedText(key, Color.Orange);
+                            DisplayLocalizedText(key + dialogueCounter++, Color.Orange);
                             break;
                         case (210):
-                            key = "Cause I’m taking over this town! Then all your friends are gonna be MY FRIENDS!";
-                            CalamityUtils.DisplayLocalizedText(key, Color.Orange);
+                            DisplayLocalizedText(key + dialogueCounter++, Color.Orange);
                             break;
                         case (270):
                             i = 20;
                             SoundEngine.PlaySound(DashSound, NPC.Center);
-                            key = "MWAHAHAHAHA!!!";
-                            CalamityUtils.DisplayLocalizedText(key, Color.Orange);
+                            DisplayLocalizedText(key + dialogueCounter++, Color.Orange);
                             break;
                         case (300):
                             for (int i = 0; i < 40; i++)
@@ -219,22 +209,19 @@ namespace Windfall.Content.NPCs.WorldEvents.CalClone
                 }
                 else
                 {
+                    string key = "Mods.Windfall.Dialogue.CalPotionSeller.WorldText.Subsequent.";
                     switch (aiCounter)
                     {
                         case (60):
-                            string key = "Fine then!";
-                            CalamityUtils.DisplayLocalizedText(key, Color.Orange);
+                            DisplayLocalizedText(key + dialogueCounter++, Color.Orange);
                             break;
-                        case 120:
-                            i = 20;
-                            key = "I’ll just beat you again!";
-                            CalamityUtils.DisplayLocalizedText(key, Color.Orange);
+                        case 120:                           
+                            DisplayLocalizedText(key + dialogueCounter++, Color.Orange);
                             break;
                         case (160):
                             i = 20;
                             SoundEngine.PlaySound(DashSound, NPC.Center);
-                            key = "MWAHAHAHAHA!!!";
-                            CalamityUtils.DisplayLocalizedText(key, Color.Orange);
+                            DisplayLocalizedText(key + dialogueCounter++, Color.Orange);
                             break;
                         case (200):
                             for (int i = 0; i < 40; i++)
@@ -260,7 +247,7 @@ namespace Windfall.Content.NPCs.WorldEvents.CalClone
                             NPC.active = false;
                             break;
                     }
-                    if (aiCounter >= 120)
+                    if (aiCounter >= 160)
                         if (i > 0)
                         {
                             NPC.position.Y -= i-- * 1.5f;
