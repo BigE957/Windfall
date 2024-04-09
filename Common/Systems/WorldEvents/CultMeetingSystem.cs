@@ -1,5 +1,6 @@
 ﻿using Terraria.ModLoader.IO;
 using Windfall.Content.Items.Quest;
+using Windfall.Content.NPCs.TravellingNPCs;
 using Windfall.Content.NPCs.WorldEvents.LunarCult;
 
 namespace Windfall.Common.Systems.WorldEvents
@@ -78,7 +79,7 @@ namespace Windfall.Common.Systems.WorldEvents
             switch (State)
             {
                 case SystemState.CheckReqs:
-                    if (!NPC.downedPlantBoss || NPC.downedAncientCultist || OnCooldown || Main.dayTime)
+                    if (!NPC.downedPlantBoss || Recruits.Count == 2 || OnCooldown || Main.dayTime)
                     {
                         if (Main.dayTime)
                         {
@@ -246,7 +247,7 @@ namespace Windfall.Common.Systems.WorldEvents
                                         case 10 * 60:
                                             Text = Main.combatText[CombatText.NewText(Cultist1Location, Color.Yellow, "!?", true)];
                                             DisplayMessage(Cultist2Location, Color.Red, "!?");
-                                            DisplayMessage(Cultist3Location, Color.Brown, "?");
+                                            DisplayMessage(Cultist3Location, Color.SandyBrown, "?");
                                             DisplayMessage(Cultist4Location, Color.Orange, "!?");
                                             break;
                                         case 12 * 60:
@@ -256,13 +257,13 @@ namespace Windfall.Common.Systems.WorldEvents
                                             Text = DisplayMessage(BishopLocation, Color.Blue, "The time shall come when all of you will be called upon to play your part.");
                                             break;
                                         case 16 * 60:
-                                            Text = DisplayMessage(Cultist3Location, Color.Brown, "Uhm... What are our 'parts'?");
+                                            Text = DisplayMessage(Cultist3Location, Color.SandyBrown, "Uhm... What are our 'parts'?");
                                             break;
                                         case 18 * 60:
                                             Text = DisplayMessage(BishopLocation, Color.Blue, "That will be revealed to you in due time.");
                                             break;
                                         case 20 * 60:
-                                            Text = DisplayMessage(Cultist3Location, Color.Brown, "Oh... Okay.");
+                                            Text = DisplayMessage(Cultist3Location, Color.SandyBrown, "Oh... Okay.");
                                             break;
                                         case 22 * 60:
                                             Text = DisplayMessage(Cultist2Location, Color.Red, "Does this mean we've learned all there is to learn?");

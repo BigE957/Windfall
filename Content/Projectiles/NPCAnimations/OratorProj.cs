@@ -24,7 +24,7 @@ namespace Windfall.Content.Projectiles.NPCAnimations
         };
         internal override SoundStyle SpawnSound => new("CalamityMod/Sounds/Custom/SCalSounds/BrimstoneHellblastSound");
         internal override int NPCType => -1;
-        internal override Color TextColor => Color.Cyan;
+        internal override Color TextColor => Color.LightGreen;
         internal override void DoOnSpawn()
         {
             for (int i = 0; i < 75; i++)
