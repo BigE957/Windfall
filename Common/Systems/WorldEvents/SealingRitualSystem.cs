@@ -46,6 +46,10 @@ namespace Windfall.Common.Systems.WorldEvents
         {
             tag["RitualSequenceSeen"] = RitualSequenceSeen;
         }
+        public override void OnWorldLoad()
+        {
+            DungeonCoords = new Vector2(Main.dungeonX - 4, Main.dungeonY).ToWorldCoordinates();
+        }
         public override void PreUpdateWorld()
         {
             Player mainPlayer = Main.player[0];
@@ -53,7 +57,6 @@ namespace Windfall.Common.Systems.WorldEvents
             //State = SystemState.CheckReqs; RitualTimer = -2; RitualSequenceSeen = false; Active = false;
             //RitualTimer = 60 * 51;
             //DisplayLocalizedText($"{RitualTimer}, {State}, {(DungeonCoords - mainPlayer.Center).Length()}, {RitualSequenceSeen}");
-            DungeonCoords = new Vector2(Main.dungeonX - 4, Main.dungeonY).ToWorldCoordinates();
             #endregion
             switch (State)
             {
@@ -271,7 +274,7 @@ namespace Windfall.Common.Systems.WorldEvents
                                         SealingTablet.ai[0] = 0;
                                         break;
                                     case 60 * 65:
-                                        if (mainPlayer.InventoryHas(ModContent.ItemType<WFEidolonTablet>()))
+                                        if (mainPlayer.InventoryHas(ModContent.ItemType<SelenicTablet>()))
                                         {
                                             Main.NewText("The Selenic Tablet hums violently...", Color.Cyan);
                                             break;
