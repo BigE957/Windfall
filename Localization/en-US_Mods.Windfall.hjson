@@ -788,9 +788,19 @@ Items: {
 			Tooltip: A worn sigil of the gods
 		}
 
-		WFEidolonTablet: {
+		SelenicTablet: {
 			DisplayName: Selenic Tablet
-			Tooltip: A tablet used by the Lunar Cult for covert communications.
+			Tooltip: ""
+			SeekerTooltip:
+				'''
+				A tablet used by the Lunar Cult for covert communications.
+				Use to detect the location of an active Cult Meeting.
+				'''
+			SummonTooltip:
+				'''
+				A tablet used by the Lunar Cult for covert communications.
+				It hums near constantly... Calling to you.
+				'''
 		}
 
 		PrimalLightShard: {

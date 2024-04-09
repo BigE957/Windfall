@@ -128,7 +128,7 @@ namespace Windfall.Common.Systems.WorldEvents
 
                         foreach (Player player in Main.player)
                         {
-                            if (player.InventoryHas(ModContent.ItemType<WFEidolonTablet>()))
+                            if (player.InventoryHas(ModContent.ItemType<SelenicTablet>()))
                             {
                                 Main.NewText("The Selenic Tablet begins to hum...", Color.Cyan);
                                 break;

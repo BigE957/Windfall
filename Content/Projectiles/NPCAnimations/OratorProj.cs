@@ -37,7 +37,7 @@ namespace Windfall.Content.Projectiles.NPCAnimations
         }
         internal override void DoBeforeDespawn()
         {
-            Item i = Main.item[Item.NewItem(Entity.GetSource_Loot(), Projectile.Center, new Vector2(8, 4), ModContent.ItemType<WFEidolonTablet>())];
+            Item i = Main.item[Item.NewItem(Entity.GetSource_Loot(), Projectile.Center, new Vector2(8, 4), ModContent.ItemType<SelenicTablet>())];
             i.velocity = new Vector2(Projectile.direction, 0) * -4;
         }
         internal override void DoOnDespawn()
