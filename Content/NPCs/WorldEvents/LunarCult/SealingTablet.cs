@@ -19,7 +19,7 @@ namespace Windfall.Content.NPCs.WorldEvents.LunarCult
         public override void SetStaticDefaults()
         {
             this.HideFromBestiary();
-            Main.npcFrameCount[Type] = 4;
+            Main.npcFrameCount[Type] = 5;
         }
         public override void SetDefaults()
         {
@@ -40,15 +40,17 @@ namespace Windfall.Content.NPCs.WorldEvents.LunarCult
             NPC.netAlways = true;
             NPC.chaseable = false;
         }
-        public override void OnSpawn(IEntitySource source)
-        {
-            
-        }
         public override bool CheckActive() => false;
         public override void FindFrame(int frameHeight)
         {
-            NPC.frameCounter += 0.2f;
-            NPC.frame.Y = frameHeight * ((int)NPC.frameCounter % Main.npcFrameCount[Type]);
+            if (NPC.ai[0] == 1)
+            {
+                NPC.frameCounter += 0.2f;
+                NPC.frame.Y = frameHeight * (((int)NPC.frameCounter % 4) + 1);
+                Lighting.AddLight(NPC.Center, new Vector3(1f, 0.84f, 0f));
+            }
+            else
+                NPC.frame.Y = 0;
         }
         public override bool PreDraw(SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor)
         {

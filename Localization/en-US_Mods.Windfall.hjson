@@ -1,6 +1,12 @@
 # This file will automatically update with entries for new content after a build and reload
 
 Dialogue: {
+	Emoticons: {
+		Shock: ?!
+		Confused: ??
+		Angry: !!
+	}
+
 	IlmeranPaladin: {
 		Chat: {
 			FirstChat: Why, hello there! You don't look like the type to frequent these parts. Anything I can do for you?
@@ -199,6 +205,18 @@ Dialogue: {
 					8: That you might come to see the Light buried within the Dark.
 					9: We will be waiting.
 				}
+
+				SealingRitual: {
+					Initial: {
+						0: So this is what's become of you?
+						1: A dog for those who desperately cling to the past?
+						2: Pathetic...
+						3: To think I once saw promise in you.
+						4: Now... You are but a nuiscence.
+						5: One that now stands in the path to my ambition.
+						6: One... I shall very soon be rid of...
+					}
+				}
 			}
 		}
 
@@ -284,6 +302,34 @@ Dialogue: {
 					PrimalLightEnd: Ah ha! This shard certainly holds a unique power. Its radiance... this must be what we're looking for! I'll need some time to finish preparing for the ritual, but I'll notify you once we're ready. I can taste our victory over the Lunar Cult just over the horizon.
 				}
 			}
+
+			SealingRitual: {
+				0: Ah! You're here!
+				1: We can finally get this thing started!
+				# Recruit1: So this thing will stop the apocalypse?
+				2: Indeed! With this ritual, the Lunar Cult's plans will be stopped in their tracks!
+				# Recruit2: To think we were helping such a villainous group...
+				3: Yes, yes, I'm aware of how regretful you all are.
+				4: However, we really must get started with this.
+				# Recruit3: And... how do we do that?
+				5: It's actually quite simple!
+				6: Just...
+				7: Hold...
+				8: Still.
+				9: ...Perfect!
+				10: You did a wonderful job my friend.
+				11: With vessels as expandable as these...
+				12: We shall complete the ritual here and now!
+				13: It'd have taken so much longer otherwise...
+				14: Oh, don't look at me like that...
+				15: Their sacrifice will pave our path forward.
+				16: Its the least they can do to atone for their service in the Lunar Cult.
+				17: ...and four lives are nothing when compared to that of a whole species.
+				18: With the Lunar Cult dealt with, nothing will stop the return of the Dragons!
+				19: To think the Orator really thought he'd be able to usurp *us*!
+				20: Once we're done here I'll put an end to that-
+				21: ...fool?
+			}
 		}
 
 		Recruits: {
@@ -304,6 +350,12 @@ Dialogue: {
 				RecruitSuccess: Oh my... The Lunar Cult... They're really planning something like that? I'll help if I can. I'll be in touch!
 				Recruited: Let's not talk about this... here, okay?
 				Unrecruited: Good talking to you!
+
+				SealingRitual: {
+					0: So this ritual... It'll protect the whole world?
+					1: I can't believe we once served such a group...
+					2: And... how do we do that?
+				}
 			}
 
 			Vivian: {
@@ -323,6 +375,12 @@ Dialogue: {
 				RecruitSuccess: Sure, I'll join your thingie!
 				Recruited: Can't wait to help out!
 				Unrecruited: See you around.
+
+				SealingRitual: {
+					0: THis ritual will actually protect us?
+					1: Yeah... I guess they were kinda messed up.
+					2: How exactly do we do that?
+				}
 			}
 
 			Tania: {
@@ -335,6 +393,12 @@ Dialogue: {
 				RecruitSuccess: Sure, I'll join your thingie!
 				Recruited: Can't wait to help out!
 				Unrecruited: Leave me alone, weirdo...
+
+				SealingRitual: {
+					0: This ritual can shield the world?
+					1: I still feel so horrible...
+					2: How do we help?
+				}
 			}
 
 			Doro: {
@@ -354,6 +418,12 @@ Dialogue: {
 				RecruitSuccess: Oh my... That's no good. This things a cult? I'll help you out if I can.
 				Recruited: Might not be a good call to talk about this here...
 				Unrecruited: I'll see you around!
+
+				SealingRitual: {
+					0: This ritual does... something good...?
+					1: Right... That was bad.
+					2: Uhm... How do we do that, again?
+				}
 			}
 
 			Skylar: {
@@ -366,6 +436,12 @@ Dialogue: {
 				RecruitSuccess: Sure, I'll join your thingie!
 				Recruited: Can't wait to help out!
 				Unrecruited: Leave me alone, weirdo...
+
+				SealingRitual: {
+					0: So this ritual... It'll protect the whole world?
+					1: I can't believe we once served such a group...
+					2: And... how do we do that?
+				}
 			}
 
 			Jamie: {
@@ -384,6 +460,12 @@ Dialogue: {
 				RecruitSuccess: Sure, I'll join your thingie!
 				Recruited: Can't wait to help out!
 				Unrecruited: See you later, new guy!
+
+				SealingRitual: {
+					0: So this ritual... It'll protect the whole world?
+					1: I can't believe we once served such a group...
+					2: And... how do we do that?
+				}
 			}
 		}
 	}
@@ -786,6 +868,7 @@ Projectiles: {
 	DarkGlob.DisplayName: Dark Glob
 	DarkBolt.DisplayName: Dark Bolt
 	GodseekerKnightProj.DisplayName: Godseeker Knight Proj
+	EmpyreanThorn.DisplayName: Empyrean Thorn
 }
 
 Buffs: {

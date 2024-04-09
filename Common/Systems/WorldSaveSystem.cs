@@ -1,4 +1,5 @@
 ﻿using Terraria.ModLoader.IO;
+using Windfall.Common.Systems.WorldEvents;
 
 namespace Windfall.Common.Systems
 {
@@ -67,6 +68,8 @@ namespace Windfall.Common.Systems
 
             paladinChats = 0;
             cultistChatState = 0;
+
+            SealingRitualSystem.RitualSequenceSeen = false;
         }
     }
 }

@@ -26,13 +26,13 @@ namespace Windfall.Content.NPCs.TravellingNPCs
 
         public override bool PreAI()
         {
-            if ((!Main.dayTime || Main.time >= despawnTime) && !IsNpcOnscreen(NPC.Center)) // If it's past the despawn time and the NPC isn't onscreen
+            if (NPC.ai[0] == 0 && (!Main.dayTime || Main.time >= despawnTime) && !IsNpcOnscreen(NPC.Center)) // If it's past the despawn time and the NPC isn't onscreen
             {
                 // Here we despawn the NPC and send a message stating that the NPC has despawned
                 DisplayLocalizedText("The " + NPC.FullName + " has departed!", new(50, 125, 255));
                 NPC.active = false;
                 NPC.netSkip = -1;
-                NPC.life = 0;
+                NPC.active = false;
                 return false;
             }
             return true;
@@ -83,6 +83,12 @@ namespace Windfall.Content.NPCs.TravellingNPCs
         }
         public override void OnSpawn(IEntitySource source)
         {
+            if (NPC.ai[0] == 1)
+            {
+                NPC.aiStyle = -1;
+                NPC.direction = 1;
+                return; 
+            }
             QuestComplete = false;
             QuestArtifact = new(0, 0);
             if (MilestoneMet(CurrentDialogue))
@@ -136,8 +142,8 @@ namespace Windfall.Content.NPCs.TravellingNPCs
             NPC.damage = 10;
             NPC.defense = 15;
             NPC.lifeMax = 250;
-            NPC.HitSound = SoundID.NPCHit1;
-            NPC.DeathSound = SoundID.NPCDeath1;
+            NPC.HitSound = SoundID.NPCHit55;
+            NPC.DeathSound = SoundID.NPCDeath59;
             NPC.knockBackResist = 0.5f;
             AnimationType = NPCID.Stylist;
             TownNPCStayingHomeless = true;
@@ -205,6 +211,12 @@ namespace Windfall.Content.NPCs.TravellingNPCs
         {
             get => (DialogueState)WorldSaveSystem.cultistChatState;
             set => WorldSaveSystem.cultistChatState = (int)value;
+        }
+        public override bool CanChat()
+        {
+            if (NPC.ai[0] == 1)
+                return false;
+            return true;
         }
         public override string GetChat()
         {

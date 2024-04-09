@@ -1,6 +1,7 @@
 ﻿using CalamityMod.Projectiles.Ranged;
 using CalamityMod.Projectiles.Rogue;
 using Windfall.Common.Systems.WorldEvents;
+using Windfall.Content.NPCs.Bosses.TheOrator;
 
 namespace Windfall.Content.NPCs.WorldEvents.LunarCult
 {
@@ -194,7 +195,7 @@ namespace Windfall.Content.NPCs.WorldEvents.LunarCult
         }
         public override bool CanChat()
         {
-            if (!chattable)
+            if (!chattable || NPC.FindFirstNPC(ModContent.NPCType<TheOrator>()) != -1)
                 return false;
             else
                 return true;
