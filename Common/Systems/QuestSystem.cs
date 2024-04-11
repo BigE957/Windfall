@@ -1,6 +1,7 @@
 ﻿using CalamityMod.Items.Accessories;
 using CalamityMod.Items.Placeables.Banners;
 using CalamityMod.Items.Placeables.Furniture.Trophies;
+using System;
 using Terraria.ModLoader.IO;
 using Windfall.Content.Items.Fishing;
 using Windfall.Content.Items.Quests;
@@ -97,6 +98,7 @@ namespace Windfall.Common.Systems
         {
             List<Quest> list = new()
             {
+                #region Ilmeran Paladin
                 CreateQuest
                 (
                     "CnidrionHunt",
@@ -113,7 +115,7 @@ namespace Windfall.Common.Systems
                     new List<int>{1},
                     true,
                     new List<QuestItem>{ new QuestItem (ModContent.ItemType<AncientIlmeranRod>(), 1 ), new QuestItem (ModContent.ItemType<Cnidrisnack>(), 5 ) },
-                    new List<QuestItem>{ new QuestItem (ModContent.ItemType<DesertScourgeTrophy>(), 1 ) }
+                    new List<QuestItem>{ new QuestItem (ItemID.GoldenCrate, 1 ) }
                 ),
                 CreateQuest
                 (
@@ -122,7 +124,7 @@ namespace Windfall.Common.Systems
                     new List<int>{8},
                     true,
                     new List<QuestItem>{ new QuestItem (ModContent.ItemType<IlmeranKnife>(), 1 )},
-                    new List<QuestItem>{ new QuestItem (ModContent.ItemType < IlmeranKnife >(), 1) }
+                    null
                 ),
                 CreateQuest
                 (
@@ -142,42 +144,28 @@ namespace Windfall.Common.Systems
                     null,
                     new List<QuestItem>{ new QuestItem (ModContent.ItemType<AquaticScourgeTrophy>(), 1 ) }
                 ),
+                #endregion
+
+                #region Godseeker Knight               
                 CreateQuest
                 (
-                    "ParryIntro",
-                    new List<string>{"Land 5 successful parries."},
-                    new List<int>{1},
-                    true,
-                    new List<QuestItem>{ new QuestItem (ModContent.ItemType<ParryBlade>(), 1 ) },
-                    new List<QuestItem>{ new QuestItem (ItemID.FrogLeg, 1 ) }
-                ),
-                CreateQuest
-                (
-                    "SlimeGodHunt",
-                    new List<string>{"Defeat Slime God"},
-                    new List<int>{1},
-                    DownedBossSystem.downedHiveMind || DownedBossSystem.downedPerforator,
-                    new List<QuestItem>{ new QuestItem (ModContent.ItemType<RuneOfGula>(), 1 ) },
-                    new List<QuestItem>{ new QuestItem (ModContent.ItemType<SlimeGodTrophy>(), 1 ) }
-                ),
-                CreateQuest
-                (
-                    "CrystalSearch",
-                    new List<string>{"Find a Gelatine Crystal"},
-                    new List<int>{1},
-                    Main.hardMode,
-                    null,
-                    new List<QuestItem>{ new QuestItem (ItemID.PixieDust,  25 ), new QuestItem (ItemID.UnicornHorn, 3 ), new QuestItem (ItemID.PinkGel, 10 ) }
-                ),
-                CreateQuest
-                (
-                    "QueenSlimeHunt",
-                    new List<string>{"Defeat Queen Slime"},
-                    new List<int>{1},
+                    "PestControl",
+                    new List<string>{"Kill 10 Crimera or Eater of Souls"},
+                    new List<int>{10},
                     true,
                     null,
-                    new List<QuestItem>{ new QuestItem (ItemID.QueenSlimeTrophy, 1 ) }
+                    new List<QuestItem>{ new QuestItem (ItemID.GoldenCrate, 1 ) }
                 ),
+                CreateQuest
+                (
+                    "Decontamination",
+                    new List<string>{"Use Purification Powder 10 times."},
+                    new List<int>{10},
+                    true,
+                    null,
+                    new List<QuestItem>{ new QuestItem (ItemID.GoldenCrate, 1 ) }
+                ),
+                #endregion
 
             };
             return list;
@@ -247,6 +235,18 @@ namespace Windfall.Common.Systems
                 temp.Active = true;
             QuestLog[questIndex] = temp;
         }
+        public static void ResetQuestProgress(int questIndex)
+        {
+            Quest temp = QuestLog[questIndex];            
+            for (int i = 0; i < temp.ObjectiveProgress.Count; i++)
+            {
+                temp.ObjectiveProgress[i] = 0;
+            }
+            temp.Completed = false;
+            temp.Active = false;
+            QuestLog[questIndex] = temp;
+        }
+        public static bool IsQuestActive(string name) => QuestLog[QuestLog.FindIndex(quest => quest.Name == name)].Active;
         public class QuestSerializer : TagSerializer<Quest, TagCompound>
         {
             public override TagCompound Serialize(Quest value) => new()

@@ -18,6 +18,9 @@ namespace Windfall.Content.Items
                     Item.NewItem(null, player.Center, 1, 1, ModContent.ItemType<JournalCompilation>());
                 }
             }
+
+            if(item.type == ItemID.PurificationPowder && QuestSystem.QuestLog[QuestSystem.QuestLog.FindIndex(quest => quest.Name == "Decontamination")].Active)
+                QuestSystem.IncrementQuestProgress(QuestSystem.QuestLog.FindIndex(quest => quest.Name == "Decontamination"), 0);
             return base.UseItem(item, player);
         }
         internal static bool FirstJournal()

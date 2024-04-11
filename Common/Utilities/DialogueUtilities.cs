@@ -1,5 +1,7 @@
-﻿using Windfall.Common.Systems;
+﻿using Terraria.DataStructures;
+using Windfall.Common.Systems;
 using Windfall.Content.NPCs.TravellingNPCs;
+using Windfall.Content.NPCs.WanderingNPCs;
 
 namespace Windfall.Common.Utilities
 {
@@ -13,12 +15,10 @@ namespace Windfall.Common.Utilities
             "ClamHunt",
             "ScoogHunt2",
         };
-        private static readonly List<string> RoninQuests = new()
+        private static readonly List<string> GodseekerQuests = new()
         {
-            "ParryIntro",
-            "SlimeGodHunt",
-            "CrystalSearch",
-            "QueenSlimeHunt",
+            "PestControl",
+            "Decontamination",
         };
         public struct dialogueButton
         {
@@ -36,7 +36,7 @@ namespace Windfall.Common.Utilities
             public dialogueButton? Button2;
         }
 
-        public static void QuestDialogueHelper(NPC npc)
+        public static void ProgressiveQuestDialogueHelper(NPC npc)
         {
             int index = -1;
             string npcName = npc.TypeName.Replace(" ", "");
@@ -47,8 +47,8 @@ namespace Windfall.Common.Utilities
                 npcName = "IlmeranPaladin";
                 MyQuests = PaladinQuests;
             }
-            else if (npcName == "LoneRonin")
-                MyQuests = RoninQuests;
+            else if (npcName == "GodseekerKnight")
+                MyQuests = GodseekerQuests;
 
             bool success = false;
             if (MyQuests != null)
@@ -64,9 +64,7 @@ namespace Windfall.Common.Utilities
                         }
                 }
                 if (!success)
-                {
                     index = -1;
-                }
             }
             if (index != -1)
             {
@@ -74,7 +72,7 @@ namespace Windfall.Common.Utilities
                 {
                     if (!QuestSystem.QuestLog[index].Active)
                     {
-                        Main.npcChatText = GetWindfallTextValue($"Dialogue.{npcName}.Quests.{QuestSystem.QuestLog[index].Name}Start");
+                        Main.npcChatText = GetWindfallTextValue($"Dialogue.{npcName}.Quests.{QuestSystem.QuestLog[index].Name}.Start");
 
                         if (QuestSystem.QuestLog[index].QuestGifts != null)
                         {
@@ -85,14 +83,14 @@ namespace Windfall.Common.Utilities
                         QuestSystem.ToggleQuestActive(index);
                     }
                     else
-                        Main.npcChatText = GetWindfallTextValue($"Dialogue.{npcName}.Quests.{QuestSystem.QuestLog[index].Name}During");
+                        Main.npcChatText = GetWindfallTextValue($"Dialogue.{npcName}.Quests.{QuestSystem.QuestLog[index].Name}.During");
                     Main.npcChatCornerItem = QuestSystem.QuestLog[index].QuestGifts[0].Type;
                 }
                 else
                 {
                     if (QuestSystem.QuestLog[index].Active)
                     {
-                        Main.npcChatText = GetWindfallTextValue($"Dialogue.{npcName}.Quests.{QuestSystem.QuestLog[index].Name}End");
+                        Main.npcChatText = GetWindfallTextValue($"Dialogue.{npcName}.Quests.{QuestSystem.QuestLog[index].Name}.End");
 
                         var entitySource = npc.GetSource_GiftOrReward();
                         for (int i = 0; i < QuestSystem.QuestLog[index].QuestRewards.Count; i++)
@@ -115,6 +113,59 @@ namespace Windfall.Common.Utilities
                 else
                     Main.npcChatText = GetWindfallTextValue($"Dialogue.{npcName}.Quests.NoQuest");
             }
+        }
+        public static void RandomizedQuestDialougeHelper(NPC npc)
+        {
+            string Path = null;
+            List<string> MyQuests = null;
+            if (npc.type == ModContent.NPCType<GodseekerKnight>())
+            {
+                Path = "GodseekerKnight.Quests";
+                MyQuests = GodseekerQuests;
+            }              
+            if (MyQuests != null)
+            {
+                int index = -1;
+                foreach (string name in MyQuests)
+                {
+                    index = QuestSystem.QuestLog.FindIndex(quest => quest.Name == name);
+                    if (index != -1 && QuestSystem.QuestLog[index].Active)
+                        break;
+                    else
+                        index = -1;
+                }
+                if (index == -1)
+                {
+                    index = Main.rand.Next(PaladinQuests.Count, MyQuests.Count + PaladinQuests.Count);
+                }
+
+                if (!QuestSystem.QuestLog[index].Active)
+                {
+                    QuestSystem.ToggleQuestActive(index);
+                    Main.npcChatText = GetWindfallTextValue($"Dialogue.{Path}.{QuestSystem.QuestLog[index].Name}.Start");
+
+                }
+                else
+                {
+                    Player player = Main.player[Main.myPlayer];
+                    if (QuestSystem.QuestLog[index].Completed)
+                    {
+                        Main.npcChatText = GetWindfallTextValue($"Dialogue.{Path}.{QuestSystem.QuestLog[index].Name}.End");
+                        for (int i = 0; i < QuestSystem.QuestLog[index].QuestRewards.Count; i++)
+                            Main.LocalPlayer.QuickSpawnItem(Entity.GetSource_None(), QuestSystem.QuestLog[index].QuestRewards[i].Type, QuestSystem.QuestLog[index].QuestRewards[i].Stack); QuestSystem.ToggleQuestActive(index);
+                        
+                        DisplayLocalizedText($"{QuestSystem.QuestLog[index].Completed}");
+                        QuestSystem.ResetQuestProgress(index);
+                        if (QuestSystem.QuestLog[index].Active)
+                            QuestSystem.ToggleQuestActive(index);
+                        //index = -1;
+                    }
+                    else
+                        Main.npcChatText = GetWindfallTextValue($"Dialogue.{Path}.{QuestSystem.QuestLog[index].Name}.During");
+                }
+            }
+            else
+                Main.npcChatText = GetWindfallTextValue($"Dialogue.{Path}.NoQuest");
         }
         public static QuestItem CollectorQuestDialogueHelper(NPC npc, ref bool QuestComplete, QuestItem CurrentQuestItem, List<QuestItem> MyQuestItems)
         {
@@ -143,7 +194,7 @@ namespace Windfall.Common.Utilities
                 if (!questActive)
                 {
                     questActive = true;
-                    Main.npcChatText = GetWindfallTextValue($"Dialogue.{Path}.{ItemName}Start");
+                    Main.npcChatText = GetWindfallTextValue($"Dialogue.{Path}.{ItemName}.Start");
 
                 }
                 else
@@ -155,6 +206,7 @@ namespace Windfall.Common.Utilities
                         {
                             item.stack -= CurrentQuestItem.Stack;
                             QuestComplete = true;
+                            break;
                         }
                         else
                         {
@@ -165,15 +217,14 @@ namespace Windfall.Common.Utilities
                     }
                     if (QuestComplete)
                     {
-
-                        Main.npcChatText = GetWindfallTextValue($"Dialogue.{Path}.{ItemName}End");
+                        Main.npcChatText = GetWindfallTextValue($"Dialogue.{Path}.{ItemName}.End");
                         Item.NewItem(npc.GetSource_GiftOrReward(), player.Center, Vector2.Zero, ItemID.DungeonFishingCrateHard);
                         CurrentQuestItem = new(0, 0);
                         questActive = false;
                         index = -1;
                     }
                     else
-                        Main.npcChatText = GetWindfallTextValue($"Dialogue.{Path}.{ItemName}During");
+                        Main.npcChatText = GetWindfallTextValue($"Dialogue.{Path}.{ItemName}.During");
                 }
                 if (questActive)
                     Main.npcChatCornerItem = CurrentQuestItem.Type;

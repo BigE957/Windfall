@@ -1,9 +1,11 @@
 ﻿using CalamityMod.Items.Armor.Statigel;
 using CalamityMod.NPCs.HiveMind;
 using CalamityMod.Projectiles.Rogue;
+using Terraria;
 using Terraria.GameContent.Bestiary;
 using Terraria.Utilities;
 using Windfall.Common.Utilities;
+using Windfall.Content.Items.Quests;
 
 namespace Windfall.Content.NPCs.WanderingNPCs
 {
@@ -26,26 +28,25 @@ namespace Windfall.Content.NPCs.WanderingNPCs
             NPCID.Sets.ActsLikeTownNPC[Type] = true;
             NPCID.Sets.NoTownNPCHappiness[Type] = true;
             NPCID.Sets.SpawnsWithCustomName[Type] = true;
-
-            // Connects this NPC with a custom emote.
-            // This makes it when the NPC is in the world, other NPCs will "talk about him".
-            //NPCID.Sets.FaceEmote[Type] = ModContent.EmoteBubbleType<ExampleBoneMerchantEmote>();
             NPCID.Sets.AllowDoorInteraction[Type] = true;
 
-            // Influences how the NPC looks in the Bestiary
             NPCID.Sets.NPCBestiaryDrawModifiers drawModifiers = new()
             {
                 Velocity = 1f, // Draws the NPC in the bestiary as if its walking +1 tiles in the x direction
                 Direction = 1 // -1 is left and 1 is right. NPCs are drawn facing the left by default but ExamplePerson will be drawn facing the right
             };
-
             NPCID.Sets.NPCBestiaryDrawOffset.Add(Type, drawModifiers);
-
             NPCProfile = new Profiles.StackedNPCProfile(
                 new Profiles.DefaultNPCProfile(Texture, -1)
             //new Profiles.DefaultNPCProfile(Texture + "_Shimmer", -1)
             );
+
+            GodlyEssenceIDs = new()
+            {
+                ModContent.ItemType<DeificInsignia>(),
+            };
         }
+        private static List<int> GodlyEssenceIDs = new List<int>();
         public override void SetDefaults()
         {
             NPC.friendly = true; // NPC Will not attack player
@@ -118,15 +119,35 @@ namespace Windfall.Content.NPCs.WanderingNPCs
         }
         public override void SetChatButtons(ref string button, ref string button2)
         {
-            button = GetWindfallTextValue($"Dialogue.Buttons.{nameof(GodseekerKnight)}.Techniques");
+            button = GetWindfallTextValue($"Dialogue.Buttons.{nameof(GodseekerKnight)}.Essence");
             button2 = Language.GetTextValue("LegacyInterface.64");
         }
         public override void OnChatButtonClicked(bool firstButton, ref string shop)
         {
-            if (firstButton)
-                Main.npcChatText = GetWindfallTextValue($"Dialogue.{nameof(GodseekerKnight)}.Chat.WorkingOnIt");
+            Player player = Main.player[Main.myPlayer];
+            if(firstButton)
+            {
+                int GodlyEssenceIndex = HasGodlyEssence(player);
+                if (GodlyEssenceIndex != -1)
+                {
+                    Item item = player.inventory[GodlyEssenceIndex];
+                    switch (item.type)
+                    {
+                        //This will determine what reward the player gets for turning in a Godly Essence
+                        default:
+                            Item.NewItem(NPC.GetSource_GiftOrReward(), NPC.Center, Vector2.Zero, Main.hardMode ? ItemID.GoldenCrateHard : ItemID.GoldenCrate);
+                            break;
+                    }
+                    item.stack -= 1;
+                    Main.npcChatText = "Why thank you, my rizzler!";
+                }
+                else
+                {
+                    Main.npcChatText = "You need more rizz, my friend.";
+                }
+            }
             else
-                QuestDialogueHelper(Main.npc[NPC.whoAmI]);
+                RandomizedQuestDialougeHelper(Main.npc[NPC.whoAmI]);
         }
 
         public override bool CheckActive() => !NPC.AnyNPCs(ModContent.NPCType<HiveMind>());
@@ -156,6 +177,41 @@ namespace Windfall.Content.NPCs.WanderingNPCs
             if (hat.type == ModContent.ItemType<StatigelHeadMagic>() || hat.type == ModContent.ItemType<StatigelHeadMelee>() || hat.type == ModContent.ItemType<StatigelHeadRanged>() || hat.type == ModContent.ItemType<StatigelHeadRogue>() || hat.type == ModContent.ItemType<StatigelHeadSummon>())
                 return true;
             return false;
+        }      
+        private static int HasGodlyEssence(Player player)
+        {
+            int i = 0;
+            if (player != null)
+                foreach (Item item in player.inventory)
+                {
+                    if (GodlyEssenceIDs.Contains(item.type))
+                        return i;
+                    i++;
+                }
+            return -1;
+        }
+        private static string WhoIsNext()
+        {
+            if (!NPC.downedBoss2)
+                if (WorldGen.crimson)
+                    return "BoC";
+                else
+                    return "EoW";
+            else if (!DownedBossSystem.downedHiveMind && !DownedBossSystem.downedPerforator)
+                if (WorldGen.crimson)
+                    return "Perforators";
+                else
+                    return "HiveMind";
+            else if (!DownedBossSystem.downedSlimeGod)
+                return "SlimeGod";
+            else if (!Main.hardMode)
+                return "WallOfFlesh";
+            else if (!NPC.downedQueenSlime)
+                return "QueenSlime";
+            else if (!NPC.downedEmpressOfLight)
+                return "EoL";
+            return "None";
+
         }
     }
 }
