@@ -107,7 +107,7 @@ namespace Windfall.Content.NPCs.WanderingNPCs
         {
             Player player = Main.player[Main.myPlayer];
             WeightedRandom<string> chat = new();
-            if (WorldSaveSystem.paladinChats == 0)
+            if (WorldSaveSystem.IlmeranPaladinChats == 0)
                 return GetWindfallTextValue($"Dialogue.IlmeranPaladin.Chat.FirstChat");
             if (NPC.ai[1] == 1)
             {
@@ -147,7 +147,7 @@ namespace Windfall.Content.NPCs.WanderingNPCs
             chat.Add(GetWindfallTextValue($"Dialogue.IlmeranPaladin.Chat.Standard1"));
             chat.Add(GetWindfallTextValue($"Dialogue.IlmeranPaladin.Chat.Standard2"));
             chat.Add(GetWindfallTextValue($"Dialogue.IlmeranPaladin.Chat.Standard3"));
-            WorldSaveSystem.paladinChats++;
+            WorldSaveSystem.IlmeranPaladinChats++;
             return chat;
         }
         public override void SetChatButtons(ref string button, ref string button2)

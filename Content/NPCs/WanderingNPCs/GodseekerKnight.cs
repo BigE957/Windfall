@@ -4,6 +4,7 @@ using CalamityMod.Projectiles.Rogue;
 using Terraria;
 using Terraria.GameContent.Bestiary;
 using Terraria.Utilities;
+using Windfall.Common.Systems;
 using Windfall.Common.Utilities;
 using Windfall.Content.Items.Quests;
 
@@ -65,6 +66,8 @@ namespace Windfall.Content.NPCs.WanderingNPCs
         }
         public override void OnSpawn(IEntitySource source)
         {
+            if (WorldSaveSystem.GodseekerKnightChats == 0)
+                Dialogue = DialogueState.Initial1;
             NPC.velocity = new Vector2(0, NPC.ai[0]);
             if (NPC.ai[1] != 0)
                 NPC.spriteDirection = NPC.direction = (int)NPC.ai[1] * -1;
@@ -93,9 +96,121 @@ namespace Windfall.Content.NPCs.WanderingNPCs
             return 0f;
         }
 
+        private enum DialogueState
+        {
+            Neutral,
+
+            #region First Time Chat
+            Initial1,
+            WhatUDoin,
+            WhoAreU,
+            Gods,
+            War,
+            Master,
+            Knights,
+            End1,
+            #endregion
+
+            #region Essences Chat
+            Initial2,
+            Effects,
+            Cleansed,
+            End2,
+            #endregion
+        }
+        private DialogueState Dialogue;
+        private string Topic = "";
+
+        private readonly List<dialogueDirections> MyDialogue = new()
+        {
+            #region Initial Conversation
+            new dialogueDirections()
+            {
+                MyPos = (int)DialogueState.Initial1,
+                Button1 = new(){name = "What are you doing here?", heading = (int)DialogueState.WhatUDoin},
+                Button2 = new(){name = "Who are you?", heading = (int)DialogueState.WhoAreU},
+            },
+            new dialogueDirections()
+            {
+                MyPos = (int)DialogueState.WhatUDoin,
+                Button1 = new(){name = "Gods?", heading = (int)DialogueState.Gods},
+                Button2 = new(){name = "What happened here?", heading = (int)DialogueState.War},
+            },
+            new dialogueDirections()
+            {
+                MyPos = (int)DialogueState.WhoAreU,
+                Button1 = new(){name = "Godseeker?", heading = (int)DialogueState.Master},
+                Button2 = new(){name = "Crusade?", heading = (int)DialogueState.War},
+            },
+            new dialogueDirections()
+            {
+                MyPos = (int)DialogueState.Gods,
+                Button1 = new(){name = "Interesting...", heading = (int)DialogueState.End1},
+                Button2 = null,
+            },
+            new dialogueDirections()
+            {
+                MyPos = (int)DialogueState.War,
+                Button1 = new(){name = "Interesting...", heading = (int)DialogueState.End1},
+                Button2 = null,
+            },
+            new dialogueDirections()
+            {
+                MyPos = (int)DialogueState.Master,
+                Button1 = new(){name = "Interesting...", heading = (int)DialogueState.End1},
+                Button2 = null,
+            },
+            new dialogueDirections()
+            {
+                MyPos = (int)DialogueState.Knights,
+                Button1 = new(){name = "Interesting...", heading = (int)DialogueState.End1},
+                Button2 = null,
+            },
+            new dialogueDirections()
+            {
+                MyPos = (int)DialogueState.End1,
+                Button1 = new(){name = "Oh, sorry...", heading = (int)DialogueState.Neutral, end = true},
+                Button2 = new(){name = "Bye!", heading = (int)DialogueState.Neutral, end = true},
+            },
+
+            #endregion
+
+            #region Godly Essence Conversation
+            new dialogueDirections()
+            {
+                MyPos = (int)DialogueState.Initial2,
+                Button1 = new(){name = "What kind of effects...?", heading = (int)DialogueState.Effects},
+                Button2 = new(){name = "Can they be cleansed?", heading = (int)DialogueState.Cleansed},
+            },
+            new dialogueDirections()
+            {
+                MyPos = (int)DialogueState.Effects,
+                Button1 = new(){name = "Freaky...", heading = (int)DialogueState.End2},
+                Button2 = null,
+            },
+            new dialogueDirections()
+            {
+                MyPos = (int)DialogueState.Cleansed,
+                Button1 = new(){name = "That's good...", heading = (int)DialogueState.End2},
+                Button2 = null,
+            },
+            new dialogueDirections()
+            {
+                MyPos = (int)DialogueState.End2,
+                Button1 = new(){name = "Will do!", heading = (int)DialogueState.Neutral, end = true},
+                Button2 = new(){name = "That's your job...", heading = (int)DialogueState.Neutral, end = true},
+            },
+            #endregion
+        };
         public override string GetChat()
         {
             Player player = Main.player[Main.myPlayer];
+            if (Dialogue != DialogueState.Neutral)
+            {
+                if (WorldSaveSystem.GodseekerKnightChats == 0)
+                    Topic = "JustMet";
+                return GetWindfallTextValue($"Dialogue.{nameof(GodseekerKnight)}.Conversation.{Topic}.{Dialogue}");
+            }
             WeightedRandom<string> chat = new();
             chat.Add(GetWindfallTextValue($"Dialogue.{nameof(GodseekerKnight)}.Chat.Standard1"));
             chat.Add(GetWindfallTextValue($"Dialogue.{nameof(GodseekerKnight)}.Chat.Standard2"));
@@ -115,39 +230,62 @@ namespace Windfall.Content.NPCs.WanderingNPCs
                 chat.Add(GetWindfallTextValue($"Dialogue.{nameof(GodseekerKnight)}.Chat.Statigel1"));
                 chat.Add(GetWindfallTextValue($"Dialogue.{nameof(GodseekerKnight)}.Chat.Statigel2"));
             }
+            WorldSaveSystem.GodseekerKnightChats++;
             return chat;
         }
         public override void SetChatButtons(ref string button, ref string button2)
         {
-            button = GetWindfallTextValue($"Dialogue.Buttons.{nameof(GodseekerKnight)}.Essence");
-            button2 = Language.GetTextValue("LegacyInterface.64");
+            if (Dialogue != DialogueState.Neutral)
+                SetConversationButtons(MyDialogue, (int)Dialogue, ref button, ref button2);
+            else
+            {
+                button = GetWindfallTextValue($"Dialogue.Buttons.{nameof(GodseekerKnight)}.Essence");
+                button2 = Language.GetTextValue("LegacyInterface.64");
+            }
         }
         public override void OnChatButtonClicked(bool firstButton, ref string shop)
         {
-            Player player = Main.player[Main.myPlayer];
-            if(firstButton)
+            if (Dialogue == DialogueState.Neutral)
             {
-                int GodlyEssenceIndex = HasGodlyEssence(player);
-                if (GodlyEssenceIndex != -1)
+                Player player = Main.player[Main.myPlayer];
+                if (firstButton)
                 {
-                    Item item = player.inventory[GodlyEssenceIndex];
-                    switch (item.type)
+                    int GodlyEssenceIndex = HasGodlyEssence(player);
+                    if (GodlyEssenceIndex != -1)
                     {
-                        //This will determine what reward the player gets for turning in a Godly Essence
-                        default:
-                            Item.NewItem(NPC.GetSource_GiftOrReward(), NPC.Center, Vector2.Zero, Main.hardMode ? ItemID.GoldenCrateHard : ItemID.GoldenCrate);
-                            break;
+                        Item item = player.inventory[GodlyEssenceIndex];
+                        switch (item.type)
+                        {
+                            //This will determine what reward the player gets for turning in a Godly Essence
+                            default:
+                                Item.NewItem(NPC.GetSource_GiftOrReward(), NPC.Center, Vector2.Zero, Main.hardMode ? ItemID.GoldenCrateHard : ItemID.GoldenCrate);
+                                break;
+                        }
+                        item.stack -= 1;
+                        Main.npcChatText = "Why thank you, my Rizzler!";
                     }
-                    item.stack -= 1;
-                    Main.npcChatText = "Why thank you, my rizzler!";
+                    else
+                    {
+                        if (!WorldSaveSystem.EssenceExplained)
+                        {
+                            Topic = "Essence";
+                            Dialogue = DialogueState.Initial2;
+                            Main.npcChatText = GetWindfallTextValue($"Dialogue.{nameof(GodseekerKnight)}.Conversation.{Topic}.{Dialogue}");
+                            WorldSaveSystem.EssenceExplained = true;
+                        }
+                        else
+
+                            Main.npcChatText = "You need more rizz, my Skibidi.";
+                    }
                 }
                 else
-                {
-                    Main.npcChatText = "You need more rizz, my friend.";
-                }
+                    RandomizedQuestDialougeHelper(Main.npc[NPC.whoAmI]);
             }
             else
-                RandomizedQuestDialougeHelper(Main.npc[NPC.whoAmI]);
+            {
+                Dialogue = (DialogueState)GetNPCConversation(MyDialogue, (int)Dialogue, firstButton);
+                Main.npcChatText = GetWindfallTextValue($"Dialogue.{nameof(GodseekerKnight)}.Conversation.{Topic}.{Dialogue}");
+            }
         }
 
         public override bool CheckActive() => !NPC.AnyNPCs(ModContent.NPCType<HiveMind>());

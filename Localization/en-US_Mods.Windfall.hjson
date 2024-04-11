@@ -156,9 +156,22 @@ Dialogue: {
 		}
 
 		Conversation: {
+			JustMet: {
+				Initial1: A traveler? In these parts? You are brave, that’s for sure. Beware. Beasts prowl this land, as I’m sure you’re aware, but some are far larger and stronger than others…
+				WhatUDoin: I'm working to undo the harm our war has rought upon the world. Stains such as these, while imposing, an indeed be cleansed! It's just going to take some time... A lot... of time...
+				WhoAreU: Hah! Do you truly not recognize this armor; the insignia? I am a member of the illustrious Godseeker Knights! Though the Godseeker himself has taken his leave from command, I have resolved to carry on his crusade until the last speck of divine tyranny is scrubbed from the world.
+				Gods: Oh my! It seems our efforts are beginning to bear fruit! There was once a time in which none knew not the ire of the Gods. You have use to thank for being so blissfully unaware of their influence. Influences such as this stain upon the land we find outselves in...
+				War: Do you truly not know of what transpired here? This was the sight of a great battle early into the Godseeker's Crusade. At the time, we knew not the disasterous effects Godly Essence could unleash if not dealt with. This stain is the result of our folly...
+				Crusade: It seems history isn't a subject most are taught these days... It was my master's crusade which rid these lands of the Gods' influence... Well... For the most part. We still have some cleaning up to do, as you can see quite clearly all around us.
+				Master: Have the common folk truly grown so dim? How could you not know of my master? It was he who unshacked these lands from the Gods' chains! It is through him that this world marches towards an era of peace! All we need do is cleanse it of these final impurities that stain it...
+				End1: Now, if you excuse me, I really must get back to work. The world isn't going to rid itself of this filth, and, for your sake, do try to keep out of this area. It isn't safe... I might accidentally mistake you for a monster! Hahaha!
+			}
+
 			Essence: {
-				Initial: What am I doing here? Protecting the lands of course, as my cohort have always done! The remnants of deific essence still taint the lands, and I hope to be able to purge them once and for all.
-				Okay: Cool
+				Initial2: Ah, you wish to know more about Godly Essence... Be warned, it is a sickly substance; not one that just anyone should be handling. Enough Godly Essence is what transformed this area into the hellscape we now know it as. Its effects on a person can be just as disasterous...
+				Effects: Not the kind you want. That's for sure. I've heard whispers that there are those who seek out Godly Essence and purposely consume it; hoping to gain even a silver of the Gods' might from it... Truly disgusting... Luckly, such fools are the type of people we Godseeker Knights are adept at cutting down.
+				Cleansed: My, how estute! You are correct! I and my fellow Godseeker Knights have been well trained to handle Godly Essence, and one of our primary tasks is its proper disposal. I've managed to gather up some during my time here, but I'm sure there's still plenty more to be dealt with!
+				End2: Since you seem so keen on poking about around here... If you are to come across any Godly Essence, would you do me a favor, and bring it to me? It'd save me quite a lot of time, and I'll ensure you are properly rewarded for your efforts.
 			}
 		}
 
