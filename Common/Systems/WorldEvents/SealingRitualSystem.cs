@@ -134,7 +134,7 @@ namespace Windfall.Common.Systems.WorldEvents
                                 OratorLocation = new((int)Orator.Center.X, (int)Orator.Center.Y, Orator.width, Orator.width);
 
                             CombatText Text;
-                            Color TextColor = Color.Blue;
+                            Color TextColor = Color.Cyan;
                             string key = "LunarCult.TravellingCultist.SealingRitual.";
                             if (RitualTimer > 60 * 65)
                                 key = "LunarCult.TheOrator.WorldText.SealingRitual.Initial.";
@@ -143,11 +143,11 @@ namespace Windfall.Common.Systems.WorldEvents
                                 switch (RitualTimer)
                                 {
                                     case 1:
-                                        Text = DisplayMessage(LunaticLocation, Color.Blue, key + '0');
+                                        Text = DisplayMessage(LunaticLocation, Color.Cyan, key + '0');
                                         Text.lifeTime = 60;
                                         break;
                                     case 60:
-                                        Text = DisplayMessage(LunaticLocation, Color.Blue, key + '1');
+                                        Text = DisplayMessage(LunaticLocation, Color.Cyan, key + '1');
                                         break;
                                     case 60 * 3:
                                         GetRecruitValues(Recruitable1.MyName.ToString(), ref TextColor, ref key);
@@ -156,29 +156,29 @@ namespace Windfall.Common.Systems.WorldEvents
                                         LunaticCultist.direction = -1;
                                         break;
                                     case 60 * 5:
-                                        Text = DisplayMessage(LunaticLocation, Color.Blue, key + '2');
+                                        Text = DisplayMessage(LunaticLocation, Color.Cyan, key + '2');
                                         break;
                                     case 60 * 7:
                                         GetRecruitValues(Recruitable2.MyName.ToString(), ref TextColor, ref key);
                                         Text = DisplayMessage(Recruit2Location, TextColor, key + '1'); //Can't believe we were helping with something so disasterous...
                                         break;
                                     case 60 * 10:
-                                        Text = DisplayMessage(LunaticLocation, Color.Blue, key + '3');
+                                        Text = DisplayMessage(LunaticLocation, Color.Cyan, key + '3');
                                         Text.lifeTime = 90;
                                         break;
                                     case 60 * 12:
-                                        Text = DisplayMessage(LunaticLocation, Color.Blue, key + '4');
+                                        Text = DisplayMessage(LunaticLocation, Color.Cyan, key + '4');
                                         break;
                                     case 60 * 14:
                                         GetRecruitValues(Recruitable1.MyName.ToString(), ref TextColor, ref key);
                                         Text = DisplayMessage(Recruit1Location, TextColor, key + '2'); //What do we do?
                                         break;
                                     case 60 * 16:
-                                        Text = DisplayMessage(LunaticLocation, Color.Blue, key + '5');
+                                        Text = DisplayMessage(LunaticLocation, Color.Cyan, key + '5');
                                         break;
                                     case 60 * 18:
                                         SoundEngine.PlaySound(SoundID.Item8, Recruit1.Center);
-                                        Text = DisplayMessage(LunaticLocation, Color.Blue, key + '6');
+                                        Text = DisplayMessage(LunaticLocation, Color.Cyan, key + '6');
                                         Text.lifeTime = 60;
                                         Recruit1.noGravity = true;
                                         Recruit1.velocity = Vector2.Zero;
@@ -186,11 +186,11 @@ namespace Windfall.Common.Systems.WorldEvents
                                         DisplayMessage(Recruit1Location, TextColor, "Emoticons.Shock");
                                         break;
                                     case 60 * 19:
-                                        Text = DisplayMessage(LunaticLocation, Color.Blue, key + '7');
+                                        Text = DisplayMessage(LunaticLocation, Color.Cyan, key + '7');
                                         Text.lifeTime = 60;
                                         break;
                                     case 60 * 20:
-                                        Text = DisplayMessage(LunaticLocation, Color.Blue, key + '8');
+                                        Text = DisplayMessage(LunaticLocation, Color.Cyan, key + '8');
                                         SoundEngine.PlaySound(SoundID.Item8, Recruit2.Center);
                                         Text.lifeTime = 60;
                                         Recruit2.noGravity = true;
@@ -202,15 +202,15 @@ namespace Windfall.Common.Systems.WorldEvents
                                         SealingTablet.ai[0] = 1;
                                         break;
                                     case 60 * 23:
-                                        Text = DisplayMessage(LunaticLocation, Color.Blue, key + '9');
+                                        Text = DisplayMessage(LunaticLocation, Color.Cyan, key + '9');
                                         Text.lifeTime = 60;
                                         break;
                                     case 60 * 25:
-                                        Text = DisplayMessage(LunaticLocation, Color.Blue, key + "10");
+                                        Text = DisplayMessage(LunaticLocation, Color.Cyan, key + "10");
                                         CultistFacePlayer = true;
                                         break;
                                     case 60 * 27:
-                                        Text = DisplayMessage(LunaticLocation, Color.Blue, key + "11");
+                                        Text = DisplayMessage(LunaticLocation, Color.Cyan, key + "11");
                                         CultistFacePlayer = false;
                                         LunaticCultist.direction = -1;
                                         break;
@@ -218,40 +218,40 @@ namespace Windfall.Common.Systems.WorldEvents
                                         LunaticCultist.direction = 1;
                                         break;
                                     case 60 * 29:
-                                        Text = DisplayMessage(LunaticLocation, Color.Blue, key + "12");
+                                        Text = DisplayMessage(LunaticLocation, Color.Cyan, key + "12");
                                         CultistFacePlayer = true;
                                         break;
                                     case 60 * 31:
-                                        Text = DisplayMessage(LunaticLocation, Color.Blue, key + "13");
+                                        Text = DisplayMessage(LunaticLocation, Color.Cyan, key + "13");
                                         break;
                                     case 60 * 34:
-                                        Text = DisplayMessage(LunaticLocation, Color.Blue, key + "14");
+                                        Text = DisplayMessage(LunaticLocation, Color.Cyan, key + "14");
                                         break;
                                     case 60 * 36:
-                                        Text = DisplayMessage(LunaticLocation, Color.Blue, key + "15");
+                                        Text = DisplayMessage(LunaticLocation, Color.Cyan, key + "15");
                                         break;
                                     case 60 * 38:
-                                        Text = DisplayMessage(LunaticLocation, Color.Blue, key + "16");
+                                        Text = DisplayMessage(LunaticLocation, Color.Cyan, key + "16");
                                         CultistFacePlayer = false;
                                         LunaticCultist.direction = -1;
                                         Text.lifeTime = 180;
                                         break;
                                     case 60 * 41:
-                                        Text = DisplayMessage(LunaticLocation, Color.Blue, key + "17");
+                                        Text = DisplayMessage(LunaticLocation, Color.Cyan, key + "17");
                                         Text.lifeTime = 180;
                                         LunaticCultist.direction = 1;
                                         break;
                                     case 60 * 44:
-                                        Text = DisplayMessage(LunaticLocation, Color.Blue, key + "18");
+                                        Text = DisplayMessage(LunaticLocation, Color.Cyan, key + "18");
                                         Text.lifeTime = 180;
                                         CultistFacePlayer = true;
                                         break;
                                     case 60 * 47:
-                                        Text = DisplayMessage(LunaticLocation, Color.Blue, key + "19");
+                                        Text = DisplayMessage(LunaticLocation, Color.Cyan, key + "19");
                                         Text.lifeTime = 180;
                                         break;
                                     case 60 * 50:
-                                        Text = DisplayMessage(LunaticLocation, Color.Blue, key + "20");
+                                        Text = DisplayMessage(LunaticLocation, Color.Cyan, key + "20");
                                         break;
                                     case 60 * 52:
                                         SoundEngine.PlaySound(SoundID.Item71, DungeonCoords);
@@ -263,7 +263,7 @@ namespace Windfall.Common.Systems.WorldEvents
                                         LunaticCultist.rotation = -Pi / 2;
                                         break;
                                     case 60 * 55:
-                                        Text = DisplayMessage(LunaticLocation, Color.Blue, key + "21");
+                                        Text = DisplayMessage(LunaticLocation, Color.Cyan, key + "21");
                                         Text.lifeTime = 60;
                                         break;
                                     case 60 * 58:

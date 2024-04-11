@@ -18,7 +18,7 @@ namespace Windfall.Content.Projectiles.NPCAnimations
         };
         internal override SoundStyle SpawnSound => new("CalamityMod/Sounds/Custom/SCalSounds/BrimstoneHellblastSound");
         internal override int NPCType => ModContent.NPCType<LunarBishop>();
-        internal override Color TextColor => Color.Blue;
+        internal override Color TextColor => Color.Cyan;
         internal override bool SpawnConditions(Player player)
         {
             Vector2 vectorFromNpcToPlayer = player.Center - Projectile.Center;

@@ -70,6 +70,7 @@ namespace Windfall.Common.Systems
             cultistChatState = 0;
 
             SealingRitualSystem.RitualSequenceSeen = false;
+            DownedNPCSystem.downedOrator = false;
         }
     }
 }
