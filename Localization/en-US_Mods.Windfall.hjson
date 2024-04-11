@@ -17,7 +17,7 @@ Dialogue: {
 			NoSandstorm: The breeze is calm... Somehow, these sands can still be beautiful despite all the regret they carry.
 			Saved: Geez... Was almost a goner there. Thanks for the rescue!
 			LookingFamiliar1: Hey now! Are you copying me?!
-			LookingFamiliar2: Well... I imitation is the sincerest form of flattery.
+			LookingFamiliar2: Well... I suppose imitation is the sincerest form of flattery.
 			LookingIlmeran1: Hoho! If I didn't know better, I might've mistaken you for one of my fellow Paladins!
 			LookingIlmeran2: Looking good! Its nice to see Ilmeran culture flourishing once more.
 			Amidias1: I'm so glad the King is doing well! Thank you again for your help. If he has any need of me, just let me know!
@@ -30,21 +30,36 @@ Dialogue: {
 
 		Quests: {
 			NoQuest: You've done all I could ask of you. Come back later, and maybe I'll have an adventure to send you on.
-			CnidrionHuntStart: Ever since the Incineration, the poor Cnidrion have been stirred into a frenzy! Would you do me a favor and lend me a hand in calming the poor guys down? All you have to do is toss them one of these after you've tired them out a bit. Cnidri-Snacks are their favourite treats! Once they've had one, they're sure to calm down, and might even take a liking towards you! If you could handle three that'd be just swell.
-			CnidrionHuntDuring: Those Cnidrions aren't gonna calm themselves down! Toss them a Cnidri-Snack once they've been tuckered out, and they'll calm right down! If you can take care of three that'd be perfect.
-			CnidrionHuntEnd: Nice work! Are those lick marks I see on you? Guess you're quite the Cnidrion tamer. You might've made a good paladin yourself!
-			ScoogHuntStart: I think you've proven yourself to be quite capable; perhaps even enough to lend me a hand in a real hunt. I'm sure you've felt the tremors below the sands. Take this, and you'll be able to lure out its source. Though be prepared for a fight once it surfaces.
-			ScoogHuntDuring: Just cast that line, and then we'll wait for her to surface. It can be a bit unnerving, I know.
-			ScoogHuntEnd: Well now, that sure was quite the fight, wasn't it! You fought like a real Paladin out there! Almost reminds me of the days before the Incineration...
-			ShuckinClamsStart: With the Desert Scourge now laid to rest, it's now much safer to reach the Sunken Sea. Its a place dear to my heart, as the sole remnant of my people's kingdom. It holds many relics of Ilmeris' past... may I ask you to seek them out? Clams just love to gobble up anything they can find, but with this, you can open them right up and get at their treasure. Good luck!
-			ShuckinClamsDuring: Crack open eight clams for me. They've managed to gobble up plenty of relics from Ilmeris' prime. You're sure to find some valuable treasures within their maws.
-			ShuckinClamsEnd: That's quite the haul you've got there! Looks like your shucking expedition was a success. Feel free to keep that knife and keep shucking away if you please. Though, if you're up for it... there's something even bigger you can shuck.
-			ClamHuntStart: Alright, you're a pretty good clam shucker, so I'm gonna need you to shuck one of the biggest clams there is. I'm sure you've seen it lying around during your time at the Sunken Sea, and I'm willing to bet it's a treasure trove of Ilmeran relics! Go give it a good shucking for me, and see what you can recover!
-			ClamHuntDuring: You just have to hang around in the Sunken Sea a while, and that giant clam is sure to turn up. Then, you can give it a good shucking.
-			ClamHuntEnd: I can't believe it! King Amidias was in that clam the whole time?! Thank you for the help, I'm certain if they were still here, the entirety of Ilmeris would be singing their praises!
-			ScoogHunt2Start: Hey, nice to see you again! I've made quite the discovery since we last spoke... Apparently, there's another still living Scourge! However, its in even worse condition than our friendly Desert scourge: The Sulphurous Sea. I feel bad for the poor thing, and I ask you lay it to rest as you did the first. That fishing rod I gave you should still be able to lure it out of hiding. Good luck!
-			ScoogHunt2During: Cast the rod I gave you into the Sulphurous Sea, and the other scourge will come out just like the last. Though be wary, it's likely far stronger than the last scourge.
-			ScoogHunt2End: Well done! I'm happy to know that the Scourges are at last resting peacefully, free from the suffering they had endured fromm the Incineration. As always, I'm impressed by your skills. You've gone above and beyond as an Paladin, and made certain the King won't regret his decision.
+
+			CnidrionHunt: {
+				Start: Ever since the Incineration, the poor Cnidrion have been stirred into a frenzy! Would you do me a favor and lend me a hand in calming the poor guys down? All you have to do is toss them one of these after you've tired them out a bit. Cnidri-Snacks are their favourite treats! Once they've had one, they're sure to calm down, and might even take a liking towards you! If you could handle three that'd be just swell.
+				During: Those Cnidrions aren't gonna calm themselves down! Toss them a Cnidri-Snack once they've been tuckered out, and they'll calm right down! If you can take care of three that'd be perfect.
+				End: Nice work! Are those lick marks I see on you? Guess you're quite the Cnidrion tamer. You might've made a good paladin yourself!
+			}
+
+			ScoogHunt: {
+				Start: I think you've proven yourself to be quite capable; perhaps even enough to lend me a hand in a real hunt. I'm sure you've felt the tremors below the sands. Take this, and you'll be able to lure out its source. Though be prepared for a fight once it surfaces.
+				During: Just cast that line, and then we'll wait for her to surface. It can be a bit unnerving, I know.
+				End: Well now, that sure was quite the fight, wasn't it! You fought like a real Paladin out there! Almost reminds me of the days before the Incineration...
+			}
+
+			ShuckinClams: {
+				Start: With the Desert Scourge now laid to rest, it's now much safer to reach the Sunken Sea. Its a place dear to my heart, as the sole remnant of my people's kingdom. It holds many relics of Ilmeris' past... may I ask you to seek them out? Clams just love to gobble up anything they can find, but with this, you can open them right up and get at their treasure. Good luck!
+				During: Crack open eight clams for me. They've managed to gobble up plenty of relics from Ilmeris' prime. You're sure to find some valuable treasures within their maws.
+				End: That's quite the haul you've got there! Looks like your shucking expedition was a success. Feel free to keep that knife and keep shucking away if you please. Though, if you're up for it... there's something even bigger you can shuck.
+			}
+
+			ClamHunt: {
+				Start: Alright, you're a pretty good clam shucker, so I'm gonna need you to shuck one of the biggest clams there is. I'm sure you've seen it lying around during your time at the Sunken Sea, and I'm willing to bet it's a treasure trove of Ilmeran relics! Go give it a good shucking for me, and see what you can recover!
+				During: You just have to hang around in the Sunken Sea a while, and that giant clam is sure to turn up. Then, you can give it a good shucking.
+				End: I can't believe it! King Amidias was in that clam the whole time?! Thank you for the help, I'm certain if they were still here, the entirety of Ilmeris would be singing their praises!
+			}
+
+			ScoogHunt2: {
+				Start: Hey, nice to see you again! I've made quite the discovery since we last spoke... Apparently, there's another still living Scourge! However, its in even worse condition than our friendly Desert scourge: The Sulphurous Sea. I feel bad for the poor thing, and I ask you lay it to rest as you did the first. That fishing rod I gave you should still be able to lure it out of hiding. Good luck!
+				During: Cast the rod I gave you into the Sulphurous Sea, and the other scourge will come out just like the last. Though be wary, it's likely far stronger than the last scourge.
+				End: Well done! I'm happy to know that the Scourges are at last resting peacefully, free from the suffering they had endured fromm the Incineration. As always, I'm impressed by your skills. You've gone above and beyond as an Paladin, and made certain the King won't regret his decision.
+			}
 		}
 
 		WorldText: {
@@ -113,7 +128,6 @@ Dialogue: {
 
 	GodseekerKnight: {
 		Chat: {
-			WorkingOnIt: Perhaps in the future I'll teach you some of my techniques.
 			Standard1: The world has nearly been cleansed of the gods. To think our goal is finally in reach...
 			Standard2: The lands seem far quieter these days, but we must remain ever vigilant.
 			Standard3: Sometimes its better to let go of the past, rather than incessantly cling to it. I sometimes wonder how things would have played out had people just accepted change. How many lives would have been spared?
@@ -126,20 +140,38 @@ Dialogue: {
 		}
 
 		Quests: {
-			LilBitch: Sorry, I'm not sure someone of your strength could do much to help.
 			NoQuest: You've done quite well. For now, I'd say we've earned some rest.
-			ParryIntroStart: So you're interested. Good. However, if you wish to aid me, you'll need to prove yourself further. Take this, its a blade once only wielded by the Godseeker Knights. With it, you'll be able to repel any projectile thrown your way. If, of course, you have the skill to wield it properly. Once you've mastered this blade, our hunt can begin.
-			ParryIntroDuring: Simply repelling a projectile is only the start of this weapon's potential. You can even return that projectile to its sender. They never see it coming! Suceed in this five times, and I think you'll have proven yourself.
-			ParryIntrotEnd: Well done! I knew you I saw something in you. Your skills are beginning to look like those of the Godseekers! You've more than proven yourself. When you're ready, we can begin our hunt.
-			SlimeGodHuntStart: To business then. Our prey is a deity; one who I've been aiming to bring down for some time: the Slime God. I've been tracking him for quite a while, but that coward knows not to face someone as mighty as me directly. Any time I get on his trail, he flees like the weakling he is. Take this, if you're the one who uses it, I bet he'll come out of hiding to reclaim it. He'll be underestimating you. Use that to your advantage.
-			SlimeGodHuntDuring: If you use the Rune of Gula, the Slime God will surely come out of hiding to reclaim it. He'll be far less wary of you than I; a hopefully fatal mistake. I trust your strength, put an end to that coward once and for all.
-			SlimeGodHuntEnd: I see... The coward is as snide as ever, escaping yet another confrontation. However, defeating his creations is a victory in its own right; setting him back a great deal in whatever he was planning. You've done well, and I'm certain another opportunity to face him will come our way. So don't let his escape get you down.
-			CrystalSearchStart: Well geez... Things sure have changed since we last met, huh? Its as if godly essence has been pumped into the veins of this world. I'm certain this is something the Slime God plans to take advantage of... Search the depths of these new lands, and if you find any evidence of him, bring it back to me.
-			CrystalSearchDuring: The crystals that grow so frequently in the Hallow may be of interest to the Slime God. See if any look out of place, and bring back what you find. Oh, and if you find whoever took down the Wall, give them a strong punch to the face for me, okay?
-			CrystalSearchEnd: Ah, now what's this? This crystals beating with the power of the Slime God... Is he... growing them? This cannot be good. If this is still connected to that filthy slime, then he knows you have it, and I doubt he plans to just leave you be after the beating you gave him.
-			QueenSlimeHuntStart: How about we take the fight to him then. I'm certain he'll be eager for a rematch with whatever power he gained from the Hallow. Just holding that thing in the Hallow might do the trick, or perhaps the Rune of Gula as well. Either way, show him no mercy! He isn't the only one who's grown stronger since your last battle. Good luck.
-			QueenSlimeHuntDuring: Show that filthy slime no mercy. While he may now wield the powers of Hallow, you too have grown in strength since your last battle with him.
-			QueenSlimeHuntEnd: So it is done at last. Even if my master has disappeared, I shall continue his work. We mustn't rest until this world is cleansed of the gods. This is an especially grand victory. The Slime God has evaded our efforts for years, and at last he has been crushed; his schemes never to come to fruition. You've done well this day, and succeeded where many have failed. I'd say this is well worth celebration!
+
+			PestControl: {
+				Start: KILL THEM BUGS.
+				During: KILL EM.
+				End: GOOD SHIT.
+			}
+
+			Decontamination: {
+				Start: CLEAN.
+				During: CLEAN NOW.
+				End: NICE AND SPARKLY.
+			}
+		}
+
+		Conversation: {
+			Essence: {
+				Initial: What am I doing here? Protecting the lands of course, as my cohort have always done! The remnants of deific essence still taint the lands, and I hope to be able to purge them once and for all.
+				Okay: Cool
+			}
+		}
+
+		Essence: {
+			Hints: {
+				Evil1: Large containers of deific energies can be found deep below us. If you're willing, their destruction would be most helpful.
+				Evil2: Amidst the grime and gore of this place lie certain… growths. You will recognize them when you see them. They are blemishes even upon the disfigured face of this land. Each one is a storehouse of lingering divine power. Destroy one, and whatever is left of the gods that haunt this place would be sure to retaliate.
+			}
+
+			Redeemed: {
+				1: Ah, you've found some deific essence! Give it here, and I'll ensure that this filth is properly dealt with. The improper handling of such essences is what resulted in this hellscape we now stand in. Be sure to bring me any more you come across; their effects on people are just as disasterous as their effects on the land... I'll even be sure to make it worth your while. Here, have this. It'll be sure to help you in the future.
+				2: Another essence? Well done! I'm glad to see there are still those who'll take up the Godseeker's cause. Here, another reward. (add some info abt said reward once we have it)
+			}
 		}
 
 		WorldText: {
@@ -274,32 +306,50 @@ Dialogue: {
 			Quests: {
 				Dungeon: {
 					NoQuest: You've done a great job! I'll be back when I next need you.
-					BoneStart: Fun fact: The bones in the Dungeon are packed full of curses! If we can get enough of them, maybe we'll be able to figure out a spell to stop the Lunar Cult. Oh, and don't ask where they got the curses. You don't want to know.
-					BoneDuring: Pretty much all of the undead you'll find in the Dungeon are prime sources for the accursed bones we're looking for. About 50 should be enough. Only hard part is getting their owners to part with them, haha.
-					BoneEnd: Yes, these'll do nicely! I'd uh... Wash your hands after handling this many... With holy water... Actually maybe get a full on baptism... Sorry.
-					WaterBoltStart:
-						'''
-						I hear those Dark Casters carry tend to carry with them a magic tome full of potent water magic. I'd be curious to figure out the origin of these tomes, and if they hold any connection to the Lunar Cult. I mean, how can you be dedicated to the moon and not use water magic?
-						Though, now that I think of it, why would the Lunar Cult care for something so trivial...
-						'''
-					WaterBoltDuring: The tome is said to carry with it potent water magic. Why would the Lunar Cult care for such simple forms of magic though...
-					WaterBoltEnd: Ah! You found it! That does indeed look like the right tome, and considering its age, I can imagine it fitting in the hands of those casters nicely. Thank you! I'll let you know if I find any connection between this and the cult.
-					DeificInsigniaStart: Many of the skeletons which wander that decrepit Dungeon were once devoted soldiers of the Gods; imprisoned within there during the Godseeker's crusade. I'd bet the insignia they bear might still hold some of the deific essence they were gifted. If you get me some, they may prove helpful in combating the Lunar Cult.
-					DeificInsigniaDuring: Those skeletons are quite angry about their eternal imprisonment within the Dungeon. So don't expect them to part with their patrons' tokens so easilly. If you can get me just five, that should suffice.
-					DeificInsigniaEnd: Oh, perfect! Yes, these absolutely reek of deific essence... Though I loathe to handle the stuff, this might just give us an edge.
+
+					Bone: {
+						Start: Fun fact: The bones in the Dungeon are packed full of curses! If we can get enough of them, maybe we'll be able to figure out a spell to stop the Lunar Cult. Oh, and don't ask where they got the curses. You don't want to know.
+						During: Pretty much all of the undead you'll find in the Dungeon are prime sources for the accursed bones we're looking for. About 50 should be enough. Only hard part is getting their owners to part with them, haha.
+						End: Yes, these'll do nicely! I'd uh... Wash your hands after handling this many... With holy water... Actually maybe get a full on baptism... Sorry.
+					}
+
+					WaterBolt: {
+						Start:
+							'''
+							I hear those Dark Casters carry tend to carry with them a magic tome full of potent water magic. I'd be curious to figure out the origin of these tomes, and if they hold any connection to the Lunar Cult. I mean, how can you be dedicated to the moon and not use water magic?
+							Though, now that I think of it, why would the Lunar Cult care for something so trivial...
+							'''
+						During: The tome is said to carry with it potent water magic. Why would the Lunar Cult care for such simple forms of magic though...
+						End: Ah! You found it! That does indeed look like the right tome, and considering its age, I can imagine it fitting in the hands of those casters nicely. Thank you! I'll let you know if I find any connection between this and the cult.
+					}
+
+					DeificInsignia: {
+						Start: Many of the skeletons which wander that decrepit Dungeon were once devoted soldiers of the Gods; imprisoned within there during the Godseeker's crusade. I'd bet the insignia they bear might still hold some of the deific essence they were gifted. If you get me some, they may prove helpful in combating the Lunar Cult.
+						During: Those skeletons are quite angry about their eternal imprisonment within the Dungeon. So don't expect them to part with their patrons' tokens so easilly. If you can get me just five, that should suffice.
+						End: Oh, perfect! Yes, these absolutely reek of deific essence... Though I loathe to handle the stuff, this might just give us an edge.
+					}
 				}
 
 				Ritual: {
 					NoQuest: You've done a great job! I'll be back when I find out what the next thing we need is.
-					TabletFragsStart: Alright, the first thing we'll need is a tablet, which'll act as the ritual's vessel. The Lihzahrds are well versed in rituals such as these; I'm certain they have the materials required to create such a tablet. No followers of the Gods would spare the slightest expense on their toys; I'm sure it'll have the materials we're looking for.
-					TabletFragsDuring: I'm not telling you to smash their ancient idol and bring me pieces of it... Buuuuuut if something horrible were to happen to that golem unexpectedly, I wouldn't be complaining... and it'd only be right to make something useful out of its parts, right?
-					TabletFragsEnd: Ah, you got the materials! Yes... These should do perfectly for our tablet. Maybe lets not poke around the Lihzahrds' temple anymore though... you look awfully banged up.
-					FishronBoneStart: Alright, I've figured out the next thing we'll need, but uhh... I don't like it any more than you will. We need a Dragon. Well, not a whole dragon. It seems anything that has the genetics of a Dragon can be used. This piece will allow us to interact with the magic used by the dragons, and not be seen as enemies. The remains a draconic offshoot should do the trick, and I've heard that the noble Fishron is quite attracted to a particular type of bait.
-					FishronBoneDuring: If you're in need of bait, I believe Amidias may be able to lend you a hand. Then you must simply cast the bait in the water. Shouldn't take too long for a Fishron to reveal herself to you...
-					FishronBoneEnd: Oh my! What a marvel! How awful that something so beautiful had to die... Thank you again for the help. We're so close to being able to begin the Sealing Ritual. I'll let you know when I narrow down what we else we need. I do wonder, though, why the Dragons went through with this ritual when it cost one of their kind... I suppose they had no choice.
-					PrimalLightStart: Good news! We need just one more thing before we're ready to begin the sealing ritual! Though... This may be the most difficult thing to acquire. Legend states that the Dragon King used the power of "Primordial Light" to ultimately seal away the behemoth. There's only one entity I know of that might allow us to harness this power: the self-appointed "Empress of Light". Perhaps she holds something that would allow us to harness the power of the Light, as the Dragons' mighty King once did.
-					PrimalLightDuring: I must warn you not to face the Empress during the day. As light bathes the land, she too can harness Primordial Light. Facing her at night would be a far wiser choice.
-					PrimalLightEnd: Ah ha! This shard certainly holds a unique power. Its radiance... this must be what we're looking for! I'll need some time to finish preparing for the ritual, but I'll notify you once we're ready. I can taste our victory over the Lunar Cult just over the horizon.
+
+					TabletFrags: {
+						Start: Alright, the first thing we'll need is a tablet, which'll act as the ritual's vessel. The Lihzahrds are well versed in rituals such as these; I'm certain they have the materials required to create such a tablet. No followers of the Gods would spare the slightest expense on their toys; I'm sure it'll have the materials we're looking for.
+						During: I'm not telling you to smash their ancient idol and bring me pieces of it... Buuuuuut if something horrible were to happen to that golem unexpectedly, I wouldn't be complaining... and it'd only be right to make something useful out of its parts, right?
+						End: Ah, you got the materials! Yes... These should do perfectly for our tablet. Maybe lets not poke around the Lihzahrds' temple anymore though... you look awfully banged up.
+					}
+
+					FishronBone: {
+						Start: Alright, I've figured out the next thing we'll need, but uhh... I don't like it any more than you will. We need a Dragon. Well, not a whole dragon. It seems anything that has the genetics of a Dragon can be used. This piece will allow us to interact with the magic used by the dragons, and not be seen as enemies. The remains a draconic offshoot should do the trick, and I've heard that the noble Fishron is quite attracted to a particular type of bait.
+						During: If you're in need of bait, I believe Amidias may be able to lend you a hand. Then you must simply cast the bait in the water. Shouldn't take too long for a Fishron to reveal herself to you...
+						End: Oh my! What a marvel! How awful that something so beautiful had to die... Thank you again for the help. We're so close to being able to begin the Sealing Ritual. I'll let you know when I narrow down what we else we need. I do wonder, though, why the Dragons went through with this ritual when it cost one of their kind... I suppose they had no choice.
+					}
+
+					PrimalLight: {
+						Start: Good news! We need just one more thing before we're ready to begin the sealing ritual! Though... This may be the most difficult thing to acquire. Legend states that the Dragon King used the power of "Primordial Light" to ultimately seal away the behemoth. There's only one entity I know of that might allow us to harness this power: the self-appointed "Empress of Light". Perhaps she holds something that would allow us to harness the power of the Light, as the Dragons' mighty King once did.
+						During: I must warn you not to face the Empress during the day. As light bathes the land, she too can harness Primordial Light. Facing her at night would be a far wiser choice.
+						End: Ah ha! This shard certainly holds a unique power. Its radiance... this must be what we're looking for! I'll need some time to finish preparing for the ritual, but I'll notify you once we're ready. I can taste our victory over the Lunar Cult just over the horizon.
+					}
 				}
 			}
 
@@ -489,7 +539,7 @@ Dialogue: {
 		}
 	}
 
-	Buttons.GodseekerKnight.Techniques: Techniques
+	Buttons.GodseekerKnight.Essence: Essences
 }
 
 UI: {
