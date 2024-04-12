@@ -29,7 +29,6 @@ namespace Windfall.Content.Projectiles.Misc
             if (owner.Calamity().cooldowns.ContainsKey(ParryWeapon.ID))
                 owner.Calamity().cooldowns[ParryWeapon.ID].timeLeft = 0;
             owner.AddBuff(ModContent.BuffType<PerfectFlow>(), 5 * 60);
-            QuestSystem.IncrementQuestProgress(QuestSystem.QuestLog.FindIndex(quest => quest.Name == "ParryIntro"), 0);
         }
         public override void OnKill(int timeLeft)
         {

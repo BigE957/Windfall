@@ -36,7 +36,7 @@ namespace Windfall.Common.Systems
                                     Item.NewItem(null, Main.npc[targetNPC].Center, 8, 4, CalVal.Find<ModItem>("SunDriedShrimp").Type);
                                 }
                             }
-                            QuestSystem.IncrementQuestProgress(index, 0);
+                            QuestSystem.IncrementQuestProgress(index);
                         }
                     }
                 }

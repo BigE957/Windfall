@@ -20,7 +20,7 @@ namespace Windfall.Content.Items
             }
 
             if(item.type == ItemID.PurificationPowder && QuestSystem.QuestLog[QuestSystem.QuestLog.FindIndex(quest => quest.Name == "Decontamination")].Active)
-                QuestSystem.IncrementQuestProgress(QuestSystem.QuestLog.FindIndex(quest => quest.Name == "Decontamination"), 0);
+                QuestSystem.IncrementQuestProgress(QuestSystem.QuestLog.FindIndex(quest => quest.Name == "Decontamination"));
             return base.UseItem(item, player);
         }
         internal static bool FirstJournal()
@@ -40,7 +40,7 @@ namespace Windfall.Content.Items
         public override bool OnPickup(Item item, Player player)
         {
             if (item.type == ItemID.QueenSlimeCrystal)
-                QuestSystem.IncrementQuestProgress(QuestSystem.QuestLog.FindIndex(quest => quest.Name == "CrystalHunt"), 0);
+                QuestSystem.IncrementQuestProgress(QuestSystem.QuestLog.FindIndex(quest => quest.Name == "CrystalHunt"));
             return true;
         }
     }

@@ -35,7 +35,10 @@ namespace Windfall.Common.Utilities
             public dialogueButton Button1;
             public dialogueButton? Button2;
         }
-
+        /// <param name="npc">The NPC who is giving dialouge currently.</param>
+        /// <returns>
+        /// Handles NPC dialogue for NPCs with Progressive Quests (quests that build off each other). Interacts with <see cref="QuestSystem"/> heavilly.
+        /// </returns>
         public static void ProgressiveQuestDialogueHelper(NPC npc)
         {
             int index = -1;
@@ -114,6 +117,11 @@ namespace Windfall.Common.Utilities
                     Main.npcChatText = GetWindfallTextValue($"Dialogue.{npcName}.Quests.NoQuest");
             }
         }
+
+        /// <param name="npc">The NPC who is giving dialouge currently.</param>
+        /// <returns>
+        /// Handles NPC dialogue for NPCs with Randomized Quests (quests that are randomly selected from a pool). Interacts with <see cref="QuestSystem"/> heavilly.
+        /// </returns>
         public static void RandomizedQuestDialougeHelper(NPC npc)
         {
             string Path = null;
@@ -167,6 +175,14 @@ namespace Windfall.Common.Utilities
             else
                 Main.npcChatText = GetWindfallTextValue($"Dialogue.{Path}.NoQuest");
         }
+
+        /// <param name="npc">The NPC who is giving dialouge currently.</param>
+        /// <param name="QuestComplete">A bool determining whether this quest has been completed.</param>
+        /// <param name="CurrentQuestItem">The current Quest Item this npc is looking for.</param>
+        /// <param name="MyQuestItems">The list of Quest Item this npc can be looking for.</param>
+        /// <returns>
+        /// Handles NPC dialogue for NPCs with Randomized Quests (quests that are randomly selected from a pool). Does not interact with <see cref="QuestSystem"/>.
+        /// </returns>
         public static QuestItem CollectorQuestDialogueHelper(NPC npc, ref bool QuestComplete, QuestItem CurrentQuestItem, List<QuestItem> MyQuestItems)
         {
             string Path = null;
@@ -233,6 +249,14 @@ namespace Windfall.Common.Utilities
                 Main.npcChatText = GetWindfallTextValue($"Dialogue.{Path}.NoQuest");
             return CurrentQuestItem;
         }
+
+        /// <param name="MyDialogue">Instructions for this function ro read from.</param>
+        /// <param name="CurrentDialogue">Dialogue state of this NPC (usually tied to an <see cref="enum"/>).</param>
+        /// <param name="button">The button variable taken directly from <see cref="ModNPC.SetChatButtons(ref string, ref string)"/>.</param>
+        /// <param name="button2">The button2 variable taken directly from <see cref="ModNPC.SetChatButtons(ref string, ref string)"/>.</param>
+        /// <returns>
+        /// Sets the Chat Buttons for an NPC when it is going through Conversation Dialogue.
+        /// </returns>
         public static void SetConversationButtons(List<dialogueDirections> MyDialogue, int CurrentDialogue, ref string button, ref string button2)
         {
             dialogueDirections myDirections = MyDialogue.Find(n => n.MyPos == CurrentDialogue);
@@ -240,6 +264,13 @@ namespace Windfall.Common.Utilities
             if (myDirections.Button2 != null)
                 button2 = myDirections.Button2.Value.name;
         }
+
+        /// <param name="MyDialogue">Instructions for this function ro read from.</param>
+        /// <param name="CurrentDialogue">Dialogue state of this NPC (usually tied to an <see cref="enum"/>).</param>
+        /// <param name="firstButton">The button variable taken directly from <see cref="ModNPC.OnChatButtonClicked(bool, ref string)"/>.</param>
+        /// <returns>
+        /// Handles setting the CurrentDialogue variable to its proper value, as well as closing the NPC Chat Box when the Conversation ends.
+        /// </returns>
         public static int GetNPCConversation(List<dialogueDirections> MyDialogue, int CurrentDialogue, bool firstButton)
         {
             dialogueDirections myDirections = MyDialogue.Find(n => n.MyPos == CurrentDialogue);

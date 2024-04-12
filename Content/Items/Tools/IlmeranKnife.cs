@@ -70,7 +70,7 @@ namespace Windfall.Content.Items.Tools
                         ClamHitAmountFieldInfo.SetValue(clam, 3);
                         int questIndex = QuestSystem.QuestLog.FindIndex(quest => quest.Name == "ShuckinClams");
                         if (questIndex != -1)
-                            QuestSystem.IncrementQuestProgress(questIndex, 0);
+                            QuestSystem.IncrementQuestProgress(questIndex);
                     }
             }
             if (target.type == ModContent.NPCType<PrismBack>() || target.type == ModContent.NPCType<BlindedAngler>())

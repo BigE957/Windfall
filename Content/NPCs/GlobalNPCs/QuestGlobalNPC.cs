@@ -13,22 +13,22 @@ namespace Windfall.Content.NPCs.GlobalNPCs
             Mod windfall = Windfall.Instance;
 
             if ((npc.type == NPCID.EaterofSouls || npc.type == NPCID.Crimera) && QuestSystem.QuestLog[QuestSystem.QuestLog.FindIndex(quest => quest.Name == "PestControl")].Active)
-                QuestSystem.IncrementQuestProgress(QuestSystem.QuestLog.FindIndex(quest => quest.Name == "PestControl"), 0);
+                QuestSystem.IncrementQuestProgress(QuestSystem.QuestLog.FindIndex(quest => quest.Name == "PestControl"));
 
             if (npc.type == calamity.Find<ModNPC>("DesertScourgeHead").Type)
-                QuestSystem.IncrementQuestProgress(QuestSystem.QuestLog.FindIndex(quest => quest.Name == "ScoogHunt"), 0);
+                QuestSystem.IncrementQuestProgress(QuestSystem.QuestLog.FindIndex(quest => quest.Name == "ScoogHunt"));
 
             if (npc.type == calamity.Find<ModNPC>("GiantClam").Type)
-                QuestSystem.IncrementQuestProgress(QuestSystem.QuestLog.FindIndex(quest => quest.Name == "ClamHunt"), 0);
+                QuestSystem.IncrementQuestProgress(QuestSystem.QuestLog.FindIndex(quest => quest.Name == "ClamHunt"));
 
             if (npc.type == calamity.Find<ModNPC>("SlimeGodCore").Type)
-                QuestSystem.IncrementQuestProgress(QuestSystem.QuestLog.FindIndex(quest => quest.Name == "SlimeGodHunt"), 0);
+                QuestSystem.IncrementQuestProgress(QuestSystem.QuestLog.FindIndex(quest => quest.Name == "SlimeGodHunt"));
 
             if (npc.type == NPCID.QueenSlimeBoss)
-                QuestSystem.IncrementQuestProgress(QuestSystem.QuestLog.FindIndex(quest => quest.Name == "QueenSlimeHunt"), 0);
+                QuestSystem.IncrementQuestProgress(QuestSystem.QuestLog.FindIndex(quest => quest.Name == "QueenSlimeHunt"));
 
             if (npc.type == calamity.Find<ModNPC>("AquaticScourgeHead").Type)
-                QuestSystem.IncrementQuestProgress(QuestSystem.QuestLog.FindIndex(quest => quest.Name == "ScoogHunt2"), 0);
+                QuestSystem.IncrementQuestProgress(QuestSystem.QuestLog.FindIndex(quest => quest.Name == "ScoogHunt2"));
         }
         public override void OnSpawn(NPC npc, IEntitySource source)
         {

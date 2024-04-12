@@ -204,7 +204,12 @@ namespace Windfall.Common.Systems
                 }
             }
         }
-        public static void IncrementQuestProgress(int questIndex, int questReqIndex)
+        /// <param name="questIndex">The index within the <see cref="QuestLog"/> of the Quest to be updated.</param>
+        /// <param name="questReqIndex">The index within the ObjectiveProgress list within a Quest to be updated.</param>
+        /// <returns>
+        /// Increments Quest Progress for the given Quest and optionally an specific objective within said Quest.
+        /// </returns>
+        public static void IncrementQuestProgress(int questIndex, int questReqIndex = 0)
         {
             if (QuestLog[questIndex].ObjectiveProgress[questReqIndex] < QuestLog[questIndex].ObjectiveRequirements[questReqIndex])
             {
@@ -226,6 +231,11 @@ namespace Windfall.Common.Systems
                 Main.NewText($"Quest Complete!", Color.Yellow);
             }
         }
+
+        /// <param name="questIndex">The index of a Quest within the <see cref="QuestLog"/>d.</param>
+        /// <returns>
+        /// Toggles whether the given Quest is Active or Inactive.
+        /// </returns>
         public static void ToggleQuestActive(int questIndex)
         {
             Quest temp = QuestLog[questIndex];
@@ -235,6 +245,11 @@ namespace Windfall.Common.Systems
                 temp.Active = true;
             QuestLog[questIndex] = temp;
         }
+
+        /// <param name="questIndex">The index of a Quest within the <see cref="QuestLog"/>d.</param>
+        /// <returns>
+        /// Resets all data for a given Quest.
+        /// </returns>
         public static void ResetQuestProgress(int questIndex)
         {
             Quest temp = QuestLog[questIndex];            
@@ -246,6 +261,11 @@ namespace Windfall.Common.Systems
             temp.Active = false;
             QuestLog[questIndex] = temp;
         }
+
+        /// <param name="name">The name of a Quest within the <see cref="QuestLog"/>.</param>
+        /// <returns>
+        /// Returns whether or not the Quest is Active or Inactive.
+        /// </returns>
         public static bool IsQuestActive(string name) => QuestLog[QuestLog.FindIndex(quest => quest.Name == name)].Active;
         public class QuestSerializer : TagSerializer<Quest, TagCompound>
         {
