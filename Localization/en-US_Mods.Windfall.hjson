@@ -177,13 +177,31 @@ Dialogue: {
 
 		Essence: {
 			Hints: {
-				Evil1: Large containers of deific energies can be found deep below us. If you're willing, their destruction would be most helpful.
-				Evil2: Amidst the grime and gore of this place lie certain… growths. You will recognize them when you see them. They are blemishes even upon the disfigured face of this land. Each one is a storehouse of lingering divine power. Destroy one, and whatever is left of the gods that haunt this place would be sure to retaliate.
+				None: Do you feel that? The air feels... lighter, as of late. It's almost as if our efforts are finally paying off... Truly splendid... The Godseeker would indeed be proud of us; I'm sure.
+				BoC: Large containers of deific energies can be found deep below us. If you're willing, their destruction would be most helpful.
+				EoW: Large containers of deific energies can be found deep below us. If you're willing, their destruction would be most helpful.
+				HiveMind: Amidst the grime and gore of this place lie certain… growths. You will recognize them when you see them. They are blemishes even upon the disfigured face of this land. Each one is a storehouse of lingering divine power. Destroy one, and whatever is left of the gods that haunt this place would be sure to retaliate.
+				Perforators: Amidst the grime and gore of this place lie certain… growths. You will recognize them when you see them. They are blemishes even upon the disfigured face of this land. Each one is a storehouse of lingering divine power. Destroy one, and whatever is left of the gods that haunt this place would be sure to retaliate.
+				SlimeGod: I've seen this icky fella roaming around. Ew.
+				WallOfFlesh: You our wall's pretty cool. Just uh, dont break it, lol.
+				QueenSlime: Dude the icky fella's back, and she TRANS'D her GENDER!!! ...Good for her, ngl.
+				EoL: Dude these WEIRDOS on Exo.com keep posting art of this YELLOW BITCH with no clothes on????? Can you like... Get them to stop????
+				Ravager: Dude this fucker is so annoying to fight can you just do it for me pweeeaaase.
+				Guardians: I fucking hate SIMPS. ESPECIALLY GOD SIMPS!!!
+				Providence: That's one spicy mama...
 			}
 
 			Redeemed: {
 				1: Ah, you've found some deific essence! Give it here, and I'll ensure that this filth is properly dealt with. The improper handling of such essences is what resulted in this hellscape we now stand in. Be sure to bring me any more you come across; their effects on people are just as disasterous as their effects on the land... I'll even be sure to make it worth your while. Here, have this. It'll be sure to help you in the future.
 				2: Another essence? Well done! I'm glad to see there are still those who'll take up the Godseeker's cause. Here, another reward. (add some info abt said reward once we have it)
+				3: Mmm, essence, yum.
+				4: Mmm, essence, yum.
+				5: Mmm, essence, yum.
+				6: Mmm, essence, yum.
+				7: Mmm, essence, yum.
+				8: Mmm, essence, yum.
+				9: Mmm, essence, yum.
+				Cheater: I know what you are.
 			}
 		}
 

@@ -14,6 +14,7 @@ namespace Windfall.Common.Systems
         public static int IlmeranPaladinChats = 0;
         public static int GodseekerKnightChats = 0;
         public static bool EssenceExplained = false;
+        public static int EssenceCounter = 0;
         public static int cultistChatState = 0;
 
         public static List<string> CreditDataNames;
@@ -37,6 +38,7 @@ namespace Windfall.Common.Systems
             IlmeranPaladinChats = tag.GetInt("paladinChats");
             GodseekerKnightChats = tag.GetInt("seekerChats");
             EssenceExplained = tag.GetBool("EssenceExplained");
+            EssenceCounter = tag.GetInt("EssenceCounter");
             cultistChatState = tag.GetInt("TravelCultistChatState");
         }
 
@@ -55,6 +57,7 @@ namespace Windfall.Common.Systems
             tag["paladinChats"] = IlmeranPaladinChats;
             tag["seekerChats"] = GodseekerKnightChats;
             tag["EssenceExplained"] = EssenceExplained;
+            tag["EssenceCounter"] = EssenceCounter;
             tag["TravelCultistChatState"] = cultistChatState;
         }
         public static void ResetWorldData()
@@ -75,6 +78,7 @@ namespace Windfall.Common.Systems
             IlmeranPaladinChats = 0;
             GodseekerKnightChats = 0;
             EssenceExplained = false;
+            EssenceCounter = 0;
             cultistChatState = 0;
 
             SealingRitualSystem.RitualSequenceSeen = false;

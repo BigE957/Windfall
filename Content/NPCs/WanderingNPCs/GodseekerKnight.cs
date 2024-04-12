@@ -262,7 +262,8 @@ namespace Windfall.Content.NPCs.WanderingNPCs
                                 break;
                         }
                         item.stack -= 1;
-                        Main.npcChatText = "Why thank you, my Rizzler!";
+                        WorldSaveSystem.EssenceCounter++;
+                        Main.npcChatText = GetWindfallTextValue($"Dialogue.GodseekerKnight.Essence.Redeemed.{WorldSaveSystem.EssenceCounter}");
                     }
                     else
                     {
@@ -275,7 +276,7 @@ namespace Windfall.Content.NPCs.WanderingNPCs
                         }
                         else
 
-                            Main.npcChatText = "You need more rizz, my Skibidi.";
+                            Main.npcChatText = GetWindfallTextValue($"Dialogue.GodseekerKnight.Essence.Hints.{WhoIsNext()}");
                     }
                 }
                 else
