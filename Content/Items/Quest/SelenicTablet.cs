@@ -42,7 +42,7 @@ namespace Windfall.Content.Items.Quest
             if (!SealingRitualSystem.RitualSequenceSeen)
             {
                 if (line != null)
-                    line.Text = GetTextValue("Items.Quest.SelenicTablet.SeekerTooltip");
+                    line.Text = GetWindfallTextValue("Items.Quest.SelenicTablet.SeekerTooltip");
                 return;
             }
             string tooltip = GetWindfallTextValue("Items.Quest.SelenicTablet.SummonTooltip");

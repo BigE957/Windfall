@@ -1,6 +1,7 @@
 ﻿using Windfall.Common.Systems;
 using Windfall.Common.Utilities;
 using Windfall.Content.NPCs.WanderingNPCs;
+using Windfall.Content.NPCs.WorldEvents.DragonCult;
 
 namespace Windfall.Content.Tiles
 {
@@ -57,16 +58,16 @@ namespace Windfall.Content.Tiles
                 Dust d = Dust.NewDustPerfect(Cultist1Coords, DustID.GoldFlame, speed * 3, Scale: 1.5f);
                 d.noGravity = true;
             }
-            NPC.NewNPCDirect(Entity.GetSource_NaturalSpawn(), Cultist1Coords, ModContent.NPCType<LunarCultistArcher>(), 0, 1);
+            NPC.NewNPCDirect(Entity.GetSource_NaturalSpawn(), Cultist1Coords, ModContent.NPCType<DragonArcher>(), 0, 1);
 
-            Vector2 Cultist2Coords = new Vector2(x + 4, y - 4).ToWorldCoordinates();
+            Vector2 Cultist2Coords = new Vector2(x + 4, y - 3).ToWorldCoordinates();
             for (int i = 0; i < 50; i++)
             {
                 Vector2 speed = Main.rand.NextVector2Circular(1.5f, 2f);
                 Dust d = Dust.NewDustPerfect(Cultist2Coords, DustID.GoldFlame, speed * 3, Scale: 1.5f);
                 d.noGravity = true;
             }
-            NPC.NewNPCDirect(Entity.GetSource_NaturalSpawn(), Cultist2Coords, ModContent.NPCType<LunarCultistArcher>(), 0, 1);
+            NPC.NewNPCDirect(Entity.GetSource_NaturalSpawn(), Cultist2Coords, ModContent.NPCType<DragonArcher>(), 0, 1);
 
         }
     }
