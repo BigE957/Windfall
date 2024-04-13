@@ -1,6 +1,8 @@
 # This file will automatically update with entries for new content after a build and reload
 
 Dialogue: {
+	Buttons.GodseekerKnight.Essence: Essences
+
 	Emoticons: {
 		Shock: ?!
 		Confused: ??
@@ -216,26 +218,8 @@ Dialogue: {
 		}
 	}
 
-	LunarCult: {
-		MechanicShed: {
-			Initial: Mind explaining what exactly you're doing here?
-			WhoAreWe: Just a small group keeping an eye on things. Not sure if its any of your business though.
-			WannaJoin: We are actually open to new members. Perhaps if we meet again you might get such an opportuity.
-			NuhUh: What?! No, nothing of the sort. Don't know what would give you that idea...
-			ExploringHuh: Just exploring, huh? Why's exploring involve snooping around abandoned buildings?
-			FairEnough: Hmm, alright. That seems fair enough. Just don't go snooping around where you don't belong, alright?
-			SomethingBad: Well, we wouldn't want anything bad happening to you now would we? You never know who roams these parts. Being all alone in a dilapitaed cabin? Sounds like a recipe for disaster if you ask me.
-			End: Hm, well you seem to be just fine. You're free to go.
-		}
-
-		OcularDevotee: {
-			Initial: Ah, welcome traveller! You arrive at just the right moment! The bishop said one like you would arrive... Join us and witness something spectacular!
-			SomethingAmazing: Yes, yes. Something truly amazing! Long have we prepared for this moment. A communion with an ancient thing. Knowledge like no other shall soon be at our fingertips!
-			TheBishop: Yes, the Bishop! He has brought together our small group, and he has prepared long for this moment. A kind man, you will like him, I'm sure!
-			End: Speak with the Bishop, there at the altar. He can tell you more than I.
-		}
-
-		DungeonBishop: {
+	DragonCult: {
+		LunaticCultist: {
 			Conversation: {
 				Initial: Your success against our guardian was... Unexpected. It was meant to keep out intruders forevermore... However... issues have crept up since it was raised. Perhaps by opening our home to others, they might at last be laid to rest.
 				Guardian: Yes, that construct was made to serve as this dungeon's guardian. That old man became its vessel after trespassing upon our sanctum. Worry not, with the guardian now dead, the man should return to his former self, despite what things might've seemed.
@@ -254,11 +238,45 @@ Dialogue: {
 			}
 		}
 
+		DragonArcher: {
+			MechanicShed: {
+				Initial: Mind explaining what exactly you're doing here?
+				WhoAreWe: Just a small group keeping an eye on things. Not sure if its any of your business though.
+				WannaJoin: Don't get any ideas. Not just anyone is allowed into our order... Especially not those who snoop around where they shouldnt't.
+				NuhUh: What?! No, nothing of the sort. Don't know what would give you that idea...
+				ExploringHuh: Just exploring, huh? Why's exploring involve snooping around abandoned buildings?
+				FairEnough: Hmm, alright. That seems fair enough. Just don't go snooping around where you don't belong, alright?
+				SomethingBad: Well, we wouldn't want anything bad happening to you now would we? You never know who roams these parts. Being all alone in a dilapitaed cabin? Sounds like a recipe for disaster if you ask me.
+				End: Hm, well you seem to be just fine. You're free to go.
+			}
+		}
+	}
+
+	LunarCult: {
+		OcularDevotee: {
+			Initial: Ah, welcome traveller! You arrive at just the right moment! The bishop said one like you would arrive... Join us and witness something spectacular!
+			SomethingAmazing: Yes, yes. Something truly amazing! Long have we prepared for this moment. A communion with an ancient thing. Knowledge like no other shall soon be at our fingertips!
+			TheBishop: Yes, the Bishop! He has brought together our small group, and he has prepared long for this moment. A kind man, you will like him, I'm sure!
+			End: Speak with the Bishop, there at the altar. He can tell you more than I.
+		}
+
+		LunarBishop: {
+			Conversation: {
+				Initial: An invitation into our order from our Master himself is a rare thing. You must indeed be something special. I am here to answer any inqueries you might have... I imagine this is a lot to take in.
+				Knowledge: You have been invited to our order, and as such, you will be allowed to partake in our ceremonies. It is in such places you will come to learn the wisdom we have gained, and see the path we now walk.
+				Balance: Our order has, for a long time now, worked in the shadows; preparing for what is soon to transpire... While this balance we've held in place is begining to come undone, that matters little. Soon the world shall be born anew in a more perfect image.
+				WhyMe: Your actions have peaked the interest of our Master; he sees great promise in you. I just hope you don't disappoint...
+				Goal: You may come to learn our goals... if you are indeed truly devoted... If you are not... Well... Our master will certainly not take kindly to it.
+				Tablet: Ah! Yes, that is a Selenic Tablet. It will serve as a means of communication. Should you hear its hum, you will know you have been called upon, and it shall guide you to where you are needed.
+				End: That is all you need know for the time being. More shall be revealed soon, so long as you heed the Tablet's call. Farewell. If you are wise, we shall meet again.
+			}
+		}
+
 		TheOrator: {
 			WorldText: {
 				Post-Plant: {
 					0: So... At last we meet.
-					1: We've been watching you keenly since you bested our guardian.
+					1: We've been watching you keenly since you bested the Dungeon's keeper.
 					2: Now you've bested yet another soul-filled terror.
 					3: The delicate balance we've long worked to maintain is falling apart...
 					4: ...and we have you to thank for that.
@@ -569,8 +587,6 @@ Dialogue: {
 			CalClone: What the fuck.
 		}
 	}
-
-	Buttons.GodseekerKnight.Essence: Essences
 }
 
 UI: {
@@ -926,6 +942,7 @@ NPCs: {
 	LoneRonin.DisplayName: Lone Ronin
 	LunarCultistArcher.DisplayName: ???
 	LunarCultistDevotee.DisplayName: Lunar Cultist Devotee
+	LunarCultist.DisplayName: Lunar Cultist
 	LunarBishop.DisplayName: Lunar Bishop
 	TravellingCultist.DisplayName: Travelling Cultist
 	TheOrator.DisplayName: The Orator
@@ -934,6 +951,8 @@ NPCs: {
 	GodseekerKnight.DisplayName: Godseeker Knight
 	DarkSpawn.DisplayName: Dark Spawn
 	SealingTablet.DisplayName: Sealing Tablet
+	DragonCultist.DisplayName: Dragon Cultist
+	DragonArcher.DisplayName: Dragon Archer
 }
 
 Projectiles: {
@@ -960,6 +979,7 @@ Projectiles: {
 	DarkBolt.DisplayName: Dark Bolt
 	GodseekerKnightProj.DisplayName: Godseeker Knight Proj
 	EmpyreanThorn.DisplayName: Empyrean Thorn
+	LunaticCultistProj.DisplayName: Lunatic Cultist Proj
 }
 
 Buffs: {
