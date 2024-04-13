@@ -5,9 +5,13 @@
         private enum DialogueState
         {
             Initial,
-            Guardian,
-            Issues,
-            End
+            Knowledge,
+            Balance,
+            WhyMe,
+            Goal,
+            Tablet,
+            End,
+            Despawn,
         }
         private DialogueState CurrentDialogue = 0;
         public override string Texture => "Windfall/Assets/NPCs/WorldEvents/LunarBishop";
@@ -54,50 +58,84 @@
                         NPC.position.Y = altY;
                 }
                 NPC.alpha = 0;
-                for (int i = 0; i < 50; i++)
+                for (int i = 0; i <= 50; i++)
                 {
+                    int dustStyle = Main.rand.NextBool() ? 66 : 263;
                     Vector2 speed = Main.rand.NextVector2Circular(1.5f, 2f);
-                    Dust d = Dust.NewDustPerfect(NPC.Center, DustID.GoldFlame, speed * 3, Scale: 1.5f);
-                    d.noGravity = true;
+                    Dust dust = Dust.NewDustPerfect(NPC.Center, Main.rand.NextBool(3) ? 191 : dustStyle, speed * 3, Scale: Main.rand.NextFloat(1.5f, 2.3f));
+                    dust.noGravity = true;
+                    dust.color = dust.type == dustStyle ? Color.LightGreen : default;
                 }
                 SoundEngine.PlaySound(SpawnSound, NPC.Center);
             }
         }
         public override string GetChat()
         {
-            return GetWindfallTextValue($"Dialogue.LunarCult.DungeonBishop.Conversation.{CurrentDialogue}");
+            return GetWindfallTextValue($"Dialogue.LunarCult.LunarBishop.Conversation.{CurrentDialogue}");
         }
         private readonly List<dialogueDirections> MyDialogue = new()
         {
             new dialogueDirections()
             {
                 MyPos = (int)DialogueState.Initial,
-                Button1 = new(){name = "Your guardian?", heading = (int)DialogueState.Guardian},
-                Button2 = new(){name = "What issues?", heading = (int)DialogueState.Issues},
+                Button1 = new(){name = "Knowledge?", heading = (int)DialogueState.Knowledge},
+                Button2 = new(){name = "Balance?", heading = (int)DialogueState.Balance},
             },
             new dialogueDirections()
             {
-                MyPos = (int)DialogueState.Guardian,
-                Button1 = new(){name = "That's a relief.", heading = (int)DialogueState.End},
-                Button2 = new(){name = "You cursed him...?", heading = (int)DialogueState.End},
+                MyPos = (int)DialogueState.Knowledge,
+                Button1 = new(){name = "Why me?", heading = (int)DialogueState.WhyMe},
+                Button2 = new(){name = "Your goal?", heading = (int)DialogueState.Goal},
             },
             new dialogueDirections()
             {
-                MyPos = (int)DialogueState.Issues,
-                Button1 = new(){name = "I'll see what I can do.", heading = (int)DialogueState.End},
-                Button2 = new(){name = "No promises.", heading = (int)DialogueState.End},
+                MyPos = (int)DialogueState.Balance,
+                Button1 = new(){name = "Why me?", heading = (int)DialogueState.WhyMe},
+                Button2 = new(){name = "Your goal?", heading = (int)DialogueState.Goal},
+            },
+            new dialogueDirections()
+            {
+                MyPos = (int)DialogueState.WhyMe,
+                Button1 = new(){name = "What's this tablet?", heading = (int)DialogueState.Tablet},
+                Button2 = null,
+            },
+            new dialogueDirections()
+            {
+                MyPos = (int)DialogueState.Goal,
+                Button1 = new(){name = "What's this tablet?", heading = (int)DialogueState.Tablet},
+                Button2 = null,
+            },
+            new dialogueDirections()
+            {
+                MyPos = (int)DialogueState.Tablet,
+                Button1 = new(){name = "I see...", heading = (int)DialogueState.End},
+                Button2 = new(){name = "Cool!", heading = (int)DialogueState.End},
             },
             new dialogueDirections()
             {
                 MyPos = (int)DialogueState.End,
-                Button1 = new(){name = "Goodbye!", heading = (int)DialogueState.End, end = true},
-                Button2 = new(){name = "Took long enough...", heading = (int)DialogueState.End, end = true},
+                Button1 = new(){name = "Goodbye!", heading = (int)DialogueState.Despawn, end = true},
+                Button2 = new(){name = "Finally...", heading = (int)DialogueState.Despawn, end = true},
             },
         };
         public override void OnChatButtonClicked(bool firstButton, ref string shop)
         {
             CurrentDialogue = (DialogueState)GetNPCConversation(MyDialogue, (int)CurrentDialogue, firstButton);
-            Main.npcChatText = GetWindfallTextValue($"Dialogue.LunarCult.DungeonBishop.Conversation.{CurrentDialogue}");
+            if(CurrentDialogue == DialogueState.Despawn)
+            {
+                for (int i = 0; i <= 50; i++)
+                {
+                    int dustStyle = Main.rand.NextBool() ? 66 : 263;
+                    Vector2 speed = Main.rand.NextVector2Circular(1.5f, 2f);
+                    Dust dust = Dust.NewDustPerfect(NPC.Center, Main.rand.NextBool(3) ? 191 : dustStyle, speed * 3, Scale: Main.rand.NextFloat(1.5f, 2.3f));
+                    dust.noGravity = true;
+                    dust.color = dust.type == dustStyle ? Color.LightGreen : default;
+                }
+                SoundEngine.PlaySound(SpawnSound, NPC.Center);
+                NPC.active = false;
+                return;
+            }
+            Main.npcChatText = GetWindfallTextValue($"Dialogue.LunarCult.LunarBishop.Conversation.{CurrentDialogue}");
         }
         public override void SetChatButtons(ref string button, ref string button2)
         {

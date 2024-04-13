@@ -27,11 +27,13 @@ namespace Windfall.Content.Projectiles.NPCAnimations
         internal override Color TextColor => Color.LightGreen;
         internal override void DoOnSpawn()
         {
-            for (int i = 0; i < 75; i++)
+            for (int i = 0; i <= 50; i++)
             {
+                int dustStyle = Main.rand.NextBool() ? 66 : 263;
                 Vector2 speed = Main.rand.NextVector2Circular(1.5f, 2f);
-                Dust d = Dust.NewDustPerfect(Projectile.Center, (int)CalamityDusts.Ectoplasm, speed * 2, Scale: 1.5f);
-                d.noGravity = true;
+                Dust dust = Dust.NewDustPerfect(Projectile.Center, Main.rand.NextBool(3) ? 191 : dustStyle, speed * 3, Scale: Main.rand.NextFloat(1.5f, 2.3f));
+                dust.noGravity = true;
+                dust.color = dust.type == dustStyle ? Color.LightGreen : default;
             }
             SoundEngine.PlaySound(SpawnSound, Projectile.Center);
         }
@@ -42,7 +44,7 @@ namespace Windfall.Content.Projectiles.NPCAnimations
         }
         internal override void DoOnDespawn()
         {
-            foreach (NPC npc in Main.npc.Where(n => (n.type == ModContent.NPCType<LunarBishop>() || n.type == ModContent.NPCType<LunarCultistArcher>() || n.type == ModContent.NPCType<LunarCultistDevotee>()) && n.active))
+            foreach (NPC npc in Main.npc.Where(n => (n.type == ModContent.NPCType<LunarCultistArcher>() || n.type == ModContent.NPCType<LunarCultistDevotee>()) && n.active))
             {
                 for (int i = 0; i < 50; i++)
                 {
@@ -60,6 +62,7 @@ namespace Windfall.Content.Projectiles.NPCAnimations
                 Dust d = Dust.NewDustPerfect(Projectile.Center, (int)CalamityDusts.Ectoplasm, speed * 2, Scale: 1.5f);
                 d.noGravity = true;
             }
+            Main.npc[NPC.FindFirstNPC(ModContent.NPCType<LunarBishop>())].ai[2] = 1;
         }
         internal override int DespawnDelay => 60 * 3;
         public override void SetStaticDefaults()

@@ -2,10 +2,10 @@
 
 namespace Windfall.Content.Projectiles.NPCAnimations
 {
-    public class LunarBishopProj : ProjectileNPC, ILocalizedModType
+    public class LunaticCultistProj : ProjectileNPC, ILocalizedModType
     {
         public override string Texture => "Windfall/Assets/NPCs/WorldEvents/LunarBishop";
-        internal override string key => "LunarCult.DungeonBishop.WorldText";
+        internal override string key => "DragonCult.WorldText";
         internal override List<float> Delays => new()
         {
             1,

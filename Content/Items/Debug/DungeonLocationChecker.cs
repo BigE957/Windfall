@@ -17,7 +17,7 @@ namespace Windfall.Content.Items.Debug
         public override bool? UseItem(Player player)
         {
             //NPC.NewNPCDirect(Entity.GetSource_FromAI(), new Vector2(Main.dungeonX, Main.dungeonY).ToWorldCoordinates(), NPCID.Zombie);
-            Projectile.NewProjectile(Entity.GetSource_FromAI(), new Vector2(Main.dungeonX, Main.dungeonY).ToWorldCoordinates(), Vector2.Zero, ModContent.ProjectileType<LunarBishopProj>(), 0, 0);
+            Projectile.NewProjectile(Entity.GetSource_FromAI(), new Vector2(Main.dungeonX, Main.dungeonY).ToWorldCoordinates(), Vector2.Zero, ModContent.ProjectileType<LunaticCultistProj>(), 0, 0);
             Main.NewText($"Your dungeon is located at X: {Main.dungeonX * 16}, Y: {Main.dungeonY * 16}", Color.Yellow);
             Main.NewText($"Your position is at X: {player.position.X}, Y: {player.position.Y}", Color.Yellow);
             return true;

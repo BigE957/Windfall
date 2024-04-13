@@ -21,7 +21,7 @@ namespace Windfall.Content.NPCs.GlobalNPCs
                 SpawnWorldEventProjectile(ModContent.ProjectileType<GodseekerKnightProj>(), 100);
 
             if (npc.type == NPCID.SkeletronHead && !NPC.downedBoss3)
-                Projectile.NewProjectile(Entity.GetSource_NaturalSpawn(), new Vector2(Main.dungeonX, Main.dungeonY).ToWorldCoordinates(), Vector2.Zero, ModContent.ProjectileType<LunarBishopProj>(), 0, 0, -1, 1);
+                Projectile.NewProjectile(Entity.GetSource_NaturalSpawn(), new Vector2(Main.dungeonX, Main.dungeonY).ToWorldCoordinates(), Vector2.Zero, ModContent.ProjectileType<LunaticCultistProj>(), 0, 0, -1, 1);
 
             if (npc.type == NPCID.Plantera && !NPC.downedPlantBoss)
             {

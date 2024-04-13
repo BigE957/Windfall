@@ -1,8 +1,7 @@
-﻿namespace Windfall.Content.NPCs.WanderingNPCs
+﻿namespace Windfall.Content.NPCs.WorldEvents.DragonCult
 {
-    public class LunarCultistArcher : ModNPC
+    public class DragonArcher : ModNPC
     {
-        /*
         private enum DialogueState
         {
             Initial,
@@ -19,7 +18,6 @@
             get => (DialogueState)NPC.ai[1];
             set => NPC.ai[1] = (int)value;
         }
-        */
         public override string Texture => "Windfall/Assets/NPCs/WorldEvents/LunarCultistArcher";
         private static SoundStyle SpawnSound => new("CalamityMod/Sounds/Custom/SCalSounds/BrimstoneHellblastSound");
         public override void SetStaticDefaults()
@@ -44,57 +42,74 @@
             NPC.immortal = true;
 
             AnimationType = NPCID.BartenderUnconscious;
-        }    
+        }
         public override void OnSpawn(IEntitySource source)
         {
-            if (NPC.ai[0] == 0)
-            {
-                NPC.GivenName = "Lunar Cultist Archer";
-                NPC.alpha = 255;
-                Vector2 oldPos = NPC.position;
-                NPC.position.Y = GetSurfacePositionFrom(NPC.position).Y - NPC.height - 8;
-                float altY = 0;
-                for (int i = 0; i < 16; i++)
-                {
-                    altY = GetSurfacePositionFrom(new Vector2(oldPos.X + i, oldPos.Y - 64)).Y - NPC.height - 8;
-                    if (altY < NPC.position.Y)
-                        NPC.position.Y = altY;
-                }
-                NPC.alpha = 0;
-                for (int i = 0; i < 50; i++)
-                {
-                    Vector2 speed = Main.rand.NextVector2Circular(1.5f, 2f);
-                    Dust d = Dust.NewDustPerfect(NPC.Center, DustID.GoldFlame, speed * 3, Scale: 1.5f);
-                    d.noGravity = true;
-                }
-                SoundEngine.PlaySound(SpawnSound, NPC.Center);
-            }
+            
         }
-        /*
         public override bool CanChat()
         {
-            if (NPC.ai[0] == 0)
-                return false;
-            else
-                return true;
+            return true;
         }
         public override string GetChat()
         {
-            return GetWindfallTextValue($"Dialogue.LunarCult.MechanicShed.{CurrentDialogue}");
+            return GetWindfallTextValue($"Dialogue.DragonCult.DragonArcher.MechanicShed.{CurrentDialogue}");
         }
         private readonly List<dialogueDirections> MyDialogue = new()
         {
             new dialogueDirections()
             {
                 MyPos = (int)DialogueState.Initial,
-                Button1 = new(){name = "Your guardian?", heading = (int)DialogueState.ExploringHuh},
-                Button2 = new(){name = "What issues?", heading = (int)DialogueState.WhoAreWe},
+                Button1 = new(){name = "I'm just exploring.", heading = (int)DialogueState.ExploringHuh},
+                Button2 = new(){name = "Who are you?", heading = (int)DialogueState.WhoAreWe},
+            },
+            new dialogueDirections()
+            {
+                MyPos = (int)DialogueState.ExploringHuh,
+                Button1 = new(){name = "Just looking for supplies.", heading = (int)DialogueState.FairEnough},
+                Button2 = new(){name = "What's it matter to you?", heading = (int)DialogueState.SomethingBad},
+            },
+            new dialogueDirections()
+            {
+                MyPos = (int)DialogueState.WhoAreWe,
+                Button1 = new(){name = "Sounds interesting.", heading = (int)DialogueState.WannaJoin},
+                Button2 = new(){name = "So... a cult?", heading = (int)DialogueState.NuhUh},
+            },
+            new dialogueDirections()
+            {
+                MyPos = (int)DialogueState.WannaJoin,
+                Button1 = new(){name = "I'll keep that in mind!", heading = (int)DialogueState.End},
+                Button2 = new(){name = "No thanks...", heading = (int)DialogueState.End},
+            },
+            new dialogueDirections()
+            {
+                MyPos = (int)DialogueState.NuhUh,
+                Button1 = new(){name = "I guess that makes sense.", heading = (int)DialogueState.End},
+                Button2 = new(){name = "Surely...", heading = (int)DialogueState.End},
+            },
+            new dialogueDirections()
+            {
+                MyPos = (int)DialogueState.FairEnough,
+                Button1 = new(){name = "Can do.", heading = (int)DialogueState.End},
+                Button2 = new(){name = "Fine.", heading = (int)DialogueState.End},
+            },
+            new dialogueDirections()
+            {
+                MyPos = (int)DialogueState.SomethingBad,
+                Button1 = new(){name = "You might be right.", heading = (int)DialogueState.End},
+                Button2 = new(){name = "Are you...?", heading = -1, end = true},
+            },
+            new dialogueDirections()
+            {
+                MyPos = (int)DialogueState.End,
+                Button1 = new(){name = "Thank you.", heading = -1, end = true},
+                Button2 = new(){name = "Finally...", heading = -1, end = true},
             },
         };
         public override void OnChatButtonClicked(bool firstButton, ref string shop)
         {
             CurrentDialogue = (DialogueState)GetNPCConversation(MyDialogue, (int)CurrentDialogue, firstButton);
-            if (CurrentDialogue == DialogueState.End)
+            if ((int)CurrentDialogue == -1)
             {
                 foreach (NPC npc in Main.npc.Where(n => n.type == NPC.type && n.active))
                 {
@@ -108,13 +123,12 @@
                 }
             }
             else
-                Main.npcChatText = GetWindfallTextValue($"Dialogue.LunarCult.MechanicShed.{CurrentDialogue}");
+                Main.npcChatText = GetWindfallTextValue($"Dialogue.DragonCult.DragonArcher.MechanicShed.{CurrentDialogue}");
         }
         public override void SetChatButtons(ref string button, ref string button2)
         {
             SetConversationButtons(MyDialogue, (int)CurrentDialogue, ref button, ref button2);
         }
-        */
         public override bool CheckActive()
         {
             return false;
