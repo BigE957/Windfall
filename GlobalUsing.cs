@@ -17,4 +17,5 @@ global using Terraria.ModLoader;
 global using Terraria.ObjectData;
 global using static CalamityMod.CalamityUtils;
 global using static Microsoft.Xna.Framework.MathHelper;
-global using static Windfall.Common.Utilities.WindfallUtils;
+global using Luminance.Common.Utilities;
+global using static Windfall.Common.Utils.WindfallUtils;
