@@ -106,7 +106,6 @@ namespace Windfall.Content.NPCs.WanderingNPCs
             WhoAreU,
             Gods,
             War,
-            Master,
             Knights,
             End1,
             #endregion
@@ -139,7 +138,7 @@ namespace Windfall.Content.NPCs.WanderingNPCs
             new dialogueDirections()
             {
                 MyPos = (int)DialogueState.WhoAreU,
-                Button1 = new(){name = "Godseeker?", heading = (int)DialogueState.Master},
+                Button1 = new(){name = "Gods?", heading = (int)DialogueState.Gods},
                 Button2 = new(){name = "Crusade?", heading = (int)DialogueState.War},
             },
             new dialogueDirections()
@@ -151,12 +150,6 @@ namespace Windfall.Content.NPCs.WanderingNPCs
             new dialogueDirections()
             {
                 MyPos = (int)DialogueState.War,
-                Button1 = new(){name = "Interesting...", heading = (int)DialogueState.End1},
-                Button2 = null,
-            },
-            new dialogueDirections()
-            {
-                MyPos = (int)DialogueState.Master,
                 Button1 = new(){name = "Interesting...", heading = (int)DialogueState.End1},
                 Button2 = null,
             },

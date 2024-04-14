@@ -130,15 +130,15 @@ Dialogue: {
 
 	GodseekerKnight: {
 		Chat: {
-			Standard1: The world has nearly been cleansed of the gods. To think our goal is finally in reach...
-			Standard2: The lands seem far quieter these days, but we must remain ever vigilant.
-			Standard3: Sometimes its better to let go of the past, rather than incessantly cling to it. I sometimes wonder how things would have played out had people just accepted change. How many lives would have been spared?
-			SlimeGod1: The Slime God has been here... Where could that coward have fled now?
-			SlimeGod2: Whatever it is the Slime God is planning, it cannot be good. While he may be but a shell of his former self, he holds the potential to become so much more...
-			Evilbiome1: What a foul place... A shame I'm stuck dredging through this filth.
-			EvilBiome2: This stain upon the land is the result of a great many gods' demise. It was the early days of our crusade... We had no idea the horrors a god's death would leave behind... I hope one day we might rectify this grave mistake.
-			Statigel1: Hah! Turning the Slime God's ooze into armor... Onyx Kinsmen garb no less! How ironic!
-			Statigel2: Despite their foolish worship, the Onyx Kinsmen were skilled in their crafts. A few of their clan could probably have given me a run for my money!
+			Standard1: So few of the Gods and their ilk remain... perhaps soon we may finally rest.
+   		 	Standard2: The lands seem far quieter these days, but we must remain ever vigilant.
+   		 	Standard3: I sometimes wonder what motivated the Gods' people to cling to the past as they did... how many lives would have been spared had they seen the potential for change?
+			Standard4: ... I suppose this insignia could use a bit of a polish...
+			SlimeGod1: Heiko... have you truly grown so foolish?
+			Evilbiome1: What a foul place... The sooner my hunt is complete, the better.
+			EvilBiome2: The seeping corruption you see before you is the grave of dozens of gods. Slain by the Godseeker's hand, their corpses now spill with pestilent gore, and worms and beasts pick apart their lifeless bones. I would relish the sight, were it not a blight upon the earth itself.
+			Statigel1: Hah! Armor fitted from the ooze of the God of Slimes... in the style of his own followers, no less! How beautifully ironic...
+			Statigel2: Though they chose to serve the most pathetic of gods, the Onyx Kinsmen were far from weak. Decades ago, there were whisperings of an assassin making his way into the Godseeker's own sanctum, though he was apparently quickly routed and put to death.
 		}
 
 		Quests: {
@@ -160,37 +160,36 @@ Dialogue: {
 		Conversation: {
 			JustMet: {
 				Initial1: A traveler? In these parts? You are brave, that’s for sure. Beware. Beasts prowl this land, as I’m sure you’re aware, but some are far larger and stronger than others…
-				WhatUDoin: I'm working to undo the harm our war has rought upon the world. Stains such as these, while imposing, an indeed be cleansed! It's just going to take some time... A lot... of time...
-				WhoAreU: Hah! Do you truly not recognize this armor; the insignia? I am a member of the illustrious Godseeker Knights! Though the Godseeker himself has taken his leave from command, I have resolved to carry on his crusade until the last speck of divine tyranny is scrubbed from the world.
-				Gods: Oh my! It seems our efforts are beginning to bear fruit! There was once a time in which none knew not the ire of the Gods. You have use to thank for being so blissfully unaware of their influence. Influences such as this stain upon the land we find outselves in...
-				War: Do you truly not know of what transpired here? This was the sight of a great battle early into the Godseeker's Crusade. At the time, we knew not the disasterous effects Godly Essence could unleash if not dealt with. This stain is the result of our folly...
-				Crusade: It seems history isn't a subject most are taught these days... It was my master's crusade which rid these lands of the Gods' influence... Well... For the most part. We still have some cleaning up to do, as you can see quite clearly all around us.
-				Master: Have the common folk truly grown so dim? How could you not know of my master? It was he who unshacked these lands from the Gods' chains! It is through him that this world marches towards an era of peace! All we need do is cleanse it of these final impurities that stain it...
+				WhatUDoin: I'm working to undo the harm our war has brought upon the world. Stains such as these, no matter how imposing, can indeed be cleansed! It's just going to take some time... A lot... of time...
+				WhoAreU: Hah! Do you truly not recognize this armor; this gleaming insignia? I am a member of the illustrious Godseeker Knights! Though the Godseeker himself has taken his leave from command, I have resolved to carry on his crusade until the last speck of divine tyranny is scrubbed from the world.
+				Gods: Oh my! It seems our efforts are beginning to bear fruit! There was once a time where the Gods' fell touch was felt in every corner of the world. You have use to thank for being so blissfully unaware of their influence. Influence such as this horrid mire we find ourselves in...
+				War: It seems history isn't a subject most are taught these days... Regardless! This was the sight of a great battle early into the Crusade. Though the fight was glorious, and the heads of tyrants rolled that day, we had no idea their death would unleash horrors innumerable. This detestable place is the price of our ignorance.
+				Crusade: You haven't heard? Perhaps this is more of a... personal issue. Centuries ago, the Godseeker, burned and near-martyred by the most foul of the Gods, rose up against the tyranny that infested our world! That time is at an end, though. All that is left now are a few stragglers and... cleaning up our early messes.
 				End1: Now, if you excuse me, I really must get back to work. The world isn't going to rid itself of this filth, and, for your sake, do try to keep out of this area. It isn't safe... I might accidentally mistake you for a monster! Hahaha!
 			}
 
 			Essence: {
-				Initial2: Ah, you wish to know more about Godly Essence... Be warned, it is a sickly substance; not one that just anyone should be handling. Enough Godly Essence is what transformed this area into the hellscape we now know it as. Its effects on a person can be just as disasterous...
-				Effects: Not the kind you want. That's for sure. I've heard whispers that there are those who seek out Godly Essence and purposely consume it; hoping to gain even a silver of the Gods' might from it... Truly disgusting... Luckly, such fools are the type of people we Godseeker Knights are adept at cutting down.
-				Cleansed: My, how estute! You are correct! I and my fellow Godseeker Knights have been well trained to handle Godly Essence, and one of our primary tasks is its proper disposal. I've managed to gather up some during my time here, but I'm sure there's still plenty more to be dealt with!
-				End2: Since you seem so keen on poking about around here... If you are to come across any Godly Essence, would you do me a favor, and bring it to me? It'd save me quite a lot of time, and I'll ensure you are properly rewarded for your efforts.
+				Initial2: Ah, you wish to know more about Godly Essence... Be warned, it is a sickly substance; not one that just anyone should be handling. It warps and corrodes anything it touches into a mirror of the corpse from which it spewed. This very land arose from such a process. As you could imagine, its effects on the unprepared are just as horrific.
+				Effects: Not the kind you want, that's for sure. I've heard tell of vagabonds that roam these places, hoping to drain some meagre power from the rot... Disgusting, I know. Luckily, they never last long. I have more than enough experience with their like.
+				Cleansed: My, how astute! You are correct! I and my fellow Godseeker Knights have been well trained to handle Godly Essence, and with the forces shattered and the Crusade reaching its end, one of our primary duties is the disposal of these lingering traces. I've managed to gather up some during my time here, but I'm sure there's still plenty more to be dealt with!
+				End2: Since you seem so keen on poking about around here... If you are to come across any Godly Essence, bring it to me, will you? Two sets of hands are far better than one, and I'll ensure you are properly rewarded for your efforts.
 			}
 		}
 
 		Essence: {
 			Hints: {
-				None: Do you feel that? The air feels... lighter, as of late. It's almost as if our efforts are finally paying off... Truly splendid... The Godseeker would indeed be proud of us; I'm sure.
-				BoC: Large containers of deific energies can be found deep below us. If you're willing, their destruction would be most helpful.
-				EoW: Large containers of deific energies can be found deep below us. If you're willing, their destruction would be most helpful.
+				None: Do you feel that? The air feels... lighter, as of late. It's almost as if our efforts are finally paying off... Splendid... The Godseeker would be proud of us; I'm sure.
+				BoC: Perhaps you have seen it on your travels. This land spreads and evolves like a cancer, subsuming and devouring anything in its way. Fitting, for the Gods who fell here valued nothing they had. Until their dying breaths, they reached for more, and more, and more. Remnants of their greed still linger in the depths of this place.
+				EoW: If there is anything pests excel at, it is coordination. The Gods that fell here kept their people under uncompromising control, and these insects are no different. When many of them band together, you will find them much harder to stamp out than usual. Draw one of these groups out by destroying storehouses of deific energy. 
 				HiveMind: Amidst the grime and gore of this place lie certain… growths. You will recognize them when you see them. They are blemishes even upon the disfigured face of this land. Each one is a storehouse of lingering divine power. Destroy one, and whatever is left of the gods that haunt this place would be sure to retaliate.
 				Perforators: Amidst the grime and gore of this place lie certain… growths. You will recognize them when you see them. They are blemishes even upon the disfigured face of this land. Each one is a storehouse of lingering divine power. Destroy one, and whatever is left of the gods that haunt this place would be sure to retaliate.
-				SlimeGod: I've seen this icky fella roaming around. Ew.
-				WallOfFlesh: You our wall's pretty cool. Just uh, dont break it, lol.
-				QueenSlime: Dude the icky fella's back, and she TRANS'D her GENDER!!! ...Good for her, ngl.
-				EoL: Dude these WEIRDOS on Exo.com keep posting art of this YELLOW BITCH with no clothes on????? Can you like... Get them to stop????
-				Ravager: Dude this fucker is so annoying to fight can you just do it for me pweeeaaase.
-				Guardians: I fucking hate SIMPS. ESPECIALLY GOD SIMPS!!!
-				Providence: That's one spicy mama...
+				SlimeGod: The God of Slimes has been lurking about in this foul muck. A fittingly squalid home. Alas, the time it spends here is not wasted. Its plans are still in motion, its power still growing. Perhaps it can be lured out of secrecy...
+				WallOfFlesh: Though Azafure lies in ruins, one of its grandest marvels remains. A biological prison, to house the festering essences of Gods. Though rudimentary compared to the work of the Devourer, it is quite ingenious. Be extremely careful if you do explore the ruins, though. If you loose it, dying may be preferable to unleashing all the essence within at once...
+				QueenSlime: Well... things sure are different. This much essence spilling into the world... the Wall must have been destroyed. Few good things could possibly come of this, but I think I know one. If there's anything I've learned about the God of Slimes, it's that it has a particular affinity for leeching the power from its fallen brethren. I'm sure tracking it down would be simple now.
+				EoL: Have you seen a rainbow while traversing the newest in our list of divine disasters? You have? Well, don't get yourself lost in them. They are the work of a particularly powerful fae; the “Empress of Light”. A title of her own making, by the way. I am oathbound not to divulge the truths of her allegiance, but know this: she has chosen to follow one of the most disgusting Gods, equal in their abhorrence to the Profaned Goddess. Her own status is brought even lower by her cowardice. Just as the Slime God before her, she has long fled from our grasp, evading the Godseeker through all of his campaign. Just like one of those butterflies she so adores...
+				Ravager: If you ever doubt our cause, remember the Ravager. With foul magic, followers of the gods created an abomination from their own flesh and bone, and loosed it, mad and merciless, upon the world. It wanders even now, bathing in the blood of anyone with the misfortune to cross its path.
+				Guardians: The slaves of the Profaned Goddess have grown anxious in recent times. No doubt spooked by a certain someone shaking up the heirarchy of the world. If this is an opportunity to get at the goddess herself...
+				Providence: That crystal... By the- You destroyed her guardians? I... this is... Listen to me. Providence wants that crystal. She wants her blood-caked hands on that crystal as much as she wants anything in the world. Take it, use it, lure her to you, and kill her. Do you understand me? Put a blade through her face, crush her, riddle her with holes. Every one of the people that horrid crone has killed will finally get their rest.
 			}
 
 			Redeemed: {
@@ -208,13 +207,13 @@ Dialogue: {
 		}
 
 		WorldText: {
-			0: Quite the display...
-			1: I'll admit I hadn't thought you'd survive that... thing. Let alone defeat it.
-			2: Even in such a state, the might of the deities is ever formidable...
-			3: Such a thing could have become quite the threat if given the opportunity.
-			4: Speaking of, there's another of the deities whom I've been hunting.
-			5: Your help might just prove invaluable in putting a stop to them.
-			6: If you'd be willing, I'd be ever thankful.
+			0: Just in time!
+			1: Greetings, traveler!
+			2: Venturing into these lands is bold... and stupid.
+			3: I'd wager if I hadn't come when I had, you would have met a terrible end.
+			4: With me here, you're safe. For now, at least.
+			5: But I'd suggest leaving with haste.
+			6: As much as I wish it would, this filth isn't going anywhere. Returning when you're better equipped is in your best interest.
 		}
 	}
 
