@@ -1,4 +1,5 @@
-﻿using Microsoft.Xna.Framework.Input;
+﻿using Luminance.Core.Graphics;
+using Microsoft.Xna.Framework.Input;
 using Terraria;
 using Terraria.ModLoader.IO;
 using Windfall.Common.Graphics.Metaballs;
@@ -323,9 +324,8 @@ namespace Windfall.Common.Systems.WorldEvents
                                 zoom = Lerp(zoom, 0.4f, 0.075f);
                             else
                                 zoom = 0.4f;
-                            ZoomSystem.SetZoomEffect(zoom);
-                            Main.LocalPlayer.Windfall_Camera().ScreenFocusPosition = new(DungeonCoords.X, DungeonCoords.Y - 150);
-                            Main.LocalPlayer.Windfall_Camera().ScreenFocusInterpolant = zoom;
+                            CameraPanSystem.Zoom = zoom;
+                            CameraPanSystem.PanTowards(new Vector2(DungeonCoords.X, DungeonCoords.Y - 150), zoom);
 
                             if (RitualTimer >= 60 * 62 && RitualTimer <= 60 * 72)
                             {

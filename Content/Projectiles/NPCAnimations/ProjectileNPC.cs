@@ -1,5 +1,6 @@
-﻿using Windfall.Common.Systems;
-using Windfall.Common.Utilities;
+﻿using Luminance.Core.Graphics;
+using Windfall.Common.Systems;
+using Windfall.Common.Utils;
 
 namespace Windfall.Content.Projectiles.NPCAnimations
 {
@@ -35,11 +36,11 @@ namespace Windfall.Content.Projectiles.NPCAnimations
         public override void OnSpawn(IEntitySource source)
         {
             Vector2 oldPos = Projectile.position;
-            Projectile.position.Y = WindfallUtils.GetSurfacePositionFrom(Projectile.position).Y - Projectile.height - 8;
+            Projectile.position.Y = Utilities.FindGroundVertical(new Point((int)Projectile.position.X, (int)Projectile.position.Y)).Y - Projectile.height - 8;
             float altY = 0;
             for (int i = 0; i < 16; i++)
             {
-                altY = WindfallUtils.GetSurfacePositionFrom(new Vector2(oldPos.X + i, oldPos.Y - 64)).Y - Projectile.height - 8;
+                altY = Utilities.FindGroundVertical(new Point((int)(oldPos.X + i), (int)(oldPos.Y - 64))).Y - Projectile.height - 8;
                 if (altY < Projectile.position.Y)
                     Projectile.position.Y = altY;
             }
@@ -71,9 +72,8 @@ namespace Windfall.Content.Projectiles.NPCAnimations
                             zoom = Lerp(zoom, 0.4f, 0.075f);
                         else
                             zoom = 0.4f;
-                        ZoomSystem.SetZoomEffect(zoom);
-                        Main.LocalPlayer.Windfall_Camera().ScreenFocusPosition = Projectile.Center;
-                        Main.LocalPlayer.Windfall_Camera().ScreenFocusInterpolant = zoom;
+                        CameraPanSystem.Zoom = zoom;
+                        CameraPanSystem.PanTowards(Projectile.Center, zoom);
                     }
                     if (Delays.Count == dialogueCounter)
                     {
@@ -104,9 +104,8 @@ namespace Windfall.Content.Projectiles.NPCAnimations
                     }
                     else
                     {
-                        ZoomSystem.SetZoomEffect(0.4f);
-                        Main.LocalPlayer.Windfall_Camera().ScreenFocusPosition = Projectile.Center;
-                        Main.LocalPlayer.Windfall_Camera().ScreenFocusInterpolant = 0.4f;
+                        CameraPanSystem.Zoom = 0.4f;
+                        CameraPanSystem.PanTowards(Projectile.Center, zoom);
                     }
                     break;
 

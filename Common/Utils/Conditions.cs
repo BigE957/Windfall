@@ -2,7 +2,7 @@
 using Windfall.Content.NPCs.TravellingNPCs;
 using static Windfall.Common.Systems.QuestSystem;
 
-namespace Windfall.Common.Utilities
+namespace Windfall.Common.Utils
 {
     public class WindfallConditions
     {

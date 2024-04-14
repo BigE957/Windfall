@@ -1,4 +1,5 @@
-﻿using Windfall.Common.Systems;
+﻿using Luminance.Core.Graphics;
+using Windfall.Common.Systems;
 
 namespace Windfall.Items.Debug
 {
@@ -42,7 +43,7 @@ namespace Windfall.Items.Debug
             if (zooming)
             {
                 zoom += 0.1f;
-                ZoomSystem.SetZoomEffect(zoom);
+                CameraPanSystem.Zoom = zoom;
             }
         }
     }

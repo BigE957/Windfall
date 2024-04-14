@@ -1,4 +1,5 @@
-﻿using Terraria.ModLoader.IO;
+﻿using Luminance.Core.Graphics;
+using Terraria.ModLoader.IO;
 using Windfall.Content.Items.Quest;
 using Windfall.Content.NPCs.TravellingNPCs;
 using Windfall.Content.NPCs.WorldEvents.LunarCult;
@@ -304,9 +305,8 @@ namespace Windfall.Common.Systems.WorldEvents
                                 zoom = Lerp(zoom, 0.4f, 0.075f);
                             else
                                 zoom = 0.4f;
-                            ZoomSystem.SetZoomEffect(zoom);
-                            Main.LocalPlayer.Windfall_Camera().ScreenFocusPosition = new(ActiveHideoutCoords.X, ActiveHideoutCoords.Y - 150);
-                            Main.LocalPlayer.Windfall_Camera().ScreenFocusInterpolant = zoom;
+                            CameraPanSystem.Zoom = zoom;
+                            CameraPanSystem.PanTowards(new Vector2(ActiveHideoutCoords.X, ActiveHideoutCoords.Y - 150), zoom);
 
                             MeetingTimer++;
                         }

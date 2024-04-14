@@ -1,8 +1,9 @@
 ﻿using CalamityMod.Dusts;
 using CalamityMod.NPCs.CalClone;
+using Luminance.Core.Graphics;
 using Terraria.Utilities;
 using Windfall.Common.Systems;
-using Windfall.Common.Utilities;
+using Windfall.Common.Utils;
 
 namespace Windfall.Content.NPCs.WorldEvents.CalClone
 {
@@ -154,9 +155,8 @@ namespace Windfall.Content.NPCs.WorldEvents.CalClone
                 {
                     if (aiCounter < 150)
                     {
-                        ZoomSystem.SetZoomEffect(1);
-                        Main.LocalPlayer.Windfall_Camera().ScreenFocusPosition = NPC.Center;
-                        Main.LocalPlayer.Windfall_Camera().ScreenFocusInterpolant = 1;
+                        CameraPanSystem.Zoom = 1;
+                        CameraPanSystem.PanTowards(NPC.Center, 1);
                     }
                     string key = "Mods.Windfall.Dialogue.CalPotionSeller.WorldText.Initial.";
                     switch (aiCounter)

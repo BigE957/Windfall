@@ -1,5 +1,5 @@
 ﻿using Windfall.Common.Systems;
-using Windfall.Common.Utilities;
+using Windfall.Common.Utils;
 using Windfall.Content.NPCs.WanderingNPCs;
 using Windfall.Content.NPCs.WorldEvents.DragonCult;
 

@@ -112,7 +112,7 @@ namespace Windfall.Common.Systems.WorldEvents
                                 Player p = Main.player[i];
                                 if (!p.dead && p.active)
                                 {
-                                    NewProjectileBetter(CalCloneSpawnLocation, Vector2.Zero, ModContent.ProjectileType<CalCloneProj>(), 0, 0f);
+                                    Utilities.NewProjectileBetter(Entity.GetSource_NaturalSpawn(), CalCloneSpawnLocation, Vector2.Zero, ModContent.ProjectileType<CalCloneProj>(), 0, 0f);
                                     break;
                                 }
                             }
@@ -140,7 +140,7 @@ namespace Windfall.Common.Systems.WorldEvents
                                 Player p = Main.player[i];
                                 if (!p.dead && p.active)
                                 {
-                                    NewProjectileBetter(CalCloneSpawnLocation, Vector2.Zero, ModContent.ProjectileType<CalCloneProj>(), 0, 0f);
+                                    Utilities.NewProjectileBetter(Entity.GetSource_NaturalSpawn(), CalCloneSpawnLocation, Vector2.Zero, ModContent.ProjectileType<CalCloneProj>(), 0, 0f);
                                     break;
                                 }
                             }

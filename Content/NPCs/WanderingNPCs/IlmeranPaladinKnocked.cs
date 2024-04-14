@@ -1,6 +1,6 @@
 ﻿using CalamityMod.Items.Accessories;
 using CalamityMod.NPCs.DesertScourge;
-using Windfall.Common.Utilities;
+using Windfall.Common.Utils;
 using Windfall.Content.Items.Fishing;
 using Windfall.Content.Items.Utility;
 using Windfall.Content.Items.Weapons.Misc;

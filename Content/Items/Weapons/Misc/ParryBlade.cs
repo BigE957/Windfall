@@ -1,4 +1,4 @@
-﻿using Windfall.Common.Utilities;
+﻿using Windfall.Common.Utils;
 using Windfall.Content.Buffs.Cooldowns;
 using Windfall.Content.Projectiles.Misc;
 

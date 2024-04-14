@@ -1,6 +1,7 @@
-﻿using Terraria.Utilities;
+﻿using Luminance.Core.Graphics;
+using Terraria.Utilities;
 using Windfall.Common.Systems;
-using Windfall.Common.Utilities;
+using Windfall.Common.Utils;
 
 namespace Windfall.Content.NPCs.WorldEvents.CalClone
 {
@@ -146,14 +147,13 @@ namespace Windfall.Content.NPCs.WorldEvents.CalClone
                         zoom = Lerp(zoom, 1, 0.075f);
                     else
                         zoom = 1;
-                    ZoomSystem.SetZoomEffect(zoom);
-                    Main.LocalPlayer.Windfall_Camera().ScreenFocusPosition = new(NPC.Center.X - 2, NPC.Center.Y - 8);
-                    Main.LocalPlayer.Windfall_Camera().ScreenFocusInterpolant = zoom;
+                    CameraPanSystem.Zoom = zoom;
+                    CameraPanSystem.PanTowards(new Vector2(NPC.Center.X - 2, NPC.Center.Y - 8), zoom);
                 }
                 else if (aiCounter == 120)
                 {
-                    ZoomSystem.SetZoomEffect(50);
-                    Main.LocalPlayer.Windfall_Camera().ScreenFocusPosition = NPC.Center;
+                    CameraPanSystem.Zoom = 50;
+                    CameraPanSystem.PanTowards(NPC.Center, 50);
                     for (int i = 0; i < 50; i++)
                     {
                         Vector2 speed = Main.rand.NextVector2Circular(1.5f, 2f);

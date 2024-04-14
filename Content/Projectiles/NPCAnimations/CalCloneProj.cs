@@ -1,7 +1,7 @@
 ﻿using CalamityMod.Dusts;
 using CalamityMod.NPCs.Crags;
 using Windfall.Common.Systems.WorldEvents;
-using Windfall.Common.Utilities;
+using Windfall.Common.Utils;
 using Windfall.Content.NPCs.WorldEvents.CalClone;
 
 namespace Windfall.Content.Projectiles.NPCAnimations
@@ -76,7 +76,8 @@ namespace Windfall.Content.Projectiles.NPCAnimations
             switch (CurrentAI)
             {
                 case AIState.Spawning:
-                    Projectile.position.Y = WindfallUtils.GetGroundPositionFrom(Projectile.position).Y - Projectile.height - 8;
+                    Projectile.position.Y = Utilities.FindGroundVertical(new Point((int)Projectile.position.X, (int)Projectile.position.Y)).Y - Projectile.height - 8;
+
                     Projectile.position.Y -= 24;
                     CurrentAI = AIState.WaitingForPlayer;
                     break;

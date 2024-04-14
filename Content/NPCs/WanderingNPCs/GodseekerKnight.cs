@@ -5,7 +5,7 @@ using Terraria;
 using Terraria.GameContent.Bestiary;
 using Terraria.Utilities;
 using Windfall.Common.Systems;
-using Windfall.Common.Utilities;
+using Windfall.Common.Utils;
 using Windfall.Content.Items.Quests;
 
 namespace Windfall.Content.NPCs.WanderingNPCs

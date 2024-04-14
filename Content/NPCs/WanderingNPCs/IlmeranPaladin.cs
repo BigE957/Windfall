@@ -7,7 +7,7 @@ using Terraria.GameContent.Bestiary;
 using Terraria.GameContent.Events;
 using Terraria.Utilities;
 using Windfall.Common.Systems;
-using Windfall.Common.Utilities;
+using Windfall.Common.Utils;
 using Windfall.Content.Items.Fishing;
 using Windfall.Content.Items.Utility;
 using Windfall.Content.Items.Weapons.Misc;

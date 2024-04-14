@@ -13,11 +13,11 @@ namespace Windfall.Common.Systems
         internal const string SolarCultistKey = "Solar Hideout";
         internal const string SolarCultistKeyFileName = "Content/Schematics/SolarCultistHideout.csch";
         internal static Dictionary<string, SchematicMetaTile[,]> TileMaps =>
-            typeof(SchematicManager).GetField("TileMaps", Utilities.WindfallUtils.UniversalBindingFlags).GetValue(null) as Dictionary<string, SchematicMetaTile[,]>;
+            typeof(SchematicManager).GetField("TileMaps", Utilities.UniversalBindingFlags).GetValue(null) as Dictionary<string, SchematicMetaTile[,]>;
 
         internal static Dictionary<string, PilePlacementFunction> PilePlacementMaps;
 
-        internal static readonly MethodInfo ImportSchematicMethod = typeof(CalamitySchematicIO).GetMethod("ImportSchematic", Utilities.WindfallUtils.UniversalBindingFlags);
+        internal static readonly MethodInfo ImportSchematicMethod = typeof(CalamitySchematicIO).GetMethod("ImportSchematic", Utilities.UniversalBindingFlags);
 
 
         public override void OnModLoad()

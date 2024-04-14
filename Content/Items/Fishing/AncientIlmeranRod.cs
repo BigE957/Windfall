@@ -3,9 +3,10 @@ using CalamityMod.Items;
 using CalamityMod.NPCs.AquaticScourge;
 using CalamityMod.NPCs.DesertScourge;
 using CalamityMod.World;
+using Luminance.Core.Graphics;
 using Windfall.Common.Systems;
 using Windfall.Common.Systems.WorldEvents;
-using Windfall.Common.Utilities;
+using Windfall.Common.Utils;
 using Windfall.Content.NPCs.WanderingNPCs;
 using Windfall.Content.Projectiles.Fishing;
 using Windfall.Content.Projectiles.NPCAnimations;
@@ -119,9 +120,8 @@ namespace Windfall.Content.Items.Fishing
                                 zoom = Lerp(zoom, 0.4f, 0.075f);
                             else
                                 zoom = 0.4f;
-                            ZoomSystem.SetZoomEffect(zoom);
-                            Main.LocalPlayer.Windfall_Camera().ScreenFocusPosition = Paladin.Center;
-                            Main.LocalPlayer.Windfall_Camera().ScreenFocusInterpolant = zoom;
+                            CameraPanSystem.Zoom = zoom;
+                            CameraPanSystem.PanTowards(Paladin.Center, zoom);
                         }
 
                         float Delay = 0;

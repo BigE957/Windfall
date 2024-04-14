@@ -52,11 +52,11 @@
                 NPC.GivenName = "Lunar Cultist Archer";
                 NPC.alpha = 255;
                 Vector2 oldPos = NPC.position;
-                NPC.position.Y = GetSurfacePositionFrom(NPC.position).Y - NPC.height - 8;
+                NPC.position.Y = Utilities.FindGroundVertical(new Point((int)NPC.position.X, (int)NPC.position.Y)).Y - NPC.height - 8;
                 float altY = 0;
                 for (int i = 0; i < 16; i++)
                 {
-                    altY = GetSurfacePositionFrom(new Vector2(oldPos.X + i, oldPos.Y - 64)).Y - NPC.height - 8;
+                    altY = Utilities.FindGroundVertical(new Point((int)(oldPos.X + i), (int)(oldPos.Y - 64))).Y - NPC.height - 8;
                     if (altY < NPC.position.Y)
                         NPC.position.Y = altY;
                 }

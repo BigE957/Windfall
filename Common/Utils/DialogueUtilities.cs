@@ -3,7 +3,7 @@ using Windfall.Common.Systems;
 using Windfall.Content.NPCs.TravellingNPCs;
 using Windfall.Content.NPCs.WanderingNPCs;
 
-namespace Windfall.Common.Utilities
+namespace Windfall.Common.Utils
 {
     public static partial class WindfallUtils
     {
