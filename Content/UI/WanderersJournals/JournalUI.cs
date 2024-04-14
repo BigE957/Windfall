@@ -93,13 +93,13 @@ namespace Windfall.Content.UI.WanderersJournals
             if (WorldSaveSystem.JournalsCollected[PageNumber])
                 if ((JournalTypes)PageNumber == JournalTypes.Evil)
                     if (JournalUISystem.whichEvilJournal == "Crimson")
-                        JournalText.JournalContents = GetWindfallTextValue($"JournalContents.Crimson");
+                        JournalText.JournalContents = GetWindfallTextValue($"UI.JournalContents.Crimson");
                     else if (JournalUISystem.whichEvilJournal == "Corruption")
-                        JournalText.JournalContents = GetWindfallTextValue($"JournalContents.Corruption");
+                        JournalText.JournalContents = GetWindfallTextValue($"UI.JournalContents.Corruption");
                     else
                         JournalText.JournalContents = "";
                 else
-                    JournalText.JournalContents = GetWindfallTextValue($"JournalContents.{(JournalTypes)PageNumber}");
+                    JournalText.JournalContents = GetWindfallTextValue($"UI.JournalContents.{(JournalTypes)PageNumber}");
             else
                 JournalText.JournalContents = "";
             ModContent.GetInstance<JournalUISystem>().ShowJournalUI();

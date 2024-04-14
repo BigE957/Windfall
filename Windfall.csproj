@@ -13,6 +13,7 @@
     <None Remove="Assets\Graphics\Metaballs\Empyrean_Metaball\Empyrean_Distortion_Layer1.png" />
     <None Remove="Assets\Graphics\Metaballs\Empyrean_Metaball\Empyrean_Distortion_Layer2.png" />
     <None Remove="Assets\Graphics\Metaballs\Empyrean_Metaball\Empyrean_Distortion_Layer3.png" />
+    <None Remove="Assets\Graphics\Metaballs\Selenic_Metaball\Selenic_Mist_Layer1.png" />
     <None Remove="Assets\Items\Debug\DraeDashGiftCard.png" />
     <None Remove="Assets\Items\Debug\TheZoomer.png" />
     <None Remove="Assets\Items\Lore\OraLore.png" />
@@ -46,7 +47,6 @@
     <None Remove="Assets\Projectiles\Misc\EmpyreanThorn.png" />
     <None Remove="Assets\Projectiles\NPCAnimations\GodseekerKnightProj.png" />
     <None Remove="Assets\Projectiles\NPCAnimations\IlmeranPaladinDig.png" />
-    <None Remove="Assets\UI\EidolonTablet\EidolonTabletBig.png" />
     <None Remove="Content\Buffs\Cooldowns\ParryWeapon.png" />
     <None Remove="Content\Buffs\Cooldowns\ParryWeaponOutline.png" />
     <None Remove="Content\Buffs\Cooldowns\ParryWeaponOverlay.png" />
