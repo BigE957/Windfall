@@ -87,7 +87,7 @@ namespace Windfall.Common.Systems.WorldEvents
                     Dust.NewDustPerfect(new Vector2(particleSpawnPosition.X, particleSpawnPosition.Y) + new Vector2(Main.rand.NextFloatDirection() * 8f, -8f), 32, Main.rand.NextVector2Circular(1.5f, 1.5f) - Vector2.UnitY * 1.5f);
             }
             // Create screen shake effects.
-            ScreenShakeSystem.SetUniversalRumble((float)(MathF.Pow(groundShakeInterpolant, 1.81f) * 10f);
+            ScreenShakeSystem.SetUniversalRumble((float)(MathF.Pow(groundShakeInterpolant, 1.81f) * 10f));
             if (scoogTimer == midpoint)
                 if (leftSide)
                 {
