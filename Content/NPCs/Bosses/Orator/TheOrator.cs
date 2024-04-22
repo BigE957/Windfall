@@ -223,7 +223,7 @@ namespace Windfall.Content.NPCs.Bosses.TheOrator
                             NPC.position.X = target.position.X;
                             NPC.position.Y = target.position.Y - 400;
                             NPC.velocity = Vector2.Zero;
-                            NPC.ai[3] = Main.rand.Next(300, 400);
+                            NPC.ai[3] = Main.rand.Next(500, 600);
                         }
                         if (aiCounter < NPC.ai[3] - 45)
                         {
@@ -235,7 +235,17 @@ namespace Windfall.Content.NPCs.Bosses.TheOrator
                             {                               
                                 Projectile.NewProjectile(Terraria.Entity.GetSource_NaturalSpawn(), NPC.Center, VectorToTarget.SafeNormalize(Vector2.UnitX) * 20, ModContent.ProjectileType<DarkBolt>(), BoltDamage, 0);
                             }
-                            if (CalamityWorld.revenge && aiCounter < NPC.ai[3] - 90)
+                            
+                            if(aiCounter % 120 == 0 && aiCounter > 30)
+                            {
+                                for(int i = 0; i < 6; i++)
+                                {
+                                    Projectile proj = Projectile.NewProjectileDirect(Terraria.Entity.GetSource_NaturalSpawn(), NPC.Center, NPC.velocity.RotatedBy(PiOver2).SafeNormalize(Vector2.UnitX) * (4 * i), ModContent.ProjectileType<DarkGlob>(), GlobDamage, 0f, -1, 0, 0.5f);
+                                    proj.timeLeft = (int)(proj.timeLeft / 1.5f);
+                                }
+                            }
+                            
+                            if (Main.expertMode && aiCounter < NPC.ai[3] - 90)
                                 Projectile.NewProjectile(Terraria.Entity.GetSource_NaturalSpawn(), NPC.Center, VectorToTarget.SafeNormalize(Vector2.UnitX) * -15, ModContent.ProjectileType<DarkGlob>(), GlobDamage, 0f, -1, 0, 1f);
                         }
                         else if(aiCounter < NPC.ai[3])
