@@ -131,8 +131,8 @@ Dialogue: {
 	GodseekerKnight: {
 		Chat: {
 			Standard1: So few of the Gods and their ilk remain... perhaps soon we may finally rest.
-   		 	Standard2: The lands seem far quieter these days, but we must remain ever vigilant.
-   		 	Standard3: I sometimes wonder what motivated the Gods' people to cling to the past as they did... how many lives would have been spared had they seen the potential for change?
+			Standard2: The lands seem far quieter these days, but we must remain ever vigilant.
+			Standard3: I sometimes wonder what motivated the Gods' people to cling to the past as they did... how many lives would have been spared had they seen the potential for change?
 			Standard4: ... I suppose this insignia could use a bit of a polish...
 			SlimeGod1: Heiko... have you truly grown so foolish?
 			Evilbiome1: What a foul place... The sooner my hunt is complete, the better.
@@ -180,7 +180,7 @@ Dialogue: {
 			Hints: {
 				None: Do you feel that? The air feels... lighter, as of late. It's almost as if our efforts are finally paying off... Splendid... The Godseeker would be proud of us; I'm sure.
 				BoC: Perhaps you have seen it on your travels. This land spreads and evolves like a cancer, subsuming and devouring anything in its way. Fitting, for the Gods who fell here valued nothing they had. Until their dying breaths, they reached for more, and more, and more. Remnants of their greed still linger in the depths of this place.
-				EoW: If there is anything pests excel at, it is coordination. The Gods that fell here kept their people under uncompromising control, and these insects are no different. When many of them band together, you will find them much harder to stamp out than usual. Draw one of these groups out by destroying storehouses of deific energy. 
+				EoW: If there is anything pests excel at, it is coordination. The Gods that fell here kept their people under uncompromising control, and these insects are no different. When many of them band together, you will find them much harder to stamp out than usual. Draw one of these groups out by destroying storehouses of deific energy.
 				HiveMind: Amidst the grime and gore of this place lie certain… growths. You will recognize them when you see them. They are blemishes even upon the disfigured face of this land. Each one is a storehouse of lingering divine power. Destroy one, and whatever is left of the gods that haunt this place would be sure to retaliate.
 				Perforators: Amidst the grime and gore of this place lie certain… growths. You will recognize them when you see them. They are blemishes even upon the disfigured face of this land. Each one is a storehouse of lingering divine power. Destroy one, and whatever is left of the gods that haunt this place would be sure to retaliate.
 				SlimeGod: The God of Slimes has been lurking about in this foul muck. A fittingly squalid home. Alas, the time it spends here is not wasted. Its plans are still in motion, its power still growing. Perhaps it can be lured out of secrecy...
@@ -1032,7 +1032,7 @@ LoreItems: {
 		[c/E3AF40:Whispers from on high dance in your ears...]
 		[c/BEBEBE:Press "Left Shift" to listen closer]
 		'''
-	OraLore:
+	LoreOrator:
 		'''
 		Orator? More like Bore-ator; Am I right? Haha, hahaha... ha...
 		Laugh.
