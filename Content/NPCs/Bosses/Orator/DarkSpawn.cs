@@ -1,6 +1,7 @@
 ﻿using CalamityMod.Dusts;
 using CalamityMod.NPCs;
 using CalamityMod.World;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Windfall.Content.Projectiles.Boss.Orator;
 
 namespace Windfall.Content.NPCs.Bosses.TheOrator
@@ -62,9 +63,15 @@ namespace Windfall.Content.NPCs.Bosses.TheOrator
                 Orator = Main.npc[NPC.FindFirstNPC(ModContent.NPCType<TheOrator>())];
 
             if (CurrentAI == AIState.OnBoss)
+            {
                 NPC.dontTakeDamage = true;
+                NPC.damage = 0;
+            }
             else
+            {
                 NPC.dontTakeDamage = false;
+                NPC.damage = 20;
+            }
             
             #region Despawning
             if (Orator == null)
@@ -87,17 +94,16 @@ namespace Windfall.Content.NPCs.Bosses.TheOrator
             switch (CurrentAI)
             {
                 case AIState.OnBoss:
-
-                    if (NPC.Center.X > Orator.Center.X)
-                        NPC.velocity.X -= Acceleration;
-                    else if (NPC.Center.X < Orator.Center.X)
-                        NPC.velocity.X += Acceleration;
-                    if (NPC.Center.Y > Orator.Center.Y)
-                        NPC.velocity.Y -= Acceleration;
-                    else if (NPC.Center.Y < Orator.Center.Y)
-                        NPC.velocity.Y += Acceleration;
-                    if (NPC.velocity.Length() > MaxSpeed)
-                        NPC.velocity = NPC.velocity.SafeNormalize(Vector2.Zero) * MaxSpeed;
+                    if (NPC.Center.Y < Orator.Center.Y)
+                        NPC.velocity.Y++;
+                    else
+                        NPC.velocity.Y--;
+                    if (NPC.Center.X < Orator.Center.X)
+                        NPC.velocity.X++;
+                    else
+                        NPC.velocity.X--;
+                    if (NPC.velocity.Length() > 15)
+                        NPC.velocity = NPC.velocity.SafeNormalize(Vector2.Zero) * 15;
                     NPC.rotation = NPC.velocity.ToRotation() + Pi;
                     break;
                 case AIState.Hunting:
@@ -123,12 +129,13 @@ namespace Windfall.Content.NPCs.Bosses.TheOrator
                     }
                     NPC.rotation = NPC.velocity.ToRotation() + Pi;
                     #endregion
+
                     #region Attack
-                    if (Main.rand.NextBool(60))
-                    {
-                        Vector2 toTarget = (target.Center - NPC.Center);
+                    Vector2 toTarget = (target.Center - NPC.Center);
+                    if (Main.rand.NextBool(60) || toTarget.Length() > 600f)
+                    {                      
                         NPC.rotation = toTarget.ToRotation() + Pi;
-                        if (Main.rand.NextBool(5))
+                        if (Main.rand.NextBool(5) || toTarget.Length() > 600f)
                         {
                             NPC.velocity = toTarget.SafeNormalize(Vector2.Zero) * -10;
                             CurrentAI = AIState.Dashing;
@@ -161,12 +168,24 @@ namespace Windfall.Content.NPCs.Bosses.TheOrator
                     }
                     break;
                 case AIState.Sacrifice:
+
+                    #region Movement
                     toTarget = Orator.Center - NPC.Center;
-                    NPC.velocity += toTarget.SafeNormalize(Vector2.UnitX);
+                    if (NPC.Center.Y < Orator.Center.Y)
+                        NPC.velocity.Y++;
+                    else
+                        NPC.velocity.Y--;
+                    if (NPC.Center.X < Orator.Center.X)
+                        NPC.velocity.X++;
+                    else
+                        NPC.velocity.X--;
                     if (NPC.velocity.Length() > 20)
                         NPC.velocity = NPC.velocity.SafeNormalize(Vector2.Zero) * 20;
-                    NPC.rotation = (Orator.Center - NPC.Center).ToRotation() + Pi;
+                    NPC.rotation = toTarget.ToRotation() + Pi;
                     NPC.spriteDirection = NPC.direction * -1;
+                    #endregion
+
+                    #region Healing
                     if (NPC.Hitbox.Intersects(Orator.Hitbox))
                     {
                         Orator.life += Orator.lifeMax / 100;
@@ -175,6 +194,8 @@ namespace Windfall.Content.NPCs.Bosses.TheOrator
                             orator.noSpawnsEscape = false;
                         NPC.active = false;
                     }
+                    #endregion
+
                     break;
             }
             aiCounter++; 

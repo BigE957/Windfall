@@ -13,6 +13,8 @@ using CalamityMod;
 using CalamityMod.Items.Armor.Vanity;
 using CalamityMod.Items.TreasureBags;
 using Terraria.GameContent.ItemDropRules;
+using Windfall.Common.Utils;
+using CalamityMod.Items.Weapons.Magic;
 
 namespace Windfall.Content.NPCs.Bosses.TheOrator
 {
@@ -49,7 +51,7 @@ namespace Windfall.Content.NPCs.Bosses.TheOrator
         internal static readonly int GlobDamage = StatCorrections.ScaleProjectileDamage(Main.masterMode ? 260 : CalamityWorld.death ? 220 : CalamityWorld.revenge ? 180 : Main.expertMode ? 140 : 100);
         internal static readonly int BoltDamage = StatCorrections.ScaleProjectileDamage(Main.masterMode ? 264 : CalamityWorld.death ? 188 : CalamityWorld.revenge ? 176 : Main.expertMode ? 152 : 90);
         //Will eventually be used for a special drop if the player kills every Dark Spawn the Orator summons and doesn't let any escape.
-        public bool noSpawnsEscape = true;
+        public static bool noSpawnsEscape = true;
         public override void OnSpawn(IEntitySource source)
         {
             noSpawnsEscape = true;
@@ -184,9 +186,7 @@ namespace Windfall.Content.NPCs.Bosses.TheOrator
                 case States.DarkSpawn:
                     
                     #region Movement
-                    target = Main.player[Player.FindClosest(NPC.Center, NPC.width, NPC.height)];
-                    if(aiCounter == 0)
-                        attackCounter = 0;
+                    target = Main.player[Player.FindClosest(NPC.Center, NPC.width, NPC.height)];                   
 
                     if (NPC.Center.Y < target.Center.Y - 250)
                         NPC.velocity.Y++;
@@ -200,7 +200,9 @@ namespace Windfall.Content.NPCs.Bosses.TheOrator
                         NPC.velocity = NPC.velocity.SafeNormalize(Vector2.Zero) * 15;
                     #endregion
 
-                    const int EndTime = 1000;
+                    const int EndTime = 1500;
+                    if (aiCounter == 0)
+                        attackCounter = 0;
 
                     if (aiCounter % 15 == 0 && attackCounter < 8 && aiCounter < 150)
                     {
@@ -223,8 +225,10 @@ namespace Windfall.Content.NPCs.Bosses.TheOrator
                                     break;
                                 if (spawn.ModNPC is DarkSpawn darkSpawn && darkSpawn.CurrentAI == DarkSpawn.AIState.OnBoss)
                                 {
-                                    spawn.velocity = (target.Center - spawn.Center).SafeNormalize(Vector2.Zero) * -10;
+                                    Vector2 ToTarget = (target.Center - spawn.Center);
+                                    spawn.velocity = ToTarget.SafeNormalize(Vector2.Zero) * -10;
                                     darkSpawn.CurrentAI = DarkSpawn.AIState.Dashing;
+                                    spawn.rotation = ToTarget.ToRotation() + Pi;
                                     attackCounter++;
                                 }
                             }
@@ -276,7 +280,10 @@ namespace Windfall.Content.NPCs.Bosses.TheOrator
                             {
                                 for(int i = 1; i < 6; i++)
                                 {
-                                    Projectile proj = Projectile.NewProjectileDirect(Terraria.Entity.GetSource_NaturalSpawn(), NPC.Center, NPC.velocity.RotatedBy(PiOver2).SafeNormalize(Vector2.UnitX) * (4 * i), ModContent.ProjectileType<DarkGlob>(), GlobDamage, 0f, -1, 0, 0.5f);
+                                    Projectile proj = Projectile.NewProjectileDirect(Terraria.Entity.GetSource_NaturalSpawn(), NPC.Center, NPC.velocity.RotatedBy(PiOver2).SafeNormalize(Vector2.UnitX) * (5 * i), ModContent.ProjectileType<DarkGlob>(), GlobDamage, 0f, -1, 0, 0.5f);
+                                    proj.timeLeft = (int)(proj.timeLeft / 1.5f);
+
+                                    proj = Projectile.NewProjectileDirect(Terraria.Entity.GetSource_NaturalSpawn(), NPC.Center, NPC.velocity.RotatedBy(PiOver2).SafeNormalize(Vector2.UnitX) * (5 * -i), ModContent.ProjectileType<DarkGlob>(), GlobDamage, 0f, -1, 0, 0.5f);
                                     proj.timeLeft = (int)(proj.timeLeft / 1.5f);
                                 }
                             }
@@ -471,6 +478,9 @@ namespace Windfall.Content.NPCs.Bosses.TheOrator
             {
                 normalOnly.Add(ItemID.BossMaskCultist, 7);
             }
+
+            // Test Drop for not letting Orator heal
+            npcLoot.DefineConditionalDropSet(WindfallConditions.OratorNeverHeal).Add(ModContent.ItemType<TomeofFates>());
 
             // Trophy
             npcLoot.Add(ItemID.AncientCultistTrophy, 10);
