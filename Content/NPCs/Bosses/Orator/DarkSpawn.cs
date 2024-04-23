@@ -191,7 +191,7 @@ namespace Windfall.Content.NPCs.Bosses.TheOrator
                         Orator.life += Orator.lifeMax / 100;
                         CombatText.NewText(NPC.Hitbox, Color.LimeGreen, Orator.lifeMax / 100);
                         if (Orator.ModNPC is TheOrator orator)
-                            orator.noSpawnsEscape = false;
+                            TheOrator.noSpawnsEscape = false;
                         NPC.active = false;
                     }
                     #endregion
