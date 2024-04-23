@@ -1,8 +1,6 @@
 ﻿using CalamityMod.Dusts;
 using CalamityMod.NPCs;
-using CalamityMod.NPCs.SunkenSea;
 using CalamityMod.World;
-using Windfall.Common.Systems;
 using Windfall.Content.Projectiles.Boss.Orator;
 
 namespace Windfall.Content.NPCs.Bosses.TheOrator
@@ -26,7 +24,7 @@ namespace Windfall.Content.NPCs.Bosses.TheOrator
             NPC.defense = 100;
             NPC.noGravity = true;
             NPC.noTileCollide = true;
-            NPC.lifeMax = 500;
+            NPC.lifeMax = 1200;
             NPC.knockBackResist = 0f;
             NPC.HitSound = SoundID.NPCHit49;
             NPC.DeathSound = SoundID.NPCDeath51;
@@ -36,12 +34,15 @@ namespace Windfall.Content.NPCs.Bosses.TheOrator
         }
         private readonly float Acceleration = CalamityWorld.death ? 1f : CalamityWorld.revenge ? 0.9f : Main.expertMode ? 0.75f : 0.5f;
         private readonly int MaxSpeed = CalamityWorld.revenge ? 8 : 5;
-        enum AIState
+        internal enum AIState
         {
-            Chasing,
-            Shooting,
+            OnBoss,
+            Hunting,
+            Recoil,
+            Dashing,
+            Sacrifice,
         }
-        private AIState CurrentAI
+        internal AIState CurrentAI
         {
             get => (AIState)NPC.ai[0];
             set => NPC.ai[0] = (int)value;
@@ -53,103 +54,131 @@ namespace Windfall.Content.NPCs.Bosses.TheOrator
         }     
 
         Vector2 toTarget = Vector2.Zero;
-        private bool hasDashed = false;
         public override void AI()
         {
             Player target = Main.player[Player.FindClosest(NPC.Center, NPC.width, NPC.height)];
-            if (!hasDashed)
-            {
-                if (aiCounter == 0)
-                    NPC.ai[3] = Main.rand.Next(180, 240);
-                if (aiCounter < NPC.ai[3] && NPC.life == NPC.lifeMax)
-                {
-                    toTarget = target.Center - NPC.Center;
-                    NPC.velocity.X = (float)(20 * Math.Cos((double)aiCounter / 20));
-                    NPC.velocity.Y = (float)(20 * Math.Sin((double)aiCounter / 20));
-                    NPC.position += target.velocity;
-                    NPC.rotation = (target.Center - NPC.Center).ToRotation() + Pi;
-                    NPC.spriteDirection = NPC.direction * -1;
-                }
-                else
-                {
-                    if (aiCounter < NPC.ai[3])
-                        aiCounter = (int)NPC.ai[3];
-                    if (aiCounter == NPC.ai[3])
-                        NPC.velocity = toTarget.SafeNormalize(Vector2.Zero) * -5;
-                    NPC.velocity += toTarget.SafeNormalize(Vector2.Zero) * 0.5f;
-                    if ((target.Center - NPC.Center).Length() > 600)
-                        hasDashed = true;
-                }
-            }
+            NPC Orator = null;
+            if(NPC.FindFirstNPC(ModContent.NPCType<TheOrator>()) != -1)
+                Orator = Main.npc[NPC.FindFirstNPC(ModContent.NPCType<TheOrator>())];
+
+            if (CurrentAI == AIState.OnBoss)
+                NPC.dontTakeDamage = true;
             else
+                NPC.dontTakeDamage = false;
+            
+            #region Despawning
+            if (Orator == null)
             {
-                NPC boss = null;
-                if (NPC.FindFirstNPC(ModContent.NPCType<TheOrator>()) != -1)
-                    boss = Main.npc[NPC.FindFirstNPC(ModContent.NPCType<TheOrator>())];
-                if (boss == null)
-                {
-                    toTarget = target.Center - NPC.Center;
-                    NPC.velocity -= toTarget.SafeNormalize(Vector2.UnitX);
-                    NPC.rotation = (target.Center - NPC.Center).ToRotation() + Pi;
-                    NPC.spriteDirection = NPC.direction * -1;
-                    if (toTarget.Length() > 800)
+                toTarget = target.Center - NPC.Center;
+                NPC.velocity -= toTarget.SafeNormalize(Vector2.UnitX);
+                NPC.rotation = (target.Center - NPC.Center).ToRotation() + Pi;
+                NPC.spriteDirection = NPC.direction * -1;
+                if (toTarget.Length() > 800)
+                    NPC.active = false;
+                return;
+            }
+            else if (Orator.ai[0] != 2 && Orator.ai[0] != 0)
+            {
+                CurrentAI = AIState.Sacrifice;
+                return;
+            }
+            #endregion
+
+            switch (CurrentAI)
+            {
+                case AIState.OnBoss:
+
+                    if (NPC.Center.X > Orator.Center.X)
+                        NPC.velocity.X -= Acceleration;
+                    else if (NPC.Center.X < Orator.Center.X)
+                        NPC.velocity.X += Acceleration;
+                    if (NPC.Center.Y > Orator.Center.Y)
+                        NPC.velocity.Y -= Acceleration;
+                    else if (NPC.Center.Y < Orator.Center.Y)
+                        NPC.velocity.Y += Acceleration;
+                    if (NPC.velocity.Length() > MaxSpeed)
+                        NPC.velocity = NPC.velocity.SafeNormalize(Vector2.Zero) * MaxSpeed;
+                    NPC.rotation = NPC.velocity.ToRotation() + Pi;
+                    break;
+                case AIState.Hunting:
+
+                    #region Movement
+                    Vector2 homeInVector = target.Center - NPC.Center;
+                    float targetDist = homeInVector.Length();
+                    homeInVector.Normalize();
+                    if (targetDist > 300f)
                     {
-                        NPC.active = false;
-                        if (boss != null && boss.ModNPC is TheOrator orator)
-                            orator.noSpawnsEscape = false;
+                        float velocity = 12f;
+                        NPC.velocity = (NPC.velocity * 40f + homeInVector * velocity) / 41f;
                     }
-                }
-                else if (boss.ai[0] != 2 && boss.ai[0] != 0)
-                {
-                    toTarget = boss.Center - NPC.Center;
+                    else
+                    {
+                        if (targetDist < 250f)
+                        {
+                            float velocity = -12f;
+                            NPC.velocity = (NPC.velocity * 40f + homeInVector * velocity) / 41f;
+                        }
+                        else
+                            NPC.velocity *= 0.97f;
+                    }
+                    NPC.rotation = NPC.velocity.ToRotation() + Pi;
+                    #endregion
+                    #region Attack
+                    if (Main.rand.NextBool(60))
+                    {
+                        Vector2 toTarget = (target.Center - NPC.Center);
+                        NPC.rotation = toTarget.ToRotation() + Pi;
+                        if (Main.rand.NextBool(5))
+                        {
+                            NPC.velocity = toTarget.SafeNormalize(Vector2.Zero) * -10;
+                            CurrentAI = AIState.Dashing;
+                        }
+                        else
+                        {
+                            NPC.velocity = toTarget.SafeNormalize(Vector2.Zero) * -10;
+                            Projectile.NewProjectile(Terraria.Entity.GetSource_NaturalSpawn(), NPC.Center, toTarget.SafeNormalize(Vector2.UnitX) * 20, ModContent.ProjectileType<DarkBolt>(), TheOrator.BoltDamage, 0);
+                            CurrentAI = AIState.Recoil;
+                        }
+                    }
+                    #endregion
+
+                    break;
+                case AIState.Dashing:
+                    NPC.velocity += NPC.velocity.SafeNormalize(Vector2.UnitX) / -2;
+                    if (NPC.velocity.Length() < 2)
+                    {
+                        NPC.velocity = NPC.velocity.SafeNormalize(Vector2.Zero) * -30;
+                        CurrentAI = AIState.Recoil;
+                    }
+                    break;
+                case AIState.Recoil:
+                    NPC.velocity += NPC.velocity.SafeNormalize(Vector2.UnitX) / -2;
+                    if (NPC.velocity.Length() < 2)
+                    {
+                        CurrentAI = AIState.Hunting;
+                        aiCounter = 0;
+                        NPC.velocity = (target.Center - NPC.Center).SafeNormalize(Vector2.Zero);
+                    }
+                    break;
+                case AIState.Sacrifice:
+                    toTarget = Orator.Center - NPC.Center;
                     NPC.velocity += toTarget.SafeNormalize(Vector2.UnitX);
                     if (NPC.velocity.Length() > 20)
                         NPC.velocity = NPC.velocity.SafeNormalize(Vector2.Zero) * 20;
-                    NPC.rotation = (boss.Center - NPC.Center).ToRotation() + Pi;
+                    NPC.rotation = (Orator.Center - NPC.Center).ToRotation() + Pi;
                     NPC.spriteDirection = NPC.direction * -1;
-                    if (NPC.Hitbox.Intersects(boss.Hitbox))
-                    {                       
-                        boss.life += boss.lifeMax / 100;
-                        CombatText.NewText(NPC.Hitbox, Color.LimeGreen, boss.lifeMax / 100);
-                        if (boss.ModNPC is TheOrator orator)
+                    if (NPC.Hitbox.Intersects(Orator.Hitbox))
+                    {
+                        Orator.life += Orator.lifeMax / 100;
+                        CombatText.NewText(NPC.Hitbox, Color.LimeGreen, Orator.lifeMax / 100);
+                        if (Orator.ModNPC is TheOrator orator)
                             orator.noSpawnsEscape = false;
                         NPC.active = false;
                     }
-                }
-                else
-                {
-                    if (Main.rand.NextBool(50) && CurrentAI == AIState.Chasing && aiCounter >= 30 && (target.Center - NPC.Center).Length() < 400)
-                    {
-                        CurrentAI = AIState.Shooting;
-                        NPC.velocity = (target.Center - NPC.Center).SafeNormalize(Vector2.Zero) * -10;
-                        Projectile.NewProjectile(Terraria.Entity.GetSource_NaturalSpawn(), NPC.Center, (target.Center - NPC.Center).SafeNormalize(Vector2.UnitX) * 20, ModContent.ProjectileType<DarkBolt>(), TheOrator.BoltDamage, 0);
-                    }
-                    switch (CurrentAI)
-                    {
-                        case AIState.Chasing:
-                            toTarget = target.Center - NPC.Center;
-                            if((target.Center - NPC.Center).Length() > 300)
-                                NPC.velocity += (toTarget.SafeNormalize(Vector2.UnitX) * Acceleration);
-                            else
-                                NPC.velocity -= (toTarget.SafeNormalize(Vector2.UnitX) * Acceleration);
-
-                            if (NPC.velocity.Length() > MaxSpeed)
-                                NPC.velocity -= NPC.velocity.SafeNormalize(Vector2.UnitX);
-                            break;
-                        case AIState.Shooting:
-                            NPC.velocity += NPC.velocity.SafeNormalize(Vector2.UnitX) / -2;
-                            if (NPC.velocity.Length() < 2)
-                            {
-                                CurrentAI = AIState.Chasing;
-                                aiCounter = 0;
-                            }
-                            break;
-                    }
-                    NPC.rotation = (target.Center - NPC.Center).ToRotation() + Pi;
-                    NPC.spriteDirection = NPC.direction * -1;
-                }
+                    break;
             }
-            aiCounter++;
+            aiCounter++; 
+            NPC.spriteDirection = NPC.direction * -1;
             Lighting.AddLight(NPC.Center, new Vector3(0.32f, 0.92f, 0.71f));
         }
 

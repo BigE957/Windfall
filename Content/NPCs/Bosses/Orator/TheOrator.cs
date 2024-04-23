@@ -182,6 +182,8 @@ namespace Windfall.Content.NPCs.Bosses.TheOrator
                     }
                     break;
                 case States.DarkSpawn:
+                    
+                    #region Movement
                     target = Main.player[Player.FindClosest(NPC.Center, NPC.width, NPC.height)];
                     if(aiCounter == 0)
                         attackCounter = 0;
@@ -196,15 +198,49 @@ namespace Windfall.Content.NPCs.Bosses.TheOrator
                         NPC.velocity.X--;
                     if (NPC.velocity.Length() > 15)
                         NPC.velocity = NPC.velocity.SafeNormalize(Vector2.Zero) * 15;
+                    #endregion
 
-                    if (aiCounter % 15 == 0 && attackCounter < 8)
+                    const int EndTime = 1000;
+
+                    if (aiCounter % 15 == 0 && attackCounter < 8 && aiCounter < 150)
                     {
-                        NPC.NewNPC(NPC.GetSource_FromThis(), (int)target.Center.X, (int)target.Center.Y - 350, ModContent.NPCType<DarkSpawn>());
+                        NPC.NewNPC(NPC.GetSource_FromThis(), (int)NPC.Center.X, (int)NPC.Center.Y, ModContent.NPCType<DarkSpawn>());
                         attackCounter++;
                     }
-                    if (!NPC.AnyNPCs(ModContent.NPCType<DarkSpawn>()) && aiCounter < 570)
-                        aiCounter = 570;
-                    if (aiCounter >= 660)
+                    
+                    if(aiCounter > 150)
+                    {
+                        attackCounter = 0;
+                        foreach(NPC spawn in Main.npc.Where(n => n.type == ModContent.NPCType<DarkSpawn>() && n.active))
+                        {
+                            if(spawn.ModNPC is DarkSpawn darkSpawn && darkSpawn.CurrentAI != DarkSpawn.AIState.OnBoss)
+                                attackCounter++;
+                        }
+                        if(attackCounter < 2 && aiCounter < EndTime)
+                            foreach (NPC spawn in Main.npc.Where(n => n.type == ModContent.NPCType<DarkSpawn>() && n.active))
+                            {
+                                if (attackCounter >= 2)
+                                    break;
+                                if (spawn.ModNPC is DarkSpawn darkSpawn && darkSpawn.CurrentAI == DarkSpawn.AIState.OnBoss)
+                                {
+                                    spawn.velocity = (target.Center - spawn.Center).SafeNormalize(Vector2.Zero) * -10;
+                                    darkSpawn.CurrentAI = DarkSpawn.AIState.Dashing;
+                                    attackCounter++;
+                                }
+                            }
+                        if (aiCounter > EndTime && NPC.AnyNPCs(ModContent.NPCType<DarkSpawn>()))
+                        {
+                            foreach (NPC spawn in Main.npc.Where(n => n.type == ModContent.NPCType<DarkSpawn>() && n.active))
+                            {
+                                if (spawn.ModNPC is DarkSpawn darkSpawn)
+                                    darkSpawn.CurrentAI = DarkSpawn.AIState.Sacrifice;
+                            }
+                        }
+                    }
+                    
+                    if (!NPC.AnyNPCs(ModContent.NPCType<DarkSpawn>()) && aiCounter < EndTime)
+                        aiCounter = EndTime;                    
+                    if (aiCounter >= EndTime + 90)
                     {
                         aiCounter = -30;
                         SoundEngine.PlaySound(DashWarn);
@@ -214,7 +250,7 @@ namespace Windfall.Content.NPCs.Bosses.TheOrator
                         return;
                     }
                     break;
-                case States.DarkOrbit:
+                case States.DarkOrbit:                  
                     if (aiCounter >= 0)
                     {
                         target = Main.player[Player.FindClosest(NPC.Center, NPC.width, NPC.height)];
@@ -238,7 +274,7 @@ namespace Windfall.Content.NPCs.Bosses.TheOrator
                             
                             if(aiCounter % 120 == 0 && aiCounter > 30)
                             {
-                                for(int i = 0; i < 6; i++)
+                                for(int i = 1; i < 6; i++)
                                 {
                                     Projectile proj = Projectile.NewProjectileDirect(Terraria.Entity.GetSource_NaturalSpawn(), NPC.Center, NPC.velocity.RotatedBy(PiOver2).SafeNormalize(Vector2.UnitX) * (4 * i), ModContent.ProjectileType<DarkGlob>(), GlobDamage, 0f, -1, 0, 0.5f);
                                     proj.timeLeft = (int)(proj.timeLeft / 1.5f);
