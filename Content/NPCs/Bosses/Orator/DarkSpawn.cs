@@ -1,7 +1,7 @@
 ﻿using CalamityMod.Dusts;
 using CalamityMod.NPCs;
 using CalamityMod.World;
-using Microsoft.CodeAnalysis.CSharp.Syntax;
+using Windfall.Common.Systems;
 using Windfall.Content.Projectiles.Boss.Orator;
 
 namespace Windfall.Content.NPCs.Bosses.TheOrator
@@ -21,7 +21,7 @@ namespace Windfall.Content.NPCs.Bosses.TheOrator
         {
             NPC.width = 78;
             NPC.height = 50;
-            NPC.damage = 20;
+            NPC.damage = StatCorrections.ScaleContactDamage(Main.masterMode ? 300 : CalamityWorld.death ? 220 : CalamityWorld.revenge ? 180 : Main.expertMode ? 120 : 80);
             NPC.defense = 100;
             NPC.noGravity = true;
             NPC.noTileCollide = true;
@@ -72,7 +72,7 @@ namespace Windfall.Content.NPCs.Bosses.TheOrator
                 NPC.dontTakeDamage = false;
                 NPC.damage = 20;
             }
-            
+            /*
             #region Despawning
             if (Orator == null)
             {
@@ -90,7 +90,11 @@ namespace Windfall.Content.NPCs.Bosses.TheOrator
                 return;
             }
             #endregion
-
+            */
+            if(CurrentAI == AIState.OnBoss)
+            {
+                CurrentAI++;
+            }
             switch (CurrentAI)
             {
                 case AIState.OnBoss:
@@ -143,7 +147,7 @@ namespace Windfall.Content.NPCs.Bosses.TheOrator
                         else
                         {
                             NPC.velocity = toTarget.SafeNormalize(Vector2.Zero) * -10;
-                            Projectile.NewProjectile(Terraria.Entity.GetSource_NaturalSpawn(), NPC.Center, toTarget.SafeNormalize(Vector2.UnitX) * 20, ModContent.ProjectileType<DarkBolt>(), TheOrator.BoltDamage, 0);
+                            Projectile.NewProjectile(Terraria.Entity.GetSource_NaturalSpawn(), NPC.Center, toTarget.SafeNormalize(Vector2.UnitX), ModContent.ProjectileType<DarkBolt>(), TheOrator.BoltDamage, 0f, -1, 0, 15);
                             CurrentAI = AIState.Recoil;
                         }
                     }

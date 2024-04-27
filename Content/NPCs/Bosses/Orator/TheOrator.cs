@@ -15,15 +15,18 @@ using CalamityMod.Items.TreasureBags;
 using Terraria.GameContent.ItemDropRules;
 using Windfall.Common.Utils;
 using CalamityMod.Items.Weapons.Magic;
+using CalamityMod.Cooldowns;
 
 namespace Windfall.Content.NPCs.Bosses.TheOrator
 {
+    [AutoloadBossHead]
     public class TheOrator : ModNPC
     {
         public override string Texture => "Windfall/Assets/NPCs/WorldEvents/TheOrator";
+        public override string BossHeadTexture => "Windfall/Assets/NPCs/WorldEvents/TheOrator_Head";
         public static readonly SoundStyle Dash = new("CalamityMod/Sounds/Item/DeadSunShot") { PitchVariance = 0.35f, Volume = 0.5f };
         public static readonly SoundStyle DashWarn = new("CalamityMod/Sounds/Item/DeadSunRicochet") { Volume = 0.5f };
-        public static readonly SoundStyle HurtSound = new("CalamityMod/Sounds/NPCHit/ShieldHit", 3);
+        public static readonly SoundStyle HurtSound = new("CalamityMod/Sounds/NPCHit/ShieldHit", 3);      
         public override void SetDefaults()
         {
             NPC.friendly = false;
@@ -94,7 +97,12 @@ namespace Windfall.Content.NPCs.Bosses.TheOrator
             {
                 case States.Spawning:
                     target = Main.player[Player.FindClosest(NPC.Center, NPC.width, NPC.height)];
-                    if (NPC.Center.Y < target.Center.Y - 250)
+
+                    int height = 150;
+                    if (aiCounter > 210)
+                        height = 250;
+
+                    if (NPC.Center.Y < target.Center.Y - height)
                         NPC.velocity.Y++;
                     else
                         NPC.velocity.Y--;
@@ -116,8 +124,7 @@ namespace Windfall.Content.NPCs.Bosses.TheOrator
                             forcefieldScale = 1f;
                         }
                     }
-
-                    if (aiCounter == 240)
+                    if (aiCounter == 300)
                     {
                         aiCounter = -30;
                         SoundEngine.PlaySound(DashWarn);
@@ -264,6 +271,7 @@ namespace Windfall.Content.NPCs.Bosses.TheOrator
                             NPC.position.Y = target.position.Y - 400;
                             NPC.velocity = Vector2.Zero;
                             NPC.ai[3] = Main.rand.Next(500, 600);
+                            target.AddCooldown(ChaosState.ID, (int)NPC.ai[3]);
                         }
                         if (aiCounter < NPC.ai[3] - 45)
                         {
@@ -415,8 +423,8 @@ namespace Windfall.Content.NPCs.Bosses.TheOrator
                         if (aiCounter % 5 == 0)
                         {
                             //The Anti-Cheesers
-                            Projectile.NewProjectile(Terraria.Entity.GetSource_NaturalSpawn(), new Vector2(target.Center.X - 400, target.Center.Y - 600), new Vector2(Main.rand.NextFloat(-3f, -1), 0), ModContent.ProjectileType<DarkGlob>(), GlobDamage, 0f, -1, 1, 1f);
-                            Projectile.NewProjectile(Terraria.Entity.GetSource_NaturalSpawn(), new Vector2(target.Center.X + 400, target.Center.Y - 600), new Vector2(Main.rand.NextFloat(1, 3f), 0), ModContent.ProjectileType<DarkGlob>(), GlobDamage, 0f, -1, 1, 1f);  
+                            Projectile.NewProjectile(Terraria.Entity.GetSource_NaturalSpawn(), new Vector2(target.Center.X - 400, target.Center.Y - 800), new Vector2(Main.rand.NextFloat(-6f, -2), 0), ModContent.ProjectileType<DarkGlob>(), GlobDamage, 0f, -1, 1, 3f);
+                            Projectile.NewProjectile(Terraria.Entity.GetSource_NaturalSpawn(), new Vector2(target.Center.X + 400, target.Center.Y - 800), new Vector2(Main.rand.NextFloat(2, 6f), 0), ModContent.ProjectileType<DarkGlob>(), GlobDamage, 0f, -1, 1, 3f);
                         }
                         if (aiCounter % AttackFrequency == 0)
                         {
