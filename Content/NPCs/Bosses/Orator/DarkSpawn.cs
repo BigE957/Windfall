@@ -72,7 +72,6 @@ namespace Windfall.Content.NPCs.Bosses.TheOrator
                 NPC.dontTakeDamage = false;
                 NPC.damage = 20;
             }
-            /*
             #region Despawning
             if (Orator == null)
             {
@@ -90,11 +89,10 @@ namespace Windfall.Content.NPCs.Bosses.TheOrator
                 return;
             }
             #endregion
-            */
+            /*
             if(CurrentAI == AIState.OnBoss)
-            {
                 CurrentAI++;
-            }
+            */
             switch (CurrentAI)
             {
                 case AIState.OnBoss:

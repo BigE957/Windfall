@@ -206,6 +206,8 @@ namespace Windfall.Content.NPCs.Bosses.TheOrator
                     if (NPC.velocity.Length() > 15)
                         NPC.velocity = NPC.velocity.SafeNormalize(Vector2.Zero) * 15;
                     #endregion
+                    
+                    NPC.DR_NERD(0.1f + (0.1f * Main.npc.Where(n => n.type == ModContent.NPCType<DarkSpawn>()).Count()));
 
                     const int EndTime = 1500;
                     if (aiCounter == 0)
@@ -257,6 +259,7 @@ namespace Windfall.Content.NPCs.Bosses.TheOrator
                         SoundEngine.PlaySound(DashWarn);
                         attackCounter = 0;
                         NPC.velocity = (target.Center - NPC.Center).SafeNormalize(Vector2.UnitY) * -5;
+                        NPC.DR_NERD(0.1f);
                         AIState = States.DarkSlice;
                         return;
                     }
@@ -423,8 +426,8 @@ namespace Windfall.Content.NPCs.Bosses.TheOrator
                         if (aiCounter % 5 == 0)
                         {
                             //The Anti-Cheesers
-                            Projectile.NewProjectile(Terraria.Entity.GetSource_NaturalSpawn(), new Vector2(target.Center.X - 400, target.Center.Y - 800), new Vector2(Main.rand.NextFloat(-6f, -2), 0), ModContent.ProjectileType<DarkGlob>(), GlobDamage, 0f, -1, 1, 3f);
-                            Projectile.NewProjectile(Terraria.Entity.GetSource_NaturalSpawn(), new Vector2(target.Center.X + 400, target.Center.Y - 800), new Vector2(Main.rand.NextFloat(2, 6f), 0), ModContent.ProjectileType<DarkGlob>(), GlobDamage, 0f, -1, 1, 3f);
+                            Projectile.NewProjectile(Terraria.Entity.GetSource_NaturalSpawn(), new Vector2(target.Center.X - 400, target.Center.Y - 800), new Vector2(Main.rand.NextFloat(-6f, -3f), 0), ModContent.ProjectileType<DarkGlob>(), GlobDamage, 0f, -1, 1, 3f);
+                            Projectile.NewProjectile(Terraria.Entity.GetSource_NaturalSpawn(), new Vector2(target.Center.X + 400, target.Center.Y - 800), new Vector2(Main.rand.NextFloat(3f, 6f), 0), ModContent.ProjectileType<DarkGlob>(), GlobDamage, 0f, -1, 1, 3f);
                         }
                         if (aiCounter % AttackFrequency == 0)
                         {
