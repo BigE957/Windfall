@@ -47,7 +47,7 @@ namespace Windfall.Content.NPCs.WanderingNPCs
                 ModContent.ItemType<DeificInsignia>(),
             };
         }
-        private static List<int> GodlyEssenceIDs = new List<int>();
+        private static List<int> GodlyEssenceIDs = new();
         public override void SetDefaults()
         {
             NPC.friendly = true; // NPC Will not attack player

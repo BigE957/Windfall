@@ -53,6 +53,8 @@ namespace Windfall.Content.Projectiles.Boss.Orator
             }
             else
             {
+                if (MaxSize > 1.5f)
+                    Projectile.scale = MaxSize;
                 if (Projectile.scale < MaxSize)
                 {
                     Projectile.scale += 1 / 60f;
