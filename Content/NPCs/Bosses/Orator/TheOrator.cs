@@ -306,6 +306,7 @@ namespace Windfall.Content.NPCs.Bosses.TheOrator
                         {
                             if (aiCounter == NPC.ai[3] - 30)
                             {
+                                dashing = true;
                                 SoundEngine.PlaySound(DashWarn);
                                 NPC.velocity = (target.Center - NPC.Center).SafeNormalize(Vector2.UnitY) * -4;
                             }
@@ -339,6 +340,7 @@ namespace Windfall.Content.NPCs.Bosses.TheOrator
                                 if (++attackCounter == 3 || !CalamityWorld.death)
                                 {
                                     aiCounter = 0;
+                                    dashing = false;
                                     AIState = States.DarkMonster;
                                 }
                                 else
@@ -365,7 +367,8 @@ namespace Windfall.Content.NPCs.Bosses.TheOrator
                     if (aiCounter == 0)
                     {
                         SoundEngine.PlaySound(Dash);
-                        VectorToTarget = NPC.velocity.SafeNormalize(Vector2.UnitX) * -60;                       
+                        VectorToTarget = NPC.velocity.SafeNormalize(Vector2.UnitX) * -60;
+                        dashing = true;
                         //values gotten from Astrum Deus' contact damage. Subject to change.
                         NPC.damage = StatCorrections.ScaleContactDamage(Main.masterMode ? 360 : CalamityWorld.death ? 280 : CalamityWorld.revenge ? 268 : Main.expertMode ? 240 : 120);
                     }
@@ -398,6 +401,7 @@ namespace Windfall.Content.NPCs.Bosses.TheOrator
                             {
                                 aiCounter = 0;
                                 AIState = States.DarkStorm;
+                                dashing = false;
                             }
                             else
                             {
