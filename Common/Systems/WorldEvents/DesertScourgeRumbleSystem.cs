@@ -25,20 +25,14 @@ namespace Windfall.Common.Systems.WorldEvents
             {
                 case SystemState.CheckReqs:
                     if (mainPlayer.ZoneDesert && !DownedBossSystem.downedDesertScourge && !CalamityUtils.AnyBossNPCS() && cooldown == 0)
-                    {
                         State = SystemState.CheckChance;
-                    }
                     else
-                    {
                         if (!mainPlayer.ZoneDesert)
                             cooldown = 0;
-                    }
                     break;
                 case SystemState.CheckChance:
                     if (Main.rand.NextBool(3) && cooldown == 0)
-                    {
                         cooldown = Main.rand.Next(-400, -200);
-                    }
                     else if (cooldown < 0)
                     {
                         cooldown++;
@@ -90,13 +84,9 @@ namespace Windfall.Common.Systems.WorldEvents
             ScreenShakeSystem.SetUniversalRumble((float)(MathF.Pow(groundShakeInterpolant, 1.81f) * 10f));
             if (scoogTimer == midpoint)
                 if (leftSide)
-                {
                     SoundEngine.PlaySound(Roar with { Volume = volume }, target.Center + new Vector2(Main.rand.Next(-300, -200), 150));
-                }
                 else
-                {
                     SoundEngine.PlaySound(Roar with { Volume = volume }, target.Center + new Vector2(Main.rand.Next(200, 300), 150));
-                }
             else if (scoogTimer > midpoint)
                 shakeCounter--;
             else
