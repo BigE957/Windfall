@@ -19,20 +19,24 @@ namespace Windfall.Common.Systems.WorldEvents
 
         SoundStyle PolterAmbiance = new("Windfall/Assets/Sounds/Ambiance/Polterghast/PolterAmbiance_", 3);
         private bool OnCooldown = false;
-        private int Counter = 30 * 60;
+        private int Counter = 1200 * 60;
         public override void PreUpdateWorld()
         {
             Player mainPlayer = Main.player[0];
-            if(Counter != 0)
-                DisplayLocalizedText($"{State}, {Counter}");
+            //if(Counter != 0)
+                //DisplayLocalizedText($"{State}, {Counter}");
             switch (State)
             {
                 case SystemState.CheckReqs:
                     if (mainPlayer.ZoneDungeon && !DownedBossSystem.downedPolterghast && !AnyBossNPCS() && !OnCooldown && Counter == 0)
                         State = SystemState.CheckChance;
                     else
+                    {
+                        if(!mainPlayer.ZoneDungeon || DownedBossSystem.downedPolterghast || AnyBossNPCS() || OnCooldown)
+                            Counter = 30 * 60;
                         if (!mainPlayer.ZoneDungeon)
                             OnCooldown = false;
+                    }
                     break;
                 case SystemState.CheckChance:
                     if (Main.rand.NextBool(1200))
