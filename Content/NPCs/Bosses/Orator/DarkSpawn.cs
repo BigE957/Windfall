@@ -33,8 +33,6 @@ namespace Windfall.Content.NPCs.Bosses.TheOrator
             NPC.Calamity().VulnerableToElectricity = true;
             NPC.Calamity().VulnerableToWater = true;
         }
-        private readonly float Acceleration = CalamityWorld.death ? 1f : CalamityWorld.revenge ? 0.9f : Main.expertMode ? 0.75f : 0.5f;
-        private readonly int MaxSpeed = CalamityWorld.revenge ? 8 : 5;
         internal enum AIState
         {
             OnBoss,
@@ -48,12 +46,13 @@ namespace Windfall.Content.NPCs.Bosses.TheOrator
             get => (AIState)NPC.ai[0];
             set => NPC.ai[0] = (int)value;
         }
+        /*
         private int aiCounter
         {
             get => (int)NPC.ai[1];
             set => NPC.ai[1] = value;
         }     
-
+        */
         Vector2 toTarget = Vector2.Zero;
         public override void AI()
         {
@@ -165,7 +164,7 @@ namespace Windfall.Content.NPCs.Bosses.TheOrator
                     if (NPC.velocity.Length() < 2)
                     {
                         CurrentAI = AIState.Hunting;
-                        aiCounter = 0;
+                        //aiCounter = 0;
                         NPC.velocity = (target.Center - NPC.Center).SafeNormalize(Vector2.Zero);
                     }
                     break;
@@ -200,7 +199,7 @@ namespace Windfall.Content.NPCs.Bosses.TheOrator
 
                     break;
             }
-            aiCounter++; 
+            //aiCounter++; 
             NPC.spriteDirection = NPC.direction * -1;
             Lighting.AddLight(NPC.Center, new Vector3(0.32f, 0.92f, 0.71f));
         }

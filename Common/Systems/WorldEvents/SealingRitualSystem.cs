@@ -25,12 +25,10 @@ namespace Windfall.Common.Systems.WorldEvents
         }
         private SystemState State = SystemState.CheckReqs;
 
-        private static bool OnCooldown = false;
         private static bool Active = false;
         private static int RitualTimer = -1;
         private static List<int> NPCIndexs = new();
         private static float zoom = 0;
-        private static SoundStyle TeleportSound => new("CalamityMod/Sounds/Custom/SCalSounds/BrimstoneHellblastSound");
         private static Vector2 DungeonCoords = new Vector2(Main.dungeonX - 4, Main.dungeonY).ToWorldCoordinates();
         private static bool CultistFacePlayer = true;
 
@@ -388,7 +386,6 @@ namespace Windfall.Common.Systems.WorldEvents
                                     Recruit.chattable = true;
                         }
                     }
-                    OnCooldown = true;
                     State = SystemState.CheckReqs;
                     break;
             }
