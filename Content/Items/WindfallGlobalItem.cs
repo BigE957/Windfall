@@ -15,7 +15,7 @@ namespace Windfall.Content.Items
             {
                 if (FirstJournal() == true)
                 {
-                    Item.NewItem(null, player.Center, 1, 1, ModContent.ItemType<JournalCompilation>());
+                    Item.NewItem(null, player.Center, 1, 1, ModContent.ItemType<WandererJournal>());
                 }
             }
 

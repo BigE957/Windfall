@@ -4,10 +4,10 @@ using static Windfall.Content.UI.WanderersJournals.JournalFullUIState;
 
 namespace Windfall.Content.Items.Journals
 {
-    public class JournalCompilation : ModItem, ILocalizedModType
+    public class WandererJournal : ModItem, ILocalizedModType
     {
         public new string LocalizationCategory => "Items.Journals";
-        public override string Texture => "Windfall/Assets/Items/Journals/JournalCompilation";
+        public override string Texture => "Windfall/Assets/Items/Journals/WandererJournal";
         public override void SetDefaults()
         {
             Item.width = 28;
