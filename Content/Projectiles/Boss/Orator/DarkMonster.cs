@@ -26,46 +26,92 @@ namespace Windfall.Content.Projectiles.Boss.Orator
         }
         private readonly float Acceleration = CalamityWorld.death ? 0.55f : CalamityWorld.revenge ? 0.5f : Main.expertMode ? 0.45f : 0.4f;
         private readonly int MaxSpeed = CalamityWorld.death ? 15 : CalamityWorld.revenge ? 12 : 10;
-        private int aiCounter = 0;
+        private int aiCounter
+        {
+            get => (int)Projectile.ai[1];
+            set => Projectile.ai[1] = value;
+        }
+        private int SoundDelay = 120;
+
+        public override void OnSpawn(IEntitySource source)
+        {
+            SoundEngine.PlaySound(SoundID.DD2_EtherianPortalOpen, Projectile.Center);
+        }
         public override void AI()
         {
-            bool dying = (!NPC.AnyNPCs(ModContent.NPCType<TheOrator>()) || Projectile.ai[0] == 1);
             Player target = Main.player[Player.FindClosest(Projectile.Center, Projectile.width, Projectile.height)];
-            if (dying)
+            if (!NPC.AnyNPCs(ModContent.NPCType<TheOrator>()) && Projectile.scale == 5f)
+            {
+                Projectile.ai[0] = 1;
+            }
+            if (Projectile.ai[0] == 1)
             {
                 Projectile.hostile = false;
-                Projectile.scale -= 0.1f;
-                if (Projectile.scale <= 0f)
-                    Projectile.active = false;
+                Projectile.scale -= (0.01f * (1 + (aiCounter / 8)));
+                if (Projectile.scale <= 1.5f)
+                    Projectile.ai[0] = 2;
+                if (Projectile.velocity.Length() > 0f)
+                {
+                    Projectile.velocity -= (Projectile.velocity).SafeNormalize(Vector2.Zero) / 5;
+                    EmitGhostGas(aiCounter);
+                }
+                if (Projectile.velocity.Length() < 1f)
+                    Projectile.velocity = Vector2.Zero;
             }
-            else
+            else if (Projectile.ai[0] == 2)
             {
+                SoundEngine.PlaySound(SoundID.DD2_EtherianPortalDryadTouch, Projectile.Center);
+                for (int i = 0; i <= 50; i++)
+                {
+                    EmpyreanMetaball.SpawnParticle(Projectile.Center, Main.rand.NextVector2Circular(10f, 10f), 40 * Main.rand.NextFloat(1.5f, 2.3f));
+                }
+                for (int i = 0; i < 12; i++)
+                {
+                    Projectile.NewProjectile(Entity.GetSource_Death(), Projectile.Center, (TwoPi / 12 * i).ToRotationVector2() * 10, ModContent.ProjectileType<DarkGlob>(), TheOrator.GlobDamage, 0f, -1, 1, 0.5f);
+                    Projectile.NewProjectile(Entity.GetSource_Death(), Projectile.Center, (TwoPi / 12 * i + (TwoPi/24)).ToRotationVector2() * 5, ModContent.ProjectileType<DarkGlob>(), TheOrator.GlobDamage, 0f, -1, 1, 0.5f);                    
+                }
+                for(int i = 0; i < 24; i++)
+                {
+                    Projectile.NewProjectile(Terraria.Entity.GetSource_NaturalSpawn(), Projectile.Center, (TwoPi / 24 * i).ToRotationVector2(), ModContent.ProjectileType<DarkBolt>(), TheOrator.BoltDamage, 0f, -1, 0, i % 2 == 0 ? - 10 : 0);
+                    if (i % 3 == 0)
+                        NPC.NewNPC(NPC.GetSource_NaturalSpawn(), (int)Projectile.Center.X, (int)Projectile.Center.Y, ModContent.NPCType<DarkSpawn>());
+                }
+                Projectile.active = false;
+            }
+            else if (Projectile.ai[0] == 0)
+            {
+                if (SoundDelay == 0)
+                {
+                    SoundEngine.PlaySound(SoundID.DD2_EtherianPortalIdleLoop, Projectile.Center);
+                    SoundDelay = 1020;
+                }
+                else
+                    SoundDelay--;
                 if (aiCounter == 0)
                     Projectile.scale = 0;
                 Projectile.hostile = true;
+                if (aiCounter > 60)
+                {
+                    if (Projectile.Center.X > target.Center.X)
+                        Projectile.velocity.X -= Acceleration;
+                    if (Projectile.Center.X < target.Center.X)
+                        Projectile.velocity.X += Acceleration;
+                    if (Projectile.Center.Y > target.Center.Y)
+                        Projectile.velocity.Y -= Acceleration;
+                    if (Projectile.Center.Y < target.Center.Y)
+                        Projectile.velocity.Y += Acceleration;
+                }
+                else
+                {
+                    Projectile.scale += 5 / 60f;
+                    
+                }
+                if (Projectile.velocity.Length() > MaxSpeed)
+                    Projectile.velocity = Projectile.velocity.SafeNormalize(Vector2.Zero) * MaxSpeed;
+                EmitGhostGas(aiCounter);
             }
-            if (aiCounter > 60)
-            {
-                if (Projectile.Center.X > target.Center.X)
-                    Projectile.velocity.X -= Acceleration;
-                if (Projectile.Center.X < target.Center.X)
-                    Projectile.velocity.X += Acceleration;
-                if (Projectile.Center.Y > target.Center.Y)
-                    Projectile.velocity.Y -= Acceleration;
-                if (Projectile.Center.Y < target.Center.Y)
-                    Projectile.velocity.Y += Acceleration;
-                
-            }
-            else
-            {
-                Projectile.scale += 5 / 60f;
-                Projectile.velocity += (target.Center - Projectile.Center).SafeNormalize(Vector2.Zero) / 5;
-            }
-            if (Projectile.velocity.Length() > MaxSpeed)
-                Projectile.velocity = Projectile.velocity.SafeNormalize(Vector2.Zero) * MaxSpeed;
             aiCounter++;
             Projectile.rotation = Projectile.velocity.ToRotation();
-            EmitGhostGas(aiCounter);
         }
         public void EmitGhostGas(int counter)
         {
