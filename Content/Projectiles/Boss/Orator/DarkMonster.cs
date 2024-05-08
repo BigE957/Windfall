@@ -40,7 +40,7 @@ namespace Windfall.Content.Projectiles.Boss.Orator
         public override void AI()
         {
             Player target = Main.player[Player.FindClosest(Projectile.Center, Projectile.width, Projectile.height)];
-            if (!NPC.AnyNPCs(ModContent.NPCType<TheOrator>()) && Projectile.scale == 5f)
+            if (!NPC.AnyNPCs(ModContent.NPCType<TheOrator>()) && Projectile.scale >= 4f)
             {
                 Projectile.ai[0] = 1;
             }
@@ -70,10 +70,11 @@ namespace Windfall.Content.Projectiles.Boss.Orator
                     Projectile.NewProjectile(Entity.GetSource_Death(), Projectile.Center, (TwoPi / 12 * i).ToRotationVector2() * 10, ModContent.ProjectileType<DarkGlob>(), TheOrator.GlobDamage, 0f, -1, 1, 0.5f);
                     Projectile.NewProjectile(Entity.GetSource_Death(), Projectile.Center, (TwoPi / 12 * i + (TwoPi/24)).ToRotationVector2() * 5, ModContent.ProjectileType<DarkGlob>(), TheOrator.GlobDamage, 0f, -1, 1, 0.5f);                    
                 }
-                for(int i = 0; i < 24; i++)
+                
+                for (int i = 0; i < 24; i++)
                 {
                     Projectile.NewProjectile(Terraria.Entity.GetSource_NaturalSpawn(), Projectile.Center, (TwoPi / 24 * i).ToRotationVector2(), ModContent.ProjectileType<DarkBolt>(), TheOrator.BoltDamage, 0f, -1, 0, i % 2 == 0 ? - 10 : 0);
-                    if (i % 3 == 0)
+                    if (NPC.AnyNPCs(ModContent.NPCType<TheOrator>()) && i % 3 == 0)
                         NPC.NewNPC(NPC.GetSource_NaturalSpawn(), (int)Projectile.Center.X, (int)Projectile.Center.Y, ModContent.NPCType<DarkSpawn>());
                 }
                 Projectile.active = false;
