@@ -35,9 +35,9 @@ namespace Windfall.Content.Projectiles.Boss.Orator
                         Projectile.scale = MaxSize;
 
                 if (Projectile.scale == MaxSize)
-                    Projectile.hostile = true;
+                    Projectile.damage = 100;
                 else
-                    Projectile.hostile = false;
+                    Projectile.damage = 0;
 
                 if (Projectile.velocity.Length() > 0.5f)
                 {
@@ -59,10 +59,10 @@ namespace Windfall.Content.Projectiles.Boss.Orator
                 {
                     Projectile.scale += 1 / 60f;
                     Projectile.timeLeft = 100;
-                    Projectile.hostile = false;
+                    Projectile.damage = 0;
                 }
                 else
-                    Projectile.hostile = true;
+                    Projectile.damage = 100;
                 Projectile.velocity.Y += 0.3f;
                 EmpyreanMetaball.SpawnParticle(Projectile.Center , Vector2.Zero, Projectile.scale * 60);
             }
