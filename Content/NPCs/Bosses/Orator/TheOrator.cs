@@ -82,7 +82,6 @@ namespace Windfall.Content.NPCs.Bosses.TheOrator
         public override void AI()
         {
             Player target = Main.player[Player.FindClosest(NPC.Center, NPC.width, NPC.height)];
-            DisplayLocalizedText($"{target.Calamity().isNearbyBoss}");
             if (target.active == false || target.dead)
                 NPC.active = false;
             if (NPC.Center.X < target.Center.X)
