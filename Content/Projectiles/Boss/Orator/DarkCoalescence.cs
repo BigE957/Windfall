@@ -51,7 +51,7 @@ namespace Windfall.Content.Projectiles.Boss.Orator
             if(Orator != null)    
                 target = Main.player[Player.FindClosest(Orator.Center, Projectile.width, Projectile.height)];
             else
-            target = Main.player[Player.FindClosest(Projectile.Center, Projectile.width, Projectile.height)];
+                target = Main.player[Player.FindClosest(Projectile.Center, Projectile.width, Projectile.height)];
 
             if (aiCounter < 120)
             {
