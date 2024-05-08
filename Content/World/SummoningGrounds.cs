@@ -48,8 +48,8 @@ namespace Windfall.Content.World
             bool place = true;
             PlaceSchematic(mapKey, placementPoint, anchorType, ref place, new Action<Chest, int, bool>(FillSummoningGroundsChest));
 
-            Rectangle protectionArea = CalamityUtils.GetSchematicProtectionArea(schematic, placementPoint, anchorType);
-            CalamityUtils.AddProtectedStructure(protectionArea, 30);
+            Rectangle protectionArea = GetSchematicProtectionArea(schematic, placementPoint, anchorType);
+            AddProtectedStructure(protectionArea, 30);
         }
 
         private static void FillSummoningGroundsChest(Chest chest, int Type, bool place)

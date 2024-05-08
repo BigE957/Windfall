@@ -40,7 +40,7 @@ namespace Windfall.Content.Projectiles.NPCAnimations
                 float rotFactor = 360f / numberOfDusts;
                 for (int i = 0; i < numberOfDusts; i++)
                 {
-                    float rot = MathHelper.ToRadians(i * rotFactor);
+                    float rot = ToRadians(i * rotFactor);
                     Vector2 offset = new Vector2(Main.rand.NextFloat(1.5f, 5.5f), 0).RotatedBy(rot * Main.rand.NextFloat(3.1f, 9.1f));
                     Vector2 velOffset = new Vector2(Main.rand.NextFloat(1.5f, 5.5f), 0).RotatedBy(rot * Main.rand.NextFloat(3.1f, 9.1f));
                     MediumMistParticle SandCloud = new(Projectile.Center + offset, velOffset * Main.rand.NextFloat(1.5f, 3f), Color.Peru, Color.PeachPuff, Main.rand.NextFloat(0.9f, 1.2f), 160f, Main.rand.NextFloat(0.03f, -0.03f));
@@ -54,7 +54,7 @@ namespace Windfall.Content.Projectiles.NPCAnimations
             }
             if (Projectile.Center.Y < Main.player[Projectile.owner].Center.Y)
             {
-                NPC.NewNPC(NPC.GetSource_NaturalSpawn(), (int)Projectile.Center.X, (int)Projectile.Center.Y, ModContent.NPCType<IlmeranPaladin>(), 0, Projectile.velocity.Y, Projectile.direction);
+                NPC.NewNPC(Terraria.Entity.GetSource_NaturalSpawn(), (int)Projectile.Center.X, (int)Projectile.Center.Y, ModContent.NPCType<IlmeranPaladin>(), 0, Projectile.velocity.Y, Projectile.direction);
                 if (PostExitTiles == false)
                 {
                     PostExitTiles = true;
@@ -62,7 +62,7 @@ namespace Windfall.Content.Projectiles.NPCAnimations
                     float rotFactor = 360f / numberOfDusts;
                     for (int i = 0; i < numberOfDusts; i++)
                     {
-                        float rot = MathHelper.ToRadians(i * rotFactor);
+                        float rot = ToRadians(i * rotFactor);
                         Vector2 offset = new Vector2(Main.rand.NextFloat(1.5f, 5.5f), 0).RotatedBy(rot * Main.rand.NextFloat(3.1f, 9.1f));
                         Vector2 velOffset = new Vector2(Main.rand.NextFloat(1.5f, 5.5f), 0).RotatedBy(rot * Main.rand.NextFloat(3.1f, 9.1f));
                         MediumMistParticle SandCloud = new(Projectile.Center + offset, velOffset * Main.rand.NextFloat(1.5f, 3f), Color.Peru, Color.PeachPuff, Main.rand.NextFloat(0.9f, 1.2f), 160f, Main.rand.NextFloat(0.03f, -0.03f));

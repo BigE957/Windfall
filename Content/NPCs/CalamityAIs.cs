@@ -39,23 +39,23 @@ namespace Windfall.Content.NPCs
 
             float calCloneBroPlayerXDist = npc.position.X + npc.width / 2 - player.position.X - player.width / 2;
             float calCloneBroPlayerYDist = npc.position.Y + npc.height - 59f - player.position.Y - player.height / 2;
-            float calCloneBroRotation = (float)Math.Atan2(calCloneBroPlayerYDist, calCloneBroPlayerXDist) + MathHelper.PiOver2;
+            float calCloneBroRotation = (float)Math.Atan2(calCloneBroPlayerYDist, calCloneBroPlayerXDist) + PiOver2;
             if (calCloneBroRotation < 0f)
-                calCloneBroRotation += MathHelper.TwoPi;
-            else if (calCloneBroRotation > MathHelper.TwoPi)
-                calCloneBroRotation -= MathHelper.TwoPi;
+                calCloneBroRotation += TwoPi;
+            else if (calCloneBroRotation > TwoPi)
+                calCloneBroRotation -= TwoPi;
 
             float calCloneBroRotationSpeed = 0.15f;
             if (npc.rotation < calCloneBroRotation)
             {
-                if (calCloneBroRotation - npc.rotation > MathHelper.Pi)
+                if (calCloneBroRotation - npc.rotation > Pi)
                     npc.rotation -= calCloneBroRotationSpeed;
                 else
                     npc.rotation += calCloneBroRotationSpeed;
             }
             else if (npc.rotation > calCloneBroRotation)
             {
-                if (npc.rotation - calCloneBroRotation > MathHelper.Pi)
+                if (npc.rotation - calCloneBroRotation > Pi)
                     npc.rotation += calCloneBroRotationSpeed;
                 else
                     npc.rotation -= calCloneBroRotationSpeed;
@@ -64,9 +64,9 @@ namespace Windfall.Content.NPCs
             if (npc.rotation > calCloneBroRotation - calCloneBroRotationSpeed && npc.rotation < calCloneBroRotation + calCloneBroRotationSpeed)
                 npc.rotation = calCloneBroRotation;
             if (npc.rotation < 0f)
-                npc.rotation += MathHelper.TwoPi;
-            else if (npc.rotation > MathHelper.TwoPi)
-                npc.rotation -= MathHelper.TwoPi;
+                npc.rotation += TwoPi;
+            else if (npc.rotation > TwoPi)
+                npc.rotation -= TwoPi;
             if (npc.rotation > calCloneBroRotation - calCloneBroRotationSpeed && npc.rotation < calCloneBroRotation + calCloneBroRotationSpeed)
                 npc.rotation = calCloneBroRotation;
 
@@ -245,7 +245,7 @@ namespace Windfall.Content.NPCs
                         int type = ModContent.ProjectileType<BrimstoneBarrage>();
                         int damage = StatCorrections.ScaleContactDamage(Main.masterMode ? 234 : CalamityWorld.death ? 176 : CalamityWorld.revenge ? 160 : Main.expertMode ? 140 : 80);
                         int totalProjectiles = death ? 10 : revenge ? 8 : expertMode ? 6 : 4;
-                        float radians = MathHelper.TwoPi / totalProjectiles;
+                        float radians = TwoPi / totalProjectiles;
                         float velocity = 5f;
                         Vector2 spinningPoint = new Vector2(0f, -velocity);
                         for (int k = 0; k < totalProjectiles; k++)
@@ -279,7 +279,7 @@ namespace Windfall.Content.NPCs
                             npc.velocity.Y = 0f;
                     }
                     else
-                        npc.rotation = (float)Math.Atan2(npc.velocity.Y, npc.velocity.X) - MathHelper.PiOver2;
+                        npc.rotation = (float)Math.Atan2(npc.velocity.Y, npc.velocity.X) - PiOver2;
 
                     if (npc.ai[2] >= 105f)
                     {
@@ -328,23 +328,23 @@ namespace Windfall.Content.NPCs
 
             float calCloneBroPlayerXDist = npc.position.X + npc.width / 2 - player.position.X - player.width / 2;
             float calCloneBroPlayerYDist = npc.position.Y + npc.height - 59f - player.position.Y - player.height / 2;
-            float calCloneBroRotation = (float)Math.Atan2(calCloneBroPlayerYDist, calCloneBroPlayerXDist) + MathHelper.PiOver2;
+            float calCloneBroRotation = (float)Math.Atan2(calCloneBroPlayerYDist, calCloneBroPlayerXDist) + PiOver2;
             if (calCloneBroRotation < 0f)
-                calCloneBroRotation += MathHelper.TwoPi;
-            else if (calCloneBroRotation > MathHelper.TwoPi)
-                calCloneBroRotation -= MathHelper.TwoPi;
+                calCloneBroRotation += TwoPi;
+            else if (calCloneBroRotation > TwoPi)
+                calCloneBroRotation -= TwoPi;
 
             float calCloneBroRotationSpeed = 0.15f;
             if (npc.rotation < calCloneBroRotation)
             {
-                if (calCloneBroRotation - npc.rotation > MathHelper.Pi)
+                if (calCloneBroRotation - npc.rotation > Pi)
                     npc.rotation -= calCloneBroRotationSpeed;
                 else
                     npc.rotation += calCloneBroRotationSpeed;
             }
             else if (npc.rotation > calCloneBroRotation)
             {
-                if (npc.rotation - calCloneBroRotation > MathHelper.Pi)
+                if (npc.rotation - calCloneBroRotation > Pi)
                     npc.rotation += calCloneBroRotationSpeed;
                 else
                     npc.rotation -= calCloneBroRotationSpeed;
@@ -353,9 +353,9 @@ namespace Windfall.Content.NPCs
             if (npc.rotation > calCloneBroRotation - calCloneBroRotationSpeed && npc.rotation < calCloneBroRotation + calCloneBroRotationSpeed)
                 npc.rotation = calCloneBroRotation;
             if (npc.rotation < 0f)
-                npc.rotation += MathHelper.TwoPi;
-            else if (npc.rotation > MathHelper.TwoPi)
-                npc.rotation -= MathHelper.TwoPi;
+                npc.rotation += TwoPi;
+            else if (npc.rotation > TwoPi)
+                npc.rotation -= TwoPi;
             if (npc.rotation > calCloneBroRotation - calCloneBroRotationSpeed && npc.rotation < calCloneBroRotation + calCloneBroRotationSpeed)
                 npc.rotation = calCloneBroRotation;
 
@@ -542,7 +542,7 @@ namespace Windfall.Content.NPCs
                         int type = ModContent.ProjectileType<BrimstoneBarrage>();
                         int damage = StatCorrections.ScaleProjectileDamage(Main.masterMode ? 192 : CalamityWorld.death ? 140 : CalamityWorld.revenge ? 128 : Main.expertMode ? 112 : 70);
                         int totalProjectiles = death ? 10 : revenge ? 8 : expertMode ? 6 : 4;
-                        float radians = MathHelper.TwoPi / totalProjectiles;
+                        float radians = TwoPi / totalProjectiles;
                         float velocity = 5f;
                         Vector2 spinningPoint = new Vector2(0f, -velocity);
                         for (int k = 0; k < totalProjectiles; k++)
@@ -576,7 +576,7 @@ namespace Windfall.Content.NPCs
                             npc.velocity.Y = 0f;
                     }
                     else
-                        npc.rotation = (float)Math.Atan2(npc.velocity.Y, npc.velocity.X) - MathHelper.PiOver2;
+                        npc.rotation = (float)Math.Atan2(npc.velocity.Y, npc.velocity.X) - PiOver2;
 
                     if (npc.ai[2] >= 90f) //80
                     {

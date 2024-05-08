@@ -64,7 +64,7 @@ namespace Windfall.Content.World
 
                     bool place = true;
                     PlaceSchematic<Action<Chest>>(mapKey, placementPoint, anchorType, ref place);
-                    CalamityUtils.AddProtectedStructure(new Rectangle(placementPoint.X, placementPoint.Y, (int)schematicSize.X, (int)schematicSize.Y), 20);
+                    AddProtectedStructure(new Rectangle(placementPoint.X, placementPoint.Y, (int)schematicSize.X, (int)schematicSize.Y), 20);
                     break;
                 }
                 placementPoint = new(-1, -1);

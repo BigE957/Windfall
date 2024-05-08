@@ -47,7 +47,7 @@ namespace Windfall.Content.NPCs.WanderingNPCs
             }
             else
             {
-                WindfallUtils.ProgressiveQuestDialogueHelper(Main.npc[NPC.whoAmI]);
+                ProgressiveQuestDialogueHelper(Main.npc[NPC.whoAmI]);
             }
         }
 

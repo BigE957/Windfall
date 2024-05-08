@@ -6,19 +6,19 @@ namespace Windfall.Common.Utils
     {
         public class ActiveAndNotActuated : GenCondition
         {
-            protected override bool CheckValidity(int x, int y) => CalamityUtils.ParanoidTileRetrieval(x, y).HasUnactuatedTile;
+            protected override bool CheckValidity(int x, int y) => ParanoidTileRetrieval(x, y).HasUnactuatedTile;
         }
 
         public class NotPlatform : GenCondition
         {
-            protected override bool CheckValidity(int x, int y) => !TileID.Sets.Platforms[CalamityUtils.ParanoidTileRetrieval(x, y).TileType];
+            protected override bool CheckValidity(int x, int y) => !TileID.Sets.Platforms[ParanoidTileRetrieval(x, y).TileType];
         }
 
         public class IsSolidOrSolidTop : GenCondition
         {
             protected override bool CheckValidity(int x, int y)
             {
-                Tile tile = CalamityUtils.ParanoidTileRetrieval(x, y);
+                Tile tile = ParanoidTileRetrieval(x, y);
                 return tile.HasUnactuatedTile && (Main.tileSolid[tile.TileType] || Main.tileSolidTop[tile.TileType]);
             }
         }
@@ -27,7 +27,7 @@ namespace Windfall.Common.Utils
         {
             protected override bool CheckValidity(int x, int y)
             {
-                Tile tile = CalamityUtils.ParanoidTileRetrieval(x, y);
+                Tile tile = ParanoidTileRetrieval(x, y);
                 return !tile.HasTile && tile.LiquidAmount <= 0;
             }
         }
@@ -36,7 +36,7 @@ namespace Windfall.Common.Utils
         {
             protected override bool CheckValidity(int x, int y)
             {
-                Tile tile = CalamityUtils.ParanoidTileRetrieval(x, y);
+                Tile tile = ParanoidTileRetrieval(x, y);
                 return tile.LiquidAmount >= 200 && !(tile.LiquidType == LiquidID.Honey) && !(tile.LiquidType == LiquidID.Lava);
             }
         }
@@ -45,7 +45,7 @@ namespace Windfall.Common.Utils
         {
             protected override bool CheckValidity(int x, int y)
             {
-                Tile tile = CalamityUtils.ParanoidTileRetrieval(x, y);
+                Tile tile = ParanoidTileRetrieval(x, y);
                 return tile.LiquidAmount >= 200 && !(tile.LiquidType == LiquidID.Honey) && !(tile.LiquidType == LiquidID.Lava) || tile.HasUnactuatedTile && Main.tileSolid[tile.TileType];
             }
         }
@@ -54,7 +54,7 @@ namespace Windfall.Common.Utils
         {
             protected override bool CheckValidity(int x, int y)
             {
-                Tile tile = CalamityUtils.ParanoidTileRetrieval(x, y);
+                Tile tile = ParanoidTileRetrieval(x, y);
                 return tile.LiquidAmount >= 200 && tile.LiquidType == LiquidID.Lava || tile.HasUnactuatedTile && Main.tileSolid[tile.TileType];
             }
         }

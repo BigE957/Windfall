@@ -137,7 +137,7 @@ namespace Windfall.Common.Systems.WorldEvents
                         }
                         zoom = 0;
                         if (AvailableTopics.Count == 0)
-                            for (int h = 0; h < MeetingTopic.GetNames(typeof(MeetingTopic)).Length; h++)
+                            for (int h = 0; h < Enum.GetNames(typeof(MeetingTopic)).Length; h++)
                                 AvailableTopics.Add(h);
 
                         CurrentMeetingTopic = MeetingTopic.CurrentEvents; //(MeetingTopic)AvailableTopics[Main.rand.Next(AvailableTopics.Count)]; Actual Code

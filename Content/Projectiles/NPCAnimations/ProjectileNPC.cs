@@ -99,7 +99,7 @@ namespace Windfall.Content.Projectiles.NPCAnimations
                     {
                         DoOnDespawn();
                         if (NPCType != -1)
-                            NPC.NewNPC(NPC.GetSource_NaturalSpawn(), (int)Projectile.Center.X, (int)Projectile.Bottom.Y - 1, NPCType, 0, Projectile.velocity.Y, Projectile.direction, 1);
+                            NPC.NewNPC(Terraria.Entity.GetSource_NaturalSpawn(), (int)Projectile.Center.X, (int)Projectile.Bottom.Y - 1, NPCType, 0, Projectile.velocity.Y, Projectile.direction, 1);
                         Projectile.active = false;
                     }
                     else

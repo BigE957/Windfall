@@ -75,7 +75,7 @@ namespace Windfall.Content.NPCs.WorldEvents.CalClone
             base.OnSpawn(source);
             string key = "A Potion Seller has arrived!";
             Color messageColor = new(50, 125, 255);
-            CalamityUtils.DisplayLocalizedText(key, messageColor);
+            DisplayLocalizedText(key, messageColor);
         }
         public override bool PreAI()
         {
@@ -92,7 +92,7 @@ namespace Windfall.Content.NPCs.WorldEvents.CalClone
                 SoundEngine.PlaySound(CalCloneTeleport, NPC.Center);
                 string key = "A Potion Seller has departed!";
                 Color messageColor = new(50, 125, 255);
-                CalamityUtils.DisplayLocalizedText(key, messageColor);
+                DisplayLocalizedText(key, messageColor);
                 NPC.active = false;
                 NPC.netSkip = -1;
                 NPC.life = 0;
