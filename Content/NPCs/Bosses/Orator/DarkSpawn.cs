@@ -69,7 +69,7 @@ namespace Windfall.Content.NPCs.Bosses.TheOrator
             else
             {
                 NPC.dontTakeDamage = false;
-                NPC.damage = 20;
+                NPC.damage = StatCorrections.ScaleContactDamage(Main.masterMode ? 300 : CalamityWorld.death ? 220 : CalamityWorld.revenge ? 180 : Main.expertMode ? 120 : 80);
             }
             #region Despawning
             if (Orator == null)
@@ -84,8 +84,9 @@ namespace Windfall.Content.NPCs.Bosses.TheOrator
             }
             else if (Orator.ai[0] != 2 && Orator.ai[0] != 0)
             {
-                CurrentAI = AIState.Sacrifice;
-                return;
+                if(CurrentAI != AIState.Sacrifice)
+                    aiCounter = 0;
+                CurrentAI = AIState.Sacrifice;  
             }
             #endregion
             /*
@@ -211,16 +212,9 @@ namespace Windfall.Content.NPCs.Bosses.TheOrator
 
                     #region Movement
                     toTarget = Orator.Center - NPC.Center;
-                    if (NPC.Center.Y < Orator.Center.Y)
-                        NPC.velocity.Y++;
-                    else
-                        NPC.velocity.Y--;
-                    if (NPC.Center.X < Orator.Center.X)
-                        NPC.velocity.X++;
-                    else
-                        NPC.velocity.X--;
+                    NPC.velocity = toTarget.SafeNormalize(Vector2.UnitY) * aiCounter / 5;
                     if (NPC.velocity.Length() > 20)
-                        NPC.velocity = NPC.velocity.SafeNormalize(Vector2.Zero) * 20;
+                        NPC.velocity = NPC.velocity.SafeNormalize(Vector2.UnitY) * 20;
                     NPC.rotation = toTarget.ToRotation() + Pi;
                     NPC.spriteDirection = NPC.direction * -1;
                     #endregion
