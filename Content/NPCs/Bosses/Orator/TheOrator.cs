@@ -1,21 +1,14 @@
-﻿using CalamityMod.Items.Weapons.Summon;
-using CalamityMod.World;
+﻿using CalamityMod.World;
 using Terraria.Graphics.Shaders;
-using Terraria;
 using Windfall.Common.Systems;
 using Windfall.Content.Projectiles.Boss.Orator;
-using CalamityMod.NPCs.SupremeCalamitas;
-using Microsoft.Xna.Framework.Graphics;
-using CalamityMod.Items.LoreItems;
 using Windfall.Content.Items.Lore;
-using CalamityMod.Items.Placeables.Furniture.Trophies;
-using CalamityMod;
-using CalamityMod.Items.Armor.Vanity;
-using CalamityMod.Items.TreasureBags;
 using Terraria.GameContent.ItemDropRules;
 using Windfall.Common.Utils;
 using CalamityMod.Items.Weapons.Magic;
 using CalamityMod.Cooldowns;
+using Terraria;
+using CalamityMod.Buffs.StatBuffs;
 
 namespace Windfall.Content.NPCs.Bosses.TheOrator
 {
@@ -79,12 +72,16 @@ namespace Windfall.Content.NPCs.Bosses.TheOrator
         Vector2 VectorToTarget = Vector2.Zero;
         public override bool PreAI()
         {
-
+            foreach(Player p in Main.player)
+            {
+                p.AddBuff(ModContent.BuffType<BossEffects>(), 2);
+            }
             return true;
         }
         public override void AI()
         {
             Player target = Main.player[Player.FindClosest(NPC.Center, NPC.width, NPC.height)];
+            DisplayLocalizedText($"{target.Calamity().isNearbyBoss}");
             if (target.active == false || target.dead)
                 NPC.active = false;
             if (NPC.Center.X < target.Center.X)
@@ -99,7 +96,7 @@ namespace Windfall.Content.NPCs.Bosses.TheOrator
                     target = Main.player[Player.FindClosest(NPC.Center, NPC.width, NPC.height)];
 
                     int height = 150;
-                    if (aiCounter > 210)
+                    if (aiCounter > 270)
                         height = 250;
 
                     if (NPC.Center.Y < target.Center.Y - height)
@@ -124,7 +121,7 @@ namespace Windfall.Content.NPCs.Bosses.TheOrator
                             forcefieldScale = 1f;
                         }
                     }
-                    if (aiCounter == 300)
+                    if (aiCounter == 360)
                     {
                         aiCounter = -30;
                         SoundEngine.PlaySound(DashWarn);
