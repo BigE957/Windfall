@@ -39,6 +39,7 @@ namespace Windfall.Content.NPCs.Bosses.TheOrator
             Hunting,
             Recoil,
             Dashing,
+            Globbing,
             Sacrifice,
         }
         internal AIState CurrentAI
@@ -46,14 +47,13 @@ namespace Windfall.Content.NPCs.Bosses.TheOrator
             get => (AIState)NPC.ai[0];
             set => NPC.ai[0] = (int)value;
         }
-        /*
         private int aiCounter
         {
             get => (int)NPC.ai[1];
             set => NPC.ai[1] = value;
         }     
-        */
         Vector2 toTarget = Vector2.Zero;
+        bool attackBool = false;
         public override void AI()
         {
             Player target = Main.player[Player.FindClosest(NPC.Center, NPC.width, NPC.height)];
@@ -138,15 +138,35 @@ namespace Windfall.Content.NPCs.Bosses.TheOrator
                         NPC.rotation = toTarget.ToRotation() + Pi;
                         if (Main.rand.NextBool(5) || toTarget.Length() > 600f)
                         {
-                            NPC.velocity = toTarget.SafeNormalize(Vector2.Zero) * -10;
+                            attackBool = NPC.position.X > target.position.X;
+                            NPC.velocity = toTarget.SafeNormalize(Vector2.Zero) * -5;
                             CurrentAI = AIState.Dashing;
                         }
                         else
                         {
-                            NPC.velocity = toTarget.SafeNormalize(Vector2.Zero) * -10;
-                            Projectile.NewProjectile(Terraria.Entity.GetSource_NaturalSpawn(), NPC.Center, toTarget.SafeNormalize(Vector2.UnitX), ModContent.ProjectileType<DarkBolt>(), TheOrator.BoltDamage, 0f, -1, 0, 15);
-                            CurrentAI = AIState.Recoil;
+                            if (Main.rand.NextBool(3))
+                            {
+                                NPC.velocity = Vector2.Zero;
+                                CurrentAI = AIState.Globbing;
+                            }
+                            else
+                            {
+                                NPC.velocity = toTarget.SafeNormalize(Vector2.Zero) * -10;
+                                if (Main.rand.NextBool())
+                                {
+                                    Projectile.NewProjectile(Terraria.Entity.GetSource_NaturalSpawn(), NPC.Center, toTarget.SafeNormalize(Vector2.UnitX), ModContent.ProjectileType<DarkBolt>(), TheOrator.BoltDamage, 0f, -1, 0, 15);
+                                    Projectile.NewProjectile(Terraria.Entity.GetSource_NaturalSpawn(), NPC.Center, toTarget.SafeNormalize(Vector2.UnitX).RotatedBy(PiOver4), ModContent.ProjectileType<DarkBolt>(), TheOrator.BoltDamage, 0f, -1, 0, 15);
+                                    Projectile.NewProjectile(Terraria.Entity.GetSource_NaturalSpawn(), NPC.Center, toTarget.SafeNormalize(Vector2.UnitX).RotatedBy(-PiOver4), ModContent.ProjectileType<DarkBolt>(), TheOrator.BoltDamage, 0f, -1, 0, 15);
+                                }
+                                else
+                                {
+                                    Projectile.NewProjectile(Terraria.Entity.GetSource_NaturalSpawn(), NPC.Center, toTarget.SafeNormalize(Vector2.UnitX).RotatedBy(Pi / 8), ModContent.ProjectileType<DarkBolt>(), TheOrator.BoltDamage, 0f, -1, 0, 15);
+                                    Projectile.NewProjectile(Terraria.Entity.GetSource_NaturalSpawn(), NPC.Center, toTarget.SafeNormalize(Vector2.UnitX).RotatedBy(Pi / -8), ModContent.ProjectileType<DarkBolt>(), TheOrator.BoltDamage, 0f, -1, 0, 15);
+                                }
+                                CurrentAI = AIState.Recoil;
+                            }
                         }
+                        aiCounter = 0;
                     }
                     #endregion
 
@@ -159,12 +179,31 @@ namespace Windfall.Content.NPCs.Bosses.TheOrator
                         CurrentAI = AIState.Recoil;
                     }
                     break;
+                case AIState.Globbing:
+                    Vector2 baseAngle;
+                    float rotation;
+                    if (attackBool)
+                    {
+                        baseAngle = 0f.ToRotationVector2();
+                        rotation = -Pi / 8;
+                    }
+                    else
+                    {                   
+                        baseAngle = Pi.ToRotationVector2();
+                        rotation = Pi / 8;
+                    }
+                    if (aiCounter % 5 == 0)
+                        Projectile.NewProjectile(Terraria.Entity.GetSource_NaturalSpawn(), NPC.Center, baseAngle.SafeNormalize(Vector2.UnitX).RotatedBy(rotation * Math.Ceiling((double)aiCounter / 5)) * 15, ModContent.ProjectileType<DarkGlob>(), TheOrator.GlobDamage, 0f, -1, 1, 0.5f);                   
+                    NPC.rotation = baseAngle.SafeNormalize(Vector2.UnitX).RotatedBy(rotation * ((float)aiCounter / 5)).ToRotation() + Pi;
+                    if (aiCounter % 30 == 0)
+                        CurrentAI = AIState.Hunting;
+                    break;
                 case AIState.Recoil:
                     NPC.velocity += NPC.velocity.SafeNormalize(Vector2.UnitX) / -2;
                     if (NPC.velocity.Length() < 2)
                     {
                         CurrentAI = AIState.Hunting;
-                        //aiCounter = 0;
+                        aiCounter = 0;
                         NPC.velocity = (target.Center - NPC.Center).SafeNormalize(Vector2.Zero);
                     }
                     break;
@@ -199,7 +238,7 @@ namespace Windfall.Content.NPCs.Bosses.TheOrator
 
                     break;
             }
-            //aiCounter++; 
+            aiCounter++; 
             NPC.spriteDirection = NPC.direction * -1;
             Lighting.AddLight(NPC.Center, new Vector3(0.32f, 0.92f, 0.71f));
         }
