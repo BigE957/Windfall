@@ -1,5 +1,6 @@
 ﻿using CalamityMod.World;
 using Windfall.Common.Graphics.Metaballs;
+using Windfall.Content.NPCs.Bosses.TheOrator;
 
 namespace Windfall.Content.Projectiles.Boss.Orator
 {
@@ -11,12 +12,12 @@ namespace Windfall.Content.Projectiles.Boss.Orator
         {
             Projectile.width = 24;
             Projectile.height = 24;
-            Projectile.damage = 100;
+            Projectile.damage = TheOrator.GlobDamage;
             Projectile.hostile = true;
             Projectile.ignoreWater = true;
             Projectile.tileCollide = false;
             Projectile.penetrate = -1;
-            Projectile.timeLeft = 600;
+            Projectile.timeLeft = 390;
             Projectile.scale = 0f;
             CooldownSlot = ImmunityCooldownID.Bosses;
         }
@@ -59,7 +60,7 @@ namespace Windfall.Content.Projectiles.Boss.Orator
                 if (Projectile.scale < MaxSize)
                 {
                     Projectile.scale += 1 / 60f;
-                    Projectile.timeLeft = 100;
+                    Projectile.timeLeft = 500;
                     Projectile.damage = 0;
                 }
                 else

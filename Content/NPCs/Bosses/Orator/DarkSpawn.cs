@@ -27,14 +27,15 @@ namespace Windfall.Content.NPCs.Bosses.TheOrator
             NPC.noTileCollide = true;
             NPC.lifeMax = 1200;
             NPC.knockBackResist = 0f;
-            NPC.HitSound = SoundID.NPCHit49;
-            NPC.DeathSound = SoundID.NPCDeath51;
+            NPC.HitSound = SoundID.DD2_LightningBugHurt;
+            NPC.DeathSound = SoundID.DD2_LightningBugDeath;
             NPC.Calamity().VulnerableToHeat = true;
             NPC.Calamity().VulnerableToElectricity = true;
             NPC.Calamity().VulnerableToWater = true;
         }
         internal enum AIState
         {
+            Spawning,
             OnBoss,
             Hunting,
             Recoil,
@@ -54,6 +55,14 @@ namespace Windfall.Content.NPCs.Bosses.TheOrator
         }     
         Vector2 toTarget = Vector2.Zero;
         bool attackBool = false;
+
+        public override void OnSpawn(IEntitySource source)
+        {
+            CurrentAI = AIState.Spawning;
+            NPC.velocity = Main.rand.NextFloat(0, TwoPi).ToRotationVector2() * Main.rand.Next(10, 15);
+            NPC.rotation = NPC.velocity.ToRotation() + Pi;
+
+        }
         public override void AI()
         {
             Player target = Main.player[Player.FindClosest(NPC.Center, NPC.width, NPC.height)];
@@ -61,7 +70,7 @@ namespace Windfall.Content.NPCs.Bosses.TheOrator
             if(NPC.FindFirstNPC(ModContent.NPCType<TheOrator>()) != -1)
                 Orator = Main.npc[NPC.FindFirstNPC(ModContent.NPCType<TheOrator>())];
 
-            if (CurrentAI == AIState.OnBoss)
+            if (CurrentAI <= AIState.OnBoss)
             {
                 NPC.dontTakeDamage = true;
                 NPC.damage = 0;
@@ -95,6 +104,15 @@ namespace Windfall.Content.NPCs.Bosses.TheOrator
             */
             switch (CurrentAI)
             {
+                case AIState.Spawning:
+                    NPC.velocity += NPC.velocity.SafeNormalize(Vector2.UnitX) / -2;
+                    if (NPC.velocity.Length() < 2)
+                    {
+                        CurrentAI = AIState.OnBoss;
+                        aiCounter = 0;
+                        NPC.velocity = (target.Center - NPC.Center).SafeNormalize(Vector2.Zero);
+                    }
+                    break;
                 case AIState.OnBoss:
                     if (NPC.Center.Y < Orator.Center.Y)
                         NPC.velocity.Y++;
@@ -138,7 +156,7 @@ namespace Windfall.Content.NPCs.Bosses.TheOrator
                     {                      
                         NPC.rotation = toTarget.ToRotation() + Pi;
                         if (Main.rand.NextBool(5) || toTarget.Length() > 600f)
-                        {
+                        {                            
                             attackBool = NPC.position.X > target.position.X;
                             NPC.velocity = toTarget.SafeNormalize(Vector2.Zero) * -5;
                             CurrentAI = AIState.Dashing;
@@ -152,6 +170,7 @@ namespace Windfall.Content.NPCs.Bosses.TheOrator
                             }
                             else
                             {
+                                SoundEngine.PlaySound(SoundID.DD2_OgreSpit, NPC.Center);
                                 NPC.velocity = toTarget.SafeNormalize(Vector2.Zero) * -10;
                                 if (Main.rand.NextBool())
                                 {
@@ -176,6 +195,7 @@ namespace Windfall.Content.NPCs.Bosses.TheOrator
                     NPC.velocity += NPC.velocity.SafeNormalize(Vector2.UnitX) / -2;
                     if (NPC.velocity.Length() < 2)
                     {
+                        SoundEngine.PlaySound(SoundID.DD2_GoblinBomberThrow, NPC.Center);
                         NPC.velocity = NPC.velocity.SafeNormalize(Vector2.Zero) * -30;
                         CurrentAI = AIState.Recoil;
                     }
@@ -194,7 +214,10 @@ namespace Windfall.Content.NPCs.Bosses.TheOrator
                         rotation = Pi / 8;
                     }
                     if (aiCounter % 5 == 0)
-                        Projectile.NewProjectile(Terraria.Entity.GetSource_NaturalSpawn(), NPC.Center, baseAngle.SafeNormalize(Vector2.UnitX).RotatedBy(rotation * Math.Ceiling((double)aiCounter / 5)) * 15, ModContent.ProjectileType<DarkGlob>(), TheOrator.GlobDamage, 0f, -1, 1, 0.5f);                   
+                    {
+                        SoundEngine.PlaySound(SoundID.DD2_LightningBugZap, NPC.Center);
+                        Projectile.NewProjectile(Terraria.Entity.GetSource_NaturalSpawn(), NPC.Center, baseAngle.SafeNormalize(Vector2.UnitX).RotatedBy(rotation * Math.Ceiling((double)aiCounter / 5)) * 15, ModContent.ProjectileType<DarkGlob>(), TheOrator.GlobDamage, 0f, -1, 1, 0.5f);
+                    }
                     NPC.rotation = baseAngle.SafeNormalize(Vector2.UnitX).RotatedBy(rotation * ((float)aiCounter / 5)).ToRotation() + Pi;
                     if (aiCounter % 30 == 0)
                         CurrentAI = AIState.Hunting;
@@ -226,6 +249,7 @@ namespace Windfall.Content.NPCs.Bosses.TheOrator
                         CombatText.NewText(NPC.Hitbox, Color.LimeGreen, Orator.lifeMax / 100);
                         if (Orator.ModNPC is TheOrator orator)
                             TheOrator.noSpawnsEscape = false;
+                        SoundEngine.PlaySound(SoundID.AbigailUpgrade, NPC.Center);
                         NPC.active = false;
                     }
                     #endregion
