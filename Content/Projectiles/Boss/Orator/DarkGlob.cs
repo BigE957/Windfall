@@ -16,7 +16,7 @@ namespace Windfall.Content.Projectiles.Boss.Orator
             Projectile.ignoreWater = true;
             Projectile.tileCollide = false;
             Projectile.penetrate = -1;
-            Projectile.timeLeft = 390;
+            Projectile.timeLeft = 600;
             Projectile.scale = 0f;
             CooldownSlot = ImmunityCooldownID.Bosses;
         }
