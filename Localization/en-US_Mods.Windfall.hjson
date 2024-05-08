@@ -1017,6 +1017,7 @@ Projectiles: {
 	GodseekerKnightProj.DisplayName: Godseeker Knight Proj
 	EmpyreanThorn.DisplayName: Empyrean Thorn
 	LunaticCultistProj.DisplayName: Lunatic Cultist Proj
+	DarkCoalescence.DisplayName: Dark Coalescence
 }
 
 Buffs: {

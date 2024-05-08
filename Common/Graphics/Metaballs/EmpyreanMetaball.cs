@@ -39,7 +39,7 @@ namespace Windfall.Common.Graphics.Metaballs
         } = new();
 
         // Check if there are any extraneous particles or if the Gruesome Eminence projectile is present when deciding if this particle should be drawn.
-        public override bool AnythingToDraw => EmpyreanParticles.Any() || AnyProjectiles(ModContent.ProjectileType<DarkGlob>()) || AnyProjectiles(ModContent.ProjectileType<DarkMonster>()) || AnyProjectiles(ModContent.ProjectileType<EmpyreanThorn>());
+        public override bool AnythingToDraw => EmpyreanParticles.Any() || AnyProjectiles(ModContent.ProjectileType<DarkGlob>()) || AnyProjectiles(ModContent.ProjectileType<DarkMonster>()) || AnyProjectiles(ModContent.ProjectileType<EmpyreanThorn>()) || AnyProjectiles(ModContent.ProjectileType<DarkCoalescence>());
 
         public override IEnumerable<Texture2D> Layers
         {
@@ -133,7 +133,7 @@ namespace Windfall.Common.Graphics.Metaballs
             }
             foreach (Projectile p in Main.projectile.Where(p => p.active))
             {
-                if (p.type == ModContent.ProjectileType<DarkGlob>() || p.type == ModContent.ProjectileType<DarkMonster>() || p.type == ModContent.ProjectileType<EmpyreanThorn>())
+                if (p.type == ModContent.ProjectileType<DarkGlob>() || p.type == ModContent.ProjectileType<DarkMonster>() || p.type == ModContent.ProjectileType<EmpyreanThorn>() || p.type == ModContent.ProjectileType<DarkCoalescence>())
                 {
                     Color c = Color.White;
                     c.A = 0;

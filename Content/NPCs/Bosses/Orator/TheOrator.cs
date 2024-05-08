@@ -6,7 +6,7 @@ using Windfall.Content.Items.Lore;
 using Terraria.GameContent.ItemDropRules;
 using Windfall.Common.Utils;
 using CalamityMod.Items.Weapons.Magic;
-using CalamityMod.Cooldowns;
+using Terraria;
 using CalamityMod.Buffs.StatBuffs;
 
 namespace Windfall.Content.NPCs.Bosses.TheOrator
@@ -59,6 +59,7 @@ namespace Windfall.Content.NPCs.Bosses.TheOrator
             DarkOrbit,
             DarkSlice,
             DarkStorm,
+            DarkCollision,
         }
         private States AIState
         {
@@ -68,6 +69,7 @@ namespace Windfall.Content.NPCs.Bosses.TheOrator
         int aiCounter = 0;
         int attackCounter = 0;
         bool dashing = false;
+        private int AttackCycles = 0;
         Vector2 VectorToTarget = Vector2.Zero;
         public override bool PreAI()
         {
@@ -247,12 +249,21 @@ namespace Windfall.Content.NPCs.Bosses.TheOrator
                         aiCounter = EndTime;                    
                     if (aiCounter >= EndTime + 90)
                     {
-                        aiCounter = -30;
-                        SoundEngine.PlaySound(DashWarn);
-                        attackCounter = 0;
-                        NPC.velocity = (target.Center - NPC.Center).SafeNormalize(Vector2.UnitY) * -5;
+                        attackCounter = 0;                        
                         NPC.DR_NERD(0.1f);
-                        AIState = States.DarkSlice;
+
+                        if (AttackCycles % 2 == 0)
+                        {
+                            AIState = States.DarkCollision;
+                            aiCounter = 0;
+                        }
+                        else
+                        {
+                            aiCounter = -30;
+                            SoundEngine.PlaySound(DashWarn);
+                            NPC.velocity = (target.Center - NPC.Center).SafeNormalize(Vector2.UnitY) * -5;
+                            AIState = States.DarkSlice;
+                        }
                         return;
                     }
                     break;
@@ -356,6 +367,7 @@ namespace Windfall.Content.NPCs.Bosses.TheOrator
                 case States.DarkSlice:
                     if (aiCounter == 0)
                     {
+                        AttackCycles++;
                         SoundEngine.PlaySound(Dash);
                         VectorToTarget = NPC.velocity.SafeNormalize(Vector2.UnitX) * -60;
                         dashing = true;
@@ -438,6 +450,45 @@ namespace Windfall.Content.NPCs.Bosses.TheOrator
                         aiCounter = -60;
                         attackCounter = 0;
                         AIState = States.DarkOrbit;
+                    }
+                    break;
+                case States.DarkCollision:
+
+                    #region Movement
+                    target = Main.player[Player.FindClosest(NPC.Center, NPC.width, NPC.height)];
+
+                    if (NPC.Center.Y < target.Center.Y - 300)
+                        NPC.velocity.Y++;
+                    else
+                        NPC.velocity.Y--;
+                    if (NPC.Center.X < target.Center.X)
+                        NPC.velocity.X++;
+                    else
+                        NPC.velocity.X--;
+                    if (NPC.velocity.Length() > 15)
+                        NPC.velocity = NPC.velocity.SafeNormalize(Vector2.Zero) * 15;
+                    #endregion
+
+                    if(aiCounter % 200 == 0)
+                    {
+                        if(Main.rand.NextBool())
+                        {
+                            Projectile.NewProjectile(Projectile.GetSource_NaturalSpawn(), new Vector2(target.Center.X + 500, target.Center.Y), Vector2.Zero, ModContent.ProjectileType<DarkCoalescence>(), MonsterDamage, 0f, -1, 0, -1);
+                            Projectile.NewProjectile(Projectile.GetSource_NaturalSpawn(), new Vector2(target.Center.X - 500, target.Center.Y), Vector2.Zero, ModContent.ProjectileType<DarkCoalescence>(), MonsterDamage, 0f, -1, 0, 1);
+                        }
+                        else
+                        {
+                            Projectile.NewProjectile(Projectile.GetSource_NaturalSpawn(), new Vector2(target.Center.X, target.Center.Y + 500), Vector2.Zero, ModContent.ProjectileType<DarkCoalescence>(), MonsterDamage, 0f, -1, 0, 0, -1);
+                            Projectile.NewProjectile(Projectile.GetSource_NaturalSpawn(), new Vector2(target.Center.X, target.Center.Y - 500), Vector2.Zero, ModContent.ProjectileType<DarkCoalescence>(), MonsterDamage, 0f, -1, 0, 0, 1);
+                        }
+                    }
+
+                    if(aiCounter >= 700)
+                    {
+                        aiCounter = -30;
+                        SoundEngine.PlaySound(DashWarn);
+                        NPC.velocity = (target.Center - NPC.Center).SafeNormalize(Vector2.UnitY) * -5;
+                        AIState = States.DarkSlice;
                     }
                     break;
             }
