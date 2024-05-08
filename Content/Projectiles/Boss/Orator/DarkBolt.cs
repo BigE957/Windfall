@@ -36,7 +36,7 @@ namespace Windfall.Content.Projectiles.Boss.Orator
         {
             if (aiCounter == 0)
                 DirectionalVelocity = Projectile.velocity.SafeNormalize(Vector2.UnitX);
-            Projectile.rotation = DirectionalVelocity.ToRotation() + MathHelper.PiOver2;
+            Projectile.rotation = DirectionalVelocity.ToRotation() + PiOver2;
             Projectile.spriteDirection = (int)Projectile.rotation;
             Projectile.velocity = DirectionalVelocity.SafeNormalize(Vector2.UnitX) * (Velocity / 2);
             Velocity += 1f;
