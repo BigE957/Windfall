@@ -74,7 +74,8 @@ namespace Windfall.Content.NPCs.Bosses.TheOrator
         {
             foreach(Player p in Main.player)
             {
-                p.AddBuff(ModContent.BuffType<BossEffects>(), 2);
+                if(p != null && p.active)
+                    p.AddBuff(ModContent.BuffType<BossEffects>(), 2);
             }
             return true;
         }
