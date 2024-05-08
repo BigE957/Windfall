@@ -1,4 +1,5 @@
-﻿using Windfall.Common.Graphics.Metaballs;
+﻿using CalamityMod.World;
+using Windfall.Common.Graphics.Metaballs;
 
 namespace Windfall.Content.Projectiles.Boss.Orator
 {
@@ -63,7 +64,7 @@ namespace Windfall.Content.Projectiles.Boss.Orator
                 }
                 else
                     Projectile.damage = 100;
-                Projectile.velocity.Y += 0.3f;
+                Projectile.velocity.Y += CalamityWorld.death ? 0.3f : CalamityWorld.revenge ? 0.25f : Main.expertMode ? 0.2f : 0.15f;
                 EmpyreanMetaball.SpawnParticle(Projectile.Center , Vector2.Zero, Projectile.scale * 60);
             }
             Projectile.Hitbox = new Rectangle((int)Projectile.position.X, (int)Projectile.position.Y, (int)(70 * MaxSize), (int)(70 * MaxSize));
