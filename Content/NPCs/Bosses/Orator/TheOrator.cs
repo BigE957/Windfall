@@ -7,7 +7,6 @@ using Terraria.GameContent.ItemDropRules;
 using Windfall.Common.Utils;
 using CalamityMod.Items.Weapons.Magic;
 using CalamityMod.Cooldowns;
-using Terraria;
 using CalamityMod.Buffs.StatBuffs;
 
 namespace Windfall.Content.NPCs.Bosses.TheOrator
@@ -97,7 +96,7 @@ namespace Windfall.Content.NPCs.Bosses.TheOrator
 
                     int height = 150;
                     if (aiCounter > 270)
-                        height = 250;
+                        height = 300;
 
                     if (NPC.Center.Y < target.Center.Y - height)
                         NPC.velocity.Y++;
@@ -168,7 +167,7 @@ namespace Windfall.Content.NPCs.Bosses.TheOrator
                         Projectile.NewProjectile(Terraria.Entity.GetSource_NaturalSpawn(), NPC.Center, VectorToTarget.SafeNormalize(Vector2.UnitX) * 10, ModContent.ProjectileType<DarkGlob>(), GlobDamage, 0f, -1, 0, 0.5f);
                         Projectile.NewProjectile(Terraria.Entity.GetSource_NaturalSpawn(), NPC.Center, VectorToTarget.RotatedBy(Pi / 2f).SafeNormalize(Vector2.UnitX) * 10, ModContent.ProjectileType<DarkGlob>(), GlobDamage, 0f, -1, 0, 0.5f);
                         Projectile.NewProjectile(Terraria.Entity.GetSource_NaturalSpawn(), NPC.Center, VectorToTarget.RotatedBy(Pi / -2f).SafeNormalize(Vector2.UnitX) * 10, ModContent.ProjectileType<DarkGlob>(), GlobDamage, 0f, -1, 0, 0.5f);
-                        Projectile.NewProjectile(Terraria.Entity.GetSource_NaturalSpawn(), NPC.Center, Vector2.Zero, ModContent.ProjectileType<DarkGlob>(), GlobDamage, 0f, -1, 0, 0, 0.5f);
+                        Projectile.NewProjectile(Terraria.Entity.GetSource_NaturalSpawn(), NPC.Center, VectorToTarget.RotatedBy(Pi).SafeNormalize(Vector2.UnitX) * 10, ModContent.ProjectileType<DarkGlob>(), GlobDamage, 0f, -1, 0, 0.5f);
                     }
                     if (aiCounter % 90 == 0)
                     {
@@ -192,7 +191,7 @@ namespace Windfall.Content.NPCs.Bosses.TheOrator
                     #region Movement
                     target = Main.player[Player.FindClosest(NPC.Center, NPC.width, NPC.height)];                   
 
-                    if (NPC.Center.Y < target.Center.Y - 250)
+                    if (NPC.Center.Y < target.Center.Y - 300)
                         NPC.velocity.Y++;
                     else
                         NPC.velocity.Y--;
@@ -261,7 +260,8 @@ namespace Windfall.Content.NPCs.Bosses.TheOrator
                         return;
                     }
                     break;
-                case States.DarkOrbit:                  
+                case States.DarkOrbit:
+                    target.AddCooldown(ChaosState.ID, 2, false);
                     if (aiCounter >= 0)
                     {
                         target = Main.player[Player.FindClosest(NPC.Center, NPC.width, NPC.height)];
@@ -270,8 +270,7 @@ namespace Windfall.Content.NPCs.Bosses.TheOrator
                             NPC.position.X = target.position.X;
                             NPC.position.Y = target.position.Y - 400;
                             NPC.velocity = Vector2.Zero;
-                            NPC.ai[3] = Main.rand.Next(500, 600);
-                            target.AddCooldown(ChaosState.ID, (int)NPC.ai[3]);
+                            NPC.ai[3] = Main.rand.Next(500, 600);                            
                         }
                         if (aiCounter < NPC.ai[3] - 45)
                         {
@@ -318,14 +317,12 @@ namespace Windfall.Content.NPCs.Bosses.TheOrator
                                 NPC.damage = StatCorrections.ScaleContactDamage(Main.masterMode ? 360 : CalamityWorld.death ? 280 : CalamityWorld.revenge ? 268 : Main.expertMode ? 240 : 120);
                             }
                             NPC.velocity = VectorToTarget;
-                            VectorToTarget -= VectorToTarget.SafeNormalize(Vector2.UnitX);
+                            VectorToTarget -= VectorToTarget.SafeNormalize(Vector2.UnitX) / 2;
 
                             #region Dash Projectiles
                             if (aiCounter % 10 == 0 && Main.expertMode)
                             {
                                 Projectile.NewProjectile(Terraria.Entity.GetSource_NaturalSpawn(), NPC.Center, VectorToTarget.RotatedBy(Pi / -2f).SafeNormalize(Vector2.UnitX) * 20, ModContent.ProjectileType<DarkBolt>(), BoltDamage, 0f, -1, 0, -20);
-                                if(CalamityWorld.revenge)
-                                    Projectile.NewProjectile(Terraria.Entity.GetSource_NaturalSpawn(), NPC.Center, (target.Center - NPC.Center).SafeNormalize(Vector2.UnitX) * 20, ModContent.ProjectileType<DarkBolt>(), BoltDamage, 0f, -1, 0, 20);
                             }
                             else if (aiCounter % 5 == 0 && Main.expertMode)
                                 Projectile.NewProjectile(Terraria.Entity.GetSource_NaturalSpawn(), NPC.Center, VectorToTarget.RotatedBy(Pi / 2f).SafeNormalize(Vector2.UnitX) * 20, ModContent.ProjectileType<DarkBolt>(), BoltDamage, 0f, -1, 0, -20);
