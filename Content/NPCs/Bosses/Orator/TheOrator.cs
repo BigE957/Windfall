@@ -165,6 +165,7 @@ namespace Windfall.Content.NPCs.Bosses.TheOrator
                         VectorToTarget = target.Center - NPC.Center;
                         if (aiCounter % (CalamityWorld.death ? 30 : CalamityWorld.revenge ? 34 : Main.expertMode ? 36 : 40) == 0)
                         {
+                            SoundEngine.PlaySound(SoundID.DD2_OgreSpit, NPC.Center);
                             Projectile.NewProjectile(Terraria.Entity.GetSource_NaturalSpawn(), NPC.Center, VectorToTarget.SafeNormalize(Vector2.UnitX) * 10, ModContent.ProjectileType<DarkGlob>(), GlobDamage, 0f, -1, 0, 0.5f);
                             Projectile.NewProjectile(Terraria.Entity.GetSource_NaturalSpawn(), NPC.Center, VectorToTarget.RotatedBy(Pi / 2f).SafeNormalize(Vector2.UnitX) * 10, ModContent.ProjectileType<DarkGlob>(), GlobDamage, 0f, -1, 0, 0.5f);
                             Projectile.NewProjectile(Terraria.Entity.GetSource_NaturalSpawn(), NPC.Center, VectorToTarget.RotatedBy(Pi / -2f).SafeNormalize(Vector2.UnitX) * 10, ModContent.ProjectileType<DarkGlob>(), GlobDamage, 0f, -1, 0, 0.5f);
@@ -279,7 +280,7 @@ namespace Windfall.Content.NPCs.Bosses.TheOrator
                             
                             if(aiCounter % 120 == 0 && aiCounter > 30)
                             {
-                                SoundEngine.PlaySound(SoundID.DD2_OgreSpit, NPC.Center);
+                                SoundEngine.PlaySound(SoundID.DD2_DarkMageAttack, NPC.Center);
                                 for (int i = 1; i < 6; i++)
                                 {
                                     Projectile proj = Projectile.NewProjectileDirect(Terraria.Entity.GetSource_NaturalSpawn(), NPC.Center, NPC.velocity.RotatedBy(PiOver2).SafeNormalize(Vector2.UnitX) * (5 * i), ModContent.ProjectileType<DarkGlob>(), GlobDamage, 0f, -1, 0, 0.5f);
@@ -424,7 +425,7 @@ namespace Windfall.Content.NPCs.Bosses.TheOrator
                         }
                         if (aiCounter % AttackFrequency == 0)
                         {
-                            SoundEngine.PlaySound(SoundID.DD2_LightningBugZap, NPC.Center);
+                            SoundEngine.PlaySound(SoundID.DD2_OgreSpit, NPC.Center);
                             Projectile.NewProjectile(Terraria.Entity.GetSource_NaturalSpawn(), NPC.Center, new Vector2((float)(10 * Math.Sin(aiCounter)), -10), ModContent.ProjectileType<DarkGlob>(), GlobDamage, 0f, -1, 1, 0.5f);
                             Projectile.NewProjectile(Terraria.Entity.GetSource_NaturalSpawn(), NPC.Center, new Vector2((float)(-10 * Math.Sin(aiCounter)), -10), ModContent.ProjectileType<DarkGlob>(), GlobDamage, 0f, -1, 1, 0.5f);
                             if (CalamityWorld.revenge && aiCounter % 20 == 0)
