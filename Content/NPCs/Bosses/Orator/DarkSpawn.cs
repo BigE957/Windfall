@@ -27,7 +27,7 @@ namespace Windfall.Content.NPCs.Bosses.TheOrator
             NPC.noTileCollide = true;
             NPC.lifeMax = 1200;
             NPC.knockBackResist = 0f;
-            NPC.HitSound = SoundID.DD2_LightningBugHurt;
+            NPC.HitSound = SoundID.DD2_LightningBugHurt with {Volume = 0.5f};
             NPC.DeathSound = SoundID.DD2_LightningBugDeath;
             NPC.Calamity().VulnerableToHeat = true;
             NPC.Calamity().VulnerableToElectricity = true;
