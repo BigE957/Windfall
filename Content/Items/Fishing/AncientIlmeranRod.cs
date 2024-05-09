@@ -29,12 +29,12 @@ namespace Windfall.Content.Items.Fishing
             Item.fishingPole = 10;
             Item.shootSpeed = 10f;
             Item.shoot = ModContent.ProjectileType<AncientIlmeranBobber>();
-            Item.value = CalamityGlobalItem.Rarity1BuyPrice;
+            Item.value = CalamityGlobalItem.RarityWhiteBuyPrice;
         }
         internal bool isCast = false;
         internal int scoogCounter = 0;
-        internal static List<float> Delays = new()
-        { 
+        internal static List<float> Delays =
+        [ 
             //First Time Dialogue
             7,
             4,
@@ -60,7 +60,7 @@ namespace Windfall.Content.Items.Fishing
             3,
             20,
 
-        };
+        ];
         int scoogWait = 60;
         int dialogueCounter = 0;
         bool startLeft = false;

@@ -26,7 +26,7 @@ namespace Windfall.Content.Items.Debug
             Item.height = 34;
             Item.useStyle = ItemUseStyleID.Swing;
             Item.UseSound = SoundID.Item7;
-            Item.value = CalamityGlobalItem.Rarity7BuyPrice;
+            Item.value = CalamityGlobalItem.RarityBlueBuyPrice;
             Item.rare = ItemRarityID.Blue;
         }
         public override void ModifyResearchSorting(ref ContentSamples.CreativeHelper.ItemGroup itemGroup)

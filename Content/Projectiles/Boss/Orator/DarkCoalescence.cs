@@ -27,7 +27,6 @@ namespace Windfall.Content.Projectiles.Boss.Orator
             get => (int)Projectile.ai[0];
             set => Projectile.ai[0] = value;
         }
-        private int SoundDelay = 120;
         public override void OnSpawn(IEntitySource source)
         {
             Projectile.scale = 0f;            
