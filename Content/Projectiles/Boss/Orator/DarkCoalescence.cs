@@ -61,8 +61,11 @@ namespace Windfall.Content.Projectiles.Boss.Orator
             }
             else
             {
-                if(aiCounter == 120)
+                if (aiCounter == 120)
+                {
+                    SoundEngine.PlaySound(SoundID.DD2_EtherianPortalSpawnEnemy, Projectile.Center);
                     Projectile.velocity = new(-10 * Projectile.ai[1], 10 * Projectile.ai[2]);
+                }
                 Projectile.velocity += new Vector2(0.5f * Projectile.ai[1], -0.5f * Projectile.ai[2]);
                 if (Projectile.ai[1] != 0)
                 {
