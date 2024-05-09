@@ -1,6 +1,7 @@
 ﻿using CalamityMod.Graphics.Metaballs;
 using CalamityMod.Projectiles.Magic;
 using CalamityMod.World;
+using Luminance.Core.Graphics;
 using Windfall.Common.Graphics.Metaballs;
 using Windfall.Common.Systems;
 using Windfall.Content.NPCs.Bosses.TheOrator;
@@ -50,7 +51,12 @@ namespace Windfall.Content.Projectiles.Boss.Orator
         public override void OnSpawn(IEntitySource source)
         {
             Projectile.scale = 0;
-            SoundEngine.PlaySound(SoundID.DD2_EtherianPortalOpen, Projectile.Center);
+            SoundEngine.PlaySound(SoundID.DD2_EtherianPortalOpen with {Volume = 2f}, Projectile.Center);
+            ScreenShakeSystem.SetUniversalRumble(5f);
+            for (int i = 0; i <= 50; i++)
+            {
+                EmpyreanMetaball.SpawnParticle(Projectile.Center, Main.rand.NextVector2Circular(5f, 5f), 40 * Main.rand.NextFloat(1.5f, 2.3f));
+            }
         }
         public override void AI()
         {
@@ -62,16 +68,34 @@ namespace Windfall.Content.Projectiles.Boss.Orator
             switch(AIState)
             {
                 case States.Chasing:
+                    if (aiCounter <= 60)
+                        Projectile.scale += 5 / 60f;
                     if (SoundDelay == 0)
                     {
-                        SoundEngine.PlaySound(SoundID.DD2_EtherianPortalIdleLoop, Projectile.Center);
+                        SoundEngine.PlaySound(SoundID.DD2_EtherianPortalIdleLoop with {Volume = 2f}, Projectile.Center);
                         SoundDelay = 1020;
                     }
                     else
                         SoundDelay--;
 
-                    Projectile.hostile = true;
-                    if (aiCounter > 60)
+                    if (Projectile.Center.X > target.Center.X)
+                        Projectile.velocity.X -= Acceleration;
+                    if (Projectile.Center.X < target.Center.X)
+                        Projectile.velocity.X += Acceleration;
+                    if (Projectile.Center.Y > target.Center.Y)
+                        Projectile.velocity.Y -= Acceleration;
+                    if (Projectile.Center.Y < target.Center.Y)
+                        Projectile.velocity.Y += Acceleration;                   
+                    if (Projectile.velocity.Length() > MaxSpeed)
+                        Projectile.velocity = Projectile.velocity.SafeNormalize(Vector2.Zero) * MaxSpeed;
+                    
+                    EmitGhostGas(aiCounter);
+                    break;
+                case States.Dying:                   
+                    Projectile.scale -= (0.01f * (1 + (aiCounter / 8)));
+                    if (Projectile.scale <= 1.5f)
+                        Projectile.ai[0] = 2;                   
+                    if (Projectile.velocity.Length() > 0f)
                     {
                         if (Projectile.Center.X > target.Center.X)
                             Projectile.velocity.X -= Acceleration;
@@ -81,23 +105,8 @@ namespace Windfall.Content.Projectiles.Boss.Orator
                             Projectile.velocity.Y -= Acceleration;
                         if (Projectile.Center.Y < target.Center.Y)
                             Projectile.velocity.Y += Acceleration;
-                    }
-                    else
-                    {
-                        Projectile.scale += 5 / 60f;
-                    }
-                    if (Projectile.velocity.Length() > MaxSpeed)
-                        Projectile.velocity = Projectile.velocity.SafeNormalize(Vector2.Zero) * MaxSpeed;
-                    EmitGhostGas(aiCounter);
-                    break;
-                case States.Dying:
-                    Projectile.hostile = false;
-                    Projectile.scale -= (0.01f * (1 + (aiCounter / 8)));
-                    if (Projectile.scale <= 1.5f)
-                        Projectile.ai[0] = 2;
-                    if (Projectile.velocity.Length() > 0f)
-                    {
-                        Projectile.velocity -= (Projectile.velocity).SafeNormalize(Vector2.Zero) / 5;
+                        if (Projectile.velocity.Length() > (MaxSpeed * (Projectile.scale / 5)))
+                            Projectile.velocity = Projectile.velocity.SafeNormalize(Vector2.Zero) * (MaxSpeed * (Projectile.scale / 5));
                         EmitGhostGas(aiCounter);
                     }
                     if (Projectile.velocity.Length() < 1f)
@@ -105,6 +114,7 @@ namespace Windfall.Content.Projectiles.Boss.Orator
                     break;
                 case States.Exploding:
                     SoundEngine.PlaySound(SoundID.DD2_EtherianPortalDryadTouch, Projectile.Center);
+                    ScreenShakeSystem.SetUniversalRumble(7.5f);
                     for (int i = 0; i <= 50; i++)
                     {
                         EmpyreanMetaball.SpawnParticle(Projectile.Center, Main.rand.NextVector2Circular(10f, 10f), 40 * Main.rand.NextFloat(1.5f, 2.3f));

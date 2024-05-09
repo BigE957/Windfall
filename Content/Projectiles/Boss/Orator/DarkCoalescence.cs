@@ -1,4 +1,6 @@
-﻿using Windfall.Common.Graphics.Metaballs;
+﻿using Luminance;
+using Luminance.Core.Graphics;
+using Windfall.Common.Graphics.Metaballs;
 using Windfall.Content.NPCs.Bosses.TheOrator;
 
 namespace Windfall.Content.Projectiles.Boss.Orator
@@ -28,8 +30,9 @@ namespace Windfall.Content.Projectiles.Boss.Orator
         private int SoundDelay = 120;
         public override void OnSpawn(IEntitySource source)
         {
-            Projectile.scale = 0f;
-            SoundEngine.PlaySound(SoundID.DD2_EtherianPortalOpen, Projectile.Center);
+            Projectile.scale = 0f;            
+            ScreenShakeSystem.SetUniversalRumble(5f);
+            
         }
         public override void AI()
         {
@@ -53,6 +56,16 @@ namespace Windfall.Content.Projectiles.Boss.Orator
             else
                 target = Main.player[Player.FindClosest(Projectile.Center, Projectile.width, Projectile.height)];
 
+            if(aiCounter == 1)
+            {
+                SoundEngine.PlaySound(SoundID.DD2_EtherianPortalOpen, Projectile.Center);
+                for (int i = 0; i <= 50; i++)
+                {
+                    Vector2 spawnPos = Projectile.Center + Main.rand.NextVector2Circular(10f, 10f) * 10;
+                    EmpyreanMetaball.SpawnParticle(spawnPos,  (Projectile.Center - spawnPos).SafeNormalize(Vector2.Zero) * 4, 40 * Main.rand.NextFloat(3f, 5f));
+                }
+            }
+
             if (aiCounter < 120)
             {
                 Projectile.position = new(target.position.X - (500 * Projectile.ai[1]), target.position.Y + (500 * Projectile.ai[2]));
@@ -63,7 +76,7 @@ namespace Windfall.Content.Projectiles.Boss.Orator
             {
                 if (aiCounter == 120)
                 {
-                    SoundEngine.PlaySound(SoundID.DD2_EtherianPortalSpawnEnemy, Projectile.Center);
+                    SoundEngine.PlaySound(SoundID.DD2_EtherianPortalSpawnEnemy with {Volume = 10f}, Projectile.Center);
                     Projectile.velocity = new(-10 * Projectile.ai[1], 10 * Projectile.ai[2]);
                 }
                 Projectile.velocity += new Vector2(0.5f * Projectile.ai[1], -0.5f * Projectile.ai[2]);
@@ -90,6 +103,7 @@ namespace Windfall.Content.Projectiles.Boss.Orator
                     }
                     if (Main.projectile.First(p => p.type == ModContent.ProjectileType<DarkCoalescence>()).whoAmI == Projectile.whoAmI)
                     {
+                        ScreenShakeSystem.SetUniversalRumble(12.5f);
                         SoundEngine.PlaySound(SoundID.DD2_MonkStaffGroundImpact, Projectile.Center);
                         for (int i = 0; i < 12; i++)
                         {
