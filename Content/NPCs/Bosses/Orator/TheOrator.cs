@@ -552,7 +552,7 @@ namespace Windfall.Content.NPCs.Bosses.TheOrator
                 case States.Defeat:
 
                     #region Movement
-                    NPC.dontTakeDamage = true;
+                    NPC.dontTakeDamage = true;                    
                     target = Main.player[Player.FindClosest(NPC.Center, NPC.width, NPC.height)];
                     Vector2 TargetLocation = new(target.Center.X, target.Center.Y - 150);
                     if (attackCounter == 0)
@@ -582,6 +582,7 @@ namespace Windfall.Content.NPCs.Bosses.TheOrator
                     }
                     else
                     {
+                        dashing = true;
                         if (Math.Abs((TargetLocation - NPC.Center).Y) > 100f)
                         {
                             attackCounter = 0;
@@ -736,9 +737,6 @@ namespace Windfall.Content.NPCs.Bosses.TheOrator
             spriteBatch.EnterShaderRegion();
             float intensity = 35f / 35f;
 
-            if (NPC.dontTakeDamage)
-                intensity = 0.75f + Math.Abs((float)Math.Cos(Main.GlobalTimeWrappedHourly * 1.7f)) * 0.1f;
-
             float lifeRatio = NPC.life / (float)NPC.lifeMax;
             float flickerPower = 0f;
             if (lifeRatio < 0.6f)
@@ -752,7 +750,7 @@ namespace Windfall.Content.NPCs.Bosses.TheOrator
             float opacity = forcefieldOpacity;
             opacity *= Lerp(1f, Max(1f - flickerPower, 0.56f), (float)Math.Pow(Math.Cos(Main.GlobalTimeWrappedHourly * Lerp(3f, 5f, flickerPower)), 24D));
 
-            if (!NPC.dontTakeDamage && dashing)
+            if (dashing)
                 intensity = 1.1f;
 
             intensity *= 0.75f;
@@ -764,7 +762,7 @@ namespace Windfall.Content.NPCs.Bosses.TheOrator
             Color forcefieldColor = Color.Black;
             Color secondaryForcefieldColor = Color.PaleGreen;
 
-            if (!NPC.dontTakeDamage && dashing)
+            if (dashing)
             {
                 forcefieldColor *= 0.25f;
                 secondaryForcefieldColor = Color.Lerp(secondaryForcefieldColor, Color.Black, 0.7f);

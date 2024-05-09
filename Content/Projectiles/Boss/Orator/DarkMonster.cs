@@ -51,11 +51,12 @@ namespace Windfall.Content.Projectiles.Boss.Orator
         public override void OnSpawn(IEntitySource source)
         {
             Projectile.scale = 0;
-            SoundEngine.PlaySound(SoundID.DD2_EtherianPortalOpen with {Volume = 2f}, Projectile.Center);
+            SoundEngine.PlaySound(SoundID.DD2_EtherianPortalOpen, Projectile.Center);
             ScreenShakeSystem.SetUniversalRumble(5f);
             for (int i = 0; i <= 50; i++)
             {
-                EmpyreanMetaball.SpawnParticle(Projectile.Center, Main.rand.NextVector2Circular(5f, 5f), 40 * Main.rand.NextFloat(1.5f, 2.3f));
+                Vector2 spawnPos = Projectile.Center + Main.rand.NextVector2Circular(10f, 10f) * 10;
+                EmpyreanMetaball.SpawnParticle(spawnPos, (Projectile.Center - spawnPos).SafeNormalize(Vector2.Zero) * 4, 40 * Main.rand.NextFloat(3f, 5f));
             }
         }
         public override void AI()
@@ -72,7 +73,7 @@ namespace Windfall.Content.Projectiles.Boss.Orator
                         Projectile.scale += 5 / 60f;
                     if (SoundDelay == 0)
                     {
-                        SoundEngine.PlaySound(SoundID.DD2_EtherianPortalIdleLoop with {Volume = 2f}, Projectile.Center);
+                        SoundEngine.PlaySound(SoundID.DD2_EtherianPortalIdleLoop, Projectile.Center);
                         SoundDelay = 1020;
                     }
                     else
