@@ -7,6 +7,7 @@ Dialogue: {
 		Shock: ?!
 		Confused: ??
 		Angry: !!
+		Silent: ...
 	}
 
 	IlmeranPaladin: {
@@ -297,6 +298,17 @@ Dialogue: {
 						6: One... I shall very soon be rid of...
 					}
 				}
+			}
+
+			BossText: {
+				0: Ever persistant...
+				1: No matter.
+				2: I need not best you here.
+				3: All I need is to buy time for...
+				4: That.
+				5: At last the end is now at our doorstep!
+				6: I shall grant you the privlage of witnessing it.
+				7: Until we meet again...
 			}
 		}
 
