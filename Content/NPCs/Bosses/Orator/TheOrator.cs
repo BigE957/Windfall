@@ -385,7 +385,7 @@ namespace Windfall.Content.NPCs.Bosses.TheOrator
                     }
                     else
                     {
-                        if (NPC.Center.Y < target.Center.Y - 250)
+                        if (NPC.Center.Y < target.Center.Y - 400)
                             NPC.velocity.Y++;
                         else
                             NPC.velocity.Y--;
@@ -552,6 +552,7 @@ namespace Windfall.Content.NPCs.Bosses.TheOrator
                 case States.Defeat:
 
                     #region Movement
+                    NPC.dontTakeDamage = true;
                     target = Main.player[Player.FindClosest(NPC.Center, NPC.width, NPC.height)];
                     Vector2 TargetLocation = new(target.Center.X, target.Center.Y - 150);
                     if (attackCounter == 0)
@@ -586,11 +587,11 @@ namespace Windfall.Content.NPCs.Bosses.TheOrator
                             attackCounter = 0;
                             return;
                         }
-                        if (Math.Abs(NPC.velocity.X) < 0.5f && Math.Abs((TargetLocation - NPC.Center).X) < 25f)
+                        if (Math.Abs(NPC.velocity.X) < 1f && Math.Abs((TargetLocation - NPC.Center).X) < 25f)
                         {
                             NPC.velocity.X = 0;
                         }
-                        else if(Math.Abs((TargetLocation - NPC.Center).X) > 100f)
+                        else if(!(Math.Abs(NPC.velocity.X) < 1f) || Math.Abs((TargetLocation - NPC.Center).X) > 100f)
                         {
                             if (NPC.Center.X < TargetLocation.X)
                                 NPC.velocity.X++;
