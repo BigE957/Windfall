@@ -14,10 +14,5 @@ namespace Windfall.Content.Projectiles.Fishing
             Projectile.bobber = true;
             Projectile.penetrate = -1;
         }
-
-        public override bool PreDrawExtras()
-        {
-            return Projectile.DrawFishingLine(ModContent.ItemType<AncientIlmeranRod>(), new Color(144, 65, 57, 100), 38, 28f);
-        }
     }
 }

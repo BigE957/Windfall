@@ -111,7 +111,7 @@ namespace Windfall.Content.UI.WanderersJournals
         public static string JournalContents;
         readonly float xResolutionScale = Main.screenWidth / 2560f;
         readonly float yResolutionScale = Main.screenHeight / 1440f;
-        readonly float xScale = MathHelper.Lerp(0.004f, 1f, 1);
+        readonly float xScale = Lerp(0.004f, 1f, 1);
         protected override void DrawSelf(SpriteBatch spriteBatch)
         {
             CalculatedStyle innerDimensions = GetInnerDimensions();

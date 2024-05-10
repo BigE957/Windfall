@@ -1,10 +1,12 @@
 ﻿using Windfall.Content.NPCs.Bosses.TheOrator;
+using Terraria.ModLoader;
+using Terraria.ID;
 
 namespace Windfall.Content.Scenes.MusicScenes
 {
     public class OratorMusicScene : ModSceneEffect
     {
-        public override int Music => MusicID.Boss5;
+        public override int Music => MusicLoader.GetMusicSlot(Windfall.Instance, "Assets/Music/Orator");
         public override bool IsSceneEffectActive(Player player) => NPC.AnyNPCs(ModContent.NPCType<TheOrator>());
         public override SceneEffectPriority Priority => SceneEffectPriority.BossMedium;
     }

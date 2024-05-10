@@ -63,7 +63,7 @@ namespace Windfall.Content.Projectiles.Other
                     Projectile.alpha += 3;
 
             // Undo squish effects.
-            SquishFactor = MathHelper.Lerp(SquishFactor, 1f, 0.08f);
+            SquishFactor = Lerp(SquishFactor, 1f, 0.08f);
 
             // Determine whether to collide with tiles.
             Projectile.tileCollide = Projectile.Bottom.Y >= TileCollisionYThreshold;

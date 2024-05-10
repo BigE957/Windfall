@@ -24,7 +24,7 @@ namespace Windfall.Content.Items.Weapons.Melee
             Item.noUseGraphic = true;
             Item.useStyle = ItemUseStyleID.Shoot;
             Item.UseSound = SoundID.DD2_SkyDragonsFurySwing;
-            Item.value = CalamityGlobalItem.Rarity7BuyPrice;
+            Item.value = CalamityGlobalItem.RarityLimeBuyPrice;
             Item.rare = ItemRarityID.Lime;
         }
     }

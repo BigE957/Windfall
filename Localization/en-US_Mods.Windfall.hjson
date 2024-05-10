@@ -7,6 +7,7 @@ Dialogue: {
 		Shock: ?!
 		Confused: ??
 		Angry: !!
+		Silent: ...
 	}
 
 	IlmeranPaladin: {
@@ -297,6 +298,17 @@ Dialogue: {
 						6: One... I shall very soon be rid of...
 					}
 				}
+			}
+
+			BossText: {
+				0: Ever persistant...
+				1: No matter.
+				2: I need not best you here.
+				3: All I need is to buy time for...
+				4: That.
+				5: At last the end is now at our doorstep!
+				6: I shall grant you the privlage of witnessing it.
+				7: Until we meet again...
 			}
 		}
 
@@ -761,6 +773,11 @@ Items: {
 				DisplayName: Stone
 				Tooltip: The first object Vitae ever created
 			}
+
+			Stone: {
+				DisplayName: Stone
+				Tooltip: ""
+			}
 		}
 
 		Misc: {
@@ -1017,6 +1034,7 @@ Projectiles: {
 	GodseekerKnightProj.DisplayName: Godseeker Knight Proj
 	EmpyreanThorn.DisplayName: Empyrean Thorn
 	LunaticCultistProj.DisplayName: Lunatic Cultist Proj
+	DarkCoalescence.DisplayName: Dark Coalescence
 }
 
 Buffs: {
@@ -1114,4 +1132,13 @@ Bestiary: {
 	GodseekerKnight: The Godseeker Knights were once the most feared warriors across the lands. Now, few still remain agter the collapse of Yharim's empire. Those who remain however, still hold a fierce loyalty to their master, and still carry out their duty to eradicate the gods.
 	IlmeranPaladin: One of few to have survived the Incineration of Ilmeris, this paladin wanders the remnants of Ilmeris; keeping an eternal vigil over the sands of his former home.
 	TravellingCultist: A strange fellow who's recently begun showing up out of nowhere. He claims to want to fight against the Lunar Cult, but can he really be trusted...?
+}
+
+MusicDisplay: {
+	ModName: Windfall
+
+	Orator: {
+		DisplayName: The Orator
+		Author: by Yuri O
+	}
 }

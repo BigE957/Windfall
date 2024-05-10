@@ -68,7 +68,7 @@ namespace Windfall.Content.Projectiles.Melee
                 Projectile.velocity = new Vector2(num2, 0f);
                 if (Projectile.ai[0] == 0f)
                 {
-                    Projectile.rotation = new Vector2(num2, 0f - player.gravDir).ToRotation() + MathHelper.ToRadians(135f);
+                    Projectile.rotation = new Vector2(num2, 0f - player.gravDir).ToRotation() + ToRadians(135f);
                     if (Projectile.velocity.X < 0f)
                     {
                         Projectile.rotation -= MathF.PI / 2f;
@@ -218,7 +218,7 @@ namespace Windfall.Content.Projectiles.Melee
             player.ChangeDir(Projectile.direction);
             player.heldProj = Projectile.whoAmI;
             player.itemTime = player.itemAnimation = 2;
-            player.itemRotation = MathHelper.WrapAngle(Projectile.rotation);
+            player.itemRotation = WrapAngle(Projectile.rotation);
         }
         private void VisibilityAndLight()
         {

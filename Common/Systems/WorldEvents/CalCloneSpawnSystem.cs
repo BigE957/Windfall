@@ -27,7 +27,7 @@ namespace Windfall.Common.Systems.WorldEvents
             {
                 case SystemState.CheckReqs:
                     if (mainPlayer.ZoneUnderworldHeight)
-                        if (!Main.hardMode || !mainPlayer.Calamity().ZoneCalamity || CalDown == 1 || CalamityUtils.AnyBossNPCS())
+                        if (!Main.hardMode || !mainPlayer.Calamity().ZoneCalamity || CalDown == 1 || AnyBossNPCS())
                         {
                             if (!mainPlayer.Calamity().ZoneCalamity)
                                 //resets the cooldown when outside of the crags.
@@ -35,7 +35,7 @@ namespace Windfall.Common.Systems.WorldEvents
                             break;
                         }
                         else
-                        if (!Main.hardMode || Main.dayTime || CalDown == 1 || CalamityUtils.AnyBossNPCS())
+                        if (!Main.hardMode || Main.dayTime || CalDown == 1 || AnyBossNPCS())
                         {
                             if (Main.dayTime)
                             {
@@ -77,7 +77,7 @@ namespace Windfall.Common.Systems.WorldEvents
                     else
                     {
                         if (cragsCal)
-                            if (!mainPlayer.Calamity().ZoneCalamity || CalamityUtils.AnyBossNPCS())
+                            if (!mainPlayer.Calamity().ZoneCalamity || AnyBossNPCS())
                             {
                                 Main.NewText("Something calamitous has vanished...", Color.Red);
                                 State = SystemState.CheckReqs;
@@ -85,7 +85,7 @@ namespace Windfall.Common.Systems.WorldEvents
                                 break;
                             }
                             else
-                            if (Main.dayTime || CalamityUtils.AnyBossNPCS())
+                            if (Main.dayTime || AnyBossNPCS())
                             {
                                 Main.NewText("Something calamitous has vanished...", Color.Red);
                                 State = SystemState.CheckReqs;

@@ -24,7 +24,8 @@ namespace Windfall.Common.Systems.WorldEvents
             switch (State)
             {
                 case SystemState.CheckReqs:
-                    if (mainPlayer.ZoneDesert && !DownedBossSystem.downedDesertScourge && !CalamityUtils.AnyBossNPCS() && cooldown == 0)
+                    if (mainPlayer.ZoneDesert && !DownedBossSystem.downedDesertScourge && !AnyBossNPCS() && cooldown == 0)
+                    {
                         State = SystemState.CheckChance;
                     else
                         if (!mainPlayer.ZoneDesert)

@@ -1,4 +1,6 @@
-﻿using Windfall.Common.Graphics.Metaballs;
+﻿using CalamityMod.World;
+using Windfall.Common.Graphics.Metaballs;
+using Windfall.Content.NPCs.Bosses.TheOrator;
 
 namespace Windfall.Content.Projectiles.Boss.Orator
 {
@@ -10,7 +12,7 @@ namespace Windfall.Content.Projectiles.Boss.Orator
         {
             Projectile.width = 24;
             Projectile.height = 24;
-            Projectile.damage = 100;
+            Projectile.damage = TheOrator.GlobDamage;
             Projectile.hostile = true;
             Projectile.ignoreWater = true;
             Projectile.tileCollide = false;
@@ -35,9 +37,9 @@ namespace Windfall.Content.Projectiles.Boss.Orator
                         Projectile.scale = MaxSize;
 
                 if (Projectile.scale == MaxSize)
-                    Projectile.hostile = true;
+                    Projectile.damage = TheOrator.GlobDamage;
                 else
-                    Projectile.hostile = false;
+                    Projectile.damage = 0;
 
                 if (Projectile.velocity.Length() > 0.5f)
                 {
@@ -58,12 +60,12 @@ namespace Windfall.Content.Projectiles.Boss.Orator
                 if (Projectile.scale < MaxSize)
                 {
                     Projectile.scale += 1 / 60f;
-                    Projectile.timeLeft = 100;
-                    Projectile.hostile = false;
+                    Projectile.timeLeft = 500;
+                    Projectile.damage = 0;
                 }
                 else
-                    Projectile.hostile = true;
-                Projectile.velocity.Y += 0.3f;
+                    Projectile.damage = TheOrator.GlobDamage;
+                Projectile.velocity.Y += CalamityWorld.death ? 0.3f : CalamityWorld.revenge ? 0.25f : Main.expertMode ? 0.2f : 0.15f;
                 EmpyreanMetaball.SpawnParticle(Projectile.Center , Vector2.Zero, Projectile.scale * 60);
             }
             Projectile.Hitbox = new Rectangle((int)Projectile.position.X, (int)Projectile.position.Y, (int)(70 * MaxSize), (int)(70 * MaxSize));

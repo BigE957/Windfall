@@ -38,7 +38,7 @@ namespace Windfall.Content.Items.Weapons.Misc
         public override bool? UseItem(Player player)
         {
             if (!player.Windfall().PerfectFlow)
-                player.AddCooldown(ParryWeapon.ID, CalamityUtils.SecondsToFrames(30));
+                player.AddCooldown(ParryWeapon.ID, SecondsToFrames(30));
             return true;
         }
     }

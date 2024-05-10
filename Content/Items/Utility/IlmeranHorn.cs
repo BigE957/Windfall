@@ -17,7 +17,7 @@ namespace Windfall.Content.Items.Utility
             Item.width = 42;
             Item.height = 32;
             Item.useStyle = ItemUseStyleID.Shoot;
-            Item.value = CalamityGlobalItem.Rarity2BuyPrice;
+            Item.value = CalamityGlobalItem.RarityGreenBuyPrice;
             Item.rare = ItemRarityID.Green;
             Item.UseSound = UseSound;
             Item.useTurn = true;

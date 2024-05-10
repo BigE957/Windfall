@@ -45,7 +45,7 @@ namespace Windfall.Content.World
                             }
                         }
                     }
-                    if (WindfallUtils.ChestContains(chest, ItemID.Toolbox) != -1)
+                    if (ChestContains(chest, ItemID.Toolbox) != -1)
                     {
                         for (int inventoryIndex = 0; inventoryIndex < 40; inventoryIndex++)
                         {
@@ -57,7 +57,7 @@ namespace Windfall.Content.World
                             }
                         }
                     }
-                    if (WindfallUtils.ChestContains(chest, ItemID.SpellTome) != -1)
+                    if (ChestContains(chest, ItemID.SpellTome) != -1)
                     {
                         for (int inventoryIndex = 0; inventoryIndex < 40; inventoryIndex++)
                         {
