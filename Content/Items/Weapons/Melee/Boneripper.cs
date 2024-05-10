@@ -10,17 +10,17 @@ namespace Windfall.Content.Items.Weapons.Melee
 
         public override void SetDefaults()
         {
-            Item.damage = 1075;
+            Item.damage = 275;
             Item.knockBack = 7.5f;
-            Item.useAnimation = Item.useTime = 25;
+            Item.useAnimation = Item.useTime = 12;
             Item.DamageType = DamageClass.MeleeNoSpeed;
             Item.noMelee = true;
             Item.channel = true;
             Item.autoReuse = true;
             Item.shootSpeed = 14f;
             Item.shoot = ModContent.ProjectileType<BoneripperProj>();
-            Item.width = 90;
-            Item.height = 90;
+            Item.width = 180;
+            Item.height = 180;
             Item.noUseGraphic = true;
             Item.useStyle = ItemUseStyleID.Shoot;
             Item.UseSound = SoundID.DD2_SkyDragonsFurySwing;

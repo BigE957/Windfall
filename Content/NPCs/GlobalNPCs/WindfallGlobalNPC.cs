@@ -1,4 +1,8 @@
-﻿using Windfall.Common.Systems;
+﻿using CalamityMod.NPCs.NormalNPCs;
+using CalamityMod.NPCs.Polterghast;
+using CalamityMod.World.Planets;
+using Windfall.Common.Systems;
+using Windfall.Common.Systems.WorldEvents;
 using Windfall.Content.NPCs.Enemies;
 using Windfall.Content.Projectiles.NPCAnimations;
 using Windfall.Content.Projectiles.Other;
@@ -7,10 +11,20 @@ namespace Windfall.Content.NPCs.GlobalNPCs
 {
     public class WindfallGlobalNPC : GlobalNPC
     {
+        private static SoundStyle PolterAmbiance = new("Windfall/Assets/Sounds/Ambiance/Polterghast/PolterAmbiance_", 3);
+        public override void OnSpawn(NPC npc, IEntitySource source)
+        {
+            Mod calamity = ModLoader.GetMod("CalamityMod");
+            if (npc.type == calamity.Find<ModNPC>("Cnidrion").Type)
+                npc.Transform(ModContent.NPCType<WFCnidrion>());
+            if (npc.type == NPCID.CultistArcherBlue || npc.type == NPCID.CultistDevote)
+                npc.active = false;
+            if (npc.type == calamity.Find<ModNPC>("Polterghast").Type)
+                SoundEngine.PlaySound(PolterAmbiance with { Volume = 1f }, npc.Center);
+        }
         public override void OnKill(NPC npc)
         {
             Mod calamity = ModLoader.GetMod("CalamityMod");
-            Mod windfall = Windfall.Instance;
             if (npc.type == calamity.Find<ModNPC>("Cnidrion").Type || npc.type == ModContent.NPCType<WFCnidrion>())
                 DownedNPCSystem.downedCnidrion = true;
 
@@ -31,18 +45,28 @@ namespace Windfall.Content.NPCs.GlobalNPCs
 
             if (npc.type == calamity.Find<ModNPC>("LeviathanStart").Type)
                 DownedNPCSystem.downedSirenLure = true;
-        }
-        public override void OnSpawn(NPC npc, IEntitySource source)
-        {
-            Mod calamity = ModLoader.GetMod("CalamityMod");
-            if (npc.type == calamity.Find<ModNPC>("Cnidrion").Type)
-                npc.Transform(ModContent.NPCType<WFCnidrion>());
-            if (npc.type == NPCID.CultistArcherBlue || npc.type == NPCID.CultistDevote)
-                npc.active = false;
+
+            PhantomCheck(npc);
         }
         private static void SpawnWorldEventProjectile(int type, int xOffSet)
         {
             Projectile.NewProjectileDirect(Entity.GetSource_NaturalSpawn(), new Vector2(Main.player[0].Center.X + xOffSet, Main.player[0].Center.Y), Vector2.Zero, type, 0, 0);
+        }
+
+        private void PhantomCheck(NPC npc)
+        {
+            if ((npc.type == ModContent.NPCType<PhantomSpirit>() || npc.type == ModContent.NPCType<PhantomSpiritS>() || npc.type == ModContent.NPCType<PhantomSpiritM>() ||
+                npc.type == ModContent.NPCType<PhantomSpiritL>()) && !NPC.AnyNPCs(ModContent.NPCType<Polterghast>()) && !DownedBossSystem.downedPolterghast)
+            {
+                if (CalamityMod.CalamityMod.ghostKillCount == 10)
+                {
+                    SoundEngine.PlaySound(PolterAmbiance with { Volume = 1f }, Main.player[0].Center + new Vector2(Main.rand.NextFloat(-1f, 1f), Main.rand.NextFloat(-1f, 1f)).SafeNormalize(Vector2.UnitX) * (Main.rand.Next(1200, 1500)));
+                }
+                else if (CalamityMod.CalamityMod.ghostKillCount == 20)
+                {
+                    SoundEngine.PlaySound(PolterAmbiance with { Volume = 1f }, Main.player[0].Center + new Vector2(Main.rand.NextFloat(-1f, 1f), Main.rand.NextFloat(-1f, 1f)).SafeNormalize(Vector2.UnitX) * (Main.rand.Next(800, 1000)));
+                }
+            }
         }
     }
 }

@@ -18,7 +18,7 @@ namespace Windfall.Content.Projectiles.Melee
         public override string Texture => "Windfall/Assets/Items/Weapons/Melee/Boneripper";
         public override void SetDefaults()
         {
-            Projectile.width = Projectile.height = 90;
+            Projectile.width = Projectile.height = 180;
             Projectile.DamageType = DamageClass.MeleeNoSpeed;
             Projectile.friendly = true;
             Projectile.penetrate = -1;
@@ -28,7 +28,7 @@ namespace Windfall.Content.Projectiles.Melee
             Projectile.alpha = 255;
             Projectile.hide = true;
             Projectile.usesLocalNPCImmunity = true;
-            Projectile.localNPCHitCooldown = 15;
+            Projectile.localNPCHitCooldown = 20;
         }
         public override void AI()
         {
