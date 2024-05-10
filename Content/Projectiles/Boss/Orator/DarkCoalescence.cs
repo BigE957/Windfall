@@ -73,6 +73,7 @@ namespace Windfall.Content.Projectiles.Boss.Orator
             }
             else
             {
+                EmpyreanMetaball.SpawnParticle(Projectile.Center + (Main.rand.NextVector2Circular(20f, 20f) * Projectile.scale), Vector2.Zero, 40 * Main.rand.NextFloat(3f, 5f));
                 if (aiCounter == 120)
                 {
                     SoundEngine.PlaySound(SoundID.DD2_EtherianPortalSpawnEnemy with {Volume = 10f}, Projectile.Center);
@@ -119,7 +120,7 @@ namespace Windfall.Content.Projectiles.Boss.Orator
             }
             aiCounter++;
             Lighting.AddLight(Projectile.Center, new Vector3(0.32f, 0.92f, 0.71f));
-            EmpyreanMetaball.SpawnParticle(Projectile.Center, Vector2.Zero, Projectile.scale * 80);
+            EmpyreanMetaball.SpawnParticle(Projectile.Center, Vector2.Zero, Projectile.scale * 80);           
             if (Projectile.ai[1] != 0)
                 EmpyreanMetaball.SpawnParticle(new(Projectile.Center.X, Projectile.Center.Y + (Main.rand.Next(-19, 19) * Projectile.scale)), Vector2.Zero, Projectile.scale * 40);
             else

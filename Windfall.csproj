@@ -89,15 +89,13 @@
     <None Remove="icon_small.png" />
   </ItemGroup>
   <ItemGroup>
-  </ItemGroup>
-  <ItemGroup>
     <Folder Include="Assets\Items\Fishing\" />
     <Folder Include="Assets\NPCs\Enemies\" />
     <Folder Include="Content\Items\Armor\Selenic\" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="CalamityMod">
-      <HintPath>..\ModAssemblies\CalamityMod.dll</HintPath>
+      <HintPath>..\ModAssemblies\CalamityMod_v2.0.3.11.dll</HintPath>
     </Reference>
     <Reference Include="Luminance">
       <HintPath>..\ModAssemblies\Luminance_v1.0.0.dll</HintPath>

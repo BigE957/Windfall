@@ -1,6 +1,7 @@
 ﻿using CalamityMod.Dusts;
 using CalamityMod.NPCs;
 using CalamityMod.World;
+using Windfall.Common.Graphics.Metaballs;
 using Windfall.Common.Systems;
 using Windfall.Content.Projectiles.Boss.Orator;
 
@@ -106,6 +107,12 @@ namespace Windfall.Content.NPCs.Bosses.TheOrator
             {
                 case AIState.Spawning:
                     NPC.velocity += NPC.velocity.SafeNormalize(Vector2.UnitX) / -2;
+                    int dustStyle = Main.rand.NextBool() ? 66 : 263;
+                    Dust dust = Dust.NewDustPerfect(NPC.Center, Main.rand.NextBool(3) ? 191 : dustStyle);
+                    dust.scale = Main.rand.NextFloat(1.5f, 2.3f);
+                    //dust.velocity = Main.rand.NextVector2Circular(10f, 10f);
+                    dust.noGravity = true;
+                    dust.color = dust.type == dustStyle ? Color.LightGreen : default;
                     if (NPC.velocity.Length() < 2)
                     {
                         CurrentAI = AIState.OnBoss;
@@ -216,7 +223,12 @@ namespace Windfall.Content.NPCs.Bosses.TheOrator
                     if (aiCounter % 5 == 0)
                     {
                         SoundEngine.PlaySound(SoundID.DD2_LightningBugZap, NPC.Center);
-                        Projectile.NewProjectile(Terraria.Entity.GetSource_NaturalSpawn(), NPC.Center, baseAngle.SafeNormalize(Vector2.UnitX).RotatedBy(rotation * Math.Ceiling((double)aiCounter / 5)) * 15, ModContent.ProjectileType<DarkGlob>(), TheOrator.GlobDamage, 0f, -1, 1, 0.5f);
+                        Vector2 myAngle = baseAngle.SafeNormalize(Vector2.UnitX).RotatedBy(rotation * Math.Ceiling((double)aiCounter / 5));
+                        for (int i = 0; i < 10; i++)
+                        {
+                            EmpyreanMetaball.SpawnParticle(NPC.Center + (myAngle * 40), myAngle.RotatedByRandom(Pi/6) * Main.rand.NextFloat(0f, 15f), 20 * Main.rand.NextFloat(1f, 2f));
+                        }
+                        Projectile.NewProjectile(Terraria.Entity.GetSource_NaturalSpawn(), NPC.Center, myAngle * 15, ModContent.ProjectileType<DarkGlob>(), TheOrator.GlobDamage, 0f, -1, 1, 0.5f);
                     }
                     NPC.rotation = baseAngle.SafeNormalize(Vector2.UnitX).RotatedBy(rotation * ((float)aiCounter / 5)).ToRotation() + Pi;
                     if (aiCounter % 30 == 0)
@@ -224,6 +236,12 @@ namespace Windfall.Content.NPCs.Bosses.TheOrator
                     break;
                 case AIState.Recoil:
                     NPC.velocity += NPC.velocity.SafeNormalize(Vector2.UnitX) / -2;
+                    dustStyle = Main.rand.NextBool() ? 66 : 263;
+                    dust = Dust.NewDustPerfect(NPC.Center, Main.rand.NextBool(3) ? 191 : dustStyle);
+                    dust.scale = Main.rand.NextFloat(1.5f, 2.3f);
+                    //dust.velocity = Main.rand.NextVector2Circular(10f, 10f);
+                    dust.noGravity = true;
+                    dust.color = dust.type == dustStyle ? Color.LightGreen : default;
                     if (NPC.velocity.Length() < 2)
                     {
                         CurrentAI = AIState.Hunting;

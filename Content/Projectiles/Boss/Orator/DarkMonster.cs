@@ -66,7 +66,7 @@ namespace Windfall.Content.Projectiles.Boss.Orator
             {
                 Projectile.ai[0] = 1;
             }
-            switch(AIState)
+            switch (AIState)
             {
                 case States.Chasing:
                     if (aiCounter <= 60)
@@ -90,7 +90,7 @@ namespace Windfall.Content.Projectiles.Boss.Orator
                     if (Projectile.velocity.Length() > MaxSpeed)
                         Projectile.velocity = Projectile.velocity.SafeNormalize(Vector2.Zero) * MaxSpeed;
                     
-                    EmitGhostGas(aiCounter);
+                    EmitGhostGas();
                     break;
                 case States.Dying:                   
                     Projectile.scale -= (0.01f * (1 + (aiCounter / 8)));
@@ -108,7 +108,7 @@ namespace Windfall.Content.Projectiles.Boss.Orator
                             Projectile.velocity.Y += Acceleration;
                         if (Projectile.velocity.Length() > (MaxSpeed * (Projectile.scale / 5)))
                             Projectile.velocity = Projectile.velocity.SafeNormalize(Vector2.Zero) * (MaxSpeed * (Projectile.scale / 5));
-                        EmitGhostGas(aiCounter);
+                        EmitGhostGas();
                     }
                     if (Projectile.velocity.Length() < 1f)
                         Projectile.velocity = Vector2.Zero;
@@ -141,8 +141,9 @@ namespace Windfall.Content.Projectiles.Boss.Orator
             aiCounter++;
             Projectile.rotation = Projectile.velocity.ToRotation();
         }
-        public void EmitGhostGas(int counter)
+        public void EmitGhostGas()
         {
+            EmpyreanMetaball.SpawnParticle(Projectile.Center + (Main.rand.NextVector2Circular(20f, 20f) * Projectile.scale), Vector2.Zero, 40 * Main.rand.NextFloat(3f, 4f));
             float gasSize = 40 * Projectile.scale;
             EmpyreanMetaball.SpawnParticle(Projectile.Center - Projectile.velocity * (2 * Projectile.scale), Vector2.Zero, gasSize);
 

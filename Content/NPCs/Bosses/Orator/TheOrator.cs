@@ -8,6 +8,8 @@ using Windfall.Common.Utils;
 using CalamityMod.Items.Weapons.Magic;
 using Terraria;
 using CalamityMod.Buffs.StatBuffs;
+using System.Drawing.Drawing2D;
+using Windfall.Common.Graphics.Metaballs;
 
 namespace Windfall.Content.NPCs.Bosses.TheOrator
 {
@@ -175,6 +177,10 @@ namespace Windfall.Content.NPCs.Bosses.TheOrator
                         if (aiCounter % (CalamityWorld.death ? 30 : CalamityWorld.revenge ? 34 : Main.expertMode ? 36 : 40) == 0)
                         {
                             SoundEngine.PlaySound(SoundID.DD2_OgreSpit, NPC.Center);
+                            for (int i = 0; i <= 20; i++)
+                            {
+                                EmpyreanMetaball.SpawnParticle(NPC.Center, Main.rand.NextVector2Circular(10f, 10f), 40 * Main.rand.NextFloat(1.5f, 2.3f));
+                            }
                             Projectile.NewProjectile(Terraria.Entity.GetSource_NaturalSpawn(), NPC.Center, VectorToTarget.SafeNormalize(Vector2.UnitX) * 10, ModContent.ProjectileType<DarkGlob>(), GlobDamage, 0f, -1, 0, 0.5f);
                             Projectile.NewProjectile(Terraria.Entity.GetSource_NaturalSpawn(), NPC.Center, VectorToTarget.RotatedBy(Pi / 2f).SafeNormalize(Vector2.UnitX) * 10, ModContent.ProjectileType<DarkGlob>(), GlobDamage, 0f, -1, 0, 0.5f);
                             Projectile.NewProjectile(Terraria.Entity.GetSource_NaturalSpawn(), NPC.Center, VectorToTarget.RotatedBy(Pi / -2f).SafeNormalize(Vector2.UnitX) * 10, ModContent.ProjectileType<DarkGlob>(), GlobDamage, 0f, -1, 0, 0.5f);
@@ -310,6 +316,10 @@ namespace Windfall.Content.NPCs.Bosses.TheOrator
                             if(aiCounter % 120 == 0 && aiCounter > 30)
                             {
                                 SoundEngine.PlaySound(SoundID.DD2_DarkMageAttack, NPC.Center);
+                                for (int i = 0; i < 20; i++)
+                                {
+                                    EmpyreanMetaball.SpawnParticle(NPC.Center, (target.Center - NPC.Center).SafeNormalize(Vector2.Zero).RotatedByRandom(Pi/6) * Main.rand.NextFloat(0f, 25f), 30 * Main.rand.NextFloat(1f, 2f));
+                                }
                                 for (int i = 1; i < 6; i++)
                                 {
                                     Projectile proj = Projectile.NewProjectileDirect(Terraria.Entity.GetSource_NaturalSpawn(), NPC.Center, NPC.velocity.RotatedBy(PiOver2).SafeNormalize(Vector2.UnitX) * (5 * i), ModContent.ProjectileType<DarkGlob>(), GlobDamage, 0f, -1, 0, 0.5f);
@@ -354,6 +364,15 @@ namespace Windfall.Content.NPCs.Bosses.TheOrator
                             VectorToTarget -= VectorToTarget.SafeNormalize(Vector2.UnitX) / 2;
 
                             #region Dash Projectiles
+                            if (NPC.velocity.Length() > 2f)
+                            {
+                                int dustStyle = Main.rand.NextBool() ? 66 : 263;
+                                Dust dust = Dust.NewDustPerfect(NPC.Center + Main.rand.NextVector2Circular(2f, 2f), Main.rand.NextBool(3) ? 191 : dustStyle);
+                                dust.scale = Main.rand.NextFloat(1.5f, 2.3f);
+                                //dust.velocity = Main.rand.NextVector2Circular(10f, 10f);
+                                dust.noGravity = true;
+                                dust.color = dust.type == dustStyle ? Color.LightGreen : default;
+                            }
                             if (aiCounter % 10 == 0 && Main.expertMode)
                             {
                                 Projectile.NewProjectile(Terraria.Entity.GetSource_NaturalSpawn(), NPC.Center, VectorToTarget.RotatedBy(Pi / -2f).SafeNormalize(Vector2.UnitX) * 20, ModContent.ProjectileType<DarkBolt>(), BoltDamage, 0f, -1, 0, -20);
@@ -413,7 +432,16 @@ namespace Windfall.Content.NPCs.Bosses.TheOrator
                         VectorToTarget -= VectorToTarget.SafeNormalize(Vector2.UnitX);
 
                         #region Dash Projectiles
-                        if((CalamityWorld.death && aiCounter % 5 == 0) || aiCounter % 10 == 0)
+                        if (NPC.velocity.Length() > 15f)
+                        {
+                            int dustStyle = Main.rand.NextBool() ? 66 : 263;
+                            Dust dust = Dust.NewDustPerfect(NPC.Center + Main.rand.NextVector2Circular(2f, 2f), Main.rand.NextBool(3) ? 191 : dustStyle);
+                            dust.scale = Main.rand.NextFloat(1.5f, 2.3f);
+                            //dust.velocity = Main.rand.NextVector2Circular(10f, 10f);
+                            dust.noGravity = true;
+                            dust.color = dust.type == dustStyle ? Color.LightGreen : default;
+                        }
+                        if ((CalamityWorld.death && aiCounter % 5 == 0) || aiCounter % 10 == 0)
                             Projectile.NewProjectile(Terraria.Entity.GetSource_NaturalSpawn(), NPC.Center, Vector2.Zero, ModContent.ProjectileType<DarkGlob>(), GlobDamage, 0f, -1, 0, 1f);
                         if (aiCounter % 10 == 0 && Main.expertMode)
                         {
@@ -468,7 +496,8 @@ namespace Windfall.Content.NPCs.Bosses.TheOrator
                         NPC.velocity.X--;
                     if (NPC.velocity.Length() > 15)
                         NPC.velocity = NPC.velocity.SafeNormalize(Vector2.Zero) * 15;
-                    if(aiCounter > 120 && NPC.Center.Y < target.Center.Y - 50)
+
+                    if (aiCounter > 120 && NPC.Center.Y < target.Center.Y - 50)
                     {
                         if (aiCounter % 5 == 0)
                         {
@@ -479,6 +508,10 @@ namespace Windfall.Content.NPCs.Bosses.TheOrator
                         if (aiCounter % AttackFrequency == 0)
                         {
                             SoundEngine.PlaySound(SoundID.DD2_OgreSpit, NPC.Center);
+                            for (int i = 0; i < 10; i++)
+                            {
+                                EmpyreanMetaball.SpawnParticle(new(NPC.Center.X, NPC.Center.Y - 50), Main.rand.NextVector2Unit(0, -Pi) * Main.rand.NextFloat(0f, 15f), 25 * Main.rand.NextFloat(1f, 2f));
+                            }
                             Projectile.NewProjectile(Terraria.Entity.GetSource_NaturalSpawn(), NPC.Center, new Vector2((float)(10 * Math.Sin(aiCounter)), -10), ModContent.ProjectileType<DarkGlob>(), GlobDamage, 0f, -1, 1, 0.5f);
                             Projectile.NewProjectile(Terraria.Entity.GetSource_NaturalSpawn(), NPC.Center, new Vector2((float)(-10 * Math.Sin(aiCounter)), -10), ModContent.ProjectileType<DarkGlob>(), GlobDamage, 0f, -1, 1, 0.5f);
                             if (CalamityWorld.revenge && aiCounter % 20 == 0)
