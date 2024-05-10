@@ -1,6 +1,7 @@
 ﻿using CalamityMod.Dusts;
 using CalamityMod.NPCs;
 using CalamityMod.World;
+using System.Drawing.Drawing2D;
 using Windfall.Common.Graphics.Metaballs;
 using Windfall.Common.Systems;
 using Windfall.Content.Projectiles.Boss.Orator;
@@ -226,7 +227,7 @@ namespace Windfall.Content.NPCs.Bosses.TheOrator
                         Vector2 myAngle = baseAngle.SafeNormalize(Vector2.UnitX).RotatedBy(rotation * Math.Ceiling((double)aiCounter / 5));
                         for (int i = 0; i < 10; i++)
                         {
-                            EmpyreanMetaball.SpawnParticle(NPC.Center + (myAngle * 40), myAngle.RotatedByRandom(Pi/6) * Main.rand.NextFloat(0f, 15f), 20 * Main.rand.NextFloat(1f, 2f));
+                            EmpyreanMetaball.SpawnDefaultParticle(NPC.Center + (myAngle * 40), myAngle.RotatedByRandom(Pi/6) * Main.rand.NextFloat(0f, 15f), 20 * Main.rand.NextFloat(1f, 2f));
                         }
                         Projectile.NewProjectile(Terraria.Entity.GetSource_NaturalSpawn(), NPC.Center, myAngle * 15, ModContent.ProjectileType<DarkGlob>(), TheOrator.GlobDamage, 0f, -1, 1, 0.5f);
                     }
@@ -280,7 +281,18 @@ namespace Windfall.Content.NPCs.Bosses.TheOrator
             NPC.spriteDirection = NPC.direction * -1;
             Lighting.AddLight(NPC.Center, new Vector3(0.32f, 0.92f, 0.71f));
         }
-
+        public override void OnKill()
+        {
+            for (int i = 0; i <= 25; i++)
+            {
+                int dustStyle = Main.rand.NextBool() ? 66 : 263;
+                Dust dust = Dust.NewDustPerfect(NPC.Center, Main.rand.NextBool(3) ? 191 : dustStyle);
+                dust.scale = Main.rand.NextFloat(1.5f, 2.3f);
+                dust.velocity = Main.rand.NextVector2Circular(10f, 10f);
+                dust.noGravity = true;
+                dust.color = dust.type == dustStyle ? Color.LightGreen : default;
+            }
+        }
         public override void FindFrame(int frameHeight)
         {
             NPC.frameCounter++;
@@ -293,9 +305,12 @@ namespace Windfall.Content.NPCs.Bosses.TheOrator
             }
 
             //DO DUST
-            Dust d = CalamityGlobalNPC.SpawnDustOnNPC(NPC, 114, frameHeight, ModContent.DustType<AstralOrange>(), new Rectangle(78, 34, 36, 18), Vector2.Zero, 0.45f, true);
+            /*
+            int dustStyle = Main.rand.NextBool() ? 66 : 263;
+            Dust d = CalamityGlobalNPC.SpawnDustOnNPC(NPC, 114, frameHeight, Main.rand.NextBool(3) ? 191 : dustStyle, new Rectangle(78, 34, 36, 18), Vector2.Zero, 0.45f, true);
             if (d != null)
                 d.customData = 0.04f;
+            */
         }
         public override void PostDraw(SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor)
         {
