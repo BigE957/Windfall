@@ -7,20 +7,13 @@ namespace Windfall.Common.Graphics.Metaballs
 {
     public class EmpyreanMetaball : Metaball
     {
-        public class EmpyreanParticle
+        public class EmpyreanParticle(Vector2 center, Vector2 velocity, float size)
         {
-            public float Size;
+            public float Size = size;
 
-            public Vector2 Velocity;
+            public Vector2 Velocity = velocity;
 
-            public Vector2 Center;
-
-            public EmpyreanParticle(Vector2 center, Vector2 velocity, float size)
-            {
-                Center = center;
-                Velocity = velocity;
-                Size = size;
-            }
+            public Vector2 Center = center;
 
             public void Update()
             {
@@ -29,6 +22,20 @@ namespace Windfall.Common.Graphics.Metaballs
                 Velocity *= 0.96f;
             }
         }
+        public class EmpyreanStickyParticle(Projectile projectile, float interpolant, float size, float rotation, bool spin)
+        {
+            public float Size = size;
+
+            public Projectile Projectile = projectile;
+
+            public float Interpolant = interpolant;
+
+            public float Rotation = rotation;
+
+            public Vector2 Center;
+
+            public bool spin = spin;
+        }
 
         private static List<Asset<Texture2D>> layerAssets;
 
@@ -36,10 +43,16 @@ namespace Windfall.Common.Graphics.Metaballs
         {
             get;
             private set;
-        } = new();
+        } = [];
+
+        public static List<EmpyreanStickyParticle> EmpyreanStickyParticles
+        {
+            get;
+            private set;
+        } = [];
 
         // Check if there are any extraneous particles or if the Gruesome Eminence projectile is present when deciding if this particle should be drawn.
-        public override bool AnythingToDraw => EmpyreanParticles.Any() || AnyProjectiles(ModContent.ProjectileType<DarkGlob>()) || AnyProjectiles(ModContent.ProjectileType<DarkMonster>()) || AnyProjectiles(ModContent.ProjectileType<EmpyreanThorn>()) || AnyProjectiles(ModContent.ProjectileType<DarkCoalescence>());
+        public override bool AnythingToDraw => EmpyreanParticles.Count != 0 || EmpyreanStickyParticles.Count != 0 || AnyProjectiles(ModContent.ProjectileType<DarkGlob>()) || AnyProjectiles(ModContent.ProjectileType<DarkMonster>()) || AnyProjectiles(ModContent.ProjectileType<EmpyreanThorn>()) || AnyProjectiles(ModContent.ProjectileType<DarkCoalescence>());
 
         public override IEnumerable<Texture2D> Layers
         {
@@ -60,17 +73,22 @@ namespace Windfall.Common.Graphics.Metaballs
                 return;
 
             // Load layer assets.
-            layerAssets = new();
+            layerAssets = [];
 
             for (int i = 1; i <= 3; i++)
                 layerAssets.Add(ModContent.Request<Texture2D>($"Windfall/Assets/Graphics/Metaballs/Empyrean_Metaball/Empyrean_Distortion_Layer{i}", AssetRequestMode.ImmediateLoad));
         }
 
-        public override void ClearInstances() => EmpyreanParticles.Clear();
+        public override void ClearInstances()
+        {
+            EmpyreanParticles.Clear();
+            EmpyreanStickyParticles.Clear();
+        }
 
-        public static void SpawnParticle(Vector2 position, Vector2 velocity, float size) =>
+        public static void SpawnDefaultParticle(Vector2 position, Vector2 velocity, float size) =>
             EmpyreanParticles.Add(new(position, velocity, size));
-
+        public static void SpawnStickyParticle(Projectile projectile, float interpolant, float size, float rotation, bool spin = true) =>
+           EmpyreanStickyParticles.Add(new(projectile, interpolant, size, rotation, spin));
         public override void Update()
         {
             // Update all particle instances.
@@ -82,6 +100,20 @@ namespace Windfall.Common.Graphics.Metaballs
                 particle.Center += particle.Velocity;
             }
             EmpyreanParticles.RemoveAll(p => p.Size <= 2.5f);
+           
+            foreach (EmpyreanStickyParticle particle in EmpyreanStickyParticles)
+            {
+                Projectile myProj = particle.Projectile;
+                if(particle.spin)
+                    if (particle.Rotation > 0)
+                        particle.Rotation += 0.0175f / Math.Abs(particle.Interpolant / 10);
+                    else
+                        particle.Rotation -= 0.0175f / Math.Abs(particle.Interpolant / 10);
+                particle.Center = (myProj.Center) + (new Vector2(myProj.width / 2 * (myProj.scale / 5f) * 1.05f, 0).RotatedBy(particle.Rotation));
+                particle.Center += (myProj.Center - particle.Center).SafeNormalize(Vector2.Zero) * (float)Math.Sin(Main.GlobalTimeWrappedHourly * 4) * particle.Interpolant;
+                if (!particle.spin)
+                    particle.Center -= myProj.velocity / 2;
+            }
         }
 
         public override Vector2 CalculateManualOffsetForLayer(int layerIndex)
@@ -131,6 +163,13 @@ namespace Windfall.Common.Graphics.Metaballs
                 Vector2 scale = Vector2.One * particle.Size / tex.Size();
                 Main.spriteBatch.Draw(tex, drawPosition, null, Color.White, 0f, origin, scale, 0, 0f);
             }
+            foreach (EmpyreanStickyParticle particle in EmpyreanStickyParticles)
+            {
+                Vector2 drawPosition = particle.Center - Main.screenPosition;
+                Vector2 origin = tex.Size() * 0.5f;
+                Vector2 scale = Vector2.One * particle.Size / tex.Size();
+                Main.spriteBatch.Draw(tex, drawPosition, null, Color.White, 0f, origin, scale, 0, 0f);
+            }
             foreach (Projectile p in Main.projectile.Where(p => p.active))
             {
                 if (p.type == ModContent.ProjectileType<DarkGlob>() || p.type == ModContent.ProjectileType<DarkMonster>() || p.type == ModContent.ProjectileType<EmpyreanThorn>() || p.type == ModContent.ProjectileType<DarkCoalescence>())
@@ -140,7 +179,6 @@ namespace Windfall.Common.Graphics.Metaballs
                     p.ModProjectile.PreDraw(ref c);
                 }
             }
-
         }
     }
 }

@@ -2,6 +2,7 @@
 using Luminance.Core.Graphics;
 using Windfall.Common.Graphics.Metaballs;
 using Windfall.Content.NPCs.Bosses.TheOrator;
+using static Windfall.Common.Graphics.Metaballs.EmpyreanMetaball;
 
 namespace Windfall.Content.Projectiles.Boss.Orator
 {
@@ -19,7 +20,7 @@ namespace Windfall.Content.Projectiles.Boss.Orator
             Projectile.tileCollide = false;
             Projectile.penetrate = -1;
             Projectile.timeLeft = 390;
-            Projectile.scale = 0f;
+            Projectile.scale = 1f;
             CooldownSlot = ImmunityCooldownID.Bosses;
         }
         private int aiCounter
@@ -29,9 +30,19 @@ namespace Windfall.Content.Projectiles.Boss.Orator
         }
         public override void OnSpawn(IEntitySource source)
         {
-            Projectile.scale = 0f;            
+            Projectile.scale = 0f;
+            for(int i = 0; i < 30; i++)
+            {
+                SpawnStickyParticle(Projectile, 5, 50, TwoPi / 30 * i, false);
+            }
+            const int pCount = 20;
+            for (int i = 0; i <= pCount; i++)
+            {
+
+                SpawnStickyParticle(Projectile, Main.rand.NextFloat(10, 25), Main.rand.NextFloat(75, 100), TwoPi / pCount * i);
+                SpawnStickyParticle(Projectile, Main.rand.NextFloat(10, 25), Main.rand.NextFloat(60, 80), TwoPi / pCount * -i - TwoPi / (pCount/2));
+            }
             ScreenShakeSystem.SetUniversalRumble(5f);
-            
         }
         public override void AI()
         {
@@ -61,19 +72,19 @@ namespace Windfall.Content.Projectiles.Boss.Orator
                 for (int i = 0; i <= 50; i++)
                 {
                     Vector2 spawnPos = Projectile.Center + Main.rand.NextVector2Circular(10f, 10f) * 10;
-                    EmpyreanMetaball.SpawnParticle(spawnPos,  (Projectile.Center - spawnPos).SafeNormalize(Vector2.Zero) * 4, 40 * Main.rand.NextFloat(3f, 5f));
+                    EmpyreanMetaball.SpawnDefaultParticle(spawnPos,  (Projectile.Center - spawnPos).SafeNormalize(Vector2.Zero) * 4, 40 * Main.rand.NextFloat(3f, 5f));
                 }
             }
 
             if (aiCounter < 120)
             {
-                Projectile.position = new(target.position.X - (500 * Projectile.ai[1]), target.position.Y + (500 * Projectile.ai[2]));
+                Projectile.Center = new(target.Center.X - (500 * Projectile.ai[1]), target.Center.Y + (500 * Projectile.ai[2]));
                 if (aiCounter < 60)
                     Projectile.scale += 5 / 60f;
             }
             else
             {
-                EmpyreanMetaball.SpawnParticle(Projectile.Center + (Main.rand.NextVector2Circular(20f, 20f) * Projectile.scale), Vector2.Zero, 40 * Main.rand.NextFloat(3f, 5f));
+                EmpyreanMetaball.SpawnDefaultParticle(Projectile.Center + (Main.rand.NextVector2Circular(20f, 25f) * Projectile.scale), Vector2.Zero, 40 * Main.rand.NextFloat(3f, 5f));
                 if (aiCounter == 120)
                 {
                     SoundEngine.PlaySound(SoundID.DD2_EtherianPortalSpawnEnemy with {Volume = 10f}, Projectile.Center);
@@ -82,14 +93,14 @@ namespace Windfall.Content.Projectiles.Boss.Orator
                 Projectile.velocity += new Vector2(0.5f * Projectile.ai[1], -0.5f * Projectile.ai[2]);
                 if (Projectile.ai[1] != 0)
                 {
-                    if (Projectile.position.Y > target.position.Y)
+                    if (Projectile.Center.Y > target.Center.Y)
                         Projectile.velocity.Y -= 0.15f;
                     else
                         Projectile.velocity.Y += 0.15f;
                 }
                 else
                 {
-                    if (Projectile.position.X > target.position.X)
+                    if (Projectile.Center.X > target.Center.X)
                         Projectile.velocity.X -= 0.15f;
                     else
                         Projectile.velocity.X += 0.15f;
@@ -99,7 +110,7 @@ namespace Windfall.Content.Projectiles.Boss.Orator
                     SoundEngine.PlaySound(SoundID.DD2_EtherianPortalDryadTouch, Projectile.Center);
                     for (int i = 0; i <= 50; i++)
                     {
-                        EmpyreanMetaball.SpawnParticle(Projectile.Center, Main.rand.NextVector2Circular(15f, 15f), 40 * Main.rand.NextFloat(3f, 5f));
+                        EmpyreanMetaball.SpawnDefaultParticle(Projectile.Center, Main.rand.NextVector2Circular(15f, 15f), 40 * Main.rand.NextFloat(3f, 5f));
                     }
                     if (Main.projectile.First(p => p.type == ModContent.ProjectileType<DarkCoalescence>()).whoAmI == Projectile.whoAmI)
                     {
@@ -116,15 +127,16 @@ namespace Windfall.Content.Projectiles.Boss.Orator
                         }
                     }
                     Projectile.active = false;
+                    EmpyreanStickyParticles.RemoveAll(p => p.Projectile == Projectile);
                 }
             }
             aiCounter++;
             Lighting.AddLight(Projectile.Center, new Vector3(0.32f, 0.92f, 0.71f));
-            EmpyreanMetaball.SpawnParticle(Projectile.Center, Vector2.Zero, Projectile.scale * 80);           
+            EmpyreanMetaball.SpawnDefaultParticle(Projectile.Center, Vector2.Zero, Projectile.scale * 80);           
             if (Projectile.ai[1] != 0)
-                EmpyreanMetaball.SpawnParticle(new(Projectile.Center.X, Projectile.Center.Y + (Main.rand.Next(-19, 19) * Projectile.scale)), Vector2.Zero, Projectile.scale * 40);
+                EmpyreanMetaball.SpawnDefaultParticle(new(Projectile.Center.X, Projectile.Center.Y + (Main.rand.Next(-19, 19) * Projectile.scale)), Vector2.Zero, Projectile.scale * 40);
             else
-                EmpyreanMetaball.SpawnParticle(new(Projectile.Center.X + (Main.rand.Next(-19, 19) * Projectile.scale), Projectile.Center.Y), Vector2.Zero, Projectile.scale * 40);
+                EmpyreanMetaball.SpawnDefaultParticle(new(Projectile.Center.X + (Main.rand.Next(-19, 19) * Projectile.scale), Projectile.Center.Y), Vector2.Zero, Projectile.scale * 40);
         }
         public override bool PreDraw(ref Color lightColor)
         {

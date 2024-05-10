@@ -5,6 +5,7 @@ using Luminance.Core.Graphics;
 using Windfall.Common.Graphics.Metaballs;
 using Windfall.Common.Systems;
 using Windfall.Content.NPCs.Bosses.TheOrator;
+using static Windfall.Common.Graphics.Metaballs.EmpyreanMetaball;
 
 namespace Windfall.Content.Projectiles.Boss.Orator
 {
@@ -12,7 +13,7 @@ namespace Windfall.Content.Projectiles.Boss.Orator
     {
         public new static string LocalizationCategory => "Projectiles.Boss";
         public override string Texture => "Windfall/Assets/Graphics/Metaballs/BasicCircle";
-        
+
         internal static readonly int MonsterDamage = StatCorrections.ScaleProjectileDamage(Main.masterMode ? 360 : CalamityWorld.death ? 280 : CalamityWorld.revenge ? 268 : Main.expertMode ? 240 : 120);
         public override void SetDefaults()
         {
@@ -56,7 +57,18 @@ namespace Windfall.Content.Projectiles.Boss.Orator
             for (int i = 0; i <= 50; i++)
             {
                 Vector2 spawnPos = Projectile.Center + Main.rand.NextVector2Circular(10f, 10f) * 10;
-                EmpyreanMetaball.SpawnParticle(spawnPos, (Projectile.Center - spawnPos).SafeNormalize(Vector2.Zero) * 4, 40 * Main.rand.NextFloat(3f, 5f));
+                SpawnDefaultParticle(spawnPos, (Projectile.Center - spawnPos).SafeNormalize(Vector2.Zero) * 4, 40 * Main.rand.NextFloat(3f, 5f));
+            }
+            for (int i = 0; i < 30; i++)
+            {
+                SpawnStickyParticle(Projectile, 5, 50, TwoPi / 30 * i, false);
+            }
+            const int pCount = 20;
+            for (int i = 0; i <= pCount; i++)
+            {
+
+                SpawnStickyParticle(Projectile, Main.rand.NextFloat(10, 25), Main.rand.NextFloat(75, 100), TwoPi / pCount * i);
+                SpawnStickyParticle(Projectile, Main.rand.NextFloat(10, 25), Main.rand.NextFloat(60, 80), TwoPi / pCount * -i - TwoPi / (pCount / 2));
             }
         }
         public override void AI()
@@ -118,7 +130,7 @@ namespace Windfall.Content.Projectiles.Boss.Orator
                     ScreenShakeSystem.SetUniversalRumble(7.5f);
                     for (int i = 0; i <= 50; i++)
                     {
-                        EmpyreanMetaball.SpawnParticle(Projectile.Center, Main.rand.NextVector2Circular(10f, 10f), 40 * Main.rand.NextFloat(1.5f, 2.3f));
+                        EmpyreanMetaball.SpawnDefaultParticle(Projectile.Center, Main.rand.NextVector2Circular(10f, 10f), 40 * Main.rand.NextFloat(1.5f, 2.3f));
                     }
                     for (int i = 0; i < 12; i++)
                     {
@@ -136,6 +148,7 @@ namespace Windfall.Content.Projectiles.Boss.Orator
                             NPC.NewNPC(Terraria.Entity.GetSource_NaturalSpawn(), (int)Projectile.Center.X, (int)Projectile.Center.Y, ModContent.NPCType<DarkSpawn>());
                     }
                     Projectile.active = false;
+                    EmpyreanStickyParticles.RemoveAll(p => p.Projectile == Projectile);
                     break;
             }
             aiCounter++;
@@ -143,13 +156,13 @@ namespace Windfall.Content.Projectiles.Boss.Orator
         }
         public void EmitGhostGas()
         {
-            EmpyreanMetaball.SpawnParticle(Projectile.Center + (Main.rand.NextVector2Circular(20f, 20f) * Projectile.scale), Vector2.Zero, 40 * Main.rand.NextFloat(3f, 4f));
+            EmpyreanMetaball.SpawnDefaultParticle(Projectile.Center + (Main.rand.NextVector2Circular(20f, 20f) * Projectile.scale), Vector2.Zero, 40 * Main.rand.NextFloat(3f, 4f));
             float gasSize = 40 * Projectile.scale;
-            EmpyreanMetaball.SpawnParticle(Projectile.Center - Projectile.velocity * (2 * Projectile.scale), Vector2.Zero, gasSize);
+            EmpyreanMetaball.SpawnDefaultParticle(Projectile.Center - Projectile.velocity * (2 * Projectile.scale), Vector2.Zero, gasSize);
 
             gasSize = 20 * Projectile.scale;
-            EmpyreanMetaball.SpawnParticle(Projectile.Center - (Projectile.velocity.RotatedBy(Pi / 4) * (2 * Projectile.scale)), Vector2.Zero, gasSize);
-            EmpyreanMetaball.SpawnParticle(Projectile.Center - (Projectile.velocity.RotatedBy(-Pi / 4) * (2 * Projectile.scale)), Vector2.Zero, gasSize);
+            EmpyreanMetaball.SpawnDefaultParticle(Projectile.Center - (Projectile.velocity.RotatedBy(Pi / 4) * (2 * Projectile.scale)), Vector2.Zero, gasSize);
+            EmpyreanMetaball.SpawnDefaultParticle(Projectile.Center - (Projectile.velocity.RotatedBy(-Pi / 4) * (2 * Projectile.scale)), Vector2.Zero, gasSize);
         }
         public override bool? Colliding(Rectangle projHitbox, Rectangle targetHitbox)
         {
