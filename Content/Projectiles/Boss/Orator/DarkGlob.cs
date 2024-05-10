@@ -44,7 +44,7 @@ namespace Windfall.Content.Projectiles.Boss.Orator
                 if (Projectile.velocity.Length() > 0.5f)
                 {
                     Projectile.velocity -= Projectile.velocity.SafeNormalize(Vector2.UnitX) * 0.2f;
-                    EmpyreanMetaball.SpawnParticle(Projectile.Center + Projectile.velocity, Vector2.Zero, Projectile.scale * 60);
+                    EmpyreanMetaball.SpawnDefaultParticle(Projectile.Center + Projectile.velocity, Vector2.Zero, Projectile.scale * 60);
                 }
                 else
                 {
@@ -66,7 +66,7 @@ namespace Windfall.Content.Projectiles.Boss.Orator
                 else
                     Projectile.damage = TheOrator.GlobDamage;
                 Projectile.velocity.Y += CalamityWorld.death ? 0.3f : CalamityWorld.revenge ? 0.25f : Main.expertMode ? 0.2f : 0.15f;
-                EmpyreanMetaball.SpawnParticle(Projectile.Center , Vector2.Zero, Projectile.scale * 60);
+                EmpyreanMetaball.SpawnDefaultParticle(Projectile.Center , Vector2.Zero, Projectile.scale * 60);
             }
             Projectile.Hitbox = new Rectangle((int)Projectile.position.X, (int)Projectile.position.Y, (int)(70 * MaxSize), (int)(70 * MaxSize));
             Lighting.AddLight(Projectile.Center, new Vector3(0.32f, 0.92f, 0.71f));

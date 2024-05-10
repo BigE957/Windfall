@@ -330,7 +330,7 @@ namespace Windfall.Common.Systems.WorldEvents
                                 if ((RitualTimer < 60 * 68 && Main.rand.NextBool(3)) || RitualTimer > 60 * 68)
                                 {
                                     for (int i = 0; i < RitualTimer / (60 * 62); i++)
-                                        EmpyreanMetaball.SpawnParticle(new Vector2(DungeonCoords.X + Main.rand.NextFloat(-16, 16), DungeonCoords.Y), new Vector2(Main.rand.Next(-2, 2), Main.rand.Next(-10, -5)), Main.rand.NextFloat(25f, 50f));
+                                        EmpyreanMetaball.SpawnDefaultParticle(new Vector2(DungeonCoords.X + Main.rand.NextFloat(-16, 16), DungeonCoords.Y), new Vector2(Main.rand.Next(-2, 2), Main.rand.Next(-10, -5)), Main.rand.NextFloat(25f, 50f));
                                 }
                             }
                             if (RitualTimer == 60 * 70)

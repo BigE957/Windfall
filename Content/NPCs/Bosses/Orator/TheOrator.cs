@@ -179,7 +179,7 @@ namespace Windfall.Content.NPCs.Bosses.TheOrator
                             SoundEngine.PlaySound(SoundID.DD2_OgreSpit, NPC.Center);
                             for (int i = 0; i <= 20; i++)
                             {
-                                EmpyreanMetaball.SpawnParticle(NPC.Center, Main.rand.NextVector2Circular(10f, 10f), 40 * Main.rand.NextFloat(1.5f, 2.3f));
+                                EmpyreanMetaball.SpawnDefaultParticle(NPC.Center, Main.rand.NextVector2Circular(10f, 10f), 40 * Main.rand.NextFloat(1.5f, 2.3f));
                             }
                             Projectile.NewProjectile(Terraria.Entity.GetSource_NaturalSpawn(), NPC.Center, VectorToTarget.SafeNormalize(Vector2.UnitX) * 10, ModContent.ProjectileType<DarkGlob>(), GlobDamage, 0f, -1, 0, 0.5f);
                             Projectile.NewProjectile(Terraria.Entity.GetSource_NaturalSpawn(), NPC.Center, VectorToTarget.RotatedBy(Pi / 2f).SafeNormalize(Vector2.UnitX) * 10, ModContent.ProjectileType<DarkGlob>(), GlobDamage, 0f, -1, 0, 0.5f);
@@ -318,7 +318,7 @@ namespace Windfall.Content.NPCs.Bosses.TheOrator
                                 SoundEngine.PlaySound(SoundID.DD2_DarkMageAttack, NPC.Center);
                                 for (int i = 0; i < 20; i++)
                                 {
-                                    EmpyreanMetaball.SpawnParticle(NPC.Center, (target.Center - NPC.Center).SafeNormalize(Vector2.Zero).RotatedByRandom(Pi/6) * Main.rand.NextFloat(0f, 25f), 30 * Main.rand.NextFloat(1f, 2f));
+                                    EmpyreanMetaball.SpawnDefaultParticle(NPC.Center, (target.Center - NPC.Center).SafeNormalize(Vector2.Zero).RotatedByRandom(Pi/6) * Main.rand.NextFloat(0f, 25f), 30 * Main.rand.NextFloat(1f, 2f));
                                 }
                                 for (int i = 1; i < 6; i++)
                                 {
@@ -437,7 +437,6 @@ namespace Windfall.Content.NPCs.Bosses.TheOrator
                             int dustStyle = Main.rand.NextBool() ? 66 : 263;
                             Dust dust = Dust.NewDustPerfect(NPC.Center + Main.rand.NextVector2Circular(2f, 2f), Main.rand.NextBool(3) ? 191 : dustStyle);
                             dust.scale = Main.rand.NextFloat(1.5f, 2.3f);
-                            //dust.velocity = Main.rand.NextVector2Circular(10f, 10f);
                             dust.noGravity = true;
                             dust.color = dust.type == dustStyle ? Color.LightGreen : default;
                         }
@@ -510,7 +509,7 @@ namespace Windfall.Content.NPCs.Bosses.TheOrator
                             SoundEngine.PlaySound(SoundID.DD2_OgreSpit, NPC.Center);
                             for (int i = 0; i < 10; i++)
                             {
-                                EmpyreanMetaball.SpawnParticle(new(NPC.Center.X, NPC.Center.Y - 50), Main.rand.NextVector2Unit(0, -Pi) * Main.rand.NextFloat(0f, 15f), 25 * Main.rand.NextFloat(1f, 2f));
+                                EmpyreanMetaball.SpawnDefaultParticle(new(NPC.Center.X, NPC.Center.Y - 50), Main.rand.NextVector2Unit(0, -Pi) * Main.rand.NextFloat(0f, 15f), 25 * Main.rand.NextFloat(1f, 2f));
                             }
                             Projectile.NewProjectile(Terraria.Entity.GetSource_NaturalSpawn(), NPC.Center, new Vector2((float)(10 * Math.Sin(aiCounter)), -10), ModContent.ProjectileType<DarkGlob>(), GlobDamage, 0f, -1, 1, 0.5f);
                             Projectile.NewProjectile(Terraria.Entity.GetSource_NaturalSpawn(), NPC.Center, new Vector2((float)(-10 * Math.Sin(aiCounter)), -10), ModContent.ProjectileType<DarkGlob>(), GlobDamage, 0f, -1, 1, 0.5f);

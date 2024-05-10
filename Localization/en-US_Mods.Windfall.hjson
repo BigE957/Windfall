@@ -749,7 +749,7 @@ Items: {
 			Tooltip: A tattered page from the journal of an explorer.
 		}
 
-		JournalCompilation: {
+		WandererJournal: {
 			DisplayName: The Wanderer's Journal
 			Tooltip: A collection of journal entries about various locations and environments.
 		}
