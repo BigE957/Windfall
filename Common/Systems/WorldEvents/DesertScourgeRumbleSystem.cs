@@ -27,9 +27,10 @@ namespace Windfall.Common.Systems.WorldEvents
                     if (mainPlayer.ZoneDesert && !DownedBossSystem.downedDesertScourge && !AnyBossNPCS() && cooldown == 0)
                     {
                         State = SystemState.CheckChance;
+                    }
                     else
                         if (!mainPlayer.ZoneDesert)
-                            cooldown = 0;
+                        cooldown = 0;
                     break;
                 case SystemState.CheckChance:
                     if (Main.rand.NextBool(3) && cooldown == 0)
