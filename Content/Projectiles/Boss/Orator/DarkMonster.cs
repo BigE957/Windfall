@@ -74,10 +74,10 @@ namespace Windfall.Content.Projectiles.Boss.Orator
         public override void AI()
         {
             Player target = Main.player[Player.FindClosest(Projectile.Center, Projectile.width, Projectile.height)];
-            if (!NPC.AnyNPCs(ModContent.NPCType<TheOrator>()) && Projectile.scale >= 4f)
-            {
-                Projectile.ai[0] = 1;
-            }
+            
+            if (!NPC.AnyNPCs(ModContent.NPCType<TheOrator>()) && AIState == States.Chasing && Projectile.scale > 4f)
+                AIState = States.Dying;
+            
             switch (AIState)
             {
                 case States.Chasing:
@@ -90,54 +90,42 @@ namespace Windfall.Content.Projectiles.Boss.Orator
                     }
                     else
                         SoundDelay--;
-
-                    if (Projectile.Center.X > target.Center.X)
-                        Projectile.velocity.X -= Acceleration;
-                    if (Projectile.Center.X < target.Center.X)
-                        Projectile.velocity.X += Acceleration;
-                    if (Projectile.Center.Y > target.Center.Y)
-                        Projectile.velocity.Y -= Acceleration;
-                    if (Projectile.Center.Y < target.Center.Y)
-                        Projectile.velocity.Y += Acceleration;                   
+                    Projectile.velocity += (target.Center - Projectile.Center).SafeNormalize(Vector2.Zero) * Acceleration;
                     if (Projectile.velocity.Length() > MaxSpeed)
                         Projectile.velocity = Projectile.velocity.SafeNormalize(Vector2.Zero) * MaxSpeed;
                     
                     EmitGhostGas();
                     break;
                 case States.Dying:                   
-                    Projectile.scale -= (0.01f * (1 + (aiCounter / 8)));
+                    Projectile.scale -= (0.005f * (1 + (aiCounter / 8)));                  
                     if (Projectile.scale <= 1.5f)
                         Projectile.ai[0] = 2;                   
                     if (Projectile.velocity.Length() > 0f)
                     {
-                        if (Projectile.Center.X > target.Center.X)
-                            Projectile.velocity.X -= Acceleration;
-                        if (Projectile.Center.X < target.Center.X)
-                            Projectile.velocity.X += Acceleration;
-                        if (Projectile.Center.Y > target.Center.Y)
-                            Projectile.velocity.Y -= Acceleration;
-                        if (Projectile.Center.Y < target.Center.Y)
-                            Projectile.velocity.Y += Acceleration;
+                        Projectile.velocity += (target.Center - Projectile.Center).SafeNormalize(Vector2.Zero) * Acceleration;
                         if (Projectile.velocity.Length() > (MaxSpeed * (Projectile.scale / 5)))
                             Projectile.velocity = Projectile.velocity.SafeNormalize(Vector2.Zero) * (MaxSpeed * (Projectile.scale / 5));
                         EmitGhostGas();
                     }
                     if (Projectile.velocity.Length() < 1f)
                         Projectile.velocity = Vector2.Zero;
+                    const float ShakeBy = 25f;
+                    Projectile.position += new Vector2(Main.rand.NextFloat(-ShakeBy, ShakeBy) / (Projectile.scale - 0.5f), Main.rand.NextFloat(-ShakeBy, ShakeBy) / (Projectile.scale * 2));
                     break;
                 case States.Exploding:
                     SoundEngine.PlaySound(SoundID.DD2_EtherianPortalDryadTouch, Projectile.Center);
                     ScreenShakeSystem.SetUniversalRumble(7.5f);
                     for (int i = 0; i <= 50; i++)
                     {
-                        EmpyreanMetaball.SpawnDefaultParticle(Projectile.Center, Main.rand.NextVector2Circular(10f, 10f), 40 * Main.rand.NextFloat(1.5f, 2.3f));
+                        EmpyreanMetaball.SpawnDefaultParticle(Projectile.Center, Main.rand.NextVector2Circular(10f, 10f) * Main.rand.NextFloat(1f, 2f), 40 * Main.rand.NextFloat(3f, 5f));
                     }
+                    
                     for (int i = 0; i < 12; i++)
                     {
                         Projectile.NewProjectile(Entity.GetSource_Death(), Projectile.Center, (TwoPi / 12 * i).ToRotationVector2() * 10, ModContent.ProjectileType<DarkGlob>(), TheOrator.GlobDamage, 0f, -1, 1, 0.5f);
                         Projectile.NewProjectile(Entity.GetSource_Death(), Projectile.Center, (TwoPi / 12 * i + (TwoPi / 24)).ToRotationVector2() * 5, ModContent.ProjectileType<DarkGlob>(), TheOrator.GlobDamage, 0f, -1, 1, 0.5f);
                     }
-
+                    
                     for (int i = 0; i < 24; i++)
                     {
                         Projectile.NewProjectile(Terraria.Entity.GetSource_NaturalSpawn(), Projectile.Center, (TwoPi / 24 * i).ToRotationVector2(), ModContent.ProjectileType<DarkBolt>(), TheOrator.BoltDamage, 0f, -1, 0, i % 2 == 0 ? -10 : 0);
@@ -147,6 +135,7 @@ namespace Windfall.Content.Projectiles.Boss.Orator
                         if (Orator != null && i % 3 == 0 && (float)Orator.life / (float)Orator.lifeMax > 0.1f)
                             NPC.NewNPC(Terraria.Entity.GetSource_NaturalSpawn(), (int)Projectile.Center.X, (int)Projectile.Center.Y, ModContent.NPCType<DarkSpawn>());
                     }
+                    
                     Projectile.active = false;
                     EmpyreanStickyParticles.RemoveAll(p => p.Projectile == Projectile);
                     break;
@@ -156,7 +145,10 @@ namespace Windfall.Content.Projectiles.Boss.Orator
         }
         public void EmitGhostGas()
         {
-            EmpyreanMetaball.SpawnDefaultParticle(Projectile.Center + (Main.rand.NextVector2Circular(20f, 20f) * Projectile.scale), Vector2.Zero, 40 * Main.rand.NextFloat(3f, 4f));
+            //smaller particles
+            EmpyreanMetaball.SpawnDefaultParticle(Projectile.Center + (Main.rand.NextVector2Circular(25f, 25f) * Projectile.scale), Projectile.velocity.SafeNormalize(Vector2.Zero) * Main.rand.NextFloat(0f, 5f), 40 * (Main.rand.NextFloat(0.75f, 0.9f) * Projectile.scale));
+            
+            //larger trails
             float gasSize = 40 * Projectile.scale;
             EmpyreanMetaball.SpawnDefaultParticle(Projectile.Center - Projectile.velocity * (2 * Projectile.scale), Vector2.Zero, gasSize);
 
