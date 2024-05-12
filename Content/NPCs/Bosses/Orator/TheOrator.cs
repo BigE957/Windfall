@@ -47,7 +47,6 @@ namespace Windfall.Content.NPCs.Bosses.TheOrator
         private static readonly int MonsterDamage = StatCorrections.ScaleProjectileDamage(Main.masterMode ? 360 : CalamityWorld.death ? 280 : CalamityWorld.revenge ? 268 : Main.expertMode ? 240 : 120);
         internal static readonly int GlobDamage = StatCorrections.ScaleProjectileDamage(Main.masterMode ? 260 : CalamityWorld.death ? 220 : CalamityWorld.revenge ? 180 : Main.expertMode ? 140 : 100);
         internal static readonly int BoltDamage = StatCorrections.ScaleProjectileDamage(Main.masterMode ? 264 : CalamityWorld.death ? 188 : CalamityWorld.revenge ? 176 : Main.expertMode ? 152 : 90);
-        //Will eventually be used for a special drop if the player kills every Dark Spawn the Orator summons and doesn't let any escape.
         public static bool noSpawnsEscape = true;
         public override void OnSpawn(IEntitySource source)
         {
@@ -322,10 +321,10 @@ namespace Windfall.Content.NPCs.Bosses.TheOrator
                                 }
                                 for (int i = 1; i < 6; i++)
                                 {
-                                    Projectile proj = Projectile.NewProjectileDirect(Terraria.Entity.GetSource_NaturalSpawn(), NPC.Center, NPC.velocity.RotatedBy(PiOver2).SafeNormalize(Vector2.UnitX) * (5 * i), ModContent.ProjectileType<DarkGlob>(), GlobDamage, 0f, -1, 0, 0.5f);
+                                    Projectile proj = Projectile.NewProjectileDirect(Terraria.Entity.GetSource_NaturalSpawn(), NPC.Center, (target.Center - NPC.Center).SafeNormalize(Vector2.UnitX) * (5 * i), ModContent.ProjectileType<DarkGlob>(), GlobDamage, 0f, -1, 0, 0.5f);
                                     proj.timeLeft = (int)(proj.timeLeft / 1.5f);
 
-                                    proj = Projectile.NewProjectileDirect(Terraria.Entity.GetSource_NaturalSpawn(), NPC.Center, NPC.velocity.RotatedBy(PiOver2).SafeNormalize(Vector2.UnitX) * (5 * -i), ModContent.ProjectileType<DarkGlob>(), GlobDamage, 0f, -1, 0, 0.5f);
+                                    proj = Projectile.NewProjectileDirect(Terraria.Entity.GetSource_NaturalSpawn(), NPC.Center, (target.Center - NPC.Center).SafeNormalize(Vector2.UnitX) * (5 * -i), ModContent.ProjectileType<DarkGlob>(), GlobDamage, 0f, -1, 0, 0.5f);
                                     proj.timeLeft = (int)(proj.timeLeft / 1.5f);
                                 }
                             }
