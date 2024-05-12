@@ -20,7 +20,7 @@ namespace Windfall.Common.Graphics.Metaballs
                 Velocity *= 0.96f;
             }
         }
-        public class EmpyreanStickyParticle(Projectile projectile, float interpolant, float size, float rotation, bool spin)
+        public class EmpyreanBorderParticle(Projectile projectile, float interpolant, float size, float rotation, bool spin)
         {
             public float Size = size;
 
@@ -43,7 +43,7 @@ namespace Windfall.Common.Graphics.Metaballs
             private set;
         } = [];
 
-        public static List<EmpyreanStickyParticle> EmpyreanStickyParticles
+        public static List<EmpyreanBorderParticle> EmpyreanStickyParticles
         {
             get;
             private set;
@@ -85,7 +85,7 @@ namespace Windfall.Common.Graphics.Metaballs
 
         public static void SpawnDefaultParticle(Vector2 position, Vector2 velocity, float size) =>
             EmpyreanParticles.Add(new(position, velocity, size));
-        public static void SpawnStickyParticle(Projectile projectile, float interpolant, float size, float rotation, bool spin = true) =>
+        public static void SpawnBorderParticle(Projectile projectile, float interpolant, float size, float rotation, bool spin = true) =>
            EmpyreanStickyParticles.Add(new(projectile, interpolant, size, rotation, spin));
         public override void Update()
         {
@@ -101,7 +101,7 @@ namespace Windfall.Common.Graphics.Metaballs
 
             if(EmpyreanStickyParticles.Count > 0 )
                 EmpyreanStickyParticles.RemoveAll(p => p.Projectile == null || !p.Projectile.active);
-            foreach (EmpyreanStickyParticle particle in EmpyreanStickyParticles)
+            foreach (EmpyreanBorderParticle particle in EmpyreanStickyParticles)
             {
 
                 Projectile myProj = particle.Projectile;
@@ -165,7 +165,7 @@ namespace Windfall.Common.Graphics.Metaballs
                 Vector2 scale = Vector2.One * particle.Size / tex.Size();
                 Main.spriteBatch.Draw(tex, drawPosition, null, Color.White, 0f, origin, scale, 0, 0f);
             }
-            foreach (EmpyreanStickyParticle particle in EmpyreanStickyParticles)
+            foreach (EmpyreanBorderParticle particle in EmpyreanStickyParticles)
             {
                 Vector2 drawPosition = particle.Center - Main.screenPosition;
                 Vector2 origin = tex.Size() * 0.5f;
