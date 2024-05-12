@@ -28,6 +28,10 @@ namespace Windfall.Content.Items.Quest
         }
         public override bool? UseItem(Player player)
         {
+            if (CanShoot(player))
+                Item.useStyle = ItemUseStyleID.Shoot;
+            else
+                Item.useStyle = ItemUseStyleID.HoldUp;
             if (SealingRitualSystem.RitualSequenceSeen)
             {
                 SoundEngine.PlaySound(SoundID.Roar, player.Center);
@@ -40,7 +44,8 @@ namespace Windfall.Content.Items.Quest
             {
                 if (!SelenicTabletUISystem.isUIOpen)
                 {
-                    SelenicText.Contents = GetWindfallTextValue($"UI.Selenic.Test");
+                    string Tier = NPC.downedEmpressOfLight || DownedBossSystem.downedRavager ? "Pre-Lunar" : NPC.downedGolemBoss ? "Post-Golem" : "Post-Plant";
+                    SelenicText.Contents = GetWindfallTextValue($"UI.Selenic.{Tier}.{Main.rand.Next(0, 3)}");
                     ModContent.GetInstance<SelenicTabletUISystem>().ShowUI();
                 }
                 else

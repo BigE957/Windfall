@@ -601,7 +601,29 @@ Dialogue: {
 }
 
 UI: {
-	Selenic.Test: Skibidi...
+	Skibidi: Toilet
+
+	Selenic: {
+		Post-Plant:
+		{
+			0: Soon we shall begin...
+			1: Await The Orator's word...
+			2: Paradise awaits...
+		}
+		Post-Golem:
+		{
+			0: The seal weakens...
+			1: Paradise draws near...
+			2: Preparations are nearly complete...
+		}
+		#Post Ravager or EoL
+		Pre-Lunar:
+		{
+			0: Our time is at hand!
+			1: The end begins!
+			2: Nothing can stop us now!
+		}
+	}
 
 	JournalContents: {
 		Forest: Today marks the beginning of my journey across these expansive lands I’ve called my home. For all my life, I’ve lived within these forests. I’ve carved out a simple, peaceful life for myself, in a world where peace seems to get rarer each day. Now as I’ve grown older, a longing has grown deep inside my heart. I want to see. I want to know. I’ve heard so much from travellers and passersby of the wonders they have seen. The aurora’s of the tundras, the ruins of Ilmeris, the verdant fauna of the jungles, and so, so much more. I write this now as a farewell to the life I once knew, and as the beginning of my chronicling of this journey I am soon to set off on. Goodbye, I shall hold onto the memories I’ve made here with each step I take.

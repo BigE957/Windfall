@@ -8,6 +8,8 @@ namespace Windfall.Content.UI.SelenicTablet
         internal SelenicTabletUIState SelenicTabletUIState;
         private UserInterface SelenicTabletUI;
         public static bool isUIOpen = false;
+        readonly float xResolutionScale = Main.screenWidth / 2560f;
+        readonly float yResolutionScale = Main.screenHeight / 1440f;
 
         public void ShowUI()
         {
@@ -21,6 +23,11 @@ namespace Windfall.Content.UI.SelenicTablet
                 SoundLimitBehavior = SoundLimitBehavior.ReplaceOldest
             });
             SelenicTabletUIState.SelenicUIPanel.Top.Set(Main.screenHeight + SelenicTabletUIState.UIHeight, 0f);
+            SelenicTabletUI?.SetState(SelenicTabletUIState);
+        }
+
+        public void UpdateUI()
+        {
             SelenicTabletUI?.SetState(SelenicTabletUIState);
         }
 
@@ -63,6 +70,8 @@ namespace Windfall.Content.UI.SelenicTablet
         internal bool UIStill = false;
         public override void PostUpdateInput()
         {
+            float xResolutionScale = Main.screenWidth / 2560f;
+            float yResolutionScale = Main.screenHeight / 1440f;
             if (SelenicTabletUIState.SelenicUIPanel.Width.Pixels / SelenicTabletUIState.UIWidth >= 0.9f)
                 SelenicTabletUIState.nextButton.SetVisibility(0.75f, 0.5f);
             else
@@ -73,21 +82,21 @@ namespace Windfall.Content.UI.SelenicTablet
                 {
                     SelenicTabletUIState.SelenicUIPanel.Width.Set(0f, 0f);
                     SelenicTabletUIState.SelenicUIPanel.Height.Set(0f, 0f);
-                    SelenicTabletUIState.SelenicUIPanel.Top.Set(Main.screenHeight + SelenicTabletUIState.UIHeight, 0f);
+                    SelenicTabletUIState.SelenicUIPanel.Top.Set(Main.screenHeight / 2 + SelenicTabletUIState.UIHeight, 0f);
                     JustOpened = false;
                 }
                 if(SelenicTabletUIState.SelenicUIPanel.Top.Pixels > 200f)
                     SelenicTabletUIState.SelenicUIPanel.Top.Set(SelenicTabletUIState.SelenicUIPanel.Top.Pixels - 15f, 0f);
 
                 if (SelenicTabletUIState.SelenicUIPanel.Height.Pixels < SelenicTabletUIState.UIHeight)
-                    SelenicTabletUIState.SelenicUIPanel.Height.Set(SelenicTabletUIState.SelenicUIPanel.Height.Pixels + (SelenicTabletUIState.UIHeight / 48), 0f);
+                    SelenicTabletUIState.SelenicUIPanel.Height.Set(SelenicTabletUIState.SelenicUIPanel.Height.Pixels + (SelenicTabletUIState.UIHeight / ((70 / 1.5f) * yResolutionScale)), 0f);
                 if (SelenicTabletUIState.SelenicUIPanel.Width.Pixels < SelenicTabletUIState.UIWidth)
-                    SelenicTabletUIState.SelenicUIPanel.Width.Set(SelenicTabletUIState.SelenicUIPanel.Width.Pixels + (SelenicTabletUIState.UIWidth / 48), 0f);
+                    SelenicTabletUIState.SelenicUIPanel.Width.Set(SelenicTabletUIState.SelenicUIPanel.Width.Pixels + (SelenicTabletUIState.UIWidth / ((70 / 1.5f) * xResolutionScale)), 0f);
                 
             }
             else if (SelenicTabletUI.CurrentState == SelenicTabletUIState)
             {
-                if (SelenicTabletUIState.SelenicUIPanel.Top.Pixels < Main.screenHeight + SelenicTabletUIState.UIHeight)
+                if (SelenicTabletUIState.SelenicUIPanel.Top.Pixels < Main.screenHeight / 2 + SelenicTabletUIState.UIHeight)
                     SelenicTabletUIState.SelenicUIPanel.Top.Set(SelenicTabletUIState.SelenicUIPanel.Top.Pixels + 15f, 0f);
                 else
                 {
@@ -96,13 +105,13 @@ namespace Windfall.Content.UI.SelenicTablet
                 }
 
                 if (SelenicTabletUIState.SelenicUIPanel.Height.Pixels > 0f)
-                    SelenicTabletUIState.SelenicUIPanel.Height.Set(SelenicTabletUIState.SelenicUIPanel.Height.Pixels - (SelenicTabletUIState.UIHeight / 48), 0f);
+                    SelenicTabletUIState.SelenicUIPanel.Height.Set(SelenicTabletUIState.SelenicUIPanel.Height.Pixels - (SelenicTabletUIState.UIHeight / ((70 / 1.5f) * yResolutionScale)), 0f);
                 if (SelenicTabletUIState.SelenicUIPanel.Width.Pixels > 0f)
-                    SelenicTabletUIState.SelenicUIPanel.Width.Set(SelenicTabletUIState.SelenicUIPanel.Width.Pixels - (SelenicTabletUIState.UIWidth / 48), 0f);
+                    SelenicTabletUIState.SelenicUIPanel.Width.Set(SelenicTabletUIState.SelenicUIPanel.Width.Pixels - (SelenicTabletUIState.UIWidth / ((70 / 1.5f) * xResolutionScale)), 0f);
             }
             if (isUIOpen || SelenicTabletUI.CurrentState == SelenicTabletUIState)
             {
-                SelenicTabletUIState.SelenicUIPanel.Left.Set((Main.screenWidth / 2) - (SelenicTabletUIState.SelenicUIPanel.Width.Pixels / 2) + 80f, 0f);
+                SelenicTabletUIState.SelenicUIPanel.Left.Set((Main.screenWidth / 4) - (SelenicTabletUIState.SelenicUIPanel.Width.Pixels / 2), 0f);
 
                 SelenicTabletUIState.nextButton.Left.Set(SelenicTabletUIState.SelenicUIPanel.Width.Pixels - (SelenicTabletUIState.nextButton.Width.Pixels + 10f), 0f);
                 SelenicTabletUIState.nextButton.Top.Set(SelenicTabletUIState.SelenicUIPanel.Height.Pixels - 35f, 0f);

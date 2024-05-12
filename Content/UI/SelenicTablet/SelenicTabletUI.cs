@@ -47,16 +47,13 @@ namespace Windfall.Content.UI.SelenicTablet
         }
         private void NextPage(UIMouseEvent evt, UIElement listeningElement)
         {
-            if (TextState != 12)
-            {
-                TextState++;
-                LoadPage();
-            }
+            LoadPage();
         }
         private void LoadPage()
         {
-            SelenicText.Contents = GetWindfallTextValue($"UI.Selenic.Test");
-            ModContent.GetInstance<SelenicTabletUISystem>().ShowUI();
+            string Tier = NPC.downedEmpressOfLight || DownedBossSystem.downedRavager ? "Pre-Lunar" : NPC.downedGolemBoss ? "Post-Golem" : "Post-Plant";
+            SelenicText.Contents = GetWindfallTextValue($"UI.Selenic.{Tier}.{Main.rand.Next(0, 3)}");
+            ModContent.GetInstance<SelenicTabletUISystem>().UpdateUI();
         }
     }
     public class SelenicText : UIElement
