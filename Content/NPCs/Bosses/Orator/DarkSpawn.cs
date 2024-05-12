@@ -1,7 +1,4 @@
-﻿using CalamityMod.Dusts;
-using CalamityMod.NPCs;
-using CalamityMod.World;
-using System.Drawing.Drawing2D;
+﻿using CalamityMod.World;
 using Windfall.Common.Graphics.Metaballs;
 using Windfall.Common.Systems;
 using Windfall.Content.Projectiles.Boss.Orator;

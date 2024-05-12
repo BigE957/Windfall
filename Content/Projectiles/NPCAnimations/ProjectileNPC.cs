@@ -1,6 +1,4 @@
 ﻿using Luminance.Core.Graphics;
-using Windfall.Common.Systems;
-using Windfall.Common.Utils;
 
 namespace Windfall.Content.Projectiles.NPCAnimations
 {

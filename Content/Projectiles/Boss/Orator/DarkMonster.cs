@@ -1,6 +1,4 @@
-﻿using CalamityMod.Graphics.Metaballs;
-using CalamityMod.Projectiles.Magic;
-using CalamityMod.World;
+﻿using CalamityMod.World;
 using Luminance.Core.Graphics;
 using Windfall.Common.Graphics.Metaballs;
 using Windfall.Common.Systems;

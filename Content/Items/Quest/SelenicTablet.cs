@@ -1,9 +1,7 @@
-﻿using Microsoft.Xna.Framework.Input;
-using Windfall.Common.Systems.WorldEvents;
+﻿using Windfall.Common.Systems.WorldEvents;
 using Windfall.Content.NPCs.Bosses.TheOrator;
 using Windfall.Content.Projectiles.Other;
 using Windfall.Content.UI.SelenicTablet;
-using Windfall.Content.UI.WanderersJournals;
 
 namespace Windfall.Content.Items.Quest
 {

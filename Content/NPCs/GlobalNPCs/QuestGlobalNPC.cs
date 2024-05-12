@@ -1,7 +1,5 @@
 ﻿using Windfall.Common.Systems;
 using Windfall.Content.NPCs.Enemies;
-using Windfall.Content.Projectiles.NPCAnimations;
-using Windfall.Content.Projectiles.Other;
 
 namespace Windfall.Content.NPCs.GlobalNPCs
 {

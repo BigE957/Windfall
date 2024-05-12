@@ -6,9 +6,7 @@ using Windfall.Content.Items.Lore;
 using Terraria.GameContent.ItemDropRules;
 using Windfall.Common.Utils;
 using CalamityMod.Items.Weapons.Magic;
-using Terraria;
 using CalamityMod.Buffs.StatBuffs;
-using System.Drawing.Drawing2D;
 using Windfall.Common.Graphics.Metaballs;
 
 namespace Windfall.Content.NPCs.Bosses.TheOrator

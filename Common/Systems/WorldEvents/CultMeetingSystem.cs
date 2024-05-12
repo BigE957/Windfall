@@ -1,7 +1,6 @@
 ﻿using Luminance.Core.Graphics;
 using Terraria.ModLoader.IO;
 using Windfall.Content.Items.Quest;
-using Windfall.Content.NPCs.TravellingNPCs;
 using Windfall.Content.NPCs.WorldEvents.LunarCult;
 
 namespace Windfall.Common.Systems.WorldEvents

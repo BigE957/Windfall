@@ -1,6 +1,4 @@
 ﻿using CalamityMod.Graphics.Metaballs;
-using CalamityMod.Projectiles.Magic;
-using Terraria.Graphics.Renderers;
 using Windfall.Content.Projectiles.Boss.Orator;
 
 namespace Windfall.Common.Graphics.Metaballs

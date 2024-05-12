@@ -1,6 +1,4 @@
 ﻿using Windfall.Content.NPCs.Bosses.TheOrator;
-using Terraria.ModLoader;
-using Terraria.ID;
 
 namespace Windfall.Content.Scenes.MusicScenes
 {

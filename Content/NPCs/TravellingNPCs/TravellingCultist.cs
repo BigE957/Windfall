@@ -3,8 +3,6 @@ using Terraria.GameContent.Bestiary;
 using Terraria.Utilities;
 using Windfall.Common.Systems;
 using Windfall.Common.Systems.WorldEvents;
-using Windfall.Common.Utils;
-using Windfall.Content.NPCs.WanderingNPCs;
 using Windfall.Content.NPCs.WorldEvents.LunarCult;
 
 namespace Windfall.Content.NPCs.TravellingNPCs

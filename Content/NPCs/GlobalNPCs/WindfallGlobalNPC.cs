@@ -1,8 +1,6 @@
 ﻿using CalamityMod.NPCs.NormalNPCs;
 using CalamityMod.NPCs.Polterghast;
-using CalamityMod.World.Planets;
 using Windfall.Common.Systems;
-using Windfall.Common.Systems.WorldEvents;
 using Windfall.Content.NPCs.Enemies;
 using Windfall.Content.Projectiles.NPCAnimations;
 using Windfall.Content.Projectiles.Other;

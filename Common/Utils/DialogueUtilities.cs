@@ -1,5 +1,4 @@
-﻿using Terraria.DataStructures;
-using Windfall.Common.Systems;
+﻿using Windfall.Common.Systems;
 using Windfall.Content.NPCs.TravellingNPCs;
 using Windfall.Content.NPCs.WanderingNPCs;
 

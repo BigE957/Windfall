@@ -1,8 +1,4 @@
-﻿using CalamityMod.NPCs.TownNPCs;
-using Microsoft.Xna.Framework.Graphics.PackedVector;
-using Windfall.Common.Graphics.Metaballs;
-
-namespace Windfall.Content.Projectiles.Boss.Orator
+﻿namespace Windfall.Content.Projectiles.Boss.Orator
 {
     public class EmpyreanThorn : ModProjectile
     {

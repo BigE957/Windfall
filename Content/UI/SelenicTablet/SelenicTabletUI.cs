@@ -1,7 +1,4 @@
-﻿using Terraria.GameContent.UI.Elements;
-using Terraria.UI;
-using Windfall.Common.Systems;
-using Windfall.Content.UI.WanderersJournals;
+﻿using Terraria.UI;
 
 namespace Windfall.Content.UI.SelenicTablet
 {

@@ -6,7 +6,6 @@ using CalamityMod.World;
 using Luminance.Core.Graphics;
 using Windfall.Common.Systems;
 using Windfall.Common.Systems.WorldEvents;
-using Windfall.Common.Utils;
 using Windfall.Content.NPCs.WanderingNPCs;
 using Windfall.Content.Projectiles.Fishing;
 using Windfall.Content.Projectiles.NPCAnimations;

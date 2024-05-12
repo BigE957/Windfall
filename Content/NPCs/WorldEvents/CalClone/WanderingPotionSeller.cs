@@ -1,7 +1,6 @@
 ﻿using Luminance.Core.Graphics;
 using Terraria.Utilities;
 using Windfall.Common.Systems;
-using Windfall.Common.Utils;
 
 namespace Windfall.Content.NPCs.WorldEvents.CalClone
 {

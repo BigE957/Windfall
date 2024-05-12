@@ -1,6 +1,5 @@
 ﻿using CalamityMod.Items.SummonItems;
 using CalamityMod.Items.Tools;
-using Windfall.Common.Utils;
 using Windfall.Content.Items.Journals;
 
 namespace Windfall.Content.World

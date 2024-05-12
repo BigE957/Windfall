@@ -1,6 +1,4 @@
 ﻿using Windfall.Common.Systems;
-using Windfall.Common.Utils;
-using Windfall.Content.NPCs.WanderingNPCs;
 using Windfall.Content.NPCs.WorldEvents.DragonCult;
 
 namespace Windfall.Content.Tiles

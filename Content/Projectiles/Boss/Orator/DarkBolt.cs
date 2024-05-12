@@ -1,11 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics.Metrics;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Windfall.Content.Projectiles.Boss.Orator
+﻿namespace Windfall.Content.Projectiles.Boss.Orator
 {
     public class DarkBolt : ModProjectile
     {

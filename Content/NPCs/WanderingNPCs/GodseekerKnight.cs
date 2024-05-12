@@ -1,11 +1,9 @@
 ﻿using CalamityMod.Items.Armor.Statigel;
 using CalamityMod.NPCs.HiveMind;
 using CalamityMod.Projectiles.Rogue;
-using Terraria;
 using Terraria.GameContent.Bestiary;
 using Terraria.Utilities;
 using Windfall.Common.Systems;
-using Windfall.Common.Utils;
 using Windfall.Content.Items.Quests;
 
 namespace Windfall.Content.NPCs.WanderingNPCs

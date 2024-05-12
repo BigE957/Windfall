@@ -1,15 +1,11 @@
 ﻿using Luminance.Core.Graphics;
-using Microsoft.Xna.Framework.Input;
-using Terraria;
 using Terraria.ModLoader.IO;
 using Windfall.Common.Graphics.Metaballs;
-using Windfall.Content.Items.Lore;
 using Windfall.Content.Items.Quest;
 using Windfall.Content.NPCs.Bosses.TheOrator;
 using Windfall.Content.NPCs.TravellingNPCs;
 using Windfall.Content.NPCs.WorldEvents.LunarCult;
 using Windfall.Content.Projectiles.Boss.Orator;
-using static System.Net.Mime.MediaTypeNames;
 using static Windfall.Common.Systems.WorldEvents.CultMeetingSystem;
 
 namespace Windfall.Common.Systems.WorldEvents

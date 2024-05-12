@@ -1,11 +1,9 @@
 ﻿using CalamityMod.Items.Accessories;
 using CalamityMod.Items.Placeables.Banners;
 using CalamityMod.Items.Placeables.Furniture.Trophies;
-using System;
 using Terraria.ModLoader.IO;
 using Windfall.Content.Items.Fishing;
 using Windfall.Content.Items.Quests;
-using Windfall.Content.Items.SummonItems;
 using Windfall.Content.Items.Tools;
 using Windfall.Content.Items.Weapons.Misc;
 using Windfall.Content.NPCs.TravellingNPCs;

@@ -1,5 +1,4 @@
-﻿using Luminance;
-using Luminance.Core.Graphics;
+﻿using Luminance.Core.Graphics;
 using Windfall.Common.Graphics.Metaballs;
 using Windfall.Content.NPCs.Bosses.TheOrator;
 using static Windfall.Common.Graphics.Metaballs.EmpyreanMetaball;

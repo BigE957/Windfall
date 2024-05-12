@@ -1,5 +1,4 @@
 ﻿using Luminance.Core.Graphics;
-using Windfall.Common.Systems;
 
 namespace Windfall.Items.Debug
 {

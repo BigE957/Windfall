@@ -1,9 +1,4 @@
-﻿using CalamityMod.NPCs.TownNPCs;
-using CalamityMod;
-using System;
-using Terraria.GameContent.Events;
-
-namespace Windfall.Content.NPCs.WorldEvents.LunarCult
+﻿namespace Windfall.Content.NPCs.WorldEvents.LunarCult
 {
     public class SealingTablet : ModNPC
     {

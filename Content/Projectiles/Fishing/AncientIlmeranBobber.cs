@@ -1,6 +1,4 @@
-﻿using Windfall.Content.Items.Fishing;
-
-namespace Windfall.Content.Projectiles.Fishing
+﻿namespace Windfall.Content.Projectiles.Fishing
 {
     public class AncientIlmeranBobber : ModProjectile
     {

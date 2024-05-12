@@ -1,7 +1,6 @@
 ﻿using CalamityMod.Dusts;
 using CalamityMod.NPCs.Crags;
 using Windfall.Common.Systems.WorldEvents;
-using Windfall.Common.Utils;
 using Windfall.Content.NPCs.WorldEvents.CalClone;
 
 namespace Windfall.Content.Projectiles.NPCAnimations
