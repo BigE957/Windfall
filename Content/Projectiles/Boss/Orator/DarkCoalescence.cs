@@ -110,7 +110,7 @@ namespace Windfall.Content.Projectiles.Boss.Orator
                     SoundEngine.PlaySound(SoundID.DD2_EtherianPortalDryadTouch, Projectile.Center);
                     for (int i = 0; i <= 50; i++)
                     {
-                        EmpyreanMetaball.SpawnDefaultParticle(Projectile.Center, Main.rand.NextVector2Circular(15f, 15f), 40 * Main.rand.NextFloat(3f, 5f));
+                        EmpyreanMetaball.SpawnDefaultParticle(Projectile.Center, Main.rand.NextVector2Circular(10f, 10f) * Main.rand.NextFloat(1f, 2f), 40 * Main.rand.NextFloat(3f, 5f));
                     }
                     if (Main.projectile.First(p => p.type == ModContent.ProjectileType<DarkCoalescence>()).whoAmI == Projectile.whoAmI)
                     {
