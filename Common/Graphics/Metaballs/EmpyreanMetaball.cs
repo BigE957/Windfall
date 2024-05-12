@@ -100,19 +100,23 @@ namespace Windfall.Common.Graphics.Metaballs
                 particle.Center += particle.Velocity;
             }
             EmpyreanParticles.RemoveAll(p => p.Size <= 2.5f);
-           
+
+            if(EmpyreanStickyParticles.Count > 0 )
+                EmpyreanStickyParticles.RemoveAll(p => p.Projectile == null || !p.Projectile.active);
             foreach (EmpyreanStickyParticle particle in EmpyreanStickyParticles)
             {
+
                 Projectile myProj = particle.Projectile;
+
                 if(particle.spin)
                     if (particle.Rotation > 0)
                         particle.Rotation += 0.0175f / Math.Abs(particle.Interpolant / 10);
                     else
                         particle.Rotation -= 0.0175f / Math.Abs(particle.Interpolant / 10);
-                particle.Center = (myProj.Center) + (new Vector2(myProj.width / 2 * (myProj.scale / 5f) * 1.05f, 0).RotatedBy(particle.Rotation));
+                particle.Center = (myProj.Center) + (new Vector2(myProj.width / 2 * (myProj.scale / 5f) * 1.05f, 0).RotatedBy(particle.Rotation + myProj.rotation));
                 particle.Center += (myProj.Center - particle.Center).SafeNormalize(Vector2.Zero) * (float)Math.Sin(Main.GlobalTimeWrappedHourly * 4) * particle.Interpolant;
                 if (!particle.spin)
-                    particle.Center -= myProj.velocity / 2;
+                    particle.Center -= myProj.velocity / 2;                
             }
         }
 
