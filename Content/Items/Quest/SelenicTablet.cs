@@ -1,7 +1,7 @@
 ﻿using Windfall.Common.Systems.WorldEvents;
 using Windfall.Content.NPCs.Bosses.TheOrator;
 using Windfall.Content.Projectiles.Other;
-using Windfall.Content.UI.SelenicTablet;
+using Windfall.Content.UI.Selenic;
 
 namespace Windfall.Content.Items.Quest
 {
@@ -14,8 +14,7 @@ namespace Windfall.Content.Items.Quest
             Item.width = 20;
             Item.height = 20;
             Item.rare = ItemRarityID.Cyan;
-            Item.useAnimation = 20;
-            Item.useTime = 20;
+            Item.useTime = Item.useAnimation = 65;
             Item.useStyle = ItemUseStyleID.Shoot;
             Item.shoot = ModContent.ProjectileType<HideoutSeeker>();
             Item.shootSpeed = 20f;
@@ -24,6 +23,7 @@ namespace Windfall.Content.Items.Quest
         {
             return !SealingRitualSystem.RitualSequenceSeen && CultMeetingSystem.ActiveHideoutCoords != new Point(-1,-1);
         }
+        public static string Key = NPC.downedEmpressOfLight || DownedBossSystem.downedRavager ? "Pre-Lunar" : NPC.downedGolemBoss ? "Post-Golem" : "Post-Plant";
         public override bool? UseItem(Player player)
         {
             if (CanShoot(player))
@@ -42,8 +42,60 @@ namespace Windfall.Content.Items.Quest
             {
                 if (!SelenicTabletUISystem.isUIOpen)
                 {
-                    string Tier = NPC.downedEmpressOfLight || DownedBossSystem.downedRavager ? "Pre-Lunar" : NPC.downedGolemBoss ? "Post-Golem" : "Post-Plant";
-                    SelenicText.Contents = GetWindfallTextValue($"UI.Selenic.{Tier}.{Main.rand.Next(0, 3)}");
+                    if (Main.rand.NextBool(10))
+                        Key = "Rare";
+                    else
+                        Key = NPC.downedEmpressOfLight || DownedBossSystem.downedRavager ? "Pre-Lunar" : NPC.downedGolemBoss ? "Post-Golem" : "Post-Plant";
+                    int Topic = Main.rand.Next(0, 3);
+                    switch (Key)
+                    {
+                        case "Post-Plant":
+                            switch (Topic)
+                            {
+                                case 0:
+                                    Key += ".Player";
+                                    break;
+                                case 1:
+                                    Key += ".Dungeon";
+                                    break;
+                                case 2:
+                                    Key += ".Change";
+                                    break;
+                            }
+                            break;
+                        case "Post-Golem":
+                            switch (Topic)
+                            {
+                                case 0:
+                                    Key += ".Player";
+                                    break;
+                                case 1:
+                                    Key += ".Dungeon";
+                                    break;
+                                case 2:
+                                    Key += ".Change";
+                                    break;
+                            }
+                            break;
+                        case "Pre-Lunar":
+                            Key += ".Beginning";
+                            break;
+                        case "Rare":
+                            switch (Topic)
+                            {
+                                case 0:
+                                    Key += ".Doubt";
+                                    break;
+                                case 1:
+                                    Key += ".Revelation";
+                                    break;
+                                case 2:
+                                    Key += ".You";
+                                    break;
+                            }
+                            break;
+                    }
+                    SelenicText.Contents = GetWindfallTextValue($"UI.Selenic.{Key}.0");
                     ModContent.GetInstance<SelenicTabletUISystem>().ShowUI();
                 }
                 else

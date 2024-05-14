@@ -1,6 +1,6 @@
 ﻿using Terraria.UI;
 
-namespace Windfall.Content.UI.SelenicTablet
+namespace Windfall.Content.UI.Selenic
 {
     public class SelenicTabletUISystem : ModSystem
     {
@@ -15,6 +15,7 @@ namespace Windfall.Content.UI.SelenicTablet
         {
             isUIOpen = true;
             JustOpened = true;
+            SelenicTabletUIState.textCounter = 0;
             SoundEngine.PlaySound(UseSound with
             {
                 Pitch = -0.25f,
@@ -34,6 +35,7 @@ namespace Windfall.Content.UI.SelenicTablet
         public void HideUI()
         {
             isUIOpen = false;
+            SelenicTabletUIState.textCounter = 0;
             SoundEngine.PlaySound(UseSound with
             {
                 Pitch = -0.25f,

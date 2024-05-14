@@ -1,6 +1,7 @@
 ﻿using Terraria.UI;
+using Windfall.Content.Items.Quest;
 
-namespace Windfall.Content.UI.SelenicTablet
+namespace Windfall.Content.UI.Selenic
 {
     internal class SelenicTabletUIState : UIState
     {
@@ -42,15 +43,22 @@ namespace Windfall.Content.UI.SelenicTablet
             uiElement.Width.Set(width, 0f);
             uiElement.Height.Set(height, 0f);
         }
+        public int textCounter = 0;
         private void NextPage(UIMouseEvent evt, UIElement listeningElement)
         {
+            textCounter++;
             LoadPage();
         }
         private void LoadPage()
         {
-            string Tier = NPC.downedEmpressOfLight || DownedBossSystem.downedRavager ? "Pre-Lunar" : NPC.downedGolemBoss ? "Post-Golem" : "Post-Plant";
-            SelenicText.Contents = GetWindfallTextValue($"UI.Selenic.{Tier}.{Main.rand.Next(0, 3)}");
-            ModContent.GetInstance<SelenicTabletUISystem>().UpdateUI();
+            SelenicText.Contents = GetWindfallTextValue($"UI.Selenic.{SelenicTablet.Key}.{textCounter}");
+            if (SelenicText.Contents.Contains("Mods.Windfall"))
+            {
+                SelenicText.Contents = GetWindfallTextValue($"UI.Selenic.{SelenicTablet.Key}.{textCounter - 1}");
+                ModContent.GetInstance<SelenicTabletUISystem>().HideUI();
+            }
+            else
+                ModContent.GetInstance<SelenicTabletUISystem>().UpdateUI();
         }
     }
     public class SelenicText : UIElement
@@ -69,12 +77,12 @@ namespace Windfall.Content.UI.SelenicTablet
 
             int textWidth = (int)((int)(xScale * SelenicTabletUIState.UIWidth) - 6f);
             textWidth = (int)(textWidth * xResolutionScale);
-            List<string> dialogLines = Utils.WordwrapString(Contents, FontAssets.MouseText.Value, (int)(textWidth / 0.45f), 250, out _).ToList();
+            List<string> dialogLines = Utils.WordwrapString(Contents, FontAssets.MouseText.Value, (int)(textWidth / 0.85f), 250, out _).ToList();
             dialogLines.RemoveAll(text => string.IsNullOrEmpty(text));
 
             int trimmedTextCharacterCount = string.Concat(dialogLines).Length;
-            float yOffsetPerLine = 28f;
-            int yScale = (int)(42 * yResolutionScale);
+            float yOffsetPerLine = 48f * (this.Width.Pixels / 100f);
+            int yScale = (int)(42 * yResolutionScale * (this.Width.Pixels / 100f));
             int yScale2 = (int)(yOffsetPerLine * yResolutionScale);
             for (int i = 0; i < dialogLines.Count; i++)
                 if (dialogLines[i] != null)
