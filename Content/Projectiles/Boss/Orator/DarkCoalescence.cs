@@ -1,4 +1,5 @@
-﻿using Luminance.Core.Graphics;
+﻿using CalamityMod.World;
+using Luminance.Core.Graphics;
 using Windfall.Common.Graphics.Metaballs;
 using Windfall.Content.NPCs.Bosses.TheOrator;
 using static Windfall.Common.Graphics.Metaballs.EmpyreanMetaball;
@@ -9,6 +10,7 @@ namespace Windfall.Content.Projectiles.Boss.Orator
     {
         public new static string LocalizationCategory => "Projectiles.Boss";
         public override string Texture => "Windfall/Assets/Graphics/Metaballs/BasicCircle";
+        public static int fireDelay;
         public override void SetDefaults()
         {
             Projectile.width = 320;
@@ -29,6 +31,7 @@ namespace Windfall.Content.Projectiles.Boss.Orator
         }
         public override void OnSpawn(IEntitySource source)
         {
+            fireDelay = CalamityWorld.death ? 65 : CalamityWorld.revenge ? 80 : 120;
             Projectile.scale = 0f;
             for(int i = 0; i < 30; i++)
             {
@@ -73,9 +76,8 @@ namespace Windfall.Content.Projectiles.Boss.Orator
                     Vector2 spawnPos = Projectile.Center + Main.rand.NextVector2Circular(10f, 10f) * 10;
                     EmpyreanMetaball.SpawnDefaultParticle(spawnPos,  (Projectile.Center - spawnPos).SafeNormalize(Vector2.Zero) * 4, 40 * Main.rand.NextFloat(3f, 5f));
                 }
-            }
-
-            if (aiCounter < 120)
+            }           
+            if (aiCounter < fireDelay)
             {
                 Projectile.Center = new(target.Center.X - (500 * Projectile.ai[1]), target.Center.Y + (500 * Projectile.ai[2]));
                 if (aiCounter < 60)
@@ -84,7 +86,7 @@ namespace Windfall.Content.Projectiles.Boss.Orator
             else
             {
                 EmpyreanMetaball.SpawnDefaultParticle(Projectile.Center + (Main.rand.NextVector2Circular(20f, 25f) * Projectile.scale), Vector2.Zero, 40 * Main.rand.NextFloat(3f, 5f));
-                if (aiCounter == 120)
+                if (aiCounter == fireDelay)
                 {
                     SoundEngine.PlaySound(SoundID.DD2_EtherianPortalSpawnEnemy with {Volume = 10f}, Projectile.Center);
                     Projectile.velocity = new(-10 * Projectile.ai[1], 10 * Projectile.ai[2]);
@@ -104,7 +106,7 @@ namespace Windfall.Content.Projectiles.Boss.Orator
                     else
                         Projectile.velocity.X += 0.15f;
                 }
-                if (aiCounter >= 188)
+                if (aiCounter >= fireDelay + 68)
                 {
                     SoundEngine.PlaySound(SoundID.DD2_EtherianPortalDryadTouch, Projectile.Center);
                     for (int i = 0; i <= 50; i++)

@@ -12,7 +12,9 @@ namespace Windfall.Content.Projectiles.Boss.Orator
         public new static string LocalizationCategory => "Projectiles.Boss";
         public override string Texture => "Windfall/Assets/Graphics/Metaballs/BasicCircle";
 
-        internal static readonly int MonsterDamage = StatCorrections.ScaleProjectileDamage(Main.masterMode ? 360 : CalamityWorld.death ? 280 : CalamityWorld.revenge ? 268 : Main.expertMode ? 240 : 120);
+        internal static int MonsterDamage;
+        private float Acceleration;
+        private int MaxSpeed;
         public override void SetDefaults()
         {
             Projectile.width = 320;
@@ -26,9 +28,7 @@ namespace Windfall.Content.Projectiles.Boss.Orator
             Projectile.scale = 1f;
             Projectile.alpha = 0;
             CooldownSlot = ImmunityCooldownID.Bosses;
-        }
-        private readonly float Acceleration = CalamityWorld.death ? 0.55f : CalamityWorld.revenge ? 0.5f : Main.expertMode ? 0.45f : 0.4f;
-        private readonly int MaxSpeed = CalamityWorld.death ? 15 : CalamityWorld.revenge ? 12 : 10;
+        }        
         private enum States
         {
             Chasing,
@@ -49,6 +49,9 @@ namespace Windfall.Content.Projectiles.Boss.Orator
 
         public override void OnSpawn(IEntitySource source)
         {
+            MonsterDamage = StatCorrections.ScaleProjectileDamage(Main.masterMode ? 360 : CalamityWorld.death ? 280 : CalamityWorld.revenge ? 268 : Main.expertMode ? 240 : 120);
+            Acceleration = CalamityWorld.death ? 0.75f : CalamityWorld.revenge ? 0.5f : Main.expertMode ? 0.45f : 0.4f;
+            MaxSpeed = CalamityWorld.death ? 15 : CalamityWorld.revenge ? 12 : 10;
             Projectile.scale = 0;
             SoundEngine.PlaySound(SoundID.DD2_EtherianPortalOpen, Projectile.Center);
             ScreenShakeSystem.SetUniversalRumble(5f);
@@ -116,22 +119,24 @@ namespace Windfall.Content.Projectiles.Boss.Orator
                     for (int i = 0; i <= 50; i++)
                     {
                         EmpyreanMetaball.SpawnDefaultParticle(Projectile.Center, Main.rand.NextVector2Circular(10f, 10f) * Main.rand.NextFloat(1f, 2f), 40 * Main.rand.NextFloat(3f, 5f));
-                    }
-                    
-                    for (int i = 0; i < 12; i++)
+                    }                    
+                    for (int i = 0; i < (CalamityWorld.death ? 10 : CalamityWorld.revenge ? 8 : Main.expertMode ? 7 : 6); i++)
                     {
-                        Projectile.NewProjectile(Entity.GetSource_Death(), Projectile.Center, (TwoPi / 12 * i).ToRotationVector2() * 10, ModContent.ProjectileType<DarkGlob>(), TheOrator.GlobDamage, 0f, -1, 1, 0.5f);
-                        Projectile.NewProjectile(Entity.GetSource_Death(), Projectile.Center, (TwoPi / 12 * i + (TwoPi / 24)).ToRotationVector2() * 5, ModContent.ProjectileType<DarkGlob>(), TheOrator.GlobDamage, 0f, -1, 1, 0.5f);
+                        NPC Orator = null;
+                        if (NPC.FindFirstNPC(ModContent.NPCType<TheOrator>()) != -1)
+                            Orator = Main.npc[NPC.FindFirstNPC(ModContent.NPCType<TheOrator>())];
+                        if (Orator != null && (float)Orator.life / (float)Orator.lifeMax > 0.1f)
+                            NPC.NewNPC(Terraria.Entity.GetSource_NaturalSpawn(), (int)Projectile.Center.X, (int)Projectile.Center.Y, ModContent.NPCType<DarkSpawn>());
                     }
                     
                     for (int i = 0; i < 24; i++)
                     {
                         Projectile.NewProjectile(Terraria.Entity.GetSource_NaturalSpawn(), Projectile.Center, (TwoPi / 24 * i).ToRotationVector2(), ModContent.ProjectileType<DarkBolt>(), TheOrator.BoltDamage, 0f, -1, 0, i % 2 == 0 ? -10 : 0);
-                        NPC Orator = null;
-                        if (NPC.FindFirstNPC(ModContent.NPCType<TheOrator>()) != -1)
-                            Orator = Main.npc[NPC.FindFirstNPC(ModContent.NPCType<TheOrator>())];
-                        if (Orator != null && i % 3 == 0 && (float)Orator.life / (float)Orator.lifeMax > 0.1f)
-                            NPC.NewNPC(Terraria.Entity.GetSource_NaturalSpawn(), (int)Projectile.Center.X, (int)Projectile.Center.Y, ModContent.NPCType<DarkSpawn>());
+                        if(i % 2 == 0)
+                        {
+                            Projectile.NewProjectile(Entity.GetSource_Death(), Projectile.Center, (TwoPi / 12 * (i/2)).ToRotationVector2() * 10, ModContent.ProjectileType<DarkGlob>(), TheOrator.GlobDamage, 0f, -1, 1, 0.5f);
+                            Projectile.NewProjectile(Entity.GetSource_Death(), Projectile.Center, (TwoPi / 12 * (i/2) + (TwoPi / 24)).ToRotationVector2() * 5, ModContent.ProjectileType<DarkGlob>(), TheOrator.GlobDamage, 0f, -1, 1, 0.5f);
+                        }
                     }
                     
                     Projectile.active = false;
