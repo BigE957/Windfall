@@ -26,8 +26,8 @@ namespace Windfall.Content.UI.Selenic
             SelenicUIPanel.BorderColor = new Color(132, 225, 211);
             Append(SelenicUIPanel);
 
-            Asset<Texture2D> journalArrowRightTexture = ModContent.Request<Texture2D>($"{nameof(Windfall)}/Assets/UI/WanderersJournals/JournalArrowRight");
-            nextButton = new(journalArrowRightTexture, "Next Page");
+            Asset<Texture2D> ArrowRightTexture = ModContent.Request<Texture2D>($"{nameof(Windfall)}/Assets/UI/DraedonsDatabase/DraedonUIArrowRight");
+            nextButton = new(ArrowRightTexture, "Continue...");
             SetRectangle(nextButton, left: 280f, top: 100f, width: 56f, height: 26f);
             nextButton.OnLeftClick += new MouseEvent(NextPage);
             SelenicUIPanel.Append(nextButton);
