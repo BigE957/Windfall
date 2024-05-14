@@ -67,13 +67,13 @@ namespace Windfall.Content.Items.Quest
                             switch (Topic)
                             {
                                 case 0:
-                                    Key += ".Player";
+                                    Key += ".Weakness";
                                     break;
                                 case 1:
-                                    Key += ".Dungeon";
+                                    Key += ".Faith";
                                     break;
                                 case 2:
-                                    Key += ".Change";
+                                    Key += ".Quiet";
                                     break;
                             }
                             break;
