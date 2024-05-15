@@ -61,7 +61,7 @@ namespace Windfall.Content.Projectiles.NPCAnimations
             }
 
             //increments through CalClone's spritesheet
-            if (++Projectile.frameCounter >= 5)
+            if (++Projectile.frameCounter < Main.projFrames[Projectile.type])
             {
                 Projectile.frameCounter = 0;
                 Projectile.frame = ++Projectile.frame % Main.projFrames[Projectile.type];

@@ -969,6 +969,13 @@ Items: {
 				Tooltip: A Cnidrion's favorite treat!
 			}
 		}
+
+		Summon: {
+			DeepSeekerStaff: {
+				DisplayName: Deep Seeker Staff
+				Tooltip: ""
+			}
+		}
 	}
 
 	Debug: {
@@ -1209,21 +1216,26 @@ Projectiles: {
 	OratorEntourageSpawner.DisplayName: Orator Entourage Spawner
 	HideoutSeeker.DisplayName: Hideout Seeker
 	ParryProj.DisplayName: Parry Proj
-	SeekerKnightProj.DisplayName: Seeker Knight Proj
 	DarkMonster.DisplayName: Dark Monster
 	Checker.DisplayName: Checker
 	DarkGlob.DisplayName: Dark Glob
 	DarkBolt.DisplayName: Dark Bolt
-	GodseekerKnightProj.DisplayName: Godseeker Knight Proj
+	GodseekerKnightProj.DisplayName: Godseeker Knight
 	EmpyreanThorn.DisplayName: Empyrean Thorn
-	LunaticCultistProj.DisplayName: Lunatic Cultist Proj
+	LunaticCultistProj.DisplayName: Lunatic Cultist
 	DarkCoalescence.DisplayName: Dark Coalescence
+	DeepSeeker.DisplayName: Dark Seeker
 }
 
 Buffs: {
 	PerfectFlow: {
 		DisplayName: Perfect Flow
 		Description: Prefection breeds perfection...
+	}
+
+	DeepSeekerBuff: {
+		DisplayName: Deep Seeker
+		Description: A creature of the Deep will protect you...
 	}
 }
 

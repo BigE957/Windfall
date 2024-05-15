@@ -48,6 +48,7 @@
     <None Remove="Content\Buffs\Cooldowns\ParryWeapon.png" />
     <None Remove="Content\Buffs\Cooldowns\ParryWeaponOutline.png" />
     <None Remove="Content\Buffs\Cooldowns\ParryWeaponOverlay.png" />
+    <None Remove="Content\Buffs\Weapons\Minions\DeepSeekerBuff.png" />
     <None Remove="Content\Buffs\Weapons\PerfectFlow.png" />
     <None Remove="Content\Items\Journals\JournalAerie.png" />
     <None Remove="Content\Items\Journals\JournalCompilation.png" />

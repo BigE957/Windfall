@@ -51,17 +51,17 @@ namespace Windfall.Content.Projectiles.Boss.Orator
             NPC Orator = null;
             if (NPC.FindFirstNPC(ModContent.NPCType<TheOrator>()) != -1)
                 Orator = Main.npc[NPC.FindFirstNPC(ModContent.NPCType<TheOrator>())];
-            /*
+            
             if(Orator == null)
             {
                 SoundEngine.PlaySound(SoundID.DD2_EtherianPortalDryadTouch, Projectile.Center);
                 for (int i = 0; i <= 50; i++)
                 {
-                    EmpyreanMetaball.SpawnParticle(Projectile.Center, Main.rand.NextVector2Circular(10f, 10f), 40 * Main.rand.NextFloat(1.5f, 2.3f));
+                    EmpyreanMetaball.SpawnDefaultParticle(Projectile.Center, Main.rand.NextVector2Circular(10f, 10f), 40 * Main.rand.NextFloat(1.5f, 2.3f));
                 }
                 Projectile.active = false;
             }
-            */
+            
             Player target;
             if(Orator != null)    
                 target = Main.player[Player.FindClosest(Orator.Center, Projectile.width, Projectile.height)];
