@@ -5,9 +5,9 @@ using Windfall.Content.Projectiles.Boss.Orator;
 using Windfall.Content.Items.Lore;
 using Terraria.GameContent.ItemDropRules;
 using Windfall.Common.Utils;
-using CalamityMod.Items.Weapons.Magic;
 using CalamityMod.Buffs.StatBuffs;
 using Windfall.Common.Graphics.Metaballs;
+using Windfall.Content.Items.Weapons.Summon;
 
 namespace Windfall.Content.NPCs.Bosses.TheOrator
 {
@@ -748,7 +748,7 @@ namespace Windfall.Content.NPCs.Bosses.TheOrator
             }
 
             // Test Drop for not letting Orator heal
-            npcLoot.DefineConditionalDropSet(WindfallConditions.OratorNeverHeal).Add(ModContent.ItemType<TomeofFates>());
+            npcLoot.DefineConditionalDropSet(WindfallConditions.OratorNeverHeal).Add(ModContent.ItemType<DeepSeekerStaff>());
 
             // Trophy
             npcLoot.Add(ItemID.AncientCultistTrophy, 10);
