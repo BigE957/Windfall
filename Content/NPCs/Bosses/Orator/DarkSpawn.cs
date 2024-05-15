@@ -1,6 +1,8 @@
 ﻿using CalamityMod.World;
+using Terraria;
 using Windfall.Common.Graphics.Metaballs;
 using Windfall.Common.Systems;
+using Windfall.Common.Utils;
 using Windfall.Content.Projectiles.Boss.Orator;
 
 namespace Windfall.Content.NPCs.Bosses.TheOrator
@@ -67,8 +69,7 @@ namespace Windfall.Content.NPCs.Bosses.TheOrator
             Player target = Main.player[Player.FindClosest(NPC.Center, NPC.width, NPC.height)];
             NPC Orator = null;
             if(NPC.FindFirstNPC(ModContent.NPCType<TheOrator>()) != -1)
-                Orator = Main.npc[NPC.FindFirstNPC(ModContent.NPCType<TheOrator>())];
-
+                Orator = Main.npc[NPC.FindFirstNPC(ModContent.NPCType<TheOrator>())];           
             if (CurrentAI <= AIState.OnBoss)
             {
                 NPC.dontTakeDamage = true;
@@ -79,6 +80,7 @@ namespace Windfall.Content.NPCs.Bosses.TheOrator
                 NPC.dontTakeDamage = false;
                 NPC.damage = StatCorrections.ScaleContactDamage(Main.masterMode ? 300 : CalamityWorld.death ? 220 : CalamityWorld.revenge ? 180 : Main.expertMode ? 120 : 80);
             }
+            
             #region Despawning
             if (Orator == null)
             {
@@ -97,10 +99,10 @@ namespace Windfall.Content.NPCs.Bosses.TheOrator
                 CurrentAI = AIState.Sacrifice;  
             }
             #endregion
-            /*
-            if(CurrentAI == AIState.OnBoss)
-                CurrentAI++;
-            */
+            
+            //if (CurrentAI == AIState.OnBoss || CurrentAI == AIState.Spawning)
+                //CurrentAI = AIState.Hunting;
+            
             switch (CurrentAI)
             {
                 case AIState.Spawning:
@@ -119,17 +121,11 @@ namespace Windfall.Content.NPCs.Bosses.TheOrator
                     }
                     break;
                 case AIState.OnBoss:
-                    if (NPC.Center.Y < Orator.Center.Y)
-                        NPC.velocity.Y++;
-                    else
-                        NPC.velocity.Y--;
-                    if (NPC.Center.X < Orator.Center.X)
-                        NPC.velocity.X++;
-                    else
-                        NPC.velocity.X--;
-                    if (NPC.velocity.Length() > 15)
-                        NPC.velocity = NPC.velocity.SafeNormalize(Vector2.Zero) * 15;
+                    NPC.velocity += (Orator.Center - NPC.Center).SafeNormalize(Vector2.Zero) * 1.5f;
+                    if (NPC.velocity.Length() > 10)
+                        NPC.velocity = NPC.velocity.SafeNormalize(Vector2.Zero) * 12;
                     NPC.rotation = NPC.velocity.ToRotation() + Pi;
+                    WindfallUtils.NPCAntiClump(NPC);
                     break;
                 case AIState.Hunting:
 
