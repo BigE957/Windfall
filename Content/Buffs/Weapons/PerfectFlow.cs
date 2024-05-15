@@ -12,7 +12,7 @@
 
         public override void Update(Player player, ref int buffIndex)
         {
-            player.Windfall().PerfectFlow = true;
+            player.Buff().PerfectFlow = true;
             if (Main.player[Main.myPlayer].buffTime[buffIndex] == 1)
                 player.AddCooldown(Cooldowns.ParryWeapon.ID, SecondsToFrames(30));
         }

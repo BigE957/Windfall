@@ -1,5 +1,5 @@
 ﻿using CalamityMod.Items;
-using Windfall.Content.Projectiles.Melee;
+using Windfall.Content.Projectiles.Weapons.Melee;
 
 namespace Windfall.Content.Items.Weapons.Melee
 {

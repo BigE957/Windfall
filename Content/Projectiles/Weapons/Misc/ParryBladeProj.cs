@@ -1,7 +1,7 @@
 ﻿using CalamityMod.Projectiles.BaseProjectiles;
 using Windfall.Content.Buffs.Weapons;
 
-namespace Windfall.Content.Projectiles.Misc
+namespace Windfall.Content.Projectiles.Weapons.Misc
 {
     // Shortsword projectiles are handled in a special way with how they draw and damage things
     // The "hitbox" itself is closer to the player, the sprite is centered on it

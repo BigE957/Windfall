@@ -1,6 +1,6 @@
 ﻿using Windfall.Content.Items.Debug;
 
-namespace Windfall.Content.Projectiles.Misc
+namespace Windfall.Content.Projectiles.Weapons.Misc
 {
     public class SuperCnidrisnackThrow : ModProjectile
     {

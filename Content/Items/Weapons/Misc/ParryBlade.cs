@@ -1,6 +1,6 @@
 ﻿using Windfall.Common.Utils;
 using Windfall.Content.Buffs.Cooldowns;
-using Windfall.Content.Projectiles.Misc;
+using Windfall.Content.Projectiles.Weapons.Misc;
 
 
 namespace Windfall.Content.Items.Weapons.Misc
@@ -37,7 +37,7 @@ namespace Windfall.Content.Items.Weapons.Misc
         }
         public override bool? UseItem(Player player)
         {
-            if (!player.Windfall().PerfectFlow)
+            if (!player.Buff().PerfectFlow)
                 player.AddCooldown(ParryWeapon.ID, SecondsToFrames(30));
             return true;
         }

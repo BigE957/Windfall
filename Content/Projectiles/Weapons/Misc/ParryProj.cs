@@ -2,7 +2,7 @@
 using Windfall.Content.Buffs.Cooldowns;
 using Windfall.Content.Buffs.Weapons;
 
-namespace Windfall.Content.Projectiles.Misc
+namespace Windfall.Content.Projectiles.Weapons.Misc
 {
     public class ParryProj : ModProjectile, ILocalizedModType
     {

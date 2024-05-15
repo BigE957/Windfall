@@ -1,5 +1,5 @@
 ﻿using CalamityMod.Items;
-using Windfall.Content.Projectiles.Misc;
+using Windfall.Content.Projectiles.Weapons.Misc;
 
 namespace Windfall.Content.Items.Weapons.Misc
 {

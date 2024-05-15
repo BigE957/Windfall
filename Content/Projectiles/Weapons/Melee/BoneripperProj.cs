@@ -3,7 +3,7 @@ using CalamityMod.Dusts;
 using CalamityMod.Projectiles.Melee;
 using Terraria.Enums;
 
-namespace Windfall.Content.Projectiles.Melee
+namespace Windfall.Content.Projectiles.Weapons.Melee
 {
     public class BoneripperProj : ModProjectile
     {
