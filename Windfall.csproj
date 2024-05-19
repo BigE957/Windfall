@@ -96,7 +96,7 @@
   </ItemGroup>
   <ItemGroup>
     <Reference Include="CalamityMod">
-      <HintPath>..\ModAssemblies\CalamityMod_v2.0.3.11.dll</HintPath>
+      <HintPath>..\ModAssemblies\CalamityMod.dll</HintPath>
     </Reference>
     <Reference Include="Luminance">
       <HintPath>..\ModAssemblies\Luminance_v1.0.0.dll</HintPath>

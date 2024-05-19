@@ -19,7 +19,6 @@ namespace Windfall.Common.Utils
                 }
                 bool shareType = npc2.type == npc.type;
                 float proximity = Math.Abs(npc.position.X - npc2.position.X) + Math.Abs(npc.position.Y - npc2.position.Y);
-                DisplayLocalizedText($"{shareType && proximity < (float)npc.width}");
                 if (shareType && proximity < (float)npc.width)
                 {
                     if (npc.position.X < npc2.position.X)
