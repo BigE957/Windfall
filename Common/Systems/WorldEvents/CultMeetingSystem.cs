@@ -66,7 +66,7 @@ namespace Windfall.Common.Systems.WorldEvents
         public enum MeetingTopic
         {
             CurrentEvents,
-            Gooning,
+            Rizzing,
             Mewing
         }
         public static MeetingTopic CurrentMeetingTopic;
@@ -224,25 +224,27 @@ namespace Windfall.Common.Systems.WorldEvents
                             Rectangle Cultist3Location = new((int)Cultist3.Center.X, (int)Cultist3.Center.Y, Cultist3.width, Cultist3.width);
                             Rectangle Cultist4Location = new((int)Cultist4.Center.X, (int)Cultist4.Center.Y, Cultist4.width, Cultist4.width);
 
+                            string key = $"Dialogue.LunarCult.CultMeeting.{CurrentMeetingTopic}.";
+
                             switch (CurrentMeetingTopic)
                             {
                                 case MeetingTopic.CurrentEvents:
                                     switch (MeetingTimer)
                                     {
                                         case 1:
-                                            Text = DisplayMessage(BishopLocation, Color.Blue, "Greetings!");
+                                            Text = DisplayMessage(BishopLocation, Color.Blue, GetWindfallTextValue(key + 0));
                                             break;
                                         case 90:
-                                            Text = DisplayMessage(BishopLocation, Color.Blue, "Let us begin");
+                                            Text = DisplayMessage(BishopLocation, Color.Blue, GetWindfallTextValue(key + 1));
                                             break;
                                         case 3 * 60:
-                                            Text = DisplayMessage(BishopLocation, Color.Blue, "I'm sure you are all aware of some... recent developments.");
+                                            Text = DisplayMessage(BishopLocation, Color.Blue, GetWindfallTextValue(key + 2));
                                             break;
                                         case 6 * 60:
-                                            Text = DisplayMessage(Cultist1Location, Color.Yellow, "Yeah, what's really going on?!");
+                                            Text = DisplayMessage(Cultist1Location, Color.Yellow, GetWindfallTextValue(key + 3));
                                             break;
                                         case 8 * 60:
-                                            Text = DisplayMessage(BishopLocation, Color.Blue, "The end of our journey together is fast approaching!");
+                                            Text = DisplayMessage(BishopLocation, Color.Blue, GetWindfallTextValue(key + 4));
                                             break;
                                         case 10 * 60:
                                             Text = Main.combatText[CombatText.NewText(Cultist1Location, Color.Yellow, "!?", true)];
@@ -251,50 +253,50 @@ namespace Windfall.Common.Systems.WorldEvents
                                             DisplayMessage(Cultist4Location, Color.Orange, "!?");
                                             break;
                                         case 12 * 60:
-                                            Text = DisplayMessage(BishopLocation, Color.Blue, "Yes! Our goals are quickly becoming in reach.");
+                                            Text = DisplayMessage(BishopLocation, Color.Blue, GetWindfallTextValue(key + 5));
                                             break;
                                         case 14 * 60:
-                                            Text = DisplayMessage(BishopLocation, Color.Blue, "The time shall come when all of you will be called upon to play your part.");
+                                            Text = DisplayMessage(BishopLocation, Color.Blue, GetWindfallTextValue(key + 6));
                                             break;
                                         case 16 * 60:
-                                            Text = DisplayMessage(Cultist3Location, Color.SandyBrown, "Uhm... What are our 'parts'?");
+                                            Text = DisplayMessage(Cultist3Location, Color.SandyBrown, GetWindfallTextValue(key + 7));
                                             break;
                                         case 18 * 60:
-                                            Text = DisplayMessage(BishopLocation, Color.Blue, "That will be revealed to you in due time.");
+                                            Text = DisplayMessage(BishopLocation, Color.Blue, GetWindfallTextValue(key + 8));
                                             break;
                                         case 20 * 60:
-                                            Text = DisplayMessage(Cultist3Location, Color.SandyBrown, "Oh... Okay.");
+                                            Text = DisplayMessage(Cultist3Location, Color.SandyBrown, GetWindfallTextValue(key + 9));
                                             break;
                                         case 22 * 60:
-                                            Text = DisplayMessage(Cultist2Location, Color.Red, "Does this mean we've learned all there is to learn?");
+                                            Text = DisplayMessage(Cultist2Location, Color.Red, GetWindfallTextValue(key + 10));
                                             break;
                                         case 24 * 60:
-                                            Text = DisplayMessage(BishopLocation, Color.Blue, "Not at all. In the coming days, much more shall be revealed to you.");
+                                            Text = DisplayMessage(BishopLocation, Color.Blue, GetWindfallTextValue(key + 11));
                                             break;
                                         case 26 * 60:
-                                            Text = DisplayMessage(Cultist2Location, Color.Red, "I see...");
+                                            Text = DisplayMessage(Cultist2Location, Color.Red, GetWindfallTextValue(key + 12));
                                             break;
                                         case 28 * 60:
-                                            Text = DisplayMessage(Cultist4Location, Color.Orange, "Will we see the Orator?");
+                                            Text = DisplayMessage(Cultist4Location, Color.Orange, GetWindfallTextValue(key + 13));
                                             break;
                                         case 30 * 60:
-                                            Text = DisplayMessage(BishopLocation, Color.Blue, "It is very possible he might grace us with his prescence as the time nears.");
+                                            Text = DisplayMessage(BishopLocation, Color.Blue, GetWindfallTextValue(key + 14));
                                             break;
                                         case 32 * 60:
-                                            Text = DisplayMessage(Cultist4Location, Color.Orange, "Awesome!");
+                                            Text = DisplayMessage(Cultist4Location, Color.Orange, GetWindfallTextValue(key + 15));
                                             break;
                                         case 34 * 60:
-                                            Text = DisplayMessage(BishopLocation, Color.Blue, "Hold steady your faith. It shall very soon be rewarded.");
+                                            Text = DisplayMessage(BishopLocation, Color.Blue, GetWindfallTextValue(key + 16));
                                             break;
                                         case 36 * 60:
-                                            Text = DisplayMessage(BishopLocation, Color.Blue, "Until we next meet.");
+                                            Text = DisplayMessage(BishopLocation, Color.Blue, GetWindfallTextValue(key + 17));
                                             break;
                                         case 37 * 60:
                                             State = SystemState.End;
                                             break;
                                     }
                                     break;
-                                case MeetingTopic.Gooning:
+                                case MeetingTopic.Rizzing:
                                     break;
                                 case MeetingTopic.Mewing:
                                     break;

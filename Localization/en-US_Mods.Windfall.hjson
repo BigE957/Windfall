@@ -441,7 +441,28 @@ Dialogue: {
 				21: ...fool?
 			}
 		}
-
+		CultMeetings: {
+			CurrentEvents: {
+				0: Greetings!
+				1: Let us begin.
+				2: I'm sure you are all aware of some... recent developments.
+				3: Yeah, what's really going on?!
+				4: The end of our journey together is fast approaching!
+				5: Yes! Our goals are quickly becoming in reach.
+				6: The time shall come when all of you will be called upon to play your part.
+				7: Uhm... What are our 'parts'?
+				8: That will be revealed to you in due time.
+				9: Oh... Okay.
+				10: Does this mean we've learned all there is to learn?
+				11: Not at all. In the coming days, much more shall be revealed to you.
+				12: I see...
+				13: Will we see the Orator?
+				14: It is very possible he might grace us with his prescence as the time nears.
+				15: Awesome!
+				16: Hold steady your faith. It shall very soon be rewarded.
+				17: Until we next meet.
+			}
+		}
 		Recruits: {
 			Tirith: {
 				CurrentEvents: {
