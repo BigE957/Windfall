@@ -734,6 +734,35 @@ UI: {
 				11: Paradise shall arrive!
 				12: Paradise shall arrive!
 			}
+			Orator: {
+				0: Are we certain we shall succeed?
+				1: What if the foolish attempt to stop us?
+				2: Worry not, friend.
+				3: Our master has set off to ensure none may halt us.
+				4: Truly?
+				5: Truly.
+				6: The Orator is ever wise...
+				7: Then we have nothing to fear.
+				8: I almost feel sorry.
+				9: To face the Orator...
+				10: Think not of that.
+				11: We must put our focus on the task at hand.
+				12: Indeed, indeed.
+				13: Paradise shall arrive.
+				14: Paradise shall arrive.
+			}
+			Paradise: {
+				0: Paradise shall arrive.
+				1: Paradise shall arrive.
+				2: None may halt it.
+				3: None may halt it.
+				4: Let open the sky.
+				5: Let open the sky.
+				6: All shall rejoice.
+				7: All shall rejoice
+				8: Paradise shall arrive.
+				9: Paradise shall arrive.
+			}
 		}
 
 		# Rare chance to appear always.

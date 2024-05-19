@@ -78,7 +78,18 @@ namespace Windfall.Content.Items.Quest
                             }
                             break;
                         case "Pre-Lunar":
-                            Key += ".Beginning";
+                            switch (Topic)
+                            {
+                                case 0:
+                                    Key += ".Beginning";
+                                    break;
+                                case 1:
+                                    Key += ".Orator";
+                                    break;
+                                case 2:
+                                    Key += ".Paradise";
+                                    break;
+                            }
                             break;
                         case "Rare":
                             switch (Topic)
