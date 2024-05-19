@@ -66,8 +66,8 @@ namespace Windfall.Common.Systems.WorldEvents
         public enum MeetingTopic
         {
             CurrentEvents,
-            Rizzing,
-            Mewing
+            Mission,
+            Paradise
         }
         public static MeetingTopic CurrentMeetingTopic;
         private static List<int> NPCIndexs = new();
@@ -151,15 +151,15 @@ namespace Windfall.Common.Systems.WorldEvents
                             NPC.NewNPC(Entity.GetSource_None(), ActiveHideoutCoords.X + 240, ActiveHideoutCoords.Y + 100, ModContent.NPCType<RecruitableLunarCultist>()),
                         };
 
-                        #region Character Setup
-                        switch (CurrentMeetingTopic)
+                        #region Character Setup                       
+                        foreach (int k in NPCIndexs)
                         {
-                            case MeetingTopic.CurrentEvents:
-                                foreach (int k in NPCIndexs)
+                            NPC npc = Main.npc[k];
+                            if (npc.ModNPC is RecruitableLunarCultist Recruit && npc.type == ModContent.NPCType<RecruitableLunarCultist>())
+                            {
+                                switch (CurrentMeetingTopic)
                                 {
-                                    NPC npc = Main.npc[k];
-                                    if (npc.ModNPC is RecruitableLunarCultist Recruit && npc.type == ModContent.NPCType<RecruitableLunarCultist>())
-                                    {
+                                    case MeetingTopic.CurrentEvents:
                                         switch (k)
                                         {
                                             case 1:
@@ -183,10 +183,60 @@ namespace Windfall.Common.Systems.WorldEvents
                                                 npc.direction = -1;
                                                 break;
                                         }
-                                    }
+                                        break;
+                                    case MeetingTopic.Mission:
+                                        switch (k)
+                                        {
+                                            case 1:
+                                                Recruit.MyName = RecruitableLunarCultist.RecruitNames.Doro;
+                                                Recruit.Recruitable = false;
+                                                npc.direction = 1;
+                                                break;
+                                            case 2:
+                                                Recruit.MyName = RecruitableLunarCultist.RecruitNames.Skylar;
+                                                Recruit.Recruitable = true;
+                                                npc.direction = 1;
+                                                break;
+                                            case 3:
+                                                Recruit.MyName = RecruitableLunarCultist.RecruitNames.Tania;
+                                                Recruit.Recruitable = false;
+                                                npc.direction = -1;
+                                                break;
+                                            case 4:
+                                                Recruit.MyName = RecruitableLunarCultist.RecruitNames.Jamie;
+                                                Recruit.Recruitable = true;
+                                                npc.direction = -1;
+                                                break;
+                                        }
+                                        break;
+                                    case MeetingTopic.Paradise:
+                                        switch (k)
+                                        {
+                                            case 1:
+                                                Recruit.MyName = RecruitableLunarCultist.RecruitNames.Vivian;
+                                                Recruit.Recruitable = true;
+                                                npc.direction = 1;
+                                                break;
+                                            case 2:
+                                                Recruit.MyName = RecruitableLunarCultist.RecruitNames.Tania;
+                                                Recruit.Recruitable = false;
+                                                npc.direction = 1;
+                                                break;
+                                            case 3:
+                                                Recruit.MyName = RecruitableLunarCultist.RecruitNames.Skylar;
+                                                Recruit.Recruitable = false;
+                                                npc.direction = -1;
+                                                break;
+                                            case 4:
+                                                Recruit.MyName = RecruitableLunarCultist.RecruitNames.Tirith;
+                                                Recruit.Recruitable = false;
+                                                npc.direction = -1;
+                                                break;
+                                        }
+                                        break;
                                 }
-                                break;
-                        }
+                            }
+                        }                        
                         #endregion
                         MeetingTimer = 0;
                     }
@@ -296,9 +346,97 @@ namespace Windfall.Common.Systems.WorldEvents
                                             break;
                                     }
                                     break;
-                                case MeetingTopic.Rizzing:
+                                case MeetingTopic.Mission:
+                                    switch (MeetingTimer)
+                                    {
+                                        case 1:
+                                            Text = DisplayMessage(BishopLocation, Color.Blue, GetWindfallTextValue(key + 0));
+                                            break;
+                                        case 90:
+                                            Text = DisplayMessage(BishopLocation, Color.Blue, GetWindfallTextValue(key + 1));
+                                            break;
+                                        case 60 * 3:
+                                            Text = DisplayMessage(BishopLocation, Color.Blue, GetWindfallTextValue(key + 2));
+                                            break;
+                                    }
                                     break;
-                                case MeetingTopic.Mewing:
+                                case MeetingTopic.Paradise:
+                                    switch (MeetingTimer)
+                                    {
+                                        case 1:
+                                            Text = DisplayMessage(BishopLocation, Color.Blue, GetWindfallTextValue(key + 0));
+                                            break;
+                                        case 90:
+                                            Text = DisplayMessage(BishopLocation, Color.Blue, GetWindfallTextValue(key + 1));
+                                            break;
+                                        case 60 * 3:
+                                            Text = DisplayMessage(BishopLocation, Color.Blue, GetWindfallTextValue(key + 2));
+                                            break;
+                                        case 60 * 5:
+                                            Text = DisplayMessage(BishopLocation, Color.Blue, GetWindfallTextValue(key + 3));
+                                            break;
+                                        case 60 * 7:
+                                            Text = DisplayMessage(BishopLocation, Color.Blue, GetWindfallTextValue(key + 4));
+                                            break;
+                                        case 60 * 9:
+                                            Text = DisplayMessage(BishopLocation, Color.Blue, GetWindfallTextValue(key + 5));
+                                            break;
+                                        case 60 * 10:
+                                            Text = DisplayMessage(Cultist1Location, Color.Red, GetWindfallTextValue(key + 6));
+                                            break;
+                                        case 60 * 11:
+                                            Text = DisplayMessage(BishopLocation, Color.Blue, GetWindfallTextValue(key + 7));
+                                            break;
+                                        case 60 * 13:
+                                            Text = DisplayMessage(BishopLocation, Color.Blue, GetWindfallTextValue(key + 8));
+                                            break;
+                                        case 60 * 15:
+                                            Text = DisplayMessage(BishopLocation, Color.Blue, GetWindfallTextValue(key + 9));
+                                            break;
+                                        case 60 * 17:
+                                            Text = DisplayMessage(BishopLocation, Color.Blue, GetWindfallTextValue(key + 10));
+                                            break;
+                                        case 60 * 19:
+                                            Text = DisplayMessage(Cultist4Location, Color.Yellow, GetWindfallTextValue(key + 11));
+                                            break;
+                                        case 60 * 21:
+                                            Text = DisplayMessage(BishopLocation, Color.Blue, GetWindfallTextValue(key + 12));
+                                            break;
+                                        case 60 * 23:
+                                            Text = DisplayMessage(BishopLocation, Color.Blue, GetWindfallTextValue(key + 13));
+                                            break;
+                                        case 60 * 25:
+                                            Text = DisplayMessage(Cultist2Location, Color.Teal, GetWindfallTextValue(key + 14));
+                                            break;
+                                        case 60 * 27:
+                                            Text = DisplayMessage(BishopLocation, Color.Blue, GetWindfallTextValue(key + 15));
+                                            break;
+                                        case 60 * 29:
+                                            Text = DisplayMessage(BishopLocation, Color.Blue, GetWindfallTextValue(key + 16));
+                                            break;
+                                        case 60 * 31:
+                                            Text = DisplayMessage(BishopLocation, Color.Blue, GetWindfallTextValue(key + 17));
+                                            break;
+                                        case 60 * 33:
+                                            Text = DisplayMessage(BishopLocation, Color.Blue, GetWindfallTextValue(key + 18));
+                                            break;
+                                        case 60 * 35:
+                                            Text = DisplayMessage(BishopLocation, Color.Blue, GetWindfallTextValue(key + 19));
+                                            break;
+                                        case 60 * 37:
+                                            Text = DisplayMessage(BishopLocation, Color.Blue, GetWindfallTextValue(key + 20));
+                                            break;
+                                        case 60 * 39:
+                                            Text = DisplayMessage(BishopLocation, Color.Blue, GetWindfallTextValue(key + 21));
+                                            break;
+                                        case 60 * 41:
+                                            Text = DisplayMessage(BishopLocation, Color.Blue, GetWindfallTextValue(key + 22));
+                                            break;
+                                        case 60 * 43:
+                                            DisplayMessage(Cultist2Location, Color.Teal, GetWindfallTextValue(key + 23));
+                                            DisplayMessage(Cultist3Location, Color.Violet, GetWindfallTextValue(key + 24));
+                                            break;
+                                    }
                                     break;
                             }
                             #endregion

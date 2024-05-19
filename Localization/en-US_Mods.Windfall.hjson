@@ -462,6 +462,42 @@ Dialogue: {
 				16: Hold steady your faith. It shall very soon be rewarded.
 				17: Until we next meet.
 			}
+			Mission: {
+				0: Greetings!
+				1: Let us begin.
+				
+			}
+			Paradise: {
+				0: Greetings!
+				1: Let us begin.
+				2: I know for some here this may feel...
+				3: Repetitive...
+				4: But I'd like to remind everyone here of our mission.
+				5: Our goal.
+				6: Ugh, again... #Vivian
+				7: Once we succeed here, Paradise shall at last bless the lands.
+				8: Prosperity shall befall those selfless few who've aided in its return.
+				9: Your efforts here shall soon be rewarded.
+				10: All that you could desire, Paradise shall fullfil!
+				11: It'll all be worth it... #Tirith
+				12: Indeed, indeed!
+				13: Paradise rewards those who devote themselves to its return.
+				14: What... is Paradise? #Tania
+				15: Well...
+				16: Paradise, it is... 
+				17: A great and mighty power.
+				18: Its might was feared, and sealed away.
+				19: Now it is up to us to restore it.
+				20: Free it.
+				21: That the world might bathe once more under its glow!
+				22: How... #Tania
+				23: ...insightful... #Tania
+				24: How intriguing! #Skylar
+				25: Happy to help enlighten!
+				26: Well, with everyone informed, we can wrap up!
+				27: Hold steady your faith. It shall very soon be rewarded.
+				28: Until we next meet.
+			}
 		}
 		Recruits: {
 			Tirith: {
