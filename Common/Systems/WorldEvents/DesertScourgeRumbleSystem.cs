@@ -76,14 +76,13 @@ namespace Windfall.Common.Systems.WorldEvents
             {
                 if (Main.rand.NextFloat() >= groundShakeInterpolant + 0.2f)
                     continue;
-                Vector2 point = target.Center + new Vector2(Main.rand.NextFloatDirection() * 1200f, -560f);
-                Point particleSpawnPosition = Utilities.FindGroundVertical(new Point((int)point.X, (int)point.Y));
-                bool sandBelow = ParanoidTileRetrieval((int)(particleSpawnPosition.X / 16f), (int)(particleSpawnPosition.Y / 16f)).TileType == TileID.Sand;
+                Point point = Utilities.FindGroundVertical((target.Center + new Vector2(Main.rand.NextFloatDirection() * 1200f, -560f)).ToTileCoordinates());
+                bool sandBelow = ParanoidTileRetrieval(point.X, point.Y).TileType == TileID.Sand;
                 if (sandBelow)
-                    Dust.NewDustPerfect(new Vector2(particleSpawnPosition.X, particleSpawnPosition.Y) + new Vector2(Main.rand.NextFloatDirection() * 8f, -8f), 32, Main.rand.NextVector2Circular(1.5f, 1.5f) - Vector2.UnitY * 1.5f);
+                    Dust.NewDustPerfect(new Vector2(point.ToWorldCoordinates().X, point.ToWorldCoordinates().Y) + new Vector2(Main.rand.NextFloatDirection() * 8f, -8f), 32, Main.rand.NextVector2Circular(1.5f, 1.5f) - Vector2.UnitY * 1.5f);
             }
             // Create screen shake effects.
-            ScreenShakeSystem.SetUniversalRumble((float)(MathF.Pow(groundShakeInterpolant, 1.81f) * 10f));
+            ScreenShakeSystem.StartShake((float)(MathF.Pow(groundShakeInterpolant, 1.81f) * 10f));
             if (scoogTimer == midpoint)
                 if (leftSide)
                     SoundEngine.PlaySound(Roar with { Volume = volume }, target.Center + new Vector2(Main.rand.Next(-300, -200), 150));

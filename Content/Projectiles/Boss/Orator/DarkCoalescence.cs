@@ -44,7 +44,7 @@ namespace Windfall.Content.Projectiles.Boss.Orator
                 SpawnBorderParticle(Projectile, Main.rand.NextFloat(10, 25), Main.rand.NextFloat(75, 100), TwoPi / pCount * i);
                 SpawnBorderParticle(Projectile, Main.rand.NextFloat(10, 25), Main.rand.NextFloat(60, 80), TwoPi / pCount * -i - TwoPi / (pCount/2));
             }
-            ScreenShakeSystem.SetUniversalRumble(5f);
+            ScreenShakeSystem.StartShake(5f);
         }
         public override void AI()
         {
@@ -115,7 +115,7 @@ namespace Windfall.Content.Projectiles.Boss.Orator
                     }
                     if (Main.projectile.First(p => p.type == ModContent.ProjectileType<DarkCoalescence>()).whoAmI == Projectile.whoAmI)
                     {
-                        ScreenShakeSystem.SetUniversalRumble(12.5f);
+                        ScreenShakeSystem.StartShake(12.5f);
                         SoundEngine.PlaySound(SoundID.DD2_MonkStaffGroundImpact, Projectile.Center);
                         for (int i = 0; i < 12; i++)
                         {

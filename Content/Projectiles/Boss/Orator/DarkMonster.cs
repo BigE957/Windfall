@@ -54,7 +54,7 @@ namespace Windfall.Content.Projectiles.Boss.Orator
             MaxSpeed = CalamityWorld.death ? 15 : CalamityWorld.revenge ? 12 : 10;
             Projectile.scale = 0;
             SoundEngine.PlaySound(SoundID.DD2_EtherianPortalOpen, Projectile.Center);
-            ScreenShakeSystem.SetUniversalRumble(5f);
+            ScreenShakeSystem.StartShake(5f);
             for (int i = 0; i <= 50; i++)
             {
                 Vector2 spawnPos = Projectile.Center + Main.rand.NextVector2Circular(10f, 10f) * 10;
@@ -115,7 +115,7 @@ namespace Windfall.Content.Projectiles.Boss.Orator
                     break;
                 case States.Exploding:
                     SoundEngine.PlaySound(SoundID.DD2_EtherianPortalDryadTouch, Projectile.Center);
-                    ScreenShakeSystem.SetUniversalRumble(7.5f);
+                    ScreenShakeSystem.StartShake(7.5f);
                     for (int i = 0; i <= 50; i++)
                     {
                         EmpyreanMetaball.SpawnDefaultParticle(Projectile.Center, Main.rand.NextVector2Circular(10f, 10f) * Main.rand.NextFloat(1f, 2f), 40 * Main.rand.NextFloat(3f, 5f));

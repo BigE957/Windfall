@@ -61,7 +61,7 @@ namespace Windfall.Content.Projectiles.NPCAnimations
             }
 
             //increments through CalClone's spritesheet
-            if (++Projectile.frameCounter < Main.projFrames[Projectile.type])
+            if (++Projectile.frameCounter > 5)
             {
                 Projectile.frameCounter = 0;
                 Projectile.frame = ++Projectile.frame % Main.projFrames[Projectile.type];
@@ -75,9 +75,9 @@ namespace Windfall.Content.Projectiles.NPCAnimations
             switch (CurrentAI)
             {
                 case AIState.Spawning:
-                    Projectile.position.Y = Utilities.FindGroundVertical(new Point((int)Projectile.position.X, (int)Projectile.position.Y)).Y - Projectile.height - 8;
-
-                    Projectile.position.Y -= 24;
+                    Point worldPosition = new Point((int)Projectile.position.ToTileCoordinates().X, (int)Projectile.position.ToTileCoordinates().Y);
+                    float groundY = Utilities.FindGroundVertical(worldPosition).ToWorldCoordinates().Y;
+                    Projectile.position.Y = groundY - Projectile.height - 32;
                     CurrentAI = AIState.WaitingForPlayer;
                     break;
 

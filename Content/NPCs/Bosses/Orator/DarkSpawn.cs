@@ -296,14 +296,6 @@ namespace Windfall.Content.NPCs.Bosses.TheOrator
                 if (NPC.frame.Y >= frameHeight * 4)
                     NPC.frame.Y = 0;
             }
-
-            //DO DUST
-            /*
-            int dustStyle = Main.rand.NextBool() ? 66 : 263;
-            Dust d = CalamityGlobalNPC.SpawnDustOnNPC(NPC, 114, frameHeight, Main.rand.NextBool(3) ? 191 : dustStyle, new Rectangle(78, 34, 36, 18), Vector2.Zero, 0.45f, true);
-            if (d != null)
-                d.customData = 0.04f;
-            */
         }
         public override void PostDraw(SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor)
         {

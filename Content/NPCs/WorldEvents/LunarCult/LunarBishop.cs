@@ -49,11 +49,11 @@
             {
                 NPC.alpha = 255;
                 Vector2 oldPos = NPC.position;
-                NPC.position.Y = Utilities.FindGroundVertical(new Point((int)NPC.position.X, (int)NPC.position.Y)).Y - NPC.height - 8;
+                NPC.position.Y = Utilities.FindGroundVertical(new Point((int)NPC.position.X / 16, (int)NPC.position.Y / 16)).Y * 16 - NPC.height + 16;
                 float altY = 0;
-                for (int i = 0; i < 16; i++)
+                for (int i = 1; i < 2; i++)
                 {
-                    altY = Utilities.FindGroundVertical(new Point((int)(oldPos.X + i), (int)(oldPos.Y - 64))).Y - NPC.height - 8;
+                    altY = Utilities.FindGroundVertical(new Point((int)(oldPos.X / 16 + i), (int)(oldPos.Y / 16 - 64))).Y * 16 - NPC.height + 16;
                     if (altY < NPC.position.Y)
                         NPC.position.Y = altY;
                 }
