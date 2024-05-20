@@ -1,4 +1,6 @@
-﻿namespace Windfall.Content.NPCs.WorldEvents.LunarCult
+﻿using Windfall.Common.Utils;
+
+namespace Windfall.Content.NPCs.WorldEvents.LunarCult
 {
     public class LunarBishop : ModNPC
     {
@@ -49,14 +51,16 @@
             {
                 NPC.alpha = 255;
                 Vector2 oldPos = NPC.position;
-                NPC.position.Y = Utilities.FindGroundVertical(new Point((int)NPC.position.X / 16, (int)NPC.position.Y / 16)).Y * 16 - NPC.height + 16;
+                NPC.position.Y = FindSurfaceBelow(new Point((int)NPC.position.X / 16, (int)NPC.position.Y / 16)).Y * 16 - NPC.height;
+                
                 float altY = 0;
-                for (int i = 1; i < 2; i++)
+                for (int i = 0; i < 2; i++)
                 {
-                    altY = Utilities.FindGroundVertical(new Point((int)(oldPos.X / 16 + i), (int)(oldPos.Y / 16 - 64))).Y * 16 - NPC.height + 16;
+                    altY = (FindSurfaceBelow(new Point((int)(oldPos.X / 16 + i), (int)(oldPos.Y / 16 - 2))).Y - 1) * 16 - NPC.height + 16;
                     if (altY < NPC.position.Y)
                         NPC.position.Y = altY;
                 }
+                
                 NPC.alpha = 0;
                 for (int i = 0; i <= 50; i++)
                 {
