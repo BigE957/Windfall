@@ -1,4 +1,5 @@
-﻿using Windfall.Content.NPCs.WorldEvents.LunarCult;
+﻿using Windfall.Content.NPCs.WorldEvents.DragonCult;
+using Windfall.Content.NPCs.WorldEvents.LunarCult;
 
 namespace Windfall.Content.Projectiles.NPCAnimations
 {
@@ -17,7 +18,7 @@ namespace Windfall.Content.Projectiles.NPCAnimations
             2,
         };
         internal override SoundStyle SpawnSound => new("CalamityMod/Sounds/Custom/SCalSounds/BrimstoneHellblastSound");
-        internal override int NPCType => ModContent.NPCType<LunarBishop>();
+        internal override int NPCType => ModContent.NPCType<DragonCultist>();
         internal override Color TextColor => Color.Cyan;
         internal override bool SpawnConditions(Player player)
         {
