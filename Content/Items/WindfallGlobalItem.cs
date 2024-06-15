@@ -1,10 +1,9 @@
-﻿using Windfall.Common.Systems;
+﻿using CalamityMod.Projectiles.Melee;
+using Windfall.Common.Systems;
 using Windfall.Content.Items.Journals;
 
 namespace Windfall.Content.Items
 {
-    //            TooltipLine tooltipLine = new TooltipLine(Windfall.Instance, "JournalPage", "Use to add this page to your Wanderer's Journal");
-
     public class WindfallGlobalItem : GlobalItem
     {
         public override bool? UseItem(Item item, Player player)
@@ -18,6 +17,13 @@ namespace Windfall.Content.Items
                     Item.NewItem(null, player.Center, 1, 1, ModContent.ItemType<WandererJournal>());
                 }
             }
+
+            if(item.healLife != 0)// && player.Godly().Evil1Essence && !WorldGen.crimson)
+                for(int i = 0; i < item.healLife / 20; i++)
+                {
+                    DisplayLocalizedText($"{item.healLife}, {item.healLife / 20}");
+                    Projectile.NewProjectile(Projectile.GetSource_NaturalSpawn(), player.Center, new Vector2(Main.rand.NextFloat(-10f, 10f), Main.rand.NextFloat(-10f, -2f)), ModContent.ProjectileType<DarkBall>(), 25, 0f);
+                }
 
             if(item.type == ItemID.PurificationPowder && QuestSystem.QuestLog[QuestSystem.QuestLog.FindIndex(quest => quest.Name == "Decontamination")].Active)
                 QuestSystem.IncrementQuestProgress(QuestSystem.QuestLog.FindIndex(quest => quest.Name == "Decontamination"));

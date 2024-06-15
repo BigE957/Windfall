@@ -29,7 +29,6 @@ namespace Windfall.Content.Projectiles.Weapons.Misc
             int drawStart = height * Projectile.frame;
             Vector2 origin = Projectile.Center;
             Main.EntitySpriteDraw(ModContent.Request<Texture2D>("Windfall/Assets/Items/Weapons/Misc/Cnidrisnack_Glow").Value, new Vector2(Projectile.Center.X - Main.screenPosition.X, Projectile.Center.Y - Main.screenPosition.Y), new Microsoft.Xna.Framework.Rectangle?(new Rectangle(0, drawStart, texture.Width, height)), Color.White * Projectile.Opacity, Projectile.rotation, origin, Projectile.scale, SpriteEffects.None, 0);
-
         }
     }
 }
