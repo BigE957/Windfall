@@ -30,6 +30,10 @@ namespace Windfall.Common.Players
             if (SlimeGodEssence)
                 tag["SlimeGodEssence"] = SlimeGodEssence;
         }
+
+        public static readonly SoundStyle PerforatorDashHit = new("CalamityMod/Sounds/Custom/Perforator/PerfHiveIchorShoot");
+        public static readonly SoundStyle SlimeGodShot = new("CalamityMod/Sounds/Custom/SlimeGodShot1", 2);
+
         private int abilityCounter = 0;
         private int activeAbility = 0;
         private enum AbilityIDS
@@ -87,13 +91,16 @@ namespace Windfall.Common.Players
                                         break;
                                     }
                                 }
+                                SoundEngine.PlaySound(SoundID.DD2_DarkMageSummonSkeleton);
                                 ancientVelocity = (target.Center - Player.Center).SafeNormalize(Vector2.Zero);
                                 Player.GiveUniversalIFrames(25);
                             }                         
                             olderVelocity = Player.velocity;
 
-                            Player.velocity = ancientVelocity * 32;
-
+                            if(abilityCounter > 8)
+                                Player.velocity = ancientVelocity * 32;
+                            else
+                                ancientVelocity = (target.Center - Player.Center).SafeNormalize(Vector2.Zero);
                             for (int i = 0; i < 3; i++)
                             {
                                 Dust d = Dust.NewDustPerfect(Player.Center + Main.rand.NextVector2Circular(40f, 40f), DustID.Blood, Vector2.Zero, Scale: 2f);
@@ -101,7 +108,7 @@ namespace Windfall.Common.Players
                             }
                             Dust p = Dust.NewDustPerfect(Player.Center + Main.rand.NextVector2Circular(40f, 40f), DustID.Ichor, Vector2.Zero, Scale: 1.5f);
                             p.noGravity = true;
-                            if (Player.Hitbox.Intersects(target.Hitbox) || abilityCounter > 15)
+                            if (Player.Hitbox.Intersects(target.Hitbox) || abilityCounter > 24)
                             {
                                 activeAbility = 0;
                                 Player.velocity = olderVelocity.SafeNormalize(Vector2.Zero) * 16;
@@ -114,6 +121,7 @@ namespace Windfall.Common.Players
                                     target.AddBuff(BuffID.Ichor, 240);
                                     Player.velocity.Y = -10;
                                     Player.wingTime += Player.wingTimeMax / 10;
+                                    SoundEngine.PlaySound(PerforatorDashHit);
                                     for (int i = 0; i < 50; i++)
                                     {
                                         Vector2 speed = Main.rand.NextVector2Circular(4f, 4f);
@@ -188,6 +196,7 @@ namespace Windfall.Common.Players
                     case (int)AbilityIDS.Attack1: //Slime God Essence
                         if(abilityCounter % 5 == 0)
                         {
+                            SoundEngine.PlaySound(SlimeGodShot);
                             Projectile.NewProjectile(Projectile.GetSource_NaturalSpawn(), Player.Center, (Main.MouseWorld - Player.Center).SafeNormalize(Vector2.Zero).RotatedByRandom(Pi/10) * 15, ModContent.ProjectileType<AbyssBall>(), 25, 0.5f);
                             Player.velocity -= (Main.MouseWorld - Player.Center).SafeNormalize(Vector2.Zero);
                             if(Player.velocity.LengthSquared() >= 400)
