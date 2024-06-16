@@ -88,13 +88,9 @@ namespace Windfall.Content.Projectiles.NPCAnimations
                         CurrentAI = AIState.Shocked;
                         Projectile.velocity.Y = 0;
                         if (closestPlayer.Center.X > Projectile.Center.X)
-                        {
                             i = -20;
-                        }
                         else
-                        {
                             i = 20;
-                        }
                         SoundEngine.PlaySound(DashSound, Projectile.Center);
                     }
                     else
@@ -107,13 +103,9 @@ namespace Windfall.Content.Projectiles.NPCAnimations
                 case AIState.Shocked:
                     //Makes CalClone dash backwards away from the player
                     if (i > 0)
-                    {
                         Projectile.velocity.X = i-- / 2;
-                    }
                     else if (i < 0)
-                    {
                         Projectile.velocity.X = i++ / 2;
-                    }
                     else
                     {
                         //creates an Orange Combat Text out of the projectile
@@ -123,13 +115,9 @@ namespace Windfall.Content.Projectiles.NPCAnimations
                         i = 30;
                         Projectile.velocity.X = 0;
                         if (CalCloneSpawnSystem.cragsCal)
-                        {
                             CurrentAI = AIState.Summoning;
-                        }
                         else
-                        {
                             CurrentAI = AIState.Fleeing;
-                        }
                     }
 
                     break;
@@ -160,13 +148,9 @@ namespace Windfall.Content.Projectiles.NPCAnimations
                             }
                             SoundEngine.PlaySound(BrotherSummon, Projectile.Center + new Vector2(0, -200));
                             if (Main.rand.NextBool(2))
-                            {
                                 NPC.NewNPC(null, (int)Projectile.Center.X, (int)Projectile.position.Y - 150, ModContent.NPCType<WorldCataclysm>());
-                            }
                             else
-                            {
                                 NPC.NewNPC(null, (int)Projectile.Center.X, (int)Projectile.position.Y - 150, ModContent.NPCType<WorldCatastrophe>());
-                            }
                         }
                         else
                         {

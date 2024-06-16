@@ -59,9 +59,9 @@ namespace Windfall.Common.Players
                 switch (activeAbility)
                 {
                     case (int)AbilityIDS.Dash:
-                        if(WorldGen.crimson) //Perforators Essence
+                        #region Perforator Essence
+                        if (WorldGen.crimson)
                         {
-                            DisplayLocalizedText("Perforator Dash Active!");
                             if (abilityCounter == 0)
                             {
                                 foreach (NPC npc in Main.npc.Where(n => n.active && !n.friendly))
@@ -94,8 +94,13 @@ namespace Windfall.Common.Players
 
                             Player.velocity = ancientVelocity * 32;
 
-                            DisplayLocalizedText($"{Player.velocity.Length()}");
-                                
+                            for (int i = 0; i < 3; i++)
+                            {
+                                Dust d = Dust.NewDustPerfect(Player.Center + Main.rand.NextVector2Circular(40f, 40f), DustID.Blood, Vector2.Zero, Scale: 2f);
+                                d.noGravity = true;
+                            }
+                            Dust p = Dust.NewDustPerfect(Player.Center + Main.rand.NextVector2Circular(40f, 40f), DustID.Ichor, Vector2.Zero, Scale: 1.5f);
+                            p.noGravity = true;
                             if (Player.Hitbox.Intersects(target.Hitbox) || abilityCounter > 15)
                             {
                                 activeAbility = 0;
@@ -105,14 +110,25 @@ namespace Windfall.Common.Players
                                     var modifiers = new NPC.HitModifiers();
                                     NPC.HitInfo hit = modifiers.ToHitInfo(100, false, 0f);
                                     target.StrikeNPC(hit);
-                                    target.AddBuff(ModContent.BuffType<BurningBlood>(), 30);
-                                    target.AddBuff(BuffID.Ichor, 60);
+                                    target.AddBuff(ModContent.BuffType<BurningBlood>(), 120);
+                                    target.AddBuff(BuffID.Ichor, 240);
                                     Player.velocity.Y = -10;
+                                    Player.wingTime += Player.wingTimeMax / 10;
+                                    for (int i = 0; i < 50; i++)
+                                    {
+                                        Vector2 speed = Main.rand.NextVector2Circular(4f, 4f);
+                                        Dust d = Dust.NewDustPerfect(Player.Center, DustID.Ichor, speed * 5, Scale: 2f);
+                                        d.noGravity = true;
+                                        Dust b = Dust.NewDustPerfect(Player.Center, DustID.Blood, speed * 5, Scale: 2.5f);
+                                        b.noGravity = true;
+                                    }
                                 }
                                 target = null;                             
                             }
                         }
-                        else //Eater of Worlds Essence
+                        #endregion
+                        #region Eater of Worlds Essence
+                        else
                         {
                             if (abilityCounter == 0)
                             {
@@ -121,13 +137,23 @@ namespace Windfall.Common.Players
                                     Player.velocity = (Main.MouseWorld - Player.Center).SafeNormalize(Vector2.Zero) * 10;
                             }
                             Player.wingTime = 0;
-                            DisplayLocalizedText($"{ancientVelocity.Y}");
+
+                            Dust d = Dust.NewDustPerfect(Player.Center + Main.rand.NextVector2Circular(40f, 40f), DustID.Corruption, Vector2.Zero, Scale: 1.5f);
+                            d.noGravity = true;
+
                             if (Player.oldVelocity.Y == Player.velocity.Y)
                             {
+                                
                                 for (int i = 0; i < 4; i++)
                                 {
                                     Projectile.NewProjectile(Projectile.GetSource_NaturalSpawn(), new Vector2(Player.Center.X + (32 * i), Player.Bottom.Y), new Vector2(4 + (i * 5), -20 + (i * 3)), ProjectileID.VilethornBase, 25, 0.25f);
                                     Projectile.NewProjectile(Projectile.GetSource_NaturalSpawn(), new Vector2(Player.Center.X - (32 * i), Player.Bottom.Y), new Vector2(-4 - (i * 5), -20 + (i * 3)), ProjectileID.VilethornBase, 25, 0.25f);
+                                }
+                                
+                                for(int i = 0; i < 50; i++)
+                                {
+                                    d = Dust.NewDustPerfect(Player.Bottom + new Vector2(Main.rand.NextFloat(-125f, 125f), 0f), DustID.Corruption, new Vector2(Main.rand.NextFloat(-10f, 10f), Main.rand.NextFloat(-15f, 0f)), Scale: 1.5f);
+                                    d.noGravity = true;
                                 }
                                 Player.velocity /= 2;
                                 if (Math.Abs(ancientVelocity.Y) >= 5)
@@ -143,6 +169,7 @@ namespace Windfall.Common.Players
                                 olderVelocity = Player.velocity;                               
                             }
                         }
+                        #endregion
                         break;
                     case (int)AbilityIDS.Harvest:
                         if (WorldGen.crimson) //Brain of Cthulhu Essence
