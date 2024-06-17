@@ -143,7 +143,7 @@ namespace Windfall.Common.Systems.WorldEvents
                             for (int h = 0; h < Enum.GetNames(typeof(MeetingTopic)).Length; h++)
                                 AvailableTopics.Add(h);
 
-                        CurrentMeetingTopic = MeetingTopic.Paradise; //(MeetingTopic)AvailableTopics[Main.rand.Next(AvailableTopics.Count)]; Actual Code
+                        CurrentMeetingTopic = (MeetingTopic)AvailableTopics[Main.rand.Next(AvailableTopics.Count)];
                         AvailableTopics.Remove((int)CurrentMeetingTopic);
                         #endregion
 
