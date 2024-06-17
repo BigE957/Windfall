@@ -25,6 +25,9 @@ namespace Windfall.Content.NPCs.WorldEvents.LunarCult
             CurrentEventsInitial,
             CurrentEventsGoodEnd,
             CurrentEventsBadEnd,
+            ParadiseInitial,
+            ParadiseGoodEnd,
+            ParadiseBadEnd,
 
 
             RecruitSuccess,
@@ -40,6 +43,13 @@ namespace Windfall.Content.NPCs.WorldEvents.LunarCult
             CurrentEventsExciting,
             CurrentEventsTrue,
             CurrentEventsHappy,
+
+            ParadiseBefore,
+            ParadiseSorryToHear,
+            ParadiseThemis,
+            ParadiseDisscusion,
+            ParadiseWhy,
+            ParadiseInteresting,
             #endregion
 
             #region Vivian
@@ -50,10 +60,27 @@ namespace Windfall.Content.NPCs.WorldEvents.LunarCult
             CurrentEventsKnowledge,
             CurrentEventsExample,
             CurrentEventsFuture,
+            ParadiseTrolled,
+            ParadiseSorry,
+            ParadiseIKR,
+            ParadiseTraining,
+            ParadiseNatural,
+            ParadiseCalamitas,
+            ParadiseSoundsLikeIt,
+            ParadiseSurelyNot,
+            ParadiseWorthIt,
+            ParadiseItsPossible,
+            ParadiseDoubtIt,
             #endregion
 
             #region Tania
-
+            ParadiseConfusing,
+            ParadiseHowKind,
+            ParadiseSoundsWrong,
+            ParadiseManipulative,
+            ParadiseChangeHow,
+            ParadiseThatsGood,
+            ParadiseIsThatGood,
             #endregion
 
             #region Doro
@@ -66,7 +93,12 @@ namespace Windfall.Content.NPCs.WorldEvents.LunarCult
             #endregion
 
             #region Skylar
-
+            ParadiseClimax,
+            ParadiseSessions,
+            ParadiseJoined,
+            ParadiseStory,
+            ParadiseRules,
+            ParadiseMeta,
             #endregion
 
             #region Jamie
@@ -79,7 +111,7 @@ namespace Windfall.Content.NPCs.WorldEvents.LunarCult
             #endregion
         }
         private DialogueState CurrentDialogue;
-        public bool chattable = false;
+        public bool Chattable = false;
         private List<dialogueDirections> MyDialogue;
         public bool Recruitable = false;
         public override void SetStaticDefaults()
@@ -144,7 +176,7 @@ namespace Windfall.Content.NPCs.WorldEvents.LunarCult
                     MyDialogue = JamieDialogue;
                     break;
             }
-            if (chattable == false)
+            if (Chattable == false)
             {
                 AnimationType = NPCID.BartenderUnconscious;
                 NPC.frame.Y = 0;
@@ -159,10 +191,19 @@ namespace Windfall.Content.NPCs.WorldEvents.LunarCult
                             NPC.direction = 1;
                 }
             }
+            switch(CultMeetingSystem.CurrentMeetingTopic)
+            {
+                case (CultMeetingSystem.MeetingTopic.CurrentEvents):
+                    CurrentDialogue = DialogueState.CurrentEventsInitial;
+                    break;
+                case (CultMeetingSystem.MeetingTopic.Paradise):
+                    CurrentDialogue = DialogueState.ParadiseInitial;
+                    break;
+            }
         }
         public override void AI()
-        {
-            if (chattable)
+        {            
+            if (Chattable)
             {
                 AnimationType = NPCID.Stylist;
                 NPC.aiStyle = 7;
@@ -195,7 +236,7 @@ namespace Windfall.Content.NPCs.WorldEvents.LunarCult
         }
         public override bool CanChat()
         {
-            if (!chattable || NPC.FindFirstNPC(ModContent.NPCType<TheOrator>()) != -1)
+            if (!Chattable || NPC.FindFirstNPC(ModContent.NPCType<TheOrator>()) != -1)
                 return false;
             else
                 return true;
@@ -209,8 +250,8 @@ namespace Windfall.Content.NPCs.WorldEvents.LunarCult
         }
 
         #region Dialogue Paths
-        private readonly List<dialogueDirections> TirithDialogue = new()
-        {
+        private readonly List<dialogueDirections> TirithDialogue =
+        [
             #region Reused Dialogue
             new dialogueDirections()
             {
@@ -287,20 +328,76 @@ namespace Windfall.Content.NPCs.WorldEvents.LunarCult
                 MyPos = (int)DialogueState.CurrentEventsBadEnd,
                 Button1 = new(){name = "Your welcome.", heading = (int)DialogueState.Unrecruited, end = true},
             },
+            #endregion
+
+            #region Paradise
             new dialogueDirections()
             {
-                MyPos = (int)DialogueState.Unrecruited,
-                Button1 = new(){name = "Likewise.", heading = (int)DialogueState.Unrecruited, end = true},
+                MyPos = (int)DialogueState.ParadiseInitial,
+                Button1 = new(){name = "Before?", heading = (int)DialogueState.ParadiseBefore},
+                Button2 = new(){name = "Our discussion...", heading = (int)DialogueState.ParadiseDisscusion},
+            },
+            new dialogueDirections()
+            {
+                MyPos = (int)DialogueState.ParadiseBefore,
+                Button1 = new(){name = "Sorry to hear...", heading = (int)DialogueState.ParadiseSorryToHear},
+                Button2 = new(){name = "Who's Themis?", heading = (int)DialogueState.ParadiseThemis},
+            },
+            new dialogueDirections()
+            {
+                MyPos = (int)DialogueState.ParadiseSorryToHear,
+                Button1 = new(){name = "Glad to hear!", heading = (int)DialogueState.CurrentEventsBadEnd},
+            },
+            new dialogueDirections()
+            {
+                MyPos = (int)DialogueState.ParadiseThemis,
+                Button1 = new(){name = "Quite interesting!", heading = (int)DialogueState.ParadiseBadEnd},
+            },
+            new dialogueDirections()
+            {
+                MyPos = (int)DialogueState.ParadiseDisscusion,
+                Button1 = new(){name = "Why?", heading = (int)DialogueState.ParadiseWhy},
+                Button2 = new(){name = "How intriguing...", heading = (int)DialogueState.ParadiseInteresting},
+            },
+            new dialogueDirections()
+            {
+                MyPos = (int)DialogueState.ParadiseWhy,
+                Button1 = new(){name = "How wonderful!", heading = (int)DialogueState.ParadiseBadEnd},
+            },
+            new dialogueDirections()
+            {
+                MyPos = (int)DialogueState.ParadiseInteresting,
+                Button1 = new(){name = "Will do!", heading = (int)DialogueState.ParadiseBadEnd},
+            },
+            new dialogueDirections()
+            {
+                MyPos = (int)DialogueState.ParadiseBadEnd,
+                Button1 = new(){name = "Later!", heading = (int)DialogueState.Unrecruited, end = true},
             },
             #endregion
-        };
-        private readonly List<dialogueDirections> VivianDialogue = new()
-        {
+        ];
+        private readonly List<dialogueDirections> VivianDialogue =
+        [
             #region Reused Dialogue
             new dialogueDirections()
             {
+                MyPos = (int)DialogueState.Recruitable,
+                Button1 = new(){name = "Same.", heading = (int)DialogueState.Recruitable, end = true},
+            },
+            new dialogueDirections()
+            {
+                MyPos = (int)DialogueState.RecruitSuccess,
+                Button1 = new(){name = "Wonderful!", heading = (int)DialogueState.Recruited, end = true},
+            },
+            new dialogueDirections()
+            {
+                MyPos = (int)DialogueState.Recruited,
+                Button1 = new(){name = "Of course.", heading = (int)DialogueState.Recruited, end = true},
+            },
+            new dialogueDirections()
+            {
                 MyPos = (int)DialogueState.Unrecruited,
-                Button1 = new(){name = "Later!", heading = (int)DialogueState.Unrecruited, end = true},
+                Button1 = new(){name = "See ya!", heading = (int)DialogueState.Unrecruited, end = true},
             },
             #endregion
 
@@ -354,23 +451,174 @@ namespace Windfall.Content.NPCs.WorldEvents.LunarCult
                 Button1 = new(){name = "Later!", heading = (int)DialogueState.Unrecruited, end = true},
             },
             #endregion
-        };
-        private readonly List<dialogueDirections> TaniaDialogue = new()
-        {
+
+            #region Paradise
             new dialogueDirections()
             {
-                MyPos = (int)DialogueState.CurrentEventsInitial,
-                Button1 = new(){name = "Hey!", heading = (int)DialogueState.CurrentEventsBadEnd},
-                Button2 = new(){name = "Hello...?", heading = (int)DialogueState.CurrentEventsBadEnd},
+                MyPos = (int)DialogueState.ParadiseInitial,
+                Button1 = new(){name = "I know, right?", heading = (int)DialogueState.ParadiseIKR},
+                Button2 = new(){name = "Paradise?", heading = (int)DialogueState.ParadiseTrolled}
             },
             new dialogueDirections()
             {
-                MyPos = (int)DialogueState.CurrentEventsBadEnd,
+                MyPos = (int)DialogueState.ParadiseTrolled,
+                Button1 = new(){name = "Sorry!", heading = (int)DialogueState.ParadiseSorry},
+                Button2 = new(){name = "Sorry!", heading = (int)DialogueState.ParadiseSorry}
+            },
+            new dialogueDirections()
+            {
+                MyPos = (int)DialogueState.ParadiseSorry,
+                Button1 = new(){name = "I know, right?", heading = (int)DialogueState.ParadiseIKR},
+            },
+            new dialogueDirections()
+            {
+                MyPos = (int)DialogueState.ParadiseIKR,
+                Button1 = new(){name = "Training?", heading = (int)DialogueState.ParadiseTraining},
+                Button2 = new(){name = "Is it worth it?", heading = (int)DialogueState.ParadiseWorthIt}
+            },
+            new dialogueDirections()
+            {
+                MyPos = (int)DialogueState.ParadiseTraining,
+                Button1 = new(){name = "That's natural.", heading = (int)DialogueState.ParadiseNatural},
+                Button2 = new(){name = "Calamitas...?", heading = (int)DialogueState.ParadiseCalamitas}
+            },
+            new dialogueDirections()
+            {
+                MyPos = (int)DialogueState.ParadiseNatural,
+                Button1 = new(){name = "Likewise...", heading = (int)DialogueState.ParadiseBadEnd},
+            },
+            new dialogueDirections()
+            {
+                MyPos = (int)DialogueState.ParadiseCalamitas,
+                Button1 = new(){name = "Sounds like it.", heading = (int)DialogueState.ParadiseSoundsLikeIt},
+                Button2 = new(){name = "Surely not.", heading = (int)DialogueState.ParadiseSurelyNot}
+            },
+            new dialogueDirections()
+            {
+                MyPos = (int)DialogueState.ParadiseSoundsLikeIt,
+                Button1 = new(){name = "Hell yeah!", heading = (int)DialogueState.ParadiseGoodEnd},
+                Button2 = new(){name = "Eek!", heading = (int)DialogueState.ParadiseGoodEnd}
+            },
+            new dialogueDirections()
+            {
+                MyPos = (int)DialogueState.ParadiseSurelyNot,
+                Button1 = new(){name = "Probably...", heading = (int)DialogueState.ParadiseBadEnd},
+                Button2 = new(){name = "Wait-", heading = (int)DialogueState.ParadiseBadEnd}
+            },
+            new dialogueDirections()
+            {
+                MyPos = (int)DialogueState.ParadiseWorthIt,
+                Button1 = new(){name = "Training?", heading = (int)DialogueState.ParadiseTraining},
+                Button2 = new(){name = "Is it worth it?", heading = (int)DialogueState.ParadiseWorthIt}
+            },
+            new dialogueDirections()
+            {
+                MyPos = (int)DialogueState.ParadiseItsPossible,
+                Button1 = new(){name = "True!", heading = (int)DialogueState.ParadiseGoodEnd},
+                Button2 = new(){name = "For sure!", heading = (int)DialogueState.ParadiseGoodEnd}
+            },
+            new dialogueDirections()
+            {
+                MyPos = (int)DialogueState.ParadiseDoubtIt,
+                Button1 = new(){name = "You got this.", heading = (int)DialogueState.ParadiseBadEnd},
+                Button2 = new(){name = "Good luck.", heading = (int)DialogueState.ParadiseBadEnd}
+            },
+            new dialogueDirections()
+            {
+                MyPos = (int)DialogueState.ParadiseGoodEnd,
+                Button1 = new(){name = "It's okay.", heading = (int)DialogueState.Recruitable, end = true},
+            },
+            new dialogueDirections()
+            {
+                MyPos = (int)DialogueState.ParadiseBadEnd,
+                Button1 = new(){name = "Bye.", heading = (int)DialogueState.Unrecruited, end = true},
+            },
+            #endregion
+        ];
+        private readonly List<dialogueDirections> TaniaDialogue =
+        [
+            #region Reused Dialogue
+            new dialogueDirections()
+            {
+                MyPos = (int)DialogueState.Recruitable,
+                Button1 = new(){name = "...", heading = (int)DialogueState.Recruitable, end = true},
+            },
+            new dialogueDirections()
+            {
+                MyPos = (int)DialogueState.RecruitSuccess,
+                Button1 = new(){name = "...", heading = (int)DialogueState.Recruited, end = true},
+            },
+            new dialogueDirections()
+            {
+                MyPos = (int)DialogueState.Recruited,
+                Button1 = new(){name = "...", heading = (int)DialogueState.Recruited, end = true},
+            },
+            new dialogueDirections()
+            {
+                MyPos = (int)DialogueState.Unrecruited,
+                Button1 = new(){name = "...", heading = (int)DialogueState.Unrecruited, end = true},
+            }, 
+            #endregion
+
+            #region Paradise
+            new dialogueDirections()
+            {
+                MyPos = (int)DialogueState.ParadiseInitial,
+                Button1 = new(){name = "Kinda confusing...", heading = (int)DialogueState.ParadiseConfusing},
+                Button2 = new(){name = "Change how?", heading = (int)DialogueState.ParadiseChangeHow},
+            },
+            new dialogueDirections()
+            {
+                MyPos = (int)DialogueState.ParadiseConfusing,
+                Button1 = new(){name = "How Kind!", heading = (int)DialogueState.ParadiseHowKind},
+                Button2 = new(){name = "That sounds... wrong.", heading = (int)DialogueState.ParadiseSoundsWrong},
+            },
+            new dialogueDirections()
+            {
+                MyPos = (int)DialogueState.ParadiseHowKind,
+                Button1 = new(){name = "Glad they helped.", heading = (int)DialogueState.ParadiseBadEnd},
+            },
+            new dialogueDirections()
+            {
+                MyPos = (int)DialogueState.ParadiseSoundsWrong,
+                Button1 = new(){name = "Sounds manipulative.", heading = (int)DialogueState.ParadiseManipulative},
+            },
+            new dialogueDirections()
+            {
+                MyPos = (int)DialogueState.ParadiseManipulative,
+                Button1 = new(){name = "Yeah...", heading = (int)DialogueState.ParadiseGoodEnd},
+            },
+            new dialogueDirections()
+            {
+                MyPos = (int)DialogueState.ParadiseChangeHow,
+                Button1 = new(){name = "That's good!", heading = (int)DialogueState.ParadiseIsThatGood},
+                Button2 = new(){name = "...is that good?", heading = (int)DialogueState.ParadiseIsThatGood},
+            },
+            new dialogueDirections()
+            {
+                MyPos = (int)DialogueState.ParadiseThatsGood,
+                Button1 = new(){name = "Hopefully!", heading = (int)DialogueState.ParadiseBadEnd},
+            },
+            new dialogueDirections()
+            {
+                MyPos = (int)DialogueState.ParadiseIsThatGood,
+                Button1 = new(){name = "Agreed.", heading = (int)DialogueState.ParadiseGoodEnd},
+                Button2 = new(){name = "Maybe.", heading = (int)DialogueState.ParadiseGoodEnd},
+            },
+            new dialogueDirections()
+            {
+                MyPos = (int)DialogueState.ParadiseGoodEnd,
+                Button1 = new(){name = "Will do!", heading = (int)DialogueState.Recruitable, end = true},
+            },
+            new dialogueDirections()
+            {
+                MyPos = (int)DialogueState.ParadiseBadEnd,
                 Button1 = new(){name = "Later!", heading = (int)DialogueState.Unrecruited, end = true},
             },
-        };
-        private readonly List<dialogueDirections> DoroDialogue = new()
-        {
+            #endregion
+        ];
+        private readonly List<dialogueDirections> DoroDialogue =
+        [
             #region Reused Dialogue
             new dialogueDirections()
             {
@@ -448,23 +696,84 @@ namespace Windfall.Content.NPCs.WorldEvents.LunarCult
                 Button1 = new(){name = "Same!", heading = (int)DialogueState.Unrecruited, end = true},
             },
             #endregion
-        };
-        private readonly List<dialogueDirections> SkylarDialogue = new()
-        {
+        ];
+        private readonly List<dialogueDirections> SkylarDialogue =
+        [
+            #region Reused Dialogue
             new dialogueDirections()
             {
-                MyPos = (int)DialogueState.CurrentEventsInitial,
-                Button1 = new(){name = "Hey!", heading = (int)DialogueState.CurrentEventsBadEnd},
-                Button2 = new(){name = "Hello...?", heading = (int)DialogueState.CurrentEventsBadEnd},
+                MyPos = (int)DialogueState.Recruitable,
+                Button1 = new(){name = "Glad to hear!", heading = (int)DialogueState.Recruitable, end = true},
             },
             new dialogueDirections()
             {
-                MyPos = (int)DialogueState.CurrentEventsBadEnd,
+                MyPos = (int)DialogueState.RecruitSuccess,
+                Button1 = new(){name = "Thank you.", heading = (int)DialogueState.Recruited, end = true},
+            },
+            new dialogueDirections()
+            {
+                MyPos = (int)DialogueState.Recruited,
+                Button1 = new(){name = "Fair...", heading = (int)DialogueState.Recruited, end = true},
+            },
+            new dialogueDirections()
+            {
+                MyPos = (int)DialogueState.Unrecruited,
+                Button1 = new(){name = "For sure!", heading = (int)DialogueState.Unrecruited, end = true},
+            }, 
+            #endregion
+
+            #region Paradise
+            new dialogueDirections()
+            {
+                MyPos = (int)DialogueState.ParadiseInitial,
+                Button1 = new(){name = "Climax?", heading = (int)DialogueState.ParadiseClimax},
+                Button2 = new(){name = "Story?", heading = (int)DialogueState.ParadiseStory},
+            },
+            new dialogueDirections()
+            {
+                MyPos = (int)DialogueState.ParadiseClimax,
+                Button1 = new(){name = "Sessions?", heading = (int)DialogueState.ParadiseSessions},
+                Button2 = new(){name = "How'd you join?", heading = (int)DialogueState.ParadiseJoined},
+            },
+            new dialogueDirections()
+            {
+                MyPos = (int)DialogueState.ParadiseSessions,
+                Button1 = new(){name = "Sounds like it!", heading = (int)DialogueState.ParadiseBadEnd},
+                Button2 = new(){name = "Informative indeed!", heading = (int)DialogueState.ParadiseBadEnd},
+            },
+            new dialogueDirections()
+            {
+                MyPos = (int)DialogueState.ParadiseJoined,
+                Button1 = new(){name = "Same!", heading = (int)DialogueState.ParadiseBadEnd},
+                Button2 = new(){name = "Sounds cool!", heading = (int)DialogueState.ParadiseBadEnd},
+            },
+            new dialogueDirections()
+            {
+                MyPos = (int)DialogueState.ParadiseStory,
+                Button1 = new(){name = "What rules?", heading = (int)DialogueState.ParadiseRules},
+                Button2 = new(){name = "...Meta?", heading = (int)DialogueState.ParadiseMeta},
+            },
+            new dialogueDirections()
+            {
+                MyPos = (int)DialogueState.ParadiseRules,
+                Button1 = new(){name = "Oh, gotcha.", heading = (int)DialogueState.ParadiseBadEnd},
+                Button2 = new(){name = "Hmm...", heading = (int)DialogueState.ParadiseBadEnd},
+            },
+            new dialogueDirections()
+            {
+                MyPos = (int)DialogueState.ParadiseMeta,
+                Button1 = new(){name = "Magic... Yeah...", heading = (int)DialogueState.ParadiseBadEnd},
+                Button2 = new(){name = "How... arcane.", heading = (int)DialogueState.ParadiseBadEnd},
+            },
+            new dialogueDirections()
+            {
+                MyPos = (int)DialogueState.ParadiseBadEnd,
                 Button1 = new(){name = "Later!", heading = (int)DialogueState.Unrecruited, end = true},
             },
-        };
-        private readonly List<dialogueDirections> JamieDialogue = new()
-        {
+            #endregion
+        ];
+        private readonly List<dialogueDirections> JamieDialogue =
+        [
             #region Reused Dialogue
             new dialogueDirections()
             {
@@ -519,15 +828,23 @@ namespace Windfall.Content.NPCs.WorldEvents.LunarCult
                 Button1 = new(){name = "Thanks!", heading = (int)DialogueState.Unrecruited, end = true},
             },
             #endregion
-        };
+        ];
         #endregion
         public override void OnChatButtonClicked(bool firstButton, ref string shop)
         {
-            if ((CurrentDialogue == DialogueState.CurrentEventsGoodEnd || CurrentDialogue == DialogueState.Recruitable) && !firstButton && Recruitable)
+            if ((CurrentDialogue.ToString().Contains("GoodEnd") || CurrentDialogue == DialogueState.Recruitable) && !firstButton && Recruitable)
             {
                 if (!CultMeetingSystem.Recruits.Contains((int)MyName))
                     CultMeetingSystem.Recruits.Add((int)MyName);
                 CurrentDialogue = DialogueState.RecruitSuccess;
+                foreach(NPC npc in Main.npc.Where(n => n.active && n.type == ModContent.NPCType<RecruitableLunarCultist>()))
+                {
+                    if (npc.ModNPC is RecruitableLunarCultist recruit)
+                    {
+                        recruit.Recruitable = false;
+                        recruit.CurrentDialogue = DialogueState.Unrecruited;
+                    }
+                }
             }
             else
             {
@@ -541,12 +858,12 @@ namespace Windfall.Content.NPCs.WorldEvents.LunarCult
         public override void SetChatButtons(ref string button, ref string button2)
         {
             SetConversationButtons(MyDialogue, (int)CurrentDialogue, ref button, ref button2);
-            if (CurrentDialogue == DialogueState.CurrentEventsGoodEnd || CurrentDialogue == DialogueState.Recruitable)
+            if (CurrentDialogue.ToString().Contains("GoodEnd") || CurrentDialogue == DialogueState.Recruitable)
                 button2 = "Recruit";
         }
         public override bool CheckActive()
         {
-            if (!chattable)
+            if (!Chattable)
                 return false;
             return true;
         }
@@ -590,7 +907,7 @@ namespace Windfall.Content.NPCs.WorldEvents.LunarCult
             NPC.frame.Width = 37;
             NPC.frame.Height = frameHeight;
             NPC.frame.X = NPC.frame.Width * (int)MyName;
-            if (!chattable)
+            if (!Chattable)
                 NPC.spriteDirection = NPC.direction;
         }
         public override bool PreDraw(SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor)

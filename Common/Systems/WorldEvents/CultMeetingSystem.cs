@@ -23,9 +23,9 @@ namespace Windfall.Common.Systems.WorldEvents
             NebulaHideoutLocation = new(-1, -1);
             StardustHideoutLocation = new(-1, -1);
 
-            Recruits = new List<int>();
+            Recruits = [];
 
-            AvailableTopics = new();
+            AvailableTopics = [];
         }
         public override void LoadWorldData(TagCompound tag)
         {
@@ -107,6 +107,7 @@ namespace Windfall.Common.Systems.WorldEvents
                 case SystemState.Spawn:
                     if (MeetingTimer == -1)
                     {
+                        #region Location Selection
                         int i = Main.rand.Next(4);
                         switch (i)
                         {
@@ -125,6 +126,7 @@ namespace Windfall.Common.Systems.WorldEvents
                         }
                         ActiveHideoutCoords.X *= 16;
                         ActiveHideoutCoords.Y *= 16;
+                        #endregion
 
                         foreach (Player player in Main.player)
                         {
@@ -135,23 +137,26 @@ namespace Windfall.Common.Systems.WorldEvents
                             }
                         }
                         zoom = 0;
+
+                        #region Topic Selection
                         if (AvailableTopics.Count == 0)
                             for (int h = 0; h < Enum.GetNames(typeof(MeetingTopic)).Length; h++)
                                 AvailableTopics.Add(h);
 
-                        CurrentMeetingTopic = MeetingTopic.CurrentEvents; //(MeetingTopic)AvailableTopics[Main.rand.Next(AvailableTopics.Count)]; Actual Code
+                        CurrentMeetingTopic = MeetingTopic.Paradise; //(MeetingTopic)AvailableTopics[Main.rand.Next(AvailableTopics.Count)]; Actual Code
                         AvailableTopics.Remove((int)CurrentMeetingTopic);
+                        #endregion
 
-                        NPCIndexs = new List<int>
-                        {
+                        #region Character Setup   
+                        NPCIndexs =
+                        [
                             NPC.NewNPC(Entity.GetSource_None(), ActiveHideoutCoords.X, ActiveHideoutCoords.Y - 2, ModContent.NPCType<LunarBishop>()),
                             NPC.NewNPC(Entity.GetSource_None(), ActiveHideoutCoords.X - 240, ActiveHideoutCoords.Y + 100, ModContent.NPCType<RecruitableLunarCultist>()),
                             NPC.NewNPC(Entity.GetSource_None(), ActiveHideoutCoords.X - 130, ActiveHideoutCoords.Y + 100, ModContent.NPCType<RecruitableLunarCultist>()),
                             NPC.NewNPC(Entity.GetSource_None(), ActiveHideoutCoords.X + 130, ActiveHideoutCoords.Y + 100, ModContent.NPCType<RecruitableLunarCultist>()),
                             NPC.NewNPC(Entity.GetSource_None(), ActiveHideoutCoords.X + 240, ActiveHideoutCoords.Y + 100, ModContent.NPCType<RecruitableLunarCultist>()),
-                        };
-
-                        #region Character Setup                       
+                        ];
+                                            
                         foreach (int k in NPCIndexs)
                         {
                             NPC npc = Main.npc[k];
@@ -219,7 +224,7 @@ namespace Windfall.Common.Systems.WorldEvents
                                                 break;
                                             case 2:
                                                 Recruit.MyName = RecruitableLunarCultist.RecruitNames.Tania;
-                                                Recruit.Recruitable = false;
+                                                Recruit.Recruitable = true;
                                                 npc.direction = 1;
                                                 break;
                                             case 3:
@@ -238,10 +243,12 @@ namespace Windfall.Common.Systems.WorldEvents
                             }
                         }                        
                         #endregion
+
                         MeetingTimer = 0;
                     }
                     else
                     {
+                        #region Despawn
                         if (Main.dayTime)
                         {
                             ActiveHideoutCoords = new(-1, -1);
@@ -256,10 +263,12 @@ namespace Windfall.Common.Systems.WorldEvents
                                     npc.active = false;
                             }
                         }
+                        #endregion
+
                         float PlayerDistFromHideout = new Vector2(mainPlayer.Center.X - ActiveHideoutCoords.X, mainPlayer.Center.Y - ActiveHideoutCoords.Y).Length();
                         if (Active)
                         {
-                            #region Meeting Dialogue
+                            #region Meeting Scene
                             CombatText Text;
 
                             NPC Bishop = Main.npc[NPCIndexs[0]];
@@ -274,7 +283,7 @@ namespace Windfall.Common.Systems.WorldEvents
                             Rectangle Cultist3Location = new((int)Cultist3.Center.X, (int)Cultist3.Center.Y, Cultist3.width, Cultist3.width);
                             Rectangle Cultist4Location = new((int)Cultist4.Center.X, (int)Cultist4.Center.Y, Cultist4.width, Cultist4.width);
 
-                            string key = $"Dialogue.LunarCult.CultMeeting.{CurrentMeetingTopic}.";
+                            string key = $"Dialogue.LunarCult.CultMeetings.{CurrentMeetingTopic}.";
 
                             switch (CurrentMeetingTopic)
                             {
@@ -283,9 +292,11 @@ namespace Windfall.Common.Systems.WorldEvents
                                     {
                                         case 1:
                                             Text = DisplayMessage(BishopLocation, Color.Blue, GetWindfallTextValue(key + 0));
+                                            Text.lifeTime = 60;
                                             break;
                                         case 90:
                                             Text = DisplayMessage(BishopLocation, Color.Blue, GetWindfallTextValue(key + 1));
+                                            Text.lifeTime = 60;
                                             break;
                                         case 3 * 60:
                                             Text = DisplayMessage(BishopLocation, Color.Blue, GetWindfallTextValue(key + 2));
@@ -351,9 +362,11 @@ namespace Windfall.Common.Systems.WorldEvents
                                     {
                                         case 1:
                                             Text = DisplayMessage(BishopLocation, Color.Blue, GetWindfallTextValue(key + 0));
+                                            Text.lifeTime = 60;
                                             break;
                                         case 90:
                                             Text = DisplayMessage(BishopLocation, Color.Blue, GetWindfallTextValue(key + 1));
+                                            Text.lifeTime = 60;
                                             break;
                                         case 60 * 3:
                                             Text = DisplayMessage(BishopLocation, Color.Blue, GetWindfallTextValue(key + 2));
@@ -365,9 +378,11 @@ namespace Windfall.Common.Systems.WorldEvents
                                     {
                                         case 1:
                                             Text = DisplayMessage(BishopLocation, Color.Blue, GetWindfallTextValue(key + 0));
+                                            Text.lifeTime = 60;
                                             break;
                                         case 90:
                                             Text = DisplayMessage(BishopLocation, Color.Blue, GetWindfallTextValue(key + 1));
+                                            Text.lifeTime = 60;
                                             break;
                                         case 60 * 3:
                                             Text = DisplayMessage(BishopLocation, Color.Blue, GetWindfallTextValue(key + 2));
@@ -406,7 +421,7 @@ namespace Windfall.Common.Systems.WorldEvents
                                             Text = DisplayMessage(BishopLocation, Color.Blue, GetWindfallTextValue(key + 13));
                                             break;
                                         case 60 * 25:
-                                            Text = DisplayMessage(Cultist2Location, Color.Teal, GetWindfallTextValue(key + 14));
+                                            Text = DisplayMessage(Cultist2Location, Color.SeaGreen, GetWindfallTextValue(key + 14));
                                             break;
                                         case 60 * 27:
                                             Text = DisplayMessage(BishopLocation, Color.Blue, GetWindfallTextValue(key + 15));
@@ -430,22 +445,40 @@ namespace Windfall.Common.Systems.WorldEvents
                                             Text = DisplayMessage(BishopLocation, Color.Blue, GetWindfallTextValue(key + 21));
                                             break;
                                         case 60 * 41:
-                                            Text = DisplayMessage(BishopLocation, Color.Blue, GetWindfallTextValue(key + 22));
+                                            Text = DisplayMessage(Cultist2Location, Color.SeaGreen, GetWindfallTextValue(key + 22));
                                             break;
                                         case 60 * 43:
-                                            DisplayMessage(Cultist2Location, Color.Teal, GetWindfallTextValue(key + 23));
+                                            DisplayMessage(Cultist2Location, Color.SeaGreen, GetWindfallTextValue(key + 23));
                                             DisplayMessage(Cultist3Location, Color.Violet, GetWindfallTextValue(key + 24));
+                                            break;
+                                        case 60 * 45:
+                                            Text = DisplayMessage(BishopLocation, Color.Blue, GetWindfallTextValue(key + 25));
+                                            break;
+                                        case 60 * 47:
+                                            Text = DisplayMessage(BishopLocation, Color.Blue, GetWindfallTextValue(key + 26));
+                                            break;
+                                        case 60 * 49:
+                                            Text = DisplayMessage(BishopLocation, Color.Blue, GetWindfallTextValue(key + 27));
+                                            break;
+                                        case 60 * 51:
+                                            Text = DisplayMessage(BishopLocation, Color.Blue, GetWindfallTextValue(key + 28));
+                                            break;
+                                        case 60 * 52:
+                                            State = SystemState.End;
                                             break;
                                     }
                                     break;
                             }
                             #endregion
+
+                            #region Camera Setup
                             if (MeetingTimer < 100)
                                 zoom = Lerp(zoom, 0.4f, 0.075f);
                             else
                                 zoom = 0.4f;
                             CameraPanSystem.Zoom = zoom;
                             CameraPanSystem.PanTowards(new Vector2(ActiveHideoutCoords.X, ActiveHideoutCoords.Y - 150), zoom);
+                            #endregion
 
                             MeetingTimer++;
                         }
@@ -471,7 +504,7 @@ namespace Windfall.Common.Systems.WorldEvents
                         else if (npc.type == ModContent.NPCType<RecruitableLunarCultist>())
                         {
                             if (npc.ModNPC is RecruitableLunarCultist Recruit)
-                                Recruit.chattable = true;
+                                Recruit.Chattable = true;
                         }
                     }
                     ActiveHideoutCoords = new(-1, -1);

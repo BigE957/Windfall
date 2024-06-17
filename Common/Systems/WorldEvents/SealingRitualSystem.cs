@@ -379,7 +379,7 @@ namespace Windfall.Common.Systems.WorldEvents
                             NPC npc = Main.npc[i];                        
                             if (npc.type == ModContent.NPCType<RecruitableLunarCultist>())
                                 if (npc.ModNPC is RecruitableLunarCultist Recruit)
-                                    Recruit.chattable = true;
+                                    Recruit.Chattable = true;
                         }
                     }
                     State = SystemState.CheckReqs;

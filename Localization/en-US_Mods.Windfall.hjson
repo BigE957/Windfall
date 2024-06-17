@@ -441,6 +441,7 @@ Dialogue: {
 				21: ...fool?
 			}
 		}
+
 		CultMeetings: {
 			CurrentEvents: {
 				0: Greetings!
@@ -462,11 +463,12 @@ Dialogue: {
 				16: Hold steady your faith. It shall very soon be rewarded.
 				17: Until we next meet.
 			}
+
 			Mission: {
 				0: Greetings!
 				1: Let us begin.
-				
 			}
+
 			Paradise: {
 				0: Greetings!
 				1: Let us begin.
@@ -484,7 +486,7 @@ Dialogue: {
 				13: Paradise rewards those who devote themselves to its return.
 				14: What... is Paradise? #Tania
 				15: Well...
-				16: Paradise, it is... 
+				16: Paradise, it is...
 				17: A great and mighty power.
 				18: Its might was feared, and sealed away.
 				19: Now it is up to us to restore it.
@@ -499,6 +501,7 @@ Dialogue: {
 				28: Until we next meet.
 			}
 		}
+
 		Recruits: {
 			Tirith: {
 				CurrentEvents: {
@@ -513,10 +516,21 @@ Dialogue: {
 					BadEnd: Yes, I just need to remain faithful. Our reward for these trials shall soon be upon us. Thank you. I really needed to be reminded of that.
 				}
 
+				Paradise: {
+					Initial: Quite the relieving discussion today I'd say! They've told us plenty of times, but its nice to be reminded that thing's will be turning out well. I had been feeling kinda antsy today... Almost reminded me of how I was found by our friends here!
+					Before: I remember it quite vividly... It was during the height of Yharim's Crusade. You see, my city was founded by a goddess, Themis, which put us in their sights. As their legions attacked, our goddess sat atop her spire at the ciy's center, meaning the invaders tore through our city just to reach her... I know not how many died that day, but I had become trapped in the rubble... That's where I was found and saved.
+					SorryToHear: There's no need to worry. Thanks to our friends, I survived, and now I get to work on something... bigger, than myself. That's something I get to be proud of. To be honest, I'm much happier now than I was before my city's fall; a strange thing to say, I know.
+					Themis: Themis was the Goddess of Justice. If my memory serves, she was one of three to claim the souls of some infamous trio of dragons. Hers held the aspect of Power, but I can't recall the other two... After her ascension, she founded our city where she became quite famous as a judge of sorts. Those with disputes would far and wide to our humble city just for her decree on the matter. Though in the end, she died by the Godseeker's hand, as many deities have.
+					Discussion: 'Paradise' as we refer to it has always been a somewhat... vague concept. But that's because we simply aren't able to put what it is into proper words! Such a magestic thing... I look forward to its arrival greatly!
+					Why: Well, it is my belief that with its arrival, all conflict shall cease. Such a wonderous being, its able to provide for us all. There would be nothing left to fight over! We shall all live happily together with open arms... such a wonderful thing.
+					Interesting: Worry not, friend. Soon all shall be made right! Just you wait!
+					BadEnd: Well, its been nice talking to you! Hope to see you next time!
+				}
+
 				Recruitable: Thanks again for that talk. My eyes feel... opened now? Haha, maybe that's weird.
 				RecruitSuccess: Oh my... The Lunar Cult... They're really planning something like that? I'll help if I can. I'll be in touch!
 				Recruited: Let's not talk about this... here, okay?
-				Unrecruited: Good talking to you!
+				Unrecruited: Be seeing you!
 
 				SealingRitual: {
 					0: So this ritual... It'll protect the whole world?
@@ -538,28 +552,62 @@ Dialogue: {
 					BadEnd: Well, this was a nice chat, but I really should be going. Unlike some people here, I've got a life outside of this stuff.
 				}
 
-				Recruitable: You're pretty pog!
-				RecruitSuccess: Sure, I'll join your thingie!
-				Recruited: Can't wait to help out!
+				Paradise: {
+					Initial: God, that was so boring. I don't know how the rest of y'all eat up that slop. Paradise this, Paradise that... If I hear that word one more time, I might just lose it!
+					Trolled: I'LL KILL YOU.
+					Sorry: You're on thin ice, pal... But apology accepted, I suppose. Here I thought these things couldn't get any worse...
+					IKR: I'm glad I'm not the only one who's not buying all this slop... If I could skip these, trust me I would. But the Orator says these'll be 'enlightening', and that they're required for my training... What a joke.
+					Training: The Orator has been kind enough to train me in the ways of magic; he believes I have much potential. His knowledge is most certainly vast, and he has opened my eyes to the vast possibilities of my magic. Though... I can't shake the feeling he's... disappointed in me.
+					Natural: Yeah, you might be on to something. He's still leagues ahead of me so... Guess it is only natural to feel like I'm not up to his standards. Well, what do I care anyway? I'm just here to get what I want from him. Once he's taught me everything, I don't plan on spending another second around here!
+					Calamitas: Ugh, please do not compare me to... her. Though... You might be onto something... Is that the only reason the Orator's training me? To have a Brimstone Witch of his own?! Thats- ...
+					SoundsLikeIt: I can't believe it! That's seriously all he wanted out of me?! I can't believe I was stupid enough to buy his garbage! Screw this! I'm done with him! Done with all of this trash!
+					SurelyNot: Maybe I'm thinking too much about this. Clearly I need to get the hell out of here; this place seems to only be good at pissing me off and stressing me out...
+					WorthIt: Hmm... Never really thought about it like that. My magic and skills have certainly grown, but... I don't really know if there's much more he's got for me. If he were just leading me along so I keep showing up to these things... Well, I'd be pissed that's for sure!
+					ItsPossible: Yeah... He does seem like the type. Well screw him! I'm plenty powerful with my magic now; I don't need his help anymore! And if it means getting out of showing up to these, well that's just the cherry on top!
+					DoubtIt: I mean, I'm getting taught magic from a pretty dang skilled guy so... can't really complain now can I. If he wants me to take part in his little pet project here then fine. I'll survive... Probably.
+					GoodEnd: Well, thanks for the help I guess. Not sure I'd have been able to piece that all together on my own... Makes me feel... kinda stupid, but whatever. I'm happy I can kiss these stupid things goodbye at least!
+					BadEnd: See you around I guess... Though maybe not. Ditching these is sounding real good right about now.
+				}
+
+				Recruitable: Thanks for the help with all that. Can't wait to never have to come to these stupid things ever again.
+				RecruitSuccess: Stick it to the Orator? That's all you needed to say! I'm already eager for revenge...
+				Recruited: We can meet up later to figure out our sweet, sweet revenge. I'd rather be literally anywhere but here right now.
 				Unrecruited: See you around.
 
 				SealingRitual: {
-					0: THis ritual will actually protect us?
+					0: This ritual will actually protect us?
 					1: Yeah... I guess they were kinda messed up.
 					2: How exactly do we do that?
 				}
 			}
 
 			Tania: {
-				???: {
-					Initial: Hi, I'm Tania!
-					BadEnd: Bye!
+				Paradise: {
+					Initial: Another... 'enlightening' experience as always... Even now they don't give us any details on what we're really working towards... Worst of all, we've been given little to do as the end approaches... Hopefully that change soon.
+					Paradise: I still know so little about we're doing... It can be a little frustrating... Though these people showed me kindness when I was at my lowest; it would be wrong to be untrusting. If they promise things will turn out well, I'll believe them.
+					HowKind: Indeed! I was a trader at the time; bringing goods from Ilmeris. After the Incineration I was left with... nothing. I was lucky to be away when it began, but with no home and no goods there was little I could do to get back on my feet. Thankfully, that's when the our friends here found me. The took me in and provided for my needs. I'm not sure I'll ever be able to repay their kindness.
+					SoundsWrong: Wrong you say? What makes you think that?
+					Manipulative: Hmm... That's... a worrying thought... Worrying and... eye opening... The only reason I'm so trusting of them is because they helped me when I was desperate... I was, in retrospect... an easy target... That's... frightening.
+					ChnageHow: I really just want something to do, y'know? If I can be honest, the worst thing over time that hit me after the Incineration was feeling... purposeless. Being here at least gives me that, as well as, y'know, food and shelter.
+					ThatsGood: Our friends here are quite generous! I almost wonder where all their resources come from... We are quite the large operation! Maybe one day I'll be able to find someone in need and bring them into our fold. We'll see!
+					IsThatGood: Huh... That's a uh... Fair point now that you mention it. Relying on them for... well, practically everything isn't exactly the best. It might be time I try to... distance myself a little, huh.			
+					GoodEnd: Thanks for the talk... You've given me a lot to think about. I'll be seeing you around hopefully, and if you need anything, all you gotta do is ask.
+					BadEnd: Well, nice talking to you! Glad to find another friend around here. We do have quite the strong community, huh. Be seeing you!
+				}
+				NotParadise: {
+					Initial: Oh... Hello there. Can I... help you?
+					Smth: ...
+					Ilmeris: ...Yes. I was from Ilmeris until... well, I assume you know the rest.
+					WDYM: You don't? What has the world come to... Ilmeris was incinerated by the hand of the Brimstone Witch at the Godseeker's command... So many lives were lost, just to kill two: the gods of Ilmeris... How does that man sleep at night. Do his sins not weigh on him?
+					Godseeker: Such a wicked man, and yet no one knows what's become of him now. There was an attempt on his life, but even they failed. After that he just... disappeared... There must truly be no justice in the world if that man gets to live out the rest of his days unpunished for his countless crimes...
+					IlmeranGods: So much of Ilmeris is already being forgotten... Ilmeris was founded by two gods: Electric Goddess, Otonilou and Tyrian, the God of the Seas. Together they unified the formerly divided tribes of Ilmeris; forming our kingdom. ...I can't believe I'm giving history lessons...
+					BadEnd: Yhadios!
 				}
 
-				Recruitable: You're pretty pog!
-				RecruitSuccess: Sure, I'll join your thingie!
-				Recruited: Can't wait to help out!
-				Unrecruited: Leave me alone, weirdo...
+				Recruitable: Hope to see you around! Mainly somewhere that isn't here, haha.
+				RecruitSuccess: You're serious? Oh my... Yes, I'd be happy to help. I'll be in touch!
+				Recruited: We can talk more somewhere that... isn't here.
+				Unrecruited: See you next time, I suppose.
 
 				SealingRitual: {
 					0: This ritual can shield the world?
@@ -583,8 +631,8 @@ Dialogue: {
 
 				Recruitable: I feel like big things are coming my way now. This is great!
 				RecruitSuccess: Oh my... That's no good. This things a cult? I'll help you out if I can.
-				Recruited: Might not be a good call to talk about this here...
-				Unrecruited: I'll see you around!
+				Recruited: You sure talking while we're here is smart?
+				Unrecruited: See you later!
 
 				SealingRitual: {
 					0: This ritual does... something good...?
@@ -594,15 +642,21 @@ Dialogue: {
 			}
 
 			Skylar: {
-				???: {
-					Initial: Hi, I'm Skylar!
-					BadEnd: Bye!
+				Paradise: {
+					Initial: What intriguing information! It really seems we're reaching the climax of this story- I mean- of our mission! I can't wait to see where this goes next!
+					Climax: Ah, you joined quite late if I recall... Yes, everything seems to have been building to this moment! It seems we're about to have some really interesting sessions!
+					Sessions: These meetings are so informative! The worldbuilding is really top notch! I must hand it to the Orator he's a talented- or, knowledgeable... scholar of this world's history. Yeah!
+					Joined: Joining this was so cool! The people I met were in character recruiting for the LARP; it was so cool! I knew right then that I just had to join, and now here I am! This whole thing has been a blast!
+					Story: Sorry, that was my mistake. I know you're new, but acting out of character and getting 'meta' is against the rules. Do try to keep that in mind!
+					Rules: Did they really not tell you the LARP's rules when you joined? Wow, that must not have been very fun. Luckily its quite straightforward. As long as you don't break character you're basically fine.
+					Meta: Oh... Of course, yes. I don't actually know what that means either. I've uh... Only heard about it from scholars and mages... Its a uh... form of magic. Yeah.
+					BadEnd: Anyways, I should be heading back. I'll see you at the next session! Or... next meeting I should say. Haha!
 				}
 
 				Recruitable: You're pretty pog!
 				RecruitSuccess: Sure, I'll join your thingie!
 				Recruited: Can't wait to help out!
-				Unrecruited: Leave me alone, weirdo...
+				Unrecruited: Hope to see you again!
 
 				SealingRitual: {
 					0: So this ritual... It'll protect the whole world?
@@ -626,7 +680,7 @@ Dialogue: {
 				Recruitable: You're pretty pog!
 				RecruitSuccess: Sure, I'll join your thingie!
 				Recruited: Can't wait to help out!
-				Unrecruited: See you later, new guy!
+				Unrecruited: See you next time, new guy!
 
 				SealingRitual: {
 					0: So this ritual... It'll protect the whole world?
@@ -791,6 +845,7 @@ UI: {
 				11: Paradise shall arrive!
 				12: Paradise shall arrive!
 			}
+
 			Orator: {
 				0: Are we certain we shall succeed?
 				1: What if the foolish attempt to stop us?
@@ -808,6 +863,7 @@ UI: {
 				13: Paradise shall arrive.
 				14: Paradise shall arrive.
 			}
+
 			Paradise: {
 				0: Paradise shall arrive.
 				1: Paradise shall arrive.
@@ -1422,4 +1478,10 @@ MusicDisplay: {
 		DisplayName: The Orator
 		Author: by Yuri O
 	}
+}
+
+Keybinds: {
+	GodlyEssenceDash.DisplayName: Godly Essence Dash
+	GodlyEssenceHarvest.DisplayName: Godly Essence Harvest
+	GodlyEssenceAttack1.DisplayName: Godly Essence Attack1
 }
