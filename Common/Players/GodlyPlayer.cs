@@ -1,6 +1,8 @@
 ﻿using CalamityMod.Buffs.DamageOverTime;
 using CalamityMod.Projectiles.Magic;
+using Terraria;
 using Terraria.ModLoader.IO;
+using Terraria.WorldBuilding;
 using Windfall.Common.Systems;
 
 namespace Windfall.Common.Players
@@ -40,8 +42,29 @@ namespace Windfall.Common.Players
         private Vector2 ancientVelocity = Vector2.Zero;
         private Vector2 olderVelocity = Vector2.Zero;
         private NPC target = null;
+        public struct Pair(Dust d, NPC owner)
+        {
+            public Dust Dust = d;
+            public NPC Owner = owner;
+        }
+        private static List<Pair> dustArray = new List<Pair>();
         public override void PostUpdate()
         {
+            #region Visual Effect Updates
+            if (dustArray.Count > 0)
+            {
+                dustArray.RemoveAll(dp => dp.Dust == null || !dp.Dust.active || dp.Owner == null || !dp.Owner.active);
+                foreach (Pair dp in dustArray)
+                {
+                    Dust d = dp.Dust;
+                    NPC npc = dp.Owner;
+                    if ((dp.Dust.position - Player.position).Length() <= 32)
+                        dp.Dust.active = false;
+                    else
+                        d.velocity = (Player.Center - d.position).SafeNormalize(Vector2.Zero) * 12;
+                }
+            }
+            #endregion
             if (activeAbility == 0)
             {
                 if (WindfallKeybinds.GodlyDashHotkey.JustPressed)// && (Evil1Essence && !WorldGen.crimson) || (Evil2Essence && WorldGen.crimson))
@@ -175,21 +198,65 @@ namespace Windfall.Common.Players
                         #endregion
                         break;
                     case (int)AbilityIDS.Harvest:
-                        if (WorldGen.crimson) //Brain of Cthulhu Essence
+                        #region Brain of Cthulhu Essence
+                        if (WorldGen.crimson)
                         {
-                            DisplayLocalizedText("BoC Harvest Active!");
-                            if (abilityCounter > 60)
+                            foreach(NPC npc in Main.npc.Where(n => n.active && !n.friendly && (n.Center - Player.Center).Length() <= 500))
+                            {
+                                if (abilityCounter % 6 == 0)
+                                {
+                                    var modifiers = new NPC.HitModifiers();
+                                    NPC.HitInfo hit = modifiers.ToHitInfo(5, false, 0f);
+                                    npc.StrikeNPC(hit);
+                                }
+                                Vector2 speed = (Player.Center - npc.Center).SafeNormalize(Vector2.Zero);
+                                Dust d = Dust.NewDustPerfect(npc.Center, DustID.Ichor, speed * 12, Scale: 2f);
+                                d.noGravity = true;
+                                dustArray.Add(new Pair(d, npc));
+                            }                           
+                            
+                            if (WindfallKeybinds.GodlyHarvestHotkey.JustReleased)
+                            {
                                 activeAbility = 0;
+                                break;
+                            }
+                            else if(abilityCounter >= 120)
+                            {
+                                foreach (NPC npc in Main.npc.Where(n => n != null && n.active && !n.friendly && (n.Center - Player.Center).LengthSquared() <= 360000))
+                                {
+                                    var modifiers = new NPC.HitModifiers();
+                                    NPC.HitInfo hit = modifiers.ToHitInfo(100, false, 0f);
+                                    npc.StrikeNPC(hit);
+                                    npc.AddBuff(BuffID.Ichor, 240);
+                                    npc.AddBuff(BuffID.Confused, 240);
+                                    SoundEngine.PlaySound(PerforatorDashHit, npc.Center);
+                                    for (int i = 0; i < 50; i++)
+                                    {
+                                        Vector2 speed = Main.rand.NextVector2Circular(4f, 4f);
+                                        Dust d = Dust.NewDustPerfect(npc.Center, DustID.Ichor, speed * 5, Scale: 2f);
+                                        d.noGravity = true;
+                                        Dust b = Dust.NewDustPerfect(npc.Center, DustID.Blood, speed * 5, Scale: 2.5f);
+                                        b.noGravity = true;
+                                    }
+                                }
+                                Player.Heal(25);
+                                activeAbility = 0;
+                                break;
+                            }
                         }
-                        else //Hive Mind Essence
+                        #endregion
+                        #region Hive Mind Essence
+                        else
                         {
                             DisplayLocalizedText("Hive Mind Harvest Active!");
                             if (abilityCounter > 60)
                                 activeAbility = 0;
                         }
+                        #endregion
                         break;
-                    case (int)AbilityIDS.Attack1: //Slime God Essence
-                        if(abilityCounter % 5 == 0)
+                    case (int)AbilityIDS.Attack1:
+                        #region Slime God Essence
+                        if (abilityCounter % 5 == 0)
                         {
                             SoundEngine.PlaySound(SlimeGodShot);
                             Projectile.NewProjectile(Projectile.GetSource_NaturalSpawn(), Player.Center, (Main.MouseWorld - Player.Center).SafeNormalize(Vector2.Zero).RotatedByRandom(Pi/10) * 15, ModContent.ProjectileType<AbyssBall>(), 25, 0.5f);
@@ -199,6 +266,7 @@ namespace Windfall.Common.Players
                         }
                         if (abilityCounter > 50)
                             activeAbility = 0;
+                        #endregion
                         break;
                 }
                 abilityCounter++;
@@ -211,5 +279,6 @@ namespace Windfall.Common.Players
             else
                 return true;
         }
+        public static bool HasGodlyEssence(Player player) => player.Godly().Evil1Essence || player.Godly().Evil2Essence || player.Godly().SlimeGodEssence;
     }
 }
