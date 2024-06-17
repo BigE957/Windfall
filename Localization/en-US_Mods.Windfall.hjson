@@ -521,7 +521,7 @@ Dialogue: {
 					Before: I remember it quite vividly... It was during the height of Yharim's Crusade. You see, my city was founded by a goddess, Themis, which put us in their sights. As their legions attacked, our goddess sat atop her spire at the ciy's center, meaning the invaders tore through our city just to reach her... I know not how many died that day, but I had become trapped in the rubble... That's where I was found and saved.
 					SorryToHear: There's no need to worry. Thanks to our friends, I survived, and now I get to work on something... bigger, than myself. That's something I get to be proud of. To be honest, I'm much happier now than I was before my city's fall; a strange thing to say, I know.
 					Themis: Themis was the Goddess of Justice. If my memory serves, she was one of three to claim the souls of some infamous trio of dragons. Hers held the aspect of Power, but I can't recall the other two... After her ascension, she founded our city where she became quite famous as a judge of sorts. Those with disputes would far and wide to our humble city just for her decree on the matter. Though in the end, she died by the Godseeker's hand, as many deities have.
-					Discussion: 'Paradise' as we refer to it has always been a somewhat... vague concept. But that's because we simply aren't able to put what it is into proper words! Such a magestic thing... I look forward to its arrival greatly!
+					Discussion: Paradise, as we refer to it, has always been a somewhat... vague concept. But that's because we simply aren't able to put what it is into proper words! Such a magestic thing... I look forward to its arrival greatly!
 					Why: Well, it is my belief that with its arrival, all conflict shall cease. Such a wonderous being, its able to provide for us all. There would be nothing left to fight over! We shall all live happily together with open arms... such a wonderful thing.
 					Interesting: Worry not, friend. Soon all shall be made right! Just you wait!
 					BadEnd: Well, its been nice talking to you! Hope to see you next time!
@@ -590,10 +590,11 @@ Dialogue: {
 					Manipulative: Hmm... That's... a worrying thought... Worrying and... eye opening... The only reason I'm so trusting of them is because they helped me when I was desperate... I was, in retrospect... an easy target... That's... frightening.
 					ChnageHow: I really just want something to do, y'know? If I can be honest, the worst thing over time that hit me after the Incineration was feeling... purposeless. Being here at least gives me that, as well as, y'know, food and shelter.
 					ThatsGood: Our friends here are quite generous! I almost wonder where all their resources come from... We are quite the large operation! Maybe one day I'll be able to find someone in need and bring them into our fold. We'll see!
-					IsThatGood: Huh... That's a uh... Fair point now that you mention it. Relying on them for... well, practically everything isn't exactly the best. It might be time I try to... distance myself a little, huh.			
+					IsThatGood: Huh... That's a uh... Fair point now that you mention it. Relying on them for... well, practically everything isn't exactly the best. It might be time I try to... distance myself a little, huh.
 					GoodEnd: Thanks for the talk... You've given me a lot to think about. I'll be seeing you around hopefully, and if you need anything, all you gotta do is ask.
 					BadEnd: Well, nice talking to you! Glad to find another friend around here. We do have quite the strong community, huh. Be seeing you!
 				}
+
 				NotParadise: {
 					Initial: Oh... Hello there. Can I... help you?
 					Smth: ...
