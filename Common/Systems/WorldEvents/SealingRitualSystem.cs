@@ -145,8 +145,8 @@ namespace Windfall.Common.Systems.WorldEvents
                                         Text = DisplayMessage(LunaticLocation, Color.Cyan, key + '1');
                                         break;
                                     case 60 * 3:
-                                        GetRecruitValues(Recruitable2.MyName.ToString(), ref TextColor, ref key);
-                                        Text = DisplayMessage(Recruit2Location, TextColor, key + '0'); //So this is gonna seal Moon Lord?
+                                        GetRecruitValues(Recruitable3.MyName.ToString(), ref TextColor, ref key);
+                                        Text = DisplayMessage(Recruit3Location, TextColor, key + '0'); //So this is gonna seal Moon Lord?
                                         CultistFacePlayer = false;
                                         LunaticCultist.direction = -1;
                                         break;
@@ -154,8 +154,8 @@ namespace Windfall.Common.Systems.WorldEvents
                                         Text = DisplayMessage(LunaticLocation, Color.Cyan, key + '2');
                                         break;
                                     case 60 * 7:
-                                        GetRecruitValues(Recruitable4.MyName.ToString(), ref TextColor, ref key);
-                                        Text = DisplayMessage(Recruit4Location, TextColor, key + '1'); //Can't believe we were helping with something so disasterous...
+                                        GetRecruitValues(Recruitable1.MyName.ToString(), ref TextColor, ref key);
+                                        Text = DisplayMessage(Recruit1Location, TextColor, key + '1'); //Can't believe we were helping with something so disasterous...
                                         break;
                                     case 60 * 10:
                                         Text = DisplayMessage(LunaticLocation, Color.Cyan, key + '3');
@@ -165,8 +165,8 @@ namespace Windfall.Common.Systems.WorldEvents
                                         Text = DisplayMessage(LunaticLocation, Color.Cyan, key + '4');
                                         break;
                                     case 60 * 14:
-                                        GetRecruitValues(Recruitable1.MyName.ToString(), ref TextColor, ref key);
-                                        Text = DisplayMessage(Recruit1Location, TextColor, key + '2'); //What do we do?
+                                        GetRecruitValues(Recruitable2.MyName.ToString(), ref TextColor, ref key);
+                                        Text = DisplayMessage(Recruit2Location, TextColor, key + '2'); //What do we do?
                                         break;
                                     case 60 * 16:
                                         Text = DisplayMessage(LunaticLocation, Color.Cyan, key + '5');
