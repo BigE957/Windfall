@@ -4,7 +4,7 @@ using CalamityMod.Projectiles.Rogue;
 using Terraria.GameContent.Bestiary;
 using Terraria.Utilities;
 using Windfall.Common.Systems;
-using Windfall.Content.Items.Quests;
+using Windfall.Content.Items.Essences;
 
 namespace Windfall.Content.NPCs.WanderingNPCs
 {
@@ -40,12 +40,16 @@ namespace Windfall.Content.NPCs.WanderingNPCs
             //new Profiles.DefaultNPCProfile(Texture + "_Shimmer", -1)
             );
 
-            GodlyEssenceIDs = new()
-            {
-                ModContent.ItemType<DeificInsignia>(),
-            };
+            GodlyEssenceIDs =
+            [
+                ModContent.ItemType<EoWEssence>(),
+                ModContent.ItemType<BoCEssence>(),
+                ModContent.ItemType<HiveEssence>(),
+                ModContent.ItemType<PerfEssence>(),
+                ModContent.ItemType<SlimeEssence>(),
+            ];
         }
-        private static List<int> GodlyEssenceIDs = new();
+        private static List<int> GodlyEssenceIDs = [];
         public override void SetDefaults()
         {
             NPC.friendly = true; // NPC Will not attack player
@@ -245,7 +249,7 @@ namespace Windfall.Content.NPCs.WanderingNPCs
                     if (GodlyEssenceIndex != -1)
                     {
                         Item item = player.inventory[GodlyEssenceIndex];
-                        switch (item.type)
+                        switch (++WorldSaveSystem.EssenceCounter)
                         {
                             //This will determine what reward the player gets for turning in a Godly Essence
                             default:
@@ -253,7 +257,6 @@ namespace Windfall.Content.NPCs.WanderingNPCs
                                 break;
                         }
                         item.stack -= 1;
-                        WorldSaveSystem.EssenceCounter++;
                         Main.npcChatText = GetWindfallTextValue($"Dialogue.GodseekerKnight.Essence.Redeemed.{WorldSaveSystem.EssenceCounter}");
                     }
                     else
