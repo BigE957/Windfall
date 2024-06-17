@@ -1316,6 +1316,53 @@ Items: {
 			Tooltip: ""
 		}
 	}
+
+	Essence: {
+		BoCEssence: {
+			DisplayName: Festering Essence
+			Tooltip:
+				'''
+				The coalesced Godly Essence of many who formed the Crimson.
+				Its whispers promise Ambrosia to those willing to drink of it.
+				'''
+		}
+
+		EoWEssence: {
+			DisplayName: Putrid Essence
+			Tooltip:
+				'''
+				The coalesced Godly Essence of many who formed the Corruption.
+				Its whispers promise Dexterity to those willing to drink of it.
+				'''
+		}
+
+		HiveEssence: {
+			DisplayName: Wretched Essence
+			Tooltip:
+				'''
+				The coalesced Godly Essence of many who formed the Hive Mind.
+				Its whispers promise Ambrosia to those willing to drink of it.
+				'''
+		}
+
+		PerfEssence: {
+			DisplayName: Blistering Essence
+			Tooltip:
+				'''
+				The coalesced Godly Essence of many who formed the Perforators.
+				Its whispers promise Dexterity to those willing to drink of it.
+				'''
+		}
+
+		SlimeEssence: {
+			DisplayName: Gluttonous Essence
+			Tooltip:
+				'''
+				A portion of the Godly Essence gathered by the Slime God.
+				Its whispers promise Power to those willing to drink of it.
+				'''
+		}
+	}
 }
 
 NPCs: {

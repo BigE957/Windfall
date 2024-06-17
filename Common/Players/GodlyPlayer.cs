@@ -67,11 +67,11 @@ namespace Windfall.Common.Players
             #endregion
             if (activeAbility == 0)
             {
-                if (WindfallKeybinds.GodlyDashHotkey.JustPressed)// && (Evil1Essence && !WorldGen.crimson) || (Evil2Essence && WorldGen.crimson))
+                if (WindfallKeybinds.GodlyDashHotkey.JustPressed && (Evil1Essence && !WorldGen.crimson) || (Evil2Essence && WorldGen.crimson))
                     activeAbility = (int)AbilityIDS.Dash;
-                else if (WindfallKeybinds.GodlyHarvestHotkey.JustPressed)// && (Evil1Essence && WorldGen.crimson) || (Evil2Essence && !WorldGen.crimson))
+                else if (WindfallKeybinds.GodlyHarvestHotkey.JustPressed && (Evil1Essence && WorldGen.crimson) || (Evil2Essence && !WorldGen.crimson))
                     activeAbility = (int)AbilityIDS.Harvest;
-                else if (WindfallKeybinds.GodlyAttack1Hotkey.JustPressed)// && SlimeGodEssence)
+                else if (WindfallKeybinds.GodlyAttack1Hotkey.JustPressed && SlimeGodEssence)
                     activeAbility = (int)AbilityIDS.Attack1;
 
                 abilityCounter = 0;
@@ -206,7 +206,7 @@ namespace Windfall.Common.Players
                                 if (abilityCounter % 6 == 0)
                                 {
                                     var modifiers = new NPC.HitModifiers();
-                                    NPC.HitInfo hit = modifiers.ToHitInfo(5, false, 0f);
+                                    NPC.HitInfo hit = modifiers.ToHitInfo(1, false, 0f);
                                     npc.StrikeNPC(hit);
                                 }
                                 Vector2 speed = (Player.Center - npc.Center).SafeNormalize(Vector2.Zero);
