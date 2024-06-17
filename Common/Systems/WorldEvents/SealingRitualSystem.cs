@@ -104,8 +104,8 @@ namespace Windfall.Common.Systems.WorldEvents
                         {
                             NPC Recruit1 = Main.npc[NPCIndexs[0]];
                             NPC Recruit2 = Main.npc[NPCIndexs[1]];
-                            //NPC Recruit3 = Main.npc[NPCIndexs[2]];
-                            //NPC Recruit4 = Main.npc[NPCIndexs[3]];
+                            NPC Recruit3 = Main.npc[NPCIndexs[2]];
+                            NPC Recruit4 = Main.npc[NPCIndexs[3]];
                             NPC SealingTablet = Main.npc[NPCIndexs[2]]; //[4]
                             NPC LunaticCultist = null;
                             if (NPCIndexs.Count == 4)
@@ -119,8 +119,8 @@ namespace Windfall.Common.Systems.WorldEvents
 
                             Rectangle Recruit1Location = new((int)Recruit1.Center.X, (int)Recruit1.Center.Y, Recruit1.width, Recruit1.width);
                             Rectangle Recruit2Location = new((int)Recruit2.Center.X, (int)Recruit2.Center.Y, Recruit2.width, Recruit2.width);
-                            //Rectangle Cultist3Location = new((int)Recruit3.Center.X, (int)Recruit3.Center.Y, Recruit3.width, Recruit3.width);
-                            //Rectangle Cultist4Location = new((int)Recruit4.Center.X, (int)Recruit4.Center.Y, Recruit4.width, Recruit4.width);
+                            Rectangle Recruit3Location = new((int)Recruit3.Center.X, (int)Recruit3.Center.Y, Recruit3.width, Recruit3.width);
+                            Rectangle Recruit4Location = new((int)Recruit4.Center.X, (int)Recruit4.Center.Y, Recruit4.width, Recruit4.width);
                             Rectangle LunaticLocation = new();
                             if (LunaticCultist != null)
                                 LunaticLocation = new((int)LunaticCultist.Center.X, (int)LunaticCultist.Center.Y, LunaticCultist.width, LunaticCultist.width);
@@ -133,7 +133,7 @@ namespace Windfall.Common.Systems.WorldEvents
                             string key = "LunarCult.TravellingCultist.SealingRitual.";
                             if (RitualTimer > 60 * 65)
                                 key = "LunarCult.TheOrator.WorldText.SealingRitual.Initial.";
-                            if (Recruit1.ModNPC is RecruitableLunarCultist Recruitable1 && Recruit2.ModNPC is RecruitableLunarCultist Recruitable2)
+                            if (Recruit1.ModNPC is RecruitableLunarCultist Recruitable1 && Recruit2.ModNPC is RecruitableLunarCultist Recruitable2 && Recruit3.ModNPC is RecruitableLunarCultist Recruitable3 && Recruit4.ModNPC is RecruitableLunarCultist Recruitable4)
                             {
                                 switch (RitualTimer)
                                 {
@@ -145,8 +145,8 @@ namespace Windfall.Common.Systems.WorldEvents
                                         Text = DisplayMessage(LunaticLocation, Color.Cyan, key + '1');
                                         break;
                                     case 60 * 3:
-                                        GetRecruitValues(Recruitable1.MyName.ToString(), ref TextColor, ref key);
-                                        Text = DisplayMessage(Recruit1Location, TextColor, key + '0'); //So this is gonna seal Moon Lord?
+                                        GetRecruitValues(Recruitable2.MyName.ToString(), ref TextColor, ref key);
+                                        Text = DisplayMessage(Recruit2Location, TextColor, key + '0'); //So this is gonna seal Moon Lord?
                                         CultistFacePlayer = false;
                                         LunaticCultist.direction = -1;
                                         break;
@@ -154,8 +154,8 @@ namespace Windfall.Common.Systems.WorldEvents
                                         Text = DisplayMessage(LunaticLocation, Color.Cyan, key + '2');
                                         break;
                                     case 60 * 7:
-                                        GetRecruitValues(Recruitable2.MyName.ToString(), ref TextColor, ref key);
-                                        Text = DisplayMessage(Recruit2Location, TextColor, key + '1'); //Can't believe we were helping with something so disasterous...
+                                        GetRecruitValues(Recruitable4.MyName.ToString(), ref TextColor, ref key);
+                                        Text = DisplayMessage(Recruit4Location, TextColor, key + '1'); //Can't believe we were helping with something so disasterous...
                                         break;
                                     case 60 * 10:
                                         Text = DisplayMessage(LunaticLocation, Color.Cyan, key + '3');
@@ -175,23 +175,33 @@ namespace Windfall.Common.Systems.WorldEvents
                                         SoundEngine.PlaySound(SoundID.Item8, Recruit1.Center);
                                         Text = DisplayMessage(LunaticLocation, Color.Cyan, key + '6');
                                         Text.lifeTime = 60;
-                                        Recruit1.noGravity = true;
-                                        Recruit1.velocity = Vector2.Zero;
-                                        GetRecruitValues(Recruitable1.MyName.ToString(), ref TextColor, ref key);
-                                        DisplayMessage(Recruit1Location, TextColor, "Emoticons.Shock");
+                                        Recruit2.noGravity = true;
+                                        Recruit2.velocity = Vector2.Zero;
+                                        GetRecruitValues(Recruitable2.MyName.ToString(), ref TextColor, ref key);
+                                        DisplayMessage(Recruit2Location, TextColor, "Emoticons.Shock");
                                         break;
                                     case 60 * 19:
                                         Text = DisplayMessage(LunaticLocation, Color.Cyan, key + '7');
                                         Text.lifeTime = 60;
+                                        Recruit3.noGravity = true;
+                                        Recruit3.velocity = Vector2.Zero;
+                                        GetRecruitValues(Recruitable3.MyName.ToString(), ref TextColor, ref key);
+                                        DisplayMessage(Recruit3Location, TextColor, "Emoticons.Shock");
                                         break;
                                     case 60 * 20:
                                         Text = DisplayMessage(LunaticLocation, Color.Cyan, key + '8');
                                         SoundEngine.PlaySound(SoundID.Item8, Recruit2.Center);
                                         Text.lifeTime = 60;
-                                        Recruit2.noGravity = true;
-                                        Recruit2.velocity = Vector2.Zero;
-                                        GetRecruitValues(Recruitable2.MyName.ToString(), ref TextColor, ref key);
-                                        DisplayMessage(Recruit2Location, TextColor, "Emoticons.Shock");
+                                        Recruit1.noGravity = true;
+                                        Recruit1.velocity = Vector2.Zero;
+                                        GetRecruitValues(Recruitable1.MyName.ToString(), ref TextColor, ref key);
+                                        DisplayMessage(Recruit1Location, TextColor, "Emoticons.Shock");
+                                        break;
+                                    case 60 * 21:
+                                        Recruit4.noGravity = true;
+                                        Recruit4.velocity = Vector2.Zero;
+                                        GetRecruitValues(Recruitable4.MyName.ToString(), ref TextColor, ref key);
+                                        DisplayMessage(Recruit4Location, TextColor, "Emoticons.Shock");
                                         break;
                                     case 60 * 22:
                                         SealingTablet.ai[0] = 1;
@@ -265,7 +275,7 @@ namespace Windfall.Common.Systems.WorldEvents
                                         NPCIndexs.Remove(2);
                                         LunaticCultist.immortal = false;
                                         LunaticCultist.StrikeInstantKill();
-                                        Recruit1.noGravity = false; Recruit2.noGravity = false;
+                                        Recruit1.noGravity = false; Recruit2.noGravity = false; Recruit3.noGravity = false; Recruit4.noGravity = false;
                                         SealingTablet.ai[0] = 0;
                                         break;
                                     case 60 * 65:
@@ -276,13 +286,20 @@ namespace Windfall.Common.Systems.WorldEvents
                                         }
                                         break;
                                     case 60 * 72:
-                                        Recruit2.velocity.Y = Recruit1.velocity.Y = -5;
+                                        Recruit1.velocity.Y = Recruit2.velocity.Y = Recruit3.velocity.Y = Recruit4.velocity.Y = -5;
 
                                         GetRecruitValues(Recruitable1.MyName.ToString(), ref TextColor, ref key);
                                         DisplayMessage(Recruit1Location, TextColor, "Emoticons.Shock");
 
                                         GetRecruitValues(Recruitable2.MyName.ToString(), ref TextColor, ref key);
                                         DisplayMessage(Recruit2Location, TextColor, "Emoticons.Shock");
+
+                                        GetRecruitValues(Recruitable3.MyName.ToString(), ref TextColor, ref key);
+                                        DisplayMessage(Recruit3Location, TextColor, "Emoticons.Shock");
+
+                                        GetRecruitValues(Recruitable4.MyName.ToString(), ref TextColor, ref key);
+                                        DisplayMessage(Recruit4Location, TextColor, "Emoticons.Shock");
+
                                         break;
                                     case 60 * 74:
                                         Text = DisplayMessage(OratorLocation, Color.LightGreen, key + "0");
