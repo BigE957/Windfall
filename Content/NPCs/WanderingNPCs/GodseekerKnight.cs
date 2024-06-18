@@ -3,6 +3,7 @@ using CalamityMod.NPCs.HiveMind;
 using CalamityMod.Projectiles.Rogue;
 using Terraria.GameContent.Bestiary;
 using Terraria.Utilities;
+using Windfall.Common.Players;
 using Windfall.Common.Systems;
 using Windfall.Content.Items.Essences;
 
@@ -224,6 +225,13 @@ namespace Windfall.Content.NPCs.WanderingNPCs
             {
                 chat.Add(GetWindfallTextValue($"Dialogue.{nameof(GodseekerKnight)}.Chat.Statigel1"));
                 chat.Add(GetWindfallTextValue($"Dialogue.{nameof(GodseekerKnight)}.Chat.Statigel2"));
+            }
+            if(GodlyPlayer.GodlyEssenceCount(player) > 0)
+            {
+                if(GodlyPlayer.GodlyEssenceCount(player) > 2)
+                    chat.Add(GetWindfallTextValue($"Dialogue.{nameof(GodseekerKnight)}.Chat.ConsumedFew"));
+                else
+                    chat.Add(GetWindfallTextValue($"Dialogue.{nameof(GodseekerKnight)}.Chat.ConsumedLittle"));
             }
             WorldSaveSystem.GodseekerKnightChats++;
             return chat;

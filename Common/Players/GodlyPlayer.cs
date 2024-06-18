@@ -280,5 +280,16 @@ namespace Windfall.Common.Players
                 return true;
         }
         public static bool HasGodlyEssence(Player player) => player.Godly().Evil1Essence || player.Godly().Evil2Essence || player.Godly().SlimeGodEssence;
+        public static int GodlyEssenceCount(Player player)
+        {
+            int count = 0;
+            if (player.Godly().Evil1Essence)
+                count++;
+            if (player.Godly().Evil2Essence)
+                count++;
+            if (player.Godly().SlimeGodEssence)
+                count++;
+            return count;
+        }
     }
 }

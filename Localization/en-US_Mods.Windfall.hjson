@@ -135,11 +135,13 @@ Dialogue: {
 			Standard2: The lands seem far quieter these days, but we must remain ever vigilant.
 			Standard3: I sometimes wonder what motivated the Gods' people to cling to the past as they did... how many lives would have been spared had they seen the potential for change?
 			Standard4: ... I suppose this insignia could use a bit of a polish...
-			SlimeGod1: Heiko... have you truly grown so foolish?
+			SlimeGod1: Heiko... what do you seek amidst the splayed gore of your kin?
 			Evilbiome1: What a foul place... The sooner my hunt is complete, the better.
 			EvilBiome2: The seeping corruption you see before you is the grave of dozens of gods. Slain by the Godseeker's hand, their corpses now spill with pestilent gore, and worms and beasts pick apart their lifeless bones. I would relish the sight, were it not a blight upon the earth itself.
 			Statigel1: Hah! Armor fitted from the ooze of the God of Slimes... in the style of his own followers, no less! How beautifully ironic...
 			Statigel2: Though they chose to serve the most pathetic of gods, the Onyx Kinsmen were far from weak. Decades ago, there were whisperings of an assassin making his way into the Godseeker's own sanctum, though he was apparently quickly routed and put to death.
+			EssenceLittle: Hah, I see you've done battle with those who dwell in this place... How can I tell? You reek of the divinty, and not in a good way. Might I suggest a bath now and again?
+			EssenceFew: My word... Are you certain you are well? It seems to me you've taken on a nasty infection; no doubt sourced from your own little crusade against the influence of the divine... It's strange to say thing, but perhaps you should rest a while. Spending so much time near the stains of divinity without proper protection can be quite damaging.
 		}
 
 		Quests: {
