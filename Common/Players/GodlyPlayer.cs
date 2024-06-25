@@ -237,10 +237,10 @@ namespace Windfall.Common.Players
                         #region Brain of Cthulhu Essence
                         if (WorldGen.crimson)
                         {
-                            if(Main.npc.Where(n => n.active && !n.friendly && (n.Center - Player.Center).Length() <= 500 && !harvestNPCArray.Contains(n) && !harvestNPCBlacklist.Contains(n)).Any())
-                                while(harvestNPCArray.Count < 5 && Main.npc.Where(n => n.active && !n.friendly && (n.Center - Player.Center).Length() <= 500 && !harvestNPCArray.Contains(n) && !harvestNPCBlacklist.Contains(n) && harvestNPCArray.Count <= 5).Any())
+                            if(Main.npc.Where(n => n.active && !n.friendly && !n.dontTakeDamage && (n.Center - Player.Center).Length() <= 500 && !harvestNPCArray.Contains(n) && !harvestNPCBlacklist.Contains(n)).Any())
+                                while(harvestNPCArray.Count < 5 && Main.npc.Where(n => n.active && !n.friendly && !n.dontTakeDamage && (n.Center - Player.Center).Length() <= 500 && !harvestNPCArray.Contains(n) && !harvestNPCBlacklist.Contains(n) && harvestNPCArray.Count <= 5).Any())
                                 {
-                                    List<NPC> arr = Main.npc.Where(n => n.active && !n.friendly && (n.Center - Player.Center).Length() <= 500 && !harvestNPCArray.Contains(n) && !harvestNPCBlacklist.Contains(n) && harvestNPCArray.Count <= 5).ToList();
+                                    List<NPC> arr = Main.npc.Where(n => n.active && !n.friendly && !n.dontTakeDamage && (n.Center - Player.Center).Length() <= 500 && !harvestNPCArray.Contains(n) && !harvestNPCBlacklist.Contains(n) && harvestNPCArray.Count <= 5).ToList();
                                     NPC npc = null;
                                     foreach(NPC n in arr)
                                     {
