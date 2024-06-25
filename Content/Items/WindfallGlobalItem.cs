@@ -1,4 +1,5 @@
 ﻿using CalamityMod.Projectiles.Melee;
+using Windfall.Common.Players;
 using Windfall.Common.Systems;
 using Windfall.Content.Items.Journals;
 
@@ -6,6 +7,12 @@ namespace Windfall.Content.Items
 {
     public class WindfallGlobalItem : GlobalItem
     {
+        public override bool CanUseItem(Item item, Player player)
+        {
+            if (GodlyPlayer.IsUsingAbility(player))
+                return false;
+            return true;
+        }
         public override bool? UseItem(Item item, Player player)
         {
             bool isJournalPage = item.type == ModContent.ItemType<JournalCorruption>() || item.type == ModContent.ItemType<JournalCrimson>() || item.type == ModContent.ItemType<JournalForest>() || item.type == ModContent.ItemType<JournalTundra>() || item.type == ModContent.ItemType<JournalIlmeris>() || item.type == ModContent.ItemType<JournalJungle>() || item.type == ModContent.ItemType<JournalDesert>() || item.type == ModContent.ItemType<JournalDungeon>() || item.type == ModContent.ItemType<JournalOcean>() || item.type == ModContent.ItemType<JournalSulphur>();
