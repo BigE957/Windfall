@@ -65,7 +65,7 @@ namespace Windfall.Content.NPCs.PlayerNPCs
                 Dust.NewDustPerfect(NPC.Bottom + new Vector2(Main.rand.NextFloat(-24f, 24f), 0f), DustID.Demonite, new Vector2(Main.rand.NextFloat(-3f, 3f), Main.rand.NextFloat(-2.5f, 0f)));
             }
 
-            Particle pulse = new StaticPulseRing(NPC.Center, Vector2.Zero, Color.Purple, new Vector2(1f, 1f), 0f, 0f, 0.2925f, 10);
+            Particle pulse = new StaticPulseRing(NPC.Center, Vector2.Zero, Color.Purple, new Vector2(1f, 1f), 0f, 0f, 0.2925f, 11);
             GeneralParticleHandler.SpawnParticle(pulse);
         }
         private int WitherFactor = 0;

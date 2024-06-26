@@ -6,6 +6,7 @@ using CalamityMod.Projectiles.Magic;
 using Terraria;
 using Terraria.ModLoader.IO;
 using Windfall.Common.Systems;
+using Windfall.Content.Buffs.StatBuffs;
 using Windfall.Content.NPCs.PlayerNPCs;
 
 namespace Windfall.Common.Players
@@ -100,6 +101,7 @@ namespace Windfall.Common.Players
                 }
             }
             #endregion
+            #region Ability Activation
             if (activeAbility == 0)
             {
                 if (WindfallKeybinds.GodlyDashHotkey.JustPressed && ((Evil1Essence && !WorldGen.crimson) || (Evil2Essence && WorldGen.crimson)))
@@ -111,6 +113,8 @@ namespace Windfall.Common.Players
                 
                 abilityCounter = 0;
             }
+            #endregion
+            #region Ability Effects
             else
             {
                 switch (activeAbility)
@@ -208,8 +212,7 @@ namespace Windfall.Common.Players
                             {
                                 if(Player.Hitbox.Intersects(npc.Hitbox))
                                 {
-                                    EoWSlam(npc.Bottom.Y);
-                                    
+                                    EoWSlam(npc.Bottom.Y, npc);                                  
                                     npc.StrikeInstantKill();
                                 }
                             }
@@ -333,10 +336,11 @@ namespace Windfall.Common.Players
                 }
                 abilityCounter++;
             }
+            #endregion
         }
         public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
         {
-            if(Player.HasBuff<Mushy>())
+            if(Player.HasBuff<WretchedHarvest>())
             {
                 if (target.HasBuff<BrainRot>())
                     target.AddBuff(BuffID.CursedInferno, 120);
@@ -351,7 +355,7 @@ namespace Windfall.Common.Players
             else
                 return true;
         }
-        private void EoWSlam(float y)
+        private void EoWSlam(float y, NPC tumor = null)
         {
             for (int i = 0; i < 4; i++)
             {
@@ -370,14 +374,46 @@ namespace Windfall.Common.Players
             else
                 Player.velocity.Y = -5;
             Player.velocity /= 2;
-            if (y != Player.Bottom.Y) //Determines if this is a Normal Slam or a Hive Tumor Slam
+            if (tumor != null) //Determines if this is a Normal Slam or a Hive Tumor Slam
+            {
                 Player.velocity = Player.velocity.SafeNormalize(Vector2.Zero) * 15;
+
+                for (int i = 1; i < 3; i++)
+                {
+                    Particle boomRing = new DirectionalPulseRing(tumor.Center, Vector2.Zero, Color.MediumPurple, Vector2.One, 0f, 0.14f * i, 1.43f * i, 20);
+                    GeneralParticleHandler.SpawnParticle(boomRing);
+                }
+
+                for (int i = 0; i < 30; i++)
+                {
+                    bool randomDust = Main.rand.NextBool();
+                    Dust boomDust = Dust.NewDustPerfect(tumor.Center, randomDust ? DustID.Demonite : DustID.Shadowflame, Main.rand.NextVector2Circular(10f, 10f), Scale: randomDust ? Main.rand.NextFloat(1f, 2f) : Main.rand.NextFloat(2.5f, 3f));
+                    boomDust.noGravity = true;
+                    boomDust.noLight = true;
+                    boomDust.noLightEmittence = true;
+                }
+                SoundEngine.PlaySound(new SoundStyle("CalamityMod/Sounds/Custom/HiveMindRoarFast") { PitchVariance = 0.2f }, tumor.Center);
+
+                foreach (NPC npc in Main.npc.Where(n => n != null && n.active && !n.friendly && !n.dontTakeDamage && Vector2.Distance(tumor.Center, n.Center) < 300))
+                {
+                    var modifiers = new NPC.HitModifiers();
+                    NPC.HitInfo hit = modifiers.ToHitInfo(100, false, 20f);
+                    npc.StrikeNPC(hit);
+                    if (npc.knockBackResist != 0)
+                    {
+                        npc.velocity = (npc.Center - tumor.Center).SafeNormalize(Vector2.Zero) * npc.velocity.Length();
+                        npc.velocity.Y -= 5;
+                    }
+                    npc.AddBuff(ModContent.BuffType<BrainRot>(), 120);
+                    npc.AddBuff(BuffID.CursedInferno, 240);
+                }
+            }
             foreach (NPC npc in Main.npc.Where(n => n != null && n.active && Vector2.Distance(Player.Center, n.Center) < 300 && n.velocity.Y == 0))
             {
                 if (npc.knockBackResist != 0)
                 {
-                    if (y != Player.Bottom.Y)
-                        npc.velocity.Y -= 20 * npc.knockBackResist;
+                    if (tumor != null)
+                        npc.velocity.Y -= 20 * npc.knockBackResist;                       
                     else
                         npc.velocity.Y -= 10 * npc.knockBackResist;
                     npc.velocity.X = 0;
