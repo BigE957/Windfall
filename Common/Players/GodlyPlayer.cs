@@ -118,7 +118,7 @@ namespace Windfall.Common.Players
                             if (abilityCounter == 0)
                             {
                                 target = null;
-                                foreach (NPC npc in Main.npc.Where(n => n.active && !n.friendly))
+                                foreach (NPC npc in Main.npc.Where(n => n.active && !n.friendly && !n.dontTakeDamage))
                                 {
                                     if (target == null)
                                         target = npc;
@@ -127,7 +127,7 @@ namespace Windfall.Common.Players
                                 }
                                 if (target == null || (Player.Center - target.Center).LengthSquared() > 810000)
                                 {
-                                    foreach (NPC npc in Main.npc.Where(n => n.active && !n.friendly))
+                                    foreach (NPC npc in Main.npc.Where(n => n.active && !n.friendly && !n.dontTakeDamage))
                                     {
                                         if (target == null)
                                             target = npc;
