@@ -1389,6 +1389,7 @@ NPCs: {
 	SealingTablet.DisplayName: Sealing Tablet
 	DragonCultist.DisplayName: Dragon Cultist
 	DragonArcher.DisplayName: Dragon Archer
+	GodlyTumor.DisplayName: Godly Tumor
 }
 
 Projectiles: {
@@ -1428,6 +1429,11 @@ Buffs: {
 	DeepSeekerBuff: {
 		DisplayName: Deep Seeker
 		Description: A creature of the Deep will protect you...
+	}
+
+	WretchedHarvest: {
+		DisplayName: Wretched Harvest
+		Description: Your Hive Tumor empowers you...
 	}
 }
 

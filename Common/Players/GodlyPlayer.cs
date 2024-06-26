@@ -1,12 +1,12 @@
 ﻿using CalamityMod.Buffs.DamageOverTime;
-using CalamityMod.NPCs.AquaticScourge;
-using CalamityMod.NPCs.AstrumDeus;
-using CalamityMod.NPCs.DesertScourge;
-using CalamityMod.NPCs.DevourerofGods;
+using CalamityMod.Buffs.StatBuffs;
+using CalamityMod.Buffs.StatDebuffs;
 using CalamityMod.NPCs.NormalNPCs;
 using CalamityMod.Projectiles.Magic;
+using Terraria;
 using Terraria.ModLoader.IO;
 using Windfall.Common.Systems;
+using Windfall.Content.NPCs.PlayerNPCs;
 
 namespace Windfall.Common.Players
 {
@@ -31,7 +31,7 @@ namespace Windfall.Common.Players
                 tag["SlimeGodEssence"] = SlimeGodEssence;
         }
 
-        public static readonly SoundStyle PerforatorDashHit = new("CalamityMod/Sounds/Custom/Perforator/PerfHiveIchorShoot");
+        public static readonly SoundStyle IchorGoopyHit = new("CalamityMod/Sounds/Custom/Perforator/PerfHiveIchorShoot");
         public static readonly SoundStyle SlimeGodShot = new("CalamityMod/Sounds/Custom/SlimeGodShot", 2);
 
         private int abilityCounter = 0;
@@ -70,6 +70,11 @@ namespace Windfall.Common.Players
                     case (int)AbilityIDS.Dash:
                         if(WorldGen.crimson)
                             Player.maxFallSpeed = 32;
+                        else
+                        {
+                            Player.gravity = 0.75f;
+                            Player.maxFallSpeed = 20;
+                        }
                         break;
                     case (int)AbilityIDS.Attack1:
                         Player.gravity = 0.5f;
@@ -175,7 +180,7 @@ namespace Windfall.Common.Players
                                     target.AddBuff(BuffID.Ichor, 240);
                                     Player.velocity.Y = -10;
                                     Player.wingTime += Player.wingTimeMax / 10;
-                                    SoundEngine.PlaySound(PerforatorDashHit);
+                                    SoundEngine.PlaySound(IchorGoopyHit);
                                     for (int i = 0; i < 50; i++)
                                     {
                                         Vector2 speed = Main.rand.NextVector2Circular(4f, 4f);
@@ -193,37 +198,25 @@ namespace Windfall.Common.Players
                         else
                         {
                             if (abilityCounter == 0)
-                            {
-                                Player.velocity += (Main.MouseWorld - Player.Center).SafeNormalize(Vector2.Zero) * 10;
-                                if (Player.velocity.LengthSquared() <= 100)
-                                    Player.velocity = (Main.MouseWorld - Player.Center).SafeNormalize(Vector2.Zero) * 10;
-                            }
+                                Player.velocity = (Main.MouseWorld - Player.Center).SafeNormalize(Vector2.Zero) * 15;
                             Player.wingTime = 0;
 
                             Dust d = Dust.NewDustPerfect(Player.Center + Main.rand.NextVector2Circular(40f, 40f), DustID.Corruption, Vector2.Zero, Scale: 1.5f);
                             d.noGravity = true;
 
+                            foreach(NPC npc in Main.npc.Where(n => n != null && n.active && n.type == ModContent.NPCType<GodlyTumor>()))
+                            {
+                                if(Player.Hitbox.Intersects(npc.Hitbox))
+                                {
+                                    EoWSlam(npc.Bottom.Y);
+                                    
+                                    npc.StrikeInstantKill();
+                                }
+                            }
+
                             if (Player.oldVelocity.Y == Player.velocity.Y)
                             {
-                                
-                                for (int i = 0; i < 4; i++)
-                                {
-                                    Projectile.NewProjectile(Projectile.GetSource_NaturalSpawn(), new Vector2(Player.Center.X + (32 * i), Player.Bottom.Y), new Vector2(4 + (i * 5), -20 + (i * 3)), ProjectileID.VilethornBase, 25, 0.25f);
-                                    Projectile.NewProjectile(Projectile.GetSource_NaturalSpawn(), new Vector2(Player.Center.X - (32 * i), Player.Bottom.Y), new Vector2(-4 - (i * 5), -20 + (i * 3)), ProjectileID.VilethornBase, 25, 0.25f);
-                                }
-                                
-                                for(int i = 0; i < 50; i++)
-                                {
-                                    d = Dust.NewDustPerfect(Player.Bottom + new Vector2(Main.rand.NextFloat(-125f, 125f), 0f), DustID.Corruption, new Vector2(Main.rand.NextFloat(-10f, 10f), Main.rand.NextFloat(-15f, 0f)), Scale: 1.5f);
-                                    d.noGravity = true;
-                                }
-                                Player.velocity /= 2;
-                                if (Math.Abs(ancientVelocity.Y) >= 5)
-                                    Player.velocity.Y = -ancientVelocity.Y;
-                                else
-                                    Player.velocity.Y = -5;
-                                Player.wingTime = Player.wingTimeMax;
-                                activeAbility = 0;
+                                EoWSlam(Player.Bottom.Y);
                             }
                             else
                             {
@@ -270,7 +263,7 @@ namespace Windfall.Common.Players
                                         npc.StrikeNPC(hit);
                                         npc.AddBuff(BuffID.Ichor, 240);
                                         npc.AddBuff(BuffID.Confused, 240);
-                                        SoundEngine.PlaySound(PerforatorDashHit, npc.Center);
+                                        SoundEngine.PlaySound(IchorGoopyHit, npc.Center);
                                         for (int j = 0; j < 50; j++)
                                         {
                                             Vector2 speed = Main.rand.NextVector2Circular(4f, 4f);
@@ -318,9 +311,8 @@ namespace Windfall.Common.Players
                         #region Hive Mind Essence
                         else
                         {
-                            DisplayLocalizedText("Hive Mind Harvest Active!");
-                            if (abilityCounter > 60)
-                                activeAbility = 0;
+                            NPC.NewNPC(NPC.GetSource_NaturalSpawn(), (int)Main.MouseWorld.X, (int)Main.MouseWorld.Y, ModContent.NPCType<GodlyTumor>());
+                            activeAbility = 0;
                         }
                         #endregion
                         break;
@@ -342,12 +334,58 @@ namespace Windfall.Common.Players
                 abilityCounter++;
             }
         }
+        public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
+        {
+            if(Player.HasBuff<Mushy>())
+            {
+                if (target.HasBuff<BrainRot>())
+                    target.AddBuff(BuffID.CursedInferno, 120);
+                else
+                    target.AddBuff(ModContent.BuffType<BrainRot>(), 120);
+            }
+        }
         public override bool CanStartExtraJump(ExtraJump jump)
         {
             if (activeAbility == (int)AbilityIDS.Dash || activeAbility == (int)AbilityIDS.Attack1)
                 return false;
             else
                 return true;
+        }
+        private void EoWSlam(float y)
+        {
+            for (int i = 0; i < 4; i++)
+            {
+                Projectile.NewProjectile(Projectile.GetSource_NaturalSpawn(), new Vector2(Player.Center.X + (32 * i), y), new Vector2(4 + (i * 5), -20 + (i * 3)), ProjectileID.VilethornBase, 25, 0f);
+                Projectile.NewProjectile(Projectile.GetSource_NaturalSpawn(), new Vector2(Player.Center.X - (32 * i), y), new Vector2(-4 - (i * 5), -20 + (i * 3)), ProjectileID.VilethornBase, 25, 0f);
+            }
+
+            for (int i = 0; i < 50; i++)
+            {
+                Dust d = Dust.NewDustPerfect(new Vector2(Player.Center.X, y) + new Vector2(Main.rand.NextFloat(-125f, 125f), 0f), DustID.Corruption, new Vector2(Main.rand.NextFloat(-10f, 10f), Main.rand.NextFloat(-15f, 0f)), Scale: 1.5f);
+                d.noGravity = true;
+            }
+            
+            if (Math.Abs(ancientVelocity.Y) >= 5)
+                Player.velocity.Y = -ancientVelocity.Y;
+            else
+                Player.velocity.Y = -5;
+            Player.velocity /= 2;
+            if (y != Player.Bottom.Y) //Determines if this is a Normal Slam or a Hive Tumor Slam
+                Player.velocity = Player.velocity.SafeNormalize(Vector2.Zero) * 15;
+            foreach (NPC npc in Main.npc.Where(n => n != null && n.active && Vector2.Distance(Player.Center, n.Center) < 300 && n.velocity.Y == 0))
+            {
+                if (npc.knockBackResist != 0)
+                {
+                    if (y != Player.Bottom.Y)
+                        npc.velocity.Y -= 20 * npc.knockBackResist;
+                    else
+                        npc.velocity.Y -= 10 * npc.knockBackResist;
+                    npc.velocity.X = 0;
+                }
+                npc.AddBuff(ModContent.BuffType<ArmorCrunch>(), 480);
+            }
+            Player.wingTime = Player.wingTimeMax;
+            activeAbility = 0;
         }
         public static bool HasGodlyEssence(Player player) => player.Godly().Evil1Essence || player.Godly().Evil2Essence || player.Godly().SlimeGodEssence;
         public static int GodlyEssenceCount(Player player)
