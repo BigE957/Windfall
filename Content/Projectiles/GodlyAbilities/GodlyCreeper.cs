@@ -1,5 +1,4 @@
-﻿
-namespace Windfall.Content.Projectiles.Other
+﻿namespace Windfall.Content.Projectiles.GodlyAbilities
 {
     public class GodlyCreeper : ModProjectile
     {
@@ -24,11 +23,11 @@ namespace Windfall.Content.Projectiles.Other
         public int ambrosiaRequirement = 0;
         public override void AI()
         {
-            if(Main.player[Projectile.owner].Godly().Ambrosia < ambrosiaRequirement)
+            if (Main.player[Projectile.owner].Godly().Ambrosia < ambrosiaRequirement)
             {
                 for (int k = 0; k < 20; k++)
                 {
-                    Dust.NewDustPerfect(Projectile.position, DustID.Blood, Main.rand.NextVector2Circular(10f, 10f));
+                    Dust.NewDustPerfect(Projectile.Center, DustID.Blood, Main.rand.NextVector2Circular(10f, 10f));
                 }
                 Projectile.active = false;
                 SoundEngine.PlaySound(SoundID.NPCDeath1, Projectile.Center);

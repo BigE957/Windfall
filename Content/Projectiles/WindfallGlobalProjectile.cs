@@ -1,7 +1,14 @@
-﻿namespace Windfall.Content.Projectiles
+﻿
+namespace Windfall.Content.Projectiles
 {
     public class WindfallGlobalProjectile : GlobalProjectile
     {
-        //lol
+        public bool hasHitMuck = false;
+        public override void SetDefaults(Projectile entity)
+        {
+            base.SetDefaults(entity);
+            hasHitMuck = false;
+        }
+        public override bool InstancePerEntity => true;
     }
 }

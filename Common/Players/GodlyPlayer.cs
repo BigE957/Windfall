@@ -7,7 +7,7 @@ using Terraria.ModLoader.IO;
 using Windfall.Common.Systems;
 using Windfall.Content.Buffs.StatBuffs;
 using Windfall.Content.NPCs.PlayerNPCs;
-using Windfall.Content.Projectiles.Other;
+using Windfall.Content.Projectiles.GodlyAbilities;
 
 namespace Windfall.Common.Players
 {
@@ -68,6 +68,7 @@ namespace Windfall.Common.Players
             dustArray = [];            
         }
         private int ambrosiaCounter = 0;
+        private int muckCounter = 0;
         public override void PreUpdate()
         {
             #region Ability Player Effects
@@ -107,6 +108,27 @@ namespace Windfall.Common.Players
                     }
                 }
             }
+            if(SlimeGodEssence)
+            {
+                if(Main.npc.Where(n => n != null && n.active && n.IsAnEnemy() && n.Distance(Player.Center) < 800).Any() && Ambrosia != 100)
+                {
+                    muckCounter++;
+                    if(muckCounter % 120 == 0)
+                    {
+                        Vector2 spawnLocation = Vector2.Zero;
+                        for (int i = 0; i < 1000; i++)
+                        {
+                            spawnLocation = Player.Center + (Main.rand.NextVector2Circular(600, 600));
+                            Point tileLoation = spawnLocation.ToTileCoordinates();
+                            if (!Main.tile[tileLoation].IsTileSolid())
+                                break;
+                            else
+                                spawnLocation = Player.Center - new Vector2(Main.rand.NextFloat(-500, 500), Main.rand.NextFloat(100, 500));
+                        }
+                        Projectile.NewProjectile(Projectile.GetSource_NaturalSpawn(), spawnLocation, Vector2.Zero, Main.rand.NextBool() ? ModContent.ProjectileType<GodlyCrimulanMuck>() : ModContent.ProjectileType<GodlyEbonianMuck>(), 0, 0f, Player.whoAmI);
+                    }
+                }
+            }
             #endregion
             #region Ambrosia           
             if (HasGodlyEssence(Player))
@@ -114,7 +136,7 @@ namespace Windfall.Common.Players
                 if (activeAbility == 0)
                 {
                     ambrosiaCounter++;
-                    if (ambrosiaCounter >= 60)
+                    if (ambrosiaCounter >= 120)
                     {
                         Ambrosia++;
                         ambrosiaCounter = 0;

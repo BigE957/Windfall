@@ -1420,6 +1420,8 @@ Projectiles: {
 	DeepSeeker.DisplayName: Dark Seeker
 	GodlyBlob.DisplayName: Hive Blob
 	GodlyCreeper.DisplayName: Creeper
+	GodlyCrimulanMuck.DisplayName: Crimulan Muck
+	GodlyEbonianMuck.DisplayName: Ebonian Muck
 }
 
 Buffs: {

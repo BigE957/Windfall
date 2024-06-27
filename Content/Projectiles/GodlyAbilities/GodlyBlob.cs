@@ -1,5 +1,4 @@
-﻿
-namespace Windfall.Content.Projectiles.Other
+﻿namespace Windfall.Content.Projectiles.GodlyAbilities
 {
     public class GodlyBlob : ModProjectile
     {
@@ -25,7 +24,7 @@ namespace Windfall.Content.Projectiles.Other
         private int aiCounter = 0;
         public override void AI()
         {
-            if(hitCounter >= 5)
+            if (hitCounter >= 5)
             {
                 for (int k = 0; k < 20; k++)
                 {
@@ -52,7 +51,7 @@ namespace Windfall.Content.Projectiles.Other
                     }
                 }
             }
-            if(Projectile.velocity.LengthSquared() < 56.25f)
+            if (Projectile.velocity.LengthSquared() < 56.25f)
                 Projectile.velocity = Projectile.velocity.SafeNormalize(Vector2.Zero) * 7.5f;
             aiCounter++;
         }
