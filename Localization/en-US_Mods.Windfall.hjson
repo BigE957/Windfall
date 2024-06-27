@@ -1389,7 +1389,7 @@ NPCs: {
 	SealingTablet.DisplayName: Sealing Tablet
 	DragonCultist.DisplayName: Dragon Cultist
 	DragonArcher.DisplayName: Dragon Archer
-	GodlyTumor.DisplayName: Godly Tumor
+	GodlyTumor.DisplayName: Hive Tumor
 }
 
 Projectiles: {
@@ -1418,6 +1418,7 @@ Projectiles: {
 	LunaticCultistProj.DisplayName: Lunatic Cultist
 	DarkCoalescence.DisplayName: Dark Coalescence
 	DeepSeeker.DisplayName: Dark Seeker
+	GodlyBlob.DisplayName: Hive Blob
 }
 
 Buffs: {
