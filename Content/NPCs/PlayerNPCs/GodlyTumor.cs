@@ -14,7 +14,6 @@ namespace Windfall.Content.NPCs.PlayerNPCs
             NPCID.Sets.ImmuneToAllBuffs[NPC.type] = true;
             this.HideFromBestiary();
         }
-
         public override void SetDefaults()
         {
             NPC.npcSlots = 0f;
@@ -68,9 +67,10 @@ namespace Windfall.Content.NPCs.PlayerNPCs
             Particle pulse = new StaticPulseRing(NPC.Center, Vector2.Zero, Color.Purple, new Vector2(1f, 1f), 0f, 0f, 0.2925f, 11);
             GeneralParticleHandler.SpawnParticle(pulse);
         }
-        private int WitherFactor = 0;
+        private int WitherFactor = 240;
         private int aiCounter = 0;
-        Particle Aura = null;
+        private Particle Aura = null;
+        public Player Owner = null;
         public override void AI()
         {
             #region Area Effects
@@ -82,12 +82,15 @@ namespace Windfall.Content.NPCs.PlayerNPCs
                     if (WitherFactor > 0)
                         WitherFactor--;
                 }
-            }
-            foreach(Player player in Main.player.Where(p => p.active && !p.dead && (p.Center - NPC.Center).LengthSquared() <= 90000)) //300
-            {
-                player.AddBuff(ModContent.BuffType<WretchedHarvest>(), 120);
-                WitherFactor++;
-            }
+            }           
+            if (!Main.player.Where(p => p.active && !p.dead && (p.Center - NPC.Center).LengthSquared() <= 90000).Any())
+                WitherFactor--;
+            else
+                foreach (Player player in Main.player.Where(p => p.active && !p.dead && (p.Center - NPC.Center).LengthSquared() <= 90000)) //300
+                {
+                    player.AddBuff(ModContent.BuffType<WretchedHarvest>(), 120);
+                    WitherFactor++;
+                }
             if (WitherFactor > 480 || aiCounter >= 3600)
                 NPC.StrikeInstantKill();
             #endregion
@@ -124,6 +127,7 @@ namespace Windfall.Content.NPCs.PlayerNPCs
             }
             if (NPC.life <= 0)
             {
+                Owner.Godly().Ambrosia += 20 - (20 * (WitherFactor/480));
                 for (int k = 0; k < 20; k++)
                 {
                     Dust.NewDust(NPC.position, NPC.width, NPC.height, DustID.Demonite, hit.HitDirection, -1f, 0, default, 1f);

@@ -1,5 +1,4 @@
 ﻿using CalamityMod.Buffs.DamageOverTime;
-using CalamityMod.Buffs.StatBuffs;
 using CalamityMod.Buffs.StatDebuffs;
 using CalamityMod.NPCs.NormalNPCs;
 using CalamityMod.Projectiles.Magic;
@@ -16,11 +15,13 @@ namespace Windfall.Common.Players
         public bool Evil1Essence = false;
         public bool Evil2Essence = false;
         public bool SlimeGodEssence = false;
+        public int Ambrosia = 0;
         public override void LoadData(TagCompound tag)
         {
             Evil1Essence = tag.GetBool("Evil1Essence");
             Evil2Essence = tag.GetBool("Evil2Essence");
             SlimeGodEssence = tag.GetBool("SlimeGodEssence");
+            Ambrosia = tag.GetInt("Ambrosia");
         }
         public override void SaveData(TagCompound tag)
         {
@@ -30,6 +31,8 @@ namespace Windfall.Common.Players
                 tag["Evil2Essence"] = Evil2Essence;
             if (SlimeGodEssence)
                 tag["SlimeGodEssence"] = SlimeGodEssence;
+            if(Ambrosia != 0)
+                tag["Ambrosia"] = Ambrosia;
         }
 
         public static readonly SoundStyle IchorGoopyHit = new("CalamityMod/Sounds/Custom/Perforator/PerfHiveIchorShoot");
@@ -37,6 +40,7 @@ namespace Windfall.Common.Players
 
         private int abilityCounter = 0;
         public int activeAbility = 0;
+        private int OldAmbrosia = 0;
         private enum AbilityIDS
         {
             Dash = 1,
@@ -60,11 +64,12 @@ namespace Windfall.Common.Players
         {            
             activeAbility = 0;
             abilityCounter = 0;
-            dustArray = new List<Pair>();            
+            dustArray = [];            
         }
         public override void PreUpdate()
         {
-            if(activeAbility != 0)
+            #region Ability Player Effects
+            if (activeAbility != 0)
             {
                 switch (activeAbility)
                 {
@@ -83,6 +88,19 @@ namespace Windfall.Common.Players
                         break;
                 }
             }
+            #endregion
+            #region Ambrosia           
+            if (HasGodlyEssence(Player))
+            {
+                if (Ambrosia > 100)
+                    Ambrosia = 100;
+                if (Ambrosia != OldAmbrosia)
+                {
+                    DisplayLocalizedText($"{Ambrosia}");
+                    OldAmbrosia = Ambrosia;
+                }
+            }
+            #endregion
         }
         public override void PostUpdate()
         {
@@ -104,14 +122,29 @@ namespace Windfall.Common.Players
             #region Ability Activation
             if (activeAbility == 0)
             {
-                if (WindfallKeybinds.GodlyDashHotkey.JustPressed && ((Evil1Essence && !WorldGen.crimson) || (Evil2Essence && WorldGen.crimson)))
-                    activeAbility = (int)AbilityIDS.Dash;
-                else if (WindfallKeybinds.GodlyHarvestHotkey.JustPressed && ((Evil1Essence && WorldGen.crimson) || (Evil2Essence && !WorldGen.crimson)))
-                    activeAbility = (int)AbilityIDS.Harvest;
-                else if (WindfallKeybinds.GodlyAttack1Hotkey.JustPressed && SlimeGodEssence)
-                    activeAbility = (int)AbilityIDS.Attack1;
-                
                 abilityCounter = 0;
+
+                if (WindfallKeybinds.GodlyDashHotkey.JustPressed && ((Evil1Essence && !WorldGen.crimson) || (Evil2Essence && WorldGen.crimson)) && Ambrosia >= 20)
+                {
+                    activeAbility = (int)AbilityIDS.Dash;
+                    Ambrosia -= 20;
+                }
+                else if (WindfallKeybinds.GodlyHarvestHotkey.JustPressed && ((Evil1Essence && WorldGen.crimson) || (Evil2Essence && !WorldGen.crimson)))
+                {
+                    if (!WorldGen.crimson)
+                    {
+                        if(Ambrosia >= 10)
+                            Ambrosia -= 10;
+                        else
+                            return;
+                    }
+                    activeAbility = (int)AbilityIDS.Harvest;                  
+                }
+                else if (WindfallKeybinds.GodlyAttack1Hotkey.JustPressed && SlimeGodEssence && Ambrosia >= 10)
+                {
+                    activeAbility = (int)AbilityIDS.Attack1;
+                    Ambrosia -= 10;
+                }                             
             }
             #endregion
             #region Ability Effects
@@ -214,6 +247,7 @@ namespace Windfall.Common.Players
                                 {
                                     EoWSlam(npc.Bottom.Y, npc);                                  
                                     npc.StrikeInstantKill();
+                                    Player.AddBuff(ModContent.BuffType<WretchedHarvest>(), 240);
                                 }
                             }
 
@@ -289,6 +323,7 @@ namespace Windfall.Common.Players
                                         {
                                             var modifiers = new NPC.HitModifiers();
                                             NPC.HitInfo hit = modifiers.ToHitInfo(1, false, 0f);
+                                            Ambrosia++;
                                             npc.StrikeNPC(hit);
                                         }
                                         Vector2 speed = (Player.Center - npc.Center).SafeNormalize(Vector2.Zero);
@@ -314,7 +349,9 @@ namespace Windfall.Common.Players
                         #region Hive Mind Essence
                         else
                         {
-                            NPC.NewNPC(NPC.GetSource_NaturalSpawn(), (int)Main.MouseWorld.X, (int)Main.MouseWorld.Y, ModContent.NPCType<GodlyTumor>());
+                            NPC npc = NPC.NewNPCDirect(NPC.GetSource_NaturalSpawn(), (int)Main.MouseWorld.X, (int)Main.MouseWorld.Y, ModContent.NPCType<GodlyTumor>());
+                            if (npc.ModNPC is GodlyTumor tumor)
+                                tumor.Owner = Player;
                             activeAbility = 0;
                         }
                         #endregion
@@ -383,15 +420,16 @@ namespace Windfall.Common.Players
                     Particle boomRing = new DirectionalPulseRing(tumor.Center, Vector2.Zero, Color.MediumPurple, Vector2.One, 0f, 0.14f * i, 1.43f * i, 20);
                     GeneralParticleHandler.SpawnParticle(boomRing);
                 }
-
+                
                 for (int i = 0; i < 30; i++)
                 {
                     bool randomDust = Main.rand.NextBool();
-                    Dust boomDust = Dust.NewDustPerfect(tumor.Center, randomDust ? DustID.Demonite : DustID.Shadowflame, Main.rand.NextVector2Circular(10f, 10f), Scale: randomDust ? Main.rand.NextFloat(1f, 2f) : Main.rand.NextFloat(2.5f, 3f));
+                    Dust boomDust = Dust.NewDustPerfect(tumor.Center, randomDust ? DustID.ShadowbeamStaff : DustID.DemonTorch, Main.rand.NextVector2Circular(30f, 30f), Scale: randomDust ? Main.rand.NextFloat(1f, 2f) : Main.rand.NextFloat(2.5f, 3f));
                     boomDust.noGravity = true;
                     boomDust.noLight = true;
                     boomDust.noLightEmittence = true;
                 }
+                
                 SoundEngine.PlaySound(new SoundStyle("CalamityMod/Sounds/Custom/HiveMindRoarFast") { PitchVariance = 0.2f }, tumor.Center);
 
                 foreach (NPC npc in Main.npc.Where(n => n != null && n.active && !n.friendly && !n.dontTakeDamage && Vector2.Distance(tumor.Center, n.Center) < 300))
