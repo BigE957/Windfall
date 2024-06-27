@@ -69,7 +69,7 @@
                         if (Projectile.Hitbox.Intersects(proj.Hitbox) && proj.Windfall().hasHitMuck == false)
                         {
                             SoundEngine.PlaySound(SoundID.NPCHit1, Projectile.Center);
-                            Projectile.velocity = proj.velocity.SafeNormalize(Vector2.Zero) * 5;
+                            Projectile.velocity = proj.velocity.SafeNormalize(Vector2.Zero) * (4 + proj.knockBack);
                             proj.Windfall().hasHitMuck = true;
                             break;
                         }
