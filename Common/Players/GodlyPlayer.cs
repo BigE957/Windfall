@@ -2,7 +2,6 @@
 using CalamityMod.Buffs.StatDebuffs;
 using CalamityMod.NPCs.NormalNPCs;
 using CalamityMod.Projectiles.Magic;
-using Terraria;
 using Terraria.ModLoader.IO;
 using Windfall.Common.Systems;
 using Windfall.Content.Buffs.StatBuffs;
@@ -71,7 +70,28 @@ namespace Windfall.Common.Players
         private int muckCounter = 0;
         public override void PreUpdate()
         {
-            #region Ability Player Effects
+            #region Ambrosia           
+            if (HasGodlyEssence(Player))
+            {
+                if (activeAbility == 0)
+                {
+                    ambrosiaCounter++;
+                    if (ambrosiaCounter >= 120)
+                    {
+                        Ambrosia++;
+                        ambrosiaCounter = 0;
+                    }
+                }
+                if (Ambrosia > 100)
+                    Ambrosia = 100;
+                if (Ambrosia != OldAmbrosia)
+                {
+                    DisplayLocalizedText($"Ambrosia: {Ambrosia}");
+                    OldAmbrosia = Ambrosia;
+                }
+            }
+            #endregion
+            #region Active Ability Player Effects
             if (activeAbility != 0)
             {
                 switch (activeAbility)
@@ -110,7 +130,7 @@ namespace Windfall.Common.Players
             }
             if(SlimeGodEssence)
             {
-                if(Main.npc.Where(n => n != null && n.active && n.IsAnEnemy() && n.Distance(Player.Center) < 800).Any() && Ambrosia != 100)
+                if(Main.npc.Where(n => n != null && n.active && n.IsAnEnemy() && n.Distance(Player.Center) < 800).Any() && Ambrosia < 100)
                 {
                     muckCounter++;
                     if(muckCounter % 120 == 0)
@@ -129,28 +149,7 @@ namespace Windfall.Common.Players
                     }
                 }
             }
-            #endregion
-            #region Ambrosia           
-            if (HasGodlyEssence(Player))
-            {
-                if (activeAbility == 0)
-                {
-                    ambrosiaCounter++;
-                    if (ambrosiaCounter >= 120)
-                    {
-                        Ambrosia++;
-                        ambrosiaCounter = 0;
-                    }
-                }
-                if (Ambrosia > 100)
-                    Ambrosia = 100;
-                if (Ambrosia != OldAmbrosia)
-                {
-                    DisplayLocalizedText($"Ambrosia: {Ambrosia}");
-                    OldAmbrosia = Ambrosia;
-                }
-            }
-            #endregion
+            #endregion           
         }
         public override void PostUpdate()
         {
@@ -448,18 +447,27 @@ namespace Windfall.Common.Players
             }
         }
         public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
-        {           
-            if(Evil2Essence && !WorldGen.crimson)
+        {
+            if (Evil2Essence)
             {
-                if (Player.HasBuff<WretchedHarvest>())
+                if (!WorldGen.crimson)
                 {
-                    if (target.HasBuff<BrainRot>())
-                        target.AddBuff(BuffID.CursedInferno, 120);
-                    else
-                        target.AddBuff(ModContent.BuffType<BrainRot>(), 120);
+                    if (Player.HasBuff<WretchedHarvest>())
+                    {
+                        if (target.HasBuff<BrainRot>())
+                            target.AddBuff(BuffID.CursedInferno, 120);
+                        else
+                            target.AddBuff(ModContent.BuffType<BrainRot>(), 120);
+                    }
+                    if (Main.projectile.Where(p => p.active && p.type == ModContent.ProjectileType<GodlyBlob>() && p.owner == Player.whoAmI).Count() <= 5 && Main.rand.NextBool(25))
+                        Projectile.NewProjectile(Projectile.GetSource_NaturalSpawn(), Player.Center, Main.rand.NextVector2CircularEdge(10f, 10f), ModContent.ProjectileType<GodlyBlob>(), 10, 0, Player.whoAmI);
                 }
-                if(Main.projectile.Where(p => p.active && p.type == ModContent.ProjectileType<GodlyBlob>() && p.owner == Player.whoAmI).Count() <= 5 && Main.rand.NextBool(25))
-                    Projectile.NewProjectile(Projectile.GetSource_NaturalSpawn(), Player.Center, Main.rand.NextVector2CircularEdge(10f, 10f), ModContent.ProjectileType<GodlyBlob>(), 10, 0, Player.whoAmI);
+                else
+                {
+                    int longestSide = target.Hitbox.Width > target.Hitbox.Height ? target.Hitbox.Width : target.Hitbox.Height;
+                    if(Vector2.Distance(target.Center, Player.Center) - longestSide < 64 || hit.DamageType is TrueMeleeDamageClass)
+                        Ambrosia++;
+                }
             }
         }
         public override bool CanStartExtraJump(ExtraJump jump)
