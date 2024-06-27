@@ -256,7 +256,7 @@ namespace Windfall.Common.Players
                                 {
                                     EoWSlam(npc.Bottom.Y, npc);                                  
                                     npc.StrikeInstantKill();
-                                    Player.Godly().Ambrosia += 15;
+                                    Player.Godly().Ambrosia += 5;
                                     Player.AddBuff(ModContent.BuffType<WretchedHarvest>(), 240);
                                 }
                             }
