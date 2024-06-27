@@ -130,7 +130,6 @@ namespace Windfall.Content.NPCs.PlayerNPCs
             }
             if (NPC.life <= 0)
             {
-                DisplayLocalizedText($"{WitherFactor}");
                 if (WitherFactor < 480 && 30 * (WitherFactor / 480f) > 15)
                     Owner.Godly().Ambrosia += (int)(30 * (WitherFactor / 480f));
                 else

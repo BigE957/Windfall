@@ -52,6 +52,8 @@ namespace Windfall.Content.Projectiles.Other
                     }
                 }
             }
+            if(Projectile.velocity.LengthSquared() < 56.25f)
+                Projectile.velocity = Projectile.velocity.SafeNormalize(Vector2.Zero) * 7.5f;
             aiCounter++;
         }
         public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
