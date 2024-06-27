@@ -60,28 +60,5 @@ namespace Windfall.Content.Projectiles.Other
         {
             hitCounter++;
         }
-        /*
-        public override bool PreDraw(SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor)
-        {
-            SpriteEffects spriteEffects = SpriteEffects.None;
-            if (NPC.spriteDirection == 1)
-                spriteEffects = SpriteEffects.FlipHorizontally;
-
-            Texture2D texture = TextureAssets.Npc[NPC.type].Value;
-            Vector2 vector = new Vector2(TextureAssets.Npc[NPC.type].Value.Width / 2, TextureAssets.Npc[NPC.type].Value.Height / 2);
-
-            Vector2 vector2 = NPC.Center - screenPos;
-            vector2 -= new Vector2(texture.Width, texture.Height) * NPC.scale / 2f;
-            vector2 += vector * NPC.scale + new Vector2(0f, NPC.gfxOffY);
-            Color color = NPC.GetAlpha(drawColor);
-
-            if (NPC.localAI[1] > ShowTelegraphValue)
-                color = Color.Lerp(color, Color.LimeGreen * NPC.Opacity, MathHelper.Clamp((NPC.localAI[1] - ShowTelegraphValue) / TelegraphDuration, 0f, 1f));
-
-            spriteBatch.Draw(texture, vector2, NPC.frame, color, NPC.rotation, vector, NPC.scale, spriteEffects, 0f);
-
-            return false;
-        }
-        */
     }
 }

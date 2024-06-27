@@ -25,10 +25,9 @@ namespace Windfall.Content.Items
                 }
             }
 
-            if(item.healLife != 0)// && player.Godly().Evil1Essence && !WorldGen.crimson)
+            if(item.healLife != 0 && player.Godly().Evil1Essence && !WorldGen.crimson)
                 for(int i = 0; i < item.healLife / 20; i++)
                 {
-                    DisplayLocalizedText($"{item.healLife}, {item.healLife / 20}");
                     Projectile.NewProjectile(Projectile.GetSource_NaturalSpawn(), player.Center, new Vector2(Main.rand.NextFloat(-10f, 10f), Main.rand.NextFloat(-10f, -2f)), ModContent.ProjectileType<DarkBall>(), 25, 0f);
                 }
 

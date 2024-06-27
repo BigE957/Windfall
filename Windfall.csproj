@@ -43,6 +43,7 @@
     <None Remove="Assets\NPCs\WorldEvents\Recruits\Vivian_Head.png" />
     <None Remove="Assets\NPCs\WorldEvents\SealingTablet.png" />
     <None Remove="Assets\NPCs\WorldEvents\WanderingPotionSeller.png" />
+    <None Remove="Assets\Projectiles\Misc\Creeper.png" />
     <None Remove="Assets\Projectiles\Misc\EmpyreanThorn.png" />
     <None Remove="Assets\Projectiles\NPCAnimations\GodseekerKnightProj.png" />
     <None Remove="Assets\Projectiles\NPCAnimations\IlmeranPaladinDig.png" />

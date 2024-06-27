@@ -1419,6 +1419,7 @@ Projectiles: {
 	DarkCoalescence.DisplayName: Dark Coalescence
 	DeepSeeker.DisplayName: Dark Seeker
 	GodlyBlob.DisplayName: Hive Blob
+	GodlyCreeper.DisplayName: Creeper
 }
 
 Buffs: {

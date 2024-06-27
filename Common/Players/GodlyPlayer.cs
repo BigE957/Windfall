@@ -67,6 +67,7 @@ namespace Windfall.Common.Players
             abilityCounter = 0;
             dustArray = [];            
         }
+        private int ambrosiaCounter = 0;
         public override void PreUpdate()
         {
             #region Ability Player Effects
@@ -90,9 +91,35 @@ namespace Windfall.Common.Players
                 }
             }
             #endregion
+            #region Passive Ability Effects
+            if(Evil1Essence && WorldGen.crimson)
+            {
+                int neededCreepers = (int)Math.Floor(Ambrosia / 20f);
+                int creeperCount = Main.projectile.Where(p => p != null && p.active && p.type == ModContent.ProjectileType<GodlyCreeper>() && p.owner == Player.whoAmI).Count();
+                if(creeperCount < neededCreepers)
+                {
+                    while(creeperCount < neededCreepers)
+                    {
+                        Projectile proj = Projectile.NewProjectileDirect(Projectile.GetSource_NaturalSpawn(), Player.Center, Main.rand.NextVector2CircularEdge(10f, 10f), ModContent.ProjectileType<GodlyCreeper>(), 10, 0, Player.whoAmI);
+                        creeperCount++;
+                        if (proj.ModProjectile is GodlyCreeper creep)
+                            creep.ambrosiaRequirement = creeperCount * 20;
+                    }
+                }
+            }
+            #endregion
             #region Ambrosia           
             if (HasGodlyEssence(Player))
             {
+                if (activeAbility == 0)
+                {
+                    ambrosiaCounter++;
+                    if (ambrosiaCounter >= 60)
+                    {
+                        Ambrosia++;
+                        ambrosiaCounter = 0;
+                    }
+                }
                 if (Ambrosia > 100)
                     Ambrosia = 100;
                 if (Ambrosia != OldAmbrosia)
@@ -127,10 +154,13 @@ namespace Windfall.Common.Players
 
                 if (WindfallKeybinds.GodlyDashHotkey.JustPressed && ((Evil1Essence && !WorldGen.crimson) || (Evil2Essence && WorldGen.crimson)))
                 {
-                    if (WorldGen.crimson && Ambrosia >= 20)
+                    if (WorldGen.crimson)
                     {
-                        activeAbility = (int)AbilityIDS.Dash;
-                        Ambrosia -= 20;
+                        if (Ambrosia >= 20 && Main.npc.Where(n => n.active && !n.friendly && !n.dontTakeDamage && (Player.Center - n.Center).LengthSquared() <= 810000).Any())
+                        {
+                            activeAbility = (int)AbilityIDS.Dash;
+                            Ambrosia -= 20;
+                        }
                     }
                     else if (Ambrosia >= 15)
                     {
@@ -156,7 +186,7 @@ namespace Windfall.Common.Players
                 }                             
             }
             #endregion
-            #region Ability Effects
+            #region Active Ability Effects
             else
             {
                 switch (activeAbility)
@@ -165,7 +195,6 @@ namespace Windfall.Common.Players
                         #region Perforator Essence
                         if (WorldGen.crimson)
                         {
-                            Player.maxFallSpeed = 32;
                             if (abilityCounter == 0)
                             {
                                 target = null;
@@ -188,6 +217,7 @@ namespace Windfall.Common.Players
                                     if (target == null || (Player.Center - target.Center).LengthSquared() > 810000)
                                     {
                                         activeAbility = 0;
+                                        Ambrosia += 20;
                                         break;
                                     }
                                 }
@@ -385,6 +415,16 @@ namespace Windfall.Common.Players
             }
             #endregion
         }
+        public override void PostUpdateMiscEffects()
+        {
+            if (Evil1Essence)
+            {
+                if(WorldGen.crimson)
+                    Player.endurance += 0.1f * (Ambrosia / 100);
+                else
+                    Player.GetDamage<GenericDamageClass>() += 0.1f * (Ambrosia / 100);
+            }
+        }
         public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
         {           
             if(Evil2Essence && !WorldGen.crimson)
@@ -397,7 +437,7 @@ namespace Windfall.Common.Players
                         target.AddBuff(ModContent.BuffType<BrainRot>(), 120);
                 }
                 if(Main.projectile.Where(p => p.active && p.type == ModContent.ProjectileType<GodlyBlob>() && p.owner == Player.whoAmI).Count() <= 5 && Main.rand.NextBool(25))
-                    Projectile.NewProjectile(Projectile.GetSource_NaturalSpawn(), Player.Center, Main.rand.NextVector2CircularEdge(10f, 10f), ModContent.ProjectileType<GodlyBlob>(), 10, 0);
+                    Projectile.NewProjectile(Projectile.GetSource_NaturalSpawn(), Player.Center, Main.rand.NextVector2CircularEdge(10f, 10f), ModContent.ProjectileType<GodlyBlob>(), 10, 0, Player.whoAmI);
             }
         }
         public override bool CanStartExtraJump(ExtraJump jump)
