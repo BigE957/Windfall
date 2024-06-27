@@ -7,6 +7,7 @@ using Terraria.ModLoader.IO;
 using Windfall.Common.Systems;
 using Windfall.Content.Buffs.StatBuffs;
 using Windfall.Content.NPCs.PlayerNPCs;
+using Windfall.Content.Projectiles.Other;
 
 namespace Windfall.Common.Players
 {
@@ -96,7 +97,7 @@ namespace Windfall.Common.Players
                     Ambrosia = 100;
                 if (Ambrosia != OldAmbrosia)
                 {
-                    DisplayLocalizedText($"{Ambrosia}");
+                    DisplayLocalizedText($"Ambrosia: {Ambrosia}");
                     OldAmbrosia = Ambrosia;
                 }
             }
@@ -124,10 +125,18 @@ namespace Windfall.Common.Players
             {
                 abilityCounter = 0;
 
-                if (WindfallKeybinds.GodlyDashHotkey.JustPressed && ((Evil1Essence && !WorldGen.crimson) || (Evil2Essence && WorldGen.crimson)) && Ambrosia >= 20)
+                if (WindfallKeybinds.GodlyDashHotkey.JustPressed && ((Evil1Essence && !WorldGen.crimson) || (Evil2Essence && WorldGen.crimson)))
                 {
-                    activeAbility = (int)AbilityIDS.Dash;
-                    Ambrosia -= 20;
+                    if (WorldGen.crimson && Ambrosia >= 20)
+                    {
+                        activeAbility = (int)AbilityIDS.Dash;
+                        Ambrosia -= 20;
+                    }
+                    else if (Ambrosia >= 15)
+                    {
+                        activeAbility = (int)AbilityIDS.Dash;
+                        Ambrosia -= 15;
+                    }
                 }
                 else if (WindfallKeybinds.GodlyHarvestHotkey.JustPressed && ((Evil1Essence && WorldGen.crimson) || (Evil2Essence && !WorldGen.crimson)))
                 {
@@ -247,6 +256,7 @@ namespace Windfall.Common.Players
                                 {
                                     EoWSlam(npc.Bottom.Y, npc);                                  
                                     npc.StrikeInstantKill();
+                                    Player.Godly().Ambrosia += 15;
                                     Player.AddBuff(ModContent.BuffType<WretchedHarvest>(), 240);
                                 }
                             }
@@ -376,13 +386,18 @@ namespace Windfall.Common.Players
             #endregion
         }
         public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
-        {
-            if(Player.HasBuff<WretchedHarvest>())
+        {           
+            if(Evil2Essence && !WorldGen.crimson)
             {
-                if (target.HasBuff<BrainRot>())
-                    target.AddBuff(BuffID.CursedInferno, 120);
-                else
-                    target.AddBuff(ModContent.BuffType<BrainRot>(), 120);
+                if (Player.HasBuff<WretchedHarvest>())
+                {
+                    if (target.HasBuff<BrainRot>())
+                        target.AddBuff(BuffID.CursedInferno, 120);
+                    else
+                        target.AddBuff(ModContent.BuffType<BrainRot>(), 120);
+                }
+                if(Main.projectile.Where(p => p.active && p.type == ModContent.ProjectileType<GodlyBlob>() && p.owner == Player.whoAmI).Count() <= 5 && Main.rand.NextBool(25))
+                    Projectile.NewProjectile(Projectile.GetSource_NaturalSpawn(), Player.Center, Main.rand.NextVector2CircularEdge(10f, 10f), ModContent.ProjectileType<GodlyBlob>(), 10, 0);
             }
         }
         public override bool CanStartExtraJump(ExtraJump jump)
