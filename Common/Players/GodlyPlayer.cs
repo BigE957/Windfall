@@ -364,7 +364,7 @@ namespace Windfall.Common.Players
                                     if (harvestCounterArray[i] >= 120)
                                     {
                                         var modifiers = new NPC.HitModifiers();
-                                        NPC.HitInfo hit = modifiers.ToHitInfo((int)Player.GetDamage(DamageClass.Generic).ApplyTo(100f), false, 0f);
+                                        NPC.HitInfo hit = modifiers.ToHitInfo((int)Player.GetDamage(DamageClass.Generic).ApplyTo(100f), false, 0f, true);
                                         npc.StrikeNPC(hit);
                                         npc.AddBuff(BuffID.Ichor, 240);
                                         npc.AddBuff(BuffID.Confused, 240);
