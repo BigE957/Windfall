@@ -17,20 +17,15 @@ namespace Windfall.Content.Items
         {
             bool isJournalPage = item.type == ModContent.ItemType<JournalCorruption>() || item.type == ModContent.ItemType<JournalCrimson>() || item.type == ModContent.ItemType<JournalForest>() || item.type == ModContent.ItemType<JournalTundra>() || item.type == ModContent.ItemType<JournalIlmeris>() || item.type == ModContent.ItemType<JournalJungle>() || item.type == ModContent.ItemType<JournalDesert>() || item.type == ModContent.ItemType<JournalDungeon>() || item.type == ModContent.ItemType<JournalOcean>() || item.type == ModContent.ItemType<JournalSulphur>();
 
-            if (isJournalPage)
-            {
-                if (FirstJournal() == true)
-                {
-                    Item.NewItem(null, player.Center, 1, 1, ModContent.ItemType<WandererJournal>());
-                }
-            }
-
+            if (isJournalPage && FirstJournal() == true)
+                Item.NewItem(null, player.Center, 1, 1, ModContent.ItemType<WandererJournal>());
+            /*
             if(item.healLife != 0 && player.Godly().Evil1Essence && !WorldGen.crimson)
                 for(int i = 0; i < item.healLife / 20; i++)
                 {
                     Projectile.NewProjectile(Projectile.GetSource_NaturalSpawn(), player.Center, new Vector2(Main.rand.NextFloat(-10f, 10f), Main.rand.NextFloat(-10f, -2f)), ModContent.ProjectileType<DarkBall>(), 25, 0f);
                 }
-
+            */
             if(item.type == ItemID.PurificationPowder && QuestSystem.QuestLog[QuestSystem.QuestLog.FindIndex(quest => quest.Name == "Decontamination")].Active)
                 QuestSystem.IncrementQuestProgress(QuestSystem.QuestLog.FindIndex(quest => quest.Name == "Decontamination"));
             return base.UseItem(item, player);

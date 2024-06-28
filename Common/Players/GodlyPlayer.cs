@@ -64,14 +64,17 @@ namespace Windfall.Common.Players
         {            
             activeAbility = 0;
             abilityCounter = 0;
-            dustArray = [];            
+            dustArray = [];
+            Ambrosia = 0;
+            ambrosiaCounter = 0;
+            muckCounter = 0;
         }
         private int ambrosiaCounter = 0;
         private int muckCounter = 0;
         public override void PreUpdate()
         {
             #region Ambrosia           
-            if (HasGodlyEssence(Player))
+            if (AnyGodlyEssence(Player))
             {
                 if (activeAbility == 0)
                 {
@@ -86,8 +89,11 @@ namespace Windfall.Common.Players
                     Ambrosia = 100;
                 if (Ambrosia != OldAmbrosia)
                 {
+                    if (Evil1Essence && !WorldGen.crimson && OldAmbrosia > Ambrosia && activeAbility != 0)
+                        for(int i = 0; i < (OldAmbrosia - Ambrosia) / 2f; i++)
+                            Projectile.NewProjectile(Projectile.GetSource_NaturalSpawn(), Player.Center, (Main.MouseWorld - Player.Center).SafeNormalize(Vector2.Zero).RotatedBy(Main.rand.NextFloat(-0.9f, 0.9f)) * 5, ProjectileID.TinyEater, 25, 0f, Player.whoAmI);
                     DisplayLocalizedText($"Ambrosia: {Ambrosia}");
-                    OldAmbrosia = Ambrosia;
+                    OldAmbrosia = Ambrosia;                   
                 }
             }
             #endregion
@@ -470,6 +476,24 @@ namespace Windfall.Common.Players
                 }
             }
         }
+        public override void OnHitByNPC(NPC npc, Player.HurtInfo hurtInfo)
+        {
+            if(Evil1Essence && !WorldGen.crimson)
+            {
+                for (int i = 0; i < Ambrosia / 2f; i++)
+                    Projectile.NewProjectile(Projectile.GetSource_NaturalSpawn(), Player.Center, Main.rand.NextVector2CircularEdge(5, 5), ProjectileID.TinyEater, 25, 0f, Player.whoAmI);
+                Ambrosia += 10;
+            }
+        }
+        public override void OnHitByProjectile(Projectile proj, Player.HurtInfo hurtInfo)
+        {
+            if (Evil1Essence && !WorldGen.crimson)
+            {
+                for (int i = 0; i < Ambrosia / 2f; i++)
+                    Projectile.NewProjectile(Projectile.GetSource_NaturalSpawn(), Player.Center, Main.rand.NextVector2CircularEdge(5, 5), ProjectileID.TinyEater, 25, 0f, Player.whoAmI);
+                Ambrosia += 10;
+            }
+        }
         public override bool CanStartExtraJump(ExtraJump jump)
         {
             if (activeAbility == (int)AbilityIDS.Dash || activeAbility == (int)AbilityIDS.Attack1)
@@ -546,7 +570,7 @@ namespace Windfall.Common.Players
             Player.wingTime = Player.wingTimeMax;
             activeAbility = 0;
         }
-        public static bool HasGodlyEssence(Player player) => player.Godly().Evil1Essence || player.Godly().Evil2Essence || player.Godly().SlimeGodEssence;
+        public static bool AnyGodlyEssence(Player player) => player.Godly().Evil1Essence || player.Godly().Evil2Essence || player.Godly().SlimeGodEssence;
         public static int GodlyEssenceCount(Player player)
         {
             int count = 0;
