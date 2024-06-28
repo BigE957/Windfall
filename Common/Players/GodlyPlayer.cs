@@ -91,7 +91,7 @@ namespace Windfall.Common.Players
                 {
                     if (Evil1Essence && !WorldGen.crimson && OldAmbrosia > Ambrosia && activeAbility != 0)
                         for(int i = 0; i < (OldAmbrosia - Ambrosia) / 2f; i++)
-                            Projectile.NewProjectile(Projectile.GetSource_NaturalSpawn(), Player.Center, (Main.MouseWorld - Player.Center).SafeNormalize(Vector2.Zero).RotatedBy(Main.rand.NextFloat(-0.25f, 0.25f)) * 5, ProjectileID.TinyEater, 25, 0f, Player.whoAmI);
+                            Projectile.NewProjectile(Projectile.GetSource_NaturalSpawn(), Player.Center, (Main.MouseWorld - Player.Center).SafeNormalize(Vector2.Zero).RotatedBy(Main.rand.NextFloat(-0.5f, 0.5f)) * 5, ProjectileID.TinyEater, 25, 0f, Player.whoAmI);
                     DisplayLocalizedText($"Ambrosia: {Ambrosia}");
                     OldAmbrosia = Ambrosia;                   
                 }
