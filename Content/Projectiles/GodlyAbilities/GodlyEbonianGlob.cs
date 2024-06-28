@@ -87,5 +87,14 @@ namespace Windfall.Content.Projectiles.GodlyAbilities
                 Dust.NewDustPerfect(Projectile.Center, DustID.TintableDust, Main.rand.NextVector2Circular(5f, 5f), Projectile.alpha, dustColor);
             }
         }
+        public override bool? CanHitNPC(NPC target)
+        {
+            if(Target == null)
+                return true;
+            else
+                if(target == Target)
+                    return true;
+            return false;
+        }
     }
 }
