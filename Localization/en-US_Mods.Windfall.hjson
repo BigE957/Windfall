@@ -1422,6 +1422,8 @@ Projectiles: {
 	GodlyCreeper.DisplayName: Creeper
 	GodlyCrimulanMuck.DisplayName: Crimulan Muck
 	GodlyEbonianMuck.DisplayName: Ebonian Muck
+	GodlyCrimulanGlob.DisplayName: Crimulan Glob
+	GodlyEbonianGlob.DisplayName: Ebonian Glob
 }
 
 Buffs: {

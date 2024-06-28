@@ -91,7 +91,7 @@ namespace Windfall.Common.Players
                 {
                     if (Evil1Essence && !WorldGen.crimson && OldAmbrosia > Ambrosia && activeAbility != 0)
                         for(int i = 0; i < (OldAmbrosia - Ambrosia) / 2f; i++)
-                            Projectile.NewProjectile(Projectile.GetSource_NaturalSpawn(), Player.Center, (Main.MouseWorld - Player.Center).SafeNormalize(Vector2.Zero).RotatedBy(Main.rand.NextFloat(-0.9f, 0.9f)) * 5, ProjectileID.TinyEater, 25, 0f, Player.whoAmI);
+                            Projectile.NewProjectile(Projectile.GetSource_NaturalSpawn(), Player.Center, (Main.MouseWorld - Player.Center).SafeNormalize(Vector2.Zero).RotatedBy(Main.rand.NextFloat(-0.25f, 0.25f)) * 5, ProjectileID.TinyEater, 25, 0f, Player.whoAmI);
                     DisplayLocalizedText($"Ambrosia: {Ambrosia}");
                     OldAmbrosia = Ambrosia;                   
                 }
@@ -206,10 +206,10 @@ namespace Windfall.Common.Players
                     }
                     activeAbility = (int)AbilityIDS.Harvest;                  
                 }
-                else if (WindfallKeybinds.GodlyAttack1Hotkey.JustPressed && SlimeGodEssence && Ambrosia >= 10)
+                else if (WindfallKeybinds.GodlyAttack1Hotkey.JustPressed && SlimeGodEssence && Ambrosia >= 20)
                 {
                     activeAbility = (int)AbilityIDS.Attack1;
-                    Ambrosia -= 10;
+                    Ambrosia -= 20;
                 }                             
             }
             #endregion
@@ -428,7 +428,7 @@ namespace Windfall.Common.Players
                         if (abilityCounter % 5 == 0)
                         {
                             SoundEngine.PlaySound(SlimeGodShot);
-                            Projectile.NewProjectile(Projectile.GetSource_NaturalSpawn(), Player.Center, (Main.MouseWorld - Player.Center).SafeNormalize(Vector2.Zero).RotatedByRandom(Pi/10) * 15, ModContent.ProjectileType<AbyssBall>(), 25, 0.5f);
+                            Projectile.NewProjectile(Projectile.GetSource_NaturalSpawn(), Player.Center, (Main.MouseWorld - Player.Center).SafeNormalize(Vector2.Zero).RotatedByRandom(Pi/10) * 15, Main.rand.NextBool() ? ModContent.ProjectileType<GodlyEbonianGlob>() : ModContent.ProjectileType<GodlyCrimulanGlob>(), 10, 0.5f);
                             Player.velocity -= (Main.MouseWorld - Player.Center).SafeNormalize(Vector2.Zero);
                             if(Player.velocity.LengthSquared() >= 400)
                                 Player.velocity = Player.velocity.SafeNormalize(Vector2.Zero) * 20;

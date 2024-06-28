@@ -89,9 +89,19 @@
                     SoundEngine.PlaySound(SoundID.NPCDeath1, Projectile.Center);
                     for (int k = 0; k < 20; k++)
                     {
-                        Dust.NewDustPerfect(Projectile.Center, DustID.Corruption, Main.rand.NextVector2Circular(5f, 5f));
+                        Color dustColor = Color.Lavender;
+                        dustColor.A = 150;
+                        Dust.NewDustPerfect(Projectile.Center, DustID.TintableDust, Main.rand.NextVector2Circular(5f, 5f), Projectile.alpha, dustColor);
                     }
                 }
+                if (Main.rand.NextBool())
+                {
+                    Color dustColor = Color.Lavender;
+                    dustColor.A = 150;
+                    int dust = Dust.NewDust(Projectile.position + Projectile.velocity, Projectile.width, Projectile.height, DustID.TintableDust, 0f, 0f, Projectile.alpha, dustColor);
+                    Main.dust[dust].noGravity = true;
+                }
+                Projectile.rotation += (Math.Abs(Projectile.velocity.X) + Math.Abs(Projectile.velocity.Y)) * 0.05f;
             }
         }
         public override bool OnTileCollide(Vector2 oldVelocity)
