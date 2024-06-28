@@ -558,7 +558,7 @@ namespace Windfall.Common.Players
             }
             foreach (NPC npc in Main.npc.Where(n => n != null && n.active && Vector2.Distance(Player.Center, n.Center) < 300 && n.velocity.Y == 0))
             {
-                if (npc.knockBackResist != 0)
+                if (npc.knockBackResist != 0 && npc.boss == false)
                 {
                     if (tumor != null)
                         npc.velocity.Y -= 20 * npc.knockBackResist;                       
