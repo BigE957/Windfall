@@ -12,15 +12,12 @@ namespace Windfall.Content.Projectiles.Weapons.Summon
 {
     public class DeepSeeker : ModProjectile
     {
-        public override string Texture => "CalamityMod/NPCs/Astral/Nova";
-        private static Texture2D glowmask;
+        public override string Texture => "Windfall/Assets/NPCs/Enemies/DarkSpawn";
         public override void SetStaticDefaults()
         {
-            Main.projFrames[Projectile.type] = 8;
+            Main.projFrames[Projectile.type] = 1;
             ProjectileID.Sets.MinionSacrificable[Projectile.type] = true;
             ProjectileID.Sets.MinionTargettingFeature[Projectile.type] = true;
-            if (!Main.dedServ)
-                glowmask = ModContent.Request<Texture2D>("CalamityMod/NPCs/Astral/NovaGlow", AssetRequestMode.ImmediateLoad).Value;
         }
         public override void SetDefaults()
         {
@@ -38,6 +35,7 @@ namespace Windfall.Content.Projectiles.Weapons.Summon
             Projectile.minion = true;
             Projectile.DamageType = DamageClass.Summon;
             Projectile.manualDirectionChange = true;
+            Projectile.scale = 1.25f;
         }
         internal enum AIState
         {
@@ -60,7 +58,7 @@ namespace Windfall.Content.Projectiles.Weapons.Summon
             set => Projectile.ai[1] = value;
         }     
         Vector2 toTarget = Vector2.Zero;
-        bool attackBool = false;
+        private bool attackBool = false;
         public Player Owner => Main.player[Projectile.owner];
         public NPC Target
         {
@@ -106,9 +104,8 @@ namespace Windfall.Content.Projectiles.Weapons.Summon
         public override void OnSpawn(IEntitySource source)
         {
             CurrentAI = AIState.Spawning;
-            Projectile.direction = -1;
             Projectile.velocity = Main.rand.NextFloat(0, TwoPi).ToRotationVector2() * Main.rand.Next(10, 15);
-            Projectile.rotation = Projectile.velocity.ToRotation();
+            Projectile.rotation = Projectile.velocity.ToRotation() + Pi;
 
         }
         public override void AI()
@@ -161,7 +158,11 @@ namespace Windfall.Content.Projectiles.Weapons.Summon
                     Projectile.velocity += (player.Center - Projectile.Center).SafeNormalize(Vector2.Zero) * 0.5f;
                     if (Projectile.velocity.Length() > 10)
                         Projectile.velocity = Projectile.velocity.SafeNormalize(Vector2.Zero) * 10;
-                    Projectile.rotation = Projectile.velocity.ToRotation() + Pi;
+                    Projectile.rotation = Projectile.velocity.ToRotation();
+                    if (Projectile.rotation + Pi > Pi / 2 && Projectile.rotation + Pi < 3 * Pi / 2)
+                        Projectile.rotation = 0 + (PiOver4 * (Projectile.velocity.Length() / 10));
+                    else
+                        Projectile.rotation = Pi - (PiOver4 * (Projectile.velocity.Length() / 10));
 
                     aiCounter = 0;
                     break;
@@ -186,16 +187,20 @@ namespace Windfall.Content.Projectiles.Weapons.Summon
                         else
                             Projectile.velocity *= 0.97f;
                     }
-                    Projectile.rotation = Projectile.velocity.ToRotation() + Pi;
+                    Projectile.rotation = (target.Center - Projectile.Center).ToRotation();
+                    if (Projectile.rotation + Pi > Pi / 2 && Projectile.rotation + Pi < 3 * Pi / 2)
+                        Projectile.rotation = 0 + (PiOver4 * (Projectile.velocity.Length() / 10));
+                    else
+                        Projectile.rotation = Pi - (PiOver4 * (Projectile.velocity.Length() / 10));
                     #endregion
 
                     #region Attack
-                    Vector2 toTarget = (target.Center - Projectile.Center);                   
-                    if(aiCounter % 45 == 0 && aiCounter <= 140)
+                    Vector2 toTarget = (target.Center - Projectile.Center);
+                    if (aiCounter % 45 == 0 && aiCounter <= 140)
                     {
                         SoundEngine.PlaySound(SoundID.DD2_OgreSpit, Projectile.Center);
                         Projectile.velocity = toTarget.SafeNormalize(Vector2.Zero) * -10;
-                        Projectile.rotation = Projectile.velocity.ToRotation();
+                        Projectile.rotation = Projectile.velocity.ToRotation() + Pi;
                         Projectile Bolt = Projectile.NewProjectileDirect(Terraria.Entity.GetSource_NaturalSpawn(), Projectile.Center, toTarget.SafeNormalize(Vector2.UnitX), ModContent.ProjectileType<DarkBolt>(), Projectile.damage, 0f, -1, 0, 15);
                         Bolt.hostile = false;
                         Bolt.friendly = true;
@@ -208,10 +213,10 @@ namespace Windfall.Content.Projectiles.Weapons.Summon
                         CurrentAI = AIState.Recoil;
                     }
                     else if (aiCounter >= 180)
-                    {                      
-                        Projectile.rotation = toTarget.ToRotation() + Pi;
+                    {
+                        Projectile.rotation = toTarget.ToRotation();
                         if (Main.rand.NextBool() || toTarget.Length() > 600f)
-                        {                            
+                        {
                             attackBool = Projectile.position.X > target.position.X;
                             Projectile.velocity = toTarget.SafeNormalize(Vector2.Zero) * -5;
                             CurrentAI = AIState.Dashing;
@@ -223,16 +228,20 @@ namespace Windfall.Content.Projectiles.Weapons.Summon
                         }
                         aiCounter = 0;
                     }
+                    else
+                        attackBool = false;
                     #endregion
 
                     break;
                 case AIState.Dashing:
-                    Projectile.velocity.RotateTowards((target.Center - Projectile.Center).ToRotation() + Pi, Pi / 10);
+                    Projectile.velocity.RotateTowards((target.Center - Projectile.Center).ToRotation(), Pi / 10);
                     Projectile.velocity += Projectile.velocity.SafeNormalize(Vector2.UnitX) / -2;
+                    Projectile.rotation = (target.Center - Projectile.Center).ToRotation();
                     if (Projectile.velocity.Length() < 2)
                     {
                         SoundEngine.PlaySound(SoundID.DD2_GoblinBomberThrow, Projectile.Center);
                         Projectile.velocity = Projectile.velocity.SafeNormalize(Vector2.Zero) * -30;
+                        attackBool = true;
                         CurrentAI = AIState.Recoil;
                     }
                     break;
@@ -261,7 +270,7 @@ namespace Windfall.Content.Projectiles.Weapons.Summon
                         Glob.hostile = false;
                         Glob.friendly = true;
                     }
-                    Projectile.rotation = baseAngle.SafeNormalize(Vector2.UnitX).RotatedBy(rotation * ((float)aiCounter / 5)).ToRotation() + Pi;
+                    Projectile.rotation = baseAngle.SafeNormalize(Vector2.UnitX).RotatedBy(rotation * ((float)aiCounter / 5)).ToRotation();
                     if (aiCounter % 30 == 0)
                     {
                         aiCounter = -30;
@@ -269,16 +278,18 @@ namespace Windfall.Content.Projectiles.Weapons.Summon
                     }
                     break;
                 case AIState.Recoil:
-                    if (Projectile.velocity.Length() >= 12f)
+                    if (attackBool)
                     {
                         Projectile.velocity = Projectile.velocity.RotateTowards((target.Center - Projectile.Center).ToRotation(), 0.05f);
-                        Projectile.rotation = Projectile.velocity.ToRotation() + Pi;
+                        Projectile.rotation = Projectile.velocity.ToRotation();
                     }
+                    else
+                        Projectile.rotation = (target.Center - Projectile.Center).ToRotation();
                     Projectile.velocity += Projectile.velocity.SafeNormalize(Vector2.UnitX) / -2;
                     if (Projectile.velocity.Length() >= 8)
                     {
                         dustStyle = Main.rand.NextBool() ? 66 : 263;
-                        dust = Dust.NewDustPerfect(Projectile.Center, Main.rand.NextBool(3) ? 191 : dustStyle);
+                        dust = Dust.NewDustPerfect(Projectile.Center - Projectile.rotation.ToRotationVector2() * 20, Main.rand.NextBool(3) ? 191 : dustStyle);
                         dust.scale = Main.rand.NextFloat(1.5f, 2.3f);
                         //dust.velocity = Main.rand.NextVector2Circular(10f, 10f);
                         dust.noGravity = true;
@@ -287,37 +298,25 @@ namespace Windfall.Content.Projectiles.Weapons.Summon
                     if (Projectile.velocity.Length() < 2)
                     {
                         CurrentAI = AIState.Hunting;
-                        Projectile.velocity = (target.Center - Projectile.Center).SafeNormalize(Vector2.Zero);
+                        attackBool = false;
+                        Projectile.velocity = Vector2.Zero;
                     }
-                    break;
-                case AIState.Sacrifice:
-
-                    #region Movement
-                    toTarget = player.Center - Projectile.Center;
-                    Projectile.velocity = toTarget.SafeNormalize(Vector2.UnitY) * aiCounter / 5;
-                    if (Projectile.velocity.Length() > 20)
-                        Projectile.velocity = Projectile.velocity.SafeNormalize(Vector2.UnitY) * 20;
-                    Projectile.rotation = toTarget.ToRotation() + Pi;
-                    Projectile.spriteDirection = Projectile.direction;
-                    #endregion
-
-                    #region Healing
-                    if (Projectile.Hitbox.Intersects(player.Hitbox))
-                    {
-                        player.statLife += player.statLifeMax / 100;
-                        if(player.statLife < player.statLifeMax)
-                            player.statLife = player.statLifeMax;
-                        CombatText.NewText(Projectile.Hitbox, Color.LimeGreen, player.statLifeMax / 100);
-                        SoundEngine.PlaySound(SoundID.AbigailUpgrade, Projectile.Center);
-                        Projectile.active = false;
-                    }
-                    #endregion
-
                     break;
             }
-            aiCounter++; 
-            Projectile.spriteDirection = Projectile.direction * -1;
+            aiCounter++;
             Lighting.AddLight(Projectile.Center, new Vector3(0.32f, 0.92f, 0.71f));
-        }       
+        }
+        public override bool PreDraw(ref Color lightColor)
+        {
+            Texture2D texture = TextureAssets.Projectile[Projectile.type].Value;
+            Vector2 halfSizeTexture = new(TextureAssets.Projectile[Projectile.type].Value.Width / 2, TextureAssets.Projectile[Projectile.type].Value.Height / Main.projFrames[Projectile.type] / 2);
+            Vector2 drawPosition = new Vector2(Projectile.Center.X, Projectile.Center.Y) - Main.screenPosition;
+            Vector2 origin = TextureAssets.Projectile[Projectile.type].Size() * 0.5f;
+            SpriteEffects spriteEffects = SpriteEffects.None;
+            if (!(Projectile.rotation + Pi > Pi / 2 && Projectile.rotation + Pi < 3 * Pi / 2))
+                spriteEffects = SpriteEffects.FlipVertically;
+            Main.EntitySpriteDraw(texture, drawPosition, texture.Frame(), Projectile.GetAlpha(lightColor), Projectile.rotation, origin, Projectile.scale, spriteEffects, 0f);
+            return false;
+        }
     }
 }

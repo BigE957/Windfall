@@ -23,6 +23,7 @@
     <None Remove="Assets\Items\Tools\IlmeranKnife.png" />
     <None Remove="Assets\Items\Utility\IlmeranHorn.png" />
     <None Remove="Assets\Items\Weapons\Misc\Cnidrisnack.png" />
+    <None Remove="Assets\NPCs\Enemies\DarkSpawn.png" />
     <None Remove="Assets\NPCs\Enemies\LunarCultistArcher.png" />
     <None Remove="Assets\NPCs\TravellingNPCs\TravellingCultist.png" />
     <None Remove="Assets\NPCs\TravellingNPCs\TravellingCultist_Head.png" />
@@ -93,7 +94,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Assets\Items\Fishing\" />
-    <Folder Include="Assets\NPCs\Enemies\" />
     <Folder Include="Content\Items\Armor\Selenic\" />
   </ItemGroup>
   <ItemGroup>
