@@ -37,7 +37,7 @@
             }
             if (aiCounter >= 30)
             {
-                foreach (Projectile proj in Main.projectile.Where(p => p != null && p.active && p.friendly && !p.npcProj && p.owner == Projectile.owner && p.damage > 0 && p.type != ModContent.ProjectileType<GodlyBlob>()))
+                foreach (Projectile proj in Main.projectile.Where(p => p != null && p.active && p.friendly && !p.npcProj && p.owner == Projectile.owner && p.damage > 0 && p.type != ModContent.ProjectileType<GodlyBlob>() && p.type != ModContent.ProjectileType<GodlyCrimulanGlob>() && p.type != ModContent.ProjectileType<GodlyEbonianGlob>()))
                 {
                     if (Projectile.Hitbox.Intersects(proj.Hitbox))
                     {
