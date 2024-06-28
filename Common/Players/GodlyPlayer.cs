@@ -545,7 +545,7 @@ namespace Windfall.Common.Players
                 foreach (NPC npc in Main.npc.Where(n => n != null && n.active && !n.friendly && !n.dontTakeDamage && Vector2.Distance(tumor.Center, n.Center) < 300))
                 {
                     var modifiers = new NPC.HitModifiers();
-                    NPC.HitInfo hit = modifiers.ToHitInfo((int)Player.GetDamage(DamageClass.Generic).ApplyTo(100f), false, 20f);
+                    NPC.HitInfo hit = modifiers.ToHitInfo((int)Player.GetDamage(DamageClass.Generic).ApplyTo(100f), false, npc.boss ? 0f : 20f);
                     npc.StrikeNPC(hit);
                     if (npc.knockBackResist != 0 && npc.boss == false)
                     {
