@@ -1,7 +1,6 @@
 ﻿using CalamityMod.Buffs.DamageOverTime;
 using CalamityMod.Buffs.StatDebuffs;
 using CalamityMod.NPCs.NormalNPCs;
-using CalamityMod.Projectiles.Magic;
 using Terraria.ModLoader.IO;
 using Windfall.Common.Systems;
 using Windfall.Content.Buffs.StatBuffs;
@@ -91,7 +90,7 @@ namespace Windfall.Common.Players
                 {
                     if (Evil1Essence && !WorldGen.crimson && OldAmbrosia > Ambrosia && activeAbility != 0)
                         for(int i = 0; i < (OldAmbrosia - Ambrosia) / 2f; i++)
-                            Projectile.NewProjectile(Projectile.GetSource_NaturalSpawn(), Player.Center, (Main.MouseWorld - Player.Center).SafeNormalize(Vector2.Zero).RotatedBy(Main.rand.NextFloat(-0.5f, 0.5f)) * 5, ProjectileID.TinyEater, 25, 0f, Player.whoAmI);
+                            Projectile.NewProjectile(Projectile.GetSource_NaturalSpawn(), Player.Center, (Main.MouseWorld - Player.Center).SafeNormalize(Vector2.Zero).RotatedBy(Main.rand.NextFloat(-0.5f, 0.5f)) * 5, ProjectileID.TinyEater, (int)Player.GetDamage(DamageClass.Generic).ApplyTo(25f), 0f, Player.whoAmI);
                     DisplayLocalizedText($"Ambrosia: {Ambrosia}");
                     OldAmbrosia = Ambrosia;                   
                 }
@@ -127,7 +126,7 @@ namespace Windfall.Common.Players
                 {
                     while(creeperCount < neededCreepers)
                     {
-                        Projectile proj = Projectile.NewProjectileDirect(Projectile.GetSource_NaturalSpawn(), Player.Center, Main.rand.NextVector2CircularEdge(10f, 10f), ModContent.ProjectileType<GodlyCreeper>(), 10, 0, Player.whoAmI);
+                        Projectile proj = Projectile.NewProjectileDirect(Projectile.GetSource_NaturalSpawn(), Player.Center, Main.rand.NextVector2CircularEdge(10f, 10f), ModContent.ProjectileType<GodlyCreeper>(), (int)Player.GetDamage(DamageClass.Generic).ApplyTo(10), 0, Player.whoAmI);
                         creeperCount++;
                         if (proj.ModProjectile is GodlyCreeper creep)
                             creep.ambrosiaRequirement = creeperCount * 20;
@@ -224,6 +223,7 @@ namespace Windfall.Common.Players
                         {
                             if (abilityCounter == 0)
                             {
+                                #region Target Selection
                                 target = null;
                                 foreach (NPC npc in Main.npc.Where(n => n.active && !n.friendly && !n.dontTakeDamage))
                                 {
@@ -248,6 +248,7 @@ namespace Windfall.Common.Players
                                         break;
                                     }
                                 }
+                                #endregion
                                 SoundEngine.PlaySound(SoundID.DD2_DarkMageSummonSkeleton);
                                 ancientVelocity = (target.Center - Player.Center).SafeNormalize(Vector2.Zero);
                                 Player.GiveUniversalIFrames(25);
@@ -277,7 +278,7 @@ namespace Windfall.Common.Players
                                 if (Player.Hitbox.Intersects(target.Hitbox))
                                 {
                                     var modifiers = new NPC.HitModifiers();
-                                    NPC.HitInfo hit = modifiers.ToHitInfo(100, false, 0f);
+                                    NPC.HitInfo hit = modifiers.ToHitInfo((int)Player.GetDamage(DamageClass.Generic).ApplyTo(100f), false, 0f, true);
                                     target.StrikeNPC(hit);
                                     target.AddBuff(ModContent.BuffType<BurningBlood>(), 120);
                                     target.AddBuff(BuffID.Ichor, 240);
@@ -363,7 +364,7 @@ namespace Windfall.Common.Players
                                     if (harvestCounterArray[i] >= 120)
                                     {
                                         var modifiers = new NPC.HitModifiers();
-                                        NPC.HitInfo hit = modifiers.ToHitInfo(100, false, 0f);
+                                        NPC.HitInfo hit = modifiers.ToHitInfo((int)Player.GetDamage(DamageClass.Generic).ApplyTo(100f), false, 0f);
                                         npc.StrikeNPC(hit);
                                         npc.AddBuff(BuffID.Ichor, 240);
                                         npc.AddBuff(BuffID.Confused, 240);
@@ -428,7 +429,7 @@ namespace Windfall.Common.Players
                         if (abilityCounter % 5 == 0)
                         {
                             SoundEngine.PlaySound(SlimeGodShot);
-                            Projectile.NewProjectile(Projectile.GetSource_NaturalSpawn(), Player.Center, (Main.MouseWorld - Player.Center).SafeNormalize(Vector2.Zero).RotatedByRandom(Pi/10) * 15, Main.rand.NextBool() ? ModContent.ProjectileType<GodlyEbonianGlob>() : ModContent.ProjectileType<GodlyCrimulanGlob>(), 10, 0.5f);
+                            Projectile.NewProjectile(Projectile.GetSource_NaturalSpawn(), Player.Center, (Main.MouseWorld - Player.Center).SafeNormalize(Vector2.Zero).RotatedByRandom(Pi/10) * 15, Main.rand.NextBool() ? ModContent.ProjectileType<GodlyEbonianGlob>() : ModContent.ProjectileType<GodlyCrimulanGlob>(), (int)Player.GetDamage(DamageClass.Generic).ApplyTo(10f), 0.5f);
                             Player.velocity -= (Main.MouseWorld - Player.Center).SafeNormalize(Vector2.Zero);
                             if(Player.velocity.LengthSquared() >= 400)
                                 Player.velocity = Player.velocity.SafeNormalize(Vector2.Zero) * 20;
@@ -505,8 +506,8 @@ namespace Windfall.Common.Players
         {
             for (int i = 0; i < 4; i++)
             {
-                Projectile.NewProjectile(Projectile.GetSource_NaturalSpawn(), new Vector2(Player.Center.X + (32 * i), y), new Vector2(4 + (i * 5), -20 + (i * 3)), ProjectileID.VilethornBase, 25, 0f);
-                Projectile.NewProjectile(Projectile.GetSource_NaturalSpawn(), new Vector2(Player.Center.X - (32 * i), y), new Vector2(-4 - (i * 5), -20 + (i * 3)), ProjectileID.VilethornBase, 25, 0f);
+                Projectile.NewProjectile(Projectile.GetSource_NaturalSpawn(), new Vector2(Player.Center.X + (32 * i), y), new Vector2(4 + (i * 5), -20 + (i * 3)), ProjectileID.VilethornBase, (int)Player.GetDamage(DamageClass.Generic).ApplyTo(25f), 0f);
+                Projectile.NewProjectile(Projectile.GetSource_NaturalSpawn(), new Vector2(Player.Center.X - (32 * i), y), new Vector2(-4 - (i * 5), -20 + (i * 3)), ProjectileID.VilethornBase, (int)Player.GetDamage(DamageClass.Generic).ApplyTo(25f), 0f);
             }
 
             for (int i = 0; i < 50; i++)
@@ -544,7 +545,7 @@ namespace Windfall.Common.Players
                 foreach (NPC npc in Main.npc.Where(n => n != null && n.active && !n.friendly && !n.dontTakeDamage && Vector2.Distance(tumor.Center, n.Center) < 300))
                 {
                     var modifiers = new NPC.HitModifiers();
-                    NPC.HitInfo hit = modifiers.ToHitInfo(100, false, 20f);
+                    NPC.HitInfo hit = modifiers.ToHitInfo((int)Player.GetDamage(DamageClass.Generic).ApplyTo(100f), false, 20f);
                     npc.StrikeNPC(hit);
                     if (npc.knockBackResist != 0)
                     {
