@@ -266,7 +266,7 @@ namespace Windfall.Content.NPCs.Bosses.TheOrator
                                         Vector2 ToTarget = (target.Center - spawn.Center);
                                         spawn.velocity = ToTarget.SafeNormalize(Vector2.Zero) * -10;
                                         darkSpawn.CurrentAI = DarkSpawn.AIState.Dashing;
-                                        spawn.rotation = ToTarget.ToRotation() + Pi;
+                                        spawn.rotation = ToTarget.ToRotation();
                                         attackCounter++;
                                     }
                                 }
