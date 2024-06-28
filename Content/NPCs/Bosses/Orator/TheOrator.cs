@@ -319,11 +319,8 @@ namespace Windfall.Content.NPCs.Bosses.TheOrator
                             NPC.velocity.Y = (float)(20 * Math.Sin((double)aiCounter * OrbitRate));
                             NPC.position += target.velocity;
                             if (aiCounter % 10 == 0 && aiCounter > 30)
-                            {                               
                                 Projectile.NewProjectile(Terraria.Entity.GetSource_NaturalSpawn(), NPC.Center, VectorToTarget.SafeNormalize(Vector2.UnitX) * 20, ModContent.ProjectileType<DarkBolt>(), BoltDamage, 0);
-                            }
-                            
-                            if(aiCounter % 120 == 0 && aiCounter > 30)
+                            if(Main.expertMode && aiCounter % (CalamityWorld.revenge ? 120 : 180) == 0 && aiCounter > 30)
                             {
                                 SoundEngine.PlaySound(SoundID.DD2_DarkMageAttack, NPC.Center);
                                 for (int i = 0; i < 20; i++)
@@ -340,7 +337,7 @@ namespace Windfall.Content.NPCs.Bosses.TheOrator
                                 }
                             }
                             
-                            if (Main.expertMode && aiCounter < NPC.ai[3] - 90)
+                            if (aiCounter < NPC.ai[3] - 90)
                                 Projectile.NewProjectile(Terraria.Entity.GetSource_NaturalSpawn(), NPC.Center, VectorToTarget.SafeNormalize(Vector2.UnitX) * -15, ModContent.ProjectileType<DarkGlob>(), GlobDamage, 0f, -1, 0, 1f);
                         }
                         else if(aiCounter < NPC.ai[3])

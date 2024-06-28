@@ -152,10 +152,10 @@ namespace Windfall.Content.Projectiles.Boss.Orator
             EmpyreanMetaball.SpawnDefaultParticle(Projectile.Center + (Main.rand.NextVector2Circular(25f, 25f) * Projectile.scale), Projectile.velocity.SafeNormalize(Vector2.Zero) * Main.rand.NextFloat(0f, 5f), 40 * (Main.rand.NextFloat(0.75f, 0.9f) * Projectile.scale));
             
             //larger trails
-            float gasSize = 40 * Projectile.scale;
+            float gasSize = 60 * Projectile.scale;
             EmpyreanMetaball.SpawnDefaultParticle(Projectile.Center - Projectile.velocity * (2 * Projectile.scale), Vector2.Zero, gasSize);
 
-            gasSize = 20 * Projectile.scale;
+            gasSize = 40 * Projectile.scale;
             EmpyreanMetaball.SpawnDefaultParticle(Projectile.Center - (Projectile.velocity.RotatedBy(Pi / 4) * (2 * Projectile.scale)), Vector2.Zero, gasSize);
             EmpyreanMetaball.SpawnDefaultParticle(Projectile.Center - (Projectile.velocity.RotatedBy(-Pi / 4) * (2 * Projectile.scale)), Vector2.Zero, gasSize);
         }
