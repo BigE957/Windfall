@@ -118,8 +118,12 @@ namespace Windfall.Content.NPCs.Bosses.TheOrator
                 case AIState.OnBoss:
                     NPC.velocity += (Orator.Center - NPC.Center).SafeNormalize(Vector2.Zero) * 1.5f;
                     if (NPC.velocity.Length() > 10)
-                        NPC.velocity = NPC.velocity.SafeNormalize(Vector2.Zero) * 12;
-                    NPC.rotation = NPC.velocity.ToRotation();
+                        NPC.velocity = NPC.velocity.SafeNormalize(Vector2.Zero) * 10;
+                    NPC.rotation = (Orator.Center - NPC.Center).ToRotation();
+                    if (NPC.rotation + Pi > Pi / 2 && NPC.rotation + Pi < 3 * Pi / 2)
+                        NPC.rotation = 0 + (PiOver4 * (NPC.velocity.Length() / 10));
+                    else
+                        NPC.rotation = Pi - (PiOver4 * (NPC.velocity.Length() / 10));
                     WindfallUtils.NPCAntiClump(NPC);
                     break;
                 case AIState.Hunting:
