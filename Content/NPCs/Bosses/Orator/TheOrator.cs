@@ -8,6 +8,7 @@ using Windfall.Common.Utils;
 using CalamityMod.Buffs.StatBuffs;
 using Windfall.Common.Graphics.Metaballs;
 using Windfall.Content.Items.Weapons.Summon;
+using Terraria.GameContent.Bestiary;
 
 namespace Windfall.Content.NPCs.Bosses.TheOrator
 {
@@ -23,6 +24,21 @@ namespace Windfall.Content.NPCs.Bosses.TheOrator
         internal static int GlobDamage;
         internal static int BoltDamage;
         private static int DashDelay;
+        public override void SetStaticDefaults()
+        {
+            NPCID.Sets.NPCBestiaryDrawModifiers drawModifiers = new()
+            {
+                Velocity = 1f,
+                Direction = 1
+            };
+            NPCID.Sets.NPCBestiaryDrawOffset.Add(Type, drawModifiers);
+        }
+        public override void SetBestiary(BestiaryDatabase database, BestiaryEntry bestiaryEntry)
+        {
+            bestiaryEntry.Info.AddRange(new IBestiaryInfoElement[] {
+            new FlavorTextBestiaryInfoElement(GetWindfallTextValue($"Bestiary.{nameof(TheOrator)}")),
+        });
+        }
         public override void SetDefaults()
         {
             NPC.friendly = false;

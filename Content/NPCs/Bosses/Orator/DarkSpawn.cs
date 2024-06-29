@@ -1,7 +1,9 @@
 ﻿using CalamityMod.World;
+using Terraria.GameContent.Bestiary;
 using Windfall.Common.Graphics.Metaballs;
 using Windfall.Common.Systems;
 using Windfall.Common.Utils;
+using Windfall.Content.NPCs.WanderingNPCs;
 using Windfall.Content.Projectiles.Boss.Orator;
 
 namespace Windfall.Content.NPCs.Bosses.TheOrator
@@ -11,7 +13,18 @@ namespace Windfall.Content.NPCs.Bosses.TheOrator
         public override string Texture => "Windfall/Assets/NPCs/Enemies/DarkSpawn";
         public override void SetStaticDefaults()
         {
-            this.HideFromBestiary();
+            NPCID.Sets.NPCBestiaryDrawModifiers drawModifiers = new()
+            {
+                Velocity = 1f,
+                Direction = 1
+            };
+            NPCID.Sets.NPCBestiaryDrawOffset.Add(Type, drawModifiers);
+        }
+        public override void SetBestiary(BestiaryDatabase database, BestiaryEntry bestiaryEntry)
+        {
+            bestiaryEntry.Info.AddRange(new IBestiaryInfoElement[] {
+			new FlavorTextBestiaryInfoElement(GetWindfallTextValue($"Bestiary.{nameof(DarkSpawn)}")),
+        });
         }
         public override void SetDefaults()
         {
