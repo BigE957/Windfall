@@ -2,17 +2,18 @@
 {
     public class MusicDisplayCompat : ModSystem
     {
+        private static readonly string displayPath = "ModCompat.MusicDisplay.";
         public override void PostAddRecipes()
         {
             if (!ModLoader.TryGetMod("MusicDisplay", out Mod display))
                 return;
 
-            LocalizedText modName = Language.GetText("Mods.Windfall.MusicDisplay.ModName");
+            LocalizedText modName = GetWindfallLocalText(displayPath + "ModName");
 
             void AddMusic(string path, string name)
             {
-                LocalizedText author = Language.GetText("Mods.Windfall.MusicDisplay." + name + ".Author");
-                LocalizedText displayName = Language.GetText("Mods.Windfall.MusicDisplay." + name + ".DisplayName");
+                LocalizedText author = GetWindfallLocalText(displayPath + name + ".Author");
+                LocalizedText displayName = GetWindfallLocalText(displayPath + name + ".DisplayName");
                 display.Call("AddMusic", (short)MusicLoader.GetMusicSlot(Windfall.Instance, path), displayName, author, modName);
             }
 
