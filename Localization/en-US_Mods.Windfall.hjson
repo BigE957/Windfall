@@ -1548,7 +1548,7 @@ ModCompat: {
 	BossChecklist: {
 		Orator: {
 			SpawnInfo: Complete the Sealing Ritual or use the [i:Windfall/SelenicTablet] after completing the Sealing Ritual.
-			DespawnMessage: "[c/39FFA2:The Orator resumes their work... The end draws ever closer...]"
+			DespawnMessage: "[c/39FFA2:The Orator vanishes to resume their work... The end draws ever closer...]"
 		}
 	}
 }

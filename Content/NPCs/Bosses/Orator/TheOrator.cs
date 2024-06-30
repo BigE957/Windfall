@@ -157,7 +157,7 @@ namespace Windfall.Content.NPCs.Bosses.TheOrator
                         SoundEngine.PlaySound(DashWarn);
                         attackCounter = 0;
                         NPC.velocity = (target.Center - NPC.Center).SafeNormalize(Vector2.UnitY) * -5;
-                        AIState = States.DarkMonster;
+                        AIState = States.DarkSlice;
                         return;
                     }
                     break;
@@ -183,10 +183,11 @@ namespace Windfall.Content.NPCs.Bosses.TheOrator
                         
                         float circleDistance = 450;
                         float currentDistance = VectorToTarget.Length();
-                        if (currentDistance > circleDistance + 5)
-                            currentDistance -= 5;
-                        else if (currentDistance < circleDistance - 5)
-                            currentDistance += 5;
+                        int approachRate = 10;
+                        if (currentDistance > circleDistance + approachRate)
+                            currentDistance -= approachRate;
+                        else if (currentDistance < circleDistance - approachRate)
+                            currentDistance += approachRate;
 
                         if (target.velocity != Vector2.Zero)
                             NPC.Center = target.Center - VectorToTarget.SafeNormalize(Vector2.Zero).RotateTowards(target.velocity.ToRotation() + Pi, rotationRate) * currentDistance;
@@ -207,12 +208,13 @@ namespace Windfall.Content.NPCs.Bosses.TheOrator
                             {
                                 EmpyreanMetaball.SpawnDefaultParticle(NPC.Center, Main.rand.NextVector2Circular(10f, 10f), 40 * Main.rand.NextFloat(1.5f, 2.3f));
                             }
-                            int globCount = CalamityWorld.revenge || CalamityWorld.death ? 4 : 3;
+                            int globCount = CalamityWorld.death ? 5 : CalamityWorld.revenge ? 4 : 3;
                             for (int i = 0; i < globCount; i++)
                             {
                                 Projectile.NewProjectile(Terraria.Entity.GetSource_NaturalSpawn(), NPC.Center, TargetVector.SafeNormalize(Vector2.UnitX).RotatedBy(TwoPi / globCount * i) * 10, ModContent.ProjectileType<DarkGlob>(), GlobDamage, 0f, -1, 0, 0.5f);
                             }
                         }
+                        /*
                         if (aiCounter % 90 == 0)
                         {
                             Vector2 MyVector = TargetVector.RotatedBy(Pi / 2);
@@ -222,6 +224,7 @@ namespace Windfall.Content.NPCs.Bosses.TheOrator
                                 MyVector = MyVector.RotatedBy(Pi / 18);
                             }                          
                         }
+                        */
                         #endregion
                     }
                     if (aiCounter == 900)
@@ -260,7 +263,7 @@ namespace Windfall.Content.NPCs.Bosses.TheOrator
                     #endregion
                     
                     NPC.DR_NERD(0.1f + (0.1f * Main.npc.Where(n => n.type == ModContent.NPCType<DarkSpawn>()).Count()));
-
+                    NPC.damage = 0;
                     const int EndTime = 1500;
                     int SpawnCount = CalamityWorld.death ? 3 : CalamityWorld.revenge || Main.expertMode ? 2 : 1;
                     if(!CalamityWorld.death && Main.npc.Where(n => n.type == ModContent.NPCType<DarkSpawn>() && n.active).Count() <= SpawnCount + 1)
@@ -349,6 +352,7 @@ namespace Windfall.Content.NPCs.Bosses.TheOrator
                             */
                             VectorToTarget = target.Center - NPC.Center;
                             NPC.Center = target.Center + new Vector2(0, -400).RotatedBy(aiCounter * OrbitRate);
+                            NPC.velocity = target.velocity;
                             if (aiCounter % 10 == 0 && aiCounter > 30)
                                 Projectile.NewProjectile(Terraria.Entity.GetSource_NaturalSpawn(), NPC.Center, VectorToTarget.SafeNormalize(Vector2.UnitX) * 20, ModContent.ProjectileType<DarkBolt>(), BoltDamage, 0);
                             if(Main.expertMode && aiCounter % (CalamityWorld.revenge ? 120 : 180) == 0 && aiCounter > 30)
