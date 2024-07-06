@@ -57,6 +57,7 @@ namespace Windfall.Content.NPCs.Bosses.TheOrator
             NPC.noGravity = true;
             NPC.noTileCollide = true;
             NPC.dontTakeDamage = true;
+            NPC.Calamity().canBreakPlayerDefense = true;
         }
         private float forcefieldOpacity = 0f;
         private int hitTimer = 0;
@@ -365,9 +366,12 @@ namespace Windfall.Content.NPCs.Bosses.TheOrator
                                     proj.timeLeft = (int)(proj.timeLeft / 1.5f);
                                 }
                             }
-                            
+
                             if (aiCounter < NPC.ai[3] - 90)
-                                Projectile.NewProjectile(Terraria.Entity.GetSource_NaturalSpawn(), NPC.Center, VectorToTarget.SafeNormalize(Vector2.UnitX) * -15, ModContent.ProjectileType<DarkGlob>(), GlobDamage * 3, 0f, -1, 0, 1f);
+                            {
+                                Projectile proj = Projectile.NewProjectileDirect(Terraria.Entity.GetSource_NaturalSpawn(), NPC.Center, VectorToTarget.SafeNormalize(Vector2.UnitX) * -15, ModContent.ProjectileType<DarkGlob>(), GlobDamage * 3, 0f, -1, 0, 1f);
+                                proj.Calamity().DealsDefenseDamage = true;
+                            }
                         }
                         else if(aiCounter < NPC.ai[3])
                         {
@@ -560,11 +564,14 @@ namespace Windfall.Content.NPCs.Bosses.TheOrator
 
                     if (aiCounter > 120 && NPC.Center.Y < target.Center.Y - 50)
                     {
+                        Projectile proj;
                         if (aiCounter % 5 == 0)
                         {
                             //The Anti-Cheesers
-                            Projectile.NewProjectile(Terraria.Entity.GetSource_NaturalSpawn(), new Vector2(target.Center.X - 400, target.Center.Y - 800), new Vector2(Main.rand.NextFloat(-6f, -3f), 0), ModContent.ProjectileType<DarkGlob>(), GlobDamage * 3, 0f, -1, 1, 3f);
-                            Projectile.NewProjectile(Terraria.Entity.GetSource_NaturalSpawn(), new Vector2(target.Center.X + 400, target.Center.Y - 800), new Vector2(Main.rand.NextFloat(3f, 6f), 0), ModContent.ProjectileType<DarkGlob>(), GlobDamage * 3, 0f, -1, 1, 3f);
+                            proj = Projectile.NewProjectileDirect(Terraria.Entity.GetSource_NaturalSpawn(), new Vector2(target.Center.X - 400, target.Center.Y - 800), new Vector2(Main.rand.NextFloat(-6f, -3f), 0), ModContent.ProjectileType<DarkGlob>(), GlobDamage * 3, 0f, -1, 1, 3f);
+                            proj.Calamity().DealsDefenseDamage = true;
+                            proj = Projectile.NewProjectileDirect(Terraria.Entity.GetSource_NaturalSpawn(), new Vector2(target.Center.X + 400, target.Center.Y - 800), new Vector2(Main.rand.NextFloat(3f, 6f), 0), ModContent.ProjectileType<DarkGlob>(), GlobDamage * 3, 0f, -1, 1, 3f);
+                            proj.Calamity().DealsDefenseDamage = true;
                         }
                         if (aiCounter % AttackFrequency == 0)
                         {
@@ -573,10 +580,15 @@ namespace Windfall.Content.NPCs.Bosses.TheOrator
                             {
                                 EmpyreanMetaball.SpawnDefaultParticle(new(NPC.Center.X, NPC.Center.Y - 50), Main.rand.NextVector2Unit(0, -Pi) * Main.rand.NextFloat(0f, 15f), 25 * Main.rand.NextFloat(1f, 2f));
                             }
-                            Projectile.NewProjectile(Terraria.Entity.GetSource_NaturalSpawn(), NPC.Center, new Vector2((float)(10 * Math.Sin(aiCounter)), -10), ModContent.ProjectileType<DarkGlob>(), GlobDamage, 0f, -1, 1, 0.5f);
-                            Projectile.NewProjectile(Terraria.Entity.GetSource_NaturalSpawn(), NPC.Center, new Vector2((float)(-10 * Math.Sin(aiCounter)), -10), ModContent.ProjectileType<DarkGlob>(), GlobDamage, 0f, -1, 1, 0.5f);
+                            proj = Projectile.NewProjectileDirect(Terraria.Entity.GetSource_NaturalSpawn(), NPC.Center, new Vector2((float)(10 * Math.Sin(aiCounter)), -10), ModContent.ProjectileType<DarkGlob>(), GlobDamage, 0f, -1, 1, 0.5f);
+                            proj.Calamity().DealsDefenseDamage = true;
+                            proj = Projectile.NewProjectileDirect(Terraria.Entity.GetSource_NaturalSpawn(), NPC.Center, new Vector2((float)(-10 * Math.Sin(aiCounter)), -10), ModContent.ProjectileType<DarkGlob>(), GlobDamage, 0f, -1, 1, 0.5f);
+                            proj.Calamity().DealsDefenseDamage = true;
                             if (CalamityWorld.revenge && aiCounter % 20 == 0)
-                                Projectile.NewProjectile(Terraria.Entity.GetSource_NaturalSpawn(), NPC.Center, new Vector2(0, -10), ModContent.ProjectileType<DarkGlob>(), GlobDamage, 0f, -1, 1, 0.5f);
+                            {
+                                proj = Projectile.NewProjectileDirect(Terraria.Entity.GetSource_NaturalSpawn(), NPC.Center, new Vector2(0, -10), ModContent.ProjectileType<DarkGlob>(), GlobDamage, 0f, -1, 1, 0.5f);
+                                proj.Calamity().DealsDefenseDamage = true;
+                            }
                         }
 
                     }

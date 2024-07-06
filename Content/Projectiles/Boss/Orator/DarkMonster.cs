@@ -28,6 +28,7 @@ namespace Windfall.Content.Projectiles.Boss.Orator
             Projectile.scale = 1f;
             Projectile.alpha = 0;
             CooldownSlot = ImmunityCooldownID.Bosses;
+            Projectile.Calamity().DealsDefenseDamage = true;
         }        
         private enum States
         {

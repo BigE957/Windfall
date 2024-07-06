@@ -13,6 +13,7 @@
             Projectile.penetrate = -1;
             Projectile.timeLeft = 250;
             Projectile.tileCollide = false;
+            Projectile.Calamity().DealsDefenseDamage = true;
         }
         private int aiCounter
         {

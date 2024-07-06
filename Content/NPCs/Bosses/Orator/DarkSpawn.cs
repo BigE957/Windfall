@@ -42,6 +42,7 @@ namespace Windfall.Content.NPCs.Bosses.TheOrator
             NPC.Calamity().VulnerableToHeat = true;
             NPC.Calamity().VulnerableToElectricity = true;
             NPC.Calamity().VulnerableToWater = true;
+            NPC.Calamity().canBreakPlayerDefense = true;
         }
         internal enum AIState
         {

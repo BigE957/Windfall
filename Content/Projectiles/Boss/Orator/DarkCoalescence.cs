@@ -23,6 +23,7 @@ namespace Windfall.Content.Projectiles.Boss.Orator
             Projectile.timeLeft = 390;
             Projectile.scale = 1f;
             CooldownSlot = ImmunityCooldownID.Bosses;
+            Projectile.Calamity().DealsDefenseDamage = true;
         }
         private int aiCounter
         {
