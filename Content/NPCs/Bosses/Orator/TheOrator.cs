@@ -67,9 +67,9 @@ namespace Windfall.Content.NPCs.Bosses.TheOrator
         public override void OnSpawn(IEntitySource source)
         {
             noSpawnsEscape = true;
-            MonsterDamage = StatCorrections.ScaleProjectileDamage(Main.masterMode ? 360 : CalamityWorld.death ? 280 : CalamityWorld.revenge ? 268 : Main.expertMode ? 240 : 120);
-            GlobDamage = StatCorrections.ScaleProjectileDamage(Main.masterMode ? 260 : CalamityWorld.death ? 220 : CalamityWorld.revenge ? 180 : Main.expertMode ? 140 : 100);
-            BoltDamage = StatCorrections.ScaleProjectileDamage(Main.masterMode ? 264 : CalamityWorld.death ? 188 : CalamityWorld.revenge ? 176 : Main.expertMode ? 152 : 90);
+            MonsterDamage = StatCorrections.ScaleProjectileDamage(Main.masterMode ? 360 : CalamityWorld.death ? 280 : CalamityWorld.revenge ? 268 : Main.expertMode ? 240 : 180);
+            GlobDamage = StatCorrections.ScaleProjectileDamage(Main.masterMode ? 255 : CalamityWorld.death ? 214 : CalamityWorld.revenge ? 186 : Main.expertMode ? 140 : 100);
+            BoltDamage = StatCorrections.ScaleProjectileDamage(Main.masterMode ? 248 : CalamityWorld.death ? 172 : CalamityWorld.revenge ? 160 : Main.expertMode ? 138 : 90);
             DashDelay = CalamityWorld.death ? 20 : CalamityWorld.revenge ? 25 : 30;
         }
         private enum States
@@ -344,12 +344,6 @@ namespace Windfall.Content.NPCs.Bosses.TheOrator
                         }
                         if (aiCounter < NPC.ai[3] - 45)
                         {
-                            /*
-                            
-                            NPC.velocity.X = (float)(20 * Math.Cos((double)aiCounter * OrbitRate));
-                            NPC.velocity.Y = (float)(20 * Math.Sin((double)aiCounter * OrbitRate));
-                            NPC.position += target.velocity;
-                            */
                             VectorToTarget = target.Center - NPC.Center;
                             NPC.Center = target.Center + new Vector2(0, -400).RotatedBy(aiCounter * OrbitRate);
                             NPC.velocity = target.velocity;
@@ -373,7 +367,7 @@ namespace Windfall.Content.NPCs.Bosses.TheOrator
                             }
                             
                             if (aiCounter < NPC.ai[3] - 90)
-                                Projectile.NewProjectile(Terraria.Entity.GetSource_NaturalSpawn(), NPC.Center, VectorToTarget.SafeNormalize(Vector2.UnitX) * -15, ModContent.ProjectileType<DarkGlob>(), GlobDamage, 0f, -1, 0, 1f);
+                                Projectile.NewProjectile(Terraria.Entity.GetSource_NaturalSpawn(), NPC.Center, VectorToTarget.SafeNormalize(Vector2.UnitX) * -15, ModContent.ProjectileType<DarkGlob>(), GlobDamage * 3, 0f, -1, 0, 1f);
                         }
                         else if(aiCounter < NPC.ai[3])
                         {
@@ -569,8 +563,8 @@ namespace Windfall.Content.NPCs.Bosses.TheOrator
                         if (aiCounter % 5 == 0)
                         {
                             //The Anti-Cheesers
-                            Projectile.NewProjectile(Terraria.Entity.GetSource_NaturalSpawn(), new Vector2(target.Center.X - 400, target.Center.Y - 800), new Vector2(Main.rand.NextFloat(-6f, -3f), 0), ModContent.ProjectileType<DarkGlob>(), GlobDamage, 0f, -1, 1, 3f);
-                            Projectile.NewProjectile(Terraria.Entity.GetSource_NaturalSpawn(), new Vector2(target.Center.X + 400, target.Center.Y - 800), new Vector2(Main.rand.NextFloat(3f, 6f), 0), ModContent.ProjectileType<DarkGlob>(), GlobDamage, 0f, -1, 1, 3f);
+                            Projectile.NewProjectile(Terraria.Entity.GetSource_NaturalSpawn(), new Vector2(target.Center.X - 400, target.Center.Y - 800), new Vector2(Main.rand.NextFloat(-6f, -3f), 0), ModContent.ProjectileType<DarkGlob>(), GlobDamage * 3, 0f, -1, 1, 3f);
+                            Projectile.NewProjectile(Terraria.Entity.GetSource_NaturalSpawn(), new Vector2(target.Center.X + 400, target.Center.Y - 800), new Vector2(Main.rand.NextFloat(3f, 6f), 0), ModContent.ProjectileType<DarkGlob>(), GlobDamage * 3, 0f, -1, 1, 3f);
                         }
                         if (aiCounter % AttackFrequency == 0)
                         {

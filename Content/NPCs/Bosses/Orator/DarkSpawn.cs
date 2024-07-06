@@ -30,7 +30,7 @@ namespace Windfall.Content.NPCs.Bosses.TheOrator
         {
             NPC.width = 78;
             NPC.height = 50;
-            NPC.damage = StatCorrections.ScaleContactDamage(Main.masterMode ? 300 : CalamityWorld.death ? 220 : CalamityWorld.revenge ? 180 : Main.expertMode ? 120 : 80);
+            NPC.damage = StatCorrections.ScaleContactDamage(Main.masterMode ? 500 : CalamityWorld.death ? 420 : CalamityWorld.revenge ? 350 : Main.expertMode ? 240 : 180);
             NPC.defense = 100;
             NPC.noGravity = true;
             NPC.noTileCollide = true;
@@ -78,7 +78,7 @@ namespace Windfall.Content.NPCs.Bosses.TheOrator
             Player target = Main.player[Player.FindClosest(NPC.Center, NPC.width, NPC.height)];
             NPC Orator = null;
             if(NPC.FindFirstNPC(ModContent.NPCType<TheOrator>()) != -1)
-                Orator = Main.npc[NPC.FindFirstNPC(ModContent.NPCType<TheOrator>())];           
+                Orator = Main.npc[NPC.FindFirstNPC(ModContent.NPCType<TheOrator>())];
             if (CurrentAI <= AIState.OnBoss)
             {
                 NPC.dontTakeDamage = true;
@@ -87,11 +87,11 @@ namespace Windfall.Content.NPCs.Bosses.TheOrator
             else
             {
                 NPC.dontTakeDamage = false;
-                NPC.damage = StatCorrections.ScaleContactDamage(Main.masterMode ? 300 : CalamityWorld.death ? 220 : CalamityWorld.revenge ? 180 : Main.expertMode ? 120 : 80);
+                NPC.damage = StatCorrections.ScaleContactDamage(Main.masterMode ? 500 : CalamityWorld.death ? 420 : CalamityWorld.revenge ? 350 : Main.expertMode ? 240 : 180);
             }
-            
+
             #region Despawning
-            if (Orator == null)
+                if (Orator == null)
             {
                 toTarget = target.Center - NPC.Center;
                 NPC.velocity -= toTarget.SafeNormalize(Vector2.UnitX);
