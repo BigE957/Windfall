@@ -4,6 +4,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Terraria;
 using Terraria.GameContent;
 using Windfall.Common.Graphics;
+using Windfall.Content.Buffs.DoT;
 using Windfall.Content.NPCs.Bosses.TheOrator;
 using static Windfall.Common.Graphics.Metaballs.EmpyreanMetaball;
 
@@ -11,16 +12,9 @@ namespace Windfall.Content.Projectiles.Boss.Orator
 {
     public class OratorBorder : ModProjectile
     {
-        public ref float Time => ref Projectile.ai[0];
-
-        public const int HandCount = 24;
-
-        public const float RingRadius = 600f;
+        public ref float counter => ref Projectile.ai[0];
 
         public float Radius = 750f;
-
-        //public override string Texture => "Windfall/Assets/NPCs/WorldEvents/TheOrator_Head";
-
 
         public override void SetDefaults()
         {
@@ -64,21 +58,20 @@ namespace Windfall.Content.Projectiles.Boss.Orator
             else if (Projectile.scale > 3f)
             {
                 Projectile.scale -= 0.05f;
-                Time = (3 * Pi / 2) * 20;
+                counter = (3 * Pi / 2) * 20;
             }
             else
-                Projectile.scale = (float)(3f - (Math.Sin(Time / 20f) + 1f) / 8);
+                Projectile.scale = (float)(3f - (Math.Sin(counter / 20f) + 1f) / 8);
             
             Projectile.timeLeft = 30;           
 
             // Move towards the target.
             //Projectile.Center = Projectile.Center.MoveTowards(Main.npc[oratorIndex].Center, 1.1f);
 
-            // Give the player the madness effect if they leave the circle.
             Player target = Main.player[Player.FindClosest(Projectile.Center, 1, 1)];
             if (!target.WithinRange(Projectile.Center, Radius + 12f))
-                Main.NewText("Out of range");
-            Time++;
+                target.AddBuff(ModContent.BuffType<Entropy>(), 5);
+            counter++;
         }
 
         public override Color? GetAlpha(Color lightColor) => Color.White * Projectile.Opacity;

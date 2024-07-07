@@ -1435,12 +1435,33 @@ Buffs: {
 
 	DeepSeekerBuff: {
 		DisplayName: Deep Seeker
-		Description: A creature of the Deep will protect you...
+		Description: A creature of the Deep will protect you.
 	}
 
 	WretchedHarvest: {
 		DisplayName: Wretched Harvest
-		Description: Your Hive Tumor empowers you...
+		Description: Your Hive Tumor empowers you.
+	}
+
+	Entropy: {
+		DisplayName: Entropy
+		Description: Cosmic chaos batters and breaks you...
+	}
+}
+
+Status: {
+	Death: {
+		Orator: {
+			1: "{0} was no match for the master of the Lunar Cult."
+			2: "{0} should have joined the Lunar Cult."
+			3: Perhaps the Orator was wrong about {0}.
+		}
+
+		Entropy: {
+			1: "{0} was shattered across time and space."
+			2: The abyss stares back at {0}.
+			3: "{0} succumbed to entropy."
+		}
 	}
 }
 
