@@ -51,8 +51,7 @@ namespace Windfall.Content.Projectiles.Boss.Orator
         {
             NPC Orator = null;
             if (NPC.FindFirstNPC(ModContent.NPCType<TheOrator>()) != -1)
-                Orator = Main.npc[NPC.FindFirstNPC(ModContent.NPCType<TheOrator>())];
-            
+                Orator = Main.npc[NPC.FindFirstNPC(ModContent.NPCType<TheOrator>())];          
             if(Orator == null)
             {
                 SoundEngine.PlaySound(SoundID.DD2_EtherianPortalDryadTouch, Projectile.Center);
@@ -62,7 +61,6 @@ namespace Windfall.Content.Projectiles.Boss.Orator
                 }
                 Projectile.active = false;
             }
-            
             Player target;
             if(Orator != null)    
                 target = Main.player[Player.FindClosest(Orator.Center, Projectile.width, Projectile.height)];
@@ -127,7 +125,11 @@ namespace Windfall.Content.Projectiles.Boss.Orator
                         {
                             Projectile.NewProjectile(Terraria.Entity.GetSource_NaturalSpawn(), Projectile.Center, (TwoPi / 24 * i).ToRotationVector2(), ModContent.ProjectileType<DarkBolt>(), TheOrator.BoltDamage, 0f, -1, 0, i % 2 == 0 ? -10 : 0);
                         }
-                    }
+                        CalamityMod.Particles.Particle pulse = new PulseRing(Projectile.Center, Vector2.Zero, Color.Teal, 0f, 4f, 16);
+                        GeneralParticleHandler.SpawnParticle(pulse);
+                        CalamityMod.Particles.Particle explosion = new DetailedExplosion(Projectile.Center, Vector2.Zero, new(117, 255, 159), new Vector2(1f, 1f), 0f, 0f, 1.5f, 16);
+                        GeneralParticleHandler.SpawnParticle(explosion);
+                    }                    
                     Projectile.active = false;
                     EmpyreanStickyParticles.RemoveAll(p => p.Projectile == Projectile);
                 }

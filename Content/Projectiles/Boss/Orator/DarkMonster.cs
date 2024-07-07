@@ -139,7 +139,10 @@ namespace Windfall.Content.Projectiles.Boss.Orator
                             Projectile.NewProjectile(Entity.GetSource_Death(), Projectile.Center, (TwoPi / 12 * (i/2) + (TwoPi / 24)).ToRotationVector2() * 5, ModContent.ProjectileType<DarkGlob>(), TheOrator.GlobDamage, 0f, -1, 1, 0.5f);
                         }
                     }
-                    
+                    CalamityMod.Particles.Particle pulse = new PulseRing(Projectile.Center, Vector2.Zero, Color.Teal, 0f, 2.5f, 16);
+                    GeneralParticleHandler.SpawnParticle(pulse);
+                    CalamityMod.Particles.Particle explosion = new DetailedExplosion(Projectile.Center, Vector2.Zero, new(117, 255, 159), new Vector2(1f, 1f), 0f, 0f, 1f, 16);
+                    GeneralParticleHandler.SpawnParticle(explosion);
                     Projectile.active = false;
                     EmpyreanStickyParticles.RemoveAll(p => p.Projectile == Projectile);
                     break;

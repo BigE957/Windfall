@@ -415,6 +415,9 @@ namespace Windfall.Content.NPCs.Bosses.TheOrator
                         dashing = true;
                         //values gotten from Astrum Deus' contact damage. Subject to change.
                         NPC.damage = StatCorrections.ScaleContactDamage(Main.masterMode ? 360 : CalamityWorld.death ? 280 : CalamityWorld.revenge ? 268 : Main.expertMode ? 240 : 120);
+
+                        Particle pulse = new DirectionalPulseRing(NPC.Center, VectorToTarget.SafeNormalize(Vector2.Zero) * 0f, new(117, 255, 159), new Vector2(0.5f, 2f), (target.Center - NPC.Center).ToRotation(), 0f, 1f, 24);
+                        GeneralParticleHandler.SpawnParticle(pulse);
                     }                   
                     if (aiCounter > 0)
                     {
@@ -430,23 +433,10 @@ namespace Windfall.Content.NPCs.Bosses.TheOrator
                             dust.noGravity = true;
                             dust.color = dust.type == dustStyle ? Color.LightGreen : default;
                         }
-                        /*
-                        if ((CalamityWorld.death && aiCounter % 5 == 0) || aiCounter % 10 == 0)
-                            Projectile.NewProjectile(Terraria.Entity.GetSource_NaturalSpawn(), NPC.Center, Vector2.Zero, ModContent.ProjectileType<DarkGlob>(), GlobDamage, 0f, -1, 0, 1f);
-                        */
                         if (aiCounter % 10 == 0 && Main.expertMode)
-                        {
                             Projectile.NewProjectile(Terraria.Entity.GetSource_NaturalSpawn(), NPC.Center, VectorToTarget.RotatedBy(Pi / -2f).SafeNormalize(Vector2.UnitX) * 20, ModContent.ProjectileType<DarkBolt>(), BoltDamage, 0f, -1, 0, -20);
-                            /*
-                            if (CalamityWorld.revenge)
-                                Projectile.NewProjectile(Terraria.Entity.GetSource_NaturalSpawn(), NPC.Center, (target.Center - NPC.Center).SafeNormalize(Vector2.UnitX) * 20, ModContent.ProjectileType<DarkBolt>(), BoltDamage, 0f, -1, 0, 20);
-                            */
-                        }
-                        else if (aiCounter % 5 == 0)
-                        {
-                            if (Main.expertMode)
-                                Projectile.NewProjectile(Terraria.Entity.GetSource_NaturalSpawn(), NPC.Center, VectorToTarget.RotatedBy(Pi / 2f).SafeNormalize(Vector2.UnitX) * 20, ModContent.ProjectileType<DarkBolt>(), BoltDamage, 0f, -1, 0, -20);
-                        }
+                        else if (aiCounter % 5 == 0 && Main.expertMode)
+                            Projectile.NewProjectile(Terraria.Entity.GetSource_NaturalSpawn(), NPC.Center, VectorToTarget.RotatedBy(Pi / 2f).SafeNormalize(Vector2.UnitX) * 20, ModContent.ProjectileType<DarkBolt>(), BoltDamage, 0f, -1, 0, -20);
                         #endregion
 
                         if (VectorToTarget.Length() <= 5)
@@ -663,6 +653,8 @@ namespace Windfall.Content.NPCs.Bosses.TheOrator
                                 SoundEngine.PlaySound(Dash);
                                 //values gotten from Astrum Deus' contact damage. Subject to change.
                                 NPC.damage = StatCorrections.ScaleContactDamage(Main.masterMode ? 360 : CalamityWorld.death ? 280 : CalamityWorld.revenge ? 268 : Main.expertMode ? 240 : 120);
+                                Particle pulse = new DirectionalPulseRing(NPC.Center, VectorToTarget.SafeNormalize(Vector2.Zero) * 0f, new(117, 255, 159), new Vector2(0.5f, 2f), (target.Center - NPC.Center).ToRotation(), 0f, 1f, 24);
+                                GeneralParticleHandler.SpawnParticle(pulse);
                             }
                             NPC.velocity = VectorToTarget;
                             if (attackCounter < OrbitDashCount - 1)
