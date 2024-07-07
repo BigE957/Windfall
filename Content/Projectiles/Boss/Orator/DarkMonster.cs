@@ -94,7 +94,7 @@ namespace Windfall.Content.Projectiles.Boss.Orator
                         SoundDelay--;
                     Projectile.velocity += (target.Center - Projectile.Center).SafeNormalize(Vector2.Zero) * Acceleration;
                     if (Projectile.velocity.Length() > MaxSpeed)
-                        Projectile.velocity = Projectile.velocity.SafeNormalize(Vector2.Zero) * MaxSpeed;
+                        Projectile.velocity = Projectile.velocity.SafeNormalize(Vector2.Zero) * (Projectile.velocity.Length() * 0.95f);
                     
                     EmitGhostGas();
                     break;
