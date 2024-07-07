@@ -76,6 +76,7 @@
     <None Remove="Content\NPCs\WanderingNPCs\IlmeranPaladinKnocked.png" />
     <None Remove="Content\NPCs\WorldEvents\WanderingCalClone.png" />
     <None Remove="Content\NPCs\WorldEvents\WanderingPotionSeller.png" />
+    <None Remove="Content\Projectiles\Boss\Orator\OratorBorder.png" />
     <None Remove="Content\Tiles\Special\DatabaseTerminal.png" />
     <None Remove="Content\UI\DraedonsDatabase\DraedonUIArrowLeft.png" />
     <None Remove="Content\UI\DraedonsDatabase\DraedonUIArrowRight.png" />

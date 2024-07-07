@@ -1424,6 +1424,7 @@ Projectiles: {
 	GodlyEbonianMuck.DisplayName: Ebonian Muck
 	GodlyCrimulanGlob.DisplayName: Crimulan Glob
 	GodlyEbonianGlob.DisplayName: Ebonian Glob
+	OratorBorder.DisplayName: Orator Border
 }
 
 Buffs: {
