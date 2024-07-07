@@ -75,8 +75,6 @@ namespace Windfall.Content.NPCs.Bosses.TheOrator
             BoltDamage = StatCorrections.ScaleProjectileDamage(Main.masterMode ? 248 : CalamityWorld.death ? 172 : CalamityWorld.revenge ? 160 : Main.expertMode ? 138 : 90);
             //Projectile.NewProjectile(Projectile.GetSource_NaturalSpawn(), NPC.Center, Vector2.Zero, ModContent.ProjectileType<OratorShaderArena>(), 0, 0f);
             DashDelay = CalamityWorld.death ? 20 : CalamityWorld.revenge ? 25 : 30;
-
-            AIState = States.DarkBarrage;
         }
         private enum States
         {
@@ -328,7 +326,7 @@ namespace Windfall.Content.NPCs.Bosses.TheOrator
                     }
                     break;
                 case States.DarkBarrage:
-                    if (aiCounter <= 1300)
+                    if (aiCounter <= 1100)
                     {
                         #region Movement
                         target = Main.player[Player.FindClosest(NPC.Center, NPC.width, NPC.height)];
@@ -349,25 +347,26 @@ namespace Windfall.Content.NPCs.Bosses.TheOrator
                         #endregion
 
                         #region Projectiles     
-                        if (aiCounter < 1200)
+                        if (aiCounter < 1000 && aiCounter > 30)
                         {
+                            int gapSize = CalamityWorld.death ? 275 : CalamityWorld.revenge ? 300 : Main.expertMode ? 325 : 350;
                             if (aiCounter % (CalamityWorld.death ? 90 : CalamityWorld.revenge ? 100 : 120) == 0)
                             {
                                 float offset = Main.rand.Next(0, 200);
                                 for (int i = 0; i < 12; i++)
                                 {
-                                    Projectile proj = Projectile.NewProjectileDirect(Terraria.Entity.GetSource_NaturalSpawn(), target.Center + new Vector2(-1500, -1200 + (250 * i) + offset), new Vector2(20, -12), ModContent.ProjectileType<DarkGlob>(), GlobDamage, 0f, -1, 1, 1f);
-                                    proj = Projectile.NewProjectileDirect(Terraria.Entity.GetSource_NaturalSpawn(), target.Center + new Vector2(1500, -1200 + (250 * i) + offset), new Vector2(-20, -12), ModContent.ProjectileType<DarkGlob>(), GlobDamage, 0f, -1, 1, 1f);
+                                    Projectile proj = Projectile.NewProjectileDirect(Terraria.Entity.GetSource_NaturalSpawn(), target.Center + new Vector2(-1500, -1200 + (gapSize * i) + offset), new Vector2(20, -12), ModContent.ProjectileType<DarkGlob>(), GlobDamage, 0f, -1, 1, 1f);
+                                    proj = Projectile.NewProjectileDirect(Terraria.Entity.GetSource_NaturalSpawn(), target.Center + new Vector2(1500, -1200 + (gapSize * i) + offset), new Vector2(-20, -12), ModContent.ProjectileType<DarkGlob>(), GlobDamage, 0f, -1, 1, 1f);
                                 }
                             }
-                            else if (aiCounter % (CalamityWorld.death ? 45 : CalamityWorld.revenge ? 50 : 60) == 0 && aiCounter > 30)
+                            else if (aiCounter % (CalamityWorld.death ? 45 : CalamityWorld.revenge ? 50 : 60) == 0)
                             {
                                 Projectile.NewProjectile(Terraria.Entity.GetSource_NaturalSpawn(), NPC.Center, (target.Center - NPC.Center).SafeNormalize(Vector2.UnitX) * 20, ModContent.ProjectileType<DarkBolt>(), BoltDamage, 0f, -1, 0, -20);
                                 Particle pulse = new DirectionalPulseRing(NPC.Center, (target.Center - NPC.Center).SafeNormalize(Vector2.Zero) * 4f, new(117, 255, 159), new Vector2(0.5f, 1f), (target.Center - NPC.Center).ToRotation(), 0f, 1f, 24);
                                 GeneralParticleHandler.SpawnParticle(pulse);
                             }
                         }
-                        else if (aiCounter % (CalamityWorld.death ? 45 : CalamityWorld.revenge ? 50 : 60) == 0 && aiCounter > 30)
+                        else if (aiCounter % (CalamityWorld.death ? 45 : CalamityWorld.revenge ? 50 : 60) == 0)
                         {
                             Projectile.NewProjectile(Terraria.Entity.GetSource_NaturalSpawn(), NPC.Center, (target.Center - NPC.Center).SafeNormalize(Vector2.UnitX) * 20, ModContent.ProjectileType<DarkBolt>(), BoltDamage, 0f, -1, 0, -20);
                             Particle pulse = new DirectionalPulseRing(NPC.Center, (target.Center - NPC.Center).SafeNormalize(Vector2.Zero) * 4f, new(117, 255, 159), new Vector2(0.5f, 1f), (target.Center - NPC.Center).ToRotation(), 0f, 1f, 24);
@@ -375,11 +374,11 @@ namespace Windfall.Content.NPCs.Bosses.TheOrator
                         }
 
                     }
-                    if(aiCounter > 1300)
+                    if(aiCounter > 1100)
                     {
                         NPC.velocity = (target.Center - NPC.Center).SafeNormalize(Vector2.Zero) * 8f;
-                        EmpyreanMetaball.SpawnDefaultParticle(NPC.Center + (target.Center - NPC.Center).SafeNormalize(Vector2.Zero) * 150f, Main.rand.NextVector2Circular(5f, 5f), 1.5f * ((aiCounter - 1300) / 2));
-                        if (aiCounter > 1600)
+                        EmpyreanMetaball.SpawnDefaultParticle(NPC.Center + (target.Center - NPC.Center).SafeNormalize(Vector2.Zero) * 150f, Main.rand.NextVector2Circular(5f, 5f), 1.5f * ((aiCounter - 1100) / 2));
+                        if (aiCounter > 1400)
                         {
                             aiCounter = 0;
                             if ((float)NPC.life / (float)NPC.lifeMax <= 0.1f)
@@ -390,7 +389,7 @@ namespace Windfall.Content.NPCs.Bosses.TheOrator
                             else
                             {
                                 AIState = States.DarkMonster;
-                                Particle pulse = new DirectionalPulseRing(NPC.Center, (target.Center - NPC.Center).SafeNormalize(Vector2.Zero) * 4f, new(117, 255, 159), new Vector2(0.5f, 1f), (target.Center - NPC.Center).ToRotation(), 0f, 2f, 24);
+                                Particle pulse = new DirectionalPulseRing(NPC.Center, (target.Center - NPC.Center).SafeNormalize(Vector2.Zero) * 8f, new(117, 255, 159), new Vector2(0.5f, 1f), (target.Center - NPC.Center).ToRotation(), 0f, 3f, 32);
                                 GeneralParticleHandler.SpawnParticle(pulse);
                             }
                         }
@@ -536,7 +535,7 @@ namespace Windfall.Content.NPCs.Bosses.TheOrator
                         }
                         else
                         {
-                            aiCounter = -60;
+                            aiCounter = 0;
                             AIState = States.DarkBarrage;
                         }
                     }
