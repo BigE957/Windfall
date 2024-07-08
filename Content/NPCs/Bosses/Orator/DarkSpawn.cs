@@ -90,7 +90,7 @@ namespace Windfall.Content.NPCs.Bosses.TheOrator
                 NPC.dontTakeDamage = false;
                 NPC.damage = StatCorrections.ScaleContactDamage(Main.masterMode ? 500 : CalamityWorld.death ? 420 : CalamityWorld.revenge ? 350 : Main.expertMode ? 240 : 180);
             }
-
+            /*
             #region Despawning
                 if (Orator == null)
             {
@@ -109,9 +109,9 @@ namespace Windfall.Content.NPCs.Bosses.TheOrator
                 CurrentAI = AIState.Sacrifice;  
             }
             #endregion
-            
-            //if (CurrentAI == AIState.OnBoss || CurrentAI == AIState.Spawning) Test Code
-            //   CurrentAI = AIState.Hunting;
+            */
+            if (CurrentAI == AIState.OnBoss || CurrentAI == AIState.Spawning)
+               CurrentAI = AIState.Hunting;
             
             switch (CurrentAI)
             {
@@ -170,12 +170,13 @@ namespace Windfall.Content.NPCs.Bosses.TheOrator
 
                     #region Attack
                     Vector2 toTarget = (target.Center - NPC.Center);
+                    attackBool = false;
                     if (Main.rand.NextBool(60) || toTarget.Length() > 600f)
                     {                      
                         NPC.rotation = toTarget.ToRotation();
                         if (Main.rand.NextBool(5) || toTarget.Length() > 600f)
-                        {                            
-                            attackBool = NPC.position.X > target.position.X;
+                        {
+                            attackBool = true;
                             NPC.velocity = toTarget.SafeNormalize(Vector2.Zero) * -5;
                             CurrentAI = AIState.Dashing;
                         }
@@ -183,6 +184,7 @@ namespace Windfall.Content.NPCs.Bosses.TheOrator
                         {
                             if (Main.rand.NextBool(3))
                             {
+                                attackBool = NPC.position.X > target.position.X;
                                 NPC.velocity = Vector2.Zero;
                                 CurrentAI = AIState.Globbing;
                             }
@@ -247,10 +249,14 @@ namespace Windfall.Content.NPCs.Bosses.TheOrator
                     break;
                 case AIState.Recoil:
                     NPC.velocity += NPC.velocity.SafeNormalize(Vector2.UnitX) / -2;
+                    if (attackBool)
+                    {
+                        NPC.velocity = NPC.velocity.RotateTowards((target.Center - NPC.Center).ToRotation(), 0.02f);
+                        NPC.rotation = NPC.velocity.ToRotation();
+                    }
                     dustStyle = Main.rand.NextBool() ? 66 : 263;
                     dust = Dust.NewDustPerfect(NPC.Center - NPC.rotation.ToRotationVector2() * 20, Main.rand.NextBool(3) ? 191 : dustStyle);
                     dust.scale = Main.rand.NextFloat(1.5f, 2.3f);
-                    //dust.velocity = Main.rand.NextVector2Circular(10f, 10f);
                     dust.noGravity = true;
                     dust.color = dust.type == dustStyle ? Color.LightGreen : default;
                     if (NPC.velocity.Length() < 2)
@@ -321,7 +327,9 @@ namespace Windfall.Content.NPCs.Bosses.TheOrator
             Vector2 halfSizeTexture = new(TextureAssets.Npc[NPC.type].Value.Width / 2, TextureAssets.Npc[NPC.type].Value.Height / Main.npcFrameCount[NPC.type] / 2);
             Vector2 drawPosition = new Vector2(NPC.Center.X, NPC.Center.Y) - screenPos;
             SpriteEffects spriteEffects = SpriteEffects.None;
-            if (!(NPC.rotation + Pi > Pi / 2 && NPC.rotation + Pi < 3 * Pi / 2))
+            if (!(NPC.rotation + Pi > Pi / 2 && NPC.rotation + Pi < 3 * Pi / 2) && CurrentAI != AIState.Globbing)
+                spriteEffects = SpriteEffects.FlipVertically;
+            if(attackBool && CurrentAI == AIState.Globbing)
                 spriteEffects = SpriteEffects.FlipVertically;
             spriteBatch.Draw(texture, drawPosition, NPC.frame, NPC.GetAlpha(drawColor), NPC.rotation, halfSizeTexture, NPC.scale, spriteEffects, 0f);
             return false;
