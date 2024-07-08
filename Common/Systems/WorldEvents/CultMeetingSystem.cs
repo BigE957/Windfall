@@ -12,9 +12,9 @@ namespace Windfall.Common.Systems.WorldEvents
         public static Point NebulaHideoutLocation;
         public static Point StardustHideoutLocation;
 
-        public static List<int> Recruits = new();
+        public static List<int> Recruits = [];
 
-        private static List<int> AvailableTopics = new();
+        private static List<int> AvailableTopics = [];
 
         public override void ClearWorld()
         {
@@ -70,7 +70,7 @@ namespace Windfall.Common.Systems.WorldEvents
             Paradise
         }
         public static MeetingTopic CurrentMeetingTopic;
-        private static List<int> NPCIndexs = new();
+        private static List<int> NPCIndexs = [];
         private static float zoom = 0;
         private static SoundStyle TeleportSound => new("CalamityMod/Sounds/Custom/SCalSounds/BrimstoneHellblastSound");
         public override void PreUpdateWorld()

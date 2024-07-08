@@ -13,10 +13,8 @@ namespace Windfall.Content.NPCs.GlobalNPCs
         {
             if(npc.type == ModContent.NPCType<TheOrator>())
             {
-                if(projectile.type ==  ModContent.ProjectileType<DukesDecapitatorProj>())
-                {
+                if(projectile.type ==  ModContent.ProjectileType<DukesDecapitatorProj>() || projectile.type == ModContent.ProjectileType<DukesDecapitatorBubble>())
                     modifiers.SourceDamage *= 0.6f;
-                }
             }
         }
     }
