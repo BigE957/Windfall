@@ -91,7 +91,7 @@ namespace Windfall.Content.NPCs.Bosses.TheOrator
                 NPC.dontTakeDamage = false;
                 NPC.damage = StatCorrections.ScaleContactDamage(Main.masterMode ? 500 : CalamityWorld.death ? 420 : CalamityWorld.revenge ? 350 : Main.expertMode ? 240 : 180);
             }
-            /*
+            
             #region Despawning
                 if (Orator == null)
             {
@@ -110,10 +110,10 @@ namespace Windfall.Content.NPCs.Bosses.TheOrator
                 CurrentAI = AIState.Sacrifice;  
             }
             #endregion
-            */
+            
             //testing code :P
-            if (CurrentAI == AIState.OnBoss || CurrentAI == AIState.Spawning)
-               CurrentAI = AIState.Hunting;
+            //if (CurrentAI == AIState.OnBoss || CurrentAI == AIState.Spawning)
+               //CurrentAI = AIState.Hunting;
             
             switch (CurrentAI)
             {
@@ -177,7 +177,7 @@ namespace Windfall.Content.NPCs.Bosses.TheOrator
                     #region Attack
                     Vector2 toTarget = (target.Center - NPC.Center);
                     attackBool = false;
-                    if (false)//Main.rand.NextBool(60) || toTarget.Length() > 600f)
+                    if (Main.rand.NextBool(60) || toTarget.Length() > 600f)
                     {                      
                         NPC.rotation = toTarget.ToRotation();
                         if (Main.rand.NextBool(5) || toTarget.Length() > 600f)
