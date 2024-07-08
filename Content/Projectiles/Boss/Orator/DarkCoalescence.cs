@@ -119,14 +119,18 @@ namespace Windfall.Content.Projectiles.Boss.Orator
                     {
                         ScreenShakeSystem.StartShake(12.5f);
                         SoundEngine.PlaySound(SoundID.DD2_MonkStaffGroundImpact, Projectile.Center);
+                        /*
                         for (int i = 0; i < 12; i++)
                         {
                             Projectile.NewProjectile(Entity.GetSource_Death(), Projectile.Center, (TwoPi / 12 * i).ToRotationVector2() * 10, ModContent.ProjectileType<DarkGlob>(), TheOrator.GlobDamage, 0f, -1, 1, 0.5f);
                             Projectile.NewProjectile(Entity.GetSource_Death(), Projectile.Center, (TwoPi / 12 * i + (TwoPi / 24)).ToRotationVector2() * 5, ModContent.ProjectileType<DarkGlob>(), TheOrator.GlobDamage, 0f, -1, 1, 0.5f);
                         }
+                        */
                         for (int i = 0; i < 24; i++)
                         {
                             Projectile.NewProjectile(Terraria.Entity.GetSource_NaturalSpawn(), Projectile.Center, (TwoPi / 24 * i).ToRotationVector2(), ModContent.ProjectileType<DarkBolt>(), TheOrator.BoltDamage, 0f, -1, 0, i % 2 == 0 ? -10 : 0);
+                            for (int j = 0; j < 3; j++)
+                                Projectile.NewProjectile(Terraria.Entity.GetSource_NaturalSpawn(), Projectile.Center, Main.rand.NextVector2Circular(15f, 15f), ModContent.ProjectileType<DarkGlob>(), TheOrator.GlobDamage, 0f, -1, 0, 1f);
                         }
                         CalamityMod.Particles.Particle pulse = new PulseRing(Projectile.Center, Vector2.Zero, Color.Teal, 0f, 4f, 16);
                         GeneralParticleHandler.SpawnParticle(pulse);
