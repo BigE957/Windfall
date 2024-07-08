@@ -37,9 +37,9 @@ namespace Windfall.Content.NPCs.Bosses.TheOrator
         }
         public override void SetBestiary(BestiaryDatabase database, BestiaryEntry bestiaryEntry)
         {
-            bestiaryEntry.Info.AddRange(new IBestiaryInfoElement[] {
+            bestiaryEntry.Info.AddRange([
             new FlavorTextBestiaryInfoElement(GetWindfallTextValue($"Bestiary.{nameof(TheOrator)}")),
-        });
+        ]);
         }
         public override void SetDefaults()
         {
@@ -73,7 +73,6 @@ namespace Windfall.Content.NPCs.Bosses.TheOrator
             MonsterDamage = StatCorrections.ScaleProjectileDamage(Main.masterMode ? 360 : CalamityWorld.death ? 280 : CalamityWorld.revenge ? 268 : Main.expertMode ? 240 : 180);
             GlobDamage = StatCorrections.ScaleProjectileDamage(Main.masterMode ? 255 : CalamityWorld.death ? 214 : CalamityWorld.revenge ? 186 : Main.expertMode ? 140 : 100);
             BoltDamage = StatCorrections.ScaleProjectileDamage(Main.masterMode ? 248 : CalamityWorld.death ? 172 : CalamityWorld.revenge ? 160 : Main.expertMode ? 138 : 90);
-            //Projectile.NewProjectile(Projectile.GetSource_NaturalSpawn(), NPC.Center, Vector2.Zero, ModContent.ProjectileType<OratorShaderArena>(), 0, 0f);
             DashDelay = CalamityWorld.death ? 20 : CalamityWorld.revenge ? 25 : 30;
         }
         private enum States
@@ -128,6 +127,7 @@ namespace Windfall.Content.NPCs.Bosses.TheOrator
 
             switch (AIState)
             {
+                //Phase 1
                 case States.Spawning:
                     DashDelay = CalamityWorld.death ? 20 : CalamityWorld.revenge ? 25 : 30;
                     target = Main.player[Player.FindClosest(NPC.Center, NPC.width, NPC.height)];
@@ -350,7 +350,7 @@ namespace Windfall.Content.NPCs.Bosses.TheOrator
                         if (aiCounter < 1000 && aiCounter > 30)
                         {
                             int gapSize = CalamityWorld.death ? 275 : CalamityWorld.revenge ? 300 : Main.expertMode ? 325 : 350;
-                            if (aiCounter % (CalamityWorld.death ? 90 : CalamityWorld.revenge ? 100 : 120) == 0)
+                            if (aiCounter % (CalamityWorld.death ? 100 : CalamityWorld.revenge ? 110 : 120) == 0)
                             {
                                 float offset = Main.rand.Next(0, 200);
                                 for (int i = 0; i < 12; i++)
@@ -359,14 +359,14 @@ namespace Windfall.Content.NPCs.Bosses.TheOrator
                                     proj = Projectile.NewProjectileDirect(Terraria.Entity.GetSource_NaturalSpawn(), target.Center + new Vector2(1500, -1200 + (gapSize * i) + offset), new Vector2(-20, -12), ModContent.ProjectileType<DarkGlob>(), GlobDamage, 0f, -1, 1, 1f);
                                 }
                             }
-                            else if (aiCounter % (CalamityWorld.death ? 45 : CalamityWorld.revenge ? 50 : 60) == 0)
+                            else if (aiCounter % (CalamityWorld.death ? 50 : CalamityWorld.revenge ? 55 : 60) == 0)
                             {
                                 Projectile.NewProjectile(Terraria.Entity.GetSource_NaturalSpawn(), NPC.Center, (target.Center - NPC.Center).SafeNormalize(Vector2.UnitX) * 20, ModContent.ProjectileType<DarkBolt>(), BoltDamage, 0f, -1, 0, -20);
                                 Particle pulse = new DirectionalPulseRing(NPC.Center, (target.Center - NPC.Center).SafeNormalize(Vector2.Zero) * 4f, new(117, 255, 159), new Vector2(0.5f, 1f), (target.Center - NPC.Center).ToRotation(), 0f, 1f, 24);
                                 GeneralParticleHandler.SpawnParticle(pulse);
                             }
                         }
-                        else if (aiCounter % (CalamityWorld.death ? 45 : CalamityWorld.revenge ? 50 : 60) == 0)
+                        else if (aiCounter % (CalamityWorld.death ? 50 : CalamityWorld.revenge ? 55 : 60) == 0)
                         {
                             Projectile.NewProjectile(Terraria.Entity.GetSource_NaturalSpawn(), NPC.Center, (target.Center - NPC.Center).SafeNormalize(Vector2.UnitX) * 20, ModContent.ProjectileType<DarkBolt>(), BoltDamage, 0f, -1, 0, -20);
                             Particle pulse = new DirectionalPulseRing(NPC.Center, (target.Center - NPC.Center).SafeNormalize(Vector2.Zero) * 4f, new(117, 255, 159), new Vector2(0.5f, 1f), (target.Center - NPC.Center).ToRotation(), 0f, 1f, 24);
@@ -374,11 +374,13 @@ namespace Windfall.Content.NPCs.Bosses.TheOrator
                         }
 
                     }
-                    if(aiCounter > 1100)
+                    #endregion
+                    if (aiCounter > 1100)
                     {
-                        NPC.velocity = (target.Center - NPC.Center).SafeNormalize(Vector2.Zero) * 8f;
+                        #region Attack Transition
+                        NPC.velocity = (target.Center - NPC.Center).SafeNormalize(Vector2.Zero) * (10f / (((float)aiCounter - 1000f) /66f) + 1f);
                         EmpyreanMetaball.SpawnDefaultParticle(NPC.Center + (target.Center - NPC.Center).SafeNormalize(Vector2.Zero) * 150f, Main.rand.NextVector2Circular(5f, 5f), 1.5f * ((aiCounter - 1100) / 2));
-                        if (aiCounter > 1400)
+                        if (aiCounter > 1300 || (float)NPC.life / (float)NPC.lifeMax <= 0.1f)
                         {
                             aiCounter = 0;
                             if ((float)NPC.life / (float)NPC.lifeMax <= 0.1f)
@@ -393,8 +395,8 @@ namespace Windfall.Content.NPCs.Bosses.TheOrator
                                 GeneralParticleHandler.SpawnParticle(pulse);
                             }
                         }
-                    }
-                    #endregion
+                        #endregion
+                    }                 
                     break;
                 case States.DarkSlice:
                     int SliceDashCount = CalamityWorld.death ? 5 : CalamityWorld.revenge ? 4 : 3;
@@ -578,7 +580,7 @@ namespace Windfall.Content.NPCs.Bosses.TheOrator
                         }
                     }
                     break;
-
+                //Phase 2
                 case States.DarkOrbit:
                     int OrbitDashCount = CalamityWorld.death ? 5 : CalamityWorld.revenge ? 3 : 1;
                     float OrbitRate = CalamityWorld.death ? 0.045f : CalamityWorld.revenge ? 0.0475f : 0.045f;
@@ -714,7 +716,7 @@ namespace Windfall.Content.NPCs.Bosses.TheOrator
                             NPC.velocity = NPC.velocity.SafeNormalize(Vector2.Zero) * 15;
                     }
                     break;
-
+                //Animations
                 case States.Defeat:
 
                     #region Movement
