@@ -74,6 +74,7 @@ namespace Windfall.Content.NPCs.Bosses.TheOrator
             NPC.rotation = NPC.velocity.ToRotation();
 
         }
+        bool movingBackward = false;
         public override void AI()
         {
             Player target = Main.player[Player.FindClosest(NPC.Center, NPC.width, NPC.height)];
@@ -110,6 +111,7 @@ namespace Windfall.Content.NPCs.Bosses.TheOrator
             }
             #endregion
             */
+            //testing code :P
             if (CurrentAI == AIState.OnBoss || CurrentAI == AIState.Spawning)
                CurrentAI = AIState.Hunting;
             
@@ -145,11 +147,12 @@ namespace Windfall.Content.NPCs.Bosses.TheOrator
                     #region Movement
                     Vector2 homeInVector = target.Center - NPC.Center;
                     float targetDist = homeInVector.Length();
-                    homeInVector.Normalize();
+                    homeInVector.Normalize();                    
                     if (targetDist > 300f)
                     {
                         float velocity = 12f;
                         NPC.velocity = (NPC.velocity * 40f + homeInVector * velocity) / 41f;
+                        movingBackward = NPC.velocity.LengthSquared() < NPC.oldVelocity.LengthSquared();
                     }
                     else
                     {
@@ -157,21 +160,24 @@ namespace Windfall.Content.NPCs.Bosses.TheOrator
                         {
                             float velocity = -12f;
                             NPC.velocity = (NPC.velocity * 40f + homeInVector * velocity) / 41f;
+                            movingBackward = NPC.velocity.LengthSquared() > NPC.oldVelocity.LengthSquared();
                         }
                         else
-                            NPC.velocity *= 0.97f;
+                        {
+                            NPC.velocity *= 0.9f;
+                        }
                     }
                     NPC.rotation = (target.Center - NPC.Center).ToRotation();
-                    if(NPC.rotation + Pi > Pi / 2 && NPC.rotation + Pi < 3 * Pi / 2)
-                        NPC.rotation = 0 + (PiOver4 * (NPC.velocity.Length() / 10));
+                    if (NPC.rotation + Pi > Pi / 2 && NPC.rotation + Pi < 3 * Pi / 2)
+                        NPC.rotation = 0 + (PiOver4 * (NPC.velocity.Length() / (10 * (movingBackward ? -1 : 1))));
                     else
-                        NPC.rotation = Pi - (PiOver4 * (NPC.velocity.Length() / 10));
+                        NPC.rotation = Pi - (PiOver4 * (NPC.velocity.Length() / (10 * (movingBackward ? -1 : 1))));
                     #endregion
 
                     #region Attack
                     Vector2 toTarget = (target.Center - NPC.Center);
                     attackBool = false;
-                    if (Main.rand.NextBool(60) || toTarget.Length() > 600f)
+                    if (false)//Main.rand.NextBool(60) || toTarget.Length() > 600f)
                     {                      
                         NPC.rotation = toTarget.ToRotation();
                         if (Main.rand.NextBool(5) || toTarget.Length() > 600f)
