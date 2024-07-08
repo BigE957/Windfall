@@ -588,9 +588,9 @@ namespace Windfall.Content.NPCs.Bosses.TheOrator
                 case States.DarkOrbit:
                     int OrbitDashCount = CalamityWorld.death ? 5 : CalamityWorld.revenge ? 3 : 1;
                     float OrbitRate = CalamityWorld.death ? 0.035f : CalamityWorld.revenge ? 0.03f : 0.025f;
+                    Projectile border = Main.projectile.First(p => p.active && p.type == ModContent.ProjectileType<OratorBorder>());
                     if (aiCounter >= 0)
                     {
-                        Projectile border = Main.projectile.First(p => p.active && p.type == ModContent.ProjectileType<OratorBorder>());
                         target = Main.player[Player.FindClosest(NPC.Center, NPC.width, NPC.height)];
                         if (aiCounter == 0)
                         {
@@ -639,7 +639,7 @@ namespace Windfall.Content.NPCs.Bosses.TheOrator
                                     NPC.velocity = (target.Center - NPC.Center).SafeNormalize(Vector2.UnitY) * -4;
                                 }
                             }
-                            else if (CalamityWorld.death || (CalamityWorld.revenge && aiCounter - NPC.ai[3] < -10) || (Main.expertMode && aiCounter - NPC.ai[3] < -20))
+                            else if (aiCounter - NPC.ai[3] < (CalamityWorld.death ? - 15 : CalamityWorld.revenge  ? -20 : -25))
                             {
                                 VectorToTarget = target.Center - NPC.Center;
                                 NPC.velocity = VectorToTarget.SafeNormalize(Vector2.UnitY) * -4;
@@ -658,6 +658,11 @@ namespace Windfall.Content.NPCs.Bosses.TheOrator
                             }
                             NPC.velocity = VectorToTarget;
                             VectorToTarget *= 0.95f;
+                            if (Vector2.Distance(border.Center, NPC.Center) >= OratorBorder.Radius)
+                            {
+                                VectorToTarget = (target.Center - NPC.Center).SafeNormalize(Vector2.Zero) * VectorToTarget.Length();
+                                NPC.velocity = VectorToTarget;
+                            }
 
                             #region Dash Projectiles
                             if (NPC.velocity.Length() > 2f)
@@ -691,6 +696,7 @@ namespace Windfall.Content.NPCs.Bosses.TheOrator
                                     else
                                     {
                                         AIState = States.DarkOrbit;
+                                        aiCounter = -60;
                                         attackCounter = 0;
                                     }
                                 }
@@ -702,11 +708,11 @@ namespace Windfall.Content.NPCs.Bosses.TheOrator
                     }
                     else
                     {
-                        if (NPC.Center.Y < target.Center.Y - 400)
+                        if (NPC.Center.Y < border.Center.Y - 700)
                             NPC.velocity.Y++;
                         else
                             NPC.velocity.Y--;
-                        if (NPC.Center.X < target.Center.X)
+                        if (NPC.Center.X < border.Center.X)
                             NPC.velocity.X++;
                         else
                             NPC.velocity.X--;
@@ -750,6 +756,8 @@ namespace Windfall.Content.NPCs.Bosses.TheOrator
                             break;
                         case 420:
                             AIState = States.DarkOrbit;
+                            aiCounter = -60;
+                            attackCounter = 0;
                             break;
                     }
                     #endregion

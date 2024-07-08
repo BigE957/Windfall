@@ -14,7 +14,7 @@ namespace Windfall.Content.Projectiles.Boss.Orator
     {
         public ref float counter => ref Projectile.ai[0];
 
-        public float Radius = 750f;
+        public static readonly float Radius = 750f;
 
         public override void SetDefaults()
         {
