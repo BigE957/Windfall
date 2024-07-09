@@ -28,7 +28,7 @@ namespace Windfall.Content.Projectiles.Boss.Orator
         }
         public override void AI()
         {
-            if (Projectile.ai[0] == 0)
+            if (Projectile.ai[0] == 0 || Projectile.ai[0] == 2)
             {
                 if (Projectile.timeLeft > 30)
                     if (Projectile.scale < MaxSize)
@@ -42,9 +42,13 @@ namespace Windfall.Content.Projectiles.Boss.Orator
 
                 if (Projectile.velocity.Length() > 0.5f)
                 {
-                    Projectile.velocity -= Projectile.velocity.SafeNormalize(Vector2.UnitX) * 0.2f;
-                    if (Projectile.hostile)
-                        EmpyreanMetaball.SpawnDefaultParticle(Projectile.Center + Projectile.velocity, Vector2.Zero, Projectile.scale * 60);
+                    if (Projectile.ai[0] == 0)
+                    {
+                        Projectile.velocity *= 0.985f;
+                        if (Projectile.velocity.LengthSquared() < 1)
+                            Projectile.velocity = Vector2.Zero;
+                    }
+                    EmpyreanMetaball.SpawnDefaultParticle(Projectile.Center + Projectile.velocity, Vector2.Zero, Projectile.scale * 60);
                 }
                 else
                 {

@@ -86,6 +86,9 @@ namespace Windfall.Content.NPCs.Bosses.TheOrator
             DarkCollision,
 
             DarkOrbit,
+            DarkFlood,
+            DarkCrush,
+            DarkFlight,
 
             PhaseChange,
             Defeat,
@@ -172,7 +175,7 @@ namespace Windfall.Content.NPCs.Bosses.TheOrator
                 case States.DarkMonster:
                     if (aiCounter == 1)
                         Projectile.NewProjectile(Terraria.Entity.GetSource_NaturalSpawn(), NPC.Center, (target.Center - NPC.Center).SafeNormalize(Vector2.Zero) * 40, ModContent.ProjectileType<DarkMonster>(), MonsterDamage, 0f);                   
-                    if (aiCounter < 900)
+                    if (aiCounter < 1200)
                     {
                         #region Movement 
                         NPC.velocity = target.velocity;
@@ -658,7 +661,7 @@ namespace Windfall.Content.NPCs.Bosses.TheOrator
                             }
                             NPC.velocity = VectorToTarget;
                             VectorToTarget *= 0.95f;
-                            if (Vector2.Distance(border.Center, NPC.Center) >= OratorBorder.Radius)
+                            if (border.ModProjectile is OratorBorder oraBorder && Vector2.Distance(border.Center, NPC.Center) >= oraBorder.Radius)
                             {
                                 VectorToTarget = (target.Center - NPC.Center).SafeNormalize(Vector2.Zero) * VectorToTarget.Length();
                                 NPC.velocity = VectorToTarget;
@@ -695,9 +698,8 @@ namespace Windfall.Content.NPCs.Bosses.TheOrator
                                     }
                                     else
                                     {
-                                        AIState = States.DarkOrbit;
-                                        aiCounter = -60;
-                                        attackCounter = 0;
+                                        AIState = States.DarkFlight;
+                                        aiCounter = 0;
                                     }
                                 }
                                 else
@@ -719,6 +721,135 @@ namespace Windfall.Content.NPCs.Bosses.TheOrator
                         if (NPC.velocity.Length() > 15)
                             NPC.velocity = NPC.velocity.SafeNormalize(Vector2.Zero) * 15;
                     }
+                    break;
+                case States.DarkCrush:
+                    target = Main.player[Player.FindClosest(NPC.Center, NPC.width, NPC.height)];
+                    border = Main.projectile.First(p => p.active && p.type == ModContent.ProjectileType<OratorBorder>());
+                    OratorBorder oratorBorder = border.ModProjectile as OratorBorder;
+                    #region Movement
+                    if (NPC.Center.Y < border.Center.Y)
+                        NPC.velocity.Y++;
+                    else
+                        NPC.velocity.Y--;
+                    if (NPC.Center.X < border.Center.X)
+                        NPC.velocity.X++;
+                    else
+                        NPC.velocity.X--;
+                    if (NPC.velocity.Length() > 8)
+                        NPC.velocity = NPC.velocity.SafeNormalize(Vector2.Zero) * 8;
+                    #endregion
+                    if(aiCounter < 1500 && oratorBorder.trueScale > 1.25f)
+                        oratorBorder.trueScale -= 0.001f;
+                    if (aiCounter % 20 == 0)
+                    {
+                        if(CalamityWorld.revenge && aiCounter % 60 == 0)
+                            Projectile.NewProjectile(Projectile.GetSource_NaturalSpawn(), NPC.Center, (target.Center - NPC.Center).SafeNormalize(Vector2.Zero), ModContent.ProjectileType<DarkBolt>(), BoltDamage, 0f, -1, 0, -5);
+
+                        Vector2 spawnPosition = border.Center + (Vector2.UnitX * (oratorBorder.Radius + 200)).RotatedBy(Main.rand.NextFloat(TwoPi));
+                        Projectile.NewProjectile(Projectile.GetSource_NaturalSpawn(), spawnPosition, (border.Center - spawnPosition).SafeNormalize(Vector2.Zero).RotatedBy(Main.rand.NextFloat(-0.75f, 0.75f)) * Main.rand.NextFloat(4f, 6f), ModContent.ProjectileType<DarkGlob>(), GlobDamage, 0f, -1, 2, 0.5f);
+                    }
+                    if (aiCounter >= 1500)
+                    {
+                        oratorBorder.trueScale += 0.003f;
+                        if (oratorBorder.trueScale >= 3f)
+                        {
+                            oratorBorder.trueScale = 3f;
+                            aiCounter = 0;
+                            if ((float)NPC.life / (float)NPC.lifeMax <= 0.1f)
+                            {
+                                AIState = States.Defeat;
+                                attackCounter = 0;
+                            }
+                            else
+                            {
+                                AIState = States.DarkOrbit;
+                                aiCounter = -60;
+                                attackCounter = 0;
+                            }
+                        }
+                    }
+                    break;
+                case States.DarkFlight:
+                    target = Main.player[Player.FindClosest(NPC.Center, NPC.width, NPC.height)];
+                    border = Main.projectile.First(p => p.active && p.type == ModContent.ProjectileType<OratorBorder>());
+                    oratorBorder = border.ModProjectile as OratorBorder;
+                    #region Movement
+                    if (NPC.Center.Y < border.Center.Y)
+                        NPC.velocity.Y++;
+                    else
+                        NPC.velocity.Y--;
+                    if (NPC.Center.X < border.Center.X - 700)
+                        NPC.velocity.X++;
+                    else
+                        NPC.velocity.X--;
+                    if (NPC.velocity.Length() > 8)
+                        NPC.velocity = NPC.velocity.SafeNormalize(Vector2.Zero) * 8;
+                    #endregion
+                    #region Projectiles
+                    if ((aiCounter > 1000 && aiCounter % 120 == 0) || (aiCounter <= 1000 && aiCounter % 60 == 0)) // Walls
+                    {
+                        float wallHole = Main.rand.NextFloat(-oratorBorder.Radius + 300, oratorBorder.Radius - 300);
+                        if (Main.rand.NextBool()) // Horizontal or Vertical?
+                        {
+                            if (Main.rand.NextBool()) //Left or Right?
+                            {
+                                for (int i = 0; i < 64; i++) //Left
+                                {
+                                    Projectile.NewProjectile(Projectile.GetSource_NaturalSpawn(), border.Center + new Vector2(-oratorBorder.Radius, -oratorBorder.Radius + (24 * i)), Vector2.UnitX * 5, ModContent.ProjectileType<DarkGlob>(), GlobDamage, 0f, -1, 2, 0.5f);
+                                    if (Main.rand.NextBool(4))
+                                        i += 6;
+                                }
+                            }
+                            else
+                            {
+                                for (int i = 0; i < 64; i++) //Right
+                                {
+                                    Projectile.NewProjectile(Projectile.GetSource_NaturalSpawn(), border.Center + new Vector2(oratorBorder.Radius, -oratorBorder.Radius + (24 * i)), Vector2.UnitX * -5, ModContent.ProjectileType<DarkGlob>(), GlobDamage, 0f, -1, 2, 0.5f);
+                                    if (Main.rand.NextBool(4))
+                                        i += 6;
+                                }
+                            }
+                        }
+                        else
+                        {
+                            if (Main.rand.NextBool()) //Top or Bottom?
+                            {
+                                for (int i = 0; i < 64; i++) //Top
+                                {
+                                    Projectile.NewProjectile(Projectile.GetSource_NaturalSpawn(), border.Center + new Vector2(-oratorBorder.Radius + (24 * i), -oratorBorder.Radius), Vector2.UnitY * 5, ModContent.ProjectileType<DarkGlob>(), GlobDamage, 0f, -1, 2, 0.5f);
+                                    if (Main.rand.NextBool(4))
+                                        i += 6;
+                                }
+                            }
+                            else
+                            {
+                                for (int i = 0; i < 64; i++) //Top
+                                {
+                                    Projectile.NewProjectile(Projectile.GetSource_NaturalSpawn(), border.Center + new Vector2(-oratorBorder.Radius + (24 * i), oratorBorder.Radius), Vector2.UnitY * -5, ModContent.ProjectileType<DarkGlob>(), GlobDamage, 0f, -1, 2, 0.5f);
+                                    if (Main.rand.NextBool(4))
+                                        i += 6;
+                                }
+                            }
+                        }
+                    }
+                    if(aiCounter % 240 == 0 && aiCounter > 1000)
+                        Projectile.NewProjectile(Projectile.GetSource_NaturalSpawn(), new Vector2(target.Center.X + 500, target.Center.Y), Vector2.Zero, ModContent.ProjectileType<DarkCoalescence>(), MonsterDamage, 0f, -1, 0, Main.rand.NextBool() ? -1 : 1, Main.rand.NextBool() ? -1 : 1);
+                    if (aiCounter >= 2500)
+                    {
+                        aiCounter = 0;
+                        if ((float)NPC.life / (float)NPC.lifeMax <= 0.1f)
+                        {
+                            AIState = States.Defeat;
+                            attackCounter = 0;
+                        }
+                        else
+                        {
+                            AIState = States.DarkCrush;
+                            aiCounter = 0;
+                            attackCounter = 0;
+                        }
+                    }
+                    #endregion
                     break;
                 //Animations
                 case States.PhaseChange:
