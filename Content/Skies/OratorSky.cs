@@ -78,7 +78,7 @@ namespace Windfall.Content.Skies
                 }
                 #endregion
                 Vector2 halfSizeTexture = new(moon.Width / 2, moon.Height / 8 / 2);
-                Vector2 position = new(Main.screenWidth / 2, 175 + bgTop);
+                Vector2 position = new(Main.screenWidth / 2, 180 + bgTop);
                 Texture2D bloomCircle = (Texture2D)ModContent.Request<Texture2D>("CalamityMod/Particles/BloomCircle", AssetRequestMode.ImmediateLoad);
                 Texture2D sparkle = (Texture2D)ModContent.Request<Texture2D>("CalamityMod/Particles/ThinSparkle", AssetRequestMode.ImmediateLoad);
 
@@ -93,7 +93,7 @@ namespace Windfall.Content.Skies
                 spriteBatch.End();
 
                 spriteBatch.Begin();
-                spriteBatch.Draw(moon, position, moon.Frame(1, 8), oratorGreen * opacity, 0f, halfSizeTexture, 1.5f, SpriteEffects.None, 0f);
+                spriteBatch.Draw(moon, position, moon.Frame(1, 8), oratorGreen * opacity, 0f, halfSizeTexture, 1.25f, SpriteEffects.None, 0f);
             }
         }
         public override void Update(GameTime gameTime)
