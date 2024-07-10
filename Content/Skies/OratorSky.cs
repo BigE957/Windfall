@@ -106,7 +106,7 @@ namespace Windfall.Content.Skies
                     Texture2D t2D = TextureAssets.Cloud[cloud.type].Value;
                     Vector2 origin = new (t2D.Width * 0.5f, t2D.Height * 0.5f);
                     Vector2 pos = new(cloud.position.X, (cloud.position.Y * 0.4f) + bgTop + 800);
-                    spriteBatch.Draw(t2D, pos, new Rectangle(0, 0, t2D.Width, t2D.Height), oratorGreen * opacity, cloud.rotation, origin, cloud.scale, SpriteEffects.None, 0f);
+                    spriteBatch.Draw(t2D, pos, new Rectangle(0, 0, t2D.Width, t2D.Height), oratorGreen * opacity, cloud.rotation, origin, cloud.scale * 2.5f, SpriteEffects.None, 0f);
                 }
             
             }
