@@ -786,7 +786,8 @@ namespace Windfall.Content.NPCs.Bosses.TheOrator
                         NPC.velocity = NPC.velocity.SafeNormalize(Vector2.Zero) * 8;
                     #endregion
                     #region Projectiles
-                    if ((aiCounter > 1000 && aiCounter % 120 == 0) || (aiCounter <= 1000 && aiCounter % 60 == 0)) // Walls
+                    #region Projectile Walls
+                    if ((aiCounter > 1000 && aiCounter % 120 == 0) || (aiCounter <= 1000 && aiCounter % 60 == 0))
                     {
                         float wallHole = Main.rand.NextFloat(-oratorBorder.Radius + 300, oratorBorder.Radius - 300);
                         if (Main.rand.NextBool()) // Horizontal or Vertical?
@@ -795,18 +796,20 @@ namespace Windfall.Content.NPCs.Bosses.TheOrator
                             {
                                 for (int i = 0; i < 64; i++) //Left
                                 {
-                                    Projectile.NewProjectile(Projectile.GetSource_NaturalSpawn(), border.Center + new Vector2(-oratorBorder.Radius, -oratorBorder.Radius + (24 * i)), Vector2.UnitX * 5, ModContent.ProjectileType<DarkGlob>(), GlobDamage, 0f, -1, 2, 0.5f);
+                                    Projectile proj = Projectile.NewProjectileDirect(Projectile.GetSource_NaturalSpawn(), border.Center + new Vector2(-oratorBorder.Radius, -oratorBorder.Radius + (24 * i)), Vector2.UnitX * 5, ModContent.ProjectileType<DarkGlob>(), GlobDamage, 0f, -1, 2, 0.5f);
                                     if (Main.rand.NextBool(4))
                                         i += 6;
+                                    proj.timeLeft = 300;
                                 }
                             }
                             else
                             {
                                 for (int i = 0; i < 64; i++) //Right
                                 {
-                                    Projectile.NewProjectile(Projectile.GetSource_NaturalSpawn(), border.Center + new Vector2(oratorBorder.Radius, -oratorBorder.Radius + (24 * i)), Vector2.UnitX * -5, ModContent.ProjectileType<DarkGlob>(), GlobDamage, 0f, -1, 2, 0.5f);
+                                    Projectile proj = Projectile.NewProjectileDirect(Projectile.GetSource_NaturalSpawn(), border.Center + new Vector2(oratorBorder.Radius, -oratorBorder.Radius + (24 * i)), Vector2.UnitX * -5, ModContent.ProjectileType<DarkGlob>(), GlobDamage, 0f, -1, 2, 0.5f);
                                     if (Main.rand.NextBool(4))
                                         i += 6;
+                                    proj.timeLeft = 300;
                                 }
                             }
                         }
@@ -816,24 +819,28 @@ namespace Windfall.Content.NPCs.Bosses.TheOrator
                             {
                                 for (int i = 0; i < 64; i++) //Top
                                 {
-                                    Projectile.NewProjectile(Projectile.GetSource_NaturalSpawn(), border.Center + new Vector2(-oratorBorder.Radius + (24 * i), -oratorBorder.Radius), Vector2.UnitY * 5, ModContent.ProjectileType<DarkGlob>(), GlobDamage, 0f, -1, 2, 0.5f);
+                                    Projectile proj = Projectile.NewProjectileDirect(Projectile.GetSource_NaturalSpawn(), border.Center + new Vector2(-oratorBorder.Radius + (24 * i), -oratorBorder.Radius), Vector2.UnitY * 5, ModContent.ProjectileType<DarkGlob>(), GlobDamage, 0f, -1, 2, 0.5f);
                                     if (Main.rand.NextBool(4))
                                         i += 6;
+                                    proj.timeLeft = 300;
                                 }
                             }
                             else
                             {
                                 for (int i = 0; i < 64; i++) //Top
                                 {
-                                    Projectile.NewProjectile(Projectile.GetSource_NaturalSpawn(), border.Center + new Vector2(-oratorBorder.Radius + (24 * i), oratorBorder.Radius), Vector2.UnitY * -5, ModContent.ProjectileType<DarkGlob>(), GlobDamage, 0f, -1, 2, 0.5f);
+                                    Projectile proj = Projectile.NewProjectileDirect(Projectile.GetSource_NaturalSpawn(), border.Center + new Vector2(-oratorBorder.Radius + (24 * i), oratorBorder.Radius), Vector2.UnitY * -5, ModContent.ProjectileType<DarkGlob>(), GlobDamage, 0f, -1, 2, 0.5f);
                                     if (Main.rand.NextBool(4))
                                         i += 6;
+                                    proj.timeLeft = 300;
                                 }
                             }
                         }
                     }
+                    #endregion
                     if(aiCounter % 240 == 0 && aiCounter > 1000)
                         Projectile.NewProjectile(Projectile.GetSource_NaturalSpawn(), new Vector2(target.Center.X + 500, target.Center.Y), Vector2.Zero, ModContent.ProjectileType<DarkCoalescence>(), MonsterDamage, 0f, -1, 0, Main.rand.NextBool() ? -1 : 1, Main.rand.NextBool() ? -1 : 1);
+                    #endregion
                     if (aiCounter >= 2500)
                     {
                         aiCounter = 0;
@@ -849,7 +856,7 @@ namespace Windfall.Content.NPCs.Bosses.TheOrator
                             attackCounter = 0;
                         }
                     }
-                    #endregion
+                    
                     break;
                 //Animations
                 case States.PhaseChange:
