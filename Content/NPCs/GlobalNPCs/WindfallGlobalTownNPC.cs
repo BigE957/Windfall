@@ -11,7 +11,7 @@ namespace Windfall.Content.NPCs.GlobalNPCs
         private static readonly string Path = "Dialogue.Others";
         public override void GetChat(NPC npc, ref string chat)
         {
-            bool LooneyToon = NPC.FindFirstNPC(NPCType<TravellingCultist>()) != -1;
+            bool DragonDeez = NPC.FindFirstNPC(NPCType<TravellingCultist>()) != -1;
             bool DrugDealer = NPC.FindFirstNPC(NPCType<WanderingPotionSeller>()) != -1;
             bool Calculus = NPC.FindFirstNPC(NPCType<WanderingCalClone>()) != -1;
 
@@ -70,6 +70,10 @@ namespace Windfall.Content.NPCs.GlobalNPCs
                 case NPCID.Guide:
                     break;
                 case NPCID.Mechanic:
+                    if (DragonDeez && Main.rand.NextBool(2))
+                        chat = GetWindfallTextValue($"{Path}.Mechanic.TravellingCultist");
+                    else if (Main.rand.NextBool(10))
+                        chat = GetWindfallTextValue($"{Path}.Mechanic.DragonCult");
                     break;
                 case NPCID.Merchant:
                     if (Main.rand.NextBool(2) && DrugDealer)
