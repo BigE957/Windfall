@@ -34,7 +34,7 @@ namespace Windfall.Content.Skies
             
             if (Main.netMode != NetmodeID.Server)
             {
-                int bgTop = (int)((-Main.screenPosition.Y) / (Main.worldSurface * 16.0 - 600.0) * 200.0);
+                float bgTop = (float)((-Main.screenPosition.Y) / (Main.worldSurface * 16.0 - 600.0) * 200.0);
                 int bgLeft = (int)((-Main.screenPosition.X) / (Main.spawnTileX * 16.0 + 1200.0) * 800.0);
                 //Main.NewText(bgTop);
                 //Main.NewText(bgLeft);
@@ -105,7 +105,7 @@ namespace Windfall.Content.Skies
                         continue;
                     Texture2D t2D = TextureAssets.Cloud[cloud.type].Value;
                     Vector2 origin = new (t2D.Width * 0.5f, t2D.Height * 0.5f);
-                    Vector2 pos = new(cloud.position.X, (cloud.position.Y * 0.4f) + bgTop + 800);
+                    Vector2 pos = new(cloud.position.X, (cloud.position.Y) + 1900 + (bgTop * 5f));
                     spriteBatch.Draw(t2D, pos, new Rectangle(0, 0, t2D.Width, t2D.Height), oratorGreen * opacity, cloud.rotation, origin, cloud.scale * 2.5f, SpriteEffects.None, 0f);
                 }
             
