@@ -11,6 +11,8 @@ using Windfall.Content.Items.Weapons.Summon;
 using Terraria.GameContent.Bestiary;
 using System.Diagnostics.Metrics;
 using Terraria;
+using Windfall.Content.Skies;
+using Terraria.Graphics.Effects;
 
 namespace Windfall.Content.NPCs.Bosses.TheOrator
 {
@@ -74,6 +76,7 @@ namespace Windfall.Content.NPCs.Bosses.TheOrator
             GlobDamage = StatCorrections.ScaleProjectileDamage(Main.masterMode ? 255 : CalamityWorld.death ? 214 : CalamityWorld.revenge ? 186 : Main.expertMode ? 140 : 100);
             BoltDamage = StatCorrections.ScaleProjectileDamage(Main.masterMode ? 248 : CalamityWorld.death ? 172 : CalamityWorld.revenge ? 160 : Main.expertMode ? 138 : 90);
             DashDelay = CalamityWorld.death ? 20 : CalamityWorld.revenge ? 25 : 30;
+            SkyManager.Instance.Activate("Windfall:Orator", args: Array.Empty<object>());
         }
         private enum States
         {
