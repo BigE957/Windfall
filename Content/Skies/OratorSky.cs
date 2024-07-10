@@ -1,4 +1,5 @@
-﻿using Terraria.Graphics.Effects;
+﻿using Luminance.Common.Utilities;
+using Terraria.Graphics.Effects;
 using Windfall.Content.NPCs.Bosses.TheOrator;
 
 namespace Windfall.Content.Skies
@@ -82,7 +83,8 @@ namespace Windfall.Content.Skies
                     position = new Vector2(posX + origin.X, posY + origin.Y + bgTop);
                     spriteBatch.Draw(t2D, position, new Rectangle(0, 0, t2D.Width, t2D.Height), Color.White * star.twinkle * colorMult, star.rotation, origin, star.scale * star.twinkle, SpriteEffects.None, 0f);
                 }
-                spriteBatch.Draw(moon, new Vector2(Main.screenWidth / 2 - (moon.Width * 0.5f), 200 + bgTop), moon.Frame(1, 8), oratorGreen * opacity);
+                Vector2 halfSizeTexture = new(moon.Width / 2, moon.Height / 8 / 2);
+                spriteBatch.Draw(moon, new Vector2(Main.screenWidth / 2, 175 + bgTop), moon.Frame(1, 8), oratorGreen * opacity, 0f, halfSizeTexture, 1.5f, SpriteEffects.None, 0f);
             }
         }
         public override void Update(GameTime gameTime)
@@ -90,8 +92,16 @@ namespace Windfall.Content.Skies
             if ((!Main.npc.Any(n => n.active && n.type == ModContent.NPCType<TheOrator>()) || Main.gameMenu))
                 skyActive = false;
 
-            if (skyActive && opacity < 1f)
-                opacity += 0.02f;
+            if (skyActive)
+            {
+                if (opacity < 1f)
+                    opacity += 0.02f;
+                else
+                {
+                    Main.dayTime = false;
+                    Main.time = 16200;
+                }
+            }
             else if (!skyActive && opacity > 0f)
                 opacity -= 0.02f;
 
