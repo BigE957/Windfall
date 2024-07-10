@@ -35,6 +35,9 @@ namespace Windfall.Content.Skies
             if (Main.netMode != NetmodeID.Server)
             {
                 int bgTop = (int)((-Main.screenPosition.Y) / (Main.worldSurface * 16.0 - 600.0) * 200.0);
+                int bgLeft = (int)((-Main.screenPosition.X) / (Main.spawnTileX * 16.0 + 1200.0) * 800.0);
+                //Main.NewText(bgTop);
+                //Main.NewText(bgLeft);
                 #region Stars
                 float colorMult = 0.952f * opacity;
                 float width1 = Main.screenWidth / 500f;
@@ -94,6 +97,18 @@ namespace Windfall.Content.Skies
 
                 spriteBatch.Begin();
                 spriteBatch.Draw(moon, position, moon.Frame(1, 8), oratorGreen * opacity, 0f, halfSizeTexture, 1.25f, SpriteEffects.None, 0f);
+                
+                for(int i = 0; i < Main.cloud.Length; i++)
+                {
+                    Cloud cloud = Main.cloud[i];
+                    if (cloud == null || !cloud.active)
+                        continue;
+                    Texture2D t2D = TextureAssets.Cloud[cloud.type].Value;
+                    Vector2 origin = new (t2D.Width * 0.5f, t2D.Height * 0.5f);
+                    Vector2 pos = new(cloud.position.X, (cloud.position.Y * 0.4f) + bgTop + 800);
+                    spriteBatch.Draw(t2D, pos, new Rectangle(0, 0, t2D.Width, t2D.Height), oratorGreen * opacity, cloud.rotation, origin, cloud.scale, SpriteEffects.None, 0f);
+                }
+            
             }
         }
         public override void Update(GameTime gameTime)
