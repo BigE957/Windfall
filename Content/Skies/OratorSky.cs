@@ -33,16 +33,16 @@ namespace Windfall.Content.Skies
         }
         public override void Draw(SpriteBatch spriteBatch, float minDepth, float maxDepth)
         {
+            Color oratorGreen = new(117, 255, 159);           
+            Texture2D moon = TextureAssets.Moon[Main.moonType].Value;
             spriteBatch.Draw(TextureAssets.BlackTile.Value, new Rectangle(0, 0, Main.screenWidth * 2, Main.screenHeight * 2), Color.Black * opacity);
-
-            // Terraria's conditions.
+            
             if (Main.netMode != NetmodeID.Server)
             {
                 int bgTop = (int)((-Main.screenPosition.Y) / (Main.worldSurface * 16.0 - 600.0) * 200.0);
                 float colorMult = 0.952f * opacity;
-                Color astralcyan = new Color(100, 183, 255);
-                Color purple = new Color(201, 148, 255);
-                Color yellow = new Color(255, 146, 73);
+                Color teal = Color.Teal;
+                Color green = Color.Green;
                 float width1 = Main.screenWidth / 500f;
                 float height1 = Main.screenHeight / 600f;
                 float width2 = Main.screenWidth / 600f;
@@ -62,19 +62,19 @@ namespace Windfall.Content.Skies
                     float posX = star.position.X * width1;
                     float posY = star.position.Y * height1;
                     Vector2 position = new Vector2(posX + origin.X, posY + origin.Y + bgTop);
-                    spriteBatch.Draw(t2D, position, new Rectangle(0, 0, t2D.Width, t2D.Height), astralcyan * star.twinkle * colorMult, star.rotation, origin, (star.scale * star.twinkle) - 0.2f, SpriteEffects.None, 0f);
+                    spriteBatch.Draw(t2D, position, new Rectangle(0, 0, t2D.Width, t2D.Height), oratorGreen * star.twinkle * colorMult, star.rotation, origin, (star.scale * star.twinkle) - 0.2f, SpriteEffects.None, 0f);
 
                     origin = new Vector2(t2D.Width * 0.2f, t2D.Height * 0.2f);
                     posX = star.position.X * width2;
                     posY = star.position.Y * height2;
                     position = new Vector2(posX + origin.X, posY + origin.Y + bgTop);
-                    spriteBatch.Draw(t2D, position, new Rectangle(0, 0, t2D.Width, t2D.Height), purple * star.twinkle * colorMult, star.rotation, origin, (star.scale * star.twinkle) + 0.2f, SpriteEffects.None, 0f);
+                    spriteBatch.Draw(t2D, position, new Rectangle(0, 0, t2D.Width, t2D.Height), teal * star.twinkle * colorMult, star.rotation, origin, (star.scale * star.twinkle) + 0.2f, SpriteEffects.None, 0f);
 
                     origin = new Vector2(t2D.Width * 0.8f, t2D.Height * 0.8f);
                     posX = star.position.X * width3;
                     posY = star.position.Y * height3;
                     position = new Vector2(posX + origin.X, posY + origin.Y + bgTop);
-                    spriteBatch.Draw(t2D, position, new Rectangle(0, 0, t2D.Width, t2D.Height), yellow * star.twinkle * colorMult, star.rotation, origin, star.scale * star.twinkle, SpriteEffects.None, 0f);
+                    spriteBatch.Draw(t2D, position, new Rectangle(0, 0, t2D.Width, t2D.Height), green * star.twinkle * colorMult, star.rotation, origin, star.scale * star.twinkle, SpriteEffects.None, 0f);
 
                     origin = new Vector2(t2D.Width * 0.5f, t2D.Height * 0.5f);
                     posX = star.position.X * width4;
@@ -82,6 +82,7 @@ namespace Windfall.Content.Skies
                     position = new Vector2(posX + origin.X, posY + origin.Y + bgTop);
                     spriteBatch.Draw(t2D, position, new Rectangle(0, 0, t2D.Width, t2D.Height), Color.White * star.twinkle * colorMult, star.rotation, origin, star.scale * star.twinkle, SpriteEffects.None, 0f);
                 }
+                spriteBatch.Draw(moon, new Vector2(Main.screenWidth / 2 - (moon.Width * 0.5f), 200 + bgTop), moon.Frame(1, 8), oratorGreen * opacity);
             }
         }
         public override void Update(GameTime gameTime)
