@@ -27,7 +27,7 @@ namespace Windfall.Content.NPCs.TravellingNPCs
             if (NPC.ai[0] == 0 && (!Main.dayTime || Main.time >= despawnTime) && !IsNpcOnscreen(NPC.Center)) // If it's past the despawn time and the NPC isn't onscreen
             {
                 // Here we despawn the NPC and send a message stating that the NPC has despawned
-                DisplayLocalizedText("The " + NPC.FullName + " has departed!", new(50, 125, 255));
+                DisplayLocalizedText("The " + DisplayName + " has departed!", new(50, 125, 255));
                 NPC.active = false;
                 NPC.netSkip = -1;
                 NPC.active = false;

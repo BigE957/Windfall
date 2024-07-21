@@ -103,7 +103,7 @@
       <HintPath>..\ModAssemblies\CalamityMod.dll</HintPath>
     </Reference>
     <Reference Include="Luminance">
-      <HintPath>..\ModAssemblies\Luminance.dll</HintPath>
+      <HintPath>..\..\ModReader\Luminance\Luminance.dll</HintPath>
     </Reference>
   </ItemGroup>
 </Project>

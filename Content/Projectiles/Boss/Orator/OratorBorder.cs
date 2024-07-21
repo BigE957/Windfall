@@ -13,6 +13,7 @@ namespace Windfall.Content.Projectiles.Boss.Orator
     public class OratorBorder : ModProjectile
     {
         public ref float counter => ref Projectile.ai[0];
+        public ref float trueScale => ref Projectile.ai[1];
 
         public float Radius = 750f;
 
@@ -30,6 +31,8 @@ namespace Windfall.Content.Projectiles.Boss.Orator
         public override void OnSpawn(IEntitySource source)
         {
             Projectile.scale = 5f;
+            Projectile.ai[1] = 5f;
+            Radius = (750 / 3f) * Projectile.scale;
             const int pCount = 250;
             for (int i = 0; i < 150; i++)
             {
@@ -52,17 +55,16 @@ namespace Windfall.Content.Projectiles.Boss.Orator
             int oratorIndex = NPC.FindFirstNPC(ModContent.NPCType<TheOrator>());
             if (oratorIndex < 0)
             {
-                Projectile.scale += 0.05f;
+                trueScale += 0.05f;
                 return;
             }
-            else if (Projectile.scale > 3f)
+            else if (trueScale > 3f)
             {
-                Projectile.scale -= 0.05f;
+                trueScale -= 0.05f;
                 counter = (3 * Pi / 2) * 20;
             }
-            else
-                Projectile.scale = (float)(3f - (Math.Sin(counter / 20f) + 1f) / 8);
-            
+            Projectile.scale = (float)(trueScale - (Math.Sin(counter / 20f) + 1f) / 8);
+            Radius = (750 / 3f) * Projectile.scale;
             Projectile.timeLeft = 30;           
 
             // Move towards the target.

@@ -7,7 +7,7 @@ namespace Windfall.Common.Players
     {
         public override bool PreKill(double damage, int hitDirection, bool pvp, ref bool playSound, ref bool genDust, ref PlayerDeathReason damageSource)
         {
-            if (hitDirection == 0 && damageSource.SourceOtherIndex == 8)
+            if (damage == 10 && hitDirection == 0 && damageSource.SourceOtherIndex == 8)
             {
                 if(Player.Buff().Entropy)
                     damageSource = PlayerDeathReason.ByCustomReason(GetWindfallLocalText("Status.Death.Entropy." + Main.rand.Next(1, 4 + 1)).Format(Player.name));

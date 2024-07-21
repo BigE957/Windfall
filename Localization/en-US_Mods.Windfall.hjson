@@ -303,14 +303,23 @@ Dialogue: {
 			}
 
 			BossText: {
-				0: Ever persistant...
-				1: No matter.
-				2: I need not best you here.
-				3: All I need do is buy time for...
-				4: That.
-				5: At last the end is now at our doorstep!
-				6: I shall grant you the privlage of witnessing it.
-				7: Until we meet again...
+				PhaseChange: {
+					0: Y'know what.
+					1: FUCK this.
+					2: I'm KILLING you.
+					3: DIE you PIECE of SHIT.
+				}
+
+				Defeat: {
+					0: Ever persistant...
+					1: No matter.
+					2: I need not best you here.
+					3: All I need do is buy time for...
+					4: That.
+					5: At last the end is now at our doorstep!
+					6: I shall grant you the privlage of witnessing it.
+					7: Until we meet again...
+				}
 			}
 		}
 
@@ -696,7 +705,7 @@ Dialogue: {
 
 	Others: {
 		Merchant.PotionSeller: I don't know who that weirdo outside is, but I don't trust them! You should probably just stick to buying your potions from me.
-		PartyGirl.PotionSeller: Hope that potion seller decides to stick around; her potions are some of the best i've had in ages...
+		PartyGirl.PotionSeller: Hope that potion seller decides to stick around; her potions are some of the best I've had in ages...
 		WitchDoctor.PotionSeller: I really must ask that potion seller how she does it... I might stand to learn a thing or two from here!
 		Truffle.PotionSeller: I hear there's some alchemist in town... Please tell me she won't be trying to turn me into a potion. I deal with enough as is...
 		TaxCollector.PotionSeller: That potion girl... She gives off a familiar presence, and not the good kind. I'd be cautious of her...
@@ -707,9 +716,14 @@ Dialogue: {
 		Golfer.CalClone: I tried to play a game of golf but that girl keeps setting my courses on fire. Can you get her to leave already...
 		Painter.CalClone: My poor paintings... She burned them... Every last one... I don't think I'm gonna recover from this...
 
+		Mechanic: {
+			DragonCult: Thanks again for saving me! I still can't believe those robed freaks left me for dead in there... After I set up all those traps for them too! Super rude...
+			TravellingCultist: Oh no! They've come back for me!!! Quick! You gotta help me hide!!!
+		}
+
 		Archmage: {
-			PotionSeller: There's something awfully familiar about that potion selller... I must be imagining things...
-			CalClone: What the fuck.
+			PotionSeller: There's something awfully familiar about that potion selller... Or perhaps my brain is still a bit frozen. Who knows?
+			CalClone: Haha, Draedon you are cloning my daughter!
 		}
 	}
 }
