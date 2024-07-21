@@ -45,7 +45,7 @@ namespace Windfall.Content.Projectiles.Boss.Orator
                     if (Projectile.ai[0] == 0)
                     {
                         Projectile.velocity *= 0.985f;
-                        if (Projectile.velocity.LengthSquared() < 1)
+                        if (Projectile.velocity.LengthSquared() < 4)
                             Projectile.velocity = Vector2.Zero;
                     }
                     EmpyreanMetaball.SpawnDefaultParticle(Projectile.Center + Projectile.velocity, Vector2.Zero, Projectile.scale * 60);
