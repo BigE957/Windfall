@@ -1425,6 +1425,7 @@ Projectiles: {
 	GodlyCrimulanGlob.DisplayName: Crimulan Glob
 	GodlyEbonianGlob.DisplayName: Ebonian Glob
 	OratorBorder.DisplayName: Orator Border
+	DarkTide.DisplayName: Dark Tide
 }
 
 Buffs: {
@@ -1461,6 +1462,13 @@ Status: {
 			1: "{0} was shattered across time and space."
 			2: The abyss stares back at {0}.
 			3: "{0} succumbed to entropy."
+			4: "{0} fell beneath the dark tides of chaos."
+		}
+
+		BigBalls: {
+			1: Fathomless darkness tore {0} to shreds.
+			2: "{0} didn't run fast enough."
+			3: "{0} is one with entropy."
 		}
 	}
 }

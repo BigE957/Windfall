@@ -1,4 +1,5 @@
 ﻿using Windfall.Content.NPCs.Bosses.TheOrator;
+using Windfall.Content.Projectiles.Boss.Orator;
 
 namespace Windfall.Common.Players
 {
@@ -9,12 +10,15 @@ namespace Windfall.Common.Players
             if (hitDirection == 0 && damageSource.SourceOtherIndex == 8)
             {
                 if(Player.Buff().Entropy)
-                    damageSource = PlayerDeathReason.ByCustomReason(GetWindfallLocalText("Status.Death.Entropy." + Main.rand.Next(1, 3 + 1)).Format(Player.name));
+                    damageSource = PlayerDeathReason.ByCustomReason(GetWindfallLocalText("Status.Death.Entropy." + Main.rand.Next(1, 4 + 1)).Format(Player.name));
             }
-            if (damageSource.SourceNPCIndex >= 0)
+            if ((damageSource.SourceNPCIndex >= 0 && Main.npc[damageSource.SourceNPCIndex].type == ModContent.NPCType<TheOrator>()) || damageSource.SourceProjectileType == ModContent.ProjectileType<DarkBolt>() || damageSource.SourceProjectileType == ModContent.ProjectileType<DarkGlob>())
             {
-                if (Main.npc[damageSource.SourceNPCIndex].type == ModContent.NPCType<TheOrator>())
-                    damageSource = PlayerDeathReason.ByCustomReason(GetWindfallLocalText("Status.Death.Orator." + Main.rand.Next(1, 3 + 1)).Format(Player.name));
+                damageSource = PlayerDeathReason.ByCustomReason(GetWindfallLocalText("Status.Death.Orator." + Main.rand.Next(1, 3 + 1)).Format(Player.name));
+            }
+            if(damageSource.SourceProjectileType == ModContent.ProjectileType<DarkCoalescence>() || damageSource.SourceProjectileType == ModContent.ProjectileType<DarkMonster>())
+            {
+                damageSource = PlayerDeathReason.ByCustomReason(GetWindfallLocalText("Status.Death.BigBalls." + Main.rand.Next(1, 3 + 1)).Format(Player.name));
             }
             return true;
         }
