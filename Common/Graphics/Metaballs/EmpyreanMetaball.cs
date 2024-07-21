@@ -50,7 +50,7 @@ namespace Windfall.Common.Graphics.Metaballs
         } = [];
 
         // Check if there are any extraneous particles or if the Gruesome Eminence projectile is present when deciding if this particle should be drawn.
-        public override bool AnythingToDraw => EmpyreanParticles.Count != 0 || EmpyreanStickyParticles.Count != 0 || AnyProjectiles(ModContent.ProjectileType<DarkGlob>()) || AnyProjectiles(ModContent.ProjectileType<DarkMonster>()) || AnyProjectiles(ModContent.ProjectileType<EmpyreanThorn>()) || AnyProjectiles(ModContent.ProjectileType<DarkCoalescence>()) || AnyProjectiles(ModContent.ProjectileType<OratorBorder>());
+        public override bool AnythingToDraw => EmpyreanParticles.Count != 0 || EmpyreanStickyParticles.Count != 0 || AnyProjectiles(ModContent.ProjectileType<DarkGlob>()) || AnyProjectiles(ModContent.ProjectileType<DarkMonster>()) || AnyProjectiles(ModContent.ProjectileType<EmpyreanThorn>()) || AnyProjectiles(ModContent.ProjectileType<DarkCoalescence>()) || AnyProjectiles(ModContent.ProjectileType<OratorBorder>()) || AnyProjectiles(ModContent.ProjectileType<DarkTide>());
 
         public override IEnumerable<Texture2D> Layers
         {
@@ -174,7 +174,7 @@ namespace Windfall.Common.Graphics.Metaballs
             }
             foreach (Projectile p in Main.projectile.Where(p => p.active))
             {
-                if (p.type == ModContent.ProjectileType<DarkGlob>() || p.type == ModContent.ProjectileType<DarkMonster>() || p.type == ModContent.ProjectileType<EmpyreanThorn>() || p.type == ModContent.ProjectileType<DarkCoalescence>() || p.type == ModContent.ProjectileType<OratorBorder>())
+                if (p.type == ModContent.ProjectileType<DarkGlob>() || p.type == ModContent.ProjectileType<DarkMonster>() || p.type == ModContent.ProjectileType<EmpyreanThorn>() || p.type == ModContent.ProjectileType<DarkCoalescence>() || p.type == ModContent.ProjectileType<OratorBorder>() || p.type == ModContent.ProjectileType<DarkTide>())
                 {
                     Color c = Color.White;
                     c.A = 0;
