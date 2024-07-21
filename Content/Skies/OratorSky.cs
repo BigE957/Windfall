@@ -1,4 +1,5 @@
-﻿using Luminance.Common.Utilities;
+﻿using CalamityMod.Events;
+using Luminance.Common.Utilities;
 using Terraria.Graphics.Effects;
 using Windfall.Content.NPCs.Bosses.TheOrator;
 
@@ -28,85 +29,91 @@ namespace Windfall.Content.Skies
         public override Color OnTileColor(Color inColor) => Color.Lerp(inColor, new(117, 255, 159, inColor.A), opacity);
         public override void Draw(SpriteBatch spriteBatch, float minDepth, float maxDepth)
         {
-            Color oratorGreen = new(117, 255, 159);           
-            Texture2D moon = TextureAssets.Moon[Main.moonType].Value;
-            spriteBatch.Draw(TextureAssets.BlackTile.Value, new Rectangle(0, 0, Main.screenWidth * 2, Main.screenHeight * 2), Color.Black * opacity);
-            
-            if (Main.netMode != NetmodeID.Server)
+            if (maxDepth >= float.MaxValue && minDepth < float.MaxValue)
             {
-                float bgTop = (float)((-Main.screenPosition.Y) / (Main.worldSurface * 16.0 - 600.0) * 200.0);
+                Color oratorGreen = new(117, 255, 159);
+                Texture2D moon = TextureAssets.Moon[Main.moonType].Value;
 
-                #region Stars
-                float colorMult = 0.952f * opacity;
-                float width1 = Main.screenWidth / 500f;
-                float height1 = Main.screenHeight / 600f;
-                float width2 = Main.screenWidth / 600f;
-                float height2 = Main.screenHeight / 800f;
-                float width3 = Main.screenWidth / 200f;
-                float height3 = Main.screenHeight / 900f;
-                float width4 = Main.screenWidth / 1000f;
-                float height4 = Main.screenHeight / 200f;
-                for (int i = 0; i < Main.star.Length; i++)
+                spriteBatch.Draw(TextureAssets.BlackTile.Value, new Rectangle(0, 0, Main.screenWidth * 2, Main.screenHeight * 2), Color.Black * opacity);
+
+                if (Main.netMode != NetmodeID.Server)
                 {
-                    Star star = Main.star[i];
-                    if (star == null)
-                        continue;
+                    float bgTop = (float)((-Main.screenPosition.Y) / (Main.worldSurface * 16.0 - 600.0) * 200.0);
 
-                    Texture2D t2D = TextureAssets.Star[star.type].Value;
-                    Vector2 origin = new Vector2(t2D.Width * 0.5f, t2D.Height * 0.5f);
-                    float posX = star.position.X * width1;
-                    float posY = star.position.Y * height1;
-                    Vector2 pos = new Vector2(posX + origin.X, posY + origin.Y + bgTop);
-                    spriteBatch.Draw(t2D, pos, new Rectangle(0, 0, t2D.Width, t2D.Height), oratorGreen * star.twinkle * colorMult, star.rotation, origin, (star.scale * star.twinkle) - 0.2f, SpriteEffects.None, 0f);
+                    #region Stars
+                    float colorMult = 0.952f * opacity;
+                    float width1 = Main.screenWidth / 500f;
+                    float height1 = Main.screenHeight / 600f;
+                    float width2 = Main.screenWidth / 600f;
+                    float height2 = Main.screenHeight / 800f;
+                    float width3 = Main.screenWidth / 200f;
+                    float height3 = Main.screenHeight / 900f;
+                    float width4 = Main.screenWidth / 1000f;
+                    float height4 = Main.screenHeight / 200f;
+                    for (int i = 0; i < Main.star.Length; i++)
+                    {
+                        Star star = Main.star[i];
+                        if (star == null)
+                            continue;
 
-                    origin = new Vector2(t2D.Width * 0.2f, t2D.Height * 0.2f);
-                    posX = star.position.X * width2;
-                    posY = star.position.Y * height2;
-                    pos = new Vector2(posX + origin.X, posY + origin.Y + bgTop);
-                    spriteBatch.Draw(t2D, pos, new Rectangle(0, 0, t2D.Width, t2D.Height), Color.Teal * star.twinkle * colorMult, star.rotation, origin, (star.scale * star.twinkle) + 0.2f, SpriteEffects.None, 0f);
+                        Texture2D t2D = TextureAssets.Star[star.type].Value;
+                        Vector2 origin = new Vector2(t2D.Width * 0.5f, t2D.Height * 0.5f);
+                        float posX = star.position.X * width1;
+                        float posY = star.position.Y * height1;
+                        Vector2 pos = new Vector2(posX + origin.X, posY + origin.Y + bgTop);
+                        spriteBatch.Draw(t2D, pos, new Rectangle(0, 0, t2D.Width, t2D.Height), oratorGreen * star.twinkle * colorMult, star.rotation, origin, (star.scale * star.twinkle) - 0.2f, SpriteEffects.None, 0f);
 
-                    origin = new Vector2(t2D.Width * 0.8f, t2D.Height * 0.8f);
-                    posX = star.position.X * width3;
-                    posY = star.position.Y * height3;
-                    pos = new Vector2(posX + origin.X, posY + origin.Y + bgTop);
-                    spriteBatch.Draw(t2D, pos, new Rectangle(0, 0, t2D.Width, t2D.Height), oratorGreen * star.twinkle * colorMult, star.rotation, origin, star.scale * star.twinkle, SpriteEffects.None, 0f);
+                        origin = new Vector2(t2D.Width * 0.2f, t2D.Height * 0.2f);
+                        posX = star.position.X * width2;
+                        posY = star.position.Y * height2;
+                        pos = new Vector2(posX + origin.X, posY + origin.Y + bgTop);
+                        spriteBatch.Draw(t2D, pos, new Rectangle(0, 0, t2D.Width, t2D.Height), Color.Teal * star.twinkle * colorMult, star.rotation, origin, (star.scale * star.twinkle) + 0.2f, SpriteEffects.None, 0f);
 
-                    origin = new Vector2(t2D.Width * 0.5f, t2D.Height * 0.5f);
-                    posX = star.position.X * width4;
-                    posY = star.position.Y * height4;
-                    pos = new Vector2(posX + origin.X, posY + origin.Y + bgTop);
-                    spriteBatch.Draw(t2D, pos, new Rectangle(0, 0, t2D.Width, t2D.Height), Color.White * star.twinkle * colorMult, star.rotation, origin, star.scale * star.twinkle, SpriteEffects.None, 0f);
+                        origin = new Vector2(t2D.Width * 0.8f, t2D.Height * 0.8f);
+                        posX = star.position.X * width3;
+                        posY = star.position.Y * height3;
+                        pos = new Vector2(posX + origin.X, posY + origin.Y + bgTop);
+                        spriteBatch.Draw(t2D, pos, new Rectangle(0, 0, t2D.Width, t2D.Height), oratorGreen * star.twinkle * colorMult, star.rotation, origin, star.scale * star.twinkle, SpriteEffects.None, 0f);
+
+                        origin = new Vector2(t2D.Width * 0.5f, t2D.Height * 0.5f);
+                        posX = star.position.X * width4;
+                        posY = star.position.Y * height4;
+                        pos = new Vector2(posX + origin.X, posY + origin.Y + bgTop);
+                        spriteBatch.Draw(t2D, pos, new Rectangle(0, 0, t2D.Width, t2D.Height), Color.White * star.twinkle * colorMult, star.rotation, origin, star.scale * star.twinkle, SpriteEffects.None, 0f);
+                    }
+                    #endregion
+
+                    Vector2 halfSizeTexture = new(moon.Width / 2, moon.Height / 8 / 2);
+                    Vector2 position = new(Main.screenWidth / 2, bgTop + 170);
+                    Texture2D bloomCircle = (Texture2D)ModContent.Request<Texture2D>("CalamityMod/Particles/BloomCircle", AssetRequestMode.ImmediateLoad);
+                    Texture2D sparkle = (Texture2D)ModContent.Request<Texture2D>("CalamityMod/Particles/ThinSparkle", AssetRequestMode.ImmediateLoad);
+                    /*
+                    SpriteBatch sb = new(Main.instance.GraphicsDevice);
+                    var rasterizer = Main.Rasterizer;
+                    rasterizer.ScissorTestEnable = true;
+                    Main.instance.GraphicsDevice.RasterizerState.ScissorTestEnable = true;
+                    Main.instance.GraphicsDevice.ScissorRectangle = new Rectangle(0, 0, Main.screenWidth * 2, Main.screenHeight * 2);
+
+                    sb.Begin(SpriteSortMode.Deferred, BlendState.Additive, SamplerState.PointClamp, DepthStencilState.Default, rasterizer, null, Main.GameViewMatrix.TransformationMatrix);
+                    sb.Draw(bloomCircle, position, bloomCircle.Frame(), oratorGreen * opacity, 0f, bloomCircle.Size() / 2f, 1.25f, SpriteEffects.None, 0f);
+                    sb.End();
+                    */
+                    Main.instance.GraphicsDevice.RasterizerState.ScissorTestEnable = false;
+
+                    spriteBatch.Draw(moon, position, moon.Frame(1, 8), oratorGreen * opacity, 0f, halfSizeTexture, 1.25f, SpriteEffects.None, 0f);
+                    /*
+                    for(int i = 0; i < Main.cloud.Length; i++)
+                    {
+                        Cloud cloud = Main.cloud[i];
+                        if (cloud == null || !cloud.active)
+                            continue;
+                        Texture2D t2D = TextureAssets.Cloud[cloud.type].Value;
+                        Vector2 origin = new (t2D.Width * 0.5f, t2D.Height * 0.5f);
+                        Vector2 pos = new(cloud.position.X, (cloud.position.Y) + 1900 + (bgTop * 5f));
+                        spriteBatch.Draw(t2D, pos, new Rectangle(0, 0, t2D.Width, t2D.Height), oratorGreen * opacity, cloud.rotation, origin, cloud.scale * 2.5f, SpriteEffects.None, 0f);
+                    }
+                    */
                 }
-                #endregion
-
-                Vector2 halfSizeTexture = new(moon.Width / 2, moon.Height / 8 / 2);
-                Vector2 position = new(Main.screenWidth, bgTop + (Main.screenHeight / 5.6f));
-                Texture2D bloomCircle = (Texture2D)ModContent.Request<Texture2D>("CalamityMod/Particles/BloomCircle", AssetRequestMode.ImmediateLoad);
-                Texture2D sparkle = (Texture2D)ModContent.Request<Texture2D>("CalamityMod/Particles/ThinSparkle", AssetRequestMode.ImmediateLoad);
-
-                var rasterizer = Main.Rasterizer;
-                rasterizer.ScissorTestEnable = true;
-                Main.instance.GraphicsDevice.RasterizerState.ScissorTestEnable = true;
-                Main.instance.GraphicsDevice.ScissorRectangle = new Rectangle(0, 0, Main.screenWidth * 2, Main.screenHeight * 2);
-
-                //spriteBatch.UseBlendState(BlendState.Additive);
-                spriteBatch.Draw(bloomCircle, position, bloomCircle.Frame(), oratorGreen * opacity, 0f, bloomCircle.Size() / 2f, 2.5f, SpriteEffects.None, 0f);
-                spriteBatch.End();
-
-                spriteBatch.Begin();
-                spriteBatch.Draw(moon, position, moon.Frame(1, 8), oratorGreen * opacity, 0f, halfSizeTexture, 2.5f, SpriteEffects.None, 0f);
-                
-                for(int i = 0; i < Main.cloud.Length; i++)
-                {
-                    Cloud cloud = Main.cloud[i];
-                    if (cloud == null || !cloud.active)
-                        continue;
-                    Texture2D t2D = TextureAssets.Cloud[cloud.type].Value;
-                    Vector2 origin = new (t2D.Width * 0.5f, t2D.Height * 0.5f);
-                    Vector2 pos = new(cloud.position.X, (cloud.position.Y) + 1900 + (bgTop * 5f));
-                    spriteBatch.Draw(t2D, pos, new Rectangle(0, 0, t2D.Width, t2D.Height), oratorGreen * opacity, cloud.rotation, origin, cloud.scale * 2.5f, SpriteEffects.None, 0f);
-                }
-                
             }
         }
         public override void Update(GameTime gameTime)
@@ -129,5 +136,6 @@ namespace Windfall.Content.Skies
 
             Opacity = opacity;
         }
+        public override float GetCloudAlpha() => 1f;
     }
 }
