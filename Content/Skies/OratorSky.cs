@@ -35,9 +35,7 @@ namespace Windfall.Content.Skies
             if (Main.netMode != NetmodeID.Server)
             {
                 float bgTop = (float)((-Main.screenPosition.Y) / (Main.worldSurface * 16.0 - 600.0) * 200.0);
-                int bgLeft = (int)((-Main.screenPosition.X) / (Main.spawnTileX * 16.0 + 1200.0) * 800.0);
-                //Main.NewText(bgTop);
-                //Main.NewText(bgLeft);
+
                 #region Stars
                 float colorMult = 0.952f * opacity;
                 float width1 = Main.screenWidth / 500f;
@@ -80,23 +78,23 @@ namespace Windfall.Content.Skies
                     spriteBatch.Draw(t2D, pos, new Rectangle(0, 0, t2D.Width, t2D.Height), Color.White * star.twinkle * colorMult, star.rotation, origin, star.scale * star.twinkle, SpriteEffects.None, 0f);
                 }
                 #endregion
+
                 Vector2 halfSizeTexture = new(moon.Width / 2, moon.Height / 8 / 2);
-                Vector2 position = new(Main.screenWidth / 2, 180 + bgTop);
+                Vector2 position = new(Main.screenWidth, bgTop + (Main.screenHeight / 5.6f));
                 Texture2D bloomCircle = (Texture2D)ModContent.Request<Texture2D>("CalamityMod/Particles/BloomCircle", AssetRequestMode.ImmediateLoad);
                 Texture2D sparkle = (Texture2D)ModContent.Request<Texture2D>("CalamityMod/Particles/ThinSparkle", AssetRequestMode.ImmediateLoad);
 
                 var rasterizer = Main.Rasterizer;
                 rasterizer.ScissorTestEnable = true;
                 Main.instance.GraphicsDevice.RasterizerState.ScissorTestEnable = true;
-                Main.instance.GraphicsDevice.ScissorRectangle = new Rectangle(0, 0, Main.screenWidth, Main.screenHeight);
-                spriteBatch.End();
+                Main.instance.GraphicsDevice.ScissorRectangle = new Rectangle(0, 0, Main.screenWidth * 2, Main.screenHeight * 2);
 
-                spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.Additive, SamplerState.PointClamp, DepthStencilState.Default, rasterizer, null, Main.GameViewMatrix.TransformationMatrix);
-                spriteBatch.Draw(bloomCircle, position, null, oratorGreen * opacity, 0f, bloomCircle.Size() / 2f, 1.25f, SpriteEffects.None, 0f);
+                //spriteBatch.UseBlendState(BlendState.Additive);
+                spriteBatch.Draw(bloomCircle, position, bloomCircle.Frame(), oratorGreen * opacity, 0f, bloomCircle.Size() / 2f, 2.5f, SpriteEffects.None, 0f);
                 spriteBatch.End();
 
                 spriteBatch.Begin();
-                spriteBatch.Draw(moon, position, moon.Frame(1, 8), oratorGreen * opacity, 0f, halfSizeTexture, 1.25f, SpriteEffects.None, 0f);
+                spriteBatch.Draw(moon, position, moon.Frame(1, 8), oratorGreen * opacity, 0f, halfSizeTexture, 2.5f, SpriteEffects.None, 0f);
                 
                 for(int i = 0; i < Main.cloud.Length; i++)
                 {
@@ -108,7 +106,7 @@ namespace Windfall.Content.Skies
                     Vector2 pos = new(cloud.position.X, (cloud.position.Y) + 1900 + (bgTop * 5f));
                     spriteBatch.Draw(t2D, pos, new Rectangle(0, 0, t2D.Width, t2D.Height), oratorGreen * opacity, cloud.rotation, origin, cloud.scale * 2.5f, SpriteEffects.None, 0f);
                 }
-            
+                
             }
         }
         public override void Update(GameTime gameTime)
