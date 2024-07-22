@@ -6,7 +6,9 @@ namespace Windfall.Content.Projectiles.Boss.Orator
 {
     public class DarkTide : ModProjectile
     {
-        public ref float counter => ref Projectile.ai[1];
+        public ref float holdtime => ref Projectile.ai[0];
+        public ref float moveDistance => ref Projectile.ai[1];
+        public ref float moveSpeed => ref Projectile.ai[2];
         public override void SetDefaults()
         {
             Projectile.height = Projectile.width = 1440;
@@ -20,10 +22,10 @@ namespace Windfall.Content.Projectiles.Boss.Orator
         }
         public override void OnSpawn(IEntitySource source)
         {
-            Projectile.rotation = Projectile.ai[0];
+            Projectile.rotation = Projectile.velocity.ToRotation();
             Vector2 newPosition = Projectile.rotation.ToRotationVector2().RotatedBy(Pi) * (1800 * Projectile.scale);
             Projectile.Center += newPosition;
-            Projectile.velocity = Projectile.rotation.ToRotationVector2() * 4f;
+            Projectile.velocity = Projectile.rotation.ToRotationVector2() * moveSpeed;
 
             int particleCounter = 50;
             for(int i = 0; i < particleCounter; i++)
@@ -32,30 +34,48 @@ namespace Windfall.Content.Projectiles.Boss.Orator
                 SpawnBorderParticle(Projectile, spawnOffset, 0.5f * i, 30, Main.rand.NextFloat(80, 160), 0f, false);
             }
         }
+        private float moveCount = 0;
+        private int holdCounter = 0;
         public override void AI()
         {
-            const int timeToMid = 330;
-            int slideDuration = timeToMid + 60;
-            int holdDuration = 120;
-            float velocityMultiplier = 1f;
-            if (counter > slideDuration)
+            int holdDuration = (int)holdtime;
+            float particleVelocity = Main.rand.NextFloat(6f, 8f);
+            if (moveCount < 0)
+                Projectile.active = false;
+            else if (moveCount >= moveDistance || holdCounter != 0)
             {
-                if (counter > slideDuration + holdDuration)
-                    if (counter > slideDuration * 2 + holdDuration)
-                        Projectile.active = false;
-                    else
+                if (holdCounter > holdDuration)
+                {
+                    if (Projectile.velocity != Projectile.rotation.ToRotationVector2() * -moveSpeed)
                     {
-                        Projectile.velocity = Projectile.rotation.ToRotationVector2() * -4f;
-                        velocityMultiplier = Main.rand.NextFloat(2f, 4f);
+                        if (Projectile.velocity == Vector2.Zero)
+                            Projectile.velocity = Projectile.rotation.ToRotationVector2() * -0.05f;
+                        Projectile.velocity *= 1.05f;
+                        if (Projectile.velocity.LengthSquared() >= 16)
+                            Projectile.velocity = Projectile.rotation.ToRotationVector2() * -moveSpeed;
                     }
+                    if(Projectile.velocity.LengthSquared() >= 1)
+                        particleVelocity /= (Projectile.velocity.Length()/2);
+                    moveCount -= Projectile.velocity.Length();
+                }
                 else
                 {
-                    Projectile.velocity = Vector2.Zero;
-                    velocityMultiplier = Main.rand.NextFloat(6f, 8f);
+                    if (holdCounter < holdDuration / 2)
+                    {
+                        Projectile.velocity *= 0.95f;
+                        moveCount += Projectile.velocity.Length();
+                    }
+                    else
+                        Projectile.velocity = Vector2.Zero;
+                        particleVelocity = Main.rand.NextFloat(6f, 8f);
+                    holdCounter++;
                 }
             }
             else
-                velocityMultiplier = Main.rand.NextFloat(9f, 12f);
+            {
+                particleVelocity *= (Projectile.velocity.Length()/2.5f);
+                moveCount += Projectile.velocity.Length();
+            }
             foreach (Player player in Main.player)
             {
                 if(player != null && player.active && !player.dead)
@@ -65,9 +85,8 @@ namespace Windfall.Content.Projectiles.Boss.Orator
                 }
             }
             Vector2 spawnPosition = Projectile.Center + (Projectile.rotation.ToRotationVector2() * (Projectile.width / 2.05f)) + (Projectile.rotation.ToRotationVector2().RotatedBy(PiOver2) * Main.rand.NextFloat(-Projectile.width / 2, Projectile.width / 2));
-            
-            SpawnDefaultParticle(spawnPosition, Projectile.rotation.ToRotationVector2().RotatedBy(Main.rand.NextFloat(-Pi/2, Pi/2)) * velocityMultiplier, Main.rand.NextFloat(80f, 120f));
-            counter++;
+            Main.NewText(moveCount);
+            SpawnDefaultParticle(spawnPosition, Projectile.rotation.ToRotationVector2().RotatedBy(Main.rand.NextFloat(-Pi/2, Pi/2)) * particleVelocity, Main.rand.NextFloat(80f, 120f));
         }
         public override Color? GetAlpha(Color lightColor) => Color.White * Projectile.Opacity;
 
