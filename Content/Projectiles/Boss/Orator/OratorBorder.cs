@@ -40,19 +40,18 @@ namespace Windfall.Content.Projectiles.Boss.Orator
                 Vector2 spawnPosition = Projectile.Center + Main.rand.NextVector2CircularEdge(Projectile.width * Projectile.scale / 9.65f, Projectile.width * Projectile.scale / 9.65f);
                 SpawnDefaultParticle(spawnPosition, ((Projectile.Center - spawnPosition).SafeNormalize(Vector2.Zero).RotatedBy(Main.rand.NextFloat(-1f, 1f)) * Main.rand.NextFloat(2f, 5f)), Main.rand.NextFloat(60f, 100f));
             }
-            /*
+            
             if (!NPC.AnyNPCs(ModContent.NPCType<TheOrator>()))
                 trueScale += 0.05f;
             else
-            {
-            */
+            {            
                 Projectile.timeLeft = 30;
                 if (trueScale > 3f)
                 {
                     trueScale -= 0.05f;
                     counter = (3 * Pi / 2) * 20;
                 }
-            //}
+            }
             Projectile.scale = (float)(trueScale - (Math.Sin(counter / 20f) + 1f) / 8);
             Radius = (750 / 3f) * Projectile.scale;                    
 

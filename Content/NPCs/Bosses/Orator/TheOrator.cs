@@ -92,6 +92,7 @@ namespace Windfall.Content.NPCs.Bosses.TheOrator
             DarkFlood,
             DarkCrush,
             DarkFlight,
+            DarkTides,
 
             PhaseChange,
             Defeat,
@@ -102,7 +103,7 @@ namespace Windfall.Content.NPCs.Bosses.TheOrator
             set => NPC.ai[0] = (float)value;
         }
         int aiCounter = 0;
-        int attackCounter = 0;
+        float attackCounter = 0;
         bool dashing = false;
         private int AttackCycles = 0;
         Vector2 VectorToTarget = Vector2.Zero;
@@ -131,7 +132,8 @@ namespace Windfall.Content.NPCs.Bosses.TheOrator
                     NPC.DR_NERD(1f);
                 else
                     NPC.DR_NERD(0.1f);
-
+            if (AIState >= States.DarkOrbit && AIState < States.PhaseChange)
+                target.GrantInfiniteFlight();
             switch (AIState)
             {
                 //Phase 1
@@ -854,12 +856,56 @@ namespace Windfall.Content.NPCs.Bosses.TheOrator
                         }
                         else
                         {
+                            AIState = States.DarkTides;
+                            aiCounter = -1;
+                            attackCounter = 0;
+                        }
+                    }
+                    
+                    break;
+                case States.DarkTides:
+                    int attackFrequency = CalamityWorld.death ? 700 : CalamityWorld.revenge ? 800 : 900;
+                    int attackGap = CalamityWorld.death ? 325 : CalamityWorld.revenge ? 350 : 400;
+                    if (aiCounter < attackFrequency * 4 - 20)
+                    {
+                        border = Main.projectile.First(p => p.active && p.type == ModContent.ProjectileType<OratorBorder>());
+                        if (aiCounter % attackFrequency == 0)
+                        {
+                            attackCounter = Main.rand.NextFloatDirection();
+                            Projectile.NewProjectile(Projectile.GetSource_NaturalSpawn(), border.Center, attackCounter.ToRotationVector2(), ModContent.ProjectileType<DarkTide>(), 0, 0f, ai0: 120, ai1: 1500, ai2: 6);
+                        }
+                        else if (aiCounter % attackFrequency == attackGap)
+                            Projectile.NewProjectile(Projectile.GetSource_NaturalSpawn(), border.Center, attackCounter.ToRotationVector2() * -1, ModContent.ProjectileType<DarkTide>(), 0, 0f, ai0: 120, ai1: 1500, ai2: 6);
+                        
+                        #region Movement
+                        Vector2 targetPosition = border.Center + attackCounter.ToRotationVector2() * (aiCounter % attackFrequency < attackGap ? 600 : -600);
+                        if (NPC.Center.Y < targetPosition.Y)
+                            NPC.velocity.Y++;
+                        else
+                            NPC.velocity.Y--;
+                        if (NPC.Center.X < targetPosition.X)
+                            NPC.velocity.X++;
+                        else
+                            NPC.velocity.X--;
+                        if (NPC.velocity.Length() > 10)
+                            NPC.velocity = NPC.velocity.SafeNormalize(Vector2.Zero) * 10;
+                        #endregion
+                    }
+                    else
+                    {
+                        aiCounter = 0;
+                        if ((float)NPC.life / (float)NPC.lifeMax <= 0.1f)
+                        {
+                            AIState = States.Defeat;
+                            attackCounter = 0;
+                        }
+                        else
+                        {
                             AIState = States.DarkCrush;
                             aiCounter = 0;
                             attackCounter = 0;
                         }
                     }
-                    
                     break;
                 //Animations
                 case States.PhaseChange:
@@ -896,7 +942,7 @@ namespace Windfall.Content.NPCs.Bosses.TheOrator
                             DisplayMessage(baseKey + 3, NPC);
                             break;
                         case 420:
-                            AIState = States.DarkOrbit;
+                            AIState = States.DarkTides;
                             aiCounter = -60;
                             attackCounter = 0;
                             break;

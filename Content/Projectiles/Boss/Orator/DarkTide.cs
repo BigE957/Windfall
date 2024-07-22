@@ -85,7 +85,6 @@ namespace Windfall.Content.Projectiles.Boss.Orator
                 }
             }
             Vector2 spawnPosition = Projectile.Center + (Projectile.rotation.ToRotationVector2() * (Projectile.width / 2.05f)) + (Projectile.rotation.ToRotationVector2().RotatedBy(PiOver2) * Main.rand.NextFloat(-Projectile.width / 2, Projectile.width / 2));
-            Main.NewText(moveCount);
             SpawnDefaultParticle(spawnPosition, Projectile.rotation.ToRotationVector2().RotatedBy(Main.rand.NextFloat(-Pi/2, Pi/2)) * particleVelocity, Main.rand.NextFloat(80f, 120f));
         }
         public override Color? GetAlpha(Color lightColor) => Color.White * Projectile.Opacity;
