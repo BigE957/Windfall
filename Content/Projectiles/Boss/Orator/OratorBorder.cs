@@ -1,10 +1,4 @@
-﻿using System;
-using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
-using Terraria;
-using Terraria.GameContent;
-using Windfall.Common.Graphics;
-using Windfall.Content.Buffs.DoT;
+﻿using Windfall.Content.Buffs.DoT;
 using Windfall.Content.NPCs.Bosses.TheOrator;
 using static Windfall.Common.Graphics.Metaballs.EmpyreanMetaball;
 
@@ -34,14 +28,9 @@ namespace Windfall.Content.Projectiles.Boss.Orator
             Projectile.ai[1] = 5f;
             Radius = (750 / 3f) * Projectile.scale;
             const int pCount = 250;
-            for (int i = 0; i < 150; i++)
-            {
-                SpawnBorderParticle(Projectile, 5, 50, TwoPi / 150 * i, false);
-            }
             for (int i = 0; i <= pCount; i++)
             {
-                SpawnBorderParticle(Projectile, Main.rand.NextFloat(10, 25), Main.rand.NextFloat(80, 160), TwoPi / pCount * i);
-                SpawnBorderParticle(Projectile, Main.rand.NextFloat(10, 25), Main.rand.NextFloat(60, 100), TwoPi / pCount * -i - TwoPi / (pCount / 2));
+                SpawnBorderParticle(Projectile, Vector2.Zero, 0.5f * i, 25, Main.rand.NextFloat(80, 160), TwoPi / pCount * i);
             }
         }
         public override void AI()
@@ -51,18 +40,19 @@ namespace Windfall.Content.Projectiles.Boss.Orator
                 Vector2 spawnPosition = Projectile.Center + Main.rand.NextVector2CircularEdge(Projectile.width * Projectile.scale / 9.65f, Projectile.width * Projectile.scale / 9.65f);
                 SpawnDefaultParticle(spawnPosition, ((Projectile.Center - spawnPosition).SafeNormalize(Vector2.Zero).RotatedBy(Main.rand.NextFloat(-1f, 1f)) * Main.rand.NextFloat(2f, 5f)), Main.rand.NextFloat(60f, 100f));
             }
-
+            /*
             if (!NPC.AnyNPCs(ModContent.NPCType<TheOrator>()))
                 trueScale += 0.05f;
             else
             {
+            */
                 Projectile.timeLeft = 30;
                 if (trueScale > 3f)
                 {
                     trueScale -= 0.05f;
                     counter = (3 * Pi / 2) * 20;
                 }
-            }
+            //}
             Projectile.scale = (float)(trueScale - (Math.Sin(counter / 20f) + 1f) / 8);
             Radius = (750 / 3f) * Projectile.scale;                    
 

@@ -36,14 +36,14 @@ namespace Windfall.Content.Projectiles.Boss.Orator
             Projectile.scale = 0f;
             for(int i = 0; i < 30; i++)
             {
-                SpawnBorderParticle(Projectile, 5, 50, TwoPi / 30 * i, false);
+                SpawnBorderParticle(Projectile, Vector2.Zero, 0f, 5, 50, TwoPi / 30 * i, false);
             }
             const int pCount = 20;
             for (int i = 0; i <= pCount; i++)
             {
 
-                SpawnBorderParticle(Projectile, Main.rand.NextFloat(10, 25), Main.rand.NextFloat(75, 100), TwoPi / pCount * i);
-                SpawnBorderParticle(Projectile, Main.rand.NextFloat(10, 25), Main.rand.NextFloat(60, 80), TwoPi / pCount * -i - TwoPi / (pCount/2));
+                SpawnBorderParticle(Projectile, Vector2.Zero, 0f, Main.rand.NextFloat(10, 25), Main.rand.NextFloat(75, 100), TwoPi / pCount * i);
+                SpawnBorderParticle(Projectile, Vector2.Zero, 0f, Main.rand.NextFloat(10, 25), Main.rand.NextFloat(60, 80), TwoPi / pCount * -i - TwoPi / (pCount/2));
             }
             ScreenShakeSystem.StartShake(5f);
         }

@@ -7,7 +7,6 @@
         public ref float Time => ref Projectile.ai[0];
         public override void SetStaticDefaults()
         {
-            // DisplayName.SetDefault("Ice Spike");
             Main.projFrames[Projectile.type] = 6;
         }
 
@@ -43,50 +42,6 @@
                 Projectile.Opacity -= 0.1f;
                 Projectile.velocity -= Projectile.rotation.ToRotationVector2() * 4;
             }
-
-            /*
-            if (Projectile.ai[1] == 0f)
-            {
-                Projectile.ai[1] = 1f;
-                Projectile.netUpdate = true;
-            }
-
-            int fadeInTime = 6;
-            int fadeoutTime = 10;
-            int lifetime = 26;
-            if (Projectile.localAI[0] == 0f)
-            {
-                Projectile.localAI[0] = 1f;
-                Projectile.rotation = Projectile.velocity.ToRotation();
-                
-                for (int i = 0; i < 5; i++)
-                {
-                    Dust iceDust = Dust.NewDustPerfect(Projectile.Center + Main.rand.NextVector2Circular(24f, 24f), 80, Projectile.velocity * Main.rand.NextFloat(0.15f, 0.525f));
-                    iceDust.velocity += Main.rand.NextVector2Circular(0.5f, 0.5f);
-                    iceDust.scale = 0.8f + Main.rand.NextFloat() * 0.5f;
-                }
-                for (int j = 0; j < 5; j++)
-                {
-                    Dust iceDust = Dust.NewDustPerfect(Projectile.Center + Main.rand.NextVector2Circular(24f, 24f), 80, Main.rand.NextVector2Circular(2f, 2f) + Projectile.velocity * Main.rand.NextFloat(0.15f, 0.375f));
-                    iceDust.velocity += Main.rand.NextVector2Circular(0.5f, 0.5f);
-                    iceDust.scale = 0.8f + Main.rand.NextFloat() * 0.5f;
-                    iceDust.fadeIn = 1f;
-                }
-            }
-            if (Time < fadeInTime)
-            {
-                Projectile.Opacity = Clamp(Projectile.Opacity + 0.2f, 0f, 1f);
-                Projectile.scale = Projectile.Opacity * Projectile.ai[1] * 1.3f;
-            }
-
-            if (Time >= lifetime - fadeoutTime)
-                Projectile.Opacity = Clamp(Projectile.Opacity - 0.2f, 0f, 1f);
-
-            if (Time >= lifetime)
-                Projectile.Kill();
-
-            Time++;
-            */
         }
 
         public override Color? GetAlpha(Color lightColor) => Color.Lerp(lightColor, Color.Black, 0.36f) * Projectile.Opacity;
@@ -100,7 +55,6 @@
             Vector2 drawPosition = Projectile.Center - Main.screenPosition;
             Rectangle frame = tex.Frame(1, Main.projFrames[Projectile.type], 0, Projectile.frame);
 
-            //Main.spriteBatch.Draw(tex, drawPosition, frame, Projectile.GetAlpha(Color.White), Projectile.rotation, frame.Size() * 0.5f, Projectile.scale, 0, 0f);
             Color drawColor = Color.White;
             DrawAfterimagesCentered(Projectile, ProjectileID.Sets.TrailingMode[Projectile.type], drawColor);
             return false;

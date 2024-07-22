@@ -20,11 +20,15 @@ namespace Windfall.Common.Graphics.Metaballs
                 Velocity *= 0.96f;
             }
         }
-        public class EmpyreanBorderParticle(Projectile projectile, float interpolant, float size, float rotation, bool spin)
+        public class EmpyreanBorderParticle(Projectile projectile, Vector2 offset, float sineOffset, float interpolant, float size, float rotation, bool spin)
         {
             public float Size = size;
 
             public Projectile Projectile = projectile;
+
+            public Vector2 Offset = offset;
+
+            public float SineOffset = sineOffset;
 
             public float Interpolant = interpolant;
 
@@ -85,8 +89,8 @@ namespace Windfall.Common.Graphics.Metaballs
 
         public static void SpawnDefaultParticle(Vector2 position, Vector2 velocity, float size) =>
             EmpyreanParticles.Add(new(position, velocity, size));
-        public static void SpawnBorderParticle(Projectile projectile, float interpolant, float size, float rotation, bool spin = true) =>
-           EmpyreanStickyParticles.Add(new(projectile, interpolant, size, rotation, spin));
+        public static void SpawnBorderParticle(Projectile projectile, Vector2 offset, float sineOffset, float interpolant, float size, float rotation, bool spin = true) =>
+           EmpyreanStickyParticles.Add(new(projectile, offset, sineOffset, interpolant, size, rotation, spin));
         public override void Update()
         {
             // Update all particle instances.
@@ -111,8 +115,8 @@ namespace Windfall.Common.Graphics.Metaballs
                         particle.Rotation += 0.0175f / Math.Abs(particle.Interpolant / 10);
                     else
                         particle.Rotation -= 0.0175f / Math.Abs(particle.Interpolant / 10);
-                particle.Center = (myProj.Center) + (new Vector2(myProj.width / 2 * (myProj.scale / 5f) * 1.05f, 0).RotatedBy(particle.Rotation + myProj.rotation));
-                particle.Center += (myProj.Center - particle.Center).SafeNormalize(Vector2.Zero) * (float)Math.Sin(Main.GlobalTimeWrappedHourly * 4) * particle.Interpolant;
+                particle.Center = myProj.Center + particle.Offset + (new Vector2(myProj.width / 2 * (myProj.scale / 5f) * 1.05f, 0).RotatedBy(particle.Rotation + myProj.rotation));
+                particle.Center += (myProj.Center + particle.Offset - particle.Center).SafeNormalize(Vector2.Zero) * (float)Math.Sin(Main.GlobalTimeWrappedHourly * 4 + particle.SineOffset) * particle.Interpolant;
                 if (!particle.spin)
                     particle.Center -= myProj.velocity / 2;                
             }
