@@ -62,6 +62,12 @@ namespace Windfall.Content.NPCs.Bosses.TheOrator
             NPC.noTileCollide = true;
             NPC.dontTakeDamage = true;
             NPC.Calamity().canBreakPlayerDefense = true;
+
+            noSpawnsEscape = true;
+            MonsterDamage = StatCorrections.ScaleProjectileDamage(Main.masterMode ? 360 : CalamityWorld.death ? 280 : CalamityWorld.revenge ? 268 : Main.expertMode ? 240 : 180);
+            GlobDamage = StatCorrections.ScaleProjectileDamage(Main.masterMode ? 255 : CalamityWorld.death ? 214 : CalamityWorld.revenge ? 186 : Main.expertMode ? 140 : 100);
+            BoltDamage = StatCorrections.ScaleProjectileDamage(Main.masterMode ? 248 : CalamityWorld.death ? 172 : CalamityWorld.revenge ? 160 : Main.expertMode ? 138 : 90);
+            DashDelay = CalamityWorld.death ? 20 : CalamityWorld.revenge ? 25 : 30;
         }
         private float forcefieldOpacity = 0f;
         private int hitTimer = 0;
@@ -70,12 +76,7 @@ namespace Windfall.Content.NPCs.Bosses.TheOrator
         
         public static bool noSpawnsEscape = true;
         public override void OnSpawn(IEntitySource source)
-        {
-            noSpawnsEscape = true;
-            MonsterDamage = StatCorrections.ScaleProjectileDamage(Main.masterMode ? 360 : CalamityWorld.death ? 280 : CalamityWorld.revenge ? 268 : Main.expertMode ? 240 : 180);
-            GlobDamage = StatCorrections.ScaleProjectileDamage(Main.masterMode ? 255 : CalamityWorld.death ? 214 : CalamityWorld.revenge ? 186 : Main.expertMode ? 140 : 100);
-            BoltDamage = StatCorrections.ScaleProjectileDamage(Main.masterMode ? 248 : CalamityWorld.death ? 172 : CalamityWorld.revenge ? 160 : Main.expertMode ? 138 : 90);
-            DashDelay = CalamityWorld.death ? 20 : CalamityWorld.revenge ? 25 : 30;
+        {            
             SkyManager.Instance.Activate("Windfall:Orator", args: Array.Empty<object>());
         }
         private enum States
