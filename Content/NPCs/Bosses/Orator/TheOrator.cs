@@ -746,13 +746,14 @@ namespace Windfall.Content.NPCs.Bosses.TheOrator
                     #endregion
                     if(aiCounter < 1500 && oratorBorder.trueScale > 1.25f)
                         oratorBorder.trueScale -= 0.001f;
-                    if (aiCounter % 20 == 0)
+                    if (aiCounter % 5 == 0 && aiCounter > 120)
                     {
-                        if(CalamityWorld.revenge && aiCounter % 60 == 0)
-                            Projectile.NewProjectile(Projectile.GetSource_NaturalSpawn(), NPC.Center, (target.Center - NPC.Center).SafeNormalize(Vector2.Zero), ModContent.ProjectileType<DarkBolt>(), BoltDamage, 0f, -1, 0, -5);
-
-                        Vector2 spawnPosition = border.Center + (Vector2.UnitX * (oratorBorder.Radius + 200)).RotatedBy(Main.rand.NextFloat(TwoPi));
-                        Projectile.NewProjectile(Projectile.GetSource_NaturalSpawn(), spawnPosition, (border.Center - spawnPosition).SafeNormalize(Vector2.Zero).RotatedBy(Main.rand.NextFloat(-0.75f, 0.75f)) * Main.rand.NextFloat(4f, 6f), ModContent.ProjectileType<DarkGlob>(), GlobDamage, 0f, -1, 2, 0.5f);
+                        if(CalamityWorld.revenge && aiCounter % 120 == 0)
+                            for (int i = 0; i < 6; i++)
+                            {
+                                Projectile.NewProjectile(Terraria.Entity.GetSource_NaturalSpawn(), NPC.Center, (target.Center - NPC.Center).SafeNormalize(Vector2.Zero).RotatedBy(TwoPi / 6 * i) * 20, ModContent.ProjectileType<DarkBolt>(), BoltDamage, 0f, -1, 0, -20);
+                            }
+                        Projectile.NewProjectile(Projectile.GetSource_NaturalSpawn(), NPC.Center, (target.Center - NPC.Center).SafeNormalize(Vector2.Zero) * 8, ModContent.ProjectileType<DarkGlob>(), GlobDamage, 0f, -1, 2, 0.5f);
                     }
                     if (aiCounter >= 1500)
                     {
@@ -792,59 +793,67 @@ namespace Windfall.Content.NPCs.Bosses.TheOrator
                         NPC.velocity = NPC.velocity.SafeNormalize(Vector2.Zero) * 8;
                     #endregion
                     #region Projectiles
-                    #region Projectile Walls
-                    if ((aiCounter > 1000 && aiCounter % 120 == 0) || (aiCounter <= 1000 && aiCounter % 60 == 0))
+                    if ((aiCounter > 1000 && aiCounter % 15 == 0) || (aiCounter <= 1000 && aiCounter % 8 == 0))
                     {
-                        float wallHole = Main.rand.NextFloat(-oratorBorder.Radius + 300, oratorBorder.Radius - 300);
-                        if (Main.rand.NextBool()) // Horizontal or Vertical?
-                        {
-                            if (Main.rand.NextBool()) //Left or Right?
-                            {
-                                for (int i = 0; i < 64; i++) //Left
-                                {
-                                    Projectile proj = Projectile.NewProjectileDirect(Projectile.GetSource_NaturalSpawn(), border.Center + new Vector2(-oratorBorder.Radius, -oratorBorder.Radius + (24 * i)), Vector2.UnitX * 5, ModContent.ProjectileType<DarkGlob>(), GlobDamage, 0f, -1, 2, 0.5f);
-                                    if (Main.rand.NextBool(4))
-                                        i += 6;
-                                    proj.timeLeft = 300;
-                                }
-                            }
-                            else
-                            {
-                                for (int i = 0; i < 64; i++) //Right
-                                {
-                                    Projectile proj = Projectile.NewProjectileDirect(Projectile.GetSource_NaturalSpawn(), border.Center + new Vector2(oratorBorder.Radius, -oratorBorder.Radius + (24 * i)), Vector2.UnitX * -5, ModContent.ProjectileType<DarkGlob>(), GlobDamage, 0f, -1, 2, 0.5f);
-                                    if (Main.rand.NextBool(4))
-                                        i += 6;
-                                    proj.timeLeft = 300;
-                                }
-                            }
-                        }
-                        else
-                        {
-                            if (Main.rand.NextBool()) //Top or Bottom?
-                            {
-                                for (int i = 0; i < 64; i++) //Top
-                                {
-                                    Projectile proj = Projectile.NewProjectileDirect(Projectile.GetSource_NaturalSpawn(), border.Center + new Vector2(-oratorBorder.Radius + (24 * i), -oratorBorder.Radius), Vector2.UnitY * 5, ModContent.ProjectileType<DarkGlob>(), GlobDamage, 0f, -1, 2, 0.5f);
-                                    if (Main.rand.NextBool(4))
-                                        i += 6;
-                                    proj.timeLeft = 300;
-                                }
-                            }
-                            else
-                            {
-                                for (int i = 0; i < 64; i++) //Top
-                                {
-                                    Projectile proj = Projectile.NewProjectileDirect(Projectile.GetSource_NaturalSpawn(), border.Center + new Vector2(-oratorBorder.Radius + (24 * i), oratorBorder.Radius), Vector2.UnitY * -5, ModContent.ProjectileType<DarkGlob>(), GlobDamage, 0f, -1, 2, 0.5f);
-                                    if (Main.rand.NextBool(4))
-                                        i += 6;
-                                    proj.timeLeft = 300;
-                                }
-                            }
-                        }
+                        Vector2 spawnPosition = border.Center + (Vector2.UnitX * (oratorBorder.Radius + 200)).RotatedBy(Main.rand.NextFloat(TwoPi));
+                        Projectile.NewProjectile(Projectile.GetSource_NaturalSpawn(), spawnPosition, (border.Center - spawnPosition).SafeNormalize(Vector2.Zero).RotatedBy(Main.rand.NextFloat(-0.75f, 0.75f)) * Main.rand.NextFloat(4f, 6f), ModContent.ProjectileType<DarkGlob>(), GlobDamage, 0f, -1, 2, 0.5f);
                     }
-                    #endregion
-                    if(aiCounter % 240 == 0 && aiCounter > 1000)
+                    #region Unused Projectile Walls
+                        /*
+                        if ((aiCounter > 1000 && aiCounter % 120 == 0) || (aiCounter <= 1000 && aiCounter % 60 == 0))
+                        {
+
+                            float wallHole = Main.rand.NextFloat(-oratorBorder.Radius + 300, oratorBorder.Radius - 300);
+                            if (Main.rand.NextBool()) // Horizontal or Vertical?
+                            {
+                                if (Main.rand.NextBool()) //Left or Right?
+                                {
+                                    for (int i = 0; i < 64; i++) //Left
+                                    {
+                                        Projectile proj = Projectile.NewProjectileDirect(Projectile.GetSource_NaturalSpawn(), border.Center + new Vector2(-oratorBorder.Radius, -oratorBorder.Radius + (24 * i)), Vector2.UnitX * 5, ModContent.ProjectileType<DarkGlob>(), GlobDamage, 0f, -1, 2, 0.5f);
+                                        if (Main.rand.NextBool(4))
+                                            i += 6;
+                                        proj.timeLeft = 300;
+                                    }
+                                }
+                                else
+                                {
+                                    for (int i = 0; i < 64; i++) //Right
+                                    {
+                                        Projectile proj = Projectile.NewProjectileDirect(Projectile.GetSource_NaturalSpawn(), border.Center + new Vector2(oratorBorder.Radius, -oratorBorder.Radius + (24 * i)), Vector2.UnitX * -5, ModContent.ProjectileType<DarkGlob>(), GlobDamage, 0f, -1, 2, 0.5f);
+                                        if (Main.rand.NextBool(4))
+                                            i += 6;
+                                        proj.timeLeft = 300;
+                                    }
+                                }
+                            }
+                            else
+                            {
+                                if (Main.rand.NextBool()) //Top or Bottom?
+                                {
+                                    for (int i = 0; i < 64; i++) //Top
+                                    {
+                                        Projectile proj = Projectile.NewProjectileDirect(Projectile.GetSource_NaturalSpawn(), border.Center + new Vector2(-oratorBorder.Radius + (24 * i), -oratorBorder.Radius), Vector2.UnitY * 5, ModContent.ProjectileType<DarkGlob>(), GlobDamage, 0f, -1, 2, 0.5f);
+                                        if (Main.rand.NextBool(4))
+                                            i += 6;
+                                        proj.timeLeft = 300;
+                                    }
+                                }
+                                else
+                                {
+                                    for (int i = 0; i < 64; i++) //Top
+                                    {
+                                        Projectile proj = Projectile.NewProjectileDirect(Projectile.GetSource_NaturalSpawn(), border.Center + new Vector2(-oratorBorder.Radius + (24 * i), oratorBorder.Radius), Vector2.UnitY * -5, ModContent.ProjectileType<DarkGlob>(), GlobDamage, 0f, -1, 2, 0.5f);
+                                        if (Main.rand.NextBool(4))
+                                            i += 6;
+                                        proj.timeLeft = 300;
+                                    }
+                                }
+                            }
+                        }
+                        */
+                        #endregion
+                    if (aiCounter % 240 == 0 && aiCounter > 1000)
                         Projectile.NewProjectile(Projectile.GetSource_NaturalSpawn(), new Vector2(target.Center.X + 500, target.Center.Y), Vector2.Zero, ModContent.ProjectileType<DarkCoalescence>(), MonsterDamage, 0f, -1, 0, Main.rand.NextBool() ? -1 : 1, Main.rand.NextBool() ? -1 : 1);
                     #endregion
                     if (aiCounter >= 2500)
