@@ -876,7 +876,7 @@ namespace Windfall.Content.NPCs.Bosses.TheOrator
                 case States.DarkTides:
                     int attackFrequency = CalamityWorld.death ? 700 : CalamityWorld.revenge ? 800 : 900;
                     int attackGap = CalamityWorld.death ? 325 : CalamityWorld.revenge ? 350 : 400;
-                    if (aiCounter < attackFrequency * 4 - 20)
+                    if (aiCounter < attackFrequency * 3 - 20)
                     {
                         border = Main.projectile.First(p => p.active && p.type == ModContent.ProjectileType<OratorBorder>());
                         if (aiCounter % attackFrequency == 0)
@@ -952,7 +952,7 @@ namespace Windfall.Content.NPCs.Bosses.TheOrator
                             DisplayMessage(baseKey + 3, NPC);
                             break;
                         case 420:
-                            AIState = States.DarkTides;
+                            AIState = States.DarkOrbit;
                             aiCounter = -60;
                             attackCounter = 0;
                             break;
