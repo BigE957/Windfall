@@ -52,9 +52,16 @@ namespace Windfall.Content.Projectiles.Boss.Orator
                 }
                 else
                 {
-                    Projectile.velocity = Vector2.Zero;                    
+                    Projectile.velocity = Vector2.Zero;
                     if (Projectile.timeLeft < 30)
+                    {
                         Projectile.scale -= MaxSize / 30;
+                        if(Projectile.timeLeft == 5)
+                            for (int i = 0; i <= 10; i++)
+                            {
+                                EmpyreanMetaball.SpawnDefaultParticle(Projectile.Center, Main.rand.NextVector2Circular(3f, 3f) * Main.rand.NextFloat(1f, 2f) * MaxSize, 8 * Main.rand.NextFloat(3f, 5f) * MaxSize);
+                            }
+                    }
                 }
             }
             else
