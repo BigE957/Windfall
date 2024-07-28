@@ -51,7 +51,7 @@ namespace Windfall.Content.NPCs.Bosses.TheOrator
             NPC.aiStyle = -1;
             //Values gotten from Lunatic Cultist. Subject to change.
             NPC.DR_NERD(0.10f);
-            NPC.LifeMaxNERB(Main.masterMode ? 253000 : Main.expertMode ? 220000 : 180000, 244000);
+            NPC.LifeMaxNERB(Main.masterMode ? 430000 : Main.expertMode ? 330000 : 270000, 370000);
             NPC.npcSlots = 5f;
             NPC.defense = 50;
             NPC.HitSound = HurtSound;
@@ -195,7 +195,7 @@ namespace Windfall.Content.NPCs.Bosses.TheOrator
                     if (aiCounter == 900)
                     {
                         aiCounter = 0;
-                        if ((float)NPC.life / (float)NPC.lifeMax <= 0.5f)
+                        if ((float)NPC.life / (float)NPC.lifeMax <= 0.66f)
                         {
                             AIState = States.PhaseChange;
                             attackCounter = 0;
@@ -274,7 +274,7 @@ namespace Windfall.Content.NPCs.Bosses.TheOrator
                         aiCounter = 0;
                         attackCounter = 0;                                     
 
-                        if ((float)NPC.life / (float)NPC.lifeMax <= 0.5f)
+                        if ((float)NPC.life / (float)NPC.lifeMax <= 0.66f)
                             AIState = States.PhaseChange;
                         else
                         {
@@ -352,7 +352,7 @@ namespace Windfall.Content.NPCs.Bosses.TheOrator
                         if (aiCounter > 1300 || (float)NPC.life / (float)NPC.lifeMax <= 0.1f)
                         {
                             aiCounter = 0;
-                            if ((float)NPC.life / (float)NPC.lifeMax <= 0.5f)
+                            if ((float)NPC.life / (float)NPC.lifeMax <= 0.66f)
                             {
                                 AIState = States.PhaseChange;
                                 attackCounter = 0;
@@ -421,7 +421,7 @@ namespace Windfall.Content.NPCs.Bosses.TheOrator
                             {
                                 aiCounter = 0;
                                 dashing = false;
-                                if ((float)NPC.life / (float)NPC.lifeMax <= 0.5f)
+                                if ((float)NPC.life / (float)NPC.lifeMax <= 0.66f)
                                 {
                                     AIState = States.PhaseChange;
                                     attackCounter = 0;
@@ -492,7 +492,7 @@ namespace Windfall.Content.NPCs.Bosses.TheOrator
                     if(aiCounter > 720)
                     {
                         attackCounter = 0;
-                        if ((float)NPC.life / (float)NPC.lifeMax <= 0.5f)
+                        if ((float)NPC.life / (float)NPC.lifeMax <= 0.66f)
                         {
                             AIState = States.PhaseChange;
                             aiCounter = 0;
@@ -537,7 +537,7 @@ namespace Windfall.Content.NPCs.Bosses.TheOrator
 
                     if(aiCounter >= 850)
                     {
-                        if ((float)NPC.life / (float)NPC.lifeMax <= 0.5f)
+                        if ((float)NPC.life / (float)NPC.lifeMax <= 0.66f)
                         {
                             AIState = States.PhaseChange;
                             attackCounter = 0;
