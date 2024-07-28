@@ -48,6 +48,9 @@
     <None Remove="Assets\Projectiles\Misc\EmpyreanThorn.png" />
     <None Remove="Assets\Projectiles\NPCAnimations\GodseekerKnightProj.png" />
     <None Remove="Assets\Projectiles\NPCAnimations\IlmeranPaladinDig.png" />
+    <None Remove="Assets\Skies\OratorCloudsBack.png" />
+    <None Remove="Assets\Skies\OratorCloudsFront.png" />
+    <None Remove="Assets\Skies\OratorCloudsMiddle.png" />
     <None Remove="Content\Buffs\Cooldowns\ParryWeapon.png" />
     <None Remove="Content\Buffs\Cooldowns\ParryWeaponOutline.png" />
     <None Remove="Content\Buffs\Cooldowns\ParryWeaponOverlay.png" />
