@@ -279,10 +279,8 @@ namespace Windfall.Content.NPCs.Bosses.TheOrator
                         else
                         {
                             NPC.DR_NERD(0.1f);
-                            if (attackCycles % 2 == 0)
-                            {
+                            if (noSpawnsEscape)
                                 AIState = States.DarkCollision;                                
-                            }
                             else
                             {
                                 aiCounter = -30;
@@ -554,8 +552,8 @@ namespace Windfall.Content.NPCs.Bosses.TheOrator
                     break;
                 //Phase 2
                 case States.DarkOrbit:
-                    int OrbitDashCount = CalamityWorld.death ? 5 : CalamityWorld.revenge ? 3 : 1;
-                    float OrbitRate = CalamityWorld.death ? 0.035f : CalamityWorld.revenge ? 0.03f : 0.025f;
+                    int OrbitDashCount = CalamityWorld.death ? 5 : CalamityWorld.revenge ? 3 : 2;
+                    float OrbitRate = CalamityWorld.death ? 0.03f : CalamityWorld.revenge ? 0.025f : 0.02f;
                     Projectile border = Main.projectile.First(p => p.active && p.type == ModContent.ProjectileType<OratorBorder>());
                     if (aiCounter >= 0)
                     {
@@ -574,7 +572,7 @@ namespace Windfall.Content.NPCs.Bosses.TheOrator
                             NPC.Center = border.Center + new Vector2(0, -700).RotatedBy(aiCounter * OrbitRate);
                             if (aiCounter % 10 == 0 && aiCounter > 30)
                                 Projectile.NewProjectile(Terraria.Entity.GetSource_NaturalSpawn(), NPC.Center, (border.Center - NPC.Center).SafeNormalize(Vector2.UnitX) * 20, ModContent.ProjectileType<DarkBolt>(), BoltDamage, 0f);
-                            if (Main.expertMode && aiCounter % (CalamityWorld.revenge ? 90 : 120) == 0 && aiCounter > 30)
+                            if (Main.expertMode && aiCounter % (CalamityWorld.revenge ? 90 : 120) == 0 && aiCounter > 30 && aiCounter < NPC.ai[3] - 100)
                             {
                                 SoundEngine.PlaySound(SoundID.DD2_DarkMageAttack, NPC.Center);
                                 for (int i = 0; i < 20; i++)
@@ -729,16 +727,8 @@ namespace Windfall.Content.NPCs.Bosses.TheOrator
                             }
                             else
                             {
-                                if (attackCycles % 2 == 0)
-                                {
-                                    AIState = States.DarkFlood;
-                                    aiCounter = -30;
-                                }
-                                else
-                                {
-                                    AIState = States.DarkOrbit;
-                                    aiCounter = -60;
-                                }
+                                AIState = States.DarkFlood;
+                                aiCounter = -30;
                                 attackCounter = 0;
                             }
                         }
@@ -761,7 +751,7 @@ namespace Windfall.Content.NPCs.Bosses.TheOrator
                         NPC.velocity = NPC.velocity.SafeNormalize(Vector2.Zero) * 8;
                     #endregion
                     #region Projectiles
-                    if ((aiCounter > 1000 && aiCounter % 15 == 0) || (aiCounter <= 1000 && aiCounter % 8 == 0))
+                    if (aiCounter > 0 && ((aiCounter > 1000 && aiCounter % 15 == 0) || (aiCounter <= 1000 && aiCounter % 8 == 0)))
                     {
                         Vector2 spawnPosition = border.Center + (Vector2.UnitX * (oratorBorder.Radius + 200)).RotatedBy(Main.rand.NextFloat(TwoPi));
                         Projectile.NewProjectile(Projectile.GetSource_NaturalSpawn(), spawnPosition, (border.Center - spawnPosition).SafeNormalize(Vector2.Zero).RotatedBy(Main.rand.NextFloat(-0.75f, 0.75f)) * Main.rand.NextFloat(4f, 6f), ModContent.ProjectileType<DarkGlob>(), GlobDamage, 0f, -1, 2, 0.5f);
@@ -963,7 +953,7 @@ namespace Windfall.Content.NPCs.Bosses.TheOrator
                     }
                     else if(aiCounter == attackDuration + tideOut + 120)
                     {
-                        aiCounter = -1;
+                        aiCounter = -20;
                         attackCounter = 0;
                         if ((float)NPC.life / (float)NPC.lifeMax <= 0.1f)
                             AIState = States.Defeat;
