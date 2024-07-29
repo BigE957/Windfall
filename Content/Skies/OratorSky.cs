@@ -94,7 +94,6 @@ namespace Windfall.Content.Skies
                 spriteBatch.Draw(moon, position, moon.Frame(1, 8), oratorGreen * opacity, 0f, halfSizeTexture, 1.25f, SpriteEffects.None, 0f);
 
                 #region Clouds
-                Main.NewText(Main.windSpeedCurrent);
                 float backgroundOffset = GetBackgroundOffset(0.1f);
                 Texture2D CloudBack = (Texture2D)ModContent.Request<Texture2D>("Windfall/Assets/Skies/OratorCloudsBack", AssetRequestMode.ImmediateLoad);                
                 spriteBatch.Draw(CloudBack, new(GetBoundedX(backgroundOffset, CloudBack), bgTop * 2 + (Main.screenHeight * 1.3f)), CloudBack.Frame(), Color.White * opacity, 0f, new(CloudBack.Width / 2, CloudBack.Height / 2), 0.75f, SpriteEffects.None, 0f);
