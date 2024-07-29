@@ -10,6 +10,7 @@ namespace Windfall.Content.Skies
         private bool skyActive;
         private float opacity;
         private int counter = 0;
+        private float windOffset = 0;
 
         public override void Deactivate(params object[] args)
         {
@@ -135,7 +136,11 @@ namespace Windfall.Content.Skies
             counter++;
         }
         public override float GetCloudAlpha() => 1f;
-        private float GetBackgroundOffset(float parallaxMultiplier) => Main.screenWidth / 2 - ((Main.LocalPlayer.Center.X + (Main.windCounter * (Main.windSpeedCurrent * 2))) * parallaxMultiplier);
+        private float GetBackgroundOffset(float parallaxMultiplier)
+        {
+            windOffset += (Main.windSpeedCurrent);
+            return Main.screenWidth / 2 - ((Main.LocalPlayer.Center.X - windOffset) * parallaxMultiplier);
+        }
         private float GetBoundedX(float initialX, Texture2D texture) => (initialX % (texture.Width * 2.24f) + (texture.Width * 1.5f));
     }
 }
