@@ -750,16 +750,18 @@ namespace Windfall.Content.NPCs.Bosses.TheOrator
                     border = Main.projectile.First(p => p.active && p.type == ModContent.ProjectileType<OratorBorder>());
                     oratorBorder = border.ModProjectile as OratorBorder;
                     #region Movement
-                    if (NPC.Center.Y < border.Center.Y)
-                        NPC.velocity.Y++;
+                    Vector2 homeInVector = target.Center - NPC.Center;
+                    float targetDist = homeInVector.Length();
+                    homeInVector.Normalize();
+                    if (targetDist > 300f)
+                        NPC.velocity = (NPC.velocity * 40f + homeInVector * 12f) / 41f;
                     else
-                        NPC.velocity.Y--;
-                    if (NPC.Center.X < border.Center.X - 700)
-                        NPC.velocity.X++;
-                    else
-                        NPC.velocity.X--;
-                    if (NPC.velocity.Length() > 8)
-                        NPC.velocity = NPC.velocity.SafeNormalize(Vector2.Zero) * 8;
+                    {
+                        if (targetDist < 250f)
+                            NPC.velocity = (NPC.velocity * 40f + homeInVector * -12f) / 41f;
+                        else
+                            NPC.velocity *= 0.975f;
+                    }
                     #endregion
                     #region Projectiles
                     if (aiCounter > 0 && ((aiCounter > 1000 && aiCounter % 15 == 0) || (aiCounter <= 1000 && aiCounter % 8 == 0)))
@@ -1065,7 +1067,7 @@ namespace Windfall.Content.NPCs.Bosses.TheOrator
                                 }
                                 NPC.velocity = VectorToTarget;
                                 VectorToTarget *= 0.925f;
-                                if (NPC.Center.Y > wallTop && NPC.Center.Y - NPC.velocity.Y <= wallTop)
+                                if (NPC.Center.Y > wallTop && NPC.ai[3] == -1)
                                 {
                                     for (int i = 0; i < 10; i++)
                                     {
@@ -1228,60 +1230,17 @@ namespace Windfall.Content.NPCs.Bosses.TheOrator
                     #region Movement
                     NPC.dontTakeDamage = true;                    
                     target = Main.player[Player.FindClosest(NPC.Center, NPC.width, NPC.height)];
-                    Vector2 TargetLocation = new(target.Center.X, target.Center.Y - 150);
-                    if (attackCounter == 0)
-                    {
-                        if(aiCounter < 30)
-                            aiCounter = 0;
-                        if (NPC.velocity.Length() < 0.5f && (TargetLocation - NPC.Center).Length() < 25f)
-                        {
-                            NPC.velocity = Vector2.Zero;
-                            attackCounter = 1;
-                        }
-                        else
-                        {
-                            if (NPC.Center.Y < TargetLocation.Y)
-                                NPC.velocity.Y++;
-                            else
-                                NPC.velocity.Y--;
-                            if (NPC.Center.X < TargetLocation.X)
-                                NPC.velocity.X++;
-                            else
-                                NPC.velocity.X--;
-                            if ((TargetLocation - NPC.Center).Length() < 25f)
-                                NPC.velocity -= NPC.velocity.SafeNormalize(Vector2.Zero);
-                            else if (NPC.velocity.Length() > 7.5f)
-                                NPC.velocity = NPC.velocity.SafeNormalize(Vector2.Zero) * 7.5f;
-                        }
-                    }
+                    homeInVector = target.Center - NPC.Center;
+                    targetDist = homeInVector.Length();
+                    homeInVector.Normalize();
+                    if (targetDist > 300f)
+                        NPC.velocity = (NPC.velocity * 40f + homeInVector * 12f) / 41f;
                     else
                     {
-                        dashing = true;
-                        if (Math.Abs((TargetLocation - NPC.Center).Y) > 100f)
-                        {
-                            attackCounter = 0;
-                            return;
-                        }
-                        if (Math.Abs(NPC.velocity.X) < 1f && Math.Abs((TargetLocation - NPC.Center).X) < 25f)
-                        {
-                            NPC.velocity.X = 0;
-                        }
-                        else if(!(Math.Abs(NPC.velocity.X) < 1f) || Math.Abs((TargetLocation - NPC.Center).X) > 100f)
-                        {
-                            if (NPC.Center.X < TargetLocation.X)
-                                NPC.velocity.X++;
-                            else
-                                NPC.velocity.X--;
-                            if (NPC.velocity.X != 0)
-                            {
-                                if (Math.Abs((TargetLocation - NPC.Center).X) < 25f)
-                                    NPC.velocity.X -= 1 * (NPC.velocity.X / Math.Abs(NPC.velocity.X));
-                                else if (Math.Abs(NPC.velocity.X) > 7.5f)
-                                    NPC.velocity.X = 7.5f * (NPC.velocity.X / Math.Abs(NPC.velocity.X));
-                            }
-                        }
-                        NPC.velocity.Y = (float)(Math.Sin((attackCounter - 1) / 10) * 1);
-                        attackCounter++;
+                        if (targetDist < 250f)
+                            NPC.velocity = (NPC.velocity * 40f + homeInVector * -12f) / 41f;
+                        else
+                            NPC.velocity *= 0.975f;
                     }
                     #endregion
                     NPC.damage = 0;
