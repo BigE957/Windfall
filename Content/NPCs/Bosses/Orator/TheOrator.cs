@@ -242,8 +242,9 @@ namespace Windfall.Content.NPCs.Bosses.TheOrator
                                 if (spawn.ModNPC is DarkSpawn darkSpawn)
                                     darkSpawn.CurrentAI = DarkSpawn.AIState.Sacrifice;
                             }
+                            attackCounter = -1;
                         }
-                        if (aiCounter > 150)
+                        else if (aiCounter > 150)
                         {
                             attackCounter = 0;
                             foreach (NPC spawn in Main.npc.Where(n => n.type == ModContent.NPCType<DarkSpawn>() && n.active))
@@ -271,15 +272,14 @@ namespace Windfall.Content.NPCs.Bosses.TheOrator
                         aiCounter = EndTime;  
                     else if (aiCounter >= EndTime + 90)
                     {
-                        aiCounter = 0;
-                        attackCounter = 0;                                     
+                        aiCounter = 0;                                                            
 
                         if ((float)NPC.life / (float)NPC.lifeMax <= 0.66f)
                             AIState = States.PhaseChange;
                         else
                         {
                             NPC.DR_NERD(0.1f);
-                            if (noSpawnsEscape)
+                            if (aiCounter != -1)
                                 AIState = States.DarkCollision;                                
                             else
                             {
@@ -289,6 +289,7 @@ namespace Windfall.Content.NPCs.Bosses.TheOrator
                                 AIState = States.DarkSlice;
                             }
                         }
+                        attackCounter = 0;
                         return;
                     }
                     break;
