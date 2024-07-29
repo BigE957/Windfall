@@ -225,8 +225,7 @@ namespace Windfall.Content.NPCs.Bosses.TheOrator
                         NPC.velocity.X--;
                     if (NPC.velocity.Length() > 15)
                         NPC.velocity = NPC.velocity.SafeNormalize(Vector2.Zero) * 15;
-                    #endregion
-                    
+                    #endregion                   
                     NPC.DR_NERD(0.1f + (0.1f * Main.npc.Where(n => n.type == ModContent.NPCType<DarkSpawn>()).Count()));
                     NPC.damage = 0;
                     const int EndTime = 1500;
@@ -272,14 +271,13 @@ namespace Windfall.Content.NPCs.Bosses.TheOrator
                         aiCounter = EndTime;  
                     else if (aiCounter >= EndTime + 90)
                     {
-                        aiCounter = 0;                                                            
-
+                        aiCounter = 0;
                         if ((float)NPC.life / (float)NPC.lifeMax <= 0.66f)
                             AIState = States.PhaseChange;
                         else
                         {
                             NPC.DR_NERD(0.1f);
-                            if (aiCounter != -1)
+                            if (attackCounter != -1)
                                 AIState = States.DarkCollision;                                
                             else
                             {
@@ -291,7 +289,7 @@ namespace Windfall.Content.NPCs.Bosses.TheOrator
                         }
                         attackCounter = 0;
                         return;
-                    }
+                    }                    
                     break;
                 case States.DarkBarrage:
                     if (aiCounter <= 1100)
