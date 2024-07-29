@@ -211,10 +211,8 @@ namespace Windfall.Content.NPCs.Bosses.TheOrator
                     }
                     break;
                 case States.DarkSpawn:
-                    
+                    target = Main.player[Player.FindClosest(NPC.Center, NPC.width, NPC.height)];
                     #region Movement
-                    target = Main.player[Player.FindClosest(NPC.Center, NPC.width, NPC.height)];                   
-
                     if (NPC.Center.Y < target.Center.Y - 300)
                         NPC.velocity.Y++;
                     else
@@ -344,7 +342,20 @@ namespace Windfall.Content.NPCs.Bosses.TheOrator
                     if (aiCounter > 1100)
                     {
                         #region Attack Transition
-                        NPC.velocity = (target.Center - NPC.Center).SafeNormalize(Vector2.Zero) * (10f / (((float)aiCounter - 1000f) /66f) + 1f);
+
+                        Vector2 homeIn = target.Center - NPC.Center;
+                        float targetDistance = homeIn.Length();
+                        homeIn.Normalize();
+                        if (targetDistance > 300f)
+                            NPC.velocity = (NPC.velocity * 40f + homeIn * 12f) / 41f;
+                        else
+                        {
+                            if (targetDistance < 250f)
+                                NPC.velocity = (NPC.velocity * 40f + homeIn * -12f) / 41f;
+                            else
+                                NPC.velocity *= 0.975f;
+                        }
+
                         EmpyreanMetaball.SpawnDefaultParticle(NPC.Center + (target.Center - NPC.Center).SafeNormalize(Vector2.Zero) * 150f, Main.rand.NextVector2Circular(5f, 5f), 1.5f * ((aiCounter - 1100) / 2));
                         if (aiCounter > 1300 || (float)NPC.life / (float)NPC.lifeMax <= 0.1f)
                         {
@@ -1048,7 +1059,7 @@ namespace Windfall.Content.NPCs.Bosses.TheOrator
                         {
                             dashing = true;
                             SoundEngine.PlaySound(DashWarn);
-                            NPC.velocity = Vector2.UnitY * 4;
+                            NPC.velocity = Vector2.UnitY * -4;
                         }
                         else
                         {
@@ -1246,7 +1257,7 @@ namespace Windfall.Content.NPCs.Bosses.TheOrator
                     NPC.damage = 0;
                     #region Dialogue and Events
                     baseKey = "LunarCult.TheOrator.BossText.Defeat.";
-                    switch (aiCounter)
+                    switch (aiCounter - 60)
                     {
                         case 30:
                             DisplayMessage(baseKey + 0, NPC);
