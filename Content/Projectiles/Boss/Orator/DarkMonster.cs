@@ -1,5 +1,6 @@
 ﻿using CalamityMod.World;
 using Luminance.Core.Graphics;
+using ReLogic.Utilities;
 using Windfall.Common.Graphics.Metaballs;
 using Windfall.Common.Systems;
 using Windfall.Content.NPCs.Bosses.TheOrator;
@@ -11,6 +12,8 @@ namespace Windfall.Content.Projectiles.Boss.Orator
     {
         public new static string LocalizationCategory => "Projectiles.Boss";
         public override string Texture => "Windfall/Assets/Graphics/Metaballs/BasicCircle";
+
+        SlotId loopingSoundSlot;
 
         internal static int MonsterDamage;
         private float Acceleration;
@@ -46,7 +49,6 @@ namespace Windfall.Content.Projectiles.Boss.Orator
             get => (States)Projectile.ai[0];
             set => Projectile.ai[0] = (float)value;
         }
-        private int SoundDelay = 120;
 
         public override void OnSpawn(IEntitySource source)
         {
@@ -85,13 +87,16 @@ namespace Windfall.Content.Projectiles.Boss.Orator
                 case States.Chasing:
                     if (aiCounter <= 60)
                         Projectile.scale += 5 / 60f;
-                    if (SoundDelay == 0)
+                    if (!SoundEngine.TryGetActiveSound(loopingSoundSlot, out var activeSound))
                     {
-                        SoundEngine.PlaySound(SoundID.DD2_EtherianPortalIdleLoop, Projectile.Center);
-                        SoundDelay = 1020;
+                        // if it isn't, play the sound and remember the SlotId
+                        var tracker = new ProjectileAudioTracker(Projectile);
+                        loopingSoundSlot = SoundEngine.PlaySound(SoundID.DD2_EtherianPortalIdleLoop, Projectile.position, soundInstance => {
+                            // This example is inlined, see ActiveSoundShowcaseProjectile.cs for other approaches
+                            soundInstance.Position = Projectile.position;
+                            return tracker.IsActiveAndInGame();
+                        });
                     }
-                    else
-                        SoundDelay--;
                     Projectile.velocity += (target.Center - Projectile.Center).SafeNormalize(Vector2.Zero) * Acceleration;
                     if (Projectile.velocity.Length() > MaxSpeed)
                         Projectile.velocity = Projectile.velocity.SafeNormalize(Vector2.Zero) * (Projectile.velocity.Length() * 0.95f);
