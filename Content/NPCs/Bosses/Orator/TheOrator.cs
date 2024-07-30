@@ -867,13 +867,20 @@ namespace Windfall.Content.NPCs.Bosses.TheOrator
                         border = Main.projectile.First(p => p.active && p.type == ModContent.ProjectileType<OratorBorder>());
                         if (aiCounter % attackFrequency == 0)
                         {
-                            attackCounter = Main.rand.NextFloatDirection();
+                            attackCounter = Main.rand.NextFloatDirection();                            
                             Projectile p = Projectile.NewProjectileDirect(Projectile.GetSource_NaturalSpawn(), border.Center, attackCounter.ToRotationVector2(), ModContent.ProjectileType<DarkTide>(), 0, 0f, ai0: 60, ai1: 1500, ai2: 6);
                             SoundEngine.PlaySound(SoundID.DD2_EtherianPortalSpawnEnemy with { Volume = 10f }, p.Center);
                         }
                         else if (aiCounter % attackFrequency == attackGap)
                         {
-                            Projectile p = Projectile.NewProjectileDirect(Projectile.GetSource_NaturalSpawn(), border.Center, attackCounter.ToRotationVector2() * -1, ModContent.ProjectileType<DarkTide>(), 0, 0f, ai0: 60, ai1: 1500, ai2: 6);
+                            Vector2 initialPos = border.Center + (attackCounter.ToRotationVector2() * 175);
+                            for (int i = 0; i < 30; i++)
+                            {
+                                Vector2 myPos = initialPos + (attackCounter.ToRotationVector2() * Main.rand.NextFloat(-500, 0)) + ((attackCounter + PiOver2).ToRotationVector2() * Main.rand.NextFloat(-800, 800));
+                                Projectile proj = Projectile.NewProjectileDirect(Terraria.Entity.GetSource_NaturalSpawn(), myPos, Vector2.Zero, ModContent.ProjectileType<DarkGlob>(), GlobDamage, 0f, -1, 0, Main.rand.NextFloat(0.5f, 1.5f));
+                                proj.timeLeft = attackGap * 2;
+                            }
+                            Projectile p = Projectile.NewProjectileDirect(Projectile.GetSource_NaturalSpawn(), border.Center, -attackCounter.ToRotationVector2(), ModContent.ProjectileType<DarkTide>(), 0, 0f, ai0: 60, ai1: 1500, ai2: 6);
                             SoundEngine.PlaySound(SoundID.DD2_EtherianPortalSpawnEnemy with { Volume = 10f }, p.Center);
                         }
                         
@@ -893,6 +900,8 @@ namespace Windfall.Content.NPCs.Bosses.TheOrator
                     }
                     else
                     {
+                        foreach (Projectile proj in Main.projectile.Where(p => p != null && p.active && p.type == ModContent.ProjectileType<DarkGlob>()))
+                            proj.timeLeft = 45;
                         aiCounter = 0;
                         if ((float)NPC.life / (float)NPC.lifeMax <= 0.1f)
                         {
@@ -1160,7 +1169,7 @@ namespace Windfall.Content.NPCs.Bosses.TheOrator
                                     NPC.damage = StatCorrections.ScaleContactDamage(Main.masterMode ? 360 : CalamityWorld.death ? 280 : CalamityWorld.revenge ? 268 : Main.expertMode ? 240 : 120);
                                 }
                                 NPC.velocity = VectorToTarget;
-                                VectorToTarget *= 0.925f;
+                                VectorToTarget *= 0.91f;
                                 if (NPC.position.Y < wallTop && NPC.oldPosition.Y >= wallTop)
                                 {
                                     SoundEngine.PlaySound(SoundID.DD2_EtherianPortalDryadTouch, NPC.Center);
