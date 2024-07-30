@@ -109,15 +109,15 @@ namespace Windfall.Content.Projectiles.Boss.Orator
                 }
                 if (aiCounter >= fireDelay + 68)
                 {
-                    SoundEngine.PlaySound(SoundID.DD2_EtherianPortalDryadTouch, Projectile.Center);
-                    if (Orator.ai[0] < 7)
-                        SoundEngine.PlaySound(new("CalamityMod/Sounds/Custom/Ravager/RavagerMissileExplosion"), Projectile.Center);
+                    SoundEngine.PlaySound(SoundID.DD2_EtherianPortalDryadTouch, Projectile.Center);                   
                     for (int i = 0; i <= 50; i++)
                     {
                         EmpyreanMetaball.SpawnDefaultParticle(Projectile.Center, Main.rand.NextVector2Circular(10f, 10f) * Main.rand.NextFloat(1f, 2f), 40 * Main.rand.NextFloat(3f, 5f));
                     }
                     if (Main.projectile.First(p => p.type == ModContent.ProjectileType<DarkCoalescence>()).whoAmI == Projectile.whoAmI)
                     {
+                        if (Orator.ai[0] < 7)
+                            SoundEngine.PlaySound(new("CalamityMod/Sounds/Custom/Ravager/RavagerMissileExplosion"), Projectile.Center);
                         ScreenShakeSystem.StartShake(12.5f);
                         SoundEngine.PlaySound(SoundID.DD2_MonkStaffGroundImpact, Projectile.Center);
                         for (int i = 0; i < 24; i++)
