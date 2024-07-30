@@ -292,57 +292,30 @@ namespace Windfall.Content.NPCs.Bosses.TheOrator
                 case States.DarkBarrage:
                     if (aiCounter <= 1100)
                     {
-                        #region Movement
                         target = Main.player[Player.FindClosest(NPC.Center, NPC.width, NPC.height)];
-                        float spinRate = CalamityWorld.death ? 0.045f : CalamityWorld.revenge ? 0.0475f : 0.045f;
-                        if (aiCounter == 0)
-                        {
-                            NPC.position.X = target.position.X;
-                            NPC.position.Y = target.position.Y - 400;
-                            NPC.velocity = Vector2.Zero;
-                            NPC.ai[3] = Main.rand.Next(500, 600);
-                        }
-                        else
-                        {
-                            VectorToTarget = target.Center - NPC.Center;
-                            NPC.Center = target.Center + new Vector2(0, -400).RotatedBy(aiCounter * spinRate);
-                            NPC.velocity = target.velocity;
-                        }
+                        #region Movement
+                        Vector2 homeIn = target.Center - NPC.Center;
+                        float targetDistance = homeIn.Length();
+                        homeIn.Normalize();
+                        NPC.velocity = (NPC.velocity * 40f + homeIn * 18f) / 41f;
                         #endregion
 
-                        #region Projectiles     
-                        if (aiCounter < 1000 && aiCounter > 30)
+                        #region Projectiles
+                        if (aiCounter % 5 == 0)
+                            Projectile.NewProjectileDirect(Terraria.Entity.GetSource_NaturalSpawn(), NPC.Center, Vector2.Zero, ModContent.ProjectileType<DarkGlob>(), GlobDamage, 0f, -1, 0, Main.rand.NextFloat(0.5f, 1.5f));
+                        if(aiCounter % 90 == 0)
                         {
-                            int gapSize = CalamityWorld.death ? 275 : CalamityWorld.revenge ? 300 : Main.expertMode ? 325 : 350;
-                            if (aiCounter % (CalamityWorld.death ? 100 : CalamityWorld.revenge ? 110 : 120) == 0)
+                            int radialCounter = CalamityWorld.death ? 12 : CalamityWorld.revenge ? 10 : 8;
+                            for (int i = 0; i < radialCounter; i++)
                             {
-                                float offset = Main.rand.Next(0, 200);
-                                for (int i = 0; i < 12; i++)
-                                {
-                                    Projectile proj = Projectile.NewProjectileDirect(Terraria.Entity.GetSource_NaturalSpawn(), target.Center + new Vector2(-1500, -1200 + (gapSize * i) + offset), new Vector2(20, -12), ModContent.ProjectileType<DarkGlob>(), GlobDamage, 0f, -1, 1, 1f);
-                                    proj = Projectile.NewProjectileDirect(Terraria.Entity.GetSource_NaturalSpawn(), target.Center + new Vector2(1500, -1200 + (gapSize * i) + offset), new Vector2(-20, -12), ModContent.ProjectileType<DarkGlob>(), GlobDamage, 0f, -1, 1, 1f);
-                                }
-                            }
-                            else if (aiCounter % (CalamityWorld.death ? 50 : CalamityWorld.revenge ? 55 : 60) == 0)
-                            {
-                                Projectile.NewProjectile(Terraria.Entity.GetSource_NaturalSpawn(), NPC.Center, (target.Center - NPC.Center).SafeNormalize(Vector2.UnitX) * 20, ModContent.ProjectileType<DarkBolt>(), BoltDamage, 0f, -1, 0, -20);
-                                Particle pulse = new DirectionalPulseRing(NPC.Center, (target.Center - NPC.Center).SafeNormalize(Vector2.Zero) * 4f, new(117, 255, 159), new Vector2(0.5f, 1f), (target.Center - NPC.Center).ToRotation(), 0f, 1f, 24);
-                                GeneralParticleHandler.SpawnParticle(pulse);
+                                Projectile.NewProjectile(Terraria.Entity.GetSource_NaturalSpawn(), NPC.Center, (target.Center - NPC.Center).SafeNormalize(Vector2.Zero).RotatedBy(TwoPi / radialCounter * i) * 20, ModContent.ProjectileType<DarkBolt>(), BoltDamage, 0f, -1, 0, -20);
                             }
                         }
-                        else if (aiCounter % (CalamityWorld.death ? 50 : CalamityWorld.revenge ? 55 : 60) == 0)
-                        {
-                            Projectile.NewProjectile(Terraria.Entity.GetSource_NaturalSpawn(), NPC.Center, (target.Center - NPC.Center).SafeNormalize(Vector2.UnitX) * 20, ModContent.ProjectileType<DarkBolt>(), BoltDamage, 0f, -1, 0, -20);
-                            Particle pulse = new DirectionalPulseRing(NPC.Center, (target.Center - NPC.Center).SafeNormalize(Vector2.Zero) * 4f, new(117, 255, 159), new Vector2(0.5f, 1f), (target.Center - NPC.Center).ToRotation(), 0f, 1f, 24);
-                            GeneralParticleHandler.SpawnParticle(pulse);
-                        }
-
+                        #endregion
                     }
-                    #endregion
                     if (aiCounter > 1100)
                     {
                         #region Attack Transition
-
                         Vector2 homeIn = target.Center - NPC.Center;
                         float targetDistance = homeIn.Length();
                         homeIn.Normalize();
@@ -513,23 +486,24 @@ namespace Windfall.Content.NPCs.Bosses.TheOrator
                     }
                     break;
                 case States.DarkCollision:
-
-                    #region Movement
                     target = Main.player[Player.FindClosest(NPC.Center, NPC.width, NPC.height)];
 
-                    if (NPC.Center.Y < target.Center.Y - 300)
-                        NPC.velocity.Y++;
+                    #region Movement
+                    Vector2 homeInVec = target.Center - NPC.Center;
+                    float distance = homeInVec.Length();
+                    homeInVec.Normalize();
+                    if (distance > 350)
+                        NPC.velocity = (NPC.velocity * 40f + homeInVec * 18f) / 41f;
                     else
-                        NPC.velocity.Y--;
-                    if (NPC.Center.X < target.Center.X)
-                        NPC.velocity.X++;
-                    else
-                        NPC.velocity.X--;
-                    if (NPC.velocity.Length() > 15)
-                        NPC.velocity = NPC.velocity.SafeNormalize(Vector2.Zero) * 15;
+                    {
+                        if (distance < 300)
+                            NPC.velocity = (NPC.velocity * 40f + homeInVec * -18f) / 41f;
+                        else
+                            NPC.velocity *= 0.975f;
+                    }
                     #endregion
 
-                    if(aiCounter % (80 + DarkCoalescence.fireDelay) == 0 && aiCounter < 700)
+                    if (aiCounter % (80 + DarkCoalescence.fireDelay) == 0 && aiCounter < 700)
                     {
                         if(Main.rand.NextBool())
                         {
@@ -1195,21 +1169,21 @@ namespace Windfall.Content.NPCs.Bosses.TheOrator
                 case States.Spawning:
                     DashDelay = CalamityWorld.death ? 20 : CalamityWorld.revenge ? 25 : 30;
                     target = Main.player[Player.FindClosest(NPC.Center, NPC.width, NPC.height)];
-
-                    int height = 150;
+                    int height = 300;
                     if (aiCounter > 270)
-                        height = 300;
-
-                    if (NPC.Center.Y < target.Center.Y - height)
-                        NPC.velocity.Y++;
+                        height = 600;
+                    homeInVec = target.Center - NPC.Center;
+                    targetDist = homeInVec.Length();
+                    homeInVec.Normalize();
+                    if (targetDist > height)
+                        NPC.velocity = (NPC.velocity * 40f + homeInVec * 16f) / 41f;
                     else
-                        NPC.velocity.Y--;
-                    if (NPC.Center.X < target.Center.X)
-                        NPC.velocity.X++;
-                    else
-                        NPC.velocity.X--;
-                    if (NPC.velocity.Length() > 15)
-                        NPC.velocity = NPC.velocity.SafeNormalize(Vector2.Zero) * 15;
+                    {
+                        if (targetDist < height - 50)
+                            NPC.velocity = (NPC.velocity * 40f + homeInVec * -16f) / 41f;
+                        else
+                            NPC.velocity *= 0.975f;
+                    }
 
                     if (aiCounter > 150)
                     {
