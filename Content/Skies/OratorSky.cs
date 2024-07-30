@@ -35,7 +35,6 @@ namespace Windfall.Content.Skies
         {
             Color oratorGreen = new(117, 255, 159);
             Texture2D moon = TextureAssets.Moon[Main.moonType].Value;
-
             spriteBatch.Draw(TextureAssets.BlackTile.Value, new Rectangle(0, 0, Main.screenWidth * 2, Main.screenHeight * 2), Color.Black * opacity);
 
             if (Main.netMode != NetmodeID.Server)
@@ -88,7 +87,6 @@ namespace Windfall.Content.Skies
                 Vector2 halfSizeTexture = new(moon.Width / 2, moon.Height / 8 / 2);
                 Vector2 position = new(Main.screenWidth / 2, bgTop + 170);
                 Texture2D bloomCircle = (Texture2D)ModContent.Request<Texture2D>("CalamityMod/Particles/BloomCircle", AssetRequestMode.ImmediateLoad);
-                Texture2D sparkle = (Texture2D)ModContent.Request<Texture2D>("CalamityMod/Particles/ThinSparkle", AssetRequestMode.ImmediateLoad);
                                        
                 spriteBatch.Draw(bloomCircle, position, bloomCircle.Frame(), oratorGreen * opacity * (float)(Math.Sin((double)counter/ 20D) * -1), 0f, bloomCircle.Size() / 2f, 1.25f, SpriteEffects.None, 0f);
 
