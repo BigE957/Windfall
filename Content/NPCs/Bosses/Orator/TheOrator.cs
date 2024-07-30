@@ -294,24 +294,53 @@ namespace Windfall.Content.NPCs.Bosses.TheOrator
                     {
                         target = Main.player[Player.FindClosest(NPC.Center, NPC.width, NPC.height)];
                         #region Movement
-                        Vector2 homeIn = target.Center - NPC.Center;
-                        float targetDistance = homeIn.Length();
-                        homeIn.Normalize();
-                        NPC.velocity = (NPC.velocity * 40f + homeIn * 18f) / 41f;
-                        #endregion
-
-                        #region Projectiles
-                        if (aiCounter % 5 == 0)
-                            Projectile.NewProjectileDirect(Terraria.Entity.GetSource_NaturalSpawn(), NPC.Center, Vector2.Zero, ModContent.ProjectileType<DarkGlob>(), GlobDamage, 0f, -1, 0, Main.rand.NextFloat(0.5f, 1.5f));
-                        if(aiCounter % 90 == 0)
+                        if (aiCounter < 0)
                         {
-                            int radialCounter = CalamityWorld.death ? 12 : CalamityWorld.revenge ? 10 : 8;
-                            for (int i = 0; i < radialCounter; i++)
-                            {
-                                Projectile.NewProjectile(Terraria.Entity.GetSource_NaturalSpawn(), NPC.Center, (target.Center - NPC.Center).SafeNormalize(Vector2.Zero).RotatedBy(TwoPi / radialCounter * i) * 20, ModContent.ProjectileType<DarkBolt>(), BoltDamage, 0f, -1, 0, -20);
-                            }
+                            if (NPC.Center.Y < target.Center.Y - 250)
+                                NPC.velocity.Y++;
+                            else
+                                NPC.velocity.Y--;
+                            if (NPC.Center.X < target.Center.X)
+                                NPC.velocity.X++;
+                            else
+                                NPC.velocity.X--;
+                            if (NPC.velocity.Length() > 15)
+                                NPC.velocity = NPC.velocity.SafeNormalize(Vector2.Zero) * 15;
+                        }
+                        else
+                        {
+                            Vector2 homeIn = target.Center - NPC.Center;
+                            float targetDistance = homeIn.Length();
+                            homeIn.Normalize();
+                            NPC.velocity = (NPC.velocity * 40f + homeIn * 18f) / 41f;
                         }
                         #endregion
+                        if (aiCounter > 0)
+                        {
+                            #region Projectiles
+                            if (aiCounter % 45 == 0)
+                            {
+                                if (aiCounter % 90 == 0)
+                                {
+                                    SoundEngine.PlaySound(SoundID.Item71, NPC.Center);
+                                    int radialCounter = CalamityWorld.death ? 12 : CalamityWorld.revenge ? 10 : 8;
+                                    for (int i = 0; i < radialCounter; i++)
+                                    {
+                                        Projectile.NewProjectile(Terraria.Entity.GetSource_NaturalSpawn(), NPC.Center, (target.Center - NPC.Center).SafeNormalize(Vector2.Zero).RotatedBy(TwoPi / radialCounter * i) * 20, ModContent.ProjectileType<DarkBolt>(), BoltDamage, 0f, -1, 0, -5);
+                                    }
+                                }
+                                else
+                                {
+                                    SoundEngine.PlaySound(SoundID.DD2_EtherianPortalSpawnEnemy with { Volume = 10f }, NPC.Center);
+                                    int radialCounter = CalamityWorld.death ? 30 : CalamityWorld.revenge ? 28 : 24;
+                                    for (int i = 0; i < radialCounter; i++)
+                                    {
+                                        Projectile.NewProjectile(Terraria.Entity.GetSource_NaturalSpawn(), NPC.Center, (target.Center - NPC.Center).SafeNormalize(Vector2.Zero).RotatedBy(TwoPi / radialCounter * i) * 6, ModContent.ProjectileType<DarkGlob>(), GlobDamage, 0f, -1, 0, Main.rand.NextFloat(1f, 2f));
+                                    }
+                                }
+                            }
+                            #endregion
+                        }
                     }
                     if (aiCounter > 1100)
                     {
@@ -320,11 +349,11 @@ namespace Windfall.Content.NPCs.Bosses.TheOrator
                         float targetDistance = homeIn.Length();
                         homeIn.Normalize();
                         if (targetDistance > 300f)
-                            NPC.velocity = (NPC.velocity * 40f + homeIn * 12f) / 41f;
+                            NPC.velocity = (NPC.velocity * 40f + homeIn * 16f) / 41f;
                         else
                         {
                             if (targetDistance < 250f)
-                                NPC.velocity = (NPC.velocity * 40f + homeIn * -12f) / 41f;
+                                NPC.velocity = (NPC.velocity * 40f + homeIn * -16f) / 41f;
                             else
                                 NPC.velocity *= 0.975f;
                         }
@@ -480,7 +509,7 @@ namespace Windfall.Content.NPCs.Bosses.TheOrator
                         }
                         else
                         {
-                            aiCounter = 0;
+                            aiCounter = -60;
                             AIState = States.DarkBarrage;
                         }
                     }
@@ -1171,7 +1200,7 @@ namespace Windfall.Content.NPCs.Bosses.TheOrator
                     target = Main.player[Player.FindClosest(NPC.Center, NPC.width, NPC.height)];
                     int height = 300;
                     if (aiCounter > 270)
-                        height = 600;
+                        height = 500;
                     homeInVec = target.Center - NPC.Center;
                     targetDist = homeInVec.Length();
                     homeInVec.Normalize();
