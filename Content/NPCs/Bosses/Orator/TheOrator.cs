@@ -718,15 +718,19 @@ namespace Windfall.Content.NPCs.Bosses.TheOrator
                     {
                         if (aiCounter < 1620)
                         {
-                            if (CalamityWorld.revenge && aiCounter % 120 == 0)
+                            if (Main.expertMode && aiCounter % 120 == 0)
+                            {
+                                SoundEngine.PlaySound(SoundID.Item71, NPC.Center);
                                 for (int i = 0; i < 6; i++)
                                 {
                                     Projectile.NewProjectile(Terraria.Entity.GetSource_NaturalSpawn(), NPC.Center, (target.Center - NPC.Center).SafeNormalize(Vector2.Zero).RotatedBy(TwoPi / 6 * i) * 20, ModContent.ProjectileType<DarkBolt>(), BoltDamage, 0f, -1, 0, -20);
                                 }
+                            }
                             Projectile.NewProjectile(Projectile.GetSource_NaturalSpawn(), NPC.Center, (target.Center - NPC.Center).SafeNormalize(Vector2.Zero) * 8, ModContent.ProjectileType<DarkGlob>(), GlobDamage, 0f, -1, 2, 0.5f);
                         }
                         else if (aiCounter >= 1680 && aiCounter % 45 == 0)
                         {
+                            SoundEngine.PlaySound(SoundID.Item71, NPC.Center);
                             Vector2 dir = Main.rand.NextVector2CircularEdge(1f, 1f);
                             int projCount = 8;
                             for (int i = 0; i < projCount; i++)
@@ -864,10 +868,14 @@ namespace Windfall.Content.NPCs.Bosses.TheOrator
                         if (aiCounter % attackFrequency == 0)
                         {
                             attackCounter = Main.rand.NextFloatDirection();
-                            Projectile.NewProjectile(Projectile.GetSource_NaturalSpawn(), border.Center, attackCounter.ToRotationVector2(), ModContent.ProjectileType<DarkTide>(), 0, 0f, ai0: 60, ai1: 1500, ai2: 6);
+                            Projectile p = Projectile.NewProjectileDirect(Projectile.GetSource_NaturalSpawn(), border.Center, attackCounter.ToRotationVector2(), ModContent.ProjectileType<DarkTide>(), 0, 0f, ai0: 60, ai1: 1500, ai2: 6);
+                            SoundEngine.PlaySound(SoundID.DD2_EtherianPortalSpawnEnemy with { Volume = 10f }, p.Center);
                         }
                         else if (aiCounter % attackFrequency == attackGap)
-                            Projectile.NewProjectile(Projectile.GetSource_NaturalSpawn(), border.Center, attackCounter.ToRotationVector2() * -1, ModContent.ProjectileType<DarkTide>(), 0, 0f, ai0: 60, ai1: 1500, ai2: 6);
+                        {
+                            Projectile p = Projectile.NewProjectileDirect(Projectile.GetSource_NaturalSpawn(), border.Center, attackCounter.ToRotationVector2() * -1, ModContent.ProjectileType<DarkTide>(), 0, 0f, ai0: 60, ai1: 1500, ai2: 6);
+                            SoundEngine.PlaySound(SoundID.DD2_EtherianPortalSpawnEnemy with { Volume = 10f }, p.Center);
+                        }
                         
                         #region Movement
                         Vector2 targetPosition = border.Center + attackCounter.ToRotationVector2() * (aiCounter % attackFrequency < attackGap ? 600 : -600);
@@ -917,6 +925,7 @@ namespace Windfall.Content.NPCs.Bosses.TheOrator
                     int tideOut = 480;
                     if (aiCounter % attackDuration == 0)
                     {
+                        SoundEngine.PlaySound(SoundID.DD2_EtherianPortalSpawnEnemy);
                         Projectile.NewProjectile(Projectile.GetSource_NaturalSpawn(), border.Center, Vector2.UnitX, ModContent.ProjectileType<DarkTide>(), 0, 0f, ai0: tideOut, ai1: 1050, ai2: 8);
                         Projectile.NewProjectile(Projectile.GetSource_NaturalSpawn(), border.Center, Vector2.UnitX * -1, ModContent.ProjectileType<DarkTide>(), 0, 0f, ai0: tideOut, ai1: 1050, ai2: 8);
                     }
@@ -977,20 +986,25 @@ namespace Windfall.Content.NPCs.Bosses.TheOrator
                     }
                     if (aiCounter >= tideOut && aiCounter < attackDuration && aiCounter % 60 == 0) //Large orb columns (must be fired earlier and for a bit longer than what's otherwise allowed)
                     {
+                        SoundEngine.PlaySound(SoundID.DD2_OgreSpit);
                         if (aiCounter % 120 == 0) //top
                         {
                             for (int i = 0; i < 3; i++)
                             {
-                                Projectile.NewProjectile(Projectile.GetSource_NaturalSpawn(), border.Center + new Vector2(200 + (250 * i) - 80, -900), Vector2.UnitY * 4, ModContent.ProjectileType<DarkGlob>(), GlobDamage, 0f, -1, 2, 2f);
-                                Projectile.NewProjectile(Projectile.GetSource_NaturalSpawn(), border.Center + new Vector2(-200 - (250 * i) - 80, -900), Vector2.UnitY * 4, ModContent.ProjectileType<DarkGlob>(), GlobDamage, 0f, -1, 2, 2f);
+                                Projectile  proj = Projectile.NewProjectileDirect(Projectile.GetSource_NaturalSpawn(), border.Center + new Vector2(200 + (250 * i) - 80, -900), Vector2.UnitY * 4, ModContent.ProjectileType<DarkGlob>(), GlobDamage, 0f, -1, 2, 2f);
+                                proj.timeLeft += 180;
+                                proj = Projectile.NewProjectileDirect(Projectile.GetSource_NaturalSpawn(), border.Center + new Vector2(-200 - (250 * i) - 80, -900), Vector2.UnitY * 4, ModContent.ProjectileType<DarkGlob>(), GlobDamage, 0f, -1, 2, 2f);
+                                proj.timeLeft += 180;
                             }
                         }
                         else //bottom
                         {
                             for (int i = 0; i < 2; i++)
                             {
-                                Projectile.NewProjectile(Projectile.GetSource_NaturalSpawn(), border.Center + new Vector2(325 + (250 * i) - 80, 900), Vector2.UnitY * -4, ModContent.ProjectileType<DarkGlob>(), GlobDamage, 0f, -1, 2, 2f);
-                                Projectile.NewProjectile(Projectile.GetSource_NaturalSpawn(), border.Center + new Vector2(-325 - (250 * i) - 80, 900), Vector2.UnitY * -4, ModContent.ProjectileType<DarkGlob>(), GlobDamage, 0f, -1, 2, 2f);
+                                Projectile proj = Projectile.NewProjectileDirect(Projectile.GetSource_NaturalSpawn(), border.Center + new Vector2(325 + (250 * i) - 80, 900), Vector2.UnitY * -4, ModContent.ProjectileType<DarkGlob>(), GlobDamage, 0f, -1, 2, 2f);
+                                proj.timeLeft += 180;
+                                proj = Projectile.NewProjectileDirect(Projectile.GetSource_NaturalSpawn(), border.Center + new Vector2(-325 - (250 * i) - 80, 900), Vector2.UnitY * -4, ModContent.ProjectileType<DarkGlob>(), GlobDamage, 0f, -1, 2, 2f);
+                                proj.timeLeft += 180;
                             }
                         }
                     }
@@ -1090,6 +1104,7 @@ namespace Windfall.Content.NPCs.Bosses.TheOrator
                                 VectorToTarget *= 0.925f;
                                 if (NPC.Center.Y > wallTop && NPC.ai[3] == -1)
                                 {
+                                    SoundEngine.PlaySound(SoundID.DD2_EtherianPortalDryadTouch, NPC.Center);
                                     for (int i = 0; i < 10; i++)
                                     {
                                         Projectile proj;
@@ -1147,6 +1162,8 @@ namespace Windfall.Content.NPCs.Bosses.TheOrator
                                 NPC.velocity = VectorToTarget;
                                 VectorToTarget *= 0.925f;
                                 if (NPC.position.Y < wallTop && NPC.oldPosition.Y >= wallTop)
+                                {
+                                    SoundEngine.PlaySound(SoundID.DD2_EtherianPortalDryadTouch, NPC.Center);
                                     for (int i = 0; i < 10; i++)
                                     {
                                         Projectile proj;
@@ -1154,11 +1171,12 @@ namespace Windfall.Content.NPCs.Bosses.TheOrator
                                         proj.Calamity().DealsDefenseDamage = true;
                                         proj = Projectile.NewProjectileDirect(Terraria.Entity.GetSource_NaturalSpawn(), NPC.Center + (Vector2.UnitY * 64), new Vector2(4, -2 * i), ModContent.ProjectileType<DarkGlob>(), GlobDamage, 0f, -1, 1, 0.5f);
                                         proj.Calamity().DealsDefenseDamage = true;
-                                    }  
-                                else if(NPC.velocity.LengthSquared() <= 64 && (NPC.position.Y < wallTop - 300 && NPC.oldPosition.Y < wallTop - 300))
+                                    }
+                                }
+                                else if (NPC.velocity.LengthSquared() <= 64 && (NPC.position.Y < wallTop - 300 && NPC.oldPosition.Y < wallTop - 300))
                                 {
                                     attackCounter++;
-                                    aiCounter = 750;                                    
+                                    aiCounter = 750;
                                 }
                             }
                         }
