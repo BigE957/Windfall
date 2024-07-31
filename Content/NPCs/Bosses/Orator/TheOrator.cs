@@ -509,6 +509,7 @@ namespace Windfall.Content.NPCs.Bosses.TheOrator
                         }
                         else
                         {
+                            NPC.velocity = Vector2.UnitY * -20;
                             aiCounter = -60;
                             AIState = States.DarkBarrage;
                         }
