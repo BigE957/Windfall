@@ -359,7 +359,7 @@ namespace Windfall.Content.NPCs.Bosses.TheOrator
                         }
 
                         EmpyreanMetaball.SpawnDefaultParticle(NPC.Center + (target.Center - NPC.Center).SafeNormalize(Vector2.Zero) * 150f, Main.rand.NextVector2Circular(5f, 5f), 1.5f * ((aiCounter - 1100) / 2));
-                        if (aiCounter > 1300 || (float)NPC.life / (float)NPC.lifeMax <= 0.1f)
+                        if (aiCounter > 1300 || (float)NPC.life / (float)NPC.lifeMax <= 0.66f)
                         {
                             aiCounter = 0;
                             if ((float)NPC.life / (float)NPC.lifeMax <= 0.66f)
