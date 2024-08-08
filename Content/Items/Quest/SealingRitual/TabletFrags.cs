@@ -1,9 +1,9 @@
-﻿namespace Windfall.Content.Items.Quests
+﻿namespace Windfall.Content.Items.Quest.SealingRitual
 {
-    public class DeificInsignia : ModItem, ILocalizedModType
+    public class TabletFrags : ModItem, ILocalizedModType
     {
         public new string LocalizationCategory => "Items.Quest";
-        public override string Texture => "Windfall/Assets/Items/Quest/DeificInsignia";
+        public override string Texture => "Windfall/Assets/Items/Quest/TabletFrags";
         public override void SetDefaults()
         {
             Item.width = 22;

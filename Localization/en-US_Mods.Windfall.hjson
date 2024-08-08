@@ -1331,6 +1331,41 @@ Items: {
 			DisplayName: Tablet Frags
 			Tooltip: ""
 		}
+
+		LunarArcherMask: {
+			DisplayName: Lunar Archer Mask
+			Tooltip: "A freshly made mask to be worn by the Lunar Cult's eyes and ears."
+		}
+
+		LunarBishopHood: {
+			DisplayName: Lunar Bishop Hood
+			Tooltip: "Hoods such as these are worn only by the most trusted of the Lunar Cult; \nthose a part of the Orator's inner circle."
+		}
+
+		LunarBishopMask: {
+			DisplayName: Lunar Bishop Mask
+			Tooltip: "A freshly made mask to be worn by those blessed with the Lunar Cult's deepest knowledge."
+		}
+
+		LunarBishopRobes: {
+			DisplayName: Lunar Bishop Robes
+			Tooltip: "Ornate robes decorated with various sigils of the Lunar Cult. \nRobes such as these place their wearer above the rest amongst the cult."
+		}
+
+		LunarCultistHood: {
+			DisplayName: Lunar Cultist Hood
+			Tooltip: "A simple hood made for low ranked Lunar Cult members. \nAlongside a mask, these ensure that the cult's members are indistinguishable from one another."
+		}
+
+		LunarCultistRobes: {
+			DisplayName: Lunar Cultist Robes
+			Tooltip: "Light robes to be worn by the Lunar Cult's rank and file. \nSuch robes allow for quick and stealthy movement."
+		}
+
+		LunarDevoteeMask: {
+			DisplayName: Lunar Devotee Mask
+			Tooltip: "A freshly made mask to be worn by initiates of the Lunar Cult."
+		}
 	}
 
 	Essence: {

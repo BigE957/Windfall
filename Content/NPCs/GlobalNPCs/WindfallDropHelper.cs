@@ -3,7 +3,8 @@ using Windfall.Common.Systems;
 using Windfall.Content.Items.Essences;
 using Windfall.Content.Items.Journals;
 using Windfall.Content.Items.Lore;
-using Windfall.Content.Items.Quests;
+using Windfall.Content.Items.Quest.SealingRitual;
+using Windfall.Content.Items.Quest.Seamstress;
 using Windfall.Content.NPCs.TravellingNPCs;
 
 namespace Windfall.Content.NPCs.GlobalNPCs
