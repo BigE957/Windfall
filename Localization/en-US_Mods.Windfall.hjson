@@ -1303,7 +1303,7 @@ Items: {
 				'''
 		}
 
-		PrimalLightShard: {
+		PrimalLightShards: {
 			DisplayName: Primordial Light Shard
 			Tooltip:
 				'''
@@ -1312,7 +1312,7 @@ Items: {
 				'''
 		}
 
-		RitualFrags: {
+		TabletFrags: {
 			DisplayName: Ritual Fragments
 			Tooltip: The fragments of an ancient tablet used in rites long forgotten.
 		}
@@ -1320,16 +1320,6 @@ Items: {
 		DraconicBone: {
 			DisplayName: Fishron Bone
 			Tooltip: The bone of a Draconic Offshoot. While lacking any Auric influence, it still holds the genetic heritage of the Dragons.
-		}
-
-		PrimalLightShards: {
-			DisplayName: Primal Light Shards
-			Tooltip: ""
-		}
-
-		TabletFrags: {
-			DisplayName: Tablet Frags
-			Tooltip: ""
 		}
 
 		LunarArcherMask: {
