@@ -6,7 +6,7 @@ using Windfall.Content.NPCs.Bosses.TheOrator;
 using Windfall.Content.NPCs.TravellingNPCs;
 using Windfall.Content.NPCs.WorldEvents.LunarCult;
 using Windfall.Content.Projectiles.Boss.Orator;
-using static Windfall.Common.Systems.WorldEvents.CultMeetingSystem;
+using static Windfall.Common.Systems.WorldEvents.LunarCultActivitySystem;
 
 namespace Windfall.Common.Systems.WorldEvents
 {

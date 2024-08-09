@@ -113,9 +113,6 @@
         {
             SetConversationButtons(MyDialogue, (int)CurrentDialogue, ref button, ref button2);
         }
-        public override bool CheckActive()
-        {
-            return false;
-        }
+        public override bool CheckActive() => false;
     }
 }

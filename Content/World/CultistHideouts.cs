@@ -15,7 +15,7 @@ namespace Windfall.Content.World
             int placementPositionX = Main.spawnTileX - 2400;
 
             Point placementPoint = PlaceHideout(structures, placementPositionX, mapKey);
-            CultMeetingSystem.SolarHideoutLocation = placementPoint;
+            LunarCultActivitySystem.SolarHideoutLocation = placementPoint;
         }
         public static void PlaceVortexCultistHideout(StructureMap structures)
         {
@@ -24,7 +24,7 @@ namespace Windfall.Content.World
             int placementPositionX = Main.spawnTileX - 1200;
 
             Point placementPoint = PlaceHideout(structures, placementPositionX, mapKey);
-            CultMeetingSystem.VortexHideoutLocation = placementPoint;
+            LunarCultActivitySystem.VortexHideoutLocation = placementPoint;
         }
         public static void PlaceNebulaCultistHideout(StructureMap structures)
         {
@@ -33,7 +33,7 @@ namespace Windfall.Content.World
             int placementPositionX = Main.spawnTileX + 1200;
 
             Point placementPoint = PlaceHideout(structures, placementPositionX, mapKey);
-            CultMeetingSystem.NebulaHideoutLocation = placementPoint;
+            LunarCultActivitySystem.NebulaHideoutLocation = placementPoint;
         }
         public static void PlaceStardustCultistHideout(StructureMap structures)
         {
@@ -42,7 +42,7 @@ namespace Windfall.Content.World
             int placementPositionX = Main.spawnTileX + 2400;
 
             Point placementPoint = PlaceHideout(structures, placementPositionX, mapKey);
-            CultMeetingSystem.StardustHideoutLocation = placementPoint;
+            LunarCultActivitySystem.StardustHideoutLocation = placementPoint;
         }
         private static Point PlaceHideout(StructureMap structures, int placementPositionX, string mapKey)
         {

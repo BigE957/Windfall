@@ -23,7 +23,7 @@ namespace Windfall.Content.Items.Debug.Seekers
         }
         public override bool? UseItem(Player player)
         {
-            Main.NewText($"You are {player.position.X / 16 - CultMeetingSystem.SolarHideoutLocation.X}, {player.position.Y / 16 - CultMeetingSystem.SolarHideoutLocation.Y} from the Solar Hideout.", Color.Yellow);
+            Main.NewText($"You are {player.position.X / 16 - LunarCultActivitySystem.SolarHideoutLocation.X}, {player.position.Y / 16 - LunarCultActivitySystem.SolarHideoutLocation.Y} from the Solar Hideout.", Color.Yellow);
             return true;
         }
     }

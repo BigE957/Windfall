@@ -1,4 +1,4 @@
-﻿using static Windfall.Common.Systems.WorldEvents.CultMeetingSystem;
+﻿using static Windfall.Common.Systems.WorldEvents.LunarCultActivitySystem;
 
 namespace Windfall.Content.Projectiles.Other
 {

@@ -239,7 +239,7 @@ namespace Windfall.Content.NPCs.TravellingNPCs
                     chat.Add(GetWindfallTextValue($"Dialogue.LunarCult.TravellingCultist.Chat.SkeletronRare"));
                 else
                     chat.Add(GetWindfallTextValue($"Dialogue.LunarCult.TravellingCultist.Chat.Skeletron"));
-            for (int i = 0; i < CultMeetingSystem.Recruits.Count; i++)
+            for (int i = 0; i < LunarCultActivitySystem.Recruits.Count; i++)
                 chat.Add(GetWindfallTextValue($"Dialogue.LunarCult.TravellingCultist.Chat.{(RecruitableLunarCultist.RecruitNames)i}"));
             return chat;
         }
@@ -453,6 +453,6 @@ namespace Windfall.Content.NPCs.TravellingNPCs
             projType = ModContent.ProjectileType<PhantasmalFuryProj>();
             attackDelay = 1;
         }
-        private static bool MilestoneMet(DialogueState CurrentDialogue) => (CurrentDialogue == DialogueState.Quests1 && NPC.downedPlantBoss) || (CurrentDialogue == DialogueState.Quests2 && CultMeetingSystem.Recruits.Count == 4) || (CurrentDialogue == DialogueState.Quests3 && RitualQuestProgress >= 3) || (CurrentDialogue == DialogueState.QuestsEnd && RitualQuestProgress < 4);
+        private static bool MilestoneMet(DialogueState CurrentDialogue) => (CurrentDialogue == DialogueState.Quests1 && NPC.downedPlantBoss) || (CurrentDialogue == DialogueState.Quests2 && LunarCultActivitySystem.Recruits.Count == 4) || (CurrentDialogue == DialogueState.Quests3 && RitualQuestProgress >= 3) || (CurrentDialogue == DialogueState.QuestsEnd && RitualQuestProgress < 4);
     }
 }

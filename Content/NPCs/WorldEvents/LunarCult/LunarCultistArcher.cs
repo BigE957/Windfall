@@ -71,6 +71,8 @@
                 SoundEngine.PlaySound(SpawnSound, NPC.Center);
             }
         }
+        public override bool CheckActive() => false;
+
         /*
         public override bool CanChat()
         {
@@ -116,9 +118,5 @@
             SetConversationButtons(MyDialogue, (int)CurrentDialogue, ref button, ref button2);
         }
         */
-        public override bool CheckActive()
-        {
-            return false;
-        }
     }
 }
