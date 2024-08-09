@@ -122,9 +122,9 @@ namespace Windfall.Content.Projectiles.Boss.Orator
                         SoundEngine.PlaySound(SoundID.DD2_MonkStaffGroundImpact, Projectile.Center);
                         for (int i = 0; i < 24; i++)
                         {
-                            if (Orator.ai[0] == 6 || i % 2 == 0)
+                            if (Main.netMode != NetmodeID.MultiplayerClient && Orator.ai[0] == 6 || i % 2 == 0)
                                 Projectile.NewProjectile(Terraria.Entity.GetSource_NaturalSpawn(), Projectile.Center, (TwoPi / 24 * i).ToRotationVector2(), ModContent.ProjectileType<DarkBolt>(), TheOrator.BoltDamage, 0f, -1, 0, i % 2 == 0 ? -10 : 0);
-                            if (Orator.ai[0] < 7)
+                            if (Main.netMode != NetmodeID.MultiplayerClient && Orator.ai[0] < 7)
                                 for (int j = 0; j < 3; j++)
                                 {
                                     Projectile p = Projectile.NewProjectileDirect(Terraria.Entity.GetSource_NaturalSpawn(), Projectile.Center, Main.rand.NextVector2Circular(15f, 15f), ModContent.ProjectileType<DarkGlob>(), TheOrator.GlobDamage, 0f, -1, 0, Main.rand.NextFloat(0.75f, 1.5f));
