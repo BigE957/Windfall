@@ -1016,7 +1016,7 @@ namespace Windfall.Content.NPCs.Bosses.TheOrator
                     }
                     else if(aiCounter == attackDuration + tideOut + 120)
                     {
-                        aiCounter = -20;
+                        aiCounter = -30;
                         attackCounter = 0;
                         if ((float)NPC.life / (float)NPC.lifeMax <= 0.1f)
                             AIState = States.Defeat;
