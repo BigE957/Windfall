@@ -10,7 +10,7 @@
             Projectile.height = 24;
             Projectile.damage = 100;
             Projectile.hostile = true;
-            Projectile.penetrate = -1;
+            Projectile.penetrate = 3;
             Projectile.timeLeft = 250;
             Projectile.tileCollide = false;
             Projectile.Calamity().DealsDefenseDamage = true;

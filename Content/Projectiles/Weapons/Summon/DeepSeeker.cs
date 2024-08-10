@@ -36,6 +36,8 @@ namespace Windfall.Content.Projectiles.Weapons.Summon
             Projectile.DamageType = DamageClass.Summon;
             Projectile.manualDirectionChange = true;
             Projectile.scale = 1.25f;
+            Projectile.usesLocalNPCImmunity = true;
+            Projectile.localNPCHitCooldown = 60;
         }
         internal enum AIState
         {
