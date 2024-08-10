@@ -17,7 +17,7 @@
                 AddIngredient<DyedRobes>().
                 AddIngredient(ItemID.CopperBar, 4).
                 AddIngredient(ItemID.FlinxFur, 4).
-                AddTile(TileID.Loom).
+                AddTile(TileID.WorkBenches).
                 Register();
         }
     }

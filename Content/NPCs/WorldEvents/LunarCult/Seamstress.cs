@@ -67,6 +67,7 @@ namespace Windfall.Content.NPCs.WorldEvents.LunarCult
         public override void OnSpawn(IEntitySource source)
         {
             NPC.GivenName = "The Seamstress";
+
             NPC.alpha = 255;
             Vector2 oldPos = NPC.position;
             NPC.position.Y = FindSurfaceBelow(new Point((int)NPC.position.X / 16, (int)NPC.position.Y / 16)).Y * 16 - NPC.height;
@@ -159,16 +160,64 @@ namespace Windfall.Content.NPCs.WorldEvents.LunarCult
                 yapCounter = 0;
         }
         public override bool CanChat() => TalkDelay <= 0 && yapCounter == 0;
+        private enum DialogueState
+        {
+            Initial,
+            What,
+            End,
+            Start,
+        }
+        private DialogueState CurrentDialogue = 0;
+        private readonly List<dialogueDirections> MyDialogue = new()
+        {
+            #region Tailor Tutorial
+            new dialogueDirections()
+            {
+                MyPos = (int)DialogueState.Initial,
+                Button1 = new(){name = "What?", heading = (int)DialogueState.What},
+                Button2 = new(){name = "I'm ready!", heading = -1, end = true},
+            },
+
+            new dialogueDirections()
+            {
+                MyPos = (int)DialogueState.What,
+                Button1 = new(){name = "Gotcha!", heading = (int)DialogueState.End},
+                Button2 = new(){name = "I think I understand.", heading = (int)DialogueState.End},
+            },
+
+            new dialogueDirections()
+            {
+                MyPos = (int)DialogueState.End,
+                Button1 = new(){name = "Will do.", heading = -1, end = true},
+                Button2 = new(){name = "I'm ready!", heading = -1, end = true},
+            },
+            new dialogueDirections()
+            {
+                MyPos = (int)DialogueState.Start,
+                Button1 = new(){name = "One moment.", heading = -1, end = true},
+                Button2 = new(){name = "I'm ready!", heading = -1, end = true},
+            },
+            new dialogueDirections()
+            {
+                MyPos = -1,
+                Button1 = new(){name = "One moment.", heading = -1, end = true},
+                Button2 = new(){name = "I'm ready!", heading = -1, end = true},
+            },
+            #endregion
+        };
         public override string GetChat()
         {
-            if (LunarCultActivitySystem.IsTailorActivityActive())
+            Player MyPlayer = Main.player[Main.myPlayer];
+            string seamstressPath = "Dialogue.LunarCult.Seamstress.";
+            if (IsTailorActivityActive())
             {
-                string activityPath = "Dialogue.LunarCult.Seamstress.Activity.";
-                Main.CloseNPCChatOrSign();
-                Player MyPlayer = Main.player[Main.myPlayer];
+                string activityPath = seamstressPath + "Activity.";
+                Main.CloseNPCChatOrSign();              
                 if (CompletedClothesCount >= ClothesGoal)
                 {
                     EndActivity = true;
+                    if (!MyPlayer.LunarCult().SeamstressTalked)
+                        MyPlayer.LunarCult().SeamstressTalked = true;
                     return "Done!";
                 }
                 else
@@ -279,37 +328,65 @@ namespace Windfall.Content.NPCs.WorldEvents.LunarCult
                     }
                 }
                 TalkDelay = 120;
-                return "Erm, what the sigma?";
+                return "Erm, what the sigma?"; //will never actually show up, as the dialogue box is closed lol
             }
             else if (Test)//(Main.moonPhase == (int)MoonPhase.HalfAtLeft || Main.moonPhase == (int)MoonPhase.HalfAtRight)
-                return "So you're the runt who's gonna be helping me tonight? Great... Just lemme know when you're ready to get started.";
+            {
+                if (CurrentDialogue == 0)
+                {
+                    if (MyPlayer.LunarCult().SeamstressTalked)
+                        CurrentDialogue = DialogueState.Start;
+                }
+
+                if ((int)CurrentDialogue == -1)
+                    return GetWindfallTextValue(seamstressPath + "Activity.Ready");
+                else
+                {
+                    if (!MyPlayer.LunarCult().SeamstressTalked)
+                        return GetWindfallTextValue(seamstressPath + "Conversation.Tutorial." + CurrentDialogue);
+                    else
+                        return GetWindfallTextValue(seamstressPath + "Conversation.Activity." + CurrentDialogue);
+                }
+            }
             else
                 return "Why are you talking to me.";
         }
         public override void OnChatButtonClicked(bool firstButton, ref string shop)
-        {
-            Main.CloseNPCChatOrSign();
-            if (Test == false)
-                Test = true;
-            if (!firstButton)
+        {                      
+            if (!firstButton && (CurrentDialogue == DialogueState.Initial || CurrentDialogue == DialogueState.End || CurrentDialogue == DialogueState.Start || (int)CurrentDialogue == -1))
             {
                 CompletedClothesCount = 0;
                 State = SystemState.Tailor;
                 Active = true;
                 BeginActivity = true;
             }
+            if (Test)
+            {
+                Player MyPlayer = Main.player[Main.myPlayer];
+                string seamstressPath = "Dialogue.LunarCult.Seamstress.";
+
+                CurrentDialogue = (DialogueState)GetNPCConversation(MyDialogue, (int)CurrentDialogue, firstButton);
+
+                if (!MyPlayer.LunarCult().SeamstressTalked)
+                    Main.npcChatText = GetWindfallTextValue(seamstressPath + "Conversation.Tutorial." + CurrentDialogue);
+                else
+                    Main.npcChatText = GetWindfallTextValue(seamstressPath + "Conversation.Activity" + CurrentDialogue);
+            } 
+            else 
+            {
+                Main.CloseNPCChatOrSign();
+                Test = true;
+            }
         }
         public override void SetChatButtons(ref string button, ref string button2)
         {
-            if (!LunarCultActivitySystem.IsTailorActivityActive())
+            if (!LunarCultActivitySystem.IsTailorActivityActive() && Test)
             {
-                if (Test)//(Main.moonPhase == (int)MoonPhase.HalfAtLeft || Main.moonPhase == (int)MoonPhase.HalfAtRight)
-                {
-                    button = "Maybe later.";
-                    button2 = "I'm ready!";
-                }
-                else
-                    button = "Oh, okay...";
+                SetConversationButtons(MyDialogue, (int)CurrentDialogue, ref button, ref button2);
+            }
+            if(!Test)
+            {
+                button = "Okay.";
             }
         }
         public override bool CheckActive() => false;
