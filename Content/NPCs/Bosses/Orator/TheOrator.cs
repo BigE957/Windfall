@@ -965,8 +965,9 @@ namespace Windfall.Content.NPCs.Bosses.TheOrator
                     if (Main.netMode != NetmodeID.MultiplayerClient && aiCounter % attackDuration == 0)
                     {
                         SoundEngine.PlaySound(SoundID.DD2_EtherianPortalSpawnEnemy);
-                        Projectile.NewProjectile(Projectile.GetSource_NaturalSpawn(), border.Center, Vector2.UnitX, ModContent.ProjectileType<DarkTide>(), 0, 0f, ai0: tideOut, ai1: 1050, ai2: 8);
-                        Projectile.NewProjectile(Projectile.GetSource_NaturalSpawn(), border.Center, Vector2.UnitX * -1, ModContent.ProjectileType<DarkTide>(), 0, 0f, ai0: tideOut, ai1: 1050, ai2: 8);
+                        int tightness = CalamityWorld.death ? 1050 : CalamityWorld.revenge ? 1025 : 1000;
+                        Projectile.NewProjectile(Projectile.GetSource_NaturalSpawn(), border.Center, Vector2.UnitX, ModContent.ProjectileType<DarkTide>(), 0, 0f, ai0: tideOut, ai1: tightness, ai2: 8);
+                        Projectile.NewProjectile(Projectile.GetSource_NaturalSpawn(), border.Center, Vector2.UnitX * -1, ModContent.ProjectileType<DarkTide>(), 0, 0f, ai0: tideOut, ai1: tightness, ai2: 8);
                     }
                     else if(aiCounter > 150 && aiCounter < tideOut + 120 || (aiCounter > attackDuration + 150 && aiCounter < attackDuration + tideOut + 120))
                     {
