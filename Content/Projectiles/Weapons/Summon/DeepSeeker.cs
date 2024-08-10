@@ -87,7 +87,7 @@ namespace Windfall.Content.Projectiles.Weapons.Summon
                 return null;
             }
         }
-        public static float AggroRange = 1000f;
+        public static float AggroRange = 1600f;
         public NPC CheckNPCTargetValidity(NPC potentialTarget)
         {
             if (potentialTarget.CanBeChasedBy(this, false))
@@ -112,7 +112,7 @@ namespace Windfall.Content.Projectiles.Weapons.Summon
         }
         public override void AI()
         {
-            AggroRange = 1000f;
+            AggroRange = 2000f;
             #region Frames
             Projectile.frameCounter++;
             if (Projectile.frameCounter >= Main.projFrames[Projectile.type])
@@ -174,16 +174,16 @@ namespace Windfall.Content.Projectiles.Weapons.Summon
                     Vector2 homeInVector = target.Center - Projectile.Center;
                     float targetDist = homeInVector.Length();
                     homeInVector.Normalize();
-                    if (targetDist > 300f)
+                    if (targetDist > 250f)
                     {
-                        float velocity = 12f;
+                        float velocity = 30f;
                         Projectile.velocity = (Projectile.velocity * 40f + homeInVector * velocity) / 41f;
                     }
                     else
                     {
-                        if (targetDist < 250f)
+                        if (targetDist < 200f)
                         {
-                            float velocity = -12f;
+                            float velocity = -30f;
                             Projectile.velocity = (Projectile.velocity * 40f + homeInVector * velocity) / 41f;
                         }
                         else
@@ -198,40 +198,43 @@ namespace Windfall.Content.Projectiles.Weapons.Summon
 
                     #region Attack
                     Vector2 toTarget = (target.Center - Projectile.Center);
-                    if (aiCounter % 45 == 0 && aiCounter <= 140)
+                    if (targetDist < 350f)
                     {
-                        SoundEngine.PlaySound(SoundID.DD2_OgreSpit, Projectile.Center);
-                        Projectile.velocity = toTarget.SafeNormalize(Vector2.Zero) * -10;
-                        Projectile.rotation = Projectile.velocity.ToRotation() + Pi;
-                        Projectile Bolt = Projectile.NewProjectileDirect(Terraria.Entity.GetSource_NaturalSpawn(), Projectile.Center, toTarget.SafeNormalize(Vector2.UnitX), ModContent.ProjectileType<DarkBolt>(), Projectile.damage, 0f, -1, 0, 15);
-                        Bolt.hostile = false;
-                        Bolt.friendly = true;
-                        Bolt = Projectile.NewProjectileDirect(Terraria.Entity.GetSource_NaturalSpawn(), Projectile.Center, toTarget.SafeNormalize(Vector2.UnitX).RotatedBy(Pi / 8), ModContent.ProjectileType<DarkBolt>(), Projectile.damage, 0f, -1, 0, 15);
-                        Bolt.hostile = false;
-                        Bolt.friendly = true;
-                        Bolt = Projectile.NewProjectileDirect(Terraria.Entity.GetSource_NaturalSpawn(), Projectile.Center, toTarget.SafeNormalize(Vector2.UnitX).RotatedBy(-Pi / 8), ModContent.ProjectileType<DarkBolt>(), Projectile.damage, 0f, -1, 0, 15);
-                        Bolt.hostile = false;
-                        Bolt.friendly = true;
-                        CurrentAI = AIState.Recoil;
-                    }
-                    else if (aiCounter >= 180)
-                    {
-                        Projectile.rotation = toTarget.ToRotation();
-                        if (Main.rand.NextBool() || toTarget.Length() > 600f)
+                        if (aiCounter % 45 == 0 && aiCounter <= 140)
                         {
-                            attackBool = Projectile.position.X > target.position.X;
-                            Projectile.velocity = toTarget.SafeNormalize(Vector2.Zero) * -5;
-                            CurrentAI = AIState.Dashing;
+                            SoundEngine.PlaySound(SoundID.DD2_OgreSpit, Projectile.Center);
+                            Projectile.velocity = toTarget.SafeNormalize(Vector2.Zero) * -10;
+                            Projectile.rotation = Projectile.velocity.ToRotation() + Pi;
+                            Projectile Bolt = Projectile.NewProjectileDirect(Terraria.Entity.GetSource_NaturalSpawn(), Projectile.Center, toTarget.SafeNormalize(Vector2.UnitX), ModContent.ProjectileType<DarkBolt>(), Projectile.damage, 0f, -1, 0, 15);
+                            Bolt.hostile = false;
+                            Bolt.friendly = true;
+                            Bolt = Projectile.NewProjectileDirect(Terraria.Entity.GetSource_NaturalSpawn(), Projectile.Center, toTarget.SafeNormalize(Vector2.UnitX).RotatedBy(Pi / 8), ModContent.ProjectileType<DarkBolt>(), Projectile.damage, 0f, -1, 0, 15);
+                            Bolt.hostile = false;
+                            Bolt.friendly = true;
+                            Bolt = Projectile.NewProjectileDirect(Terraria.Entity.GetSource_NaturalSpawn(), Projectile.Center, toTarget.SafeNormalize(Vector2.UnitX).RotatedBy(-Pi / 8), ModContent.ProjectileType<DarkBolt>(), Projectile.damage, 0f, -1, 0, 15);
+                            Bolt.hostile = false;
+                            Bolt.friendly = true;
+                            CurrentAI = AIState.Recoil;
+                        }
+                        else if (aiCounter >= 180)
+                        {
+                            Projectile.rotation = toTarget.ToRotation();
+                            if (Main.rand.NextBool() || toTarget.Length() > 600f)
+                            {
+                                attackBool = Projectile.position.X > target.position.X;
+                                Projectile.velocity = toTarget.SafeNormalize(Vector2.Zero) * -5;
+                                CurrentAI = AIState.Dashing;
+                            }
+                            else
+                            {
+                                Projectile.velocity = Vector2.Zero;
+                                CurrentAI = AIState.Globbing;
+                            }
+                            aiCounter = 0;
                         }
                         else
-                        {
-                            Projectile.velocity = Vector2.Zero;
-                            CurrentAI = AIState.Globbing;
-                        }
-                        aiCounter = 0;
+                            attackBool = false;
                     }
-                    else
-                        attackBool = false;
                     #endregion
 
                     break;
