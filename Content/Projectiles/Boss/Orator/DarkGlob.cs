@@ -35,7 +35,7 @@ namespace Windfall.Content.Projectiles.Boss.Orator
                         Projectile.scale += MaxSize/30;
                     else
                         Projectile.scale = MaxSize;                
-                if (Projectile.scale < MaxSize)
+                if (Projectile.scale < MaxSize || Projectile.friendly)
                     Projectile.hostile = false;
                 else
                     Projectile.hostile = true;
@@ -74,7 +74,7 @@ namespace Windfall.Content.Projectiles.Boss.Orator
                     Projectile.timeLeft = 500;
                     Projectile.hostile = false;
                 }
-                else
+                else if(!Projectile.friendly)
                     Projectile.hostile = true;
                 Projectile.velocity.Y += CalamityWorld.death ? 0.3f : CalamityWorld.revenge ? 0.25f : Main.expertMode ? 0.2f : 0.15f;
                 EmpyreanMetaball.SpawnDefaultParticle(Projectile.Center , Vector2.Zero, Projectile.scale * 60);
