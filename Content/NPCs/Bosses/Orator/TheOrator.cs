@@ -64,7 +64,7 @@ namespace Windfall.Content.NPCs.Bosses.TheOrator
 
             noSpawnsEscape = true;
             MonsterDamage = StatCorrections.ScaleProjectileDamage(Main.masterMode ? 360 : CalamityWorld.death ? 280 : CalamityWorld.revenge ? 268 : Main.expertMode ? 240 : 180);
-            GlobDamage = StatCorrections.ScaleProjectileDamage(Main.masterMode ? 255 : CalamityWorld.death ? 214 : CalamityWorld.revenge ? 186 : Main.expertMode ? 140 : 100);
+            GlobDamage = StatCorrections.ScaleProjectileDamage(Main.masterMode ? 245 : CalamityWorld.death ? 205 : CalamityWorld.revenge ? 175 : Main.expertMode ? 130 : 100);
             BoltDamage = StatCorrections.ScaleProjectileDamage(Main.masterMode ? 248 : CalamityWorld.death ? 172 : CalamityWorld.revenge ? 160 : Main.expertMode ? 138 : 90);
             DashDelay = CalamityWorld.death ? 20 : CalamityWorld.revenge ? 25 : 30;
         }
