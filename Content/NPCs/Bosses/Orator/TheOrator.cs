@@ -120,7 +120,7 @@ namespace Windfall.Content.NPCs.Bosses.TheOrator
         public override void AI()
         {
             Player target = Main.player[Player.FindClosest(NPC.Center, NPC.width, NPC.height)];
-            if (target.active == false || target.dead)
+            if (target == null || target.active == false || target.dead)
                 NPC.active = false;
             if (NPC.Center.X < target.Center.X)
                 NPC.direction = 1;
@@ -1436,6 +1436,7 @@ namespace Windfall.Content.NPCs.Bosses.TheOrator
             //Lore
             npcLoot.AddConditionalPerPlayer(() => !DownedNPCSystem.downedOrator, ModContent.ItemType<OraLore>(), desc: DropHelper.FirstKillText);
         }
+        public override bool CheckActive() => false;
         internal static void DisplayMessage(string key, NPC NPC)
         {
             Rectangle location = new((int)NPC.Center.X, (int)NPC.Center.Y, NPC.width / 2, NPC.width / 2);
