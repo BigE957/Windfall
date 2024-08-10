@@ -1,6 +1,10 @@
+using CalamityMod.NPCs.SunkenSea;
 using CalamityMod.Skies;
+using CalamityMod.UI;
+using System.Reflection;
 using Terraria.Graphics.Effects;
 using Windfall.Content.Skies;
+using Windfall.Content.UI.Events;
 
 namespace Windfall
 {
@@ -19,6 +23,8 @@ namespace Windfall
         public override void PostSetupContent()
         {
             ModLoader.GetMod("CalamityMod").Call("RegisterModCooldowns", this);
+            FieldInfo InvasionGUIsFieldInfo = typeof(InvasionProgressUIManager).GetField("gUIs", BindingFlags.NonPublic | BindingFlags.Static);
+            ((List<InvasionProgressUI>)InvasionGUIsFieldInfo.GetValue(null)).Add(Activator.CreateInstance(typeof(TailorEventBar)) as InvasionProgressUI);
         }
     }
 }

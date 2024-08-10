@@ -21,7 +21,7 @@ namespace Windfall.Content.Items.Quest
         }
         public override bool CanShoot(Player player)
         {
-            return !SealingRitualSystem.RitualSequenceSeen && LunarCultActivitySystem.ActiveHideoutCoords != new Point(-1,-1);
+            return !SealingRitualSystem.RitualSequenceSeen && LunarCultActivitySystem.ActivityCoords != new Point(-1,-1);
         }
         public static string Key = NPC.downedEmpressOfLight || DownedBossSystem.downedRavager ? "Pre-Lunar" : NPC.downedGolemBoss ? "Post-Golem" : "Post-Plant";
         public override bool? UseItem(Player player)
@@ -38,7 +38,7 @@ namespace Windfall.Content.Items.Quest
                 else
                     NetMessage.SendData(MessageID.SpawnBossUseLicenseStartEvent, -1, -1, null, player.whoAmI, ModContent.NPCType<TheOrator>());
             }
-            else if (LunarCultActivitySystem.ActiveHideoutCoords == new Point(-1, -1))
+            else if (LunarCultActivitySystem.ActivityCoords == new Point(-1, -1))
             {
                 if (!SelenicTabletUISystem.isUIOpen)
                 {

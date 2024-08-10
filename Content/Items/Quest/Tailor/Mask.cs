@@ -14,7 +14,7 @@
         public override void AddRecipes()
         {
             CreateRecipe().
-                AddIngredient(ItemID.Bone, 12).
+                AddIngredient(ItemID.Bone, 8).
                 AddTile(TileID.WorkBenches).
                 Register();
         }

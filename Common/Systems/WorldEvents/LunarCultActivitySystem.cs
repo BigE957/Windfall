@@ -27,6 +27,9 @@ namespace Windfall.Common.Systems.WorldEvents
             Recruits = [];
 
             AvailableTopics = [];
+
+            Active = false;
+            State = SystemState.CheckReqs;
         }
         public override void LoadWorldData(TagCompound tag)
         {
@@ -51,7 +54,7 @@ namespace Windfall.Common.Systems.WorldEvents
             tag["AvailableTopics"] = AvailableTopics;
         }
 
-        private enum SystemState
+        public enum SystemState
         {
             CheckReqs,
             CheckChance,
@@ -62,12 +65,16 @@ namespace Windfall.Common.Systems.WorldEvents
             Ritual,
             End,
         }
-        private SystemState State = SystemState.CheckReqs;
+        public static SystemState State = SystemState.CheckReqs;
 
         private static bool OnCooldown = true;
-        private static bool Active = false;
-        public static Point ActiveHideoutCoords = new(-1, -1);
+        public static bool Active = false;
         private static int ActivityTimer = -1;
+        public static Point ActivityCoords = new(-1, -1);
+        private static List<int> NPCIndexs = [];
+        private static float zoom = 0;
+
+        #region Meeting Variables
         public enum MeetingTopic
         {
             CurrentEvents,
@@ -75,8 +82,13 @@ namespace Windfall.Common.Systems.WorldEvents
             Paradise
         }
         public static MeetingTopic CurrentMeetingTopic;
-        private static List<int> NPCIndexs = [];
-        private static float zoom = 0;
+        #endregion
+        #region Tailor Variables
+        public static int[] AssignedClothing = new int[255];
+        public static int CompletedClothesCount = 0;
+        public static int ClothesGoal = 3;
+        #endregion
+
         private static SoundStyle TeleportSound => new("CalamityMod/Sounds/Custom/SCalSounds/BrimstoneHellblastSound");
         public override void PreUpdateWorld()
         {
@@ -90,7 +102,7 @@ namespace Windfall.Common.Systems.WorldEvents
                         {
                             OnCooldown = false;
                             Active = false;
-                            ActiveHideoutCoords = new(-1, -1);
+                            ActivityCoords = new(-1, -1);
                             ActivityTimer = -1;
                         }
                         break;
@@ -117,20 +129,20 @@ namespace Windfall.Common.Systems.WorldEvents
                         switch (i)
                         {
                             case 0:
-                                ActiveHideoutCoords = SolarHideoutLocation;
+                                ActivityCoords = SolarHideoutLocation;
                                 break;
                             case 1:
-                                ActiveHideoutCoords = VortexHideoutLocation;
+                                ActivityCoords = VortexHideoutLocation;
                                 break;
                             case 2:
-                                ActiveHideoutCoords = NebulaHideoutLocation;
+                                ActivityCoords = NebulaHideoutLocation;
                                 break;
                             case 3:
-                                ActiveHideoutCoords = StardustHideoutLocation;
+                                ActivityCoords = StardustHideoutLocation;
                                 break;
                         }
-                        ActiveHideoutCoords.X *= 16;
-                        ActiveHideoutCoords.Y *= 16;
+                        ActivityCoords.X *= 16;
+                        ActivityCoords.Y *= 16;
                         #endregion
 
                         #region Activity Alert
@@ -145,133 +157,246 @@ namespace Windfall.Common.Systems.WorldEvents
                         #endregion
 
                         #region Activity Specific Setup
-                        /*
-                        Actual Code
-                        if (Main.moonPhase == (int)MoonPhase.Full || Main.moonPhase == (int)MoonPhase.Empty)
-                            State = SystemState.Ritual;
-                        else if (Main.moonPhase == (int)MoonPhase.QuarterAtLeft || Main.moonPhase == (int)MoonPhase.QuarterAtRight)
-                            State = SystemState.Meeting;
-                        else if (Main.moonPhase == (int)MoonPhase.HalfAtLeft || Main.moonPhase == (int)MoonPhase.HalfAtRight)
-                            State = SystemState.Tailor;
-                        else
-                            State = SystemState.Cafeteria;
-                        */
-
-                        zoom = 0;
-
-                        #region Topic Selection
-                        if (AvailableTopics.Count == 0)
-                            for (int h = 0; h < Enum.GetNames(typeof(MeetingTopic)).Length; h++)
-                                AvailableTopics.Add(h);
-
-                        CurrentMeetingTopic = (MeetingTopic)AvailableTopics[Main.rand.Next(AvailableTopics.Count)];
-                        AvailableTopics.Remove((int)CurrentMeetingTopic);
-                        #endregion
-
-                        #region Character Setup   
-                        NPCIndexs =
-                        [
-                            NPC.NewNPC(Entity.GetSource_None(), ActiveHideoutCoords.X, ActiveHideoutCoords.Y - 2, ModContent.NPCType<LunarBishop>()),
-                            NPC.NewNPC(Entity.GetSource_None(), ActiveHideoutCoords.X - 240, ActiveHideoutCoords.Y + 100, ModContent.NPCType<RecruitableLunarCultist>()),
-                            NPC.NewNPC(Entity.GetSource_None(), ActiveHideoutCoords.X - 130, ActiveHideoutCoords.Y + 100, ModContent.NPCType<RecruitableLunarCultist>()),
-                            NPC.NewNPC(Entity.GetSource_None(), ActiveHideoutCoords.X + 130, ActiveHideoutCoords.Y + 100, ModContent.NPCType<RecruitableLunarCultist>()),
-                            NPC.NewNPC(Entity.GetSource_None(), ActiveHideoutCoords.X + 240, ActiveHideoutCoords.Y + 100, ModContent.NPCType<RecruitableLunarCultist>()),
-                        ];
-
-                        foreach (int k in NPCIndexs)
+                        if (1 == 0)
                         {
-                            NPC npc = Main.npc[k];
-                            if (npc.ModNPC is RecruitableLunarCultist Recruit && npc.type == ModContent.NPCType<RecruitableLunarCultist>())
+                            if (Main.moonPhase == (int)MoonPhase.Full || Main.moonPhase == (int)MoonPhase.Empty) //Ritual
                             {
-                                switch (CurrentMeetingTopic)
+                            }
+                            else if (Main.moonPhase == (int)MoonPhase.QuarterAtLeft || Main.moonPhase == (int)MoonPhase.QuarterAtRight) //Meeting
+                            {
+                                #region Topic Selection
+                                if (AvailableTopics.Count == 0)
+                                    for (int h = 0; h < Enum.GetNames(typeof(MeetingTopic)).Length; h++)
+                                        AvailableTopics.Add(h);
+
+                                CurrentMeetingTopic = (MeetingTopic)AvailableTopics[Main.rand.Next(AvailableTopics.Count)];
+                                AvailableTopics.Remove((int)CurrentMeetingTopic);
+                                #endregion
+
+                                #region Character Setup   
+                                NPCIndexs =
+                                [
+                                    NPC.NewNPC(Entity.GetSource_None(), ActivityCoords.X, ActivityCoords.Y - 2, ModContent.NPCType<LunarBishop>()),
+                                    NPC.NewNPC(Entity.GetSource_None(), ActivityCoords.X - 240, ActivityCoords.Y + 100, ModContent.NPCType<RecruitableLunarCultist>()),
+                                    NPC.NewNPC(Entity.GetSource_None(), ActivityCoords.X - 130, ActivityCoords.Y + 100, ModContent.NPCType<RecruitableLunarCultist>()),
+                                    NPC.NewNPC(Entity.GetSource_None(), ActivityCoords.X + 130, ActivityCoords.Y + 100, ModContent.NPCType<RecruitableLunarCultist>()),
+                                    NPC.NewNPC(Entity.GetSource_None(), ActivityCoords.X + 240, ActivityCoords.Y + 100, ModContent.NPCType<RecruitableLunarCultist>()),
+                                ];
+
+                                foreach (int k in NPCIndexs)
                                 {
-                                    case MeetingTopic.CurrentEvents:
-                                        switch (k)
+                                    NPC npc = Main.npc[k];
+                                    if (npc.ModNPC is RecruitableLunarCultist Recruit && npc.type == ModContent.NPCType<RecruitableLunarCultist>())
+                                    {
+                                        switch (CurrentMeetingTopic)
                                         {
-                                            case 1:
-                                                Recruit.MyName = RecruitableLunarCultist.RecruitNames.Tirith;
-                                                Recruit.Recruitable = true;
-                                                npc.direction = 1;
+                                            case MeetingTopic.CurrentEvents:
+                                                switch (k)
+                                                {
+                                                    case 1:
+                                                        Recruit.MyName = RecruitableLunarCultist.RecruitNames.Tirith;
+                                                        Recruit.Recruitable = true;
+                                                        npc.direction = 1;
+                                                        break;
+                                                    case 2:
+                                                        Recruit.MyName = RecruitableLunarCultist.RecruitNames.Vivian;
+                                                        Recruit.Recruitable = false;
+                                                        npc.direction = 1;
+                                                        break;
+                                                    case 3:
+                                                        Recruit.MyName = RecruitableLunarCultist.RecruitNames.Doro;
+                                                        Recruit.Recruitable = true;
+                                                        npc.direction = -1;
+                                                        break;
+                                                    case 4:
+                                                        Recruit.MyName = RecruitableLunarCultist.RecruitNames.Jamie;
+                                                        Recruit.Recruitable = false;
+                                                        npc.direction = -1;
+                                                        break;
+                                                }
                                                 break;
-                                            case 2:
-                                                Recruit.MyName = RecruitableLunarCultist.RecruitNames.Vivian;
-                                                Recruit.Recruitable = false;
-                                                npc.direction = 1;
+                                            case MeetingTopic.Mission:
+                                                switch (k)
+                                                {
+                                                    case 1:
+                                                        Recruit.MyName = RecruitableLunarCultist.RecruitNames.Doro;
+                                                        Recruit.Recruitable = false;
+                                                        npc.direction = 1;
+                                                        break;
+                                                    case 2:
+                                                        Recruit.MyName = RecruitableLunarCultist.RecruitNames.Skylar;
+                                                        Recruit.Recruitable = true;
+                                                        npc.direction = 1;
+                                                        break;
+                                                    case 3:
+                                                        Recruit.MyName = RecruitableLunarCultist.RecruitNames.Tania;
+                                                        Recruit.Recruitable = false;
+                                                        npc.direction = -1;
+                                                        break;
+                                                    case 4:
+                                                        Recruit.MyName = RecruitableLunarCultist.RecruitNames.Jamie;
+                                                        Recruit.Recruitable = true;
+                                                        npc.direction = -1;
+                                                        break;
+                                                }
                                                 break;
-                                            case 3:
-                                                Recruit.MyName = RecruitableLunarCultist.RecruitNames.Doro;
-                                                Recruit.Recruitable = true;
-                                                npc.direction = -1;
-                                                break;
-                                            case 4:
-                                                Recruit.MyName = RecruitableLunarCultist.RecruitNames.Jamie;
-                                                Recruit.Recruitable = false;
-                                                npc.direction = -1;
+                                            case MeetingTopic.Paradise:
+                                                switch (k)
+                                                {
+                                                    case 1:
+                                                        Recruit.MyName = RecruitableLunarCultist.RecruitNames.Vivian;
+                                                        Recruit.Recruitable = true;
+                                                        npc.direction = 1;
+                                                        break;
+                                                    case 2:
+                                                        Recruit.MyName = RecruitableLunarCultist.RecruitNames.Tania;
+                                                        Recruit.Recruitable = true;
+                                                        npc.direction = 1;
+                                                        break;
+                                                    case 3:
+                                                        Recruit.MyName = RecruitableLunarCultist.RecruitNames.Skylar;
+                                                        Recruit.Recruitable = false;
+                                                        npc.direction = -1;
+                                                        break;
+                                                    case 4:
+                                                        Recruit.MyName = RecruitableLunarCultist.RecruitNames.Tirith;
+                                                        Recruit.Recruitable = false;
+                                                        npc.direction = -1;
+                                                        break;
+                                                }
                                                 break;
                                         }
-                                        break;
-                                    case MeetingTopic.Mission:
-                                        switch (k)
-                                        {
-                                            case 1:
-                                                Recruit.MyName = RecruitableLunarCultist.RecruitNames.Doro;
-                                                Recruit.Recruitable = false;
-                                                npc.direction = 1;
-                                                break;
-                                            case 2:
-                                                Recruit.MyName = RecruitableLunarCultist.RecruitNames.Skylar;
-                                                Recruit.Recruitable = true;
-                                                npc.direction = 1;
-                                                break;
-                                            case 3:
-                                                Recruit.MyName = RecruitableLunarCultist.RecruitNames.Tania;
-                                                Recruit.Recruitable = false;
-                                                npc.direction = -1;
-                                                break;
-                                            case 4:
-                                                Recruit.MyName = RecruitableLunarCultist.RecruitNames.Jamie;
-                                                Recruit.Recruitable = true;
-                                                npc.direction = -1;
-                                                break;
-                                        }
-                                        break;
-                                    case MeetingTopic.Paradise:
-                                        switch (k)
-                                        {
-                                            case 1:
-                                                Recruit.MyName = RecruitableLunarCultist.RecruitNames.Vivian;
-                                                Recruit.Recruitable = true;
-                                                npc.direction = 1;
-                                                break;
-                                            case 2:
-                                                Recruit.MyName = RecruitableLunarCultist.RecruitNames.Tania;
-                                                Recruit.Recruitable = true;
-                                                npc.direction = 1;
-                                                break;
-                                            case 3:
-                                                Recruit.MyName = RecruitableLunarCultist.RecruitNames.Skylar;
-                                                Recruit.Recruitable = false;
-                                                npc.direction = -1;
-                                                break;
-                                            case 4:
-                                                Recruit.MyName = RecruitableLunarCultist.RecruitNames.Tirith;
-                                                Recruit.Recruitable = false;
-                                                npc.direction = -1;
-                                                break;
-                                        }
-                                        break;
+                                    }
                                 }
+                                #endregion
+                            }
+                            else if (Main.moonPhase == (int)MoonPhase.HalfAtLeft || Main.moonPhase == (int)MoonPhase.HalfAtRight) //Tailor
+                            {
+                                AssignedClothing = [];
+                                CompletedClothesCount = 0;
+                                ClothesGoal = 5 * (Main.player.Where(p => p.active).Count() + 1);
+                            }
+                            else //Cafeteria
+                            {
                             }
                         }
-                        #endregion
-                        #endregion
+                        else //Test Code
+                        {                             
+                            #region Topic Selection
+                            if (AvailableTopics.Count == 0)
+                                for (int h = 0; h < Enum.GetNames(typeof(MeetingTopic)).Length; h++)
+                                    AvailableTopics.Add(h);
 
+                            CurrentMeetingTopic = (MeetingTopic)AvailableTopics[Main.rand.Next(AvailableTopics.Count)];
+                            AvailableTopics.Remove((int)CurrentMeetingTopic);
+                            #endregion
+
+                            #region Character Setup   
+                            NPCIndexs =
+                            [
+                                NPC.NewNPC(Entity.GetSource_None(), ActivityCoords.X, ActivityCoords.Y - 2, ModContent.NPCType<LunarBishop>()),
+                                NPC.NewNPC(Entity.GetSource_None(), ActivityCoords.X - 240, ActivityCoords.Y + 100, ModContent.NPCType<RecruitableLunarCultist>()),
+                                NPC.NewNPC(Entity.GetSource_None(), ActivityCoords.X - 130, ActivityCoords.Y + 100, ModContent.NPCType<RecruitableLunarCultist>()),
+                                NPC.NewNPC(Entity.GetSource_None(), ActivityCoords.X + 130, ActivityCoords.Y + 100, ModContent.NPCType<RecruitableLunarCultist>()),
+                                NPC.NewNPC(Entity.GetSource_None(), ActivityCoords.X + 240, ActivityCoords.Y + 100, ModContent.NPCType<RecruitableLunarCultist>()),
+                            ];
+
+                            foreach (int k in NPCIndexs)
+                            {
+                                NPC npc = Main.npc[k];
+                                if (npc.ModNPC is RecruitableLunarCultist Recruit && npc.type == ModContent.NPCType<RecruitableLunarCultist>())
+                                {
+                                    switch (CurrentMeetingTopic)
+                                    {
+                                        case MeetingTopic.CurrentEvents:
+                                            switch (k)
+                                            {
+                                                case 1:
+                                                    Recruit.MyName = RecruitableLunarCultist.RecruitNames.Tirith;
+                                                    Recruit.Recruitable = true;
+                                                    npc.direction = 1;
+                                                    break;
+                                                case 2:
+                                                    Recruit.MyName = RecruitableLunarCultist.RecruitNames.Vivian;
+                                                    Recruit.Recruitable = false;
+                                                    npc.direction = 1;
+                                                    break;
+                                                case 3:
+                                                    Recruit.MyName = RecruitableLunarCultist.RecruitNames.Doro;
+                                                    Recruit.Recruitable = true;
+                                                    npc.direction = -1;
+                                                    break;
+                                                case 4:
+                                                    Recruit.MyName = RecruitableLunarCultist.RecruitNames.Jamie;
+                                                    Recruit.Recruitable = false;
+                                                    npc.direction = -1;
+                                                    break;
+                                            }
+                                            break;
+                                        case MeetingTopic.Mission:
+                                            switch (k)
+                                            {
+                                                case 1:
+                                                    Recruit.MyName = RecruitableLunarCultist.RecruitNames.Doro;
+                                                    Recruit.Recruitable = false;
+                                                    npc.direction = 1;
+                                                    break;
+                                                case 2:
+                                                    Recruit.MyName = RecruitableLunarCultist.RecruitNames.Skylar;
+                                                    Recruit.Recruitable = true;
+                                                    npc.direction = 1;
+                                                    break;
+                                                case 3:
+                                                    Recruit.MyName = RecruitableLunarCultist.RecruitNames.Tania;
+                                                    Recruit.Recruitable = false;
+                                                    npc.direction = -1;
+                                                    break;
+                                                case 4:
+                                                    Recruit.MyName = RecruitableLunarCultist.RecruitNames.Jamie;
+                                                    Recruit.Recruitable = true;
+                                                    npc.direction = -1;
+                                                    break;
+                                            }
+                                            break;
+                                        case MeetingTopic.Paradise:
+                                            switch (k)
+                                            {
+                                                case 1:
+                                                    Recruit.MyName = RecruitableLunarCultist.RecruitNames.Vivian;
+                                                    Recruit.Recruitable = true;
+                                                    npc.direction = 1;
+                                                    break;
+                                                case 2:
+                                                    Recruit.MyName = RecruitableLunarCultist.RecruitNames.Tania;
+                                                    Recruit.Recruitable = true;
+                                                    npc.direction = 1;
+                                                    break;
+                                                case 3:
+                                                    Recruit.MyName = RecruitableLunarCultist.RecruitNames.Skylar;
+                                                    Recruit.Recruitable = false;
+                                                    npc.direction = -1;
+                                                    break;
+                                                case 4:
+                                                    Recruit.MyName = RecruitableLunarCultist.RecruitNames.Tirith;
+                                                    Recruit.Recruitable = false;
+                                                    npc.direction = -1;
+                                                    break;
+                                            }
+                                            break;
+                                    }
+                                }
+                            }
+                            #endregion
+                        }
+                        #endregion
+                        
+                        zoom = 0;
                         ActivityTimer = 0;
                     }
                     #region Despawn
                     if (Main.dayTime && !Active)
                     {
-                        ActiveHideoutCoords = new(-1, -1);
+                        ActivityCoords = new(-1, -1);
                         State = SystemState.CheckReqs;
                         OnCooldown = true;
                         foreach (int k in NPCIndexs)
@@ -286,8 +411,8 @@ namespace Windfall.Common.Systems.WorldEvents
                     #endregion
 
                     #region Player Proximity
-                    Player closestPlayer = Main.player[Player.FindClosest(new Vector2(ActiveHideoutCoords.X, ActiveHideoutCoords.Y), 300, 300)];
-                    float PlayerDistFromHideout = new Vector2(closestPlayer.Center.X - ActiveHideoutCoords.X, closestPlayer.Center.Y - ActiveHideoutCoords.Y).Length();
+                    Player closestPlayer = Main.player[Player.FindClosest(new Vector2(ActivityCoords.X, ActivityCoords.Y), 300, 300)];
+                    float PlayerDistFromHideout = new Vector2(closestPlayer.Center.X - ActivityCoords.X, closestPlayer.Center.Y - ActivityCoords.Y).Length();
                     if (PlayerDistFromHideout < 300f)
                     {
                         /*
@@ -522,13 +647,14 @@ namespace Windfall.Common.Systems.WorldEvents
                         else
                             zoom = 0.4f;
                         CameraPanSystem.Zoom = zoom;
-                        CameraPanSystem.PanTowards(new Vector2(ActiveHideoutCoords.X, ActiveHideoutCoords.Y - 150), zoom);
+                        CameraPanSystem.PanTowards(new Vector2(ActivityCoords.X, ActivityCoords.Y - 150), zoom);
                         #endregion
 
                         ActivityTimer++;
                     }
                     else
                     {
+                        #region Character Modifying
                         foreach (int i in NPCIndexs)
                         {
                             NPC npc = Main.npc[i];
@@ -549,11 +675,17 @@ namespace Windfall.Common.Systems.WorldEvents
                                     Recruit.Chattable = true;
                             }
                         }
+                        #endregion
+
                         State = SystemState.End;
                     }
                     break;
+                case SystemState.Tailor:
+                    if (!Active)
+                        State = SystemState.End;
+                    break;
                 case SystemState.End:                    
-                    ActiveHideoutCoords = new(-1, -1);
+                    ActivityCoords = new(-1, -1);
                     OnCooldown = true;
                     State = SystemState.CheckReqs;
                     break;
@@ -564,5 +696,6 @@ namespace Windfall.Common.Systems.WorldEvents
             CombatText MyDialogue = Main.combatText[CombatText.NewText(location, color, text, true)];
             return MyDialogue;
         }
+        public static bool IsTailorActivityActive() => Active && State == SystemState.Tailor;
     }
 }

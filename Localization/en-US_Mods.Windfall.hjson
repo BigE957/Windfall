@@ -323,6 +323,28 @@ Dialogue: {
 			}
 		}
 
+		Seamstress: {
+			Activity: {
+				Request: {
+					0: Get me a {0}, stat!
+					1: I need a {0} ASAP!!
+					2: Quit standing around and fetch a {0}, will ya?!
+				}
+
+				Completed: {
+					0: Impressive... how long that took.
+					1: I asked for this forever ago!!! About time!
+					2: Took you long enough.
+				}
+
+				Repeat: {
+					0: I SAID get me a {0}!!!
+					1: You forgot?! I told you to get me a {0}!!!
+					2: A {0}! Get me a {0}!!!
+				}
+			}
+		}
+
 		TravellingCultist: {
 			Chat: {
 				Standard1: Do I stand out...?
@@ -1319,42 +1341,82 @@ Items: {
 
 		DraconicBone: {
 			DisplayName: Fishron Bone
-			Tooltip: The bone of a Draconic Offshoot. While lacking any Auric influence, it still holds the genetic heritage of the Dragons.
+			Tooltip:
+				'''
+				The bone of a Draconic Offshoot. 
+				While lacking any Auric influence, it still holds the genetic heritage of the Dragons.
+				'''
 		}
 
 		LunarArcherMask: {
 			DisplayName: Lunar Archer Mask
-			Tooltip: "A freshly made mask to be worn by the Lunar Cult's eyes and ears."
+			Tooltip: A freshly made mask to be worn by the Lunar Cult's eyes and ears.
 		}
 
 		LunarBishopHood: {
 			DisplayName: Lunar Bishop Hood
-			Tooltip: "Hoods such as these are worn only by the most trusted of the Lunar Cult; \nthose a part of the Orator's inner circle."
+			Tooltip:
+				'''
+				Hoods such as these are worn only by the most trusted of the Lunar Cult; 
+				those a part of the Orator's inner circle.
+				'''
 		}
 
 		LunarBishopMask: {
 			DisplayName: Lunar Bishop Mask
-			Tooltip: "A freshly made mask to be worn by those blessed with the Lunar Cult's deepest knowledge."
+			Tooltip: A freshly made mask to be worn by those blessed with the Lunar Cult's deepest knowledge.
 		}
 
 		LunarBishopRobes: {
 			DisplayName: Lunar Bishop Robes
-			Tooltip: "Ornate robes decorated with various sigils of the Lunar Cult. \nRobes such as these place their wearer above the rest amongst the cult."
+			Tooltip:
+				'''
+				Ornate robes decorated with various sigils of the Lunar Cult. 
+				Robes such as these place their wearer above the rest amongst the cult.
+				'''
 		}
 
 		LunarCultistHood: {
 			DisplayName: Lunar Cultist Hood
-			Tooltip: "A simple hood made for low ranked Lunar Cult members. \nAlongside a mask, these ensure that the cult's members are indistinguishable from one another."
+			Tooltip:
+				'''
+				A simple hood made for low ranked Lunar Cult members. 
+				Alongside a mask, these ensure that the cult's members are indistinguishable from one another.
+				'''
 		}
 
 		LunarCultistRobes: {
 			DisplayName: Lunar Cultist Robes
-			Tooltip: "Light robes to be worn by the Lunar Cult's rank and file. \nSuch robes allow for quick and stealthy movement."
+			Tooltip:
+				'''
+				Light robes to be worn by the Lunar Cult's rank and file. 
+				Such robes allow for quick and stealthy movement.
+				'''
 		}
 
 		LunarDevoteeMask: {
 			DisplayName: Lunar Devotee Mask
-			Tooltip: "A freshly made mask to be worn by initiates of the Lunar Cult."
+			Tooltip: A freshly made mask to be worn by initiates of the Lunar Cult.
+		}
+
+		DyedHood: {
+			DisplayName: Dyed Hood
+			Tooltip: ""
+		}
+
+		DyedRobes: {
+			DisplayName: Dyed Robes
+			Tooltip: ""
+		}
+
+		Hood: {
+			DisplayName: Hood
+			Tooltip: ""
+		}
+
+		Mask: {
+			DisplayName: Mask
+			Tooltip: ""
 		}
 	}
 
@@ -1429,6 +1491,8 @@ NPCs: {
 	DragonCultist.DisplayName: Dragon Cultist
 	DragonArcher.DisplayName: Dragon Archer
 	GodlyTumor.DisplayName: Hive Tumor
+	Seamstressm.DisplayName: Seamstressm
+	Seamstress.DisplayName: Seamstress
 }
 
 Projectiles: {
@@ -1612,6 +1676,11 @@ ModCompat: {
 			DisplayName: The Orator
 			Author: by Yuri O
 		}
+
+		Tailor: {
+			DisplayName: Death By Glamour
+			Author: by Toby Fox
+		}
 	}
 
 	BossChecklist: {
@@ -1626,4 +1695,10 @@ Keybinds: {
 	GodlyEssenceDash.DisplayName: Godly Essence Dash
 	GodlyEssenceHarvest.DisplayName: Godly Essence Harvest
 	GodlyEssenceAttack1.DisplayName: Godly Essence Attack1
+}
+
+Events: {
+	Tailor: Fashion Frenzy
+	Cafeteria: Lunch-Time Lunacy
+	RitualSite: Dark Communion
 }

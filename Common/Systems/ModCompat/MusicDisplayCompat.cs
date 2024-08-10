@@ -18,6 +18,7 @@
             }
 
             AddMusic("Assets/Music/Orator", "Orator");
+            AddMusic("Assets/Music/DeathByGlamor", "Tailor");
         }
     }
 }
