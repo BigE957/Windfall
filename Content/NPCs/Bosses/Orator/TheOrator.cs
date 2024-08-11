@@ -631,7 +631,7 @@ namespace Windfall.Content.NPCs.Bosses.TheOrator
                                     NPC.velocity = (target.Center - NPC.Center).SafeNormalize(Vector2.UnitY) * -4;
                                 }
                             }
-                            else if (aiCounter - NPC.ai[3] < (CalamityWorld.death ? - 15 : CalamityWorld.revenge  ? -20 : -25))
+                            else if (aiCounter - NPC.ai[3] < (CalamityWorld.death ? -20 : -30))
                             {
                                 VectorToTarget = target.Center - NPC.Center;
                                 NPC.velocity = VectorToTarget.SafeNormalize(Vector2.UnitY) * -4;
