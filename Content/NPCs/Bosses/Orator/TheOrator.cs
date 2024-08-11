@@ -642,6 +642,7 @@ namespace Windfall.Content.NPCs.Bosses.TheOrator
                             if (aiCounter == NPC.ai[3])
                             {
                                 VectorToTarget = NPC.velocity.SafeNormalize(Vector2.UnitX) * -75;
+                                NPC.ai[2] = -1;
                                 SoundEngine.PlaySound(Dash);
                                 //values gotten from Astrum Deus' contact damage. Subject to change.
                                 NPC.damage = StatCorrections.ScaleContactDamage(Main.masterMode ? 360 : CalamityWorld.death ? 280 : CalamityWorld.revenge ? 268 : Main.expertMode ? 240 : 120);
@@ -652,9 +653,24 @@ namespace Windfall.Content.NPCs.Bosses.TheOrator
                             VectorToTarget *= 0.95f;
                             if (border.ModProjectile is OratorBorder oraBorder && Vector2.Distance(border.Center, NPC.Center) >= oraBorder.Radius)
                             {
-                                VectorToTarget = (target.Center - NPC.Center).SafeNormalize(Vector2.Zero) * VectorToTarget.Length();
-                                NPC.velocity = VectorToTarget;
+                                if (NPC.ai[2] == 0)
+                                {
+                                    VectorToTarget /= -2;
+                                    NPC.velocity = VectorToTarget;
+
+                                    if (CalamityWorld.revenge)
+                                    {
+                                        int radialCounter = CalamityWorld.death ? 12 : 10;
+                                        for (int i = 0; i < radialCounter; i++)
+                                        {
+                                            if (Main.netMode != NetmodeID.MultiplayerClient)
+                                                Projectile.NewProjectile(Terraria.Entity.GetSource_NaturalSpawn(), NPC.Center, (target.Center - NPC.Center).SafeNormalize(Vector2.Zero).RotatedBy(TwoPi / radialCounter * i) * 20, ModContent.ProjectileType<DarkBolt>(), BoltDamage, 0f, -1, 0, -20);
+                                        }
+                                    }
+                                }
                             }
+                            else
+                                NPC.ai[2] = 0;
 
                             #region Dash Projectiles
                             if (NPC.velocity.Length() > 2f)
@@ -990,7 +1006,7 @@ namespace Windfall.Content.NPCs.Bosses.TheOrator
                                     }
                                 if (touchingWall)
                                 {
-                                    float goalX = border.Center.X + (proj.Center.X < border.Center.X ? -130 : 130);
+                                    float goalX = border.Center.X + (proj.Center.X < border.Center.X ? -140 : 140);
                                     if ((proj.Center.X < border.Center.X && proj.Center.X < goalX) || proj.Center.X > goalX)
                                     {
                                         Vector2 goalPostiion = new Vector2(goalX, proj.Center.Y + (float)Math.Atan(proj.velocity.AngleTo(new Vector2(goalX, proj.Center.Y)) * -proj.Center.Distance(new Vector2(goalX, proj.Center.Y))));
@@ -1022,7 +1038,7 @@ namespace Windfall.Content.NPCs.Bosses.TheOrator
                         if ((float)NPC.life / (float)NPC.lifeMax <= 0.1f)
                             AIState = States.Defeat;
                         else
-                            AIState = States.DarkFlight;
+                            AIState = States.DarkOrbit; // States.DarkFlight;
                     }
                     if (aiCounter >= tideOut && aiCounter < attackDuration && aiCounter % 60 == 0) //Large orb columns (must be fired earlier and for a bit longer than what's otherwise allowed)
                     {
