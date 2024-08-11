@@ -133,7 +133,7 @@ namespace Windfall.Content.NPCs.Bosses.TheOrator
             else
                 NPC.DR_NERD(0.1f);
             if (AIState >= States.DarkOrbit && AIState < States.PhaseChange)
-                target.GrantInfiniteFlight();
+                target.Calamity().infiniteFlight = true;
             switch (AIState)
             {
                 //Phase 1               
