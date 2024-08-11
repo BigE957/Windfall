@@ -1038,7 +1038,7 @@ namespace Windfall.Content.NPCs.Bosses.TheOrator
                         if ((float)NPC.life / (float)NPC.lifeMax <= 0.1f)
                             AIState = States.Defeat;
                         else
-                            AIState = States.DarkOrbit; // States.DarkFlight;
+                            AIState = States.DarkFlight;
                     }
                     if (aiCounter >= tideOut && aiCounter < attackDuration && aiCounter % 60 == 0) //Large orb columns (must be fired earlier and for a bit longer than what's otherwise allowed)
                     {
