@@ -345,7 +345,7 @@ namespace Windfall.Content.NPCs.WorldEvents.LunarCult
                     if (!MyPlayer.LunarCult().SeamstressTalked)
                         return GetWindfallTextValue(seamstressPath + "Conversation.Tutorial." + CurrentDialogue);
                     else
-                        return GetWindfallTextValue(seamstressPath + "Conversation.Activity." + CurrentDialogue);
+                        return GetWindfallTextValue(seamstressPath + "Activity." + CurrentDialogue);
                 }
             }
             else

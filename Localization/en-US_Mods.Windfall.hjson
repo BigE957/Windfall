@@ -334,7 +334,7 @@ Dialogue: {
 
 			Activity: {
 				Ready: So, are you ready to get started?
-				Start: Ah... If it isnt my favorite little henchman! Guess you got stuck with helping me again, huh. Welp, lemme know when you're ready!
+				Start: Ah... If it isnt my favorite little underling! Guess you got stuck with helping me again, huh. Welp, lemme know when you're ready!
 
 				Request: {
 					0: Get me a {0}, stat!
