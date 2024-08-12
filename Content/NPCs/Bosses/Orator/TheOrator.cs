@@ -18,8 +18,8 @@ namespace Windfall.Content.NPCs.Bosses.TheOrator
     [AutoloadBossHead]
     public class TheOrator : ModNPC
     {
-        public override string Texture => "Windfall/Assets/NPCs/WorldEvents/TheOrator";
-        public override string BossHeadTexture => "Windfall/Assets/NPCs/WorldEvents/TheOrator_Head";
+        public override string Texture => "Windfall/Assets/NPCs/Bosses/TheOrator_Boss";
+        public override string BossHeadTexture => "Windfall/Assets/NPCs/Bosses/TheOrator_Boss_Head";
         public static readonly SoundStyle Dash = new("CalamityMod/Sounds/Item/DeadSunShot") { PitchVariance = 0.35f, Volume = 0.5f };
         public static readonly SoundStyle DashWarn = new("CalamityMod/Sounds/Item/DeadSunRicochet") { Volume = 0.5f };
         public static readonly SoundStyle HurtSound = new("CalamityMod/Sounds/NPCHit/ShieldHit", 3);

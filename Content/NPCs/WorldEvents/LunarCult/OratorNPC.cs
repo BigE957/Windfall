@@ -10,7 +10,7 @@
             End
         }
         private DialogueState CurrentDialogue = 0;
-        public override string Texture => "Windfall/Assets/NPCs/WorldEvents/TheOrator";
+        public override string Texture => "Windfall/Assets/NPCs/WorldEvents/TheOrator_NPC";
         public override void SetStaticDefaults()
         {
             this.HideFromBestiary();
@@ -21,8 +21,8 @@
         public override void SetDefaults()
         {
             NPC.friendly = true; // NPC Will not attack player
-            NPC.width = 38;
-            NPC.height = 50;
+            NPC.width = 58;
+            NPC.height = 70;
             NPC.aiStyle = 0;
             NPC.damage = 0;
             NPC.defense = 0;

@@ -7,7 +7,7 @@ namespace Windfall.Content.Projectiles.NPCAnimations
 {
     public class OratorProj : ProjectileNPC, ILocalizedModType
     {
-        public override string Texture => "Windfall/Assets/NPCs/WorldEvents/TheOrator";
+        public override string Texture => "Windfall/Assets/NPCs/WorldEvents/TheOrator_NPC";
         internal override string key => "LunarCult.TheOrator.WorldText.Post-Plant";
         internal override List<float> Delays => new()
         {
@@ -71,8 +71,8 @@ namespace Windfall.Content.Projectiles.NPCAnimations
         }
         public override void SetDefaults()
         {
-            Projectile.width = 38;
-            Projectile.height = 50;
+            Projectile.width = 58;
+            Projectile.height = 70;
             Projectile.tileCollide = false;
             Projectile.ignoreWater = true;
             Projectile.netImportant = true;

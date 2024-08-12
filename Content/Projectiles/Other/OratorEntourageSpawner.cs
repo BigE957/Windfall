@@ -6,7 +6,7 @@ namespace Windfall.Content.Projectiles.Other
 {
     public class OratorEntourageSpawner : ModProjectile
     {
-        public override string Texture => "Windfall/Assets/NPCs/WorldEvents/TheOrator_Head";
+        public override string Texture => "Windfall/Assets/NPCs/Bosses/TheOrator_Boss_Head";
         public new static string LocalizationCategory => "Projectiles.Other";
         public override void SetDefaults()
         {
