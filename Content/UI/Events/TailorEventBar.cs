@@ -10,6 +10,6 @@ namespace Windfall.Content.UI.Events
         public override float CompletionRatio => (float)LunarCultActivitySystem.CompletedClothesCount / (float)LunarCultActivitySystem.ClothesGoal;
         public override string InvasionName => GetWindfallTextValue("Events.Tailor");
         public override Color InvasionBarColor => Color.LimeGreen;
-        public override Texture2D IconTexture => ModContent.Request<Texture2D>("Windfall/Assets/NPCs/WorldEvents/TheOrator_Head").Value;
+        public override Texture2D IconTexture => ModContent.Request<Texture2D>("Windfall/Assets/NPCs/Bosses/TheOrator_Boss_Head").Value;
     }
 }

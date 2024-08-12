@@ -284,7 +284,7 @@ namespace Windfall.Content.NPCs.WorldEvents.LunarCult
                                 i.velocity = (MyPlayer.Center - NPC.Center).SafeNormalize(Vector2.Zero).RotatedBy(Main.rand.NextFloat(-0.5f, 0.5f)) * 4;
                                 break;
                             case LunarCultistRobes:
-                                i = Main.item[Item.NewItem(Entity.GetSource_Loot(), NPC.Center, new Vector2(8, 4), ItemID.Cobweb, 164)];
+                                i = Main.item[Item.NewItem(Entity.GetSource_Loot(), NPC.Center, new Vector2(8, 4), ItemID.Cobweb, 168)];
                                 i.velocity = (MyPlayer.Center - NPC.Center).SafeNormalize(Vector2.Zero).RotatedBy(Main.rand.NextFloat(-0.5f, 0.5f)) * 4;
                                 i = Main.item[Item.NewItem(Entity.GetSource_Loot(), NPC.Center, new Vector2(8, 4), ItemID.GreenMushroom)];
                                 i.velocity = (MyPlayer.Center - NPC.Center).SafeNormalize(Vector2.Zero).RotatedBy(Main.rand.NextFloat(-0.5f, 0.5f)) * 4;

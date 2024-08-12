@@ -35,15 +35,14 @@ namespace Windfall.Common.Systems
             int FinalIndex = tasks.FindIndex(genpass => genpass.Name.Equals("Final Cleanup"));
             if (FinalIndex != -1)
             {
-                int currentFinalIndex = FinalIndex;
-                tasks.Insert(++currentFinalIndex, new PassLegacy("Lunar Cult Hideouts", (progress, config) =>
-                {
-                    progress.Message = Language.GetOrRegister("Mods.Windfall.UI.WorldGen.LunarHideouts").Value;
+                int DraedonStructuresIndex = FinalIndex + 7;
 
-                    CultistHideouts.PlaceSolarCultistHideout(GenVars.structures);
-                    CultistHideouts.PlaceVortexCultistHideout(GenVars.structures);
-                    CultistHideouts.PlaceNebulaCultistHideout(GenVars.structures);
-                    CultistHideouts.PlaceStardustCultistHideout(GenVars.structures);
+                int currentFinalIndex = FinalIndex;
+                tasks.Insert(DraedonStructuresIndex + 1, new PassLegacy("Lunar Cult Base", (progress, config) =>
+                {
+                    progress.Message = Language.GetOrRegister("Mods.Windfall.UI.WorldGen.LunarCultBase").Value;
+
+                    LunarCultBase.PlaceLunarCultBase(GenVars.structures);
                 }));
             }
         }

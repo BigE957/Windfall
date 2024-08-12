@@ -118,6 +118,7 @@ namespace Windfall.Content.NPCs.WorldEvents.LunarCult
         {
             this.HideFromBestiary();
             NPCID.Sets.ActsLikeTownNPC[Type] = true;
+            NPCID.Sets.AllowDoorInteraction[Type] = true;
             Main.npcFrameCount[Type] = 25;
             NPCID.Sets.ExtraFramesCount[Type] = 9;
             NPCID.Sets.AttackFrameCount[Type] = 4;
@@ -150,7 +151,7 @@ namespace Windfall.Content.NPCs.WorldEvents.LunarCult
             NPC.knockBackResist = 1f;
             NPC.immortal = true;
 
-            AnimationType = NPCID.Stylist;
+            TownNPCStayingHomeless = true;
         }
         public override void OnSpawn(IEntitySource source)
         {
@@ -186,9 +187,9 @@ namespace Windfall.Content.NPCs.WorldEvents.LunarCult
                     NPC Bishop = Main.npc[NPC.FindFirstNPC(ModContent.NPCType<LunarBishop>())];
                     if (Bishop != null)
                         if (NPC.position.X < Bishop.position.X)
-                            NPC.direction = -1;
-                        else
                             NPC.direction = 1;
+                        else
+                            NPC.direction = -1;
                 }
             }
             switch(LunarCultActivitySystem.CurrentMeetingTopic)
@@ -206,7 +207,7 @@ namespace Windfall.Content.NPCs.WorldEvents.LunarCult
             if (Chattable)
             {
                 AnimationType = NPCID.Stylist;
-                NPC.aiStyle = 7;
+                NPC.aiStyle = NPCAIStyleID.Passive;
             }
             else
             {
@@ -231,6 +232,15 @@ namespace Windfall.Content.NPCs.WorldEvents.LunarCult
                     case (RecruitNames.Jamie):
                         MyDialogue = JamieDialogue;
                         break;
+                }
+                if (NPC.FindFirstNPC(ModContent.NPCType<LunarBishop>()) != -1)
+                {
+                    NPC Bishop = Main.npc[NPC.FindFirstNPC(ModContent.NPCType<LunarBishop>())];
+                    if (Bishop != null)
+                        if (NPC.position.X < Bishop.position.X)
+                            NPC.direction = 1;
+                        else
+                            NPC.direction = -1;
                 }
             }
         }

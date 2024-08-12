@@ -23,6 +23,8 @@
     <None Remove="Assets\Items\Tools\IlmeranKnife.png" />
     <None Remove="Assets\Items\Utility\IlmeranHorn.png" />
     <None Remove="Assets\Items\Weapons\Misc\Cnidrisnack.png" />
+    <None Remove="Assets\NPCs\Bosses\TheOrator_Boss.png" />
+    <None Remove="Assets\NPCs\Bosses\TheOrator_Boss_Head.png" />
     <None Remove="Assets\NPCs\Enemies\DarkSpawn.png" />
     <None Remove="Assets\NPCs\Enemies\LunarCultistArcher.png" />
     <None Remove="Assets\NPCs\TravellingNPCs\TravellingCultist.png" />
@@ -43,6 +45,7 @@
     <None Remove="Assets\NPCs\WorldEvents\Recruits\Vivian.png" />
     <None Remove="Assets\NPCs\WorldEvents\Recruits\Vivian_Head.png" />
     <None Remove="Assets\NPCs\WorldEvents\SealingTablet.png" />
+    <None Remove="Assets\NPCs\WorldEvents\TheOrator_NPC.png" />
     <None Remove="Assets\NPCs\WorldEvents\WanderingPotionSeller.png" />
     <None Remove="Assets\Projectiles\Misc\Creeper.png" />
     <None Remove="Assets\Projectiles\Misc\EmpyreanThorn.png" />

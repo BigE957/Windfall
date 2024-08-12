@@ -64,15 +64,15 @@ namespace Windfall.Content.World
 
         private static void FillWanderersChest(Chest chest, int Type, bool place)
         {
-            List<ChestItem> contents = new()
-            {
+            List<ChestItem> contents =
+            [
                 new ChestItem(ModContent.ItemType<JournalForest>(), 1),
                 new ChestItem(ItemID.Binoculars, 1),
                 new ChestItem(ItemID.HermesBoots, 1),
                 new ChestItem(ItemID.SwiftnessPotion, WorldGen.genRand.Next(1, 3)),
                 new ChestItem(ItemID.SpelunkerPotion, WorldGen.genRand.Next(1, 3)),
                 new ChestItem(ItemID.GoldCoin, WorldGen.genRand.Next(1, 3)),
-            };
+            ];
 
             for (int i = 0; i < contents.Count; i++)
             {
