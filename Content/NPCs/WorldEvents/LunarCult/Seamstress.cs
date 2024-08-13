@@ -3,7 +3,6 @@ using Humanizer;
 using Microsoft.Xna.Framework.Graphics;
 using Terraria.Enums;
 using Windfall.Common.Systems.WorldEvents;
-using Windfall.Content.Items.Quest;
 using Windfall.Content.Items.Quest.Seamstress;
 using Windfall.Content.Items.Summoning;
 using Windfall.Content.UI.Events;
@@ -51,8 +50,8 @@ namespace Windfall.Content.NPCs.WorldEvents.LunarCult
             NPC.knockBackResist = 1f;
             NPC.immortal = true;
 
-            ClothingIDs = new List<int>()
-            {
+            ClothingIDs =
+            [
                 ModContent.ItemType<LunarDevoteeMask>(),
                 ModContent.ItemType<LunarArcherMask>(),
                 ModContent.ItemType<LunarBishopMask>(),
@@ -60,7 +59,7 @@ namespace Windfall.Content.NPCs.WorldEvents.LunarCult
                 ModContent.ItemType<LunarBishopHood>(),
                 ModContent.ItemType<LunarCultistRobes>(),
                 ModContent.ItemType<LunarBishopRobes>(),
-            };
+            ];
 
             AnimationType = NPCID.BartenderUnconscious;
         }
@@ -94,6 +93,7 @@ namespace Windfall.Content.NPCs.WorldEvents.LunarCult
                 TalkDelay--;
             if (BeginActivity)
             {
+                #region Start Activity Dialogue
                 switch (yapCounter)
                 {
                     case 60:
@@ -118,10 +118,12 @@ namespace Windfall.Content.NPCs.WorldEvents.LunarCult
                         BeginActivity = false;
                         break;
                 }
+                #endregion
                 yapCounter++;
             }
             else if (EndActivity)
             {
+                #region End Activity Dialogue
                 Rectangle location = new((int)NPC.Center.X, (int)NPC.Center.Y, NPC.width, NPC.width);
 
                 switch (yapCounter)
@@ -154,6 +156,7 @@ namespace Windfall.Content.NPCs.WorldEvents.LunarCult
                         EndActivity = false;
                         break;
                 }
+                #endregion
                 yapCounter++;
             }
             else
@@ -168,8 +171,8 @@ namespace Windfall.Content.NPCs.WorldEvents.LunarCult
             Start,
         }
         private DialogueState CurrentDialogue = 0;
-        private readonly List<dialogueDirections> MyDialogue = new()
-        {
+        private readonly List<dialogueDirections> MyDialogue = 
+        [
             #region Tailor Tutorial
             new dialogueDirections()
             {
@@ -204,13 +207,14 @@ namespace Windfall.Content.NPCs.WorldEvents.LunarCult
                 Button2 = new(){name = "I'm ready!", heading = -1, end = true},
             },
             #endregion
-        };
+        ];
         public override string GetChat()
         {
             Player MyPlayer = Main.player[Main.myPlayer];
             string seamstressPath = "Dialogue.LunarCult.Seamstress.";
             if (IsTailorActivityActive())
             {
+                #region Active Activity
                 string activityPath = seamstressPath + "Activity.";
                 Main.CloseNPCChatOrSign();              
                 if (CompletedClothesCount >= ClothesGoal)
@@ -228,7 +232,7 @@ namespace Windfall.Content.NPCs.WorldEvents.LunarCult
 
                         Rectangle location = new((int)NPC.Center.X, (int)NPC.Center.Y, NPC.width, NPC.width);
 
-                        Item item = new Item();
+                        Item item = new();
                         item.SetDefaults(AssignedClothing[Main.myPlayer]);
                         string name = item.Name;
 
@@ -319,7 +323,7 @@ namespace Windfall.Content.NPCs.WorldEvents.LunarCult
                         {
                             Rectangle location = new((int)NPC.Center.X, (int)NPC.Center.Y, NPC.width, NPC.width);
 
-                            Item item = new Item();
+                            Item item = new();
                             item.SetDefaults(AssignedClothing[Main.myPlayer]);
                             string name = item.Name;
 
@@ -329,27 +333,22 @@ namespace Windfall.Content.NPCs.WorldEvents.LunarCult
                 }
                 TalkDelay = 120;
                 return "Erm, what the sigma?"; //will never actually show up, as the dialogue box is closed lol
+                #endregion
             }
             else if (Test)//(Main.moonPhase == (int)MoonPhase.HalfAtLeft || Main.moonPhase == (int)MoonPhase.HalfAtRight)
             {
-                if (CurrentDialogue == 0)
-                {
-                    if (MyPlayer.LunarCult().SeamstressTalked)
-                        CurrentDialogue = DialogueState.Start;
-                }
+                if (CurrentDialogue == 0 && MyPlayer.LunarCult().SeamstressTalked)
+                    CurrentDialogue = DialogueState.Start;
 
                 if ((int)CurrentDialogue == -1)
                     return GetWindfallTextValue(seamstressPath + "Activity.Ready");
+                else if (!MyPlayer.LunarCult().SeamstressTalked)
+                    return GetWindfallTextValue(seamstressPath + "Conversation.Tutorial." + CurrentDialogue);
                 else
-                {
-                    if (!MyPlayer.LunarCult().SeamstressTalked)
-                        return GetWindfallTextValue(seamstressPath + "Conversation.Tutorial." + CurrentDialogue);
-                    else
-                        return GetWindfallTextValue(seamstressPath + "Activity." + CurrentDialogue);
-                }
+                    return GetWindfallTextValue(seamstressPath + "Activity." + CurrentDialogue);
             }
             else
-                return "Why are you talking to me.";
+                return "Why are you talking to me."; //Can eventually be used for randomized dialogue.
         }
         public override void OnChatButtonClicked(bool firstButton, ref string shop)
         {                      
@@ -374,20 +373,17 @@ namespace Windfall.Content.NPCs.WorldEvents.LunarCult
             } 
             else 
             {
+                //Can eventually be used for other stuff. Only here as this is for testing
                 Main.CloseNPCChatOrSign();
                 Test = true;
             }
         }
         public override void SetChatButtons(ref string button, ref string button2)
         {
-            if (!LunarCultActivitySystem.IsTailorActivityActive() && Test)
-            {
+            if (!IsTailorActivityActive() && Test)
                 SetConversationButtons(MyDialogue, (int)CurrentDialogue, ref button, ref button2);
-            }
             if(!Test)
-            {
                 button = "Okay.";
-            }
         }
         public override bool CheckActive() => false;
 
