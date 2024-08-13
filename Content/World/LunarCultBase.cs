@@ -16,35 +16,33 @@ namespace Windfall.Content.World
             Tile tile = CalamityUtils.ParanoidTileRetrieval(placementPoint.X, placementPoint.Y);
             if (tile.LiquidType == LiquidID.Lava && careAboutLava)
                 return true;
+
             if (tile.TileType == TileID.BlueDungeonBrick ||
             tile.TileType == TileID.GreenDungeonBrick ||
             tile.TileType == TileID.PinkDungeonBrick)
-            {
                 return true;
-            }
+
             if (tile.TileType == TileID.Crimstone ||
             tile.WallType == WallID.CrimstoneUnsafe ||
             tile.TileType == TileID.Ebonstone ||
             tile.WallType == WallID.EbonstoneUnsafe)
-            {
                 return true;
-            }
 
             if (tile.TileType == TileID.SnowBlock ||
             tile.WallType == WallID.SnowWallUnsafe ||
             tile.TileType == TileID.IceBlock ||
             tile.WallType == WallID.IceUnsafe)
-            {
                 return true;
-            }
 
             if (tile.TileType == TileID.WoodBlock ||
             tile.WallType == WallID.Planked ||
             tile.TileType == TileID.WoodenBeam ||
             tile.WallType == WallID.SpiderUnsafe)
-            {
                 return true;
-            }
+
+            if (tile.TileType == TileID.Mud ||
+            tile.TileType == TileID.MushroomGrass)
+                return true;
 
             if (tile.TileType == ModContent.TileType<LaboratoryPlating>() ||
             tile.WallType == ModContent.WallType<LaboratoryPlatingWall>() ||
@@ -52,9 +50,7 @@ namespace Windfall.Content.World
             tile.WallType == ModContent.WallType<RustedPlatingWall>() ||
             tile.TileType == ModContent.TileType<LaboratoryPanels>() ||
             tile.WallType == ModContent.WallType<LaboratoryPanelWall>())
-            {
                 return true;
-            }
 
             return false;
         }
