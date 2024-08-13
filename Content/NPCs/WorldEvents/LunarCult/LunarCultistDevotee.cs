@@ -14,6 +14,17 @@
             get => (DialogueState)NPC.ai[1];
             set => NPC.ai[1] = (int)value;
         }
+        private enum States
+        {
+            Idle,
+            Chatting,
+            CafeteriaEvent,
+        }
+        private States AIState
+        {
+            get => (States)NPC.ai[2];
+            set => NPC.ai[2] = (float)value;
+        }
         public override string Texture => "Windfall/Assets/NPCs/WorldEvents/LunarCultistDevotee";
         internal static SoundStyle SpawnSound => new("CalamityMod/Sounds/Custom/SCalSounds/BrimstoneHellblastSound");
         public override void SetStaticDefaults()
@@ -41,7 +52,7 @@
         }
         public override void OnSpawn(IEntitySource source)
         {
-            if (NPC.ai[0] == 0)
+            if (AIState == States.Idle)
             {
                 AnimationType = NPCID.BartenderUnconscious;
                 NPC.frame.Y = (NPC.height + 2) * 3;
@@ -66,19 +77,11 @@
                 SoundEngine.PlaySound(SpawnSound, NPC.Center);
             }
         }
-        public override bool CanChat()
-        {
-            if (NPC.ai[0] == 0)
-                return false;
-            else
-                return true;
-        }
-        public override string GetChat()
-        {
-            return GetWindfallTextValue($"Dialogue.LunarCult.OcularDevotee.{CurrentDialogue}");
-        }
-        private readonly List<dialogueDirections> MyDialogue = new()
-        {
+        public override bool CanChat() => AIState == States.Chatting;
+        public override string GetChat() => GetWindfallTextValue($"Dialogue.LunarCult.OcularDevotee.{CurrentDialogue}");
+
+        private readonly List<dialogueDirections> MyDialogue =
+        [
             new dialogueDirections()
             {
                 MyPos = (int)DialogueState.Initial,
@@ -103,7 +106,7 @@
                 Button1 = new(){name = "Alright.", heading = -1, end = true},
                 Button2 = new(){name = "If you say so...", heading = -1, end = true},
             },
-        };
+        ];
         public override void OnChatButtonClicked(bool firstButton, ref string shop)
         {
             CurrentDialogue = (DialogueState)GetNPCConversation(MyDialogue, (int)CurrentDialogue, firstButton);

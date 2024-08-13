@@ -16,6 +16,17 @@ namespace Windfall.Content.NPCs.WorldEvents.LunarCult
             Despawn,
         }
         private DialogueState CurrentDialogue = 0;
+        private enum States
+        {
+            Idle,
+            Chatting,
+            CafeteriaEvent,
+        }
+        private States AIState
+        {
+            get => (States)NPC.ai[2];
+            set => NPC.ai[2] = (float)value;
+        }
         public override string Texture => "Windfall/Assets/NPCs/WorldEvents/LunarBishop";
         internal static SoundStyle SpawnSound => new("CalamityMod/Sounds/Custom/SCalSounds/BrimstoneHellblastSound");
         public override void SetStaticDefaults()
@@ -39,15 +50,10 @@ namespace Windfall.Content.NPCs.WorldEvents.LunarCult
             NPC.knockBackResist = 1f;
             NPC.immortal = true;
         }
-        public override bool CanChat()
-        {
-            if (NPC.ai[2] == 0)
-                return false;
-            return true;
-        }
+        public override bool CanChat() => AIState == States.Chatting;
         public override void OnSpawn(IEntitySource source)
         {
-            if (NPC.ai[2] == 0)
+            if (AIState == States.Idle)
             {
                 NPC.alpha = 255;
                 Vector2 oldPos = NPC.position;
@@ -73,10 +79,8 @@ namespace Windfall.Content.NPCs.WorldEvents.LunarCult
                 SoundEngine.PlaySound(SpawnSound, NPC.Center);
             }
         }
-        public override string GetChat()
-        {
-            return GetWindfallTextValue($"Dialogue.LunarCult.LunarBishop.Conversation.{CurrentDialogue}");
-        }
+        public override string GetChat() => GetWindfallTextValue($"Dialogue.LunarCult.LunarBishop.Conversation.{CurrentDialogue}");
+
         private readonly List<dialogueDirections> MyDialogue = new()
         {
             new dialogueDirections()
@@ -147,7 +151,7 @@ namespace Windfall.Content.NPCs.WorldEvents.LunarCult
         }
         public override bool CheckActive()
         {
-            if (NPC.ai[2] == 0)
+            if (AIState == States.Idle || AIState == States.CafeteriaEvent)
                 return false;
             return true;
         }

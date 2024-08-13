@@ -20,6 +20,17 @@
             set => NPC.ai[1] = (int)value;
         }
         */
+        private enum States
+        {
+            Idle,
+            Chatting,
+            CafeteriaEvent,
+        }
+        private States AIState
+        {
+            get => (States)NPC.ai[2];
+            set => NPC.ai[2] = (float)value;
+        }
         public override string Texture => "Windfall/Assets/NPCs/WorldEvents/LunarCultistArcher";
         private static SoundStyle SpawnSound => new("CalamityMod/Sounds/Custom/SCalSounds/BrimstoneHellblastSound");
         public override void SetStaticDefaults()
@@ -47,7 +58,7 @@
         }    
         public override void OnSpawn(IEntitySource source)
         {
-            if (NPC.ai[0] == 0)
+            if (AIState == States.Idle)
             {
                 NPC.GivenName = "Lunar Cultist Archer";
                 NPC.alpha = 255;
@@ -81,10 +92,8 @@
             else
                 return true;
         }
-        public override string GetChat()
-        {
-            return GetWindfallTextValue($"Dialogue.LunarCult.MechanicShed.{CurrentDialogue}");
-        }
+        public override string GetChat() => GetWindfallTextValue($"Dialogue.LunarCult.MechanicShed.{CurrentDialogue}");
+        
         private readonly List<dialogueDirections> MyDialogue = new()
         {
             new dialogueDirections()
