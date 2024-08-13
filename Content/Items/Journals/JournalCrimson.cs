@@ -1,4 +1,5 @@
 ﻿using Windfall.Common.Systems;
+using Windfall.Content.Items.GlobalItems;
 using Windfall.Content.UI.WanderersJournals;
 
 namespace Windfall.Content.Items.Journals
