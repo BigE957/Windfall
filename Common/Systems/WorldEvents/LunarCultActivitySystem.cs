@@ -76,6 +76,27 @@ namespace Windfall.Common.Systems.WorldEvents
         public static int CompletedClothesCount = 0;
         public static int ClothesGoal = 3;
         #endregion
+        #region Cafeteria Variables
+        public struct Customer(NPC npc, int orderIDs)
+        { 
+            public NPC NPC = npc;
+            public int OrderID = orderIDs;
+        }
+        public static List<Customer?> CustomerQueue = [];
+        public static readonly List<int> FoodIDs =
+        [
+            ItemID.PadThai,
+            ItemID.Ale,
+            ItemID.BowlofSoup,
+            ItemID.AppleJuice,
+            ItemID.Escargot,
+            ItemID.FruitSalad,
+
+        ];
+        public static int SatisfiedCustomers = 0;
+        public static int CustomerGoal = 8;
+        private static readonly int CustomerLimit = 12;
+        #endregion
 
         private static SoundStyle TeleportSound => new("CalamityMod/Sounds/Custom/SCalSounds/BrimstoneHellblastSound");
         public override void OnWorldLoad()
@@ -86,6 +107,8 @@ namespace Windfall.Common.Systems.WorldEvents
         {
             if (!NPC.AnyNPCs(ModContent.NPCType<Seamstress>()))
                 NPC.NewNPC(Entity.GetSource_None(), (LunarCultBaseLocation.X*16) + 242, (LunarCultBaseLocation.Y*16) + 300, ModContent.NPCType<Seamstress>());
+            if (!NPC.AnyNPCs(ModContent.NPCType<TheChef>()))
+                NPC.NewNPC(Entity.GetSource_None(), (LunarCultBaseLocation.X * 16) - 1040, (LunarCultBaseLocation.Y * 16) - 110, ModContent.NPCType<TheChef>());
             switch (State)
             {
                 case SystemState.CheckReqs:
@@ -564,5 +587,6 @@ namespace Windfall.Common.Systems.WorldEvents
             return MyDialogue;
         }
         public static bool IsTailorActivityActive() => Active && State == SystemState.Tailor;
+        public static bool IsCafeteriaActivityActive() => Active && State == SystemState.Cafeteria;
     }
 }

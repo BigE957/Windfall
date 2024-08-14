@@ -54,6 +54,8 @@
     <None Remove="Assets\Skies\OratorCloudsBack.png" />
     <None Remove="Assets\Skies\OratorCloudsFront.png" />
     <None Remove="Assets\Skies\OratorCloudsMiddle.png" />
+    <None Remove="Assets\UI\ProgressFrame.png" />
+    <None Remove="Assets\UI\ThoughtBubble.png" />
     <None Remove="Content\Buffs\Cooldowns\ParryWeapon.png" />
     <None Remove="Content\Buffs\Cooldowns\ParryWeaponOutline.png" />
     <None Remove="Content\Buffs\Cooldowns\ParryWeaponOverlay.png" />

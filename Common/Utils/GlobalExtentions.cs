@@ -1,5 +1,5 @@
 ﻿using Windfall.Common.Players;
-using Windfall.Content.Items;
+using Windfall.Content.Items.GlobalItems;
 using Windfall.Content.NPCs.GlobalNPCs;
 using Windfall.Content.Projectiles;
 
@@ -12,6 +12,7 @@ namespace Windfall.Common.Utils
         public static LunarCultPlayer LunarCult(this Player player) => player.GetModPlayer<LunarCultPlayer>();
         public static WindfallGlobalNPC Windfall(this NPC npc) => npc.GetGlobalNPC<WindfallGlobalNPC>();
         public static WindfallGlobalItem Windfall(this Item item) => item.GetGlobalItem<WindfallGlobalItem>();
+        public static LunarCultGlobalItem LunarCult(this Item item) => item.GetGlobalItem<LunarCultGlobalItem>();
         public static WindfallGlobalProjectile Windfall(this Projectile proj) => proj.GetGlobalProjectile<WindfallGlobalProjectile>();
     }
 }

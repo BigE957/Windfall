@@ -272,6 +272,26 @@ Dialogue: {
 				Tablet: Ah! Yes, that is a Selenic Tablet. It will serve as a means of communication. Should you hear its hum, you will know you have been called upon, and it shall guide you to where you are needed.
 				End: That is all you need know for the time being. More shall be revealed soon, so long as you heed the Tablet's call. Farewell. If you are wise, we shall meet again.
 			}
+
+			Cafeteria: {
+				Unfresh: {
+					0: That doesn't look very fresh...
+					1: How old is that?!
+					2: That looks disgusting! Bring me another!
+				}
+
+				Where: {
+					0: Where the hell is my food?
+					1: You got my food yet?
+					2: I'm waiting...
+				}
+
+				Thanks: {
+					0: Thanks for the food!
+					1: Can't wait to dig in...
+					2: That looks delicious!
+				}
+			}
 		}
 
 		TheOrator: {
@@ -352,6 +372,12 @@ Dialogue: {
 					0: I SAID get me a {0}!!!
 					1: You forgot?! I told you to get me a {0}!!!
 					2: A {0}! Get me a {0}!!!
+				}
+
+				Garbage: {
+					0: Do you SERIOUSLY think I want your made at home GARBAGE!?
+					1: Get that TRASH out of my SIGHT!!!
+					2: THAT is AWFUL! Do it again!
 				}
 			}
 		}
@@ -766,6 +792,8 @@ UI: {
 		WanderersCabin: Building an Explorer's abode
 		LunarCultBase: Renovating an ancient Dragon's sanctum
 	}
+
+	Ambrosia: Ambrosia: {0} / {1}
 
 	Selenic: {
 		Post-Plant: {
@@ -1492,6 +1520,7 @@ NPCs: {
 	GodlyTumor.DisplayName: Hive Tumor
 	Seamstressm.DisplayName: Seamstressm
 	Seamstress.DisplayName: Seamstress
+	TheChef.DisplayName: The Chef
 }
 
 Projectiles: {
@@ -1528,6 +1557,7 @@ Projectiles: {
 	GodlyEbonianGlob.DisplayName: Ebonian Glob
 	OratorBorder.DisplayName: Orator Border
 	DarkTide.DisplayName: Dark Tide
+	FoodAlert.DisplayName: Food Alert
 }
 
 Buffs: {

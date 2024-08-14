@@ -1,6 +1,7 @@
 ﻿using CalamityMod.UI;
 using Humanizer;
 using Microsoft.Xna.Framework.Graphics;
+using Terraria;
 using Terraria.Enums;
 using Windfall.Common.Systems.WorldEvents;
 using Windfall.Content.Items.Quest.Seamstress;
@@ -21,7 +22,6 @@ namespace Windfall.Content.NPCs.WorldEvents.LunarCult
         }
         private bool BeginActivity = false;
         private bool EndActivity = false;
-
         private bool Test = false;
 
         private int yapCounter
@@ -327,7 +327,10 @@ namespace Windfall.Content.NPCs.WorldEvents.LunarCult
                             item.SetDefaults(AssignedClothing[Main.myPlayer]);
                             string name = item.Name;
 
-                            CombatText.NewText(location, Color.LimeGreen, GetWindfallTextValue(activityPath + "Repeat." + Main.rand.Next(3)).FormatWith(name), true);
+                            if(MyPlayer.inventory.Where(i => i.type == AssignedClothing[Main.myPlayer]).Any())
+                                CombatText.NewText(location, Color.LimeGreen, GetWindfallTextValue(activityPath + "Garbage." + Main.rand.Next(3)).FormatWith(name), true);
+                            else
+                                CombatText.NewText(location, Color.LimeGreen, GetWindfallTextValue(activityPath + "Repeat." + Main.rand.Next(3)).FormatWith(name), true);
                         }
                     }
                 }
@@ -389,9 +392,9 @@ namespace Windfall.Content.NPCs.WorldEvents.LunarCult
 
         private static bool HasItem(Player player, int id)
         {
-            if (player.inventory.Where(i => i.type == id).Any())
+            if (player.inventory.Where(i => i.type == id && i.LunarCult().madeDuringTailorActivity).Any())
             {
-                player.inventory.Where(i => i.type == id).First().stack--;
+                player.inventory.Where(i => i.type == id && i.LunarCult().madeDuringTailorActivity).First().stack--;
                 return true;
             }
             return false;
