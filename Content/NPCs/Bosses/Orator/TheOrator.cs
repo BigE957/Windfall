@@ -129,7 +129,7 @@ namespace Windfall.Content.NPCs.Bosses.TheOrator
                 NPC.direction = -1;
             NPC.spriteDirection = NPC.direction;
             Lighting.AddLight(NPC.Center, new Vector3(0.32f, 0.92f, 0.71f));
-            if ((float)NPC.life / (float)NPC.lifeMax <= 0.1f || AIState == States.PhaseChange)
+            if ((float)NPC.life / (float)NPC.lifeMax <= 0.1f || AIState == States.PhaseChange || ((float)NPC.life / (float)NPC.lifeMax <= 0.66f && AIState < States.DarkOrbit))
                NPC.DR_NERD(1f);
             else
                 NPC.DR_NERD(0.1f);
@@ -302,8 +302,6 @@ namespace Windfall.Content.NPCs.Bosses.TheOrator
                             float velocity = 60;
                             homeIn.Normalize();
                             NPC.velocity = (NPC.velocity * velocity + homeIn * 18f) / (velocity + 1f);
-                            if (NPC.Center.Y > target.Center.Y - 250)
-                                NPC.velocity.Y -= 0.25f;
                         }
                         else
                         {
@@ -510,7 +508,7 @@ namespace Windfall.Content.NPCs.Bosses.TheOrator
                         }
                         else
                         {
-                            NPC.velocity = Vector2.UnitY * -20;
+                            NPC.velocity = Vector2.UnitY * -10;
                             aiCounter = -60;
                             AIState = States.DarkBarrage;
                         }
@@ -713,16 +711,10 @@ namespace Windfall.Content.NPCs.Bosses.TheOrator
                     }
                     else
                     {
-                        if (NPC.Center.Y < border.Center.Y - 700)
-                            NPC.velocity.Y++;
-                        else
-                            NPC.velocity.Y--;
-                        if (NPC.Center.X < border.Center.X)
-                            NPC.velocity.X++;
-                        else
-                            NPC.velocity.X--;
-                        if (NPC.velocity.Length() > 15)
-                            NPC.velocity = NPC.velocity.SafeNormalize(Vector2.Zero) * 15;
+                        homeInV = (border.Center + (Vector2.UnitY * -700)) - NPC.Center;
+                        velo = 60;
+                        homeInV.Normalize();
+                        NPC.velocity = (NPC.velocity * velo + homeInV * 18f) / (velo + 1f);
                     }
                     break;
                 case States.DarkCrush:
@@ -730,18 +722,15 @@ namespace Windfall.Content.NPCs.Bosses.TheOrator
                     border = Main.projectile.First(p => p.active && p.type == ModContent.ProjectileType<OratorBorder>());
                     OratorBorder oratorBorder = border.ModProjectile as OratorBorder;
                     #region Movement
-                    if (NPC.Center.Y < border.Center.Y)
-                        NPC.velocity.Y++;
+                    if (aiCounter < 1620)
+                        homeInV = border.Center - ((target.Center - NPC.Center).SafeNormalize(Vector2.Zero) * 64) - NPC.Center;
                     else
-                        NPC.velocity.Y--;
-                    if (NPC.Center.X < border.Center.X)
-                        NPC.velocity.X++;
-                    else
-                        NPC.velocity.X--;
-                    if (NPC.velocity.Length() > 8)
-                        NPC.velocity = NPC.velocity.SafeNormalize(Vector2.Zero) * 8;
+                        homeInV = border.Center - NPC.Center;
+                    velo = 60;
+                    homeInV.Normalize();
+                    NPC.velocity = (NPC.velocity * velo + homeInV * 18f) / (velo + 1f);
                     #endregion
-                    if(aiCounter < 1500 && oratorBorder.trueScale > 1.25f)
+                    if (aiCounter < 1500 && oratorBorder.trueScale > 1.5f)
                         oratorBorder.trueScale -= 0.001f;
                     if (aiCounter % 5 == 0 && aiCounter > 120)
                     {
@@ -927,16 +916,10 @@ namespace Windfall.Content.NPCs.Bosses.TheOrator
                         
                         #region Movement
                         Vector2 targetPosition = border.Center + attackCounter.ToRotationVector2() * (aiCounter % attackFrequency < attackGap ? 600 : -600);
-                        if (NPC.Center.Y < targetPosition.Y)
-                            NPC.velocity.Y++;
-                        else
-                            NPC.velocity.Y--;
-                        if (NPC.Center.X < targetPosition.X)
-                            NPC.velocity.X++;
-                        else
-                            NPC.velocity.X--;
-                        if (NPC.velocity.Length() > 10)
-                            NPC.velocity = NPC.velocity.SafeNormalize(Vector2.Zero) * 10;
+                        homeInV = targetPosition - NPC.Center;
+                        velo = 60;
+                        homeInV.Normalize();
+                        NPC.velocity = (NPC.velocity * velo + homeInV * 18f) / (velo + 1f);
                         #endregion
                     }
                     else
@@ -960,16 +943,10 @@ namespace Windfall.Content.NPCs.Bosses.TheOrator
                 case States.DarkEmbrace:
                     border = Main.projectile.First(p => p.active && p.type == ModContent.ProjectileType<OratorBorder>());
                     #region Movement
-                    if (NPC.Center.Y < border.Center.Y - 600)
-                        NPC.velocity.Y++;
-                    else
-                        NPC.velocity.Y--;
-                    if (NPC.Center.X < border.Center.X)
-                        NPC.velocity.X++;
-                    else
-                        NPC.velocity.X--;
-                    if (NPC.velocity.Length() > 8)
-                        NPC.velocity = NPC.velocity.SafeNormalize(Vector2.Zero) * 8;
+                    homeInV = (border.Center + (Vector2.UnitY * -600)) - NPC.Center;
+                    velo = 60;
+                    homeInV.Normalize();
+                    NPC.velocity = (NPC.velocity * velo + homeInV * 18f) / (velo + 1f);
                     #endregion
                     int attackDuration = 1700;
                     int tideOut = 480;
@@ -1071,16 +1048,10 @@ namespace Windfall.Content.NPCs.Bosses.TheOrator
                     if (aiCounter < 750)
                     {
                         #region Movement
-                        if (NPC.Center.Y < border.Center.Y - 600)
-                            NPC.velocity.Y++;
-                        else
-                            NPC.velocity.Y--;
-                        if (NPC.Center.X < border.Center.X)
-                            NPC.velocity.X++;
-                        else
-                            NPC.velocity.X--;
-                        if (NPC.velocity.Length() > 8)
-                            NPC.velocity = NPC.velocity.SafeNormalize(Vector2.Zero) * 8;
+                        homeInV = (border.Center + (Vector2.UnitY * -600)) - NPC.Center;
+                        velo = 60;
+                        homeInV.Normalize();
+                        NPC.velocity = (NPC.velocity * velo + homeInV * 18f) / (velo + 1f);
                         #endregion
                         if (aiCounter >= 0)
                         {
@@ -1121,23 +1092,21 @@ namespace Windfall.Content.NPCs.Bosses.TheOrator
                             else
                                 AIState = States.DarkOrbit;
                         }
-                        if(aiCounter - 750 == 120)
-                            NPC.ai[3] = -1;
                         if (aiCounter - 750 < 120)
-                        {                            
-                            if (NPC.Center.Y < border.Center.Y - 600)
-                                NPC.velocity.Y++;
+                        {
+                            homeInV = new Vector2(target.Center.X, border.Center.Y -600) - NPC.Center;
+                            velo = 20;
+                            homeInV.Normalize();
+                            NPC.velocity = (NPC.velocity * velo + homeInV * 18f) / (velo + 1f);
+                            if (NPC.Center.Y > border.Center.Y - 600)
+                                NPC.velocity.Y -= 0.25f;
                             else
-                                NPC.velocity.Y--;
-                            if (NPC.Center.X < target.Center.X)
-                                NPC.velocity.X++;
-                            else
-                                NPC.velocity.X--;
-                            if (NPC.velocity.Length() > 8)
-                                NPC.velocity = NPC.velocity.SafeNormalize(Vector2.Zero) * 8;
+                                NPC.velocity.Y += 0.25f;
+
                         }
                         else if(aiCounter - 750 == 120)
                         {
+                            NPC.ai[3] = -1;
                             dashing = true;
                             SoundEngine.PlaySound(DashWarn);
                             NPC.velocity = Vector2.UnitY * -4;
@@ -1190,7 +1159,7 @@ namespace Windfall.Content.NPCs.Bosses.TheOrator
                                             NPC.velocity.X = -8;
                                         else
                                             NPC.velocity.X = 8;
-                                    EmpyreanMetaball.SpawnDefaultParticle(NPC.Center + (Vector2.UnitX * Main.rand.NextFloat(-32, 32)), Vector2.UnitY * Main.rand.NextFloat(8f, 12f) * -1, Main.rand.NextFloat(80f, 100f));
+                                    EmpyreanMetaball.SpawnDefaultParticle(NPC.Center + (Vector2.UnitX * Main.rand.NextFloat(-48, 48)), Vector2.UnitY * Main.rand.NextFloat(8f, 12f) * -1, Main.rand.NextFloat(90f, 110f));
 
                                     if (Main.expertMode && aiCounter % 60 == 0)
                                     {
@@ -1202,7 +1171,8 @@ namespace Windfall.Content.NPCs.Bosses.TheOrator
                                 }
                                 else if(aiCounter >= NPC.ai[3] + 450)
                                 {
-                                    EmpyreanMetaball.SpawnDefaultParticle(NPC.Center + new Vector2(Main.rand.NextFloat(-48, 48), 64), Vector2.UnitY * Main.rand.NextFloat(10f, 14f) * -1, Main.rand.NextFloat(100f, 120f));
+                                    for(int i = 0; i < 2; i++)
+                                        EmpyreanMetaball.SpawnDefaultParticle(NPC.Center + new Vector2(Main.rand.NextFloat(-64, 64), 64), Vector2.UnitY * Main.rand.NextFloat(10f, 14f) * -1, Main.rand.NextFloat(110f, 130f));
                                     if (aiCounter == NPC.ai[3] + 450)
                                     {
                                         dashing = true;
