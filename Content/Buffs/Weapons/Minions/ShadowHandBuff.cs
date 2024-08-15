@@ -10,7 +10,7 @@ using Windfall.Content.Projectiles.Weapons.Summon;
 
 namespace Windfall.Content.Buffs.Weapons.Minions
 {
-    public class DeepSeekerBuff : ModBuff
+    public class ShadowHandBuff : ModBuff
     {
         public override void SetStaticDefaults()
         {
@@ -22,7 +22,7 @@ namespace Windfall.Content.Buffs.Weapons.Minions
         public override void Update(Player player, ref int buffIndex)
         {           
             BuffPlayer buffPlayer = player.Buff();
-            if (player.ownedProjectileCounts[ModContent.ProjectileType<DeepSeeker>()] > 0)
+            if (player.ownedProjectileCounts[ModContent.ProjectileType<ShadowHand_Minion>()] > 0)
             {
                 buffPlayer.DeepSeeker = true;
             }

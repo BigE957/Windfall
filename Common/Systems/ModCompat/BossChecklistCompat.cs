@@ -29,7 +29,7 @@ namespace Windfall.Common.Systems.ModCompat
             int spawnItem = ModContent.ItemType<SelenicTablet>();
             List<int> collectibles =
             [
-                ModContent.ItemType<DeepSeekerStaff>(),
+                ModContent.ItemType<ShadowHandStaff>(),
             ];
 
             bossChecklistMod.Call(

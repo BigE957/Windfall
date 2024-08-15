@@ -2,6 +2,7 @@
 using CalamityMod.Graphics.Metaballs;
 using Windfall.Content.NPCs.Bosses.TheOrator;
 using Windfall.Content.Projectiles.Boss.Orator;
+using Windfall.Content.Projectiles.Weapons.Summon;
 
 namespace Windfall.Common.Graphics.Metaballs
 {
@@ -65,6 +66,7 @@ namespace Windfall.Common.Graphics.Metaballs
             AnyProjectiles(ModContent.ProjectileType<DarkCoalescence>()) ||
             AnyProjectiles(ModContent.ProjectileType<OratorBorder>()) ||
             AnyProjectiles(ModContent.ProjectileType<DarkTide>()) ||
+            AnyProjectiles(ModContent.ProjectileType<ShadowHand_Minion>()) ||
             NPC.AnyNPCs(ModContent.NPCType<ShadowHand>())
         ;
 
@@ -188,9 +190,22 @@ namespace Windfall.Common.Graphics.Metaballs
                 Vector2 scale = Vector2.One * particle.Size / tex.Size();
                 Main.spriteBatch.Draw(tex, drawPosition, null, Color.White, 0f, origin, scale, 0, 0f);
             }
-            foreach (Projectile p in Main.projectile.Where(p => p.active))
+            foreach (Projectile p in Main.projectile.Where(p => p.active && (
+                p.type == ModContent.ProjectileType<DarkGlob>() || 
+                p.type == ModContent.ProjectileType<DarkMonster>() || 
+                p.type == ModContent.ProjectileType<EmpyreanThorn>() || 
+                p.type == ModContent.ProjectileType<DarkCoalescence>() || 
+                p.type == ModContent.ProjectileType<OratorBorder>() || 
+                p.type == ModContent.ProjectileType<DarkTide>() ||
+                p.type == ModContent.ProjectileType<ShadowHand_Minion>()
+            )))
             {
-                if (p.type == ModContent.ProjectileType<DarkGlob>() || p.type == ModContent.ProjectileType<DarkMonster>() || p.type == ModContent.ProjectileType<EmpyreanThorn>() || p.type == ModContent.ProjectileType<DarkCoalescence>() || p.type == ModContent.ProjectileType<OratorBorder>() || p.type == ModContent.ProjectileType<DarkTide>())
+                if(p.type == ModContent.ProjectileType<ShadowHand_Minion>())
+                {
+                    Vector2 drawPosition = p.Center - Main.screenPosition;
+                    p.As<ShadowHand_Minion>().DrawSelf(drawPosition, p.GetAlpha(Color.White), p.rotation);
+                }
+                else
                 {
                     Color c = Color.White;
                     c.A = 0;

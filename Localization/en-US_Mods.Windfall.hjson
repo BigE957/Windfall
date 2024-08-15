@@ -1194,9 +1194,9 @@ Items: {
 		}
 
 		Summon: {
-			DeepSeekerStaff: {
-				DisplayName: Deep Seeker Staff
-				Tooltip: ""
+			ShadowHandStaff: {
+				DisplayName: Shadow Hand Staff
+				Tooltip: "Calls forth the darkest of shadows."
 			}
 		}
 	}
@@ -1548,7 +1548,7 @@ Projectiles: {
 	EmpyreanThorn.DisplayName: Empyrean Thorn
 	LunaticCultistProj.DisplayName: Lunatic Cultist
 	DarkCoalescence.DisplayName: Dark Coalescence
-	DeepSeeker.DisplayName: Dark Seeker
+	ShadowHand_Minion.DisplayName: Shadow Hand Minion
 	GodlyBlob.DisplayName: Hive Blob
 	GodlyCreeper.DisplayName: Creeper
 	GodlyCrimulanMuck.DisplayName: Crimulan Muck
@@ -1566,9 +1566,9 @@ Buffs: {
 		Description: Prefection breeds perfection...
 	}
 
-	DeepSeekerBuff: {
-		DisplayName: Deep Seeker
-		Description: A creature of the Deep will protect you.
+	ShadowHandBuff: {
+		DisplayName: Shadow Hand
+		Description: Darkness given form will protect you.
 	}
 
 	WretchedHarvest: {

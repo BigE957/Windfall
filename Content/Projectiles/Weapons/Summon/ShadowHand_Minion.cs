@@ -10,12 +10,12 @@ using Windfall.Content.Projectiles.Boss.Orator;
 
 namespace Windfall.Content.Projectiles.Weapons.Summon
 {
-    public class DeepSeeker : ModProjectile
+    public class ShadowHand_Minion : ModProjectile
     {
-        public override string Texture => "Windfall/Assets/NPCs/Enemies/DarkSpawn";
+        public override string Texture => "Windfall/Assets/NPCs/Enemies/ShadowHand";
         public override void SetStaticDefaults()
         {
-            Main.projFrames[Projectile.type] = 1;
+            Main.projFrames[Projectile.type] = 6;
             ProjectileID.Sets.MinionSacrificable[Projectile.type] = true;
             ProjectileID.Sets.MinionTargettingFeature[Projectile.type] = true;
         }
@@ -27,7 +27,7 @@ namespace Windfall.Content.Projectiles.Weapons.Summon
             Projectile.netImportant = true;
             Projectile.friendly = true;
             Projectile.ignoreWater = true;
-            Projectile.minionSlots = 1f;
+            Projectile.minionSlots = 2f;
             Projectile.timeLeft = 18000;
             Projectile.penetrate = -1;
             Projectile.tileCollide = false;
@@ -126,7 +126,7 @@ namespace Windfall.Content.Projectiles.Weapons.Summon
             BuffPlayer buffPlayer = player.Buff();           
 
             #region Buff
-            player.AddBuff(ModContent.BuffType<DeepSeekerBuff>(), 3600);
+            player.AddBuff(ModContent.BuffType<ShadowHandBuff>(), 3600);
             if (player.dead)
                 buffPlayer.DeepSeeker = false;
             if (buffPlayer.DeepSeeker)
@@ -144,9 +144,8 @@ namespace Windfall.Content.Projectiles.Weapons.Summon
                 case AIState.Spawning:
                     Projectile.velocity += Projectile.velocity.SafeNormalize(Vector2.UnitX) / -2;
                     int dustStyle = Main.rand.NextBool() ? 66 : 263;
-                    Dust dust = Dust.NewDustPerfect(Projectile.Center, Main.rand.NextBool(3) ? 191 : dustStyle);
+                    Dust dust = Dust.NewDustPerfect(Projectile.Center + (Vector2.UnitY * Main.rand.NextFloat(-16, 16)) + new Vector2(-54, 0).RotatedBy(Projectile.rotation), Main.rand.NextBool(3) ? 191 : dustStyle);
                     dust.scale = Main.rand.NextFloat(1.5f, 2.3f);
-                    //dust.velocity = Main.rand.NextVector2Circular(10f, 10f);
                     dust.noGravity = true;
                     dust.color = dust.type == dustStyle ? Color.LightGreen : default;
                     if (Projectile.velocity.Length() < 2)
@@ -268,9 +267,7 @@ namespace Windfall.Content.Projectiles.Weapons.Summon
                         SoundEngine.PlaySound(SoundID.DD2_LightningBugZap, Projectile.Center);
                         Vector2 myAngle = baseAngle.SafeNormalize(Vector2.UnitX).RotatedBy(rotation * Math.Ceiling((double)aiCounter / 5));
                         for (int i = 0; i < 10; i++)
-                        {
                             EmpyreanMetaball.SpawnDefaultParticle(Projectile.Center + (myAngle * 40), myAngle.RotatedByRandom(Pi/6) * Main.rand.NextFloat(0f, 15f), 20 * Main.rand.NextFloat(1f, 2f));
-                        }
                         Projectile Glob = Projectile.NewProjectileDirect(Terraria.Entity.GetSource_NaturalSpawn(), Projectile.Center, myAngle * 15, ModContent.ProjectileType<DarkGlob>(), Projectile.damage, 0f, -1, 1, 0.5f);
                         Glob.hostile = false;
                         Glob.friendly = true;
@@ -287,19 +284,15 @@ namespace Windfall.Content.Projectiles.Weapons.Summon
                     {
                         Projectile.velocity = Projectile.velocity.RotateTowards((target.Center - Projectile.Center).ToRotation(), 0.05f);
                         Projectile.rotation = Projectile.velocity.ToRotation();
+                        dustStyle = Main.rand.NextBool() ? 66 : 263;
+                        dust = Dust.NewDustPerfect(Projectile.Center + (Vector2.UnitY * Main.rand.NextFloat(-16, 16)) + new Vector2(-54, 0).RotatedBy(Projectile.rotation), Main.rand.NextBool(3) ? 191 : dustStyle);
+                        dust.scale = Main.rand.NextFloat(1.5f, 2.3f);
+                        dust.noGravity = true;
+                        dust.color = dust.type == dustStyle ? Color.LightGreen : default;
                     }
                     else
                         Projectile.rotation = (target.Center - Projectile.Center).ToRotation();
                     Projectile.velocity += Projectile.velocity.SafeNormalize(Vector2.UnitX) / -2;
-                    if (Projectile.velocity.Length() >= 8)
-                    {
-                        dustStyle = Main.rand.NextBool() ? 66 : 263;
-                        dust = Dust.NewDustPerfect(Projectile.Center - Projectile.rotation.ToRotationVector2() * 20, Main.rand.NextBool(3) ? 191 : dustStyle);
-                        dust.scale = Main.rand.NextFloat(1.5f, 2.3f);
-                        //dust.velocity = Main.rand.NextVector2Circular(10f, 10f);
-                        dust.noGravity = true;
-                        dust.color = dust.type == dustStyle ? Color.LightGreen : default;
-                    }
                     if (Projectile.velocity.Length() < 2)
                     {
                         CurrentAI = AIState.Hunting;
@@ -309,19 +302,26 @@ namespace Windfall.Content.Projectiles.Weapons.Summon
                     break;
             }
             aiCounter++;
+
+            EmpyreanMetaball.SpawnDefaultParticle(Projectile.Center + new Vector2(-32, 0).RotatedBy(Projectile.rotation), Vector2.UnitX.RotatedBy(Projectile.rotation) * -8, Projectile.scale * 34);
+            if (Main.rand.NextBool(3))
+                EmpyreanMetaball.SpawnDefaultParticle(Projectile.Center + Main.rand.NextVector2Circular(2, 2) + new Vector2(-32, 0).RotatedBy(Projectile.rotation), Vector2.UnitX.RotatedBy(Projectile.rotation + Main.rand.NextFloat(-0.5f, 0.5f)) * -Main.rand.NextFloat(6f, 8f), Projectile.scale * Main.rand.NextFloat(30f, 40f));
             Lighting.AddLight(Projectile.Center, new Vector3(0.32f, 0.92f, 0.71f));
         }
-        public override bool PreDraw(ref Color lightColor)
+        public override bool PreDraw(ref Color lightColor) => false;
+        public void DrawSelf(Vector2 drawPosition, Color color, float rotation)
         {
             Texture2D texture = TextureAssets.Projectile[Projectile.type].Value;
-            Vector2 halfSizeTexture = new(TextureAssets.Projectile[Projectile.type].Value.Width / 2, TextureAssets.Projectile[Projectile.type].Value.Height / Main.projFrames[Projectile.type] / 2);
-            Vector2 drawPosition = new Vector2(Projectile.Center.X, Projectile.Center.Y) - Main.screenPosition;
-            Vector2 origin = TextureAssets.Projectile[Projectile.type].Size() * 0.5f;
+
+            Rectangle frame = texture.Frame(1, Main.projFrames[Projectile.type], 0, Projectile.frame);
+
             SpriteEffects spriteEffects = SpriteEffects.None;
-            if (!(Projectile.rotation + Pi > Pi / 2 && Projectile.rotation + Pi < 3 * Pi / 2))
+            if (!(Projectile.rotation + Pi > Pi / 2 && Projectile.rotation + Pi < 3 * Pi / 2) && CurrentAI != AIState.Globbing)
                 spriteEffects = SpriteEffects.FlipVertically;
-            Main.EntitySpriteDraw(texture, drawPosition, texture.Frame(), Projectile.GetAlpha(lightColor), Projectile.rotation, origin, Projectile.scale, spriteEffects, 0f);
-            return false;
+            if (attackBool && CurrentAI == AIState.Globbing)
+                spriteEffects = SpriteEffects.FlipVertically;
+
+            Main.EntitySpriteDraw(texture, drawPosition, frame, color, rotation, frame.Size() * 0.5f, Projectile.scale / 2f, spriteEffects, 0);
         }
     }
 }
