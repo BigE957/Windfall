@@ -20,6 +20,9 @@
     <None Remove="Assets\Items\Quest\DraconicBone.png" />
     <None Remove="Assets\Items\Quest\PrimalLightShards.png" />
     <None Remove="Assets\Items\Quest\TabletFrags.png" />
+    <None Remove="Assets\Items\Quest\Tailor\DyedHood.png" />
+    <None Remove="Assets\Items\Quest\Tailor\DyedRobes.png" />
+    <None Remove="Assets\Items\Quest\Tailor\Hood.png" />
     <None Remove="Assets\Items\Tools\IlmeranKnife.png" />
     <None Remove="Assets\Items\Utility\IlmeranHorn.png" />
     <None Remove="Assets\Items\Weapons\Misc\Cnidrisnack.png" />
@@ -76,6 +79,7 @@
     <None Remove="Content\Items\Journals\JournalSulphur.png" />
     <None Remove="Content\Items\Journals\JournalTundra.png" />
     <None Remove="Content\Items\Placeables\Special\DatabaseTerminalItem.png" />
+    <None Remove="Content\Items\Quest\LunarCoin.png" />
     <None Remove="Content\Items\Utility\DraedonCharger.png" />
     <None Remove="Content\Items\Weapons\Melee\Boneripper.png" />
     <None Remove="Content\Items\Weapons\Misc\Cnidrisnack.png" />
