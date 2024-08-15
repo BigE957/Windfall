@@ -298,16 +298,12 @@ namespace Windfall.Content.NPCs.Bosses.TheOrator
                         #region Movement
                         if (aiCounter < 0)
                         {
-                            if (NPC.Center.Y < target.Center.Y - 250)
-                                NPC.velocity.Y++;
-                            else
-                                NPC.velocity.Y--;
-                            if (NPC.Center.X < target.Center.X)
-                                NPC.velocity.X++;
-                            else
-                                NPC.velocity.X--;
-                            if (NPC.velocity.Length() > 15)
-                                NPC.velocity = NPC.velocity.SafeNormalize(Vector2.Zero) * 15;
+                            Vector2 homeIn = (target.Center + (Vector2.UnitY * -250)) - NPC.Center;
+                            float velocity = 60;
+                            homeIn.Normalize();
+                            NPC.velocity = (NPC.velocity * velocity + homeIn * 18f) / (velocity + 1f);
+                            if (NPC.Center.Y > target.Center.Y - 250)
+                                NPC.velocity.Y -= 0.25f;
                         }
                         else
                         {
@@ -465,6 +461,8 @@ namespace Windfall.Content.NPCs.Bosses.TheOrator
                     float velo = 60;
                     homeInV.Normalize();
                     NPC.velocity = (NPC.velocity * velo + homeInV * 18f) / (velo + 1f);
+                    if (NPC.Center.Y > target.Center.Y - 250)
+                        NPC.velocity.Y -= 0.25f;
                     #endregion
                     #region Projectiles
                     if (aiCounter > 120 && NPC.Center.Y < target.Center.Y - 50)
@@ -501,7 +499,8 @@ namespace Windfall.Content.NPCs.Bosses.TheOrator
 
                     }
                     #endregion
-                    if(aiCounter > 720)
+                    #region Attack Shift
+                    if (aiCounter > 720)
                     {
                         attackCounter = 0;
                         if ((float)NPC.life / (float)NPC.lifeMax <= 0.66f)
@@ -516,6 +515,7 @@ namespace Windfall.Content.NPCs.Bosses.TheOrator
                             AIState = States.DarkBarrage;
                         }
                     }
+                    #endregion
                     break;
                 case States.DarkCollision:
                     target = Main.player[Player.FindClosest(NPC.Center, NPC.width, NPC.height)];
@@ -1430,7 +1430,7 @@ namespace Windfall.Content.NPCs.Bosses.TheOrator
             }
 
             // Test Drop for not letting Orator heal
-            npcLoot.DefineConditionalDropSet(WindfallConditions.OratorNeverHeal).Add(ModContent.ItemType<DeepSeekerStaff>());
+            npcLoot.DefineConditionalDropSet(WindfallConditions.OratorNeverHeal).Add(ModContent.ItemType<ShadowHandStaff>());
 
             // Trophy
             npcLoot.Add(ItemID.AncientCultistTrophy, 10);
