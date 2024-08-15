@@ -11,11 +11,9 @@ namespace Windfall.Content.World
 {
     public static class LunarCultBase
     {
-        public static bool ShouldAvoidLocation(Point placementPoint, bool careAboutLava = true)
+        public static bool ShouldAvoidLocation(Point placementPoint, bool careAboutMushroom = false)
         {
             Tile tile = CalamityUtils.ParanoidTileRetrieval(placementPoint.X, placementPoint.Y);
-            if (tile.LiquidType == LiquidID.Lava && careAboutLava)
-                return true;
 
             if (tile.TileType == TileID.BlueDungeonBrick ||
             tile.TileType == TileID.GreenDungeonBrick ||
@@ -80,7 +78,7 @@ namespace Windfall.Content.World
                 {
                     for (int y = placementPoint.Y - 20; y < placementPoint.Y + schematicSize.Y + 20; y++)
                     {
-                        if (ShouldAvoidLocation(new Point(x, y), false))
+                        if (ShouldAvoidLocation(new Point(x, y), tries > 5000))
                             canGenerateInLocation = false;
                     }
                 }
