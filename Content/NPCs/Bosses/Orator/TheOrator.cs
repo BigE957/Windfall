@@ -225,41 +225,41 @@ namespace Windfall.Content.NPCs.Bosses.TheOrator
                     if (NPC.velocity.Length() > 15)
                         NPC.velocity = NPC.velocity.SafeNormalize(Vector2.Zero) * 15;
                     #endregion                   
-                    NPC.DR_NERD(0.1f + (0.1f * Main.npc.Where(n => n.type == ModContent.NPCType<DarkSpawn>()).Count()));
+                    NPC.DR_NERD(0.1f + (0.1f * Main.npc.Where(n => n.type == ModContent.NPCType<ShadowHand>()).Count()));
                     NPC.damage = 0;
                     const int EndTime = 1500;
                     int SpawnCount = CalamityWorld.death ? 3 : CalamityWorld.revenge || Main.expertMode ? 2 : 1;
-                    if(!CalamityWorld.death && Main.npc.Where(n => n.type == ModContent.NPCType<DarkSpawn>() && n.active).Count() <= SpawnCount + 1)
+                    if(!CalamityWorld.death && Main.npc.Where(n => n.type == ModContent.NPCType<ShadowHand>() && n.active).Count() <= SpawnCount + 1)
                         SpawnCount++;
-                    if (NPC.AnyNPCs(ModContent.NPCType<DarkSpawn>()))
+                    if (NPC.AnyNPCs(ModContent.NPCType<ShadowHand>()))
                     {
                         if (aiCounter > EndTime)
                         {
-                            foreach (NPC spawn in Main.npc.Where(n => n.type == ModContent.NPCType<DarkSpawn>() && n.active))
+                            foreach (NPC spawn in Main.npc.Where(n => n.type == ModContent.NPCType<ShadowHand>() && n.active))
                             {
-                                if (spawn.ModNPC is DarkSpawn darkSpawn)
-                                    darkSpawn.CurrentAI = DarkSpawn.AIState.Sacrifice;
+                                if (spawn.ModNPC is ShadowHand darkSpawn)
+                                    darkSpawn.CurrentAI = ShadowHand.AIState.Sacrifice;
                             }
                             attackCounter = -1;
                         }
                         else if (aiCounter > 150)
                         {
                             attackCounter = 0;
-                            foreach (NPC spawn in Main.npc.Where(n => n.type == ModContent.NPCType<DarkSpawn>() && n.active))
+                            foreach (NPC spawn in Main.npc.Where(n => n.type == ModContent.NPCType<ShadowHand>() && n.active))
                             {
-                                if (spawn.ModNPC is DarkSpawn darkSpawn && darkSpawn.CurrentAI != DarkSpawn.AIState.OnBoss)
+                                if (spawn.ModNPC is ShadowHand darkSpawn && darkSpawn.CurrentAI != ShadowHand.AIState.OnBoss)
                                     attackCounter++;
                             }
                             if (attackCounter < SpawnCount)
-                                foreach (NPC spawn in Main.npc.Where(n => n.type == ModContent.NPCType<DarkSpawn>() && n.active))
+                                foreach (NPC spawn in Main.npc.Where(n => n.type == ModContent.NPCType<ShadowHand>() && n.active))
                                 {
                                     if (attackCounter >= SpawnCount)
                                         break;
-                                    if (spawn.ModNPC is DarkSpawn darkSpawn && darkSpawn.CurrentAI == DarkSpawn.AIState.OnBoss)
+                                    if (spawn.ModNPC is ShadowHand darkSpawn && darkSpawn.CurrentAI == ShadowHand.AIState.OnBoss)
                                     {
                                         Vector2 ToTarget = (target.Center - spawn.Center);
                                         spawn.velocity = ToTarget.SafeNormalize(Vector2.Zero) * -10;
-                                        darkSpawn.CurrentAI = DarkSpawn.AIState.Dashing;
+                                        darkSpawn.CurrentAI = ShadowHand.AIState.Dashing;
                                         spawn.rotation = ToTarget.ToRotation();
                                         attackCounter++;
                                     }
@@ -460,16 +460,10 @@ namespace Windfall.Content.NPCs.Bosses.TheOrator
                     int AttackFrequency = CalamityWorld.death ? 10 : CalamityWorld.revenge ? 12 : Main.expertMode ? 14 : 16;
                     target = Main.player[Player.FindClosest(NPC.Center, NPC.width, NPC.height)];
                     #region Movement
-                    if (NPC.Center.Y < target.Center.Y - 250)
-                        NPC.velocity.Y++;
-                    else
-                        NPC.velocity.Y--;
-                    if (NPC.Center.X < target.Center.X)
-                        NPC.velocity.X++;
-                    else
-                        NPC.velocity.X--;
-                    if (NPC.velocity.Length() > 15)
-                        NPC.velocity = NPC.velocity.SafeNormalize(Vector2.Zero) * 15;
+                    Vector2 homeInV = (target.Center + (Vector2.UnitY * -250)) - NPC.Center;
+                    float velo = 60;
+                    homeInV.Normalize();
+                    NPC.velocity = (NPC.velocity * velo + homeInV * 18f) / (velo + 1f);
                     #endregion
                     #region Projectiles
                     if (aiCounter > 120 && NPC.Center.Y < target.Center.Y - 50)
@@ -1294,16 +1288,9 @@ namespace Windfall.Content.NPCs.Bosses.TheOrator
                     break;
                 case States.PhaseChange:
                     #region Movement
-                    if (NPC.Center.Y < target.Center.Y - 175)
-                        NPC.velocity.Y++;
-                    else
-                        NPC.velocity.Y--;
-                    if (NPC.Center.X < target.Center.X)
-                        NPC.velocity.X++;
-                    else
-                        NPC.velocity.X--;
-                    if (NPC.velocity.Length() > 15)
-                        NPC.velocity = NPC.velocity.SafeNormalize(Vector2.Zero) * 15;
+                    homeInV = (target.Center + (Vector2.UnitY * -250)) - NPC.Center;
+                    homeInV.Normalize();
+                    NPC.velocity = (NPC.velocity * 40f + homeInV * 18f) / 41f;
                     #endregion
                     NPC.damage = 0;
                     #region Dialogue and Events

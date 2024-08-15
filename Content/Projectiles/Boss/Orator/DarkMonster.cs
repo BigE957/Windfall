@@ -132,7 +132,7 @@ namespace Windfall.Content.Projectiles.Boss.Orator
                         if (NPC.FindFirstNPC(ModContent.NPCType<TheOrator>()) != -1)
                             Orator = Main.npc[NPC.FindFirstNPC(ModContent.NPCType<TheOrator>())];
                         if (Orator != null && Orator.ai[0] == 2 && (float)Orator.life / (float)Orator.lifeMax > 0.1f)
-                            NPC.NewNPC(Terraria.Entity.GetSource_NaturalSpawn(), (int)Projectile.Center.X, (int)Projectile.Center.Y, ModContent.NPCType<DarkSpawn>());
+                            NPC.NewNPC(Terraria.Entity.GetSource_NaturalSpawn(), (int)Projectile.Center.X, (int)Projectile.Center.Y, ModContent.NPCType<ShadowHand>());
                     }
 
                     for (int i = 0; i < 24; i++)

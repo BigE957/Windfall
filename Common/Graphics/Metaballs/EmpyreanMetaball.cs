@@ -1,4 +1,6 @@
-﻿using CalamityMod.Graphics.Metaballs;
+﻿using CalamityMod.Buffs.StatDebuffs;
+using CalamityMod.Graphics.Metaballs;
+using Windfall.Content.NPCs.Bosses.TheOrator;
 using Windfall.Content.Projectiles.Boss.Orator;
 
 namespace Windfall.Common.Graphics.Metaballs
@@ -54,7 +56,17 @@ namespace Windfall.Common.Graphics.Metaballs
         } = [];
 
         // Check if there are any extraneous particles or if the Gruesome Eminence projectile is present when deciding if this particle should be drawn.
-        public override bool AnythingToDraw => EmpyreanParticles.Count != 0 || EmpyreanStickyParticles.Count != 0 || AnyProjectiles(ModContent.ProjectileType<DarkGlob>()) || AnyProjectiles(ModContent.ProjectileType<DarkMonster>()) || AnyProjectiles(ModContent.ProjectileType<EmpyreanThorn>()) || AnyProjectiles(ModContent.ProjectileType<DarkCoalescence>()) || AnyProjectiles(ModContent.ProjectileType<OratorBorder>()) || AnyProjectiles(ModContent.ProjectileType<DarkTide>());
+        public override bool AnythingToDraw =>
+            EmpyreanParticles.Count != 0 ||
+            EmpyreanStickyParticles.Count != 0 ||
+            AnyProjectiles(ModContent.ProjectileType<DarkGlob>()) ||
+            AnyProjectiles(ModContent.ProjectileType<DarkMonster>()) ||
+            AnyProjectiles(ModContent.ProjectileType<EmpyreanThorn>()) ||
+            AnyProjectiles(ModContent.ProjectileType<DarkCoalescence>()) ||
+            AnyProjectiles(ModContent.ProjectileType<OratorBorder>()) ||
+            AnyProjectiles(ModContent.ProjectileType<DarkTide>()) ||
+            NPC.AnyNPCs(ModContent.NPCType<ShadowHand>())
+        ;
 
         public override IEnumerable<Texture2D> Layers
         {
@@ -184,6 +196,11 @@ namespace Windfall.Common.Graphics.Metaballs
                     c.A = 0;
                     p.ModProjectile.PreDraw(ref c);
                 }
+            }
+            foreach (NPC n in Main.npc.Where(n => n.active && n.type == ModContent.NPCType<ShadowHand>()))
+            {
+                Vector2 drawPosition = n.Center - Main.screenPosition;
+                n.As<ShadowHand>().DrawSelf(drawPosition, n.GetAlpha(Color.White), n.rotation);
             }
         }
     }

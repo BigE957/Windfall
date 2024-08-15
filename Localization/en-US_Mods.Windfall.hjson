@@ -1513,7 +1513,7 @@ NPCs: {
 	RecruitableLunarCultist.DisplayName: Goober
 	OratorNPC.DisplayName: Orator N P C
 	GodseekerKnight.DisplayName: Godseeker Knight
-	DarkSpawn.DisplayName: Dark Spawn
+	ShadowHand.DisplayName: Shadow Hand
 	SealingTablet.DisplayName: Sealing Tablet
 	DragonCultist.DisplayName: Dragon Cultist
 	DragonArcher.DisplayName: Dragon Archer
@@ -1694,7 +1694,7 @@ Bestiary: {
 	IlmeranPaladin: One of few to have survived the Incineration of Ilmeris, this paladin wanders the remnants of Ilmeris; keeping an eternal vigil over the sands of his former home.
 	TravellingCultist: A strange fellow who's recently begun showing up out of nowhere. He claims to want to fight against the Lunar Cult, but can he really be trusted...?
 	TheOrator: The enigmatic leader of the Lunar Cult, the Orator's motives are unknown, however, their cult has now succeeded in their goal. The titan responsible for the Dragons' extinction now descends upon the world...
-	DarkSpawn: These spawn ripped from another dimension are drawn to the Orator, and defend them unwaveringly. However, this seems to be but the floor of what the Orator is capable of with this strange power they wield.
+	ShadowHand: The strange matter the Orator wields traces its origins to the Distortion. How he manages to handle such potent, otherworldly power is unknown, but that which he is able to conjure through it is all the proof one needs to see the mastery he has attained.
 }
 
 ModCompat: {

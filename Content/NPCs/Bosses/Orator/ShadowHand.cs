@@ -1,18 +1,21 @@
 ﻿using CalamityMod.World;
+using Microsoft.Xna.Framework.Graphics;
+using Terraria;
 using Terraria.GameContent.Bestiary;
 using Windfall.Common.Graphics.Metaballs;
 using Windfall.Common.Systems;
 using Windfall.Common.Utils;
-using Windfall.Content.NPCs.WanderingNPCs;
 using Windfall.Content.Projectiles.Boss.Orator;
 
 namespace Windfall.Content.NPCs.Bosses.TheOrator
 {
-    public class DarkSpawn : ModNPC
+    public class ShadowHand : ModNPC
     {
-        public override string Texture => "Windfall/Assets/NPCs/Enemies/DarkSpawn";
+        public override string Texture => "Windfall/Assets/NPCs/Enemies/ShadowHand";
         public override void SetStaticDefaults()
         {
+            Main.npcFrameCount[Type] = 6;
+
             NPCID.Sets.NPCBestiaryDrawModifiers drawModifiers = new()
             {
                 Velocity = 1f,
@@ -23,13 +26,12 @@ namespace Windfall.Content.NPCs.Bosses.TheOrator
         public override void SetBestiary(BestiaryDatabase database, BestiaryEntry bestiaryEntry)
         {
             bestiaryEntry.Info.AddRange(new IBestiaryInfoElement[] {
-			new FlavorTextBestiaryInfoElement(GetWindfallTextValue($"Bestiary.{nameof(DarkSpawn)}")),
+			new FlavorTextBestiaryInfoElement(GetWindfallTextValue($"Bestiary.{nameof(ShadowHand)}")),
         });
         }
         public override void SetDefaults()
         {
-            NPC.width = 78;
-            NPC.height = 50;
+            NPC.width = NPC.height = 64;
             NPC.damage = StatCorrections.ScaleContactDamage(Main.masterMode ? 500 : CalamityWorld.death ? 420 : CalamityWorld.revenge ? 350 : Main.expertMode ? 240 : 180);
             NPC.defense = 100;
             NPC.noGravity = true;
@@ -72,7 +74,8 @@ namespace Windfall.Content.NPCs.Bosses.TheOrator
             CurrentAI = AIState.Spawning;
             NPC.velocity = Main.rand.NextFloat(0, TwoPi).ToRotationVector2() * Main.rand.Next(10, 15);
             NPC.rotation = NPC.velocity.ToRotation();
-
+            for (int i = 0; i <= 20; i++)
+                EmpyreanMetaball.SpawnDefaultParticle(NPC.Center, Main.rand.NextVector2Circular(7f, 7f), 40 * Main.rand.NextFloat(1.5f, 2.3f));
         }
         bool movingBackward = false;
         public override void AI()
@@ -93,12 +96,12 @@ namespace Windfall.Content.NPCs.Bosses.TheOrator
             }
             
             #region Despawning
-                if (Orator == null)
+            if (Orator == null)
             {
                 toTarget = target.Center - NPC.Center;
                 NPC.velocity -= toTarget.SafeNormalize(Vector2.UnitX);
-                NPC.rotation = (target.Center - NPC.Center).ToRotation() + Pi;
-                NPC.spriteDirection = NPC.direction * -1;
+                //NPC.rotation = (target.Center - NPC.Center).ToRotation() + Pi;
+                //NPC.spriteDirection = NPC.direction * -1;
                 if (toTarget.Length() > 800)
                     NPC.active = false;
                 return;
@@ -113,14 +116,14 @@ namespace Windfall.Content.NPCs.Bosses.TheOrator
             
             //testing code :P
             //if (CurrentAI == AIState.OnBoss || CurrentAI == AIState.Spawning)
-               //CurrentAI = AIState.Hunting;
-            
+            //   CurrentAI = AIState.Hunting;
+
             switch (CurrentAI)
             {
                 case AIState.Spawning:
                     NPC.velocity += NPC.velocity.SafeNormalize(Vector2.UnitX) / -2;
                     int dustStyle = Main.rand.NextBool() ? 66 : 263;
-                    Dust dust = Dust.NewDustPerfect(NPC.Center, Main.rand.NextBool(3) ? 191 : dustStyle);
+                    Dust dust = Dust.NewDustPerfect(NPC.Center + (Vector2.UnitY * Main.rand.NextFloat(-16, 16)) + new Vector2(-54, 0).RotatedBy(NPC.rotation), Main.rand.NextBool(3) ? 191 : dustStyle);
                     dust.scale = Main.rand.NextFloat(1.5f, 2.3f);
                     dust.noGravity = true;
                     dust.color = dust.type == dustStyle ? Color.LightGreen : default;
@@ -245,9 +248,7 @@ namespace Windfall.Content.NPCs.Bosses.TheOrator
                         SoundEngine.PlaySound(SoundID.DD2_LightningBugZap, NPC.Center);
                         Vector2 myAngle = baseAngle.SafeNormalize(Vector2.UnitX).RotatedBy(rotation * Math.Ceiling((double)aiCounter / 5));
                         for (int i = 0; i < 10; i++)
-                        {
                             EmpyreanMetaball.SpawnDefaultParticle(NPC.Center + (myAngle * 40), myAngle.RotatedByRandom(Pi/6) * Main.rand.NextFloat(0f, 15f), 20 * Main.rand.NextFloat(1f, 2f));
-                        }
                         if(Main.netMode != NetmodeID.MultiplayerClient)
                             Projectile.NewProjectile(Terraria.Entity.GetSource_NaturalSpawn(), NPC.Center, myAngle * 15, ModContent.ProjectileType<DarkGlob>(), TheOrator.GlobDamage, 0f, -1, 1, 0.5f);
                     }
@@ -261,12 +262,12 @@ namespace Windfall.Content.NPCs.Bosses.TheOrator
                     {
                         NPC.velocity = NPC.velocity.RotateTowards((target.Center - NPC.Center).ToRotation(), 0.02f);
                         NPC.rotation = NPC.velocity.ToRotation();
-                    }
-                    dustStyle = Main.rand.NextBool() ? 66 : 263;
-                    dust = Dust.NewDustPerfect(NPC.Center - NPC.rotation.ToRotationVector2() * 20, Main.rand.NextBool(3) ? 191 : dustStyle);
-                    dust.scale = Main.rand.NextFloat(1.5f, 2.3f);
-                    dust.noGravity = true;
-                    dust.color = dust.type == dustStyle ? Color.LightGreen : default;
+                        dustStyle = Main.rand.NextBool() ? 66 : 263;
+                        dust = Dust.NewDustPerfect(NPC.Center + (Vector2.UnitY * Main.rand.NextFloat(-16, 16)) + new Vector2(-54, 0).RotatedBy(NPC.rotation), Main.rand.NextBool(3) ? 191 : dustStyle);
+                        dust.scale = Main.rand.NextFloat(1.5f, 2.3f);
+                        dust.noGravity = true;
+                        dust.color = dust.type == dustStyle ? Color.LightGreen : default;
+                    }                    
                     if (NPC.velocity.Length() < 2)
                     {
                         CurrentAI = AIState.Hunting;
@@ -294,28 +295,27 @@ namespace Windfall.Content.NPCs.Bosses.TheOrator
                         if (Orator.ModNPC is TheOrator orator)
                             TheOrator.noSpawnsEscape = false;
                         SoundEngine.PlaySound(SoundID.AbigailUpgrade, NPC.Center);
+                        for (int i = 0; i <= 20; i++)
+                            EmpyreanMetaball.SpawnDefaultParticle(NPC.Center, Main.rand.NextVector2Circular(6f, 6f), 40 * Main.rand.NextFloat(1.5f, 2.3f));
                         NPC.active = false;
                     }
                     #endregion
 
                     break;
             }
-            aiCounter++; 
+            aiCounter++;
+
+            EmpyreanMetaball.SpawnDefaultParticle(NPC.Center + new Vector2(-32, 0).RotatedBy(NPC.rotation), Vector2.UnitX.RotatedBy(NPC.rotation) * -8, NPC.scale * 34);
+            if(Main.rand.NextBool(3))
+                EmpyreanMetaball.SpawnDefaultParticle(NPC.Center + Main.rand.NextVector2Circular(2, 2) + new Vector2(-32, 0).RotatedBy(NPC.rotation), Vector2.UnitX.RotatedBy(NPC.rotation + Main.rand.NextFloat(-0.5f, 0.5f)) * -Main.rand.NextFloat(6f, 8f), NPC.scale * Main.rand.NextFloat(30f, 40f));
             Lighting.AddLight(NPC.Center, new Vector3(0.32f, 0.92f, 0.71f));
         }
         public override void OnKill()
         {
             for (int i = 0; i <= 25; i++)
-            {
-                int dustStyle = Main.rand.NextBool() ? 66 : 263;
-                Dust dust = Dust.NewDustPerfect(NPC.Center, Main.rand.NextBool(3) ? 191 : dustStyle);
-                dust.scale = Main.rand.NextFloat(1.5f, 2.3f);
-                dust.velocity = Main.rand.NextVector2Circular(10f, 10f);
-                dust.noGravity = true;
-                dust.color = dust.type == dustStyle ? Color.LightGreen : default;
-            }
+                EmpyreanMetaball.SpawnDefaultParticle(NPC.Center, Main.rand.NextVector2Circular(8f, 8f), 40 * Main.rand.NextFloat(1.75f, 2.5f));
         }
-        /*
+        
         public override void FindFrame(int frameHeight)
         {
             NPC.frameCounter++;
@@ -326,21 +326,20 @@ namespace Windfall.Content.NPCs.Bosses.TheOrator
                 if (NPC.frame.Y >= frameHeight * 4)
                     NPC.frame.Y = 0;
             }
-        }
-        */
+        }      
         public override bool CheckActive() => false;
-        public override bool PreDraw(SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor)
+        public override bool PreDraw(SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor) => false;
+        public void DrawSelf(Vector2 drawPosition, Color color, float rotation)
         {
             Texture2D texture = TextureAssets.Npc[NPC.type].Value;
-            Vector2 halfSizeTexture = new(TextureAssets.Npc[NPC.type].Value.Width / 2, TextureAssets.Npc[NPC.type].Value.Height / Main.npcFrameCount[NPC.type] / 2);
-            Vector2 drawPosition = new Vector2(NPC.Center.X, NPC.Center.Y) - screenPos;
+
             SpriteEffects spriteEffects = SpriteEffects.None;
             if (!(NPC.rotation + Pi > Pi / 2 && NPC.rotation + Pi < 3 * Pi / 2) && CurrentAI != AIState.Globbing)
                 spriteEffects = SpriteEffects.FlipVertically;
-            if(attackBool && CurrentAI == AIState.Globbing)
+            if (attackBool && CurrentAI == AIState.Globbing)
                 spriteEffects = SpriteEffects.FlipVertically;
-            spriteBatch.Draw(texture, drawPosition, NPC.frame, NPC.GetAlpha(drawColor), NPC.rotation, halfSizeTexture, NPC.scale, spriteEffects, 0f);
-            return false;
+
+            Main.EntitySpriteDraw(texture, drawPosition, NPC.frame, color, rotation, NPC.frame.Size() * 0.5f, NPC.scale / 2f, spriteEffects, 0);
         }
     }
 }
