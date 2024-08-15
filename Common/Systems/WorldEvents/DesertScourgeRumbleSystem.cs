@@ -54,7 +54,7 @@ namespace Windfall.Common.Systems.WorldEvents
                     break;
                 case SystemState.Spawn:
                     ScoogShake(mainPlayer, trueTimer++, 135, Main.rand.NextBool(), 0.25f);
-                    if (trueTimer >= 270)
+                    if (trueTimer >= 270 || !mainPlayer.ZoneDesert)
                         State = SystemState.CheckReqs;
                     break;
             }
