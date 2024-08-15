@@ -1196,7 +1196,7 @@ Items: {
 		Summon: {
 			ShadowHandStaff: {
 				DisplayName: Shadow Hand Staff
-				Tooltip: "Calls forth the darkest of shadows."
+				Tooltip: Calls forth the darkest of shadows.
 			}
 		}
 	}
