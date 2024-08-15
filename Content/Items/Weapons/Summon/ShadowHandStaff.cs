@@ -4,7 +4,7 @@ using Windfall.Content.Projectiles.Weapons.Summon;
 
 namespace Windfall.Content.Items.Weapons.Summon
 {
-    public class DeepSeekerStaff : ModItem, ILocalizedModType
+    public class ShadowHandStaff : ModItem, ILocalizedModType
     {
         public new string LocalizationCategory => "Items.Weapons.Summon";
         public override string Texture => "CalamityMod/Items/Weapons/Magic/TomeofFates";
@@ -12,7 +12,7 @@ namespace Windfall.Content.Items.Weapons.Summon
         {
             Item.width = 28;
             Item.height = 30;
-            Item.damage = 160;
+            Item.damage = 280;
             Item.mana = 10;
             Item.useTime = Item.useAnimation = 34;
             Item.useStyle = ItemUseStyleID.HoldUp;
@@ -22,7 +22,7 @@ namespace Windfall.Content.Items.Weapons.Summon
             Item.rare = ItemRarityID.Red;
             Item.UseSound = SoundID.Item103;
             Item.autoReuse = true;
-            Item.shoot = ModContent.ProjectileType<DeepSeeker>();
+            Item.shoot = ModContent.ProjectileType<ShadowHand_Minion>();
             Item.shootSpeed = 10f;
             Item.DamageType = DamageClass.Summon;
         }
