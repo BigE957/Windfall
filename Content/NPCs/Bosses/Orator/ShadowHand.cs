@@ -226,7 +226,7 @@ namespace Windfall.Content.NPCs.Bosses.TheOrator
                     if (NPC.velocity.Length() < 2)
                     {
                         SoundEngine.PlaySound(SoundID.DD2_GoblinBomberThrow, NPC.Center);
-                        NPC.velocity = NPC.velocity.SafeNormalize(Vector2.Zero) * -30;
+                        NPC.velocity = NPC.velocity.SafeNormalize(Vector2.Zero) * -36;
                         CurrentAI = AIState.Recoil;
                     }
                     break;
