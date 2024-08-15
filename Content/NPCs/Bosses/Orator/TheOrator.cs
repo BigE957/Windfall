@@ -12,6 +12,7 @@ using Terraria.GameContent.Bestiary;
 using Terraria;
 using Windfall.Content.Skies;
 using Terraria.Graphics.Effects;
+using CalamityMod.Items.LoreItems;
 
 namespace Windfall.Content.NPCs.Bosses.TheOrator
 {
@@ -1439,6 +1440,7 @@ namespace Windfall.Content.NPCs.Bosses.TheOrator
 
             //Lore
             npcLoot.AddConditionalPerPlayer(() => !DownedNPCSystem.downedOrator, ModContent.ItemType<OraLore>(), desc: DropHelper.FirstKillText);
+            npcLoot.AddConditionalPerPlayer(() => !DownedNPCSystem.downedOrator, ModContent.ItemType<LorePrelude>(), desc: DropHelper.FirstKillText);
         }
         public override bool CheckActive() => false;
         internal static void DisplayMessage(string key, NPC NPC)
