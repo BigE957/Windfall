@@ -1,5 +1,6 @@
 ﻿using Windfall.Common.Systems;
 using Windfall.Content.NPCs.WorldEvents.DragonCult;
+using static Windfall.Common.Systems.WorldEvents.LunarCultActivitySystem;
 
 namespace Windfall.Content.Tiles
 {
@@ -67,6 +68,35 @@ namespace Windfall.Content.Tiles
             }
             NPC.NewNPCDirect(Entity.GetSource_NaturalSpawn(), Cultist2Coords, ModContent.NPCType<DragonArcher>(), 0, 1);
 
+        }
+        public override bool CanExplode(int i, int j, int type)
+        {
+            if (CultBaseArea.Intersects(new(i, j, 1, 1)) || CultBaseBridgeArea.Intersects(new(i, j, 1, 1)))
+                return false;
+
+            return base.CanExplode(i, j, type);
+        }
+
+        public override bool CanKillTile(int i, int j, int type, ref bool blockDamaged)
+        {
+            if (CultBaseArea.Intersects(new(i, j, 1, 1)) || CultBaseBridgeArea.Intersects(new(i, j, 1, 1)))
+                return false;
+
+            return base.CanKillTile(i, j, type, ref blockDamaged);
+        }
+
+        public override bool CanReplace(int i, int j, int type, int tileTypeBeingPlaced)
+        {
+            if (CultBaseArea.Intersects(new(i, j, 1, 1)) || CultBaseBridgeArea.Intersects(new(i, j, 1, 1)))
+                return false;
+
+            return base.CanPlace(i, j, type);
+        }
+        public override void NearbyEffects(int i, int j, int type, bool closer)
+        {
+            bool tombstonesShouldSpontaneouslyCombust = CultBaseArea.Intersects(new(i, j, 16, 16)) || CultBaseBridgeArea.Intersects(new(i, j, 16, 16));
+            if (tombstonesShouldSpontaneouslyCombust && type is TileID.Tombstones)
+                WorldGen.KillTile(i, j);
         }
     }
 }

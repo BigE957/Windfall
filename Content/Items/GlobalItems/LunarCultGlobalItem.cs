@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Windfall.Common.Systems.WorldEvents;
+﻿using static Windfall.Common.Systems.WorldEvents.LunarCultActivitySystem;
 
 namespace Windfall.Content.Items.GlobalItems
 {
@@ -16,8 +11,22 @@ namespace Windfall.Content.Items.GlobalItems
 
         public override void OnCreated(Item item, ItemCreationContext context)
         {
-            madeDuringCafeteriaActivity = LunarCultActivitySystem.IsCafeteriaActivityActive();
-            madeDuringTailorActivity = LunarCultActivitySystem.IsCafeteriaActivityActive();
+            madeDuringCafeteriaActivity = IsCafeteriaActivityActive();
+            madeDuringTailorActivity = IsCafeteriaActivityActive();
+        }
+
+        public override bool CanUseItem(Item item, Player player)
+        {            
+            bool inCultBase = CultBaseArea.Contains(player.Hitbox);
+            bool illegalCultBaseItem = item.type is ItemID.Sandgun or ItemID.DirtBomb or ItemID.DirtStickyBomb or ItemID.DryBomb;
+            if (illegalCultBaseItem && inCultBase)
+                return false;
+
+            //CultBaseArea.Inflate(2, 2);
+            if ((item.createTile != -1 || item.createWall != -1) && (CultBaseArea.Contains(player.Calamity().mouseWorld.ToPoint())))
+                return false;
+
+            return base.CanUseItem(item, player);
         }
     }
 }
