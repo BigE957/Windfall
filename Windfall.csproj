@@ -15,6 +15,13 @@
     <None Remove="Assets\Items\Debug\DraeDashGiftCard.png" />
     <None Remove="Assets\Items\Debug\SuperCnidrisnack_Glow.png" />
     <None Remove="Assets\Items\Debug\TheZoomer.png" />
+    <None Remove="Assets\Items\Food\AbyssalInkpasta.png" />
+    <None Remove="Assets\Items\Food\AzafurianPallela.png" />
+    <None Remove="Assets\Items\Food\EbonianCheddarboard.png" />
+    <None Remove="Assets\Items\Food\EutrophicClamChowder.png" />
+    <None Remove="Assets\Items\Food\friedToxicatfishsandwich.png" />
+    <None Remove="Assets\Items\Food\glimmeringNigiri.png" />
+    <None Remove="Assets\Items\Food\LemonButterHermititanLegs.png" />
     <None Remove="Assets\Items\Lore\OraLore.png" />
     <None Remove="Assets\Items\Quest\DeificInsignia.png" />
     <None Remove="Assets\Items\Quest\DraconicBone.png" />

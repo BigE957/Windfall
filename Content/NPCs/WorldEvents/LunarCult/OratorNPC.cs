@@ -22,6 +22,7 @@ namespace Windfall.Content.NPCs.WorldEvents.LunarCult
             NPCID.Sets.ActsLikeTownNPC[Type] = true;
             Main.npcFrameCount[Type] = 1;
             NPCID.Sets.NoTownNPCHappiness[Type] = true;
+            ModContent.GetInstance<DialogueUISystem>().DialogueClose += CloseEffect;
         }
         public override void SetDefaults()
         {
@@ -46,6 +47,15 @@ namespace Windfall.Content.NPCs.WorldEvents.LunarCult
                 ModContent.GetInstance<DialogueUISystem>().DisplayDialogueTree(AIState.ToString());
 
             return "In the Cult Base, straight Orating it. And by it i mean, lets just say, my Tablet";
+        }
+        private void CloseEffect(string treeKey, int dialogueID, int buttonID)
+        {
+            if (treeKey == States.TutorialChat.ToString())
+            {
+                NPC orator = Main.npc.First(n => n.active && n.type == ModContent.NPCType<OratorNPC>() && n.ai[0] == (int)States.TutorialChat);
+                LunarCultActivitySystem.TutorialComplete = true;
+                orator.ai[0] = 0;
+            }
         }
     }
 }

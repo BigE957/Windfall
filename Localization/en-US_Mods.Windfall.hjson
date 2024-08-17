@@ -75,16 +75,21 @@ Dialogue: {
 				1: As this is your first time here, I only ask that you become aclimated to this new environment, as in the future, you'll be working alongside us in the up keep of our community and in furthering our goals. There's a few people you especially should meet, such as our [c/FFFF00:Chef] and the [c/FFFF00:Seamstress], as you'll be working with them both.
 				2: The Chef is in charge of our very own cafeteria, and provides a wide array of meals for our members. You may be called upon to help him in serving food.
 				3: The Seamstress is responsible for the creation of all our members' garments. From robes to masks, she handles it all. You may be called upon to help her in making these clothes.
-				4: I believe that is all then! I do hope this will be a fruitful arrangement for the both of us.
-				5: ...
-				6: Oh... one other thing.
-				7: Do not go in the basement.
-				8: That is all.
+				4: Is there anyone else you'd like to know about? Getting to know those around you will be vital in becoming a part of the team!
+				5: Me? Haha, I should have expected that I suppose.
+				6: I believe that is all then! I do hope this will be a fruitful arrangement for the both of us.
+				7: ...
+				8: Oh... one other thing.
+				9: Do not go in the basement.
+				10: That is all.
 			}
 
 			Responses: {
-				lol: lol
-				lmao: lmao
+				Chef: The Chef?
+				Seamstress: Seamstress?
+				IC: I see...
+				You: What about you?
+				No: Don't think so.
 			}
 		}
 	}
@@ -1628,6 +1633,41 @@ Items: {
 				Its whispers promise Power to those willing to drink of it.
 				'''
 		}
+	}
+
+	AbyssalInkPasta: {
+		DisplayName: Abyssal Ink Pasta
+		Tooltip: ""
+	}
+
+	AzafurianPallela: {
+		DisplayName: Azafurian Pallela
+		Tooltip: ""
+	}
+
+	EbonianCheddarBoard: {
+		DisplayName: Ebonian Cheddar Board
+		Tooltip: ""
+	}
+
+	EutrophicClamChowder: {
+		DisplayName: Eutrophic Clam Chowder
+		Tooltip: ""
+	}
+
+	FriedToxicatfishSandwich: {
+		DisplayName: Fried Toxicatfish Sandwich
+		Tooltip: ""
+	}
+
+	GlimmeringNigiri: {
+		DisplayName: Glimmering Nigiri
+		Tooltip: ""
+	}
+
+	LemonButterHermititanLegs: {
+		DisplayName: Lemon Butter Hermititan Legs
+		Tooltip: ""
 	}
 }
 

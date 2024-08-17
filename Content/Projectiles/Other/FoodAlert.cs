@@ -94,7 +94,8 @@ namespace Windfall.Content.Projectiles.Other
             Vector2 origin = texture.Size() / 2f;
             Main.EntitySpriteDraw(texture, position, new Rectangle(0, 0, texture.Width, texture.Height), lightColor * endFade, Projectile.rotation, origin, Projectile.scale, spriteEffects, 0);
 
-            texture = ModContent.Request<Texture2D>($"Terraria/Images/Item_{FoodID}").Value;
+            Item item = new(FoodID);
+            texture = TextureAssets.Item[FoodID].Value;
             float width = texture.Width;
             if (Obfuscation == ObfuscateType.Sliced)
             {               
@@ -105,7 +106,7 @@ namespace Windfall.Content.Projectiles.Other
                 if (width < 1)
                     return false;
             }
-            Rectangle source = new(0, 0, (int)width, texture.Height / 3);
+            Rectangle source = new(0, 0, (int)width, texture.Height / (ItemID.Sets.IsFood[FoodID] ? 3 : 1));
             Texture2D FramedTexture = new(Main.graphics.GraphicsDevice, source.Width, source.Height);
             if (Obfuscation == ObfuscateType.Darkened)
             {

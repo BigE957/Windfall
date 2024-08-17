@@ -28,7 +28,7 @@ namespace Windfall.Content.NPCs.WorldEvents.LunarCult
             //NPCID.Sets.ActsLikeTownNPC[Type] = true;
             Main.npcFrameCount[Type] = 1;
             NPCID.Sets.NoTownNPCHappiness[Type] = true;
-            ModContent.GetInstance<DialogueUISystem>().ButtonClick += ClickEffect;
+            ModContent.GetInstance<DialogueUISystem>().DialogueClose += CloseEffect;
         }
         public override void SetDefaults()
         {
@@ -166,15 +166,10 @@ namespace Windfall.Content.NPCs.WorldEvents.LunarCult
             }
             return "Rizz"; //Won't actually be seen.
         }
-        public override bool CheckActive()
+        public override bool CheckActive() => false;
+        private void CloseEffect(string treeKey, int dialogueID, int buttonID)
         {
-            if (AIState == States.Idle || AIState == States.CafeteriaEvent)
-                return false;
-            return true;
-        }
-        private void ClickEffect(string treeKey, int dialogueID, int buttonID)
-        {
-            if (treeKey == States.SelenicChat.ToString() && dialogueID == 6)
+            if (treeKey == States.SelenicChat.ToString())
             {
                 NPC bishop = Main.npc.First(n => n.active && n.type == ModContent.NPCType<LunarBishop>() && n.ai[2] == (int)States.SelenicChat);
                 bishop.As<LunarBishop>().Despawn();

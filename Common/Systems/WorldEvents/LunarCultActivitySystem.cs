@@ -5,6 +5,7 @@ using Terraria.Enums;
 using Terraria.ModLoader.IO;
 using Terraria.Utilities;
 using Windfall.Common.Graphics.Metaballs;
+using Windfall.Content.Items.Food;
 using Windfall.Content.Items.Quest;
 using Windfall.Content.NPCs.WanderingNPCs;
 using Windfall.Content.NPCs.WorldEvents.LunarCult;
@@ -37,6 +38,8 @@ namespace Windfall.Common.Systems.WorldEvents
             Recruits = [];
 
             AvailableTopics = [];
+
+            CustomerQueue = [];
 
             TutorialComplete = false;
 
@@ -114,12 +117,13 @@ namespace Windfall.Common.Systems.WorldEvents
         public static List<Customer?> CustomerQueue = [];
         public static List<int> MenuFoodIDs =
         [
-            ItemID.PadThai,
-            ItemID.Ale,
-            ItemID.BowlofSoup,
-            ItemID.AppleJuice,
-            ItemID.Escargot,
-            ItemID.FruitSalad,
+            ModContent.ItemType<AbyssalInkPasta>(),
+            ModContent.ItemType<AzafurianPallela>(),
+            ModContent.ItemType<EbonianCheddarBoard>(),
+            ModContent.ItemType<EutrophicClamChowder>(),
+            ModContent.ItemType<FriedToxicatfishSandwich>(),
+            ModContent.ItemType<GlimmeringNigiri>(),
+            ModContent.ItemType<LemonButterHermititanLegs>(),
 
         ];
         public static int SatisfiedCustomers = 0;
@@ -134,6 +138,8 @@ namespace Windfall.Common.Systems.WorldEvents
         }
         public override void PreUpdateWorld()
         {
+            if (DownedNPCSystem.downedOrator)
+                return;
             //Main.NewText(Main.player[0].Center.Y - CultBaseBridgeArea.Center.Y * 16);
             if (NPC.downedPlantBoss)
             {
@@ -196,6 +202,7 @@ namespace Windfall.Common.Systems.WorldEvents
                         #endregion
 
                         ActivityTimer = -1;
+                        return;
                     }
                     else
                     {
@@ -297,10 +304,21 @@ namespace Windfall.Common.Systems.WorldEvents
                     }
                     #endregion
 
-                    ActivityTimer++;
-                    if(State == SystemState.Ready)
-                        ActivityTimer = -1;
+                    #region Camera Setup
+                    if (ActivityTimer < 100)
+                        zoom = Lerp(zoom, 0.4f, 0.075f);
+                    else
+                        zoom = 0.4f;
+                    CameraPanSystem.Zoom = zoom;
+                    CameraPanSystem.PanTowards(new Vector2(ActivityCoords.X, ActivityCoords.Y - 120), zoom);
+                    #endregion
 
+                    ActivityTimer++;
+                    if (State == SystemState.Ready)
+                    {
+                        ActivityTimer = -1;
+                        return;
+                    }
                     break;
                 case SystemState.Ready:     
                     if(ActivityTimer == -1)
@@ -308,12 +326,14 @@ namespace Windfall.Common.Systems.WorldEvents
                         #region Activity Specific Setup
                         if (!TutorialComplete) //Orator Visit
                         {
-                            #region Location Selection
                             ActivityCoords = new Point((CultBaseArea.Right - 11) * 16, (CultBaseArea.Top + 30) * 16);
-                            #endregion
 
                             if (!NPC.AnyNPCs(ModContent.NPCType<OratorNPC>()))
-                                NPC.NewNPC(Entity.GetSource_None(), (CultBaseArea.Right - 11) * 16, (CultBaseArea.Top + 30) * 16, ModContent.NPCType<OratorNPC>());
+                                NPC.NewNPC(Entity.GetSource_None(), (CultBaseArea.Right - 11) * 16, (CultBaseArea.Top + 30) * 16, ModContent.NPCType<OratorNPC>(), ai0: 1);
+                            else
+                                Main.npc[NPC.FindFirstNPC(ModContent.NPCType<OratorNPC>())].ai[0] = 1;
+                            State = SystemState.OratorVisit;
+                            Active = true;
                         }
                         else
                         {
@@ -491,6 +511,13 @@ namespace Windfall.Common.Systems.WorldEvents
                     #endregion
                     break;
                 case SystemState.OratorVisit:
+                    if(TutorialComplete)
+                    {
+                        Active = false;
+                        State = SystemState.End;
+                    }
+                    //else
+                        //Main.npc[NPC.FindFirstNPC(ModContent.NPCType<OratorNPC>())].ai[0] = 1;
                     break;
                 case SystemState.Meeting:                     
                     if (Active)

@@ -158,6 +158,75 @@ namespace Windfall.Content.UI.Dialogue
                     ])
                 },
                 #endregion
+                #region The Orator Trees
+                {
+                    "TutorialChat",
+                    new DialogueTree(
+                    [
+                        new Dialogue
+                        (
+                            musicID: -1
+                        ),
+                        new Dialogue
+                        (
+                            [
+                                new Response("Chef", 2),
+                                new Response("Seamstress", 3),
+                            ]
+                        ),
+                        new Dialogue
+                        (
+                            [
+                                new Response("IC", 4),
+                            ]
+                        ),
+                        new Dialogue
+                        (
+                            [
+                                new Response("IC", 4),
+                            ]
+                        ),
+                        new Dialogue
+                        (
+                            [
+                                new Response("Chef", 2),
+                                new Response("Seamstress", 3),
+                                new Response("You", 5),
+                                new Response("No", 6),
+                            ]
+                        ),
+                        new Dialogue
+                        (
+                            [
+                                new Response("IC", 4)
+                            ]
+                        ),
+                        new Dialogue
+                        (
+                            musicID: -1
+                        ),
+                        new Dialogue
+                        (
+                            musicID: -1
+                        ),
+                        new Dialogue
+                        (
+                            musicID: -1
+                        ),
+                        new Dialogue
+                        (
+                            musicID: -1
+                        ),
+                        new Dialogue
+                        (
+                            musicID: -1
+                        ),
+                    ],
+                    [
+                        Characters[(int)CharacterIDs.TheCalamity]
+                    ])
+                },
+                #endregion
             };
             return dialogueTrees;
         }       
