@@ -1,8 +1,10 @@
 ﻿using Luminance.Core.Graphics;
+using System.IO;
 using Terraria;
 using Terraria.Enums;
 using Terraria.ModLoader.IO;
 using Terraria.Utilities;
+using Windfall.Common.Graphics.Metaballs;
 using Windfall.Content.Items.Quest;
 using Windfall.Content.NPCs.WanderingNPCs;
 using Windfall.Content.NPCs.WorldEvents.LunarCult;
@@ -133,12 +135,31 @@ namespace Windfall.Common.Systems.WorldEvents
         public override void PreUpdateWorld()
         {
             //Main.NewText(Main.player[0].Center.Y - CultBaseBridgeArea.Center.Y * 16);
-
-            State = SystemState.Ready;
-            if (!NPC.AnyNPCs(ModContent.NPCType<Seamstress>()))
-                NPC.NewNPC(Entity.GetSource_None(), (LunarCultBaseLocation.X*16) + 242, (LunarCultBaseLocation.Y*16) + 300, ModContent.NPCType<Seamstress>());
-            if (!NPC.AnyNPCs(ModContent.NPCType<TheChef>()))
-                NPC.NewNPC(Entity.GetSource_None(), (LunarCultBaseLocation.X * 16) - 1040, (LunarCultBaseLocation.Y * 16) - 110, ModContent.NPCType<TheChef>());
+            if (NPC.downedPlantBoss)
+            {
+                if (!NPC.AnyNPCs(ModContent.NPCType<Seamstress>()))
+                    NPC.NewNPC(Entity.GetSource_None(), (LunarCultBaseLocation.X * 16) + 242, (LunarCultBaseLocation.Y * 16) + 300, ModContent.NPCType<Seamstress>());
+                if (!NPC.AnyNPCs(ModContent.NPCType<TheChef>()))
+                    NPC.NewNPC(Entity.GetSource_None(), (LunarCultBaseLocation.X * 16) - 1040, (LunarCultBaseLocation.Y * 16) - 110, ModContent.NPCType<TheChef>());
+                if (!NPC.AnyNPCs(ModContent.NPCType<OratorNPC>()))
+                    NPC.NewNPC(Entity.GetSource_None(), (CultBaseArea.Right - 11) * 16, (CultBaseArea.Top + 30) * 16, ModContent.NPCType<OratorNPC>());
+            }
+            foreach (Player player in Main.player.Where(p => p.active && !p.dead && CultBaseArea.Contains(p.Center.ToTileCoordinates())))
+            {
+                if (player.Center.Y > (LunarCultBaseLocation.Y + 30) * 16)
+                {
+                    for (int i = 0; i <= 20; i++)
+                        EmpyreanMetaball.SpawnDefaultParticle(player.Center, Main.rand.NextVector2Circular(5f, 5f), 30 * Main.rand.NextFloat(1.5f, 2.3f));
+                    player.Teleport(new Vector2((CultBaseArea.Right - 21) * 16, (CultBaseArea.Top + 27) * 16), TeleportationStyleID.DebugTeleport);
+                    SoundEngine.PlaySound(SoundID.Item8, player.Center);
+                    for (int i = 0; i <= 20; i++)
+                        EmpyreanMetaball.SpawnDefaultParticle(player.Center, Main.rand.NextVector2Circular(5f, 5f), 30 * Main.rand.NextFloat(1.5f, 2.3f));
+                    NPC orator = Main.npc[NPC.FindFirstNPC(ModContent.NPCType<OratorNPC>())];
+                    string path = "Dialogue.LunarCult.TheOrator.WorldText.Basement." + Main.rand.Next(3);
+                    DisplayMessage(orator.Hitbox, Color.LimeGreen, path);
+                }
+            }
+            
             switch (State)
             {
                 case SystemState.CheckReqs:
@@ -288,13 +309,11 @@ namespace Windfall.Common.Systems.WorldEvents
                         if (!TutorialComplete) //Orator Visit
                         {
                             #region Location Selection
-                            ActivityCoords = new Point(LunarCultBaseLocation.X + 42, LunarCultBaseLocation.Y - 45);
-                            ActivityCoords.X *= 16;
-                            ActivityCoords.Y *= 16;
-                            ActivityCoords.Y -= 5;
+                            ActivityCoords = new Point((CultBaseArea.Right - 11) * 16, (CultBaseArea.Top + 30) * 16);
                             #endregion
 
-                            NPC.NewNPC(Entity.GetSource_None(), ActivityCoords.X, ActivityCoords.Y, ModContent.NPCType<OratorNPC>());
+                            if (!NPC.AnyNPCs(ModContent.NPCType<OratorNPC>()))
+                                NPC.NewNPC(Entity.GetSource_None(), (CultBaseArea.Right - 11) * 16, (CultBaseArea.Top + 30) * 16, ModContent.NPCType<OratorNPC>());
                         }
                         else
                         {

@@ -17,7 +17,7 @@ namespace Windfall.Content.Items.GlobalItems
 
         public override bool CanUseItem(Item item, Player player)
         {            
-            bool inCultBase = CultBaseArea.Contains(player.Hitbox);
+            bool inCultBase = CultBaseArea.Contains(player.Center.ToTileCoordinates());
             bool illegalCultBaseItem = item.type is ItemID.Sandgun or ItemID.DirtBomb or ItemID.DirtStickyBomb or ItemID.DryBomb;
             if (illegalCultBaseItem && inCultBase)
                 return false;
