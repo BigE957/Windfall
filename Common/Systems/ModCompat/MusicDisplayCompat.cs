@@ -19,6 +19,8 @@
 
             AddMusic("Assets/Music/Orator", "Orator");
             AddMusic("Assets/Music/DeathByGlamor", "Tailor");
+            AddMusic("Assets/Music/CanYouReallyCallThisAHotelIDidntReceiveAMintOnMyPillowOrAnything", "Cafeteria");
+            AddMusic("Assets/Music/ItsRainingSomewhereElse", "LunarCultBase");
         }
     }
 }
