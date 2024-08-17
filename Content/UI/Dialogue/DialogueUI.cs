@@ -594,6 +594,10 @@ namespace Windfall.Content.UI.Dialogue
                             text = new(Language.GetTextValue(LocalizationPath + TreeKey + ".Responses." + availableResponses[i].Title));
                         else
                             text = new(availableResponses[i].Title);
+                        
+                        text.Width.Pixels = style.ButtonSize.X;
+                        text.IsWrapped = true;
+                        text.WrappedTextBottomPadding = 0.5f;
                         style.OnResponseTextCreate(text);
                         button.Append(text);
                         if (availableResponses[i].Cost != null)
