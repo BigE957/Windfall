@@ -1,4 +1,5 @@
 ﻿using Windfall.Common.Systems.WorldEvents;
+using Windfall.Content.NPCs.WorldEvents.LunarCult;
 using Windfall.Content.Projectiles.Other;
 
 namespace Windfall.Content.NPCs.WanderingNPCs
@@ -83,11 +84,13 @@ namespace Windfall.Content.NPCs.WanderingNPCs
                     break;
                 case States.CafeteriaEvent:
                     NPC.ai[3] = LunarCultActivitySystem.CustomerQueue.Count;
-                    LunarCultActivitySystem.CustomerQueue.Add(new LunarCultActivitySystem.Customer(NPC, LunarCultActivitySystem.FoodIDs[Main.rand.Next(LunarCultActivitySystem.FoodIDs.Count)]));
+                    LunarCultActivitySystem.CustomerQueue.Add(new LunarCultActivitySystem.Customer(NPC, LunarCultActivitySystem.MenuFoodIDs[Main.rand.Next(LunarCultActivitySystem.MenuFoodIDs.Count)]));
                     NPC.aiStyle = -1;
                     NPC.direction = -1;
                     NPC.noGravity = true;
                     NPC.noTileCollide = true;
+                    AnimationType = NPCID.BartenderUnconscious;
+                    NPC.frame.X = 3;
                     break;
             }
         }
@@ -160,6 +163,12 @@ namespace Windfall.Content.NPCs.WanderingNPCs
                         Main.projectile.First(p => p.active && p.type == ModContent.ProjectileType<FoodAlert>() && p.ai[2] == NPC.whoAmI).ai[2] = -1;
                     NPC.ai[3] = -1;
                     CombatText.NewText(NPC.Hitbox, Color.White, GetWindfallTextValue("Dialogue.LunarCult.LunarBishop.Cafeteria.Thanks." + Main.rand.Next(3)));
+                    LunarCultActivitySystem.SatisfiedCustomers++;
+                    if(LunarCultActivitySystem.SatisfiedCustomers == LunarCultActivitySystem.CustomerGoal)
+                    {
+                        NPC chef = Main.npc[NPC.FindFirstNPC(ModContent.NPCType<TheChef>())];
+                        CombatText.NewText(chef.Hitbox, Color.LimeGreen, GetWindfallTextValue("Dialogue.LunarCult.TheChef.Activity.AlmostDone"), true);
+                    }
                 }
                 else
                 {
