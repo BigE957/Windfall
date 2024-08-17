@@ -514,7 +514,7 @@ namespace Windfall.Common.Players
                 Dust d = Dust.NewDustPerfect(new Vector2(Player.Center.X, y) + new Vector2(Main.rand.NextFloat(-125f, 125f), 0f), DustID.Corruption, new Vector2(Main.rand.NextFloat(-10f, 10f), Main.rand.NextFloat(-15f, 0f)), Scale: 1.5f);
                 d.noGravity = true;
             }
-            
+            SoundEngine.PlaySound(SoundID.Item14, Player.Center);
             if (Math.Abs(ancientVelocity.Y) >= 5)
                 Player.velocity.Y = -ancientVelocity.Y;
             else
@@ -546,7 +546,7 @@ namespace Windfall.Common.Players
                     var modifiers = new NPC.HitModifiers();
                     NPC.HitInfo hit = modifiers.ToHitInfo((int)Player.GetDamage(DamageClass.Generic).ApplyTo(100f), false, npc.boss ? 0f : 20f);
                     npc.StrikeNPC(hit);
-                    if (npc.knockBackResist != 0 && npc.boss == false)
+                    if (npc.knockBackResist < 1f && npc.boss == false)
                     {
                         npc.velocity = (npc.Center - tumor.Center).SafeNormalize(Vector2.Zero) * npc.velocity.Length();
                         npc.velocity.Y -= 5;
@@ -557,7 +557,7 @@ namespace Windfall.Common.Players
             }
             foreach (NPC npc in Main.npc.Where(n => n != null && n.active && Vector2.Distance(Player.Center, n.Center) < 300 && n.velocity.Y == 0))
             {
-                if (npc.knockBackResist != 0 && npc.boss == false)
+                if (npc.knockBackResist < 1f && npc.boss == false)
                 {
                     if (tumor != null)
                         npc.velocity.Y -= 20 * npc.knockBackResist;                       
@@ -565,7 +565,8 @@ namespace Windfall.Common.Players
                         npc.velocity.Y -= 10 * npc.knockBackResist;
                     npc.velocity.X = 0;
                 }
-                npc.AddBuff(ModContent.BuffType<ArmorCrunch>(), 480);
+                if(!npc.friendly && !npc.dontTakeDamage)
+                    npc.AddBuff(ModContent.BuffType<ArmorCrunch>(), 480);
             }
             Player.wingTime = Player.wingTimeMax;
             activeAbility = 0;
