@@ -3,7 +3,7 @@
     public class Mask : ModItem, ILocalizedModType
     {
         public new string LocalizationCategory => "Items.Quest";
-        public override string Texture => "Windfall/Assets/Items/Quest/DeificInsignia";
+        public override string Texture => $"Windfall/Assets/Items/Quest/Tailor/{nameof(Mask)}";
         public override void SetDefaults()
         {
             Item.width = 22;

@@ -3,7 +3,7 @@
     public class LunarCultistRobes : ModItem, ILocalizedModType
     {
         public new string LocalizationCategory => "Items.Quest";
-        public override string Texture => "Windfall/Assets/Items/Quest/DeificInsignia";
+        public override string Texture => $"Windfall/Assets/Items/Quest/Tailor/{nameof(LunarCultistRobes)}";
         public override void SetDefaults()
         {
             Item.width = 22;
