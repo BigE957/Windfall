@@ -10,6 +10,78 @@ Dialogue: {
 		Silent: ...
 	}
 
+	DialogueTrees: {
+		Calamitous: {
+			Messages: {
+				0: Things are about to get [c/FF0000:Calamitous!] Tremble in fear!
+				1: Witness the power of a [c/FF0000:Calamity!!!] MWAHAHAHAHAHA!!! SKIBDIDI [c/FF0000:TRISZ EDHEJF DHDJE DFHEDHFDJH] teehee
+				2: Fuck you.
+				3: Bitch.
+			}
+
+			Responses: {
+				Huh: Huh?
+				What: What?
+				Okay: "[c/FF0000:Okay...?]"
+			}
+		}
+
+		#The Chef
+		FoodSelection: {
+			Messages: {
+				0: Wadaya need?
+				1: On it!
+			}
+		}
+
+		CafeteriaActivityStart: {
+			Messages.0: Ready to begin?
+
+			Responses: {
+				No: Not right now.
+				Yes: Yup!
+			}
+		}
+
+		#Lunar Bishop
+		SelenicChat: {
+			Messages: {
+				0: An invitation into our order from our Master himself is a rare thing. You must indeed be something special. I am here to answer any inqueries you might have... I imagine this is a lot to take in.
+				1: You have been invited into our order, and as such, you will be allowed to partake in our ceremonies. It is in such places you will come to learn the wisdom we have gained, and see the path we now walk.
+				2: Our order has, for a long time now, worked in the shadows; preparing for what is soon to transpire... While this balance we've held in place is begining to come undone, that matters little. Soon the world shall be born anew in a more perfect image.
+				3: Your actions have peaked the interest of our Master; he sees great promise in you. I just hope you don't disappoint...
+				4: You may come to learn our goals... if you are indeed truly devoted. If you are not, well... Our master will certainly not take kindly to it.
+				5: Ah! Yes, that is a Selenic Tablet. It will serve as a means of communication. Should you hear its hum, you will know you have been called upon, and it shall guide you to where you are needed.
+				6: That is all you need know for the time being. More shall be revealed soon, so long as you heed the Tablet's call. Farewell. If you are wise, we shall meet again.
+			}
+
+			Responses: {
+				Knowledge: Knowledge?
+				Balance: Balance?
+				Me: Why me?
+				Goal: Your goal?
+				Tablet: What's this?
+				IC: I see...
+				Cool: Cool!
+				Bye: Bye!
+				Finally: Finally...
+			}
+		}
+
+		#The Orator
+		TutorialChat: {
+			Messages: {
+				0: Welcome! I'm so glad you could join us. I hope you didn't have too much trouble finding our humble abode. It is a tad out of the way, isn't it. I'm hoping that you may soon come to see this place as I do: a home away from home, if you will.
+				1: Dop Dop Dop
+			}
+
+			Responses: {
+				lol: lol
+				lmao: lmao
+			}
+		}
+	}
+
 	IlmeranPaladin: {
 		Chat: {
 			FirstChat: Why, hello there! You don't look like the type to frequent these parts. Anything I can do for you?
@@ -273,6 +345,44 @@ Dialogue: {
 				End: That is all you need know for the time being. More shall be revealed soon, so long as you heed the Tablet's call. Farewell. If you are wise, we shall meet again.
 			}
 
+			Greeting: {
+				First: {
+					0: Ah! You finally arrived.
+					1: I know some didn't think you actually would.
+					2: We welcome you into our sanctum.
+					3: Have a look around, and once you are done...
+					4: The Orator shall meet with you.
+					5: Head up the stairs.
+					6: You'll find him at our sanctum's peak.
+					7: He shall guide you...
+					8: ...as you begin your journey with us.
+				}
+
+				Ritual: {
+					0: Welcome back!
+					1: We have a task for you.
+					2: Go to the Ritual Site upstairs.
+				}
+
+				Meeting: {
+					0: Welcome back!
+					1: We have a task for you.
+					2: Go to the Meeting Hall downstairs.
+				}
+
+				Cafeteria: {
+					0: Welcome back!
+					1: We have a task for you.
+					2: Go to the Cafeteria across the hall.
+				}
+
+				Tailor: {
+					0: Welcome back!
+					1: We have a task for you.
+					2: Go to the Tailor downstairs.
+				}
+			}
+
 			Cafeteria: {
 				Unfresh: {
 					0: That doesn't look very fresh...
@@ -379,6 +489,19 @@ Dialogue: {
 					1: Get that TRASH out of my SIGHT!!!
 					2: THAT is AWFUL! Do it again!
 				}
+			}
+		}
+
+		TheChef: {
+			Activity: {
+				Completed: {
+					0: Order up!
+					1: Voilà!
+					2: And... Done!
+				}
+
+				AlmostDone: I think that's everyone! Let's finish up here.
+				Finished: We did it! Well done!
 			}
 		}
 
@@ -1511,7 +1634,7 @@ NPCs: {
 	TravellingCultist.DisplayName: Travelling Cultist
 	TheOrator.DisplayName: The Orator
 	RecruitableLunarCultist.DisplayName: Goober
-	OratorNPC.DisplayName: Orator N P C
+	OratorNPC.DisplayName: The Orator
 	GodseekerKnight.DisplayName: Godseeker Knight
 	ShadowHand.DisplayName: Shadow Hand
 	SealingTablet.DisplayName: Sealing Tablet
@@ -1708,6 +1831,16 @@ ModCompat: {
 
 		Tailor: {
 			DisplayName: Death By Glamour
+			Author: by Toby Fox
+		}
+
+		Cafeteria: {
+			DisplayName: Can You Really Call This A Hotel, I Didn't Receive A Mint On My Pillow Or Anything
+			Author: by Toby Fox
+		}
+
+		LunarCultBase: {
+			DisplayName: It's Raining Somewhere Else
 			Author: by Toby Fox
 		}
 	}

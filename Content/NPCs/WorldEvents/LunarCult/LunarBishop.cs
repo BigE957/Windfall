@@ -1,27 +1,18 @@
-﻿using Windfall.Common.Systems.WorldEvents;
+﻿using Terraria.ModLoader;
+using Windfall.Common.Systems.WorldEvents;
 using Windfall.Common.Utils;
 using Windfall.Content.Projectiles.Other;
+using Windfall.Content.UI.Dialogue;
 
 namespace Windfall.Content.NPCs.WorldEvents.LunarCult
 {
     public class LunarBishop : ModNPC
     {
-        private enum DialogueState
-        {
-            Initial,
-            Knowledge,
-            Balance,
-            WhyMe,
-            Goal,
-            Tablet,
-            End,
-            Despawn,
-        }
-        private DialogueState CurrentDialogue = 0;
         private enum States
         {
             Idle,
-            Chatting,
+            SelenicChat,
+            Greeting,
             CafeteriaEvent,
         }
         private States AIState
@@ -37,6 +28,7 @@ namespace Windfall.Content.NPCs.WorldEvents.LunarCult
             //NPCID.Sets.ActsLikeTownNPC[Type] = true;
             Main.npcFrameCount[Type] = 1;
             NPCID.Sets.NoTownNPCHappiness[Type] = true;
+            ModContent.GetInstance<DialogueUISystem>().ButtonClick += ClickEffect;
         }
         public override void SetDefaults()
         {
@@ -82,7 +74,7 @@ namespace Windfall.Content.NPCs.WorldEvents.LunarCult
                     break;
                 case States.CafeteriaEvent:
                     NPC.ai[3] = LunarCultActivitySystem.CustomerQueue.Count;
-                    LunarCultActivitySystem.CustomerQueue.Add(new LunarCultActivitySystem.Customer(NPC, LunarCultActivitySystem.FoodIDs[Main.rand.Next(LunarCultActivitySystem.FoodIDs.Count)]));
+                    LunarCultActivitySystem.CustomerQueue.Add(new LunarCultActivitySystem.Customer(NPC, LunarCultActivitySystem.MenuFoodIDs[Main.rand.Next(LunarCultActivitySystem.MenuFoodIDs.Count)]));
                     NPC.aiStyle = -1;
                     NPC.direction = -1;
                     NPC.noGravity = true;
@@ -138,15 +130,16 @@ namespace Windfall.Content.NPCs.WorldEvents.LunarCult
                 }
             }
         }
-        public override bool CanChat() => AIState == States.Chatting || (AIState == States.CafeteriaEvent && NPC.ai[3] == 0 && NPC.velocity.X == 0);
+        public override bool CanChat() => ((AIState == States.SelenicChat) && !ModContent.GetInstance<DialogueUISystem>().isDialogueOpen) || (AIState == States.CafeteriaEvent && NPC.ai[3] == 0 && NPC.velocity.X == 0);
         public override string GetChat()
         {
-            if(AIState == States.Chatting)
-             return GetWindfallTextValue($"Dialogue.LunarCult.LunarBishop.Conversation.{CurrentDialogue}");
+            Main.CloseNPCChatOrSign();
+            if (AIState == States.SelenicChat)
+            {
+                ModContent.GetInstance<DialogueUISystem>().DisplayDialogueTree(AIState.ToString());
+            }
             else
             {
-                Main.CloseNPCChatOrSign();
-
                 if (Main.player[Main.myPlayer].HeldItem.type == LunarCultActivitySystem.CustomerQueue[0].Value.OrderID)
                 {
                     Main.player[Main.myPlayer].HeldItem.stack--;
@@ -159,89 +152,46 @@ namespace Windfall.Content.NPCs.WorldEvents.LunarCult
                         Main.projectile.First(p => p.active && p.type == ModContent.ProjectileType<FoodAlert>() && p.ai[2] == NPC.whoAmI).ai[2] = -1;
                     NPC.ai[3] = -1;
                     CombatText.NewText(NPC.Hitbox, Color.White, GetWindfallTextValue("Dialogue.LunarCult.LunarBishop.Cafeteria.Thanks." + Main.rand.Next(3)));
+                    LunarCultActivitySystem.SatisfiedCustomers++;
+                    if (LunarCultActivitySystem.SatisfiedCustomers == LunarCultActivitySystem.CustomerGoal)
+                    {
+                        NPC chef = Main.npc[NPC.FindFirstNPC(ModContent.NPCType<TheChef>())];
+                        CombatText.NewText(chef.Hitbox, Color.LimeGreen, GetWindfallTextValue("Dialogue.LunarCult.TheChef.Activity.AlmostDone"), true);
+                    }
                 }
                 else
                 {
                     CombatText.NewText(NPC.Hitbox, Color.White, GetWindfallTextValue("Dialogue.LunarCult.LunarBishop.Cafeteria.Where." + Main.rand.Next(3)));
-                }
-
-                return "Rizz"; //Won't actually be seen.
+                }               
             }
-        }
-
-        private readonly List<dialogueDirections> MyDialogue = new()
-        {
-            new dialogueDirections()
-            {
-                MyPos = (int)DialogueState.Initial,
-                Button1 = new(){name = "Knowledge?", heading = (int)DialogueState.Knowledge},
-                Button2 = new(){name = "Balance?", heading = (int)DialogueState.Balance},
-            },
-            new dialogueDirections()
-            {
-                MyPos = (int)DialogueState.Knowledge,
-                Button1 = new(){name = "Why me?", heading = (int)DialogueState.WhyMe},
-                Button2 = new(){name = "Your goal?", heading = (int)DialogueState.Goal},
-            },
-            new dialogueDirections()
-            {
-                MyPos = (int)DialogueState.Balance,
-                Button1 = new(){name = "Why me?", heading = (int)DialogueState.WhyMe},
-                Button2 = new(){name = "Your goal?", heading = (int)DialogueState.Goal},
-            },
-            new dialogueDirections()
-            {
-                MyPos = (int)DialogueState.WhyMe,
-                Button1 = new(){name = "What's this tablet?", heading = (int)DialogueState.Tablet},
-                Button2 = null,
-            },
-            new dialogueDirections()
-            {
-                MyPos = (int)DialogueState.Goal,
-                Button1 = new(){name = "What's this tablet?", heading = (int)DialogueState.Tablet},
-                Button2 = null,
-            },
-            new dialogueDirections()
-            {
-                MyPos = (int)DialogueState.Tablet,
-                Button1 = new(){name = "I see...", heading = (int)DialogueState.End},
-                Button2 = new(){name = "Cool!", heading = (int)DialogueState.End},
-            },
-            new dialogueDirections()
-            {
-                MyPos = (int)DialogueState.End,
-                Button1 = new(){name = "Goodbye!", heading = (int)DialogueState.Despawn, end = true},
-                Button2 = new(){name = "Finally...", heading = (int)DialogueState.Despawn, end = true},
-            },
-        };
-        public override void OnChatButtonClicked(bool firstButton, ref string shop)
-        {
-            CurrentDialogue = (DialogueState)GetNPCConversation(MyDialogue, (int)CurrentDialogue, firstButton);
-            if(CurrentDialogue == DialogueState.Despawn)
-            {
-                for (int i = 0; i <= 50; i++)
-                {
-                    int dustStyle = Main.rand.NextBool() ? 66 : 263;
-                    Vector2 speed = Main.rand.NextVector2Circular(1.5f, 2f);
-                    Dust dust = Dust.NewDustPerfect(NPC.Center, Main.rand.NextBool(3) ? 191 : dustStyle, speed * 3, Scale: Main.rand.NextFloat(1.5f, 2.3f));
-                    dust.noGravity = true;
-                    dust.color = dust.type == dustStyle ? Color.LightGreen : default;
-                }
-                SoundEngine.PlaySound(SpawnSound, NPC.Center);
-                NPC.active = false;
-                return;
-            }
-            Main.npcChatText = GetWindfallTextValue($"Dialogue.LunarCult.LunarBishop.Conversation.{CurrentDialogue}");
-        }
-        public override void SetChatButtons(ref string button, ref string button2)
-        {
-            SetConversationButtons(MyDialogue, (int)CurrentDialogue, ref button, ref button2);
+            return "Rizz"; //Won't actually be seen.
         }
         public override bool CheckActive()
         {
             if (AIState == States.Idle || AIState == States.CafeteriaEvent)
                 return false;
             return true;
+        }
+        private void ClickEffect(string treeKey, int dialogueID, int buttonID)
+        {
+            if (treeKey == States.SelenicChat.ToString() && dialogueID == 6)
+            {
+                NPC bishop = Main.npc.First(n => n.active && n.type == ModContent.NPCType<LunarBishop>() && n.ai[2] == (int)States.SelenicChat);
+                bishop.As<LunarBishop>().Despawn();
+            }
+        }
+        public void Despawn()
+        {
+            for (int i = 0; i <= 50; i++)
+            {
+                int dustStyle = Main.rand.NextBool() ? 66 : 263;
+                Vector2 speed = Main.rand.NextVector2Circular(1.5f, 2f);
+                Dust dust = Dust.NewDustPerfect(NPC.Center, Main.rand.NextBool(3) ? 191 : dustStyle, speed * 3, Scale: Main.rand.NextFloat(1.5f, 2.3f));
+                dust.noGravity = true;
+                dust.color = dust.type == dustStyle ? Color.LightGreen : default;
+            }
+            SoundEngine.PlaySound(SpawnSound, NPC.Center);
+            NPC.active = false;
         }
     }
 }

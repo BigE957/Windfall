@@ -23,6 +23,14 @@
     <None Remove="Assets\Items\Quest\Tailor\DyedHood.png" />
     <None Remove="Assets\Items\Quest\Tailor\DyedRobes.png" />
     <None Remove="Assets\Items\Quest\Tailor\Hood.png" />
+    <None Remove="Assets\Items\Quest\Tailor\LunarArcherMask.png" />
+    <None Remove="Assets\Items\Quest\Tailor\LunarBishopHood.png" />
+    <None Remove="Assets\Items\Quest\Tailor\LunarBishopMask.png" />
+    <None Remove="Assets\Items\Quest\Tailor\LunarBishopRobes.png" />
+    <None Remove="Assets\Items\Quest\Tailor\LunarCultistHood.png" />
+    <None Remove="Assets\Items\Quest\Tailor\LunarCultistRobes.png" />
+    <None Remove="Assets\Items\Quest\Tailor\LunarDevoteeMask.png" />
+    <None Remove="Assets\Items\Quest\Tailor\Mask.png" />
     <None Remove="Assets\Items\Tools\IlmeranKnife.png" />
     <None Remove="Assets\Items\Utility\IlmeranHorn.png" />
     <None Remove="Assets\Items\Weapons\Misc\Cnidrisnack.png" />
