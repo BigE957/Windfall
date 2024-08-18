@@ -25,8 +25,8 @@
     <None Remove="Assets\Items\Lore\OraLore.png" />
     <None Remove="Assets\Items\Quest\DeificInsignia.png" />
     <None Remove="Assets\Items\Quest\DraconicBone.png" />
-    <None Remove="Assets\Items\Quest\PrimalLightShards.png" />
-    <None Remove="Assets\Items\Quest\TabletFrags.png" />
+    <None Remove="Assets\Items\Quest\PrimalLightShard.png" />
+    <None Remove="Assets\Items\Quest\TabletFragment.png" />
     <None Remove="Assets\Items\Quest\Tailor\DyedHood.png" />
     <None Remove="Assets\Items\Quest\Tailor\DyedRobes.png" />
     <None Remove="Assets\Items\Quest\Tailor\Hood.png" />

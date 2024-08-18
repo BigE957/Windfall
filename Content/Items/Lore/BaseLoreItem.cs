@@ -28,5 +28,9 @@
                 line.Text = tooltip;
         }
         public override bool CanUseItem(Player player) => false;
+        public override void Update(ref float gravity, ref float maxFallSpeed)
+        {
+            Lighting.AddLight(Item.Center, LightColor.ToVector3());
+        }
     }
 }
