@@ -57,9 +57,9 @@ namespace Windfall.Common.Systems
         };
         public static readonly List<QuestItem> RitualQuestItems = new()
         {
-            new QuestItem(ModContent.ItemType<TabletFrags>(), 1),
+            new QuestItem(ModContent.ItemType<TabletFragment>(), 1),
             new QuestItem(ModContent.ItemType<DraconicBone>(), 1),
-            new QuestItem(ModContent.ItemType<PrimalLightShards>(), 1),
+            new QuestItem(ModContent.ItemType<PrimalLightShard>(), 1),
         };
 
         public override void ClearWorld()

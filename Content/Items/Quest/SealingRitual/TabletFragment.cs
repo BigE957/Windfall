@@ -1,9 +1,9 @@
 ﻿namespace Windfall.Content.Items.Quest.SealingRitual
 {
-    public class PrimalLightShards : ModItem, ILocalizedModType
+    public class TabletFragment : ModItem, ILocalizedModType
     {
         public new string LocalizationCategory => "Items.Quest";
-        public override string Texture => "Windfall/Assets/Items/Quest/PrimalLightShards";
+        public override string Texture => "Windfall/Assets/Items/Quest/TabletFragment";
         public override void SetDefaults()
         {
             Item.width = 22;

@@ -39,7 +39,7 @@ namespace Windfall.Content.NPCs.GlobalNPCs
             }
             if (npc.type == NPCID.Golem)
             {
-                npcLoot.AddConditionalPerPlayer(() => !NPC.downedGolemBoss, ModContent.ItemType<TabletFrags>(), desc: DropHelper.FirstKillText);
+                npcLoot.AddConditionalPerPlayer(() => !NPC.downedGolemBoss, ModContent.ItemType<TabletFragment>(), desc: DropHelper.FirstKillText);
             }
             if (npc.type == NPCID.DukeFishron)
             {
@@ -47,7 +47,7 @@ namespace Windfall.Content.NPCs.GlobalNPCs
             }
             if (npc.type == NPCID.HallowBoss)
             {
-                npcLoot.AddConditionalPerPlayer(() => !NPC.downedEmpressOfLight, ModContent.ItemType<PrimalLightShards>(), desc: DropHelper.FirstKillText);
+                npcLoot.AddConditionalPerPlayer(() => !NPC.downedEmpressOfLight, ModContent.ItemType<PrimalLightShard>(), desc: DropHelper.FirstKillText);
             }
             #endregion
             #region Calamity Drops
