@@ -19,11 +19,6 @@ namespace Windfall.Content.Items.Quest.SealingRitual
             Item.rare = ItemRarityID.Quest;
             Item.maxStack = 99;
         }
-        public override bool PreDrawInWorld(SpriteBatch spriteBatch, Color lightColor, Color alphaColor, ref float rotation, ref float scale, int whoAmI)
-        {
-            Color color = Color.White;
-            return base.PreDrawInWorld(spriteBatch, lightColor, alphaColor, ref rotation, ref scale, whoAmI);
-        }
         public override void Update(ref float gravity, ref float maxFallSpeed)
         {
             Lighting.AddLight(Item.Center, Color.White.ToVector3());

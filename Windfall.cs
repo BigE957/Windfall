@@ -1,9 +1,11 @@
+using CalamityMod.NPCs.CalClone;
 using CalamityMod.NPCs.SunkenSea;
 using CalamityMod.Skies;
 using CalamityMod.UI;
 using System.Reflection;
 using Terraria.Graphics.Effects;
 using Windfall.Content.Skies;
+using Windfall.Content.Skies.ScreenShaders;
 using Windfall.Content.UI.Events;
 
 namespace Windfall
@@ -13,8 +15,7 @@ namespace Windfall
         internal static Windfall Instance;
         public override void Load()
         {
-            Instance = this;
-            SkyManager.Instance["Windfall:Orator"] = new OratorSky();
+            Instance = this;            
         }
         public override void Unload()
         {

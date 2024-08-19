@@ -1,4 +1,7 @@
 ﻿using CalamityMod.Rarities;
+using Terraria;
+using Terraria.Graphics.Effects;
+using Windfall.Content.UI.Dialogue;
 
 namespace Windfall.Content.Items.Essences
 {
@@ -6,7 +9,6 @@ namespace Windfall.Content.Items.Essences
     {
         public new string LocalizationCategory => "Items.Essence";
         public override string Texture => "CalamityMod/Items/Ammo/BloodRune";
-
         public override void SetDefaults()
         {
             Item.width = 22;
@@ -23,6 +25,9 @@ namespace Windfall.Content.Items.Essences
         public override bool? UseItem(Player player)
         {
             player.Godly().SlimeGodEssence = true;
+            player.Godly().SlimyCommunion = true;
+            SkyManager.Instance.Activate("Windfall:SlimyCommunion", args: Array.Empty<object>());
+            ModContent.GetInstance<DialogueUISystem>().DisplayDialogueTree("SlimyCommunion");
             return true;
         }
     }

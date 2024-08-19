@@ -1,4 +1,6 @@
 ﻿using CalamityMod.Rarities;
+using Terraria.Graphics.Effects;
+using Windfall.Content.UI.Dialogue;
 
 namespace Windfall.Content.Items.Essences
 {
@@ -23,6 +25,9 @@ namespace Windfall.Content.Items.Essences
         public override bool? UseItem(Player player)
         {
             player.Godly().Evil1Essence = true;
+            player.Godly().CorruptCommunion = true;
+            SkyManager.Instance.Activate("Windfall:CorruptCommunion", args: Array.Empty<object>());
+            ModContent.GetInstance<DialogueUISystem>().DisplayDialogueTree("CorruptCommunion1");
             return true;
         }
     }

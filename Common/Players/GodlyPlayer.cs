@@ -1,11 +1,14 @@
 ﻿using CalamityMod.Buffs.DamageOverTime;
 using CalamityMod.Buffs.StatDebuffs;
 using CalamityMod.NPCs.NormalNPCs;
+using Terraria;
+using Terraria.Graphics.Effects;
 using Terraria.ModLoader.IO;
 using Windfall.Common.Systems;
 using Windfall.Content.Buffs.StatBuffs;
 using Windfall.Content.NPCs.PlayerNPCs;
 using Windfall.Content.Projectiles.GodlyAbilities;
+using Windfall.Content.UI.Dialogue;
 
 namespace Windfall.Common.Players
 {
@@ -37,6 +40,10 @@ namespace Windfall.Common.Players
         public static readonly SoundStyle IchorGoopyHit = new("CalamityMod/Sounds/Custom/Perforator/PerfHiveIchorShoot");
         public static readonly SoundStyle SlimeGodShot = new("CalamityMod/Sounds/Custom/SlimeGodShot", 2);
 
+        public bool CorruptCommunion = false;
+        public bool CrimsonCommunion = false;
+        public bool SlimyCommunion = false;
+
         private int abilityCounter = 0;
         public int activeAbility = 0;
         private int OldAmbrosia = 0;
@@ -58,7 +65,10 @@ namespace Windfall.Common.Players
         private static List<NPC> harvestNPCArray = [];
         private static List<int> harvestCounterArray = [];
         private static List<NPC> harvestNPCBlacklist = [];
-
+        public override void SetStaticDefaults()
+        {
+            ModContent.GetInstance<DialogueUISystem>().DialogueClose += CloseEffect;
+        }
         public override void UpdateDead()
         {            
             activeAbility = 0;
@@ -72,6 +82,10 @@ namespace Windfall.Common.Players
         private int muckCounter = 0;
         public override void PreUpdate()
         {
+            //CorruptCommunion = false;
+            //CrimsonCommunion = false;
+            //SlimyCommunion = false;
+
             #region Ambrosia           
             if (AnyGodlyEssence(Player))
             {
@@ -570,6 +584,15 @@ namespace Windfall.Common.Players
             }
             Player.wingTime = Player.wingTimeMax;
             activeAbility = 0;
+        }
+        private void CloseEffect(string treeKey, int dialogueID, int buttonID)
+        {
+            if (treeKey.Contains("Communion"))
+            {
+                Main.LocalPlayer.Godly().CorruptCommunion = false;
+                Main.LocalPlayer.Godly().CrimsonCommunion = false;
+                Main.LocalPlayer.Godly().SlimyCommunion = false;
+            }
         }
         public static bool AnyGodlyEssence(Player player) => player.Godly().Evil1Essence || player.Godly().Evil2Essence || player.Godly().SlimeGodEssence;
         public static int GodlyEssenceCount(Player player)

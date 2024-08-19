@@ -1,7 +1,4 @@
-﻿using CalamityMod.Items.Materials;
-using CalamityMod.Items.Placeables.Ores;
-using CalamityMod.Items.Weapons.Melee;
-using Terraria.UI;
+﻿using Terraria.UI;
 using Windfall.Common.Systems.WorldEvents;
 
 namespace Windfall.Content.UI.Dialogue
@@ -220,6 +217,141 @@ namespace Windfall.Content.UI.Dialogue
                         new Dialogue
                         (
                             musicID: -1
+                        ),
+                    ],
+                    [
+                        Characters[(int)CharacterIDs.TheCalamity]
+                    ])
+                },
+                #endregion
+                #region Communion Trees
+                {
+                    "CorruptCommunion1",
+                    new DialogueTree(
+                    [
+                        new Dialogue
+                        (
+                            musicID: MusicID.Corruption
+                        ),
+                        new Dialogue
+                        (
+                            musicID: MusicID.Corruption
+                        ),
+                        new Dialogue
+                        (
+                            musicID: MusicID.Corruption
+                        ),
+                        new Dialogue
+                        (
+                            musicID: MusicID.Corruption
+                        ),
+                        new Dialogue
+                        (
+                            musicID: MusicID.Corruption
+                        ),
+                    ],
+                    [
+                        Characters[(int)CharacterIDs.TheCalamity]
+                    ])
+                },
+                {
+                    "CorruptCommunion2",
+                    new DialogueTree(
+                    [
+                        new Dialogue
+                        (
+                            musicID: MusicID.Corruption
+                        ),
+                        new Dialogue
+                        (
+                            musicID: MusicID.Corruption
+                        ),
+                        new Dialogue
+                        (
+                            musicID: MusicID.Corruption
+                        ),
+                        new Dialogue
+                        (
+                            musicID: MusicID.Corruption
+                        ),
+                    ],
+                    [
+                        Characters[(int)CharacterIDs.TheCalamity]
+                    ])
+                },
+                {
+                    "CrimsonCommunion1",
+                    new DialogueTree(
+                    [
+                        new Dialogue
+                        (
+                            musicID: MusicID.Crimson
+                        ),
+                        new Dialogue
+                        (
+                            musicID: MusicID.Crimson
+                        ),
+                        new Dialogue
+                        (
+                            musicID: MusicID.Crimson
+                        ),
+                        new Dialogue
+                        (
+                            musicID: MusicID.Crimson
+                        ),
+                        new Dialogue
+                        (
+                            musicID: MusicID.Crimson
+                        ),
+                    ],
+                    [
+                        Characters[(int)CharacterIDs.TheCalamity]
+                    ])
+                },
+                {
+                    "CrimsonCommunion2",
+                    new DialogueTree(
+                    [
+                        new Dialogue
+                        (
+                            musicID: MusicID.Crimson
+                        ),
+                        new Dialogue
+                        (
+                            musicID: MusicID.Crimson
+                        ),
+                        new Dialogue
+                        (
+                            musicID: MusicID.Crimson
+                        ),
+                        new Dialogue
+                        (
+                            musicID: MusicID.Crimson
+                        ),
+                    ],
+                    [
+                        Characters[(int)CharacterIDs.TheCalamity]
+                    ])
+                },
+                {
+                    "SlimyCommunion",
+                    new DialogueTree(
+                    [
+                        new Dialogue
+                        (
+                            musicID: MusicID.Eerie
+                        ),
+                        new Dialogue
+                        (
+                            musicID: MusicID.Eerie
+                        ),
+                        new Dialogue
+                        (
+                            musicID: MusicID.Eerie
+                        ),
+                        new Dialogue
+                        (
+                            musicID: MusicID.Eerie
                         ),
                     ],
                     [

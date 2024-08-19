@@ -92,6 +92,54 @@ Dialogue: {
 				No: Don't think so.
 			}
 		}
+
+		#Communions
+		CorruptCommunion1: {
+			Messages: {
+				0: Aha! What righteous communion! It has been so long since on chose to drink of our might. You seek power, and we can offer it in droves. Our essence spreads throughout your feeble body, and now you may wield a mere fraction of our power.
+				1: With this essence, no foe is safe while within your reach. You may lunge forth and crush them with our fervor! In your wake, thorns shall strike at any who dare stand before you! Those who dare to survive shall be forced back.
+				2: However, our power comes with a cost; a fuel required. To wield such abilities you must drink of Ambrosia. For now you lack the means to gather Ambrosia, outside of a pitiful trickle. However, should you continue to feast upon our Essence, new avenues shall be opened to you.
+				3: When using our powers, vile creatures shall burst forth from thee to devour your foes. As your Ambrosia grows, so too is your power heightened.
+				4: Now go forth! Conquer thy foes in our name! Breed righteous slaughter that we might be avenged!
+			}
+		}
+
+		CorruptCommunion2: {
+			Messages: {
+				0: How wonderful! You seek further power. You continue to drink of the Essence. Truly wonderful! We shall sate your desire.
+				1: With this essence, you may call upon a us to aid you! Whilst the form we take is feeble, when within our reach, you shall be empowered! Though if it is Ambrosia that you thirst for, we can deliver. Destroy us! Feast upon us! Drink of our Ambrosia and be filled!
+				2: As you strike at your foes, our children shall form within you and rise to aid you. Should thee seek further Ambrosia, you may destroy them to quench they thirst.
+				3: Now go forth! Feast upon thy foes in our name! Breed righteous slaughter that we might be avenged!
+			}
+		}
+
+		CrimsonCommunion1: {
+			Messages: {
+				0: Aha! What righteous communion! It has been so long since on chose to drink of our might. You seek power, and we can offer it in droves. Our essence spreads throughout your feeble body, and now you may wield a mere fraction of our power.
+				1: With this essence, no foe is safe while within your reach. You may reach out and drain them of their life. Those in your grasp for long enough shall burst at the seams; drenched in our Ichor.
+				2: Our powers often comes with a cost; a fuel required. To wield such abilities you must drink of Ambrosia. Though this power is different. It turns your foes life force into wonderous Ambrosia. Should you continue to feast upon our Essence, new powers shall make a grand use of the Ambrosia you gather.
+				3: As you drink more and more Ambrosia, our children shall rise to fight in your name! Our children's presence shall bolster your fortitude.
+				4: Now go forth! Feast upon thy foes in our name! Breed righteous slaughter that we might be avenged!
+			}
+		}
+
+		CrimsonCommunion2: {
+			Messages: {
+				0: How wonderful! You seek further power. You continue to drink of the Essence. Truly wonderful! We shall sate your desire.
+				1: With this essence, none shall be able to escape you! You shall dart forth at a wicked speed, and strike at the hearts of your enemies! Your wrath shall boil their very blood!
+				2: When nearest your foes, every strike shall tear Ambrosia from their very being!
+				3: Now go forth! Conquer thy foes in our name! Breed righteous slaughter that we might be avenged!
+			}
+		}
+
+		SlimyCommunion: {
+			Messages: {
+				0: Oh my... What a pure essence you've consumed... Undoubtably an essence from the Slime God. Let us see what power it grants...
+				1: This essence grants you the power to unleash the Ambrosia that's gathered within you in the form of a powerful attack: a barrage of slimy globs.
+				2: Additionally, the muck formed by the rotting corpses of the Gods shall gather around you. Forcing it to converge shall transform it into Ambrosia that you may make use of.
+				3: Truly a potent boon to have at your disposal. Wield it well as you continue our conquest!
+			}
+		}
 	}
 
 	IlmeranPaladin: {
