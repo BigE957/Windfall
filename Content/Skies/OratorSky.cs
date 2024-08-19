@@ -117,7 +117,7 @@ namespace Windfall.Content.Skies
         }
         public override void Update(GameTime gameTime)
         {
-            if ((!Main.npc.Any(n => n.active && n.type == ModContent.NPCType<TheOrator>()) || Main.gameMenu))
+            if (!NPC.AnyNPCs(ModContent.NPCType<TheOrator>()) || BossRushEvent.BossRushActive)
                 skyActive = false;
 
             if (skyActive)
@@ -131,7 +131,7 @@ namespace Windfall.Content.Skies
                 }
             }
             else if (!skyActive && opacity > 0f)
-                opacity -= 0.02f;
+                opacity -= 0.01f;
 
             Opacity = opacity;
 
