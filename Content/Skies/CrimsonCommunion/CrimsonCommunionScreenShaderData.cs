@@ -11,8 +11,6 @@ namespace Windfall.Content.Skies.CrimsonCommunion
 {
     public class CrimsonCommunionScreenShaderData : ScreenShaderData
     {
-        private float Opacity = 0f;
-
         public CrimsonCommunionScreenShaderData(string passName)
             : base(passName)
         {

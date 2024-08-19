@@ -11,8 +11,6 @@ namespace Windfall.Content.Skies.ScreenShaders
 {
     public class SlimyCommunionScreenShaderData : ScreenShaderData
     {
-        private float Opacity = 0f;
-
         public SlimyCommunionScreenShaderData(string passName)
             : base(passName)
         {

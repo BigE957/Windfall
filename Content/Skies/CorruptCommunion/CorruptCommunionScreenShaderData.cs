@@ -11,8 +11,6 @@ namespace Windfall.Content.Skies.CorruptCommunion
 {
     public class CorruptCommunionScreenShaderData : ScreenShaderData
     {
-        private float Opacity = 0f;
-
         public CorruptCommunionScreenShaderData(string passName)
             : base(passName)
         {

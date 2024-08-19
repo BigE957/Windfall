@@ -15,12 +15,11 @@ namespace Windfall.Content.UI.Dialogue
         ];
         
         public static Dictionary<string, DialogueTree> DialogueTrees; //Can be marked readonly once testing is done. Isnt so that it can be updated everytime dialogue is called for testing purposes.
-                
+
         internal enum CharacterIDs
         {
             //Make sure the order of these matches the order of the Characters array
             TheCalamity,
-            Ardiena,
         }
 
         public static Dictionary<string, DialogueTree> PopulateDialogueTrees()
@@ -411,8 +410,8 @@ namespace Windfall.Content.UI.Dialogue
         {
             if (!Main.dedServ)
             {
-                DialogueUI = new UserInterface();
-                DialogueUIState = new DialogueUIState();
+                DialogueUI = new();
+                DialogueUIState = new();
                 DialogueUIState.Activate();
             }
         }
@@ -471,10 +470,12 @@ namespace Windfall.Content.UI.Dialogue
 
             DialogueOpen?.Invoke(TreeKey, DialogueIndex, 0);
 
-            DialogueUI = new UserInterface();
-            DialogueUIState = new DialogueUIState();
-            DialogueUIState.TreeKey = TreeKey;
-            DialogueUIState.DialogueIndex = DialogueIndex;
+            DialogueUI = new();
+            DialogueUIState = new()
+            {
+                TreeKey = TreeKey,
+                DialogueIndex = DialogueIndex
+            };
             DialogueUIState.Activate();
 
             DialogueUI?.SetState(DialogueUIState);
@@ -527,10 +528,12 @@ namespace Windfall.Content.UI.Dialogue
 
             justOpened = false;
             DialogueUI?.SetState(null);
-            DialogueUI = new UserInterface();
-            DialogueUIState = new DialogueUIState();
-            DialogueUIState.TreeKey = TreeKey;
-            DialogueUIState.DialogueIndex = DialogueIndex;
+            DialogueUI = new();
+            DialogueUIState = new()
+            {
+                TreeKey = TreeKey,
+                DialogueIndex = DialogueIndex
+            };
 
             DialogueUI?.SetState(DialogueUIState);
         }

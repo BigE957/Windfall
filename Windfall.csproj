@@ -67,6 +67,7 @@
     <None Remove="Assets\NPCs\WorldEvents\SealingTablet.png" />
     <None Remove="Assets\NPCs\WorldEvents\TheOrator_NPC.png" />
     <None Remove="Assets\NPCs\WorldEvents\WanderingPotionSeller.png" />
+    <None Remove="Assets\Projectiles\Boss\nailshot.png" />
     <None Remove="Assets\Projectiles\Misc\Creeper.png" />
     <None Remove="Assets\Projectiles\Misc\EmpyreanThorn.png" />
     <None Remove="Assets\Projectiles\NPCAnimations\GodseekerKnightProj.png" />
