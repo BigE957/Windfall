@@ -16,7 +16,6 @@ namespace Windfall.Content.UI
     {
         // For this bar we'll be using a frame texture and then a gradient inside bar, as it's one of the more simpler approaches while still looking decent.
         // Once this is all set up make sure to go and do the required stuff for most UI's in the ModSystem class.
-        private UIText text;
         private UIElement area;
         private UIImage barFrame;
         private Color gradientA;
@@ -38,16 +37,9 @@ namespace Windfall.Content.UI
             barFrame.Width.Set(138, 0f);
             barFrame.Height.Set(34, 0f);
 
-            text = new UIText("0/0", 0.8f); // text to show stat
-            text.Width.Set(138, 0f);
-            text.Height.Set(34, 0f);
-            text.Top.Set(40, 0f);
-            text.Left.Set(22, 0f);
-
             gradientA = Color.DarkRed;
             gradientB = Color.Gold;
 
-            area.Append(text);
             area.Append(barFrame);
             Append(area);
         }
@@ -95,9 +87,15 @@ namespace Windfall.Content.UI
             if (!GodlyPlayer.AnyGodlyEssence(Main.LocalPlayer))
                 return;
 
-            var modPlayer = Main.LocalPlayer.Godly();
+            if (barFrame.ContainsPoint(Main.MouseScreen))
+            {
+                var modPlayer = Main.LocalPlayer.Godly();
+                string category = "UI";
+                Main.LocalPlayer.mouseInterface = true;
+                Main.instance.MouseText(GetWindfallLocalText($"{category}.Ambrosia").Format(modPlayer.Ambrosia, 100));
+            }
+            
             // Setting the text per tick to update and show our resource values.
-            text.SetText(AmbrosiaResourceUISystem.AmbrosiaResourceText.Format(modPlayer.Ambrosia, 100));
             base.Update(gameTime);
         }
     }
@@ -110,16 +108,11 @@ namespace Windfall.Content.UI
 
         internal AmbrosiaResourceBar AmbrosiaResourceBar;
 
-        public static LocalizedText AmbrosiaResourceText { get; private set; }
-
         public override void Load()
         {
             AmbrosiaResourceBar = new();
             AmbrosiaUI = new();
             AmbrosiaUI.SetState(AmbrosiaResourceBar);
-
-            string category = "UI";
-            AmbrosiaResourceText ??= Mod.GetLocalization($"{category}.Ambrosia");
         }
 
         public override void UpdateUI(GameTime gameTime)
