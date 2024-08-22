@@ -65,20 +65,27 @@ namespace Windfall.Content.UI
 
             // Here we get the screen dimensions of the barFrame element, then tweak the resulting rectangle to arrive at a rectangle within the barFrame texture that we will draw the gradient. These values were measured in a drawing program.
             Rectangle hitbox = barFrame.GetInnerDimensions().ToRectangle();
-            hitbox.X += 12;
-            hitbox.Width -= 24;
-            hitbox.Y += 8;
-            hitbox.Height -= 16;
+            hitbox.X += 8;
+            hitbox.Width -= 16;
+            hitbox.Y += 4;
+            hitbox.Height -= 8;
 
             // Now, using this hitbox, we draw a gradient by drawing vertical lines while slowly interpolating between the 2 colors.
             int left = hitbox.Left;
             int right = hitbox.Right;
             int steps = (int)((right - left) * quotient);
-            for (int i = 0; i < steps; i += 1)
+            for (int i = 0; i < steps; i++)
             {
                 // float percent = (float)i / steps; // Alternate Gradient Approach
                 float percent = (float)i / (right - left);
                 spriteBatch.Draw(TextureAssets.MagicPixel.Value, new Rectangle(left + i, hitbox.Y, 1, hitbox.Height), Color.Lerp(gradientA, gradientB, percent));
+            }
+            if (quotient != 1f)
+            {
+                for (int i = steps; i < (right - left); i++)
+                {
+                    spriteBatch.Draw(TextureAssets.MagicPixel.Value, new Rectangle(left + i, hitbox.Y, 1, hitbox.Height), Color.Black);
+                }
             }
         }
 
