@@ -1,4 +1,5 @@
-﻿namespace Windfall.Content.Projectiles.Boss.Orator
+﻿
+namespace Windfall.Content.Projectiles.Boss.Orator
 {
     public class DarkBolt : ModProjectile
     {
@@ -26,13 +27,13 @@
             set => Projectile.ai[1] = value;
         }
         Vector2 DirectionalVelocity = Vector2.Zero;
+        public override void OnSpawn(IEntitySource source)
+        {
+            DirectionalVelocity = Projectile.velocity.SafeNormalize(Vector2.UnitX);
+        }
         public override void AI()
         {
-            
-            if (aiCounter == 0)
-                DirectionalVelocity = Projectile.velocity.SafeNormalize(Vector2.UnitX);
             Projectile.rotation = DirectionalVelocity.ToRotation();
-            Projectile.spriteDirection = (int)Projectile.rotation;
             Projectile.velocity = DirectionalVelocity.SafeNormalize(Vector2.UnitX) * (Velocity / 2);
             Velocity += 1f;
             aiCounter++;
