@@ -1,7 +1,7 @@
 ﻿using Terraria.GameContent.ItemDropRules;
 using Windfall.Content.Items.Quest.SealingRitual;
 using Windfall.Content.Items.Quest.Seamstress;
-using Windfall.Content.NPCs.Bosses.TheOrator;
+using Windfall.Content.NPCs.Bosses.Orator;
 using Windfall.Content.NPCs.TravellingNPCs;
 using static Windfall.Common.Systems.QuestSystem;
 

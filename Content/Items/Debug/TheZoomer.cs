@@ -1,6 +1,6 @@
 ﻿using Luminance.Core.Graphics;
 
-namespace Windfall.Items.Debug
+namespace Windfall.Content.Items.Debug
 {
     public class TheZoomer : ModItem, ILocalizedModType
     {

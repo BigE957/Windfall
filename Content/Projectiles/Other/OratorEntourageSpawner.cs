@@ -1,5 +1,4 @@
-﻿using Windfall.Content.NPCs.WanderingNPCs;
-using Windfall.Content.NPCs.WorldEvents.LunarCult;
+﻿using Windfall.Content.NPCs.WorldEvents.LunarCult;
 using Windfall.Content.Projectiles.NPCAnimations;
 
 namespace Windfall.Content.Projectiles.Other

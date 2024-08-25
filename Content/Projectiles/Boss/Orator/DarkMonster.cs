@@ -3,7 +3,7 @@ using Luminance.Core.Graphics;
 using ReLogic.Utilities;
 using Windfall.Common.Graphics.Metaballs;
 using Windfall.Common.Systems;
-using Windfall.Content.NPCs.Bosses.TheOrator;
+using Windfall.Content.NPCs.Bosses.Orator;
 using static Windfall.Common.Graphics.Metaballs.EmpyreanMetaball;
 
 namespace Windfall.Content.Projectiles.Boss.Orator

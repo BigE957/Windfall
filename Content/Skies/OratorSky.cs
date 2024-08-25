@@ -1,7 +1,7 @@
 ﻿using CalamityMod.Events;
 using Luminance.Common.Utilities;
 using Terraria.Graphics.Effects;
-using Windfall.Content.NPCs.Bosses.TheOrator;
+using Windfall.Content.NPCs.Bosses.Orator;
 
 namespace Windfall.Content.Skies
 {

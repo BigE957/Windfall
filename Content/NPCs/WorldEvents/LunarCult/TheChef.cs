@@ -42,7 +42,7 @@ namespace Windfall.Content.NPCs.WorldEvents.LunarCult
             NPC.lifeMax = 210;
             NPC.HitSound = SoundID.NPCHit1;
             NPC.DeathSound = SoundID.NPCDeath1;
-            NPC.knockBackResist = 1f;
+            NPC.knockBackResist = 0f;
             NPC.immortal = true;           
 
             AnimationType = NPCID.BartenderUnconscious;

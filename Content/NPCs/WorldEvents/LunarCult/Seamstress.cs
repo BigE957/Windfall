@@ -4,7 +4,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Terraria;
 using Terraria.Enums;
 using Windfall.Common.Systems.WorldEvents;
-using Windfall.Content.Items.Quest.Seamstress;
+using Windfall.Content.Items.Quest.Tailor;
 using Windfall.Content.Items.Summoning;
 using Windfall.Content.UI.Events;
 using static Windfall.Common.Systems.WorldEvents.LunarCultActivitySystem;
@@ -47,7 +47,7 @@ namespace Windfall.Content.NPCs.WorldEvents.LunarCult
             NPC.lifeMax = 210;
             NPC.HitSound = SoundID.NPCHit1;
             NPC.DeathSound = SoundID.NPCDeath1;
-            NPC.knockBackResist = 1f;
+            NPC.knockBackResist = 0f;
             NPC.immortal = true;
 
             ClothingIDs =

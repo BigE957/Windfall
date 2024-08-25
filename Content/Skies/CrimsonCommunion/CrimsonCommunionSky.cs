@@ -1,7 +1,7 @@
 ﻿using CalamityMod.Events;
 using Terraria.Graphics.Effects;
 
-namespace Windfall.Content.Skies.ScreenShaders
+namespace Windfall.Content.Skies.CrimsonCommunion
 {
     public class CrimsonCommunionSky : CustomSky
     {

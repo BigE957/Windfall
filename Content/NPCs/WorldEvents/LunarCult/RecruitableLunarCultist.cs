@@ -1,7 +1,7 @@
 ﻿using CalamityMod.Projectiles.Ranged;
 using CalamityMod.Projectiles.Rogue;
 using Windfall.Common.Systems.WorldEvents;
-using Windfall.Content.NPCs.Bosses.TheOrator;
+using Windfall.Content.NPCs.Bosses.Orator;
 
 namespace Windfall.Content.NPCs.WorldEvents.LunarCult
 {
@@ -148,7 +148,7 @@ namespace Windfall.Content.NPCs.WorldEvents.LunarCult
             NPC.lifeMax = 400;
             NPC.HitSound = SoundID.NPCHit1;
             NPC.DeathSound = SoundID.NPCDeath1;
-            NPC.knockBackResist = 1f;
+            NPC.knockBackResist = 0f;
             NPC.immortal = true;
 
             TownNPCStayingHomeless = true;

@@ -1,4 +1,4 @@
-﻿namespace Windfall.Content.Items.Quest.Seamstress
+﻿namespace Windfall.Content.Items.Quest.Tailor
 {
     public class LunarBishopHood : ModItem, ILocalizedModType
     {

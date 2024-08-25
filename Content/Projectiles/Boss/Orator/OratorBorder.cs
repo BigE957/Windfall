@@ -1,5 +1,5 @@
 ﻿using Windfall.Content.Buffs.DoT;
-using Windfall.Content.NPCs.Bosses.TheOrator;
+using Windfall.Content.NPCs.Bosses.Orator;
 using static Windfall.Common.Graphics.Metaballs.EmpyreanMetaball;
 
 namespace Windfall.Content.Projectiles.Boss.Orator

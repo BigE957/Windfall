@@ -7,14 +7,14 @@ using System.Threading.Tasks;
 using Terraria.Graphics.Effects;
 using Terraria.Graphics.Shaders;
 
-namespace Windfall.Content.Skies.ScreenShaders
+namespace Windfall.Content.Skies.SlimyCommunion
 {
     public class SlimyCommunionScreenShaderData : ScreenShaderData
     {
         public SlimyCommunionScreenShaderData(string passName)
             : base(passName)
         {
-        }       
+        }
 
         public override void Update(GameTime gameTime)
         {
