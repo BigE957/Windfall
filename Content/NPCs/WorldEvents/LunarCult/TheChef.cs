@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Windfall.Common.Systems.WorldEvents;
-using Windfall.Content.Items.Quest.Seamstress;
+﻿using Windfall.Common.Systems.WorldEvents;
 using Windfall.Content.UI.Dialogue;
 
 namespace Windfall.Content.NPCs.WorldEvents.LunarCult

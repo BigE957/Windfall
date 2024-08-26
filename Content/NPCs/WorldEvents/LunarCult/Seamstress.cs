@@ -1,12 +1,6 @@
-﻿using CalamityMod.UI;
-using Humanizer;
-using Microsoft.Xna.Framework.Graphics;
-using Terraria;
-using Terraria.Enums;
-using Windfall.Common.Systems.WorldEvents;
+﻿using Humanizer;
 using Windfall.Content.Items.Quest.Tailor;
 using Windfall.Content.Items.Summoning;
-using Windfall.Content.UI.Events;
 using static Windfall.Common.Systems.WorldEvents.LunarCultActivitySystem;
 
 namespace Windfall.Content.NPCs.WorldEvents.LunarCult

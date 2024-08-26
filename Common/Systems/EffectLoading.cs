@@ -2,7 +2,7 @@
 using Windfall.Content.Skies;
 using Windfall.Content.Skies.CorruptCommunion;
 using Windfall.Content.Skies.CrimsonCommunion;
-using Windfall.Content.Skies.ScreenShaders;
+using Windfall.Content.Skies.SlimyCommunion;
 
 namespace Windfall.Common.Systems
 {
