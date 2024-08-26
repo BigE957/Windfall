@@ -93,6 +93,15 @@ Dialogue: {
 			}
 		}
 
+		RitualEvent: {
+			Messages.0: Shall we begin?
+
+			Responses: {
+				No: No.
+				Yes: Yes.
+			}
+		}
+
 		#Communions
 		CorruptCommunion1: {
 			Messages: {
@@ -483,6 +492,13 @@ Dialogue: {
 					0: The basement is off limits.
 					1: You aren't allowed in there.
 					2: Keep out of there.
+				}
+
+				Ritual: {
+					0: Aha!
+					1: Yes, I've found it!
+					2: At last, we may begin...
+					3: Ah shit, nvm.
 				}
 
 				SealingRitual: {
@@ -1749,6 +1765,7 @@ NPCs: {
 	Seamstressm.DisplayName: Seamstressm
 	Seamstress.DisplayName: Seamstress
 	TheChef.DisplayName: The Chef
+	PortalMole.DisplayName: Enimgatic Rift
 }
 
 Projectiles: {
@@ -1923,6 +1940,7 @@ Bestiary: {
 	TravellingCultist: A strange fellow who's recently begun showing up out of nowhere. He claims to want to fight against the Lunar Cult, but can he really be trusted...?
 	TheOrator: The enigmatic leader of the Lunar Cult, the Orator's motives are unknown, however, their cult has now succeeded in their goal. The titan responsible for the Dragons' extinction now descends upon the world...
 	ShadowHand: The strange matter the Orator wields traces its origins to the Distortion. How he manages to handle such potent, otherworldly power is unknown, but that which he is able to conjure through it is all the proof one needs to see the mastery he has attained.
+	PortalMole: These strange vortexes are drawn to the reality bending rituals of the Lunar Cult; whatever is making them attempting to feast upon unwitting ritualists. The Lunar Cult does little to protect their members from these rifts, uncaring for whatever fate might befall their members.
 }
 
 ModCompat: {
@@ -1948,6 +1966,11 @@ ModCompat: {
 			DisplayName: It's Raining Somewhere Else
 			Author: by Toby Fox
 		}
+
+		Ritual: {
+			DisplayName: Amalgam
+			Author: by Toby Fox
+		}
 	}
 
 	BossChecklist: {
@@ -1967,5 +1990,5 @@ Keybinds: {
 Events: {
 	Tailor: Fashion Frenzy
 	Cafeteria: Lunch-Time Lunacy
-	RitualSite: Dark Communion
+	Ritual: Lunar Communion
 }

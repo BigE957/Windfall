@@ -21,6 +21,7 @@
             AddMusic("Assets/Music/DeathByGlamor", "Tailor");
             AddMusic("Assets/Music/CanYouReallyCallThisAHotelIDidntReceiveAMintOnMyPillowOrAnything", "Cafeteria");
             AddMusic("Assets/Music/ItsRainingSomewhereElse", "LunarCultBase");
+            AddMusic("Assets/Music/Amalgam", "Ritual");
         }
     }
 }
