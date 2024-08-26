@@ -175,7 +175,7 @@ namespace Windfall.Content.NPCs.WorldEvents.LunarCult
             Despawn();
 
             LunarCultActivitySystem.PortalsDowned++;
-            LunarCultActivitySystem.ActivePortals--;
+            
             if (LunarCultActivitySystem.PortalsDowned >= LunarCultActivitySystem.RequiredPortalKills)
                 LunarCultActivitySystem.ResetTimer();
 
@@ -193,6 +193,9 @@ namespace Windfall.Content.NPCs.WorldEvents.LunarCult
                 dust.color = dust.type == dustStyle ? Color.LightGreen : default;
             }
             ScreenShakeSystem.StartShake(2f);
+
+            LunarCultActivitySystem.ActivePortals--;
+
             NPC.active = false;
         }
     }

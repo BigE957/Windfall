@@ -150,7 +150,12 @@ namespace Windfall.Content.NPCs.WorldEvents.LunarCult
                             {
                                 NPC.Opacity -= 0.05f;
                                 if (NPC.scale < 0.1f)
+                                {
+                                    LunarCultActivitySystem.RemainingCultists--;
+                                    if (LunarCultActivitySystem.RemainingCultists <= 0)
+                                        LunarCultActivitySystem.ResetTimer();
                                     NPC.active = false;
+                                }
                             }
                         }
                         else

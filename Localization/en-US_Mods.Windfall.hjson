@@ -495,10 +495,19 @@ Dialogue: {
 				}
 
 				Ritual: {
-					0: Aha!
-					1: Yes, I've found it!
-					2: At last, we may begin...
-					3: Ah shit, nvm.
+					Success: {
+						0: Aha!
+						1: Yes, I've found it!
+						2: At last, we may begin...
+						3: Ah shit, nvm.
+					}
+
+					Failure: {
+						0: Drats...
+						1: Seems this ritual can no longer continue.
+						2: Oh well.
+						3: There is always next time.
+					}
 				}
 
 				SealingRitual: {

@@ -858,8 +858,8 @@ namespace Windfall.Common.Systems.WorldEvents
                         State = SystemState.End;
                     break;
                 case SystemState.Ritual:
-                    //Main.NewText(new Vector2(Main.LocalPlayer.Center.X - ActivityCoords.X, Main.LocalPlayer.Center.Y - ActivityCoords.Y).Length());
-                    if (PortalsDowned < RequiredPortalKills && ActivePortals < RemainingCultists && ActivityTimer >= 60 && Main.rand.NextBool(100)) //Spawn New Customer
+                    //ActivePortals = 0;
+                    if (PortalsDowned < RequiredPortalKills && RemainingCultists > 0 && ActivePortals < RemainingCultists && ActivityTimer >= 60 && Main.rand.NextBool(100)) //Spawn New Customer
                     {
                         Point spawnLocation = new(ActivityCoords.X + Main.rand.Next(-450, 450), ActivityCoords.Y - Main.rand.Next(120, 300));
                         NPC.NewNPC(NPC.GetSource_NaturalSpawn(), spawnLocation.X, spawnLocation.Y, ModContent.NPCType<PortalMole>(), Start: Main.npc[NPCIndexs[6]].whoAmI + 1);
@@ -873,16 +873,16 @@ namespace Windfall.Common.Systems.WorldEvents
                         switch(ActivityTimer)
                         {
                             case 0:
-                                DisplayMessage(orator.Hitbox, Color.LimeGreen, "Dialogue.LunarCult.TheOrator.WorldText.Ritual.0");
+                                DisplayMessage(orator.Hitbox, Color.LimeGreen, "Dialogue.LunarCult.TheOrator.WorldText.Ritual.Success.0");
                                 break;
                             case 120:
-                                DisplayMessage(orator.Hitbox, Color.LimeGreen, "Dialogue.LunarCult.TheOrator.WorldText.Ritual.1");
+                                DisplayMessage(orator.Hitbox, Color.LimeGreen, "Dialogue.LunarCult.TheOrator.WorldText.Ritual.Success.1");
                                 break;
                             case 240:
-                                DisplayMessage(orator.Hitbox, Color.LimeGreen, "Dialogue.LunarCult.TheOrator.WorldText.Ritual.2");
+                                DisplayMessage(orator.Hitbox, Color.LimeGreen, "Dialogue.LunarCult.TheOrator.WorldText.Ritual.Success.2");
                                 break;
                             case 360:
-                                DisplayMessage(orator.Hitbox, Color.LimeGreen, "Dialogue.LunarCult.TheOrator.WorldText.Ritual.3");
+                                DisplayMessage(orator.Hitbox, Color.LimeGreen, "Dialogue.LunarCult.TheOrator.WorldText.Ritual.Success.3");
                                 break;
                             case 420:
                                 if (Main.npc[NPCIndexs[0]].active)
@@ -986,6 +986,43 @@ namespace Windfall.Common.Systems.WorldEvents
                                 break;
                         }
 
+                        ActivityTimer++;
+                    }
+                    else if(RemainingCultists <= 0)
+                    {
+                        NPC orator = Main.npc[NPC.FindFirstNPC(ModContent.NPCType<OratorNPC>())];
+
+                        switch (ActivityTimer)
+                        {
+                            case 0:
+                                DisplayMessage(orator.Hitbox, Color.LimeGreen, "Dialogue.LunarCult.TheOrator.WorldText.Ritual.Failure.0");
+                                break;
+                            case 120:
+                                DisplayMessage(orator.Hitbox, Color.LimeGreen, "Dialogue.LunarCult.TheOrator.WorldText.Ritual.Failure.1");
+                                break;
+                            case 240:
+                                DisplayMessage(orator.Hitbox, Color.LimeGreen, "Dialogue.LunarCult.TheOrator.WorldText.Ritual.Failure.2");
+                                break;
+                            case 360:
+                                DisplayMessage(orator.Hitbox, Color.LimeGreen, "Dialogue.LunarCult.TheOrator.WorldText.Ritual.Failure.3");
+                                break;
+                            case 420:
+                                for (int i = 0; i <= 50; i++)
+                                {
+                                    int dustStyle = Main.rand.NextBool() ? 66 : 263;
+                                    Vector2 speed = Main.rand.NextVector2Circular(2f, 2.5f);
+                                    Dust dust = Dust.NewDustPerfect(orator.Center, Main.rand.NextBool(3) ? 191 : dustStyle, speed * 3, Scale: Main.rand.NextFloat(1.5f, 2.3f));
+                                    dust.noGravity = true;
+                                    dust.color = dust.type == dustStyle ? Color.LightGreen : default;
+                                }
+                                SoundEngine.PlaySound(LunarCultistDevotee.SpawnSound, orator.Center);
+
+                                Main.npc[NPCIndexs[6]].active = false;
+
+                                NPCIndexs = [];
+                                Active = false;
+                                break;
+                        }
                         ActivityTimer++;
                     }
                     else
