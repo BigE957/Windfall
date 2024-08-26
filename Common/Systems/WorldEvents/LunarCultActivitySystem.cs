@@ -1,8 +1,5 @@
 ﻿using CalamityMod.World;
 using Luminance.Core.Graphics;
-using System.IO;
-using Terraria;
-using Terraria.Enums;
 using Terraria.ModLoader.IO;
 using Terraria.Utilities;
 using Windfall.Common.Graphics.Metaballs;
@@ -26,6 +23,8 @@ namespace Windfall.Common.Systems.WorldEvents
         private static List<int> AvailableTopics = [];
 
         public static bool TutorialComplete = false;
+
+        private static int spawnChance = 5;
 
         public override void ClearWorld()
         {
@@ -59,6 +58,8 @@ namespace Windfall.Common.Systems.WorldEvents
             AvailableTopics = (List<int>)tag.GetList<int>("AvailableTopics");
 
             TutorialComplete = tag.GetBool("TutorialComplete");
+
+            spawnChance = tag.GetInt("spawnChance");
         }
         public override void SaveWorldData(TagCompound tag)
         {
@@ -69,6 +70,8 @@ namespace Windfall.Common.Systems.WorldEvents
             tag["AvailableTopics"] = AvailableTopics;
 
             tag["TutorialComplete"] = TutorialComplete;
+
+            tag["spawnChance"] = spawnChance;
         }
 
         public enum SystemState
@@ -92,7 +95,7 @@ namespace Windfall.Common.Systems.WorldEvents
         private static int ActivityTimer = -1;
         public static Point ActivityCoords = new(-1, -1);
         private static List<int> NPCIndexs = [];
-        private static float zoom = 0;
+        private static float zoom = 0;        
 
         #region Meeting Variables
         public enum MeetingTopic
@@ -196,10 +199,13 @@ namespace Windfall.Common.Systems.WorldEvents
                         break;
                     }
                 case SystemState.CheckChance:
-                    if (Main.rand.NextBool(5))
+                    if (spawnChance < 1)
+                        spawnChance = 1;
+                    Main.NewText(spawnChance);
+                    if (Main.rand.NextBool(spawnChance))
                     {
                         State = SystemState.Waiting;
-
+                        spawnChance = 5;
                         #region Activity Alert
                         foreach (Player player in Main.player)
                         {
@@ -216,6 +222,8 @@ namespace Windfall.Common.Systems.WorldEvents
                     }
                     else
                     {
+                        if(spawnChance > 1)
+                            spawnChance--;
                         OnCooldown = true;
                         State = SystemState.CheckReqs;
                     }
@@ -237,6 +245,15 @@ namespace Windfall.Common.Systems.WorldEvents
                     float PlayerDistFromHideout = new Vector2(closestPlayer.Center.X - ActivityCoords.X, closestPlayer.Center.Y - ActivityCoords.Y).Length();
                     if (PlayerDistFromHideout < 160f && closestPlayer.Center.Y < ActivityCoords.Y + 16)
                         State = SystemState.Yap;
+                    #endregion
+
+                    #region Despawn
+                    if (Main.dayTime)
+                    {
+                        ActivityCoords = new(-1, -1);
+                        State = SystemState.CheckReqs;
+                        OnCooldown = true;
+                    }
                     #endregion
                     break;
                 case SystemState.Yap:
@@ -524,24 +541,7 @@ namespace Windfall.Common.Systems.WorldEvents
                         zoom = 0;
                     }
 
-                    //Main.NewText( Main.player[0].Center - new Vector2(ActivityCoords.X, ActivityCoords.Y));
-
-                    #region Despawn
-                    if (Main.dayTime && !Active)
-                    {
-                        ActivityCoords = new(-1, -1);
-                        State = SystemState.CheckReqs;
-                        OnCooldown = true;
-                        foreach (int k in NPCIndexs)
-                        {
-                            NPC npc = Main.npc[k];
-                            if (npc.type == ModContent.NPCType<RecruitableLunarCultist>())
-                                npc.active = false;
-                            else if (npc.type == ModContent.NPCType<LunarBishop>())
-                                npc.active = false;
-                        }
-                    }
-                    #endregion
+                    //Main.NewText( Main.player[0].Center - new Vector2(ActivityCoords.X, ActivityCoords.Y));                  
 
                     #region Player Proximity
                     closestPlayer = Main.player[Player.FindClosest(new Vector2(ActivityCoords.X, ActivityCoords.Y), 300, 300)];
@@ -565,6 +565,19 @@ namespace Windfall.Common.Systems.WorldEvents
                         //Active = true;
                     }
                     #endregion
+                    #region Despawn  
+                    else if (Main.dayTime && !Active && PlayerDistFromHideout > 4000f)
+                    {
+                        ActivityCoords = new(-1, -1);
+                        State = SystemState.CheckReqs;
+                        OnCooldown = true;
+                        foreach (int k in NPCIndexs)
+                        {
+                            Main.npc[k].active = false;
+                        }
+                    }
+                    #endregion
+                    
                     break;
                 case SystemState.OratorVisit:
                     if(TutorialComplete)
