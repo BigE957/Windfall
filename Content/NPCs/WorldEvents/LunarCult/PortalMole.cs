@@ -120,15 +120,19 @@ namespace Windfall.Content.NPCs.WorldEvents.LunarCult
                     dust.color = dust.type == dustStyle ? Color.LightGreen : default;
                     dustsIndexs.Add(dust.dustIndex);
 
-                    foreach(int i in dustsIndexs)
+                    for (int j = 0; j < dustsIndexs.Count; j++)
                     {
+                        int i = dustsIndexs[j];
                         dust = Main.dust[i];
                         if (NPC.Hitbox.Contains((int)dust.position.X, (int)dust.position.Y))
+                        {
                             dust.active = false;
+                            dustsIndexs[j] = -1;
+                        }
                         else
                             dust.velocity = (NPC.Center - dust.position).SafeNormalize(Vector2.Zero) * 12;
                     }
-                    dustsIndexs.RemoveAll(i => Main.dust[i] == null || !Main.dust[i].active);
+                    dustsIndexs.RemoveAll(i => Main.dust[i] == null || !Main.dust[i].active || i == -1);
                 }
             }
             #region Visuals

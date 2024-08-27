@@ -43,6 +43,7 @@
     <None Remove="Assets\Items\Weapons\Misc\Cnidrisnack.png" />
     <None Remove="Assets\NPCs\Ancient_Storm.png" />
     <None Remove="Assets\NPCs\Bosses\TheOrator_Boss.png" />
+    <None Remove="Assets\NPCs\Bosses\TheOrator_Boss_Arm.png" />
     <None Remove="Assets\NPCs\Bosses\TheOrator_Boss_Head.png" />
     <None Remove="Assets\NPCs\Enemies\DarkSpawn.png" />
     <None Remove="Assets\NPCs\Enemies\LunarCultistArcher.png" />

@@ -42,6 +42,8 @@ namespace Windfall.Common.Systems.WorldEvents
 
             TutorialComplete = false;
 
+            spawnChance = 5;
+
             Active = false;
             State = SystemState.CheckReqs;
         }
@@ -201,7 +203,6 @@ namespace Windfall.Common.Systems.WorldEvents
                 case SystemState.CheckChance:
                     if (spawnChance < 1)
                         spawnChance = 1;
-                    Main.NewText(spawnChance);
                     if (Main.rand.NextBool(spawnChance))
                     {
                         State = SystemState.Waiting;
@@ -246,7 +247,6 @@ namespace Windfall.Common.Systems.WorldEvents
                     if (PlayerDistFromHideout < 160f && closestPlayer.Center.Y < ActivityCoords.Y + 16)
                         State = SystemState.Yap;
                     #endregion
-
                     #region Despawn
                     if (Main.dayTime)
                     {

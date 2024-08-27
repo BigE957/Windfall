@@ -38,12 +38,15 @@ namespace Windfall.Content.Projectiles.Boss.Orator
             Velocity += 1f;
             aiCounter++;
 
-            Vector2 position = new(Projectile.position.X + 39, Projectile.Center.Y);
-            Vector2 rotation = Projectile.rotation.ToRotationVector2();
-            rotation *= -8;
-            Dust dust = Dust.NewDustPerfect(position + rotation, DustID.Terra);
-            dust.scale = Main.rand.NextFloat(1f, 2f);
-            dust.noGravity = true;
+            if (Velocity > 5 && Main.rand.NextBool(3))
+            {
+                Vector2 position = new(Projectile.position.X + 39, Projectile.Center.Y);
+                Vector2 rotation = Projectile.rotation.ToRotationVector2();
+                rotation *= -8;
+                Dust dust = Dust.NewDustPerfect(position + rotation, DustID.Terra);
+                dust.scale = Main.rand.NextFloat(1f, 2f);
+                dust.noGravity = true;
+            }
             Lighting.AddLight(Projectile.Center, new Vector3(0.32f, 0.92f, 0.71f));
         }
         public override void ModifyDamageHitbox(ref Rectangle hitbox)

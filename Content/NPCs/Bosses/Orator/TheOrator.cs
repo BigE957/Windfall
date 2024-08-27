@@ -13,6 +13,7 @@ using Terraria;
 using Windfall.Content.Skies;
 using Terraria.Graphics.Effects;
 using CalamityMod.Items.LoreItems;
+using Windfall.Content.UI.BossBars;
 
 namespace Windfall.Content.NPCs.Bosses.Orator
 {
@@ -30,6 +31,8 @@ namespace Windfall.Content.NPCs.Bosses.Orator
         private static int DashDelay;
         public override void SetStaticDefaults()
         {
+            Main.npcFrameCount[Type] = 2;
+
             NPCID.Sets.NPCBestiaryDrawModifiers drawModifiers = new()
             {
                 Velocity = 1f,
@@ -45,14 +48,13 @@ namespace Windfall.Content.NPCs.Bosses.Orator
         }
         public override void SetDefaults()
         {
-            NPC.friendly = false;
             NPC.boss = true;
             NPC.width = NPC.height = 44;
             NPC.Size = new Vector2(150, 150);
-            NPC.aiStyle = -1;
             //Values gotten from Lunatic Cultist. Subject to change.
             NPC.DR_NERD(0.10f);
-            NPC.LifeMaxNERB(Main.masterMode ? 430000 : Main.expertMode ? 330000 : 270000, 370000);
+            NPC.LifeMaxNERB(Main.masterMode ? 330000 : Main.expertMode ? 240000 : 180000, 300000);
+            NPC.BossBar = ModContent.GetInstance<OratorBossBar>();
             NPC.npcSlots = 5f;
             NPC.defense = 50;
             NPC.HitSound = HurtSound;
@@ -72,14 +74,16 @@ namespace Windfall.Content.NPCs.Bosses.Orator
         private float forcefieldOpacity = 0f;
         private int hitTimer = 0;
         private float forcefieldScale = 0f;
-
+        private bool scytheSpin = false;
+        private bool scytheSlice = false;
 
         public static bool noSpawnsEscape = true;
         public override void OnSpawn(IEntitySource source)
         {
             SkyManager.Instance.Activate("Windfall:Orator", args: Array.Empty<object>());
+            target = Main.player[Player.FindClosest(NPC.Center, NPC.width, NPC.height)];
         }
-        private enum States
+        internal enum States
         {
             Spawning,
             DarkMonster,
@@ -99,40 +103,56 @@ namespace Windfall.Content.NPCs.Bosses.Orator
             PhaseChange,
             Defeat,
         }
-        private States AIState
+        internal States AIState
         {
             get => (States)NPC.ai[0];
             set => NPC.ai[0] = (float)value;
         }
-        int aiCounter = 0;
+        internal int aiCounter
+        {
+            get => (int)NPC.ai[1];
+            set => NPC.ai[1] = value;
+        }
         float attackCounter = 0;
         bool dashing = false;
         private int attackCycles = 0;
         Vector2 VectorToTarget = Vector2.Zero;
+        public Player target = null;
         public override bool PreAI()
         {
-            foreach (Player p in Main.player)
+            foreach (Player p in Main.player.Where(p => p != null && p.active && !p.dead))
             {
-                if (p != null && p.active)
-                    p.AddBuff(ModContent.BuffType<BossEffects>(), 2);
+                p.AddBuff(ModContent.BuffType<BossEffects>(), 2);
             }
             return true;
         }
         public override void AI()
         {
-            Player target = Main.player[Player.FindClosest(NPC.Center, NPC.width, NPC.height)];
             if (target == null || target.active == false || target.dead)
-                NPC.active = false;
-            if (NPC.Center.X < target.Center.X)
-                NPC.direction = 1;
-            else
-                NPC.direction = -1;
+            {
+                target = Main.player[Player.FindClosest(NPC.Center, NPC.width, NPC.height)];
+                if (target == null || target.active == false || target.dead)
+                    NPC.active = false;
+            }
+            if (!dashing)
+            {
+                if (NPC.Center.X < target.Center.X)
+                    NPC.direction = 1;
+                else
+                    NPC.direction = -1;
+            }
             NPC.spriteDirection = NPC.direction;
-            Lighting.AddLight(NPC.Center, new Vector3(0.32f, 0.92f, 0.71f));
-            if (NPC.life / (float)NPC.lifeMax <= 0.1f || AIState == States.PhaseChange || NPC.life / (float)NPC.lifeMax <= 0.66f && AIState < States.DarkOrbit)
-                NPC.DR_NERD(1f);
+            //Lighting.AddLight(NPC.Center, new Vector3(0.32f, 0.92f, 0.71f));
+            if (NPC.AnyNPCs(ModContent.NPCType<OratorHand>()))
+                NPC.dontTakeDamage = true;
             else
-                NPC.DR_NERD(0.1f);
+            {
+                NPC.dontTakeDamage = false;
+                if (NPC.life / (float)NPC.lifeMax <= 0.1f || AIState == States.PhaseChange)
+                    NPC.DR_NERD(1f);
+                else
+                    NPC.DR_NERD(0.1f);
+            }
             if (AIState >= States.DarkOrbit && AIState < States.PhaseChange)
                 target.Calamity().infiniteFlight = true;
             switch (AIState)
@@ -197,7 +217,8 @@ namespace Windfall.Content.NPCs.Bosses.Orator
                     if (aiCounter == 900)
                     {
                         aiCounter = 0;
-                        if (NPC.life / (float)NPC.lifeMax <= 0.66f)
+                        target = Main.player[Player.FindClosest(NPC.Center, NPC.width, NPC.height)];
+                        if (!NPC.AnyNPCs(ModContent.NPCType<OratorHand>()))
                         {
                             AIState = States.PhaseChange;
                             attackCounter = 0;
@@ -213,20 +234,16 @@ namespace Windfall.Content.NPCs.Bosses.Orator
                     }
                     break;
                 case States.DarkSpawn:
-                    target = Main.player[Player.FindClosest(NPC.Center, NPC.width, NPC.height)];
                     #region Movement
-                    if (NPC.Center.Y < target.Center.Y - 300)
-                        NPC.velocity.Y++;
-                    else
-                        NPC.velocity.Y--;
-                    if (NPC.Center.X < target.Center.X)
-                        NPC.velocity.X++;
-                    else
-                        NPC.velocity.X--;
-                    if (NPC.velocity.Length() > 15)
-                        NPC.velocity = NPC.velocity.SafeNormalize(Vector2.Zero) * 15;
-                    #endregion                   
-                    NPC.DR_NERD(0.1f + 0.1f * Main.npc.Where(n => n.type == ModContent.NPCType<ShadowHand>()).Count());
+                    Vector2 homeInV = target.Center + Vector2.UnitY * -300 - NPC.Center;
+                    float velo = 40;
+                    homeInV.Normalize();
+                    NPC.velocity = (NPC.velocity * velo + homeInV * 18f) / (velo + 1f);
+                    if (NPC.Center.Y > target.Center.Y - 250)
+                        NPC.velocity.Y -= 0.25f;
+                    else if (NPC.Center.Y < target.Center.Y + 400)
+                        NPC.velocity.Y += 0.25f;
+                    #endregion                                       
                     NPC.damage = 0;
                     const int EndTime = 1500;
                     int SpawnCount = CalamityWorld.death ? 3 : CalamityWorld.revenge || Main.expertMode ? 2 : 1;
@@ -272,7 +289,8 @@ namespace Windfall.Content.NPCs.Bosses.Orator
                     else if (aiCounter >= EndTime + 90)
                     {
                         aiCounter = 0;
-                        if (NPC.life / (float)NPC.lifeMax <= 0.66f)
+                        target = Main.player[Player.FindClosest(NPC.Center, NPC.width, NPC.height)];
+                        if (!NPC.AnyNPCs(ModContent.NPCType<OratorHand>()))
                             AIState = States.PhaseChange;
                         else
                         {
@@ -294,7 +312,6 @@ namespace Windfall.Content.NPCs.Bosses.Orator
                 case States.DarkBarrage:
                     if (aiCounter <= 1100)
                     {
-                        target = Main.player[Player.FindClosest(NPC.Center, NPC.width, NPC.height)];
                         #region Movement
                         if (aiCounter < 0)
                         {
@@ -318,12 +335,15 @@ namespace Windfall.Content.NPCs.Bosses.Orator
                             {
                                 if (aiCounter % 90 == 0)
                                 {
-                                    SoundEngine.PlaySound(SoundID.Item71, NPC.Center);
+                                    scytheSpin = true;
                                     int radialCounter = CalamityWorld.death ? 12 : CalamityWorld.revenge ? 10 : 8;
                                     for (int i = 0; i < radialCounter; i++)
                                     {
                                         if (Main.netMode != NetmodeID.MultiplayerClient)
-                                            Projectile.NewProjectile(Terraria.Entity.GetSource_NaturalSpawn(), NPC.Center, (target.Center - NPC.Center).SafeNormalize(Vector2.Zero).RotatedBy(TwoPi / radialCounter * i) * 20, ModContent.ProjectileType<DarkBolt>(), BoltDamage, 0f, -1, 0, -5);
+                                        {
+                                            Vector2 rotationVector = (target.Center - NPC.Center).SafeNormalize(Vector2.Zero).RotatedBy(TwoPi / radialCounter * i);
+                                            Projectile.NewProjectile(Terraria.Entity.GetSource_NaturalSpawn(), NPC.Center + NPC.velocity + rotationVector * 40, rotationVector * 20, ModContent.ProjectileType<DarkBolt>(), BoltDamage, 0f, -1, 0, 5);
+                                        }
                                     }
                                 }
                                 else
@@ -333,7 +353,7 @@ namespace Windfall.Content.NPCs.Bosses.Orator
                                     for (int i = 0; i < radialCounter; i++)
                                     {
                                         if (Main.netMode != NetmodeID.MultiplayerClient)
-                                            Projectile.NewProjectile(Terraria.Entity.GetSource_NaturalSpawn(), NPC.Center, (target.Center - NPC.Center).SafeNormalize(Vector2.Zero).RotatedBy(TwoPi / radialCounter * i) * 6, ModContent.ProjectileType<DarkGlob>(), GlobDamage, 0f, -1, 0, Main.rand.NextFloat(1f, 2f));
+                                            Projectile.NewProjectile(Terraria.Entity.GetSource_NaturalSpawn(), NPC.Center + NPC.velocity, (target.Center - NPC.Center).SafeNormalize(Vector2.Zero).RotatedBy(TwoPi / radialCounter * i) * 6, ModContent.ProjectileType<DarkGlob>(), GlobDamage, 0f, -1, 0, Main.rand.NextFloat(1f, 2f));
                                     }
                                 }
                             }
@@ -343,6 +363,8 @@ namespace Windfall.Content.NPCs.Bosses.Orator
                     if (aiCounter > 1100)
                     {
                         #region Attack Transition
+                        if(aiCounter < 1240)
+                            target = Main.player[Player.FindClosest(NPC.Center, NPC.width, NPC.height)];
                         Vector2 homeIn = target.Center - NPC.Center;
                         float targetDistance = homeIn.Length();
                         homeIn.Normalize();
@@ -357,10 +379,10 @@ namespace Windfall.Content.NPCs.Bosses.Orator
                         }
 
                         EmpyreanMetaball.SpawnDefaultParticle(NPC.Center + (target.Center - NPC.Center).SafeNormalize(Vector2.Zero) * 150f, Main.rand.NextVector2Circular(5f, 5f), 1.5f * ((aiCounter - 1100) / 2));
-                        if (aiCounter > 1300 || NPC.life / (float)NPC.lifeMax <= 0.66f)
+                        if (aiCounter > 1300 || !NPC.AnyNPCs(ModContent.NPCType<OratorHand>()))
                         {
                             aiCounter = 0;
-                            if (NPC.life / (float)NPC.lifeMax <= 0.66f)
+                            if (!NPC.AnyNPCs(ModContent.NPCType<OratorHand>()))
                             {
                                 AIState = States.PhaseChange;
                                 attackCounter = 0;
@@ -376,21 +398,38 @@ namespace Windfall.Content.NPCs.Bosses.Orator
                     }
                     break;
                 case States.DarkSlice:
-                    int SliceDashCount = CalamityWorld.death ? 5 : CalamityWorld.revenge ? 4 : 3;
-                    if (aiCounter < 0)
+                    if(aiCounter < -30)
                     {
-                        if (CalamityWorld.death || CalamityWorld.revenge && aiCounter < -10 || Main.expertMode && aiCounter < -20)
+                        Vector2 vector = target.Center - NPC.Center;
+                        float dist = vector.Length();
+                        vector.Normalize();
+                        if (dist > 500)
+                            NPC.velocity = (NPC.velocity * 40f + vector * 16f) / 41f;
+                        else
                         {
-                            VectorToTarget = target.Center - NPC.Center;
-                            NPC.velocity = VectorToTarget.SafeNormalize(Vector2.UnitY) * -5;
+                            if (dist < 450)
+                                NPC.velocity = (NPC.velocity * 40f + vector * -16f) / 41f;
+                            else
+                                NPC.velocity *= 0.975f;
                         }
                     }
-                    if (aiCounter == 0)
+                    int SliceDashCount = CalamityWorld.revenge ? 3 : Main.expertMode ? 2 : 1;
+                    if (aiCounter < 0 && aiCounter >= -30)
                     {
-                        if (attackCounter == 0)
-                            attackCycles++;
-                        SoundEngine.PlaySound(Dash);
+                        if(aiCounter == -30)
+                            SoundEngine.PlaySound(DashWarn);
+                        if (CalamityWorld.death || CalamityWorld.revenge && aiCounter < -10 || Main.expertMode && aiCounter < -20)                        
+                            VectorToTarget = target.Center - NPC.Center;                                                        
+                        float reelBackSpeedExponent = 2.6f;
+                        float reelBackCompletion = Utils.GetLerpValue(0f, DashDelay, aiCounter + DashDelay, true);
+                        float reelBackSpeed = MathHelper.Lerp(2.5f, 16f, MathF.Pow(reelBackCompletion, reelBackSpeedExponent));
+                        Vector2 reelBackVelocity = NPC.DirectionTo(target.Center) * -reelBackSpeed;
+                        NPC.velocity = Vector2.Lerp(NPC.velocity, reelBackVelocity, 0.25f);
+                    }
+                    if (aiCounter == 0)
+                    {                      
                         VectorToTarget = NPC.velocity.SafeNormalize(Vector2.UnitX) * -75;
+                        scytheSlice = true;
                         dashing = true;
                         //values gotten from Astrum Deus' contact damage. Subject to change.
                         NPC.damage = StatCorrections.ScaleContactDamage(Main.masterMode ? 360 : CalamityWorld.death ? 280 : CalamityWorld.revenge ? 268 : Main.expertMode ? 240 : 120);
@@ -398,7 +437,7 @@ namespace Windfall.Content.NPCs.Bosses.Orator
                         Particle pulse = new DirectionalPulseRing(NPC.Center, VectorToTarget.SafeNormalize(Vector2.Zero) * 0f, new(117, 255, 159), new Vector2(0.5f, 2f), (target.Center - NPC.Center).ToRotation(), 0f, 1f, 24);
                         GeneralParticleHandler.SpawnParticle(pulse);
                     }
-                    if (aiCounter > 0)
+                    if (aiCounter >= 0)
                     {
                         NPC.velocity = VectorToTarget;
                         VectorToTarget *= 0.93f;
@@ -418,34 +457,45 @@ namespace Windfall.Content.NPCs.Bosses.Orator
                             Projectile.NewProjectile(Terraria.Entity.GetSource_NaturalSpawn(), NPC.Center, VectorToTarget.RotatedBy(Pi / 2f).SafeNormalize(Vector2.UnitX) * 20, ModContent.ProjectileType<DarkBolt>(), BoltDamage, 0f, -1, 0, -20);
                         #endregion
 
-                        if (VectorToTarget.Length() <= 5)
+                        if (VectorToTarget.Length() <= 4)
                         {
+                            scytheSpin = true;
                             int radialCounter = CalamityWorld.death ? 12 : CalamityWorld.revenge ? 10 : 8;
                             for (int i = 0; i < radialCounter; i++)
                             {
                                 if (Main.netMode != NetmodeID.MultiplayerClient)
-                                    Projectile.NewProjectile(Terraria.Entity.GetSource_NaturalSpawn(), NPC.Center, (target.Center - NPC.Center).SafeNormalize(Vector2.Zero).RotatedBy(TwoPi / radialCounter * i) * 20, ModContent.ProjectileType<DarkBolt>(), BoltDamage, 0f, -1, 0, -20);
+                                {
+                                    Vector2 rotationVector = (target.Center - NPC.Center).SafeNormalize(Vector2.Zero).RotatedBy(TwoPi / radialCounter * i);
+                                    Projectile.NewProjectile(Terraria.Entity.GetSource_NaturalSpawn(), NPC.Center + NPC.velocity + rotationVector * 124, rotationVector * 20, ModContent.ProjectileType<DarkBolt>(), BoltDamage, 0f, -1, 0, -10);
+                                }
                             }
                             if (++attackCounter == SliceDashCount)
                             {
-                                aiCounter = 0;
-                                dashing = false;
-                                if (NPC.life / (float)NPC.lifeMax <= 0.66f)
+                                attackCounter = 0;
+                                target = Main.player[Player.FindClosest(NPC.Center, NPC.width, NPC.height)];
+                                if (++attackCycles == 3)
                                 {
-                                    AIState = States.PhaseChange;
-                                    attackCounter = 0;
+                                    attackCycles = 0;
+                                    aiCounter = 0;
+                                    dashing = false;
+                                    if (!NPC.AnyNPCs(ModContent.NPCType<OratorHand>()))
+                                    {
+                                        AIState = States.PhaseChange;                                        
+                                    }
+                                    else
+                                    {
+                                        NPC.damage = 0;
+                                        AIState = States.DarkStorm;
+                                    }
                                 }
                                 else
                                 {
-                                    NPC.damage = 0;
-                                    AIState = States.DarkStorm;
+                                    aiCounter = -200;
                                 }
                             }
                             else
                             {
-                                aiCounter = DashDelay * -1;
-                                SoundEngine.PlaySound(DashWarn);
-                                NPC.velocity = (target.Center - NPC.Center).SafeNormalize(Vector2.UnitY) * -5;
+                                aiCounter = -30;
                             }
                             return;
                         }
@@ -453,25 +503,32 @@ namespace Windfall.Content.NPCs.Bosses.Orator
                     break;
                 case States.DarkStorm:
                     int AttackFrequency = CalamityWorld.death ? 10 : CalamityWorld.revenge ? 12 : Main.expertMode ? 14 : 16;
-                    target = Main.player[Player.FindClosest(NPC.Center, NPC.width, NPC.height)];
                     #region Movement
-                    Vector2 homeInV = target.Center + Vector2.UnitY * -250 - NPC.Center;
-                    float velo = 60;
+                    homeInV = target.Center + Vector2.UnitY * -300 - NPC.Center;
+                    velo = 60;
                     homeInV.Normalize();
                     NPC.velocity = (NPC.velocity * velo + homeInV * 18f) / (velo + 1f);
-                    if (NPC.Center.Y > target.Center.Y - 250)
-                        NPC.velocity.Y -= 0.25f;
+                    if (Math.Abs(NPC.velocity.Y) > 15)
+                    {
+                        if(NPC.velocity.Y >= 0)
+                            NPC.velocity.Y = 15;
+                        else
+                            NPC.velocity.Y = -15;
+                    }
                     #endregion
                     #region Projectiles
                     if (aiCounter > 120 && NPC.Center.Y < target.Center.Y - 50)
                     {
                         Projectile proj;
-                        if (aiCounter % 5 == 0 && Main.netMode != NetmodeID.MultiplayerClient)
+                        if (Main.netMode != NetmodeID.MultiplayerClient && aiCounter % 10 == 0)
                         {
-                            //The Anti-Cheesers
-                            proj = Projectile.NewProjectileDirect(Terraria.Entity.GetSource_NaturalSpawn(), new Vector2(target.Center.X - 400, target.Center.Y - 800), new Vector2(Main.rand.NextFloat(-6f, -3f), 0), ModContent.ProjectileType<DarkGlob>(), GlobDamage * 3, 0f, -1, 1, 3f);
+                            //Anti-Cheesers
+                            NPC hand = Main.npc[NPC.FindFirstNPC(ModContent.NPCType<OratorHand>())]; ;
+                            proj = Projectile.NewProjectileDirect(Terraria.Entity.GetSource_NaturalSpawn(), hand.Center + new Vector2(0, -32), new Vector2(Main.rand.NextFloat(-1.5f, 1.5f), -12), ModContent.ProjectileType<DarkGlob>(), GlobDamage * 3, 0f, -1, 1, 1.5f);
                             proj.Calamity().DealsDefenseDamage = true;
-                            proj = Projectile.NewProjectileDirect(Terraria.Entity.GetSource_NaturalSpawn(), new Vector2(target.Center.X + 400, target.Center.Y - 800), new Vector2(Main.rand.NextFloat(3f, 6f), 0), ModContent.ProjectileType<DarkGlob>(), GlobDamage * 3, 0f, -1, 1, 3f);
+
+                            hand = Main.npc.Last(n => n != null && n.active && n.type == ModContent.NPCType<OratorHand>());
+                            proj = Projectile.NewProjectileDirect(Terraria.Entity.GetSource_NaturalSpawn(), hand.Center + new Vector2(-64, -32), new Vector2(Main.rand.NextFloat(-1.5f, 1.5f), -12), ModContent.ProjectileType<DarkGlob>(), GlobDamage * 3, 0f, -1, 1, 1.5f);
                             proj.Calamity().DealsDefenseDamage = true;
                         }
                         if (aiCounter % AttackFrequency == 0)
@@ -501,7 +558,8 @@ namespace Windfall.Content.NPCs.Bosses.Orator
                     if (aiCounter > 720)
                     {
                         attackCounter = 0;
-                        if (NPC.life / (float)NPC.lifeMax <= 0.66f)
+                        target = Main.player[Player.FindClosest(NPC.Center, NPC.width, NPC.height)];
+                        if (!NPC.AnyNPCs(ModContent.NPCType<OratorHand>()))
                         {
                             AIState = States.PhaseChange;
                             aiCounter = 0;
@@ -516,8 +574,6 @@ namespace Windfall.Content.NPCs.Bosses.Orator
                     #endregion
                     break;
                 case States.DarkCollision:
-                    target = Main.player[Player.FindClosest(NPC.Center, NPC.width, NPC.height)];
-
                     #region Movement
                     Vector2 homeInVec = target.Center - NPC.Center;
                     float distance = homeInVec.Length();
@@ -535,6 +591,7 @@ namespace Windfall.Content.NPCs.Bosses.Orator
 
                     if (aiCounter % (80 + DarkCoalescence.fireDelay) == 0 && aiCounter < 700)
                     {
+                        target = Main.player[Player.FindClosest(NPC.Center, NPC.width, NPC.height)];
                         if (Main.netMode != NetmodeID.MultiplayerClient)
                             if (Main.rand.NextBool())
                             {
@@ -550,7 +607,8 @@ namespace Windfall.Content.NPCs.Bosses.Orator
 
                     if (aiCounter >= 850)
                     {
-                        if (NPC.life / (float)NPC.lifeMax <= 0.66f)
+                        target = Main.player[Player.FindClosest(NPC.Center, NPC.width, NPC.height)];
+                        if (!NPC.AnyNPCs(ModContent.NPCType<OratorHand>()))
                         {
                             AIState = States.PhaseChange;
                             attackCounter = 0;
@@ -572,7 +630,6 @@ namespace Windfall.Content.NPCs.Bosses.Orator
                     Projectile border = Main.projectile.First(p => p.active && p.type == ModContent.ProjectileType<OratorBorder>());
                     if (aiCounter >= 0)
                     {
-                        target = Main.player[Player.FindClosest(NPC.Center, NPC.width, NPC.height)];
                         if (aiCounter == 0)
                         {
                             NPC.position.X = border.position.X;
@@ -589,6 +646,7 @@ namespace Windfall.Content.NPCs.Bosses.Orator
                                 Projectile.NewProjectile(Terraria.Entity.GetSource_NaturalSpawn(), NPC.Center, (border.Center - NPC.Center).SafeNormalize(Vector2.UnitX) * 20, ModContent.ProjectileType<DarkBolt>(), BoltDamage, 0f);
                             if (Main.expertMode && aiCounter % (CalamityWorld.revenge ? 90 : 120) == 0 && aiCounter > 30 && aiCounter < NPC.ai[3] - 240)
                             {
+                                target = Main.player[Player.FindClosest(NPC.Center, NPC.width, NPC.height)];
                                 SoundEngine.PlaySound(SoundID.DD2_DarkMageAttack, NPC.Center);
                                 for (int i = 0; i < 20; i++)
                                 {
@@ -611,6 +669,7 @@ namespace Windfall.Content.NPCs.Bosses.Orator
                         {
                             if (aiCounter == NPC.ai[3] - DashDelay)
                             {
+                                target = Main.player[Player.FindClosest(NPC.Center, NPC.width, NPC.height)];
                                 if (NPC.life / (float)NPC.lifeMax <= 0.1f)
                                 {
                                     AIState = States.Defeat;
@@ -621,14 +680,15 @@ namespace Windfall.Content.NPCs.Bosses.Orator
                                 {
                                     dashing = true;
                                     SoundEngine.PlaySound(DashWarn);
-                                    NPC.velocity = (target.Center - NPC.Center).SafeNormalize(Vector2.UnitY) * -4;
                                 }
                             }
-                            else if (aiCounter - NPC.ai[3] < (CalamityWorld.death ? -20 : -30))
-                            {
+                            if (aiCounter - NPC.ai[3] < (CalamityWorld.death ? -20 : -30))
                                 VectorToTarget = target.Center - NPC.Center;
-                                NPC.velocity = VectorToTarget.SafeNormalize(Vector2.UnitY) * -4;
-                            }
+                            float reelBackSpeedExponent = 2.6f;
+                            float reelBackCompletion = Utils.GetLerpValue(0f, DashDelay, (aiCounter - NPC.ai[3]) + DashDelay, true);
+                            float reelBackSpeed = MathHelper.Lerp(2.5f, 16f, MathF.Pow(reelBackCompletion, reelBackSpeedExponent));
+                            Vector2 reelBackVelocity = NPC.DirectionTo(target.Center) * -reelBackSpeed;
+                            NPC.velocity = Vector2.Lerp(NPC.velocity, reelBackVelocity, 0.25f);
                         }
                         else
                         {
@@ -636,7 +696,7 @@ namespace Windfall.Content.NPCs.Bosses.Orator
                             {
                                 VectorToTarget = NPC.velocity.SafeNormalize(Vector2.UnitX) * -75;
                                 NPC.ai[2] = -1;
-                                SoundEngine.PlaySound(Dash);
+                                scytheSlice = true;
                                 //values gotten from Astrum Deus' contact damage. Subject to change.
                                 NPC.damage = StatCorrections.ScaleContactDamage(Main.masterMode ? 360 : CalamityWorld.death ? 280 : CalamityWorld.revenge ? 268 : Main.expertMode ? 240 : 120);
                                 Particle pulse = new DirectionalPulseRing(NPC.Center, VectorToTarget.SafeNormalize(Vector2.Zero) * 0f, new(117, 255, 159), new Vector2(0.5f, 2f), (target.Center - NPC.Center).ToRotation(), 0f, 1f, 24);
@@ -650,16 +710,6 @@ namespace Windfall.Content.NPCs.Bosses.Orator
                                 {
                                     VectorToTarget /= -2;
                                     NPC.velocity = VectorToTarget;
-
-                                    if (CalamityWorld.revenge)
-                                    {
-                                        int radialCounter = CalamityWorld.death ? 12 : 10;
-                                        for (int i = 0; i < radialCounter; i++)
-                                        {
-                                            if (Main.netMode != NetmodeID.MultiplayerClient)
-                                                Projectile.NewProjectile(Terraria.Entity.GetSource_NaturalSpawn(), NPC.Center, (target.Center - NPC.Center).SafeNormalize(Vector2.Zero).RotatedBy(TwoPi / radialCounter * i) * 20, ModContent.ProjectileType<DarkBolt>(), BoltDamage, 0f, -1, 0, -20);
-                                        }
-                                    }
                                 }
                             }
                             else
@@ -690,6 +740,7 @@ namespace Windfall.Content.NPCs.Bosses.Orator
                                 NPC.damage = 0;
                                 if (attackCounter++ == OrbitDashCount - 1)
                                 {
+                                    target = Main.player[Player.FindClosest(NPC.Center, NPC.width, NPC.height)];
                                     dashing = false;
                                     aiCounter = 0;
                                     if (NPC.life / (float)NPC.lifeMax <= 0.1f)
@@ -718,7 +769,6 @@ namespace Windfall.Content.NPCs.Bosses.Orator
                     }
                     break;
                 case States.DarkCrush:
-                    target = Main.player[Player.FindClosest(NPC.Center, NPC.width, NPC.height)];
                     border = Main.projectile.First(p => p.active && p.type == ModContent.ProjectileType<OratorBorder>());
                     OratorBorder oratorBorder = border.ModProjectile as OratorBorder;
                     #region Movement
@@ -738,7 +788,7 @@ namespace Windfall.Content.NPCs.Bosses.Orator
                         {
                             if (Main.expertMode && aiCounter % 120 == 0)
                             {
-                                SoundEngine.PlaySound(SoundID.Item71, NPC.Center);
+                                scytheSpin = true;
                                 for (int i = 0; i < 6; i++)
                                 {
                                     if (Main.netMode != NetmodeID.MultiplayerClient)
@@ -750,7 +800,7 @@ namespace Windfall.Content.NPCs.Bosses.Orator
                         }
                         else if (aiCounter >= 1680 && aiCounter % 45 == 0)
                         {
-                            SoundEngine.PlaySound(SoundID.Item71, NPC.Center);
+                            scytheSpin = true;
                             Vector2 dir = Main.rand.NextVector2CircularEdge(1f, 1f);
                             int projCount = 8;
                             for (int i = 0; i < projCount; i++)
@@ -767,6 +817,7 @@ namespace Windfall.Content.NPCs.Bosses.Orator
                         {
                             oratorBorder.trueScale = 3f;
                             aiCounter = 0;
+                            target = Main.player[Player.FindClosest(NPC.Center, NPC.width, NPC.height)];
                             if (NPC.life / (float)NPC.lifeMax <= 0.1f)
                             {
                                 AIState = States.Defeat;
@@ -782,7 +833,6 @@ namespace Windfall.Content.NPCs.Bosses.Orator
                     }
                     break;
                 case States.DarkFlight:
-                    target = Main.player[Player.FindClosest(NPC.Center, NPC.width, NPC.height)];
                     border = Main.projectile.First(p => p.active && p.type == ModContent.ProjectileType<OratorBorder>());
                     oratorBorder = border.ModProjectile as OratorBorder;
                     #region Movement
@@ -861,11 +911,15 @@ namespace Windfall.Content.NPCs.Bosses.Orator
                     */
                     #endregion
                     if (Main.netMode != NetmodeID.MultiplayerClient && aiCounter % 240 == 0 && aiCounter > 1000)
+                    {
+                        target = Main.player[Player.FindClosest(NPC.Center, NPC.width, NPC.height)];
                         Projectile.NewProjectile(Terraria.Entity.GetSource_NaturalSpawn(), new Vector2(target.Center.X + 500, target.Center.Y), Vector2.Zero, ModContent.ProjectileType<DarkCoalescence>(), MonsterDamage, 0f, -1, 0, Main.rand.NextBool() ? -1 : 1, Main.rand.NextBool() ? -1 : 1);
+                    }
                     #endregion
                     if (aiCounter >= 2500)
                     {
                         aiCounter = 0;
+                        target = Main.player[Player.FindClosest(NPC.Center, NPC.width, NPC.height)];
                         if (NPC.life / (float)NPC.lifeMax <= 0.1f)
                         {
                             AIState = States.Defeat;
@@ -927,6 +981,7 @@ namespace Windfall.Content.NPCs.Bosses.Orator
                         foreach (Projectile proj in Main.projectile.Where(p => p != null && p.active && p.type == ModContent.ProjectileType<DarkGlob>()))
                             proj.timeLeft = 45;
                         aiCounter = 0;
+                        target = Main.player[Player.FindClosest(NPC.Center, NPC.width, NPC.height)];
                         if (NPC.life / (float)NPC.lifeMax <= 0.1f)
                         {
                             AIState = States.Defeat;
@@ -1000,13 +1055,14 @@ namespace Windfall.Content.NPCs.Bosses.Orator
                                     Projectile.NewProjectile(Projectile.GetSource_NaturalSpawn(), NPC.Center + Main.rand.NextVector2Circular(64f, 64f), (target.Center - NPC.Center).SafeNormalize(Vector2.Zero) * 8, ModContent.ProjectileType<DarkGlob>(), GlobDamage, 0f, -1, 2, 0.5f);
                             */
                             if (Main.netMode != NetmodeID.MultiplayerClient && aiCounter % 8 == 0)
-                                Projectile.NewProjectile(Terraria.Entity.GetSource_NaturalSpawn(), NPC.Center, new Vector2(0, -10).RotatedBy(Main.rand.NextFloat(-0.1f, 0.1f)), ModContent.ProjectileType<DarkGlob>(), GlobDamage, 0f, -1, 1, 0.75f);
+                                Projectile.NewProjectile(Terraria.Entity.GetSource_NaturalSpawn(), NPC.Center, new Vector2(0, -10).RotatedBy(Main.rand.NextFloat(-0.10f, 0.10f)), ModContent.ProjectileType<DarkGlob>(), GlobDamage, 0f, -1, 1, 0.75f);
                         }
                     }
                     else if (aiCounter == attackDuration + tideOut + 120)
                     {
                         aiCounter = -30;
                         attackCounter = 0;
+                        target = Main.player[Player.FindClosest(NPC.Center, NPC.width, NPC.height)];
                         if (NPC.life / (float)NPC.lifeMax <= 0.1f)
                             AIState = States.Defeat;
                         else
@@ -1087,6 +1143,7 @@ namespace Windfall.Content.NPCs.Bosses.Orator
                         {
                             aiCounter = -30;
                             attackCounter = 0;
+                            target = Main.player[Player.FindClosest(NPC.Center, NPC.width, NPC.height)];
                             if (NPC.life / (float)NPC.lifeMax <= 0.1f)
                                 AIState = States.Defeat;
                             else
@@ -1098,18 +1155,28 @@ namespace Windfall.Content.NPCs.Bosses.Orator
                             velo = 20;
                             homeInV.Normalize();
                             NPC.velocity = (NPC.velocity * velo + homeInV * 18f) / (velo + 1f);
-                            if (NPC.Center.Y > border.Center.Y - 600)
-                                NPC.velocity.Y -= 0.25f;
-                            else
-                                NPC.velocity.Y += 0.25f;
+                            if (Math.Abs(NPC.velocity.Y) > 15)
+                            {
+                                if (NPC.velocity.Y >= 0)
+                                    NPC.velocity.Y = 15;
+                                else
+                                    NPC.velocity.Y = -15;
+                            }
 
                         }
-                        else if (aiCounter - 750 == 120)
+                        else if (aiCounter - 750 < 145)
                         {
                             NPC.ai[3] = -1;
-                            dashing = true;
-                            SoundEngine.PlaySound(DashWarn);
-                            NPC.velocity = Vector2.UnitY * -4;
+                            if (aiCounter - 750 == 120)
+                            {                                
+                                dashing = true;
+                                SoundEngine.PlaySound(DashWarn);
+                            }
+                            float reelBackSpeedExponent = 2.6f;
+                            float reelBackCompletion = Utils.GetLerpValue(0f, 25, aiCounter - 870, true);
+                            float reelBackSpeed = MathHelper.Lerp(2.5f, 16f, MathF.Pow(reelBackCompletion, reelBackSpeedExponent));
+                            Vector2 reelBackVelocity = Vector2.UnitY * -reelBackSpeed;
+                            NPC.velocity = Vector2.Lerp(NPC.velocity, reelBackVelocity, 0.25f);
                         }
                         else
                         {
@@ -1209,6 +1276,7 @@ namespace Windfall.Content.NPCs.Bosses.Orator
                                 }
                                 else if (NPC.velocity.LengthSquared() <= 64 && NPC.position.Y < wallTop - 300 && NPC.oldPosition.Y < wallTop - 300)
                                 {
+                                    target = Main.player[Player.FindClosest(NPC.Center, NPC.width, NPC.height)];
                                     attackCounter++;
                                     aiCounter = 750;
                                 }
@@ -1235,24 +1303,18 @@ namespace Windfall.Content.NPCs.Bosses.Orator
                         else
                             NPC.velocity *= 0.975f;
                     }
-
-                    if (aiCounter > 150)
+                    if (Main.netMode != NetmodeID.MultiplayerClient)
                     {
-                        forcefieldOpacity = Lerp(forcefieldOpacity, 1f, 0.08f);
-                        forcefieldScale = Lerp(forcefieldScale, 1f, 0.08f);
-                        if (forcefieldScale >= 0.99f)
+                        if (aiCounter == 1)
                         {
-                            NPC.dontTakeDamage = false;
-                            forcefieldOpacity = 1f;
-                            forcefieldScale = 1f;
+                            NPC.NewNPC(NPC.GetSource_NaturalSpawn(), (int)NPC.Center.X, (int)NPC.Center.Y, ModContent.NPCType<OratorHand>(), ai0: NPC.whoAmI, ai1: 1);
+                            NPC.NewNPC(NPC.GetSource_NaturalSpawn(), (int)NPC.Center.X, (int)NPC.Center.Y, ModContent.NPCType<OratorHand>(), ai0: NPC.whoAmI, ai1: -1);
                         }
                     }
                     if (aiCounter == 360)
                     {
                         aiCounter = -30;
-                        SoundEngine.PlaySound(DashWarn);
                         attackCounter = 0;
-                        NPC.velocity = (target.Center - NPC.Center).SafeNormalize(Vector2.UnitY) * -5;
                         AIState = States.DarkSlice;
                         return;
                     }
@@ -1355,11 +1417,156 @@ namespace Windfall.Content.NPCs.Bosses.Orator
 
                     break;
             }
+            if (scytheSpin)
+                DoScytheSpin();
+            if (scytheSlice)
+                DoScytheSlice();
 
             aiCounter++;
             if (hitTimer > 0)
                 hitTimer--;
         }
+        Particle spinSmear = null;
+        Vector2 spinDirection = Vector2.Zero;
+        int spinCounter = 0;
+        private void DoScytheSpin()
+        {
+            if (spinCounter == 0)
+            {
+                SoundEngine.PlaySound(SoundID.Item71, NPC.Center);
+                spinDirection = NPC.velocity.SafeNormalize(Vector2.UnitX * NPC.direction) * -1;
+                spinDirection.Normalize();
+                spinDirection.RotatedBy(PiOver2 + (Pi / 4));
+            }
+
+            spinDirection = spinDirection.RotatedBy(MathHelper.Clamp(1f - (spinCounter / 60f), 0.5f, 1f) * MathHelper.PiOver4 * 0.50f);
+            spinDirection.Normalize();
+
+            if (spinCounter > 15)
+            {
+                if (spinSmear != null)
+                {
+                    if (spinCounter < 30)
+                    {
+                        spinSmear.Rotation = spinDirection.ToRotation() + MathHelper.PiOver2;
+                        spinSmear.Time = 0;
+                        spinSmear.Position = NPC.Center;
+                        spinSmear.Scale = NPC.scale * 1.9f;
+                        spinSmear.Color = Color.Lerp(Color.LimeGreen, Color.Teal, spinCounter / 40f);
+                        spinSmear.Color.A = (byte)(255 - 255 * MathHelper.Clamp((spinCounter - 15) / 15f, 0f, 1f));
+                    }
+                    else
+                    {
+                        spinSmear.Kill();
+                        spinSmear = null;
+                        scytheSpin = false;
+                        spinCounter = 0;
+                        return;
+                    }
+                }
+            }
+            else
+            {
+                if (spinSmear == null)
+                {
+                    spinSmear = new CircularSmearVFX(NPC.Center, Color.HotPink, spinDirection.ToRotation(), NPC.scale * 1.5f);
+                    GeneralParticleHandler.SpawnParticle(spinSmear);
+                    spinSmear.Color.A = 0;
+                }
+                else
+                {
+                    spinSmear.Rotation = spinDirection.ToRotation() + MathHelper.PiOver2;
+                    spinSmear.Time = 0;
+                    spinSmear.Position = NPC.Center;
+                    spinSmear.Scale = NPC.scale * 1.9f;
+                    spinSmear.Color = Color.Lerp(Color.LimeGreen, Color.Teal, spinCounter / 40f);
+                    spinSmear.Color.A = (byte)(255 * MathHelper.Clamp((spinCounter / 10f), 0f, 1f));
+                }
+            }
+            if(spinSmear != null)
+            {
+                int dustStyle = Main.rand.NextBool() ? 66 : 263;
+                Vector2 speed = spinDirection.RotatedBy(PiOver2) * Main.rand.NextFloat(1f, 2f);
+                Dust dust = Dust.NewDustPerfect(NPC.Center + (spinDirection.RotatedBy(Main.rand.NextFloat(-Pi / 6, Pi / 6)) * Main.rand.NextFloat(160f, 190f)), Main.rand.NextBool(3) ? 191 : dustStyle, speed * 3, Scale: Main.rand.NextFloat(1.5f, 2.3f));
+                dust.noGravity = true;
+                dust.color = dust.type == dustStyle ? Color.LightGreen : default;
+            }
+            spinCounter++;
+        }
+        Particle sliceSmear = null;
+        Vector2 sliceDirection = Vector2.Zero;
+        int sliceCounter = 0;
+        private void DoScytheSlice()
+        {
+            if (sliceCounter == 0)
+            {
+                SoundEngine.PlaySound(SoundID.Item71, NPC.Center);
+                SoundEngine.PlaySound(Dash);
+                SoundEngine.PlaySound(SoundID.Item71, NPC.Center);
+                sliceDirection = NPC.velocity.SafeNormalize(Vector2.UnitX * NPC.direction) * 1;
+                sliceDirection.Normalize();
+                sliceDirection = sliceDirection.RotatedBy(-Pi + PiOver4);
+            }
+
+            sliceDirection = sliceDirection.RotatedBy(MathHelper.Clamp(1f - (sliceCounter / 60f), 0.5f, 1f) * MathHelper.PiOver4 * 0.35f);
+            sliceDirection.Normalize();
+
+            //Update the variables of the smear                      
+            if (sliceCounter > 8)
+            {
+                if (sliceSmear != null)
+                {
+                    if (sliceCounter < 16)
+                    {
+                        sliceSmear.Rotation = sliceDirection.ToRotation() + MathHelper.PiOver2;
+                        sliceSmear.Time = 0;
+                        sliceSmear.Position = NPC.Center;
+                        sliceSmear.Scale = NPC.scale * 1.5f;
+                        sliceSmear.Color = Color.Lerp(Color.LimeGreen, Color.Teal, sliceCounter / 20f);
+                        sliceSmear.Color.A = (byte)(255 - 255 * MathHelper.Clamp(((sliceCounter - 8) / 8f), 0f, 1f));
+                    }
+                    else
+                    {
+                        sliceSmear.Kill();
+                        sliceSmear = null;
+                        scytheSlice = false;
+                        sliceCounter = 0;
+                        return;
+                    }
+                }
+                if (sliceCounter >= 120)
+                    sliceCounter = -1;
+            }
+            else
+            {
+
+                if (sliceSmear == null)
+                {
+                    sliceSmear = new CircularSmearVFX(NPC.Center, Color.HotPink, sliceDirection.ToRotation(), NPC.scale * 1.5f);
+                    GeneralParticleHandler.SpawnParticle(sliceSmear);
+                    sliceSmear.Color.A = 0;
+                }
+                else
+                {
+                    sliceSmear.Rotation = sliceDirection.ToRotation() + MathHelper.PiOver2;
+                    sliceSmear.Time = 0;
+                    sliceSmear.Position = NPC.Center;
+                    sliceSmear.Scale = NPC.scale * 1.5f;
+                    sliceSmear.Color = Color.Lerp(Color.LimeGreen, Color.Teal, sliceCounter / 20f);
+                    sliceSmear.Color.A = (byte)(255 * MathHelper.Clamp((sliceCounter / 4f), 0f, 1f));
+                }
+            }
+            if (sliceSmear != null)
+            {
+                int dustStyle = Main.rand.NextBool() ? 66 : 263;
+                Vector2 speed = sliceDirection.RotatedBy(PiOver2) * Main.rand.NextFloat(1f, 2f);
+                Dust dust = Dust.NewDustPerfect(NPC.Center + (sliceDirection.RotatedBy(Main.rand.NextFloat(-Pi / 6, Pi / 6)) * Main.rand.NextFloat(120f, 160f)), Main.rand.NextBool(3) ? 191 : dustStyle, speed * 3, Scale: Main.rand.NextFloat(1.5f, 2.3f));
+                dust.noGravity = true;
+                dust.color = dust.type == dustStyle ? Color.LightGreen : default;
+            }
+            sliceCounter++;
+        }
+        
         public override void HitEffect(NPC.HitInfo hit)
         {
             if (Main.netMode != NetmodeID.MultiplayerClient)
@@ -1420,67 +1627,42 @@ namespace Windfall.Content.NPCs.Bosses.Orator
             if (MyDialogue.text.Length > 50)
                 MyDialogue.lifeTime = 60 + MyDialogue.text.Length;
         }
+        public override void FindFrame(int frameHeight)
+        {
+            NPC.frame.Width = frameHeight;
+            if (scytheSlice || scytheSpin)
+            {
+                NPC.frame.Y = frameHeight;
+                NPC.frame.X = frameHeight;
+            }
+            else if (AIState == States.DarkStorm || AIState == States.DarkEmbrace || AIState == States.DarkMonster || AIState == States.DarkCollision)
+            {
+                NPC.frame.Y = frameHeight;
+                NPC.frame.X = 0;
+            }
+            else if (AIState == States.DarkFlight || AIState == States.DarkSpawn || AIState == States.DarkTides || AIState == States.Defeat || AIState == States.PhaseChange)
+            {
+                NPC.frame.X = frameHeight;
+                NPC.frame.Y = 0;
+            }
+            else
+            {
+                NPC.frame.X = 0;
+                NPC.frame.Y = 0;
+            }
+        }
         public override bool PreDraw(SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor)
         {
 
             Texture2D texture = TextureAssets.Npc[NPC.type].Value;
-            Vector2 halfSizeTexture = new(TextureAssets.Npc[NPC.type].Value.Width / 2, TextureAssets.Npc[NPC.type].Value.Height / Main.npcFrameCount[NPC.type] / 2);
+            Vector2 halfSizeTexture = new(TextureAssets.Npc[NPC.type].Value.Width / 4, TextureAssets.Npc[NPC.type].Value.Height / Main.npcFrameCount[NPC.type] / 2);
             Vector2 drawPosition = new Vector2(NPC.Center.X, NPC.Center.Y) - screenPos;
             SpriteEffects spriteEffects = SpriteEffects.None;
-            if (NPC.spriteDirection == 1)
+            if (NPC.spriteDirection == -1)
                 spriteEffects = SpriteEffects.FlipHorizontally;
             spriteBatch.Draw(texture, drawPosition, NPC.frame, NPC.GetAlpha(drawColor), NPC.rotation, halfSizeTexture, NPC.scale, spriteEffects, 0f);
-            DrawForcefield(spriteBatch);
+
             return false;
-        }
-        public void DrawForcefield(SpriteBatch spriteBatch)
-        {
-            spriteBatch.EnterShaderRegion();
-            float intensity = 35f / 35f;
-
-            float lifeRatio = NPC.life / (float)NPC.lifeMax;
-            float flickerPower = 0f;
-            if (lifeRatio < 0.6f)
-                flickerPower += 0.1f;
-            if (lifeRatio < 0.3f)
-                flickerPower += 0.15f;
-            if (lifeRatio < 0.1f)
-                flickerPower += 0.2f;
-            if (lifeRatio < 0.05f)
-                flickerPower += 0.1f;
-            float opacity = forcefieldOpacity;
-            opacity *= Lerp(1f, Max(1f - flickerPower, 0.56f), (float)Math.Pow(Math.Cos(Main.GlobalTimeWrappedHourly * Lerp(3f, 5f, flickerPower)), 24D));
-
-            if (dashing)
-                intensity = 1.1f;
-
-            intensity *= 0.75f;
-            opacity *= 0.75f;
-
-            Texture2D forcefieldTexture = ModContent.Request<Texture2D>("CalamityMod/NPCs/SupremeCalamitas/ForcefieldTexture").Value;
-            GameShaders.Misc["CalamityMod:SupremeShield"].UseImage1("Images/Misc/Perlin");
-
-            Color forcefieldColor = Color.Black;
-            Color secondaryForcefieldColor = Color.PaleGreen;
-
-            if (dashing)
-            {
-                forcefieldColor *= 0.25f;
-                secondaryForcefieldColor = Color.Lerp(secondaryForcefieldColor, Color.Black, 0.7f);
-            }
-
-            forcefieldColor *= opacity;
-            secondaryForcefieldColor *= opacity;
-
-            GameShaders.Misc["CalamityMod:SupremeShield"].UseSecondaryColor(secondaryForcefieldColor);
-            GameShaders.Misc["CalamityMod:SupremeShield"].UseColor(forcefieldColor);
-            GameShaders.Misc["CalamityMod:SupremeShield"].UseSaturation(intensity);
-            GameShaders.Misc["CalamityMod:SupremeShield"].UseOpacity(opacity);
-            GameShaders.Misc["CalamityMod:SupremeShield"].Apply();
-
-            spriteBatch.Draw(forcefieldTexture, NPC.Center - Main.screenPosition, null, Color.White * opacity, 0f, forcefieldTexture.Size() * 0.5f, forcefieldScale * 3f, SpriteEffects.None, 0f);
-
-            spriteBatch.ExitShaderRegion();
         }
     }
 }

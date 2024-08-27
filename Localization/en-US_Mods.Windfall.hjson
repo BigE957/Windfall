@@ -1775,6 +1775,7 @@ NPCs: {
 	Seamstress.DisplayName: Seamstress
 	TheChef.DisplayName: The Chef
 	PortalMole.DisplayName: Enimgatic Rift
+	OratorHand.DisplayName: Orator Hand
 }
 
 Projectiles: {
