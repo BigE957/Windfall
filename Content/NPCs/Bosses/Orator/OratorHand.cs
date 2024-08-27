@@ -123,6 +123,11 @@ namespace Windfall.Content.NPCs.Bosses.Orator
                     case TheOrator.States.DarkSlice:
                         Vector2 goalPos = Vector2.Zero;
                         aiCounter += 200;
+                        if (aiCounter > 110)
+                            NPC.damage = StatCorrections.ScaleContactDamage(Main.masterMode ? 360 : CalamityWorld.death ? 280 : CalamityWorld.revenge ? 268 : Main.expertMode ? 240 : 120);
+                        else
+                            NPC.damage = 0;
+
                         if (WhatHand == 1)
                         {
                             if (aiCounter < 90)
