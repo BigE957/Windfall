@@ -71,9 +71,7 @@ namespace Windfall.Content.NPCs.Bosses.Orator
             BoltDamage = StatCorrections.ScaleProjectileDamage(Main.masterMode ? 205 : CalamityWorld.death ? 172 : CalamityWorld.revenge ? 160 : Main.expertMode ? 138 : 90);
             DashDelay = CalamityWorld.death ? 20 : CalamityWorld.revenge ? 25 : 30;
         }
-        private float forcefieldOpacity = 0f;
         private int hitTimer = 0;
-        private float forcefieldScale = 0f;
         private bool scytheSpin = false;
         private bool scytheSlice = false;
 
