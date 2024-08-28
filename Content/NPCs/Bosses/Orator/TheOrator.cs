@@ -67,8 +67,8 @@ namespace Windfall.Content.NPCs.Bosses.Orator
 
             noSpawnsEscape = true;
             MonsterDamage = StatCorrections.ScaleProjectileDamage(Main.masterMode ? 360 : CalamityWorld.death ? 280 : CalamityWorld.revenge ? 268 : Main.expertMode ? 240 : 180);
-            GlobDamage = StatCorrections.ScaleProjectileDamage(Main.masterMode ? 245 : CalamityWorld.death ? 205 : CalamityWorld.revenge ? 175 : Main.expertMode ? 130 : 100);
-            BoltDamage = StatCorrections.ScaleProjectileDamage(Main.masterMode ? 248 : CalamityWorld.death ? 172 : CalamityWorld.revenge ? 160 : Main.expertMode ? 138 : 90);
+            GlobDamage = StatCorrections.ScaleProjectileDamage(Main.masterMode ? 240 : CalamityWorld.death ? 200 : CalamityWorld.revenge ? 170 : Main.expertMode ? 125 : 100);
+            BoltDamage = StatCorrections.ScaleProjectileDamage(Main.masterMode ? 205 : CalamityWorld.death ? 172 : CalamityWorld.revenge ? 160 : Main.expertMode ? 138 : 90);
             DashDelay = CalamityWorld.death ? 20 : CalamityWorld.revenge ? 25 : 30;
         }
         private float forcefieldOpacity = 0f;
@@ -128,7 +128,7 @@ namespace Windfall.Content.NPCs.Bosses.Orator
         }
         public override void AI()
         {
-            if (target == null || target.active == false || target.dead)
+            if (target == null || !target.active || target.dead)
             {
                 target = Main.player[Player.FindClosest(NPC.Center, NPC.width, NPC.height)];
                 if (target == null || target.active == false || target.dead)
@@ -235,14 +235,9 @@ namespace Windfall.Content.NPCs.Bosses.Orator
                     break;
                 case States.DarkSpawn:
                     #region Movement
-                    Vector2 homeInV = target.Center + Vector2.UnitY * -300 - NPC.Center;
-                    float velo = 40;
-                    homeInV.Normalize();
-                    NPC.velocity = (NPC.velocity * velo + homeInV * 18f) / (velo + 1f);
-                    if (NPC.Center.Y > target.Center.Y - 250)
-                        NPC.velocity.Y -= 0.25f;
-                    else if (NPC.Center.Y < target.Center.Y + 400)
-                        NPC.velocity.Y += 0.25f;
+                    Vector2 homeInV = target.Center + Vector2.UnitY * -300;
+                    
+                    NPC.velocity = (homeInV - NPC.Center).SafeNormalize(Vector2.Zero) * ((homeInV - NPC.Center).Length() / 10f);
                     #endregion                                       
                     NPC.damage = 0;
                     const int EndTime = 1500;
@@ -504,31 +499,22 @@ namespace Windfall.Content.NPCs.Bosses.Orator
                 case States.DarkStorm:
                     int AttackFrequency = CalamityWorld.death ? 10 : CalamityWorld.revenge ? 12 : Main.expertMode ? 14 : 16;
                     #region Movement
-                    homeInV = target.Center + Vector2.UnitY * -300 - NPC.Center;
-                    velo = 60;
-                    homeInV.Normalize();
-                    NPC.velocity = (NPC.velocity * velo + homeInV * 18f) / (velo + 1f);
-                    if (Math.Abs(NPC.velocity.Y) > 15)
-                    {
-                        if(NPC.velocity.Y >= 0)
-                            NPC.velocity.Y = 15;
-                        else
-                            NPC.velocity.Y = -15;
-                    }
+                    Vector2 goalPosition = target.Center + Vector2.UnitY * -300;
+                    NPC.velocity = (goalPosition - NPC.Center).SafeNormalize(Vector2.Zero) * ((goalPosition - NPC.Center).Length() / 10f);
                     #endregion
                     #region Projectiles
                     if (aiCounter > 120 && NPC.Center.Y < target.Center.Y - 50)
                     {
                         Projectile proj;
-                        if (Main.netMode != NetmodeID.MultiplayerClient && aiCounter % 10 == 0)
+                        if (Main.netMode != NetmodeID.MultiplayerClient && NPC.AnyNPCs(ModContent.NPCType<OratorHand>()) && aiCounter % 10 == 0)
                         {
                             //Anti-Cheesers
                             NPC hand = Main.npc[NPC.FindFirstNPC(ModContent.NPCType<OratorHand>())]; ;
-                            proj = Projectile.NewProjectileDirect(Terraria.Entity.GetSource_NaturalSpawn(), hand.Center + new Vector2(0, -32), new Vector2(Main.rand.NextFloat(-1.5f, 1.5f), -12), ModContent.ProjectileType<DarkGlob>(), GlobDamage * 3, 0f, -1, 1, 1.5f);
+                            proj = Projectile.NewProjectileDirect(Terraria.Entity.GetSource_NaturalSpawn(), hand.Center + new Vector2(0, -32), new Vector2(Main.rand.NextFloat(0f, 2f), -12), ModContent.ProjectileType<DarkGlob>(), GlobDamage * 3, 0f, -1, 1, 1.5f);
                             proj.Calamity().DealsDefenseDamage = true;
 
                             hand = Main.npc.Last(n => n != null && n.active && n.type == ModContent.NPCType<OratorHand>());
-                            proj = Projectile.NewProjectileDirect(Terraria.Entity.GetSource_NaturalSpawn(), hand.Center + new Vector2(-64, -32), new Vector2(Main.rand.NextFloat(-1.5f, 1.5f), -12), ModContent.ProjectileType<DarkGlob>(), GlobDamage * 3, 0f, -1, 1, 1.5f);
+                            proj = Projectile.NewProjectileDirect(Terraria.Entity.GetSource_NaturalSpawn(), hand.Center + new Vector2(-64, -32), new Vector2(Main.rand.NextFloat(-2f, 0f), -12), ModContent.ProjectileType<DarkGlob>(), GlobDamage * 3, 0f, -1, 1, 1.5f);
                             proj.Calamity().DealsDefenseDamage = true;
                         }
                         if (aiCounter % AttackFrequency == 0)
@@ -625,6 +611,7 @@ namespace Windfall.Content.NPCs.Bosses.Orator
                     break;
                 //Phase 2
                 case States.DarkOrbit:
+                    float velo = 0f;
                     int OrbitDashCount = CalamityWorld.death ? 5 : CalamityWorld.revenge ? 3 : 2;
                     float OrbitRate = CalamityWorld.death ? 0.03f : CalamityWorld.revenge ? 0.025f : 0.02f;
                     Projectile border = Main.projectile.First(p => p.active && p.type == ModContent.ProjectileType<OratorBorder>());

@@ -148,7 +148,7 @@ namespace Windfall.Common.Systems.WorldEvents
         }
         public override void PreUpdateWorld()
         {
-            if (DownedNPCSystem.downedOrator)
+            if (DownedNPCSystem.downedOrator || LunarCultBaseLocation == new Point(-1, -1))
                 return;
             //Main.NewText(Main.player[0].Center.Y - CultBaseBridgeArea.Center.Y * 16);
             if (NPC.downedPlantBoss)

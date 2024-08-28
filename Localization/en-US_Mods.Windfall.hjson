@@ -525,10 +525,10 @@ Dialogue: {
 
 			BossText: {
 				PhaseChange: {
-					0: Y'know what.
-					1: FUCK this.
-					2: I'm KILLING you.
-					3: DIE you PIECE of SHIT.
+					0: Hey!
+					1: You have any idea how long those take to make?!
+					2: That's it!
+					3: I'm KILLING you.
 				}
 
 				Defeat: {
@@ -1763,7 +1763,7 @@ NPCs: {
 	LunarBishop.DisplayName: Lunar Bishop
 	TravellingCultist.DisplayName: Travelling Cultist
 	TheOrator.DisplayName: The Orator
-	RecruitableLunarCultist.DisplayName: Goober
+	RecruitableLunarCultist.DisplayName: Recruit
 	OratorNPC.DisplayName: The Orator
 	GodseekerKnight.DisplayName: Godseeker Knight
 	ShadowHand.DisplayName: Shadow Hand
@@ -1771,11 +1771,10 @@ NPCs: {
 	DragonCultist.DisplayName: Dragon Cultist
 	DragonArcher.DisplayName: Dragon Archer
 	GodlyTumor.DisplayName: Hive Tumor
-	Seamstressm.DisplayName: Seamstressm
 	Seamstress.DisplayName: Seamstress
 	TheChef.DisplayName: The Chef
 	PortalMole.DisplayName: Enimgatic Rift
-	OratorHand.DisplayName: Orator Hand
+	OratorHand.DisplayName: Malfeasant Grasp
 }
 
 Projectiles: {
@@ -1949,8 +1948,9 @@ Bestiary: {
 	IlmeranPaladin: One of few to have survived the Incineration of Ilmeris, this paladin wanders the remnants of Ilmeris; keeping an eternal vigil over the sands of his former home.
 	TravellingCultist: A strange fellow who's recently begun showing up out of nowhere. He claims to want to fight against the Lunar Cult, but can he really be trusted...?
 	TheOrator: The enigmatic leader of the Lunar Cult, the Orator's motives are unknown, however, their cult has now succeeded in their goal. The titan responsible for the Dragons' extinction now descends upon the world...
-	ShadowHand: The strange matter the Orator wields traces its origins to the Distortion. How he manages to handle such potent, otherworldly power is unknown, but that which he is able to conjure through it is all the proof one needs to see the mastery he has attained.
+	ShadowHand: The strange matter the Orator wields traces its origins to the Distortion. How he manages to handle such potent, otherworldly power is unknown, but that which he is able to conjure through it is all the proof one needs to see the mastery he has attained. Though he seems to lack control over these unstable creations...
 	PortalMole: These strange vortexes are drawn to the reality bending rituals of the Lunar Cult; whatever is making them attempting to feast upon unwitting ritualists. The Lunar Cult does little to protect their members from these rifts, uncaring for whatever fate might befall their members.
+	OratorHand: Some of the Orator's finest creations, he wields full control over these puppets; able to wield them in crushing any foe who'd dare stand in his way. While they hold some of the Distortion's power, they aren't entirely made of it; instead being comprised primarilly of flesh. Where could he have gotten enough to make these...?
 }
 
 ModCompat: {

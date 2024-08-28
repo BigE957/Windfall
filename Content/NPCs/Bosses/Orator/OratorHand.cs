@@ -47,7 +47,7 @@ namespace Windfall.Content.NPCs.Bosses.Orator
         public override void SetDefaults()
         {
             NPC.width = NPC.height = 75;
-            NPC.damage = StatCorrections.ScaleContactDamage(Main.masterMode ? 500 : CalamityWorld.death ? 420 : CalamityWorld.revenge ? 350 : Main.expertMode ? 240 : 180);
+            NPC.damage = 0;
             NPC.DR_NERD(0.10f);
             NPC.defense = 100;
             NPC.noGravity = true;
@@ -73,15 +73,13 @@ namespace Windfall.Content.NPCs.Bosses.Orator
                 else
                     WhatHand = 1;
             }
-            NPC.life /= 2;
-            NPC.lifeMax /= 2;
         }
         public override bool PreAI()
         {
             NPC mainHand = Main.npc.First(n => n != null && n.active && n.type == NPC.type);
             if (mainHand.whoAmI != NPC.whoAmI)
                 NPC.realLife = mainHand.whoAmI;
-
+            NPC.damage = 0;
             return true;
         }
         public override void AI()
