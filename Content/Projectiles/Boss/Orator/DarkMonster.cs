@@ -88,7 +88,8 @@ namespace Windfall.Content.Projectiles.Boss.Orator
                     AIState = States.Dying;
             }
             if(!NPC.AnyNPCs(ModContent.NPCType<OratorHand>()))
-                AIState = States.Dying;
+                if (AIState == States.Chasing && Projectile.scale > 4f)
+                    AIState = States.Dying;
 
             switch (AIState)
             {

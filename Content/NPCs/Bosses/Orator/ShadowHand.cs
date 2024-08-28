@@ -5,6 +5,7 @@ using Terraria.GameContent.Bestiary;
 using Windfall.Common.Graphics.Metaballs;
 using Windfall.Common.Systems;
 using Windfall.Common.Utils;
+using Windfall.Content.Items.Lore;
 using Windfall.Content.Projectiles.Boss.Orator;
 
 namespace Windfall.Content.NPCs.Bosses.Orator
@@ -134,15 +135,24 @@ namespace Windfall.Content.NPCs.Bosses.Orator
                     }
                     break;
                 case AIState.OnBoss:
-                    NPC.velocity += (Orator.Center - NPC.Center).SafeNormalize(Vector2.Zero) * 1.5f;
-                    if (NPC.velocity.Length() > 10)
-                        NPC.velocity = NPC.velocity.SafeNormalize(Vector2.Zero) * 10;
-                    NPC.rotation = (Orator.Center - NPC.Center).ToRotation();
-                    if (NPC.rotation + Pi > Pi / 2 && NPC.rotation + Pi < 3 * Pi / 2)
-                        NPC.rotation = 0 + PiOver4 * (NPC.velocity.Length() / 10);
-                    else
-                        NPC.rotation = Pi - PiOver4 * (NPC.velocity.Length() / 10);
-                    NPC.NPCAntiClump();
+                    NPC[] inactiveHands = Main.npc.Where(n => n != null && n.active && n.type == NPC.type && n.ai[0] == (int)AIState.OnBoss).ToArray();
+                    int myIndex = -1;
+                    for(int i = 0; i < inactiveHands.Length; i++)
+                    {
+                        if (inactiveHands[i].whoAmI == NPC.whoAmI)
+                            myIndex = i;
+                    }
+                    int WhatHand = (myIndex % 2 == 0 ? 1 : -1);
+                    int height = (int)Math.Floor(myIndex / 2f) + 1;
+
+                    Vector2 goalPos = Orator.Center + Orator.velocity + new Vector2((124) * WhatHand, 75 - (75 * height));
+                    goalPos.Y += (float)Math.Sin(aiCounter / 20f) * (16f + height);
+
+                    #region Movement
+                    NPC.velocity = (goalPos - NPC.Center).SafeNormalize(Vector2.Zero) * ((goalPos - NPC.Center).Length() / 10f);
+                    NPC.rotation = (-3 * Pi / 2) - (Pi / 8 * (height + 1) * WhatHand);
+                    NPC.direction = WhatHand;
+                    #endregion
                     break;
                 case AIState.Hunting:
 
@@ -343,9 +353,11 @@ namespace Windfall.Content.NPCs.Bosses.Orator
             Texture2D texture = TextureAssets.Npc[NPC.type].Value;
 
             SpriteEffects spriteEffects = SpriteEffects.None;
-            if (!(NPC.rotation + Pi > Pi / 2 && NPC.rotation + Pi < 3 * Pi / 2) && CurrentAI != AIState.Globbing)
+            if (!(NPC.rotation + Pi > Pi / 2 && NPC.rotation + Pi < 3 * Pi / 2) && CurrentAI != AIState.Globbing && CurrentAI != AIState.OnBoss)
                 spriteEffects = SpriteEffects.FlipVertically;
             if (attackBool && CurrentAI == AIState.Globbing)
+                spriteEffects = SpriteEffects.FlipVertically;
+            if(CurrentAI == AIState.OnBoss && NPC.direction == -1)
                 spriteEffects = SpriteEffects.FlipVertically;
 
             Main.EntitySpriteDraw(texture, drawPosition, NPC.frame, color, rotation, NPC.frame.Size() * 0.5f, NPC.scale / 2f, spriteEffects, 0);
