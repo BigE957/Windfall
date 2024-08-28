@@ -10,7 +10,7 @@ namespace Windfall.Content.Skies.CorruptCommunion
 
         public override void Update(GameTime gameTime)
         {
-            if (!Main.LocalPlayer.Godly().CorruptCommunion || BossRushEvent.BossRushActive)
+            if (!Main.LocalPlayer.Godly().CorruptCommunion || BossRushEvent.BossRushActive || Main.gameMenu)
             {
                 isActive = false;
             }

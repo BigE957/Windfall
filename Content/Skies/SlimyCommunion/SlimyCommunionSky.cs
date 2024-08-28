@@ -10,7 +10,7 @@ namespace Windfall.Content.Skies.SlimyCommunion
 
         public override void Update(GameTime gameTime)
         {
-            if (!Main.LocalPlayer.Godly().SlimyCommunion || BossRushEvent.BossRushActive)
+            if (!Main.LocalPlayer.Godly().SlimyCommunion || BossRushEvent.BossRushActive || Main.gameMenu)
             {
                 isActive = false;
             }

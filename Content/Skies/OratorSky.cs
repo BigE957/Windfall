@@ -120,7 +120,7 @@ namespace Windfall.Content.Skies
         }
         public override void Update(GameTime gameTime)
         {
-            if (!NPC.AnyNPCs(ModContent.NPCType<TheOrator>()) || BossRushEvent.BossRushActive)
+            if (!NPC.AnyNPCs(ModContent.NPCType<TheOrator>()) || BossRushEvent.BossRushActive || Main.gameMenu)
                 skyActive = false;
 
             if (skyActive)
