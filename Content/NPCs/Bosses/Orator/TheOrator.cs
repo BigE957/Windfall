@@ -510,7 +510,7 @@ namespace Windfall.Content.NPCs.Bosses.Orator
                     NPC.velocity = (goalPosition - NPC.Center).SafeNormalize(Vector2.Zero) * ((goalPosition - NPC.Center).Length() / 10f);
                     #endregion
                     #region Projectiles
-                    if (aiCounter > 120 && NPC.Center.Y < target.Center.Y - 50)
+                    if (aiCounter > 60 && NPC.Center.Y < target.Center.Y - 50)
                     {
                         Projectile proj;
                         if (Main.netMode != NetmodeID.MultiplayerClient && NPC.AnyNPCs(ModContent.NPCType<OratorHand>()) && aiCounter % 10 == 0)
@@ -892,6 +892,7 @@ namespace Windfall.Content.NPCs.Bosses.Orator
                                     NPC.Center = border.Center + VectorToTarget;
                                 }
                                 NPC.Center = border.Center + VectorToTarget.RotatedBy(aiCounter * OrbitRate);
+                                EmpyreanMetaball.SpawnDefaultParticle(NPC.Center + ((border.Center - NPC.Center).SafeNormalize(Vector2.Zero).RotatedBy(PiOver2) * Main.rand.NextFloat(-48, 48)), (border.Center - NPC.Center).SafeNormalize(Vector2.Zero) * Main.rand.NextFloat(10f, 14f), Main.rand.NextFloat(100f, 120f));
                             }
                             else
                             {
@@ -924,11 +925,12 @@ namespace Windfall.Content.NPCs.Bosses.Orator
                                     }
                                     else
                                     {
-                                        NPC.velocity *= 0.95f;
-                                        if (NPC.velocity.LengthSquared() < 64)
+                                        NPC.velocity *= 0.96f;
+                                        if (NPC.velocity.LengthSquared() < 400)
                                         {
                                             dashing = false;
                                             NPC.damage = 0;
+                                            NPC.velocity = Vector2.Zero;
                                             if (++attackCounter < OrbitDashCount)
                                             {
                                                 int radialCounter = CalamityWorld.death ? 30 : CalamityWorld.revenge ? 24 : 16;
