@@ -904,7 +904,7 @@ namespace Windfall.Content.NPCs.Bosses.Orator
                                 {
                                     if (aiCounter == 1060 + NPC.ai[3] + 30)
                                     {
-                                        int radialCounter = CalamityWorld.death ? 12 : CalamityWorld.revenge ? 10 : 8;
+                                        int radialCounter = CalamityWorld.death ? 30 : CalamityWorld.revenge ? 24 : 16;
                                         for (int i = 0; i < radialCounter; i++)
                                         {
                                             if (Main.netMode != NetmodeID.MultiplayerClient)
@@ -931,7 +931,7 @@ namespace Windfall.Content.NPCs.Bosses.Orator
                                             NPC.damage = 0;
                                             if (++attackCounter < OrbitDashCount)
                                             {
-                                                int radialCounter = CalamityWorld.death ? 12 : CalamityWorld.revenge ? 10 : 8;
+                                                int radialCounter = CalamityWorld.death ? 30 : CalamityWorld.revenge ? 24 : 16;
                                                 for (int i = 0; i < radialCounter; i++)
                                                 {
                                                     if (Main.netMode != NetmodeID.MultiplayerClient)
