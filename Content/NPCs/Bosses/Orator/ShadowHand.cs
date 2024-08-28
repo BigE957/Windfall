@@ -179,7 +179,7 @@ namespace Windfall.Content.NPCs.Bosses.Orator
                     #region Attack
                     Vector2 toTarget = target.Center - NPC.Center;
                     attackBool = false;
-                    if (Main.rand.NextBool(60) || toTarget.Length() > 600f)
+                    if (Main.rand.NextBool(60) || toTarget.Length() > 800f)
                     {
                         NPC.rotation = toTarget.ToRotation();
                         if (Main.rand.NextBool(5) || toTarget.Length() > 600f)
