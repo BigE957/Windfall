@@ -52,7 +52,7 @@ namespace Windfall.Content.NPCs.Bosses.Orator
             NPC.defense = 100;
             NPC.noGravity = true;
             NPC.noTileCollide = true;
-            NPC.LifeMaxNERB(Main.masterMode ? 120000 : Main.expertMode ? 80000 : 70000, 100000);
+            NPC.LifeMaxNERB(Main.masterMode ? 180000 : Main.expertMode ? 120000 : 90000, 150000);
             NPC.knockBackResist = 0f;
             NPC.scale = 1.25f;
             NPC.HitSound = SoundID.DD2_LightningBugHurt with { Volume = 0.5f };
@@ -76,9 +76,17 @@ namespace Windfall.Content.NPCs.Bosses.Orator
         }
         public override bool PreAI()
         {
-            NPC mainHand = Main.npc.First(n => n != null && n.active && n.type == NPC.type);
-            if (mainHand.whoAmI != NPC.whoAmI)
-                NPC.realLife = mainHand.whoAmI;
+            if (Main.npc.Where(n => n != null && n.active && n.type == NPC.type).Count() == 1)
+            {
+                NPC.realLife = -1;
+                NPC.life = 0;
+            }
+            else
+            {
+                NPC mainHand = Main.npc.First(n => n != null && n.active && n.type == NPC.type);
+                if (mainHand.whoAmI != NPC.whoAmI)
+                    NPC.realLife = mainHand.whoAmI;
+            }
             NPC.damage = 0;
             return true;
         }

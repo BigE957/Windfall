@@ -55,12 +55,10 @@ namespace Windfall.Content.Projectiles.Boss.Orator
             Projectile.scale = (float)(trueScale - (Math.Sin(counter / 20f) + 1f) / 8);
             Radius = (750 / 3f) * Projectile.scale;                    
 
-            // Move towards the target.
-            //Projectile.Center = Projectile.Center.MoveTowards(Main.npc[oratorIndex].Center, 1.1f);
-
-            Player target = Main.player[Player.FindClosest(Projectile.Center, 1, 1)];
-            if (!target.WithinRange(Projectile.Center, Radius + 12f))
-                target.AddBuff(ModContent.BuffType<Entropy>(), 5);
+            if(NPC.AnyNPCs(ModContent.NPCType<TheOrator>()))
+                foreach(Player target in Main.ActivePlayers)
+                    if (!target.dead && !target.WithinRange(Projectile.Center, Radius + 12f))
+                        target.AddBuff(ModContent.BuffType<Entropy>(), 5);
             counter++;
         }
 
