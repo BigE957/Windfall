@@ -463,7 +463,7 @@ namespace Windfall.Content.NPCs.Bosses.TheOrator
                         NPC.velocity.Y -= 0.25f;
                     #endregion
                     #region Projectiles
-                    if (aiCounter > 120 && NPC.Center.Y < target.Center.Y - 50)
+                    if (aiCounter > 120)
                     {
                         Projectile proj;
                         if (aiCounter % 5 == 0 && Main.netMode != NetmodeID.MultiplayerClient)
