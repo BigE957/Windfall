@@ -1,7 +1,7 @@
 ﻿using CalamityMod.Events;
 using Terraria.Graphics.Effects;
 
-namespace Windfall.Content.Skies.ScreenShaders
+namespace Windfall.Content.Skies.CrimsonCommunion
 {
     public class CrimsonCommunionSky : CustomSky
     {
@@ -10,7 +10,7 @@ namespace Windfall.Content.Skies.ScreenShaders
 
         public override void Update(GameTime gameTime)
         {
-            if (!Main.LocalPlayer.Godly().CrimsonCommunion || BossRushEvent.BossRushActive)
+            if (!Main.LocalPlayer.Godly().CrimsonCommunion || BossRushEvent.BossRushActive || Main.gameMenu)
             {
                 isActive = false;
             }

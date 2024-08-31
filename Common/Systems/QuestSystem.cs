@@ -4,7 +4,6 @@ using CalamityMod.Items.Placeables.Furniture.Trophies;
 using Terraria.ModLoader.IO;
 using Windfall.Content.Items.Fishing;
 using Windfall.Content.Items.Quest.SealingRitual;
-using Windfall.Content.Items.Quest.Seamstress;
 using Windfall.Content.Items.Tools;
 using Windfall.Content.Items.Weapons.Misc;
 using Windfall.Content.NPCs.TravellingNPCs;

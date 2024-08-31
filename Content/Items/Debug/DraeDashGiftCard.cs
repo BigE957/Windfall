@@ -1,7 +1,7 @@
 ﻿using CalamityMod.Rarities;
 using Windfall.Content.Projectiles.Other;
 
-namespace Windfall.Items.Debug
+namespace Windfall.Content.Items.Debug
 {
     public class DraeDashGiftCard : ModItem, ILocalizedModType
     {

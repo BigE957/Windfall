@@ -1,7 +1,7 @@
 ﻿using CalamityMod.Events;
 using Terraria.Graphics.Effects;
 
-namespace Windfall.Content.Skies.ScreenShaders
+namespace Windfall.Content.Skies.CorruptCommunion
 {
     public class CorruptCommunionSky : CustomSky
     {
@@ -10,7 +10,7 @@ namespace Windfall.Content.Skies.ScreenShaders
 
         public override void Update(GameTime gameTime)
         {
-            if (!Main.LocalPlayer.Godly().CorruptCommunion || BossRushEvent.BossRushActive)
+            if (!Main.LocalPlayer.Godly().CorruptCommunion || BossRushEvent.BossRushActive || Main.gameMenu)
             {
                 isActive = false;
             }

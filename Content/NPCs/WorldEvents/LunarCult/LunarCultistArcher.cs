@@ -1,8 +1,7 @@
 ﻿using Windfall.Common.Systems.WorldEvents;
-using Windfall.Content.NPCs.WorldEvents.LunarCult;
 using Windfall.Content.Projectiles.Other;
 
-namespace Windfall.Content.NPCs.WanderingNPCs
+namespace Windfall.Content.NPCs.WorldEvents.LunarCult
 {
     public class LunarCultistArcher : ModNPC
     {
@@ -55,11 +54,11 @@ namespace Windfall.Content.NPCs.WanderingNPCs
             NPC.lifeMax = 210;
             NPC.HitSound = SoundID.NPCHit1;
             NPC.DeathSound = SoundID.NPCDeath1;
-            NPC.knockBackResist = 1f;
+            NPC.knockBackResist = 0f;
             NPC.immortal = true;
 
             AnimationType = NPCID.BartenderUnconscious;
-        }    
+        }
         public override void OnSpawn(IEntitySource source)
         {
             switch (AIState)
@@ -112,17 +111,17 @@ namespace Windfall.Content.NPCs.WanderingNPCs
                         NPC.velocity.X = 1.5f;
                     NPC.direction = 1;
                     NPC.spriteDirection = 1;
-                    if (NPC.Center.X - ((LunarCultActivitySystem.LunarCultBaseLocation.X * 16) - 850) > 800)
+                    if (NPC.Center.X - (LunarCultActivitySystem.LunarCultBaseLocation.X * 16 - 850) > 800)
                         NPC.active = false;
                 }
                 else
                 {
-                    Vector2 goalPosition = new((LunarCultActivitySystem.LunarCultBaseLocation.X * 16) - 850 + (queueGap * queueIndex), (LunarCultActivitySystem.LunarCultBaseLocation.Y * 16) - 96);
-                    NPC.position.Y = goalPosition.Y - (NPC.height);
+                    Vector2 goalPosition = new(LunarCultActivitySystem.LunarCultBaseLocation.X * 16 - 850 + queueGap * queueIndex, LunarCultActivitySystem.LunarCultBaseLocation.Y * 16 - 96);
+                    NPC.position.Y = goalPosition.Y - NPC.height;
                     if (queueIndex != 0 && !LunarCultActivitySystem.CustomerQueue[queueIndex - 1].HasValue)
                     {
                         goalPosition.X -= queueGap;
-                        if (NPC.Center.X - goalPosition.X < (queueGap / 2))
+                        if (NPC.Center.X - goalPosition.X < queueGap / 2)
                         {
                             LunarCultActivitySystem.CustomerQueue[queueIndex - 1] = LunarCultActivitySystem.CustomerQueue[queueIndex];
                             if (queueIndex + 1 == LunarCultActivitySystem.CustomerQueue.Count)
@@ -141,13 +140,13 @@ namespace Windfall.Content.NPCs.WanderingNPCs
                     {
                         NPC.velocity.X = 0;
                         if (queueIndex == 0 && !Main.projectile.Any(p => p.active && p.type == ModContent.ProjectileType<FoodAlert>() && p.ai[2] == NPC.whoAmI))
-                            Projectile.NewProjectile(Projectile.GetSource_NaturalSpawn(), NPC.Center, new Vector2(Main.rand.NextFloat(0f, 2f), -2.5f), ModContent.ProjectileType<FoodAlert>(), 0, 0f, ai0: LunarCultActivitySystem.CustomerQueue[queueIndex].Value.OrderID, ai1: Main.rand.Next(3), ai2: NPC.whoAmI);
+                            Projectile.NewProjectile(Terraria.Entity.GetSource_NaturalSpawn(), NPC.Center, new Vector2(Main.rand.NextFloat(0f, 2f), -2.5f), ModContent.ProjectileType<FoodAlert>(), 0, 0f, ai0: LunarCultActivitySystem.CustomerQueue[queueIndex].Value.OrderID, ai1: Main.rand.Next(3), ai2: NPC.whoAmI);
                     }
                 }
             }
         }
         public override bool CheckActive() => false;
-        public override bool CanChat() => AIState == States.Chatting || (AIState == States.CafeteriaEvent && NPC.ai[3] == 0 && NPC.velocity.X == 0);
+        public override bool CanChat() => AIState == States.Chatting || AIState == States.CafeteriaEvent && NPC.ai[3] == 0 && NPC.velocity.X == 0;
         public override string GetChat()
         {
             if (AIState == States.Chatting)

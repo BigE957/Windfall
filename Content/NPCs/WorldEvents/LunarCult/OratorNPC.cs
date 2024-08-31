@@ -9,6 +9,7 @@ namespace Windfall.Content.NPCs.WorldEvents.LunarCult
         {
             Idle,
             TutorialChat,
+            RitualEvent,
         }
         private States AIState
         {
@@ -35,7 +36,7 @@ namespace Windfall.Content.NPCs.WorldEvents.LunarCult
             NPC.lifeMax = 1000;
             NPC.HitSound = SoundID.NPCHit1;
             NPC.DeathSound = SoundID.NPCDeath1;
-            NPC.knockBackResist = 1f;
+            NPC.knockBackResist = 0f;
             NPC.immortal = true;
         }
         public override bool CanChat() => NPC.ai[0] != 0 && !ModContent.GetInstance<DialogueUISystem>().isDialogueOpen;
@@ -43,8 +44,7 @@ namespace Windfall.Content.NPCs.WorldEvents.LunarCult
         {
             Main.CloseNPCChatOrSign();
 
-            if(!LunarCultActivitySystem.TutorialComplete)
-                ModContent.GetInstance<DialogueUISystem>().DisplayDialogueTree(AIState.ToString());
+            ModContent.GetInstance<DialogueUISystem>().DisplayDialogueTree(AIState.ToString());
 
             return "In the Cult Base, straight Orating it. And by it i mean, lets just say, my Tablet";
         }
@@ -55,6 +55,15 @@ namespace Windfall.Content.NPCs.WorldEvents.LunarCult
                 NPC orator = Main.npc.First(n => n.active && n.type == ModContent.NPCType<OratorNPC>() && n.ai[0] == (int)States.TutorialChat);
                 LunarCultActivitySystem.TutorialComplete = true;
                 orator.ai[0] = 0;
+                return;
+            }
+            if (treeKey == States.RitualEvent.ToString() && buttonID == 1)
+            {
+                NPC orator = Main.npc.First(n => n.active && n.type == ModContent.NPCType<OratorNPC>() && n.ai[0] == (int)States.RitualEvent);
+                LunarCultActivitySystem.State = LunarCultActivitySystem.SystemState.Ritual;
+                LunarCultActivitySystem.Active = true;
+                orator.ai[0] = 0;
+                return;
             }
         }
     }

@@ -3,7 +3,7 @@ using Luminance.Core.Graphics;
 using ReLogic.Utilities;
 using Windfall.Common.Graphics.Metaballs;
 using Windfall.Common.Systems;
-using Windfall.Content.NPCs.Bosses.TheOrator;
+using Windfall.Content.NPCs.Bosses.Orator;
 using static Windfall.Common.Graphics.Metaballs.EmpyreanMetaball;
 
 namespace Windfall.Content.Projectiles.Boss.Orator
@@ -77,11 +77,20 @@ namespace Windfall.Content.Projectiles.Boss.Orator
         }
         public override void AI()
         {
-            Player target = Main.player[Player.FindClosest(Projectile.Center, Projectile.width, Projectile.height)];
-            
-            if (!NPC.AnyNPCs(ModContent.NPCType<TheOrator>()) && AIState == States.Chasing && Projectile.scale > 4f)
-                AIState = States.Dying;
-            
+
+            Player target;
+            if (NPC.AnyNPCs(ModContent.NPCType<TheOrator>()))
+                target = Main.npc[NPC.FindFirstNPC(ModContent.NPCType<TheOrator>())].As<TheOrator>().target;                           
+            else
+            {
+                target = Main.player[Player.FindClosest(Projectile.Center, Projectile.width, Projectile.height)];
+                if (AIState == States.Chasing && Projectile.scale > 4f)
+                    AIState = States.Dying;
+            }
+            if(!NPC.AnyNPCs(ModContent.NPCType<OratorHand>()))
+                if (AIState == States.Chasing && Projectile.scale > 4f)
+                    AIState = States.Dying;
+
             switch (AIState)
             {
                 case States.Chasing:
@@ -131,7 +140,7 @@ namespace Windfall.Content.Projectiles.Boss.Orator
                         NPC Orator = null;
                         if (NPC.FindFirstNPC(ModContent.NPCType<TheOrator>()) != -1)
                             Orator = Main.npc[NPC.FindFirstNPC(ModContent.NPCType<TheOrator>())];
-                        if (Orator != null && Orator.ai[0] == 2 && (float)Orator.life / (float)Orator.lifeMax > 0.1f)
+                        if (Main.netMode != NetmodeID.MultiplayerClient && Orator != null && Orator.ai[0] == 2 && (float)Orator.life / (float)Orator.lifeMax > 0.1f)
                             NPC.NewNPC(Terraria.Entity.GetSource_NaturalSpawn(), (int)Projectile.Center.X, (int)Projectile.Center.Y, ModContent.NPCType<ShadowHand>());
                     }
 

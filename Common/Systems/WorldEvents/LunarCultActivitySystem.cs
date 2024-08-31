@@ -1,13 +1,10 @@
-﻿using Luminance.Core.Graphics;
-using System.IO;
-using Terraria;
-using Terraria.Enums;
+﻿using CalamityMod.World;
+using Luminance.Core.Graphics;
 using Terraria.ModLoader.IO;
 using Terraria.Utilities;
 using Windfall.Common.Graphics.Metaballs;
 using Windfall.Content.Items.Food;
 using Windfall.Content.Items.Quest;
-using Windfall.Content.NPCs.WanderingNPCs;
 using Windfall.Content.NPCs.WorldEvents.LunarCult;
 using Windfall.Content.UI.Dialogue;
 
@@ -27,6 +24,8 @@ namespace Windfall.Common.Systems.WorldEvents
 
         public static bool TutorialComplete = false;
 
+        private static int spawnChance = 5;
+
         public override void ClearWorld()
         {
             LunarCultBaseLocation = new(-1, -1);
@@ -42,6 +41,8 @@ namespace Windfall.Common.Systems.WorldEvents
             CustomerQueue = [];
 
             TutorialComplete = false;
+
+            spawnChance = 5;
 
             Active = false;
             State = SystemState.CheckReqs;
@@ -59,6 +60,8 @@ namespace Windfall.Common.Systems.WorldEvents
             AvailableTopics = (List<int>)tag.GetList<int>("AvailableTopics");
 
             TutorialComplete = tag.GetBool("TutorialComplete");
+
+            spawnChance = tag.GetInt("spawnChance");
         }
         public override void SaveWorldData(TagCompound tag)
         {
@@ -69,6 +72,8 @@ namespace Windfall.Common.Systems.WorldEvents
             tag["AvailableTopics"] = AvailableTopics;
 
             tag["TutorialComplete"] = TutorialComplete;
+
+            tag["spawnChance"] = spawnChance;
         }
 
         public enum SystemState
@@ -92,7 +97,7 @@ namespace Windfall.Common.Systems.WorldEvents
         private static int ActivityTimer = -1;
         public static Point ActivityCoords = new(-1, -1);
         private static List<int> NPCIndexs = [];
-        private static float zoom = 0;
+        private static float zoom = 0;        
 
         #region Meeting Variables
         public enum MeetingTopic
@@ -130,7 +135,12 @@ namespace Windfall.Common.Systems.WorldEvents
         public static int CustomerGoal = 8;
         private static readonly int CustomerLimit = 12;
         #endregion
-
+        #region Ritual Variables
+        public static int RemainingCultists = 6;
+        public static int ActivePortals = 0;
+        public static int PortalsDowned = 0;
+        public static int RequiredPortalKills = 10;
+        #endregion
         private static SoundStyle TeleportSound => new("CalamityMod/Sounds/Custom/SCalSounds/BrimstoneHellblastSound");
         public override void OnWorldLoad()
         {
@@ -138,7 +148,7 @@ namespace Windfall.Common.Systems.WorldEvents
         }
         public override void PreUpdateWorld()
         {
-            if (DownedNPCSystem.downedOrator)
+            if (DownedNPCSystem.downedOrator || LunarCultBaseLocation == new Point(-1, -1))
                 return;
             //Main.NewText(Main.player[0].Center.Y - CultBaseBridgeArea.Center.Y * 16);
             if (NPC.downedPlantBoss)
@@ -150,6 +160,8 @@ namespace Windfall.Common.Systems.WorldEvents
                 if (!NPC.AnyNPCs(ModContent.NPCType<OratorNPC>()))
                     NPC.NewNPC(Entity.GetSource_None(), (CultBaseArea.Right - 11) * 16, (CultBaseArea.Top + 30) * 16, ModContent.NPCType<OratorNPC>());
             }
+            if (Main.player.Any(p => p.active && !p.dead && CultBaseArea.Contains(p.Center.ToTileCoordinates())))
+                CalamityWorld.ArmoredDiggerSpawnCooldown = 36000;
             foreach (Player player in Main.player.Where(p => p.active && !p.dead && CultBaseArea.Contains(p.Center.ToTileCoordinates())))
             {
                 if (player.Center.Y > (LunarCultBaseLocation.Y + 30) * 16)
@@ -165,7 +177,10 @@ namespace Windfall.Common.Systems.WorldEvents
                     DisplayMessage(orator.Hitbox, Color.LimeGreen, path);
                 }
             }
-            
+            //State = SystemState.CheckReqs;
+            //ActivityTimer = -1;
+            //TutorialComplete = true;
+
             switch (State)
             {
                 case SystemState.CheckReqs:
@@ -186,10 +201,12 @@ namespace Windfall.Common.Systems.WorldEvents
                         break;
                     }
                 case SystemState.CheckChance:
-                    if (Main.rand.NextBool(5))
+                    if (spawnChance < 1)
+                        spawnChance = 1;
+                    if (Main.rand.NextBool(spawnChance))
                     {
                         State = SystemState.Waiting;
-
+                        spawnChance = 5;
                         #region Activity Alert
                         foreach (Player player in Main.player)
                         {
@@ -206,6 +223,8 @@ namespace Windfall.Common.Systems.WorldEvents
                     }
                     else
                     {
+                        if(spawnChance > 1)
+                            spawnChance--;
                         OnCooldown = true;
                         State = SystemState.CheckReqs;
                     }
@@ -227,6 +246,14 @@ namespace Windfall.Common.Systems.WorldEvents
                     float PlayerDistFromHideout = new Vector2(closestPlayer.Center.X - ActivityCoords.X, closestPlayer.Center.Y - ActivityCoords.Y).Length();
                     if (PlayerDistFromHideout < 160f && closestPlayer.Center.Y < ActivityCoords.Y + 16)
                         State = SystemState.Yap;
+                    #endregion
+                    #region Despawn
+                    if (Main.dayTime)
+                    {
+                        ActivityCoords = new(-1, -1);
+                        State = SystemState.CheckReqs;
+                        OnCooldown = true;
+                    }
                     #endregion
                     break;
                 case SystemState.Yap:
@@ -277,7 +304,7 @@ namespace Windfall.Common.Systems.WorldEvents
                     #region Activity Chats
                     else
                     {
-                        if (false)//Main.moonPhase == (int)MoonPhase.Full || Main.moonPhase == (int)MoonPhase.Empty) //Ritual
+                        if (true)//Main.moonPhase == (int)MoonPhase.Full || Main.moonPhase == (int)MoonPhase.Empty) //Ritual
                             path += "Ritual.";
                         else if (false)//Main.moonPhase == (int)MoonPhase.QuarterAtLeft || Main.moonPhase == (int)MoonPhase.QuarterAtRight) //Meeting
                             path += "Meeting.";
@@ -337,8 +364,53 @@ namespace Windfall.Common.Systems.WorldEvents
                         }
                         else
                         {
-                            if (false)//Main.moonPhase == (int)MoonPhase.Full || Main.moonPhase == (int)MoonPhase.Empty) //Ritual
+                            if (true)//Main.moonPhase == (int)MoonPhase.Full || Main.moonPhase == (int)MoonPhase.Empty) //Ritual
                             {
+                                #region Location Selection
+                                ActivityCoords = new Point(LunarCultBaseLocation.X - 37, LunarCultBaseLocation.Y - 24);
+                                ActivityCoords.X *= 16;
+                                //ActivityCoords.X += 8;
+                                ActivityCoords.Y *= 16;
+                                #endregion
+
+                                RemainingCultists = 6;
+                                ActivePortals = 0;
+                                PortalsDowned = 0;
+                                NPCIndexs = [];
+
+                                #region Character Setup   
+                                if (NPC.AnyNPCs(ModContent.NPCType<OratorNPC>()))
+                                    foreach(NPC npc in Main.npc.Where(n => n != null && n.active && n.type == ModContent.NPCType<OratorNPC>()))
+                                    {
+                                        npc.active = false;
+                                    }
+                                NPCIndexs =
+                                [
+                                    NPC.NewNPC(Entity.GetSource_None(), ActivityCoords.X - 364, ActivityCoords.Y, ModContent.NPCType<LunarCultistDevotee>(), ai2: 3),
+                                    NPC.NewNPC(Entity.GetSource_None(), ActivityCoords.X - 252, ActivityCoords.Y, ModContent.NPCType<LunarCultistDevotee>(), ai2: 3),
+                                    NPC.NewNPC(Entity.GetSource_None(), ActivityCoords.X - 108, ActivityCoords.Y, ModContent.NPCType<LunarCultistDevotee>(), ai2: 3),
+                                    NPC.NewNPC(Entity.GetSource_None(), ActivityCoords.X + 108, ActivityCoords.Y, ModContent.NPCType<LunarCultistDevotee>(), ai2: 3),
+                                    NPC.NewNPC(Entity.GetSource_None(), ActivityCoords.X + 252, ActivityCoords.Y, ModContent.NPCType<LunarCultistDevotee>(), ai2: 3),
+                                    NPC.NewNPC(Entity.GetSource_None(), ActivityCoords.X + 364, ActivityCoords.Y, ModContent.NPCType<LunarCultistDevotee>(), ai2: 3),
+                                    NPC.NewNPC(Entity.GetSource_None(), ActivityCoords.X - 36, ActivityCoords.Y, ModContent.NPCType<OratorNPC>(), ai0: 2),
+                                ];
+
+                                Main.npc[NPCIndexs[0]].spriteDirection = 1;
+                                Main.npc[NPCIndexs[0]].As<LunarCultistDevotee>().goalPosition = new(ActivityCoords.X - 364, ActivityCoords.Y);
+
+                                Main.npc[NPCIndexs[1]].spriteDirection = 1;
+                                Main.npc[NPCIndexs[1]].As<LunarCultistDevotee>().goalPosition = new(ActivityCoords.X - 252, ActivityCoords.Y);
+
+                                Main.npc[NPCIndexs[2]].spriteDirection = 1;
+                                Main.npc[NPCIndexs[2]].As<LunarCultistDevotee>().goalPosition = new(ActivityCoords.X - 108, ActivityCoords.Y);
+
+                                Main.npc[NPCIndexs[3]].As<LunarCultistDevotee>().goalPosition = new(ActivityCoords.X + 108, ActivityCoords.Y);
+
+                                Main.npc[NPCIndexs[4]].As<LunarCultistDevotee>().goalPosition = new(ActivityCoords.X + 252, ActivityCoords.Y);
+
+                                Main.npc[NPCIndexs[5]].As<LunarCultistDevotee>().goalPosition = new(ActivityCoords.X + 364, ActivityCoords.Y);
+
+                                #endregion
                             }
                             else if (false)//Main.moonPhase == (int)MoonPhase.QuarterAtLeft || Main.moonPhase == (int)MoonPhase.QuarterAtRight) //Meeting
                             {
@@ -362,11 +434,11 @@ namespace Windfall.Common.Systems.WorldEvents
                                 NPCIndexs =
                                 [
                                     NPC.NewNPC(Entity.GetSource_None(), ActivityCoords.X, ActivityCoords.Y - 2, ModContent.NPCType<LunarBishop>()),
-                                NPC.NewNPC(Entity.GetSource_None(), ActivityCoords.X - 280, ActivityCoords.Y + 100, ModContent.NPCType<RecruitableLunarCultist>()),
-                                NPC.NewNPC(Entity.GetSource_None(), ActivityCoords.X - 138, ActivityCoords.Y + 100, ModContent.NPCType<RecruitableLunarCultist>()),
-                                NPC.NewNPC(Entity.GetSource_None(), ActivityCoords.X + 138, ActivityCoords.Y + 100, ModContent.NPCType<RecruitableLunarCultist>()),
-                                NPC.NewNPC(Entity.GetSource_None(), ActivityCoords.X + 280, ActivityCoords.Y + 100, ModContent.NPCType<RecruitableLunarCultist>()),
-                            ];
+                                    NPC.NewNPC(Entity.GetSource_None(), ActivityCoords.X - 280, ActivityCoords.Y + 100, ModContent.NPCType<RecruitableLunarCultist>()),
+                                    NPC.NewNPC(Entity.GetSource_None(), ActivityCoords.X - 138, ActivityCoords.Y + 100, ModContent.NPCType<RecruitableLunarCultist>()),
+                                    NPC.NewNPC(Entity.GetSource_None(), ActivityCoords.X + 138, ActivityCoords.Y + 100, ModContent.NPCType<RecruitableLunarCultist>()),
+                                    NPC.NewNPC(Entity.GetSource_None(), ActivityCoords.X + 280, ActivityCoords.Y + 100, ModContent.NPCType<RecruitableLunarCultist>()),
+                                ];
                                 int y = 0;
                                 foreach (int k in NPCIndexs)
                                 {
@@ -464,34 +536,18 @@ namespace Windfall.Common.Systems.WorldEvents
                                 SatisfiedCustomers = 0;
                             }
                         }
-                        #endregion
-
+                        #endregion                        
                         ActivityTimer = 0;
+                        zoom = 0;
                     }
 
-                    //Main.NewText( Main.player[0].Center - new Vector2(ActivityCoords.X, ActivityCoords.Y));
-
-                    #region Despawn
-                    if (Main.dayTime && !Active)
-                    {
-                        ActivityCoords = new(-1, -1);
-                        State = SystemState.CheckReqs;
-                        OnCooldown = true;
-                        foreach (int k in NPCIndexs)
-                        {
-                            NPC npc = Main.npc[k];
-                            if (npc.type == ModContent.NPCType<RecruitableLunarCultist>())
-                                npc.active = false;
-                            else if (npc.type == ModContent.NPCType<LunarBishop>())
-                                npc.active = false;
-                        }
-                    }
-                    #endregion
+                    //Main.NewText( Main.player[0].Center - new Vector2(ActivityCoords.X, ActivityCoords.Y));                  
 
                     #region Player Proximity
                     closestPlayer = Main.player[Player.FindClosest(new Vector2(ActivityCoords.X, ActivityCoords.Y), 300, 300)];
                     PlayerDistFromHideout = new Vector2(closestPlayer.Center.X - ActivityCoords.X, closestPlayer.Center.Y - ActivityCoords.Y).Length();
-                    if (PlayerDistFromHideout < 300f)
+
+                    if (PlayerDistFromHideout < 300f && closestPlayer.Center.Y < ActivityCoords.Y)
                     {
                         /*
                         Actual Code
@@ -504,11 +560,24 @@ namespace Windfall.Common.Systems.WorldEvents
                         else
                             State = SystemState.Cafeteria;
                         */
-                        //State = SystemState.Meeting;
+                        //State = SystemState.Ritual;
 
                         //Active = true;
                     }
                     #endregion
+                    #region Despawn  
+                    else if (Main.dayTime && !Active && PlayerDistFromHideout > 4000f)
+                    {
+                        ActivityCoords = new(-1, -1);
+                        State = SystemState.CheckReqs;
+                        OnCooldown = true;
+                        foreach (int k in NPCIndexs)
+                        {
+                            Main.npc[k].active = false;
+                        }
+                    }
+                    #endregion
+                    
                     break;
                 case SystemState.OratorVisit:
                     if(TutorialComplete)
@@ -801,6 +870,179 @@ namespace Windfall.Common.Systems.WorldEvents
                     else
                         State = SystemState.End;
                     break;
+                case SystemState.Ritual:
+                    //ActivePortals = 0;
+                    if (PortalsDowned < RequiredPortalKills && RemainingCultists > 0 && ActivePortals < RemainingCultists && ActivityTimer >= 60 && Main.rand.NextBool(100)) //Spawn New Customer
+                    {
+                        Point spawnLocation = new(ActivityCoords.X + Main.rand.Next(-450, 450), ActivityCoords.Y - Main.rand.Next(120, 300));
+                        NPC.NewNPC(NPC.GetSource_NaturalSpawn(), spawnLocation.X, spawnLocation.Y, ModContent.NPCType<PortalMole>(), Start: Main.npc[NPCIndexs[6]].whoAmI + 1);
+
+                        ActivityTimer = 0;
+                    }
+                    else if (PortalsDowned >= RequiredPortalKills)
+                    {
+                        NPC orator = Main.npc[NPC.FindFirstNPC(ModContent.NPCType<OratorNPC>())];                                               
+
+                        switch(ActivityTimer)
+                        {
+                            case 0:
+                                DisplayMessage(orator.Hitbox, Color.LimeGreen, "Dialogue.LunarCult.TheOrator.WorldText.Ritual.Success.0");
+                                break;
+                            case 120:
+                                DisplayMessage(orator.Hitbox, Color.LimeGreen, "Dialogue.LunarCult.TheOrator.WorldText.Ritual.Success.1");
+                                break;
+                            case 240:
+                                DisplayMessage(orator.Hitbox, Color.LimeGreen, "Dialogue.LunarCult.TheOrator.WorldText.Ritual.Success.2");
+                                break;
+                            case 360:
+                                DisplayMessage(orator.Hitbox, Color.LimeGreen, "Dialogue.LunarCult.TheOrator.WorldText.Ritual.Success.3");
+                                break;
+                            case 420:
+                                if (Main.npc[NPCIndexs[0]].active)
+                                {
+                                    for (int i = 0; i <= 50; i++)
+                                    {
+                                        int dustStyle = Main.rand.NextBool() ? 66 : 263;
+                                        Vector2 speed = Main.rand.NextVector2Circular(1.5f, 2f);
+                                        Dust dust = Dust.NewDustPerfect(Main.npc[NPCIndexs[0]].Center, Main.rand.NextBool(3) ? 191 : dustStyle, speed * 3, Scale: Main.rand.NextFloat(1.5f, 2.3f));
+                                        dust.noGravity = true;
+                                        dust.color = dust.type == dustStyle ? Color.LightGreen : default;
+                                    }
+                                    SoundEngine.PlaySound(LunarCultistDevotee.SpawnSound, Main.npc[NPCIndexs[0]].Center);
+                                    Main.npc[NPCIndexs[0]].active = false;
+                                }
+                                if (Main.npc[NPCIndexs[5]].active)
+                                {
+                                    for (int i = 0; i <= 50; i++)
+                                    {
+                                        int dustStyle = Main.rand.NextBool() ? 66 : 263;
+                                        Vector2 speed = Main.rand.NextVector2Circular(1.5f, 2f);
+                                        Dust dust = Dust.NewDustPerfect(Main.npc[NPCIndexs[5]].Center, Main.rand.NextBool(3) ? 191 : dustStyle, speed * 3, Scale: Main.rand.NextFloat(1.5f, 2.3f));
+                                        dust.noGravity = true;
+                                        dust.color = dust.type == dustStyle ? Color.LightGreen : default;
+                                    }
+                                    SoundEngine.PlaySound(LunarCultistDevotee.SpawnSound, Main.npc[NPCIndexs[5]].Center);
+                                    Main.npc[NPCIndexs[5]].active = false;
+                                }
+                                break;
+                            case 440:
+                                if (Main.npc[NPCIndexs[1]].active)
+                                {
+                                    for (int i = 0; i <= 50; i++)
+                                    {
+                                        int dustStyle = Main.rand.NextBool() ? 66 : 263;
+                                        Vector2 speed = Main.rand.NextVector2Circular(1.5f, 2f);
+                                        Dust dust = Dust.NewDustPerfect(Main.npc[NPCIndexs[1]].Center, Main.rand.NextBool(3) ? 191 : dustStyle, speed * 3, Scale: Main.rand.NextFloat(1.5f, 2.3f));
+                                        dust.noGravity = true;
+                                        dust.color = dust.type == dustStyle ? Color.LightGreen : default;
+                                    }
+                                    SoundEngine.PlaySound(LunarCultistDevotee.SpawnSound, Main.npc[NPCIndexs[1]].Center);
+                                    Main.npc[NPCIndexs[1]].active = false;
+                                }
+                                if (Main.npc[NPCIndexs[4]].active)
+                                {
+                                    for (int i = 0; i <= 50; i++)
+                                    {
+                                        int dustStyle = Main.rand.NextBool() ? 66 : 263;
+                                        Vector2 speed = Main.rand.NextVector2Circular(1.5f, 2f);
+                                        Dust dust = Dust.NewDustPerfect(Main.npc[NPCIndexs[4]].Center, Main.rand.NextBool(3) ? 191 : dustStyle, speed * 3, Scale: Main.rand.NextFloat(1.5f, 2.3f));
+                                        dust.noGravity = true;
+                                        dust.color = dust.type == dustStyle ? Color.LightGreen : default;
+                                    }
+                                    SoundEngine.PlaySound(LunarCultistDevotee.SpawnSound, Main.npc[NPCIndexs[4]].Center);
+                                    Main.npc[NPCIndexs[4]].active = false;
+                                }
+                                break;
+                            case 460:
+                                if (Main.npc[NPCIndexs[2]].active)
+                                {
+                                    for (int i = 0; i <= 50; i++)
+                                    {
+                                        int dustStyle = Main.rand.NextBool() ? 66 : 263;
+                                        Vector2 speed = Main.rand.NextVector2Circular(1.5f, 2f);
+                                        Dust dust = Dust.NewDustPerfect(Main.npc[NPCIndexs[2]].Center, Main.rand.NextBool(3) ? 191 : dustStyle, speed * 3, Scale: Main.rand.NextFloat(1.5f, 2.3f));
+                                        dust.noGravity = true;
+                                        dust.color = dust.type == dustStyle ? Color.LightGreen : default;
+                                    }
+                                    SoundEngine.PlaySound(LunarCultistDevotee.SpawnSound, Main.npc[NPCIndexs[2]].Center);
+                                    Main.npc[NPCIndexs[2]].active = false;
+                                }
+                                if (Main.npc[NPCIndexs[3]].active)
+                                {
+                                    for (int i = 0; i <= 50; i++)
+                                    {
+                                        int dustStyle = Main.rand.NextBool() ? 66 : 263;
+                                        Vector2 speed = Main.rand.NextVector2Circular(1.5f, 2f);
+                                        Dust dust = Dust.NewDustPerfect(Main.npc[NPCIndexs[3]].Center, Main.rand.NextBool(3) ? 191 : dustStyle, speed * 3, Scale: Main.rand.NextFloat(1.5f, 2.3f));
+                                        dust.noGravity = true;
+                                        dust.color = dust.type == dustStyle ? Color.LightGreen : default;
+                                    }
+                                    SoundEngine.PlaySound(LunarCultistDevotee.SpawnSound, Main.npc[NPCIndexs[3]].Center);
+                                    Main.npc[NPCIndexs[3]].active = false;
+                                }
+                                break;
+                            case 480:
+                                for (int i = 0; i <= 50; i++)
+                                {
+                                    int dustStyle = Main.rand.NextBool() ? 66 : 263;
+                                    Vector2 speed = Main.rand.NextVector2Circular(2f, 2.5f);
+                                    Dust dust = Dust.NewDustPerfect(orator.Center, Main.rand.NextBool(3) ? 191 : dustStyle, speed * 3, Scale: Main.rand.NextFloat(1.5f, 2.3f));
+                                    dust.noGravity = true;
+                                    dust.color = dust.type == dustStyle ? Color.LightGreen : default;
+                                }
+                                SoundEngine.PlaySound(LunarCultistDevotee.SpawnSound, orator.Center);
+                                
+                                Main.npc[NPCIndexs[6]].active = false;
+                                
+                                NPCIndexs = [];
+                                Active = false;
+                                break;
+                        }
+
+                        ActivityTimer++;
+                    }
+                    else if(RemainingCultists <= 0)
+                    {
+                        NPC orator = Main.npc[NPC.FindFirstNPC(ModContent.NPCType<OratorNPC>())];
+
+                        switch (ActivityTimer)
+                        {
+                            case 0:
+                                DisplayMessage(orator.Hitbox, Color.LimeGreen, "Dialogue.LunarCult.TheOrator.WorldText.Ritual.Failure.0");
+                                break;
+                            case 120:
+                                DisplayMessage(orator.Hitbox, Color.LimeGreen, "Dialogue.LunarCult.TheOrator.WorldText.Ritual.Failure.1");
+                                break;
+                            case 240:
+                                DisplayMessage(orator.Hitbox, Color.LimeGreen, "Dialogue.LunarCult.TheOrator.WorldText.Ritual.Failure.2");
+                                break;
+                            case 360:
+                                DisplayMessage(orator.Hitbox, Color.LimeGreen, "Dialogue.LunarCult.TheOrator.WorldText.Ritual.Failure.3");
+                                break;
+                            case 420:
+                                for (int i = 0; i <= 50; i++)
+                                {
+                                    int dustStyle = Main.rand.NextBool() ? 66 : 263;
+                                    Vector2 speed = Main.rand.NextVector2Circular(2f, 2.5f);
+                                    Dust dust = Dust.NewDustPerfect(orator.Center, Main.rand.NextBool(3) ? 191 : dustStyle, speed * 3, Scale: Main.rand.NextFloat(1.5f, 2.3f));
+                                    dust.noGravity = true;
+                                    dust.color = dust.type == dustStyle ? Color.LightGreen : default;
+                                }
+                                SoundEngine.PlaySound(LunarCultistDevotee.SpawnSound, orator.Center);
+
+                                Main.npc[NPCIndexs[6]].active = false;
+
+                                NPCIndexs = [];
+                                Active = false;
+                                break;
+                        }
+                        ActivityTimer++;
+                    }
+                    else
+                        ActivityTimer++;
+                    if(!Active)
+                        State = SystemState.End;
+                    break;
                 case SystemState.End:
                     ActivityCoords = new(-1, -1);
                     OnCooldown = true;
@@ -815,6 +1057,7 @@ namespace Windfall.Common.Systems.WorldEvents
         }
         public static bool IsTailorActivityActive() => Active && State == SystemState.Tailor;
         public static bool IsCafeteriaActivityActive() => Active && State == SystemState.Cafeteria;
+        public static bool IsRitualActivityActive() => Active && State == SystemState.Ritual;
         public static Response[] GetMenuResponses()
         {
             Response[] Responses = new Response[MenuFoodIDs.Count];
@@ -824,6 +1067,10 @@ namespace Windfall.Common.Systems.WorldEvents
                 Responses[i] = new Response(item.Name, localize: false);
             }
             return Responses;
+        }
+        public static void ResetTimer()
+        {
+            ActivityTimer = 0;
         }
     }
 }

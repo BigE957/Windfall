@@ -10,7 +10,7 @@ using Terraria.UI;
 using Windfall.Common.Players;
 using Windfall.Content.NPCs.WorldEvents.LunarCult;
 
-namespace Windfall.Content.UI
+namespace Windfall.Content.UI.Events
 {
     // This custom UI will show whenever the player is holding the ExampleCustomResourceWeapon item and will display the player's custom resource amounts that are tracked in ExampleResourcePlayer
     internal class ChefProgressBar : UIState
@@ -81,7 +81,7 @@ namespace Windfall.Content.UI
             int left = hitbox.Left;
             int right = hitbox.Right;
             int steps = (int)((right - left) * quotient);
-            for (int i = 0; i < steps; i ++)
+            for (int i = 0; i < steps; i++)
             {
                 float percent = (float)i / steps; // Alternate Gradient Approach
                 //float percent = (float)i / (right - left);
@@ -89,7 +89,7 @@ namespace Windfall.Content.UI
             }
             if (quotient != 1f)
             {
-                for (int i = steps; i < (right - left); i++)
+                for (int i = steps; i < right - left; i++)
                 {
                     spriteBatch.Draw(TextureAssets.MagicPixel.Value, new Rectangle(left + i, hitbox.Y, 1, hitbox.Height), Color.Black);
                 }
@@ -100,7 +100,7 @@ namespace Windfall.Content.UI
         {
             if (!NPC.AnyNPCs(ModContent.NPCType<TheChef>()))
                 return;
-          
+
             NPC chef = Main.npc.First(n => n.active && n.type == ModContent.NPCType<TheChef>());
 
             if (chef.ai[3] == -1)
@@ -108,7 +108,7 @@ namespace Windfall.Content.UI
 
             area.Left.Pixels = chef.Center.ToScreenPosition().X - 30;
             area.Top.Pixels = chef.Center.ToScreenPosition().Y + 40;
-            
+
             base.Update(gameTime);
         }
     }
@@ -137,7 +137,8 @@ namespace Windfall.Content.UI
             {
                 layers.Insert(mouseTextIndex, new LegacyGameInterfaceLayer(
                     "Windfall: Chef Progress Bar",
-                    delegate {
+                    delegate
+                    {
                         ChefUI.Draw(Main.spriteBatch, new GameTime());
                         return true;
                     },

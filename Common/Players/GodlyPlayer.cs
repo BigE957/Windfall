@@ -560,7 +560,7 @@ namespace Windfall.Common.Players
                     var modifiers = new NPC.HitModifiers();
                     NPC.HitInfo hit = modifiers.ToHitInfo((int)Player.GetDamage(DamageClass.Generic).ApplyTo(100f), false, npc.boss ? 0f : 20f);
                     npc.StrikeNPC(hit);
-                    if (npc.knockBackResist < 1f && npc.boss == false)
+                    if (npc.knockBackResist > 0f && npc.boss == false)
                     {
                         npc.velocity = (npc.Center - tumor.Center).SafeNormalize(Vector2.Zero) * npc.velocity.Length();
                         npc.velocity.Y -= 5;
@@ -571,7 +571,7 @@ namespace Windfall.Common.Players
             }
             foreach (NPC npc in Main.npc.Where(n => n != null && n.active && Vector2.Distance(Player.Center, n.Center) < 300 && n.velocity.Y == 0))
             {
-                if (npc.knockBackResist < 1f && npc.boss == false)
+                if (npc.knockBackResist > 0f && npc.boss == false)
                 {
                     if (tumor != null)
                         npc.velocity.Y -= 20 * npc.knockBackResist;                       

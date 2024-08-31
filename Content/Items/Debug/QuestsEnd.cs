@@ -1,6 +1,6 @@
 ﻿using Windfall.Common.Systems;
 
-namespace Windfall.Items.Debug
+namespace Windfall.Content.Items.Debug
 {
     public class QuestsEnd : ModItem, ILocalizedModType
     {

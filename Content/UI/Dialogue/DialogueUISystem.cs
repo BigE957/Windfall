@@ -222,6 +222,22 @@ namespace Windfall.Content.UI.Dialogue
                         Characters[(int)CharacterIDs.TheCalamity]
                     ])
                 },
+                {
+                    "RitualEvent",
+                    new DialogueTree(
+                    [
+                        new Dialogue
+                        (
+                            [
+                                new Response("No"),
+                                new Response("Yes"),
+                            ]
+                        ),
+                    ],
+                    [
+                        Characters[(int)CharacterIDs.TheCalamity]
+                    ])
+                },
                 #endregion
                 #region Communion Trees
                 {

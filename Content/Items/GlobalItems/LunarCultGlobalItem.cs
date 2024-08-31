@@ -23,7 +23,7 @@ namespace Windfall.Content.Items.GlobalItems
                 return false;
 
             //CultBaseArea.Inflate(2, 2);
-            if ((item.createTile != -1 || item.createWall != -1) && (CultBaseArea.Contains(player.Calamity().mouseWorld.ToPoint())))
+            if ((item.createTile != -1 || item.createWall != -1) && (CultBaseArea.Contains(player.Calamity().mouseWorld.ToTileCoordinates())))
                 return false;
 
             return base.CanUseItem(item, player);

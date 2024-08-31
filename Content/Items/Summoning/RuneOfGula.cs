@@ -1,7 +1,7 @@
 ﻿using CalamityMod.Events;
 using CalamityMod.NPCs.SlimeGod;
 
-namespace Windfall.Content.Items.SummonItems
+namespace Windfall.Content.Items.Summoning
 {
     public class RuneOfGula : ModItem, ILocalizedModType
     {

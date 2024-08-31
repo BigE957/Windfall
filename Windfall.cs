@@ -1,11 +1,5 @@
-using CalamityMod.NPCs.CalClone;
-using CalamityMod.NPCs.SunkenSea;
-using CalamityMod.Skies;
 using CalamityMod.UI;
 using System.Reflection;
-using Terraria.Graphics.Effects;
-using Windfall.Content.Skies;
-using Windfall.Content.Skies.ScreenShaders;
 using Windfall.Content.UI.Events;
 
 namespace Windfall
@@ -27,7 +21,8 @@ namespace Windfall
             FieldInfo InvasionGUIsFieldInfo = typeof(InvasionProgressUIManager).GetField("gUIs", BindingFlags.NonPublic | BindingFlags.Static);
             List<InvasionProgressUI> guis = ((List<InvasionProgressUI>)InvasionGUIsFieldInfo.GetValue(null));
             guis.Add(Activator.CreateInstance(typeof(TailorEventBar)) as InvasionProgressUI);
-            guis.Add(Activator.CreateInstance(typeof(CafeteriaEventBar)) as InvasionProgressUI);
+            guis.Add(Activator.CreateInstance(typeof(CafeteriaEventBar)) as InvasionProgressUI); 
+            guis.Add(Activator.CreateInstance(typeof(RitualEventBar)) as InvasionProgressUI);
         }
     }
 }

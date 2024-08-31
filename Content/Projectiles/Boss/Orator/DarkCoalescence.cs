@@ -1,7 +1,7 @@
 ﻿using CalamityMod.World;
 using Luminance.Core.Graphics;
 using Windfall.Common.Graphics.Metaballs;
-using Windfall.Content.NPCs.Bosses.TheOrator;
+using Windfall.Content.NPCs.Bosses.Orator;
 using static Windfall.Common.Graphics.Metaballs.EmpyreanMetaball;
 
 namespace Windfall.Content.Projectiles.Boss.Orator
@@ -65,7 +65,7 @@ namespace Windfall.Content.Projectiles.Boss.Orator
             
             Player target;
             if(Orator != null)    
-                target = Main.player[Player.FindClosest(Orator.Center, Projectile.width, Projectile.height)];
+                target = Main.npc[NPC.FindFirstNPC(ModContent.NPCType<TheOrator>())].As<TheOrator>().target;
             else
                 target = Main.player[Player.FindClosest(Projectile.Center, Projectile.width, Projectile.height)];
 

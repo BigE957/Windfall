@@ -1,6 +1,6 @@
 ﻿using CalamityMod.Buffs.StatDebuffs;
 using CalamityMod.Graphics.Metaballs;
-using Windfall.Content.NPCs.Bosses.TheOrator;
+using Windfall.Content.NPCs.Bosses.Orator;
 using Windfall.Content.Projectiles.Boss.Orator;
 using Windfall.Content.Projectiles.Weapons.Summon;
 
@@ -116,12 +116,9 @@ namespace Windfall.Common.Graphics.Metaballs
                 particle.Center += particle.Velocity;
             }
             EmpyreanParticles.RemoveAll(p => p.Size <= 2.5f);
-
-            if(EmpyreanStickyParticles.Count > 0 )
-                EmpyreanStickyParticles.RemoveAll(p => p.Projectile == null || !p.Projectile.active);
+            
             foreach (EmpyreanBorderParticle particle in EmpyreanStickyParticles)
             {
-
                 Projectile myProj = particle.Projectile;
 
                 if(particle.spin)
@@ -134,6 +131,8 @@ namespace Windfall.Common.Graphics.Metaballs
                 if (!particle.spin)
                     particle.Center -= myProj.velocity / 2;                
             }
+            if(EmpyreanStickyParticles.Count != 0)
+                EmpyreanStickyParticles.RemoveAll(p => p.Projectile == null || !p.Projectile.active);
         }
 
         public override Vector2 CalculateManualOffsetForLayer(int layerIndex)

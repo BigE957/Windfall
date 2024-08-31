@@ -1,7 +1,7 @@
 ﻿using CalamityMod.Rarities;
 using Windfall.Content.UI.DraedonsDatabase;
 
-namespace Windfall.Items.Debug
+namespace Windfall.Content.Items.Debug
 {
     public class PortableDraedonDatabase : ModItem, ILocalizedModType
     {

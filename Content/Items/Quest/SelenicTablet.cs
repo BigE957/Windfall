@@ -1,5 +1,5 @@
 ﻿using Windfall.Common.Systems.WorldEvents;
-using Windfall.Content.NPCs.Bosses.TheOrator;
+using Windfall.Content.NPCs.Bosses.Orator;
 using Windfall.Content.Projectiles.Other;
 using Windfall.Content.UI.Selenic;
 

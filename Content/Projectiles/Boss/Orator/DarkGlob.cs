@@ -1,6 +1,6 @@
 ﻿using CalamityMod.World;
 using Windfall.Common.Graphics.Metaballs;
-using Windfall.Content.NPCs.Bosses.TheOrator;
+using Windfall.Content.NPCs.Bosses.Orator;
 
 namespace Windfall.Content.Projectiles.Boss.Orator
 {

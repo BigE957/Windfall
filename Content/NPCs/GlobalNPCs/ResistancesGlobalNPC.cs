@@ -1,5 +1,5 @@
 ﻿using CalamityMod.Projectiles.Rogue;
-using Windfall.Content.NPCs.Bosses.TheOrator;
+using Windfall.Content.NPCs.Bosses.Orator;
 
 namespace Windfall.Content.NPCs.GlobalNPCs
 {

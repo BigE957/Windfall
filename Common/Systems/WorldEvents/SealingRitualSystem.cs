@@ -2,7 +2,7 @@
 using Terraria.ModLoader.IO;
 using Windfall.Common.Graphics.Metaballs;
 using Windfall.Content.Items.Quest;
-using Windfall.Content.NPCs.Bosses.TheOrator;
+using Windfall.Content.NPCs.Bosses.Orator;
 using Windfall.Content.NPCs.TravellingNPCs;
 using Windfall.Content.NPCs.WorldEvents.LunarCult;
 using Windfall.Content.Projectiles.Boss.Orator;

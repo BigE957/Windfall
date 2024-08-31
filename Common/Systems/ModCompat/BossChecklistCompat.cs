@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Windfall.Content.Items.Quest;
 using Windfall.Content.Items.Weapons.Summon;
-using Windfall.Content.NPCs.Bosses.TheOrator;
+using Windfall.Content.NPCs.Bosses.Orator;
 
 namespace Windfall.Common.Systems.ModCompat
 {
