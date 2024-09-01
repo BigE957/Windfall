@@ -324,10 +324,13 @@ namespace Windfall.Content.NPCs.Bosses.Orator
             }
             aiCounter++;
 
-            EmpyreanMetaball.SpawnDefaultParticle(NPC.Center + new Vector2(-32, 0).RotatedBy(NPC.rotation), Vector2.UnitX.RotatedBy(NPC.rotation) * -8, NPC.scale * 34);
-            if (Main.rand.NextBool(3))
-                EmpyreanMetaball.SpawnDefaultParticle(NPC.Center + Main.rand.NextVector2Circular(2, 2) + new Vector2(-32, 0).RotatedBy(NPC.rotation), Vector2.UnitX.RotatedBy(NPC.rotation + Main.rand.NextFloat(-0.5f, 0.5f)) * -Main.rand.NextFloat(6f, 8f), NPC.scale * Main.rand.NextFloat(30f, 40f));
-            Lighting.AddLight(NPC.Center, new Vector3(0.32f, 0.92f, 0.71f));
+            if (CurrentAI != AIState.OnBoss)
+            {
+                EmpyreanMetaball.SpawnDefaultParticle(NPC.Center + new Vector2(-32, 0).RotatedBy(NPC.rotation), Vector2.UnitX.RotatedBy(NPC.rotation) * -8, NPC.scale * 34);
+                if (Main.rand.NextBool(3))
+                    EmpyreanMetaball.SpawnDefaultParticle(NPC.Center + Main.rand.NextVector2Circular(2, 2) + new Vector2(-32, 0).RotatedBy(NPC.rotation), Vector2.UnitX.RotatedBy(NPC.rotation + Main.rand.NextFloat(-0.5f, 0.5f)) * -Main.rand.NextFloat(6f, 8f), NPC.scale * Main.rand.NextFloat(30f, 40f));
+            }
+            //Lighting.AddLight(NPC.Center, new Vector3(0.32f, 0.92f, 0.71f));
         }
         public override void OnKill()
         {

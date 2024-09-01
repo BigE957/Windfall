@@ -526,7 +526,7 @@ Dialogue: {
 			BossText: {
 				PhaseChange: {
 					0: Hey!
-					1: You have any idea how long those take to make?!
+					1: Do you have any idea how long those take to make?!
 					2: That's it!
 					3: I'm KILLING you.
 				}
