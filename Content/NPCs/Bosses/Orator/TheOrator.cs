@@ -427,6 +427,7 @@ namespace Windfall.Content.NPCs.Bosses.Orator
                     }
                     if(aiCounter < -30)
                     {
+                        NPC.damage = 0;
                         Vector2 vector = target.Center - NPC.Center;
                         float dist = vector.Length();
                         vector.Normalize();
