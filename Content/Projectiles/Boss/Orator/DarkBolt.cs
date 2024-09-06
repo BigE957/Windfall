@@ -4,7 +4,11 @@ namespace Windfall.Content.Projectiles.Boss.Orator
     public class DarkBolt : ModProjectile
     {
         public override string Texture => "Windfall/Assets/Projectiles/Boss/NailShot";
-
+        public override void SetStaticDefaults()
+        {
+            ProjectileID.Sets.TrailCacheLength[Projectile.type] = 6;
+            ProjectileID.Sets.TrailingMode[Projectile.type] = 2;
+        }
         public override void SetDefaults()
         {
             Projectile.width = 24;
@@ -55,6 +59,11 @@ namespace Windfall.Content.Projectiles.Boss.Orator
             Vector2 rotation = Projectile.rotation.ToRotationVector2();
             rotation *= 39;           
             hitbox.Location = new Point((int)(hitbox.Location.X + rotation.X), (int)(hitbox.Location.Y + rotation.Y));
+        }
+        public override bool PreDraw(ref Color lightColor)
+        {
+            CalamityUtils.DrawAfterimagesCentered(Projectile, ProjectileID.Sets.TrailingMode[Projectile.type], lightColor, 2);
+            return false;
         }
     }
 }
