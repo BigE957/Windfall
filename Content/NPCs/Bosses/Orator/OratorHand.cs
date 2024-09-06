@@ -86,8 +86,8 @@ namespace Windfall.Content.NPCs.Bosses.Orator
             NPC mainHand = Main.npc.First(n => n != null && n.active && n.type == NPC.type);
             if (Main.npc.Where(n => n != null && n.active && n.type == NPC.type).Count() == 1)
             {
-                //NPC.realLife = -1;
-                //NPC.life = 0;
+                NPC.realLife = -1;
+                NPC.life = 0;
             }
             else if(mainHand.life > 1)
             {                
@@ -106,6 +106,14 @@ namespace Windfall.Content.NPCs.Bosses.Orator
         private static int deadCounter = 0;
         private static float zoom = 0f;
         private Vector2 shakeOffset = Vector2.Zero;
+        private enum Pose
+        {
+            Default,
+            FingerGun,
+            Fist,
+            OpenPalm
+        }
+        private Pose CurrentPose = Pose.Default;
         public override void AI()
         {
             if (Main.npc[OratorIndex] == null || !Main.npc[OratorIndex].active || Main.npc[OratorIndex].type != ModContent.NPCType<TheOrator>())
@@ -122,6 +130,7 @@ namespace Windfall.Content.NPCs.Bosses.Orator
             TheOrator modOrator = orator.As<TheOrator>();
             int aiCounter = modOrator.aiCounter;
 
+            #region Death Scene
             if ((NPC.life == 1 || (NPC.realLife != -1 && Main.npc[NPC.realLife].life == 1)) && NPC.damage == 0)
             {
                 if (deadCounter <= 1)
@@ -133,7 +142,7 @@ namespace Windfall.Content.NPCs.Bosses.Orator
                         NPC.buffTime[i] = 0;
                     }
 
-                    NPC.velocity = (orator.Center - NPC.Center).SafeNormalize(Vector2.Zero) * 8f * ((orator.Center - NPC.Center).Length() > 300f ? 1.5f : -1);
+                    NPC.velocity = (orator.Center - NPC.Center).SafeNormalize(Vector2.Zero) * 8f * (modOrator.AIState == TheOrator.States.DarkCollision ? 2.5f : (orator.Center - NPC.Center).Length() > 300f ? 1.5f : -1);
                 }
 
                 NPC otherHand = Main.npc.Last(n => n != null && n.active && n.type == NPC.type);
@@ -182,6 +191,7 @@ namespace Windfall.Content.NPCs.Bosses.Orator
                     deadCounter++;
                 return;
             }
+            #endregion
 
             if (NPC.AnyNPCs(ModContent.NPCType<ShadowHand>()))
                 NPC.dontTakeDamage = true;
@@ -394,6 +404,18 @@ namespace Windfall.Content.NPCs.Bosses.Orator
                                 }
                             }
                             NPC.velocity = (goal - NPC.Center).SafeNormalize(Vector2.Zero) * ((goal - NPC.Center).Length() / 8f);
+                        }
+                        else
+                        {
+                            NPC.damage = 0;
+                            goalPos = orator.Center + orator.velocity + new Vector2(124 * WhatHand, +75);
+                            goalPos.Y += (float)Math.Sin(aiCounter / 20f) * 16f;
+
+                            #region Movement
+                            NPC.velocity = (goalPos - NPC.Center).SafeNormalize(Vector2.Zero) * ((goalPos - NPC.Center).Length() / 10f);
+                            NPC.rotation = (-3 * Pi / 2) - (Pi / 8 * WhatHand);
+                            NPC.direction = WhatHand;
+                            #endregion
                         }
                         break;
                     case TheOrator.States.DarkBarrage:
@@ -799,6 +821,18 @@ namespace Windfall.Content.NPCs.Bosses.Orator
         }
         public override void FindFrame(int frameHeight)
         {
+            /*
+            NPC.frame.Width = ModContent.Request<Texture2D>(this.Texture).Width() / 2;
+            switch(CurrentPose)
+            {
+                case Pose.FingerGun:
+                    NPC.frame.X = NPC.frame.Width;
+                    break;
+                default:
+                    NPC.frame.X = 0; 
+                    break;
+            }
+            */
             if (deadCounter > 300)
                 return;            
             NPC.frameCounter++;
