@@ -82,7 +82,7 @@ namespace Windfall.Content.NPCs.Bosses.Orator
             SkyManager.Instance.Activate("Windfall:Orator", args: Array.Empty<object>());
             target = Main.player[Player.FindClosest(NPC.Center, NPC.width, NPC.height)];
 
-            //AIState = States.PhaseChange;
+            //AIState = States.Testing;
         }
         internal enum States
         {
@@ -926,7 +926,10 @@ namespace Windfall.Content.NPCs.Bosses.Orator
                                                 Projectile.NewProjectile(Terraria.Entity.GetSource_NaturalSpawn(), spawnPos, ToTarget * 8, ModContent.ProjectileType<DarkGlob>(), GlobDamage, 0f, -1, 2, 0.5f);
                                             }
                                         }
-                                        NPC.velocity = (target.Center - NPC.Center).SafeNormalize(Vector2.UnitX) * 90;
+                                        if(attackCounter + 1 >= OrbitDashCount)
+                                            NPC.velocity = (target.Center - NPC.Center).SafeNormalize(Vector2.UnitX) * 70;
+                                        else
+                                            NPC.velocity = (target.Center - NPC.Center).SafeNormalize(Vector2.UnitX) * 90;
                                         scytheSlice = true;
                                         dashing = true;
                                         //values gotten from Astrum Deus' contact damage. Subject to change.
@@ -1427,7 +1430,7 @@ namespace Windfall.Content.NPCs.Bosses.Orator
                     if (!NPC.AnyNPCs(ModContent.NPCType<OratorHand>()))
                     {
                         #region Movement
-                        goalPosition = target.Center + Vector2.UnitY * -300;
+                        goalPosition = target.Center + Vector2.UnitY * -250;
                         NPC.velocity = (goalPosition - NPC.Center).SafeNormalize(Vector2.Zero) * ((goalPosition - NPC.Center).Length() / 10f);
                         #endregion
 
@@ -1533,20 +1536,17 @@ namespace Windfall.Content.NPCs.Bosses.Orator
                     homeInVector = target.Center - NPC.Center;
                     targetDist = homeInVector.Length();
                     homeInVector.Normalize();
-                    if (targetDist > 300f)
+                    if (targetDist > 1000f)
                         NPC.velocity = (NPC.velocity * 40f + homeInVector * 12f) / 41f;
                     else
                     {
-                        if (targetDist < 250f)
+                        if (targetDist < 950f)
                             NPC.velocity = (NPC.velocity * 40f + homeInVector * -12f) / 41f;
                         else
                             NPC.velocity *= 0.975f;
                     }
                     #endregion
-                    if (aiCounter % 120 == 0)
-                        scytheSlice = true;
-                    if (aiCounter > 230)
-                        aiCounter = -1;
+                    aiCounter = -1;
                     break;
             }
             if (scytheSpin)

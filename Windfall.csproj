@@ -77,6 +77,9 @@
     <None Remove="Assets\Skies\OratorCloudsBack.png" />
     <None Remove="Assets\Skies\OratorCloudsFront.png" />
     <None Remove="Assets\Skies\OratorCloudsMiddle.png" />
+    <None Remove="Assets\Skies\OratorMoon.png" />
+    <None Remove="Assets\Skies\OratorMoonBloom.png" />
+    <None Remove="Assets\Skies\OratorMoonBloom2.png" />
     <None Remove="Assets\UI\ProgressFrame.png" />
     <None Remove="Assets\UI\ThoughtBubble.png" />
     <None Remove="Content\Buffs\Cooldowns\ParryWeapon.png" />
@@ -118,6 +121,7 @@
     <None Remove="Content\UI\DraedonsDatabase\DraedonUIDraeDashLogo.png" />
     <None Remove="Content\UI\DraedonsDatabase\DraedonUIIconBG.png" />
     <None Remove="Content\UI\DraedonsDatabase\DraedonUIPurchase.png" />
+    <None Remove="Content\UI\MenuThemes\Selenic\WindfallLogoWhite.png" />
     <None Remove="Content\UI\WanderersJournals\DraedonsUICheckmark.png" />
     <None Remove="Content\UI\WanderersJournals\JournalArrowLeft(Highlighted).png" />
     <None Remove="Content\UI\WanderersJournals\JournalArrowLeft.png" />

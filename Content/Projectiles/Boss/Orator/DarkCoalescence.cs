@@ -53,7 +53,7 @@ namespace Windfall.Content.Projectiles.Boss.Orator
             if (NPC.FindFirstNPC(ModContent.NPCType<TheOrator>()) != -1)
                 Orator = Main.npc[NPC.FindFirstNPC(ModContent.NPCType<TheOrator>())];          
             
-            if(Orator == null)
+            if(Orator == null || Orator.As<TheOrator>().AIState == TheOrator.States.PhaseChange)
             {
                 SoundEngine.PlaySound(SoundID.DD2_EtherianPortalDryadTouch, Projectile.Center);
                 for (int i = 0; i <= 50; i++)
