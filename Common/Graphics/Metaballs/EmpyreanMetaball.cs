@@ -120,16 +120,17 @@ namespace Windfall.Common.Graphics.Metaballs
             foreach (EmpyreanBorderParticle particle in EmpyreanStickyParticles)
             {
                 Projectile myProj = particle.Projectile;
-
+                
                 if(particle.spin)
                     if (particle.Rotation > 0)
-                        particle.Rotation += 0.0175f / Math.Abs(particle.Interpolant / 10);
+                        particle.Rotation += 0.0175f / Math.Abs(particle.Interpolant / 4);
                     else
-                        particle.Rotation -= 0.0175f / Math.Abs(particle.Interpolant / 10);
+                        particle.Rotation -= 0.0175f / Math.Abs(particle.Interpolant / 4);
+                
                 particle.Center = myProj.Center + particle.Offset + (new Vector2(myProj.width / 2 * (myProj.scale / 5f) * 1.05f, 0).RotatedBy(particle.Rotation + myProj.rotation));
-                particle.Center += (myProj.Center + particle.Offset - particle.Center).SafeNormalize(Vector2.Zero) * (float)Math.Sin(Main.GlobalTimeWrappedHourly * 4 + particle.SineOffset) * particle.Interpolant;
+                particle.Center += (myProj.Center + particle.Offset - particle.Center).SafeNormalize(Vector2.Zero) * SumofSines(particle, 1.5f, 2f);
                 if (!particle.spin)
-                    particle.Center -= myProj.velocity / 2;                
+                    particle.Center -= myProj.velocity / 2;  
             }
             if(EmpyreanStickyParticles.Count != 0)
                 EmpyreanStickyParticles.RemoveAll(p => p.Projectile == null || !p.Projectile.active);
@@ -216,6 +217,15 @@ namespace Windfall.Common.Graphics.Metaballs
                 Vector2 drawPosition = n.Center - Main.screenPosition;
                 n.As<ShadowHand>().DrawSelf(drawPosition, n.GetAlpha(Color.White), n.rotation);
             }
+        }
+        private static float SumofSines(EmpyreanBorderParticle particle, float wavelength, float speed)
+        {
+            float time = Main.GlobalTimeWrappedHourly;
+            float x = particle.SineOffset;
+            float a = particle.Interpolant / 2f;
+            float w = 2 / wavelength;
+            float s = speed * w;
+            return (a * 2f) * (float)Math.Sin(x * w + time * (s * 0.25f)) + a * (float)Math.Sin(x * (w * 0.75f) + time * (s * 2f)) + (a * 0.5f) * (float)Math.Sin(x * (w * 1.5f) + time * s);
         }
     }
 }
