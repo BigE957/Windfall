@@ -51,9 +51,9 @@ namespace Windfall.Content.NPCs.Bosses.Orator
             Spawning,
             OnBoss,
             Hunting,
-            Recoil,
             Dashing,
             Globbing,
+            Aiming,
             Sacrifice,
         }
         internal AIState CurrentAI
@@ -68,7 +68,14 @@ namespace Windfall.Content.NPCs.Bosses.Orator
         }
         Vector2 toTarget = Vector2.Zero;
         bool attackBool = false;
-
+        private enum Pose
+        {
+            Default,
+            FingerGun,
+            Fist,
+            OpenPalm
+        }
+        private Pose CurrentPose = Pose.Default;
         public override void OnSpawn(IEntitySource source)
         {
             CurrentAI = AIState.Spawning;
@@ -94,7 +101,7 @@ namespace Windfall.Content.NPCs.Bosses.Orator
                 NPC.dontTakeDamage = false;
                 NPC.damage = StatCorrections.ScaleContactDamage(Main.masterMode ? 500 : CalamityWorld.death ? 420 : CalamityWorld.revenge ? 350 : Main.expertMode ? 240 : 180);
             }
-
+            
             #region Despawning
             if (Orator == null)
             {
@@ -113,26 +120,30 @@ namespace Windfall.Content.NPCs.Bosses.Orator
                 CurrentAI = AIState.Sacrifice;
             }
             #endregion
-
+            
             //testing code :P
             //if (CurrentAI == AIState.OnBoss || CurrentAI == AIState.Spawning)
-            //   CurrentAI = AIState.Hunting;
+               //CurrentAI = AIState.Hunting;
 
             switch (CurrentAI)
             {
                 case AIState.Spawning:
-                    NPC.velocity += NPC.velocity.SafeNormalize(Vector2.UnitX) / -2;
+                    NPC.velocity *= 0.98f;
+
                     int dustStyle = Main.rand.NextBool() ? 66 : 263;
                     Dust dust = Dust.NewDustPerfect(NPC.Center + Vector2.UnitY * Main.rand.NextFloat(-16, 16) + new Vector2(-54, 0).RotatedBy(NPC.rotation), Main.rand.NextBool(3) ? 191 : dustStyle);
                     dust.scale = Main.rand.NextFloat(1.5f, 2.3f);
                     dust.noGravity = true;
                     dust.color = dust.type == dustStyle ? Color.LightGreen : default;
+
                     if (NPC.velocity.Length() < 2)
                     {
                         CurrentAI = AIState.OnBoss;
                         aiCounter = 0;
                         NPC.velocity = (target.Center - NPC.Center).SafeNormalize(Vector2.Zero);
                     }
+
+                    SetNPCDirection();
                     break;
                 case AIState.OnBoss:
                     NPC[] inactiveHands = Main.npc.Where(n => n != null && n.active && n.type == NPC.type && n.ai[0] == (int)AIState.OnBoss).ToArray();
@@ -155,6 +166,7 @@ namespace Windfall.Content.NPCs.Bosses.Orator
                     #endregion
                     break;
                 case AIState.Hunting:
+                    CurrentPose = Pose.Default;
 
                     #region Movement
                     Vector2 homeInVector = target.Center - NPC.Center;
@@ -195,8 +207,9 @@ namespace Windfall.Content.NPCs.Bosses.Orator
                         if (Main.rand.NextBool(5) || toTarget.Length() > 600f)
                         {
                             attackBool = true;
-                            NPC.velocity = toTarget.SafeNormalize(Vector2.Zero) * -5;
                             CurrentAI = AIState.Dashing;
+                            aiCounter = 0;
+                            return;
                         }
                         else
                         {
@@ -205,38 +218,59 @@ namespace Windfall.Content.NPCs.Bosses.Orator
                                 attackBool = NPC.position.X > target.position.X;
                                 NPC.velocity = Vector2.Zero;
                                 CurrentAI = AIState.Globbing;
+                                aiCounter = -15;
+                                return;
                             }
                             else
                             {
-                                SoundEngine.PlaySound(SoundID.DD2_OgreSpit, NPC.Center);
-                                NPC.velocity = toTarget.SafeNormalize(Vector2.Zero) * -10;
-                                if (Main.netMode != NetmodeID.MultiplayerClient)
-                                    if (Main.rand.NextBool())
-                                    {
-                                        Projectile.NewProjectile(Terraria.Entity.GetSource_NaturalSpawn(), NPC.Center, toTarget.SafeNormalize(Vector2.UnitX), ModContent.ProjectileType<DarkBolt>(), TheOrator.BoltDamage, 0f, -1, 0, 15);
-                                        Projectile.NewProjectile(Terraria.Entity.GetSource_NaturalSpawn(), NPC.Center, toTarget.SafeNormalize(Vector2.UnitX).RotatedBy(PiOver4), ModContent.ProjectileType<DarkBolt>(), TheOrator.BoltDamage, 0f, -1, 0, 15);
-                                        Projectile.NewProjectile(Terraria.Entity.GetSource_NaturalSpawn(), NPC.Center, toTarget.SafeNormalize(Vector2.UnitX).RotatedBy(-PiOver4), ModContent.ProjectileType<DarkBolt>(), TheOrator.BoltDamage, 0f, -1, 0, 15);
-                                    }
-                                    else
-                                    {
-                                        Projectile.NewProjectile(Terraria.Entity.GetSource_NaturalSpawn(), NPC.Center, toTarget.SafeNormalize(Vector2.UnitX).RotatedBy(Pi / 8), ModContent.ProjectileType<DarkBolt>(), TheOrator.BoltDamage, 0f, -1, 0, 15);
-                                        Projectile.NewProjectile(Terraria.Entity.GetSource_NaturalSpawn(), NPC.Center, toTarget.SafeNormalize(Vector2.UnitX).RotatedBy(Pi / -8), ModContent.ProjectileType<DarkBolt>(), TheOrator.BoltDamage, 0f, -1, 0, 15);
-                                    }
-                                CurrentAI = AIState.Recoil;
+                                CurrentPose = Pose.FingerGun;
+                                CurrentAI = AIState.Aiming;
+                                aiCounter = 0;
+                                return;
                             }
                         }
-                        aiCounter = 0;
                     }
                     #endregion
 
+                    SetNPCDirection();
                     break;
                 case AIState.Dashing:
-                    NPC.velocity += NPC.velocity.SafeNormalize(Vector2.UnitX) / -2;
-                    if (NPC.velocity.Length() < 2)
+                    if(aiCounter <= 30)
+                    {
+                        toTarget = (target.Center - NPC.Center).SafeNormalize(Vector2.Zero);
+                        float reelBackSpeedExponent = 2.6f;
+                        float reelBackCompletion = Utils.GetLerpValue(0, 30, aiCounter, true);
+                        float reelBackSpeed = MathHelper.Lerp(2.5f, 16f, MathF.Pow(reelBackCompletion, reelBackSpeedExponent));
+                        Vector2 reelBackVelocity = toTarget * -reelBackSpeed;
+                        NPC.velocity = Vector2.Lerp(NPC.velocity, reelBackVelocity, 0.25f);
+
+                        SetNPCDirection();
+                    }
+                    else if (aiCounter == 31)
                     {
                         SoundEngine.PlaySound(SoundID.DD2_GoblinBomberThrow, NPC.Center);
                         NPC.velocity = NPC.velocity.SafeNormalize(Vector2.Zero) * -36;
-                        CurrentAI = AIState.Recoil;
+
+                        SetNPCDirection();
+                    }
+                    else
+                    {
+                        NPC.velocity *= 0.975f;
+
+                        NPC.velocity = NPC.velocity.RotateTowards((target.Center - NPC.Center).ToRotation(), 0.02f);
+                        NPC.rotation = NPC.velocity.ToRotation();
+                        dustStyle = Main.rand.NextBool() ? 66 : 263;
+                        dust = Dust.NewDustPerfect(NPC.Center + Vector2.UnitY * Main.rand.NextFloat(-16, 16) + new Vector2(-54, 0).RotatedBy(NPC.rotation), Main.rand.NextBool(3) ? 191 : dustStyle);
+                        dust.scale = Main.rand.NextFloat(1.5f, 2.3f);
+                        dust.noGravity = true;
+                        dust.color = dust.type == dustStyle ? Color.LightGreen : default;
+                        
+                        if (NPC.velocity.LengthSquared() < 64f)
+                        {
+                            CurrentAI = AIState.Hunting;
+                            aiCounter = 0;
+                            NPC.velocity = (target.Center - NPC.Center).SafeNormalize(Vector2.Zero);
+                        }
                     }
                     break;
                 case AIState.Globbing:
@@ -246,43 +280,138 @@ namespace Windfall.Content.NPCs.Bosses.Orator
                     {
                         baseAngle = 0f.ToRotationVector2();
                         rotation = -Pi / 8;
+                        NPC.direction = -1;
                     }
                     else
                     {
                         baseAngle = Pi.ToRotationVector2();
                         rotation = Pi / 8;
+                        NPC.direction = 1;
                     }
-                    if (aiCounter % 5 == 0)
+                    if (aiCounter >= 0)
                     {
-                        SoundEngine.PlaySound(SoundID.DD2_LightningBugZap, NPC.Center);
-                        Vector2 myAngle = baseAngle.SafeNormalize(Vector2.UnitX).RotatedBy(rotation * Math.Ceiling((double)aiCounter / 5));
-                        for (int i = 0; i < 10; i++)
-                            EmpyreanMetaball.SpawnDefaultParticle(NPC.Center + myAngle * 40, myAngle.RotatedByRandom(Pi / 6) * Main.rand.NextFloat(0f, 15f), 20 * Main.rand.NextFloat(1f, 2f));
-                        if (Main.netMode != NetmodeID.MultiplayerClient)
-                            Projectile.NewProjectile(Terraria.Entity.GetSource_NaturalSpawn(), NPC.Center, myAngle * 15, ModContent.ProjectileType<DarkGlob>(), TheOrator.GlobDamage, 0f, -1, 1, 0.5f);
+                        if (aiCounter % 5 == 0)
+                        {
+                            SoundEngine.PlaySound(SoundID.DD2_LightningBugZap, NPC.Center);
+                            Vector2 myAngle = baseAngle.SafeNormalize(Vector2.UnitX).RotatedBy(rotation * Math.Ceiling((double)aiCounter / 5));
+                            for (int i = 0; i < 10; i++)
+                                EmpyreanMetaball.SpawnDefaultParticle(NPC.Center + myAngle * 40, myAngle.RotatedByRandom(Pi / 6) * Main.rand.NextFloat(0f, 15f), 20 * Main.rand.NextFloat(1f, 2f));
+                            if (Main.netMode != NetmodeID.MultiplayerClient)
+                                Projectile.NewProjectile(Terraria.Entity.GetSource_NaturalSpawn(), NPC.Center, myAngle * 15, ModContent.ProjectileType<DarkGlob>(), TheOrator.GlobDamage, 0f, -1, 1, 0.5f);
+                        }
+                        NPC.rotation = baseAngle.SafeNormalize(Vector2.UnitX).RotatedBy(rotation * ((float)aiCounter / 5)).ToRotation();
+                        if (aiCounter > 0 && aiCounter % 30 == 0)
+                            CurrentAI = AIState.Hunting;
                     }
-                    NPC.rotation = baseAngle.SafeNormalize(Vector2.UnitX).RotatedBy(rotation * ((float)aiCounter / 5)).ToRotation();
-                    if (aiCounter % 30 == 0)
-                        CurrentAI = AIState.Hunting;
+                    else
+                        NPC.rotation = Lerp(baseAngle.ToRotation() + (Pi * NPC.direction), baseAngle.ToRotation(), SineOutEasing((aiCounter + 15) / 15f, 1));
                     break;
-                case AIState.Recoil:
-                    NPC.velocity += NPC.velocity.SafeNormalize(Vector2.UnitX) / -2;
-                    if (attackBool)
+                case AIState.Aiming:
+                    #region Movement
+                    if (aiCounter < 90 || aiCounter > 120)
                     {
-                        NPC.velocity = NPC.velocity.RotateTowards((target.Center - NPC.Center).ToRotation(), 0.02f);
-                        NPC.rotation = NPC.velocity.ToRotation();
-                        dustStyle = Main.rand.NextBool() ? 66 : 263;
-                        dust = Dust.NewDustPerfect(NPC.Center + Vector2.UnitY * Main.rand.NextFloat(-16, 16) + new Vector2(-54, 0).RotatedBy(NPC.rotation), Main.rand.NextBool(3) ? 191 : dustStyle);
-                        dust.scale = Main.rand.NextFloat(1.5f, 2.3f);
-                        dust.noGravity = true;
-                        dust.color = dust.type == dustStyle ? Color.LightGreen : default;
+                        homeInVector = target.Center - NPC.Center;
+                        targetDist = homeInVector.Length();
+                        homeInVector.Normalize();
+                        if (targetDist > 300f)
+                        {
+                            float velocity = 24f;
+                            if (aiCounter > 120)
+                                velocity /= 2f;
+                            NPC.velocity = (NPC.velocity * 40f + homeInVector * velocity) / 41f;
+                        }
+                        else
+                        {
+                            if (targetDist < 250f)
+                            {
+                                float velocity = -24f;
+                                if (aiCounter > 120)
+                                    velocity /= 2f;
+                                NPC.velocity = (NPC.velocity * 40f + homeInVector * velocity) / 41f;
+                            }
+                            else
+                            {
+                                NPC.velocity *= 0.9f;
+                            }
+                        }
+                        if(aiCounter < 90)
+                            NPC.rotation = (target.Center - NPC.Center).ToRotation();
                     }
-                    if (NPC.velocity.Length() < 2)
+                    #endregion
+
+                    if(aiCounter >= 90)
                     {
-                        CurrentAI = AIState.Hunting;
-                        aiCounter = 0;
-                        NPC.velocity = (target.Center - NPC.Center).SafeNormalize(Vector2.Zero);
+                        if (aiCounter == 90)
+                        {
+                            SoundEngine.PlaySound(SoundID.DD2_OgreSpit, NPC.Center);
+                            toTarget = target.Center - NPC.Center;
+                            NPC.velocity = toTarget.SafeNormalize(Vector2.Zero) * -12;
+                            if (Main.netMode != NetmodeID.MultiplayerClient)
+                                if (Main.rand.NextBool())
+                                {
+                                    Projectile.NewProjectile(Terraria.Entity.GetSource_NaturalSpawn(), NPC.Center, toTarget.SafeNormalize(Vector2.UnitX), ModContent.ProjectileType<DarkBolt>(), TheOrator.BoltDamage, 0f, -1, 0, 15);
+                                    Projectile.NewProjectile(Terraria.Entity.GetSource_NaturalSpawn(), NPC.Center, toTarget.SafeNormalize(Vector2.UnitX).RotatedBy(PiOver4), ModContent.ProjectileType<DarkBolt>(), TheOrator.BoltDamage, 0f, -1, 0, 15);
+                                    Projectile.NewProjectile(Terraria.Entity.GetSource_NaturalSpawn(), NPC.Center, toTarget.SafeNormalize(Vector2.UnitX).RotatedBy(-PiOver4), ModContent.ProjectileType<DarkBolt>(), TheOrator.BoltDamage, 0f, -1, 0, 15);
+                                }
+                                else
+                                {
+                                    Projectile.NewProjectile(Terraria.Entity.GetSource_NaturalSpawn(), NPC.Center, toTarget.SafeNormalize(Vector2.UnitX).RotatedBy(Pi / 8), ModContent.ProjectileType<DarkBolt>(), TheOrator.BoltDamage, 0f, -1, 0, 15);
+                                    Projectile.NewProjectile(Terraria.Entity.GetSource_NaturalSpawn(), NPC.Center, toTarget.SafeNormalize(Vector2.UnitX).RotatedBy(Pi / -8), ModContent.ProjectileType<DarkBolt>(), TheOrator.BoltDamage, 0f, -1, 0, 15);
+                                }
+
+                            SetNPCDirection();
+                        }
+                        else if(aiCounter <= 120)
+                        {
+                            NPC.velocity *= 0.95f;
+
+                            if (NPC.direction == -1)
+                                NPC.rotation = Lerp((target.Center - NPC.Center).ToRotation(), (target.Center - NPC.Center).ToRotation() + (PiOver2 + PiOver4), CalamityUtils.ExpOutEasing((aiCounter - 90) / 30f, 1));
+                            else
+                                NPC.rotation = Lerp((target.Center - NPC.Center).ToRotation(), (target.Center - NPC.Center).ToRotation() - (PiOver2 + PiOver4), CalamityUtils.ExpOutEasing((aiCounter - 90) / 30f, 1));
+
+                            if (aiCounter == 120)
+                            {
+                                NPC.ai[2] = NPC.rotation;
+                            }
+                        }
+                        else
+                        {
+                            NPC.rotation = Lerp(NPC.ai[2], (target.Center - NPC.Center).ToRotation(), (aiCounter - 120) / 30f);
+
+                            #region Movement
+                            homeInVector = target.Center - NPC.Center;
+                            targetDist = homeInVector.Length();
+                            homeInVector.Normalize();
+                            if (targetDist > 300f)
+                            {
+                                float velocity = 12f;
+                                NPC.velocity = (NPC.velocity * 40f + homeInVector * velocity) / 41f;
+                            }
+                            else
+                            {
+                                if (targetDist < 250f)
+                                {
+                                    float velocity = -12f;
+                                    NPC.velocity = (NPC.velocity * 40f + homeInVector * velocity) / 41f;
+                                }
+                                else
+                                {
+                                    NPC.velocity *= 0.9f;
+                                }
+                            }
+                            #endregion
+
+                            if (aiCounter == 150)
+                            {
+                                CurrentAI = AIState.Hunting;
+                                aiCounter = 0;
+                                NPC.velocity = (target.Center - NPC.Center).SafeNormalize(Vector2.Zero);
+                            }
+                        }
                     }
+                    else
+                        SetNPCDirection();
                     break;
                 case AIState.Sacrifice:
 
@@ -292,6 +421,8 @@ namespace Windfall.Content.NPCs.Bosses.Orator
                     if (NPC.velocity.Length() > 20)
                         NPC.velocity = NPC.velocity.SafeNormalize(Vector2.UnitY) * 20;
                     NPC.rotation = toTarget.ToRotation();
+
+                    SetNPCDirection();
                     #endregion
 
                     #region Healing
@@ -340,6 +471,18 @@ namespace Windfall.Content.NPCs.Bosses.Orator
 
         public override void FindFrame(int frameHeight)
         {
+            NPC.frame.Width = ModContent.Request<Texture2D>(this.Texture).Width() / 2;
+            switch (CurrentPose)
+            {
+                case Pose.FingerGun:
+                    NPC.frame.X = NPC.frame.Width;
+                    NPC.frame.Y = 0;
+                    return;
+                default:
+                    NPC.frame.X = 0;
+                    break;
+            }
+
             NPC.frameCounter++;
             if (NPC.frameCounter >= 8)
             {
@@ -356,14 +499,17 @@ namespace Windfall.Content.NPCs.Bosses.Orator
             Texture2D texture = TextureAssets.Npc[NPC.type].Value;
 
             SpriteEffects spriteEffects = SpriteEffects.None;
-            if (!(NPC.rotation + Pi > Pi / 2 && NPC.rotation + Pi < 3 * Pi / 2) && CurrentAI != AIState.Globbing && CurrentAI != AIState.OnBoss)
-                spriteEffects = SpriteEffects.FlipVertically;
-            if (attackBool && CurrentAI == AIState.Globbing)
-                spriteEffects = SpriteEffects.FlipVertically;
-            if(CurrentAI == AIState.OnBoss && NPC.direction == -1)
+            if(NPC.direction == -1)
                 spriteEffects = SpriteEffects.FlipVertically;
 
             Main.EntitySpriteDraw(texture, drawPosition, NPC.frame, color, rotation, NPC.frame.Size() * 0.5f, NPC.scale / 2f, spriteEffects, 0);
+        }
+        private void SetNPCDirection()
+        {
+            if (!(NPC.rotation + Pi > Pi / 2 && NPC.rotation + Pi < 3 * Pi / 2) && CurrentAI != AIState.Globbing && CurrentAI != AIState.OnBoss)
+                NPC.direction = -1;
+            else
+                NPC.direction = 1;
         }
     }
 }
