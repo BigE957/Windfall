@@ -243,9 +243,9 @@ namespace Windfall.Content.UI.Dialogue
                     };
                     float startPositionX = 0;
                     if (speakerRight)
-                        startPositionX = returningSpeaker ? Main.screenWidth / 1.15f : Main.screenWidth / 1.25f;
+                        startPositionX = returningSpeaker ? Main.screenWidth / 1.3f : Main.screenWidth / 1.25f;
                     else
-                        startPositionX = returningSpeaker ? Main.screenWidth * 0.15f : Main.screenWidth * 0.25f;
+                        startPositionX = returningSpeaker ? Main.screenWidth * 0.075f : Main.screenWidth * 0.15f;
 
                     if (justOpened || newSpeaker)
                         SetRectangle(Speaker, left: startPositionX, top: Main.screenHeight, width: speakerFrameTexture.Width, height: speakerFrameTexture.Height);
@@ -277,17 +277,17 @@ namespace Windfall.Content.UI.Dialogue
                     }
                     subSpeakerFrameTexture.SetData(data);
                     if (speakerRight)
-                        subSpeakerFrameTexture = WindfallUtils.FlipTexture2D(subSpeakerTexture, false, true);
+                        subSpeakerFrameTexture = FlipTexture2D(subSpeakerTexture, false, true);
                     SubSpeaker = new(subSpeakerFrameTexture)
                     {
                         ImageScale = CurrentSubSpeaker.Scale
                     };                   
                     float startPositionX = 0;
                     if (speakerRight)
-                        startPositionX = newSpeaker || returningSpeaker ? 200f : 0f;
+                        startPositionX = newSpeaker || returningSpeaker ? Main.screenWidth * 0.15f : Main.screenWidth * 0.075f;
                     else
-                        startPositionX = newSpeaker || returningSpeaker ? 1500f : 1700f;
-                    SetRectangle(SubSpeaker, left: startPositionX, top: 500f, width: subSpeakerFrameTexture.Width, height: subSpeakerFrameTexture.Height);
+                        startPositionX = newSpeaker || returningSpeaker ? Main.screenWidth / 1.25f : Main.screenWidth / 1.35f;
+                    SetRectangle(SubSpeaker, left: startPositionX, top: Main.screenHeight / 1.5f, width: subSpeakerFrameTexture.Width, height: subSpeakerFrameTexture.Height);
                     style.PreSubSpeakerCreate(TreeKey, DialogueIndex, Speaker, SubSpeaker);
                     Append(SubSpeaker);
                     style.PostSubSpeakerCreate(TreeKey, DialogueIndex, Speaker, SubSpeaker);
@@ -396,8 +396,8 @@ namespace Windfall.Content.UI.Dialogue
                     }
                     else
                     {
-                        float goalRight = 1700 * xResolutionScale;
-                        float goalLeft = 0 * xResolutionScale;
+                        float goalRight = Main.screenWidth + SubSpeaker.Width.Pixels;
+                        float goalLeft = -SubSpeaker.Width.Pixels;
 
                         if (ModContent.GetInstance<DialogueUISystem>().speakerRight && SubSpeaker.Left.Pixels > 0f)
                         {
