@@ -112,6 +112,23 @@ namespace Windfall.Content.NPCs.WorldEvents.LunarCult
             base.SetChatButtons(ref button, ref button2);
         }
         public override bool CheckActive() => false;
+        public override void PostDraw(SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor)
+        {
+            if (ItemCooking == -1)
+                return;
+            float barScale = 1.34f;
+
+            var barBG = ModContent.Request<Texture2D>("CalamityMod/UI/MiscTextures/GenericBarBack").Value;
+            var barFG = ModContent.Request<Texture2D>("CalamityMod/UI/MiscTextures/GenericBarFront").Value;
+
+            Vector2 barOrigin = barBG.Size() * 0.5f;
+            float yOffset = 23f;
+            Vector2 drawPos = (NPC.Center - screenPos) + Vector2.UnitY * barScale * (NPC.frame.Height - yOffset);
+            Rectangle frameCrop = new Rectangle(0, 0, (int)(TimeCooking / CookTIme * barFG.Width), barFG.Height);
+
+            spriteBatch.Draw(barBG, drawPos, null, Color.Gray, 0f, barOrigin, barScale, 0f, 0f);
+            spriteBatch.Draw(barFG, drawPos, frameCrop, new Color(117, 255, 159) * 0.8f, 0f, barOrigin, barScale, 0f, 0f);
+        }
         private void ClickEffect(string treeKey, int dialogueID, int buttonID)
         {
             if(treeKey == "FoodSelection" && dialogueID == 0)
