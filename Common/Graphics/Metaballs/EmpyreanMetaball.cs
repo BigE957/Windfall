@@ -67,7 +67,8 @@ namespace Windfall.Common.Graphics.Metaballs
             AnyProjectiles(ModContent.ProjectileType<OratorBorder>()) ||
             AnyProjectiles(ModContent.ProjectileType<DarkTide>()) ||
             AnyProjectiles(ModContent.ProjectileType<ShadowHand_Minion>()) ||
-            NPC.AnyNPCs(ModContent.NPCType<ShadowHand>())
+            NPC.AnyNPCs(ModContent.NPCType<ShadowHand>()) ||
+            NPC.AnyNPCs(ModContent.NPCType<OratorHand>())
         ;
 
         public override IEnumerable<Texture2D> Layers
@@ -212,10 +213,13 @@ namespace Windfall.Common.Graphics.Metaballs
                     p.ModProjectile.PreDraw(ref c);
                 }
             }
-            foreach (NPC n in Main.npc.Where(n => n.active && n.type == ModContent.NPCType<ShadowHand>()))
+            foreach (NPC n in Main.npc.Where(n => n.active && (n.type == ModContent.NPCType<ShadowHand>() || n.type == ModContent.NPCType<OratorHand>())))
             {
                 Vector2 drawPosition = n.Center - Main.screenPosition;
-                n.As<ShadowHand>().DrawSelf(drawPosition, n.GetAlpha(Color.White), n.rotation);
+                if (n.type == ModContent.NPCType<ShadowHand>())
+                    n.As<ShadowHand>().DrawSelf(drawPosition, n.GetAlpha(Color.White), n.rotation);
+                else
+                    n.As<OratorHand>().PostDraw(Main.spriteBatch, Main.screenPosition, n.GetAlpha(Color.White));
             }
         }
         private static float SumofSines(EmpyreanBorderParticle particle, float wavelength, float speed)

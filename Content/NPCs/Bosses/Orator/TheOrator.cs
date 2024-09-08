@@ -312,24 +312,6 @@ namespace Windfall.Content.NPCs.Bosses.Orator
                         #region Movement
                         Vector2 goal = target.Center + Vector2.UnitY * -300;
                         NPC.velocity = (goal - NPC.Center).SafeNormalize(Vector2.Zero) * ((goal - NPC.Center).Length() / 10f);
-                        #region Old Movement
-                        /*
-                        if (aiCounter < 0)
-                        {
-                            Vector2 homeIn = target.Center + Vector2.UnitY * -250 - NPC.Center;
-                            float velocity = 60;
-                            homeIn.Normalize();
-                            NPC.velocity = (NPC.velocity * velocity + homeIn * 18f) / (velocity + 1f);
-                        }
-                        else
-                        {
-                            Vector2 homeIn = target.Center - NPC.Center;
-                            float targetDistance = homeIn.Length();
-                            homeIn.Normalize();
-                            NPC.velocity = (NPC.velocity * 40f + homeIn * 18f) / 41f;
-                        }
-                        */
-                        #endregion
                         #endregion
 
                         #region Scrapped Projectiles

@@ -1,14 +1,8 @@
 ﻿using CalamityMod.World;
 using Luminance.Core.Graphics;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net;
-using System.Text;
-using System.Threading.Tasks;
 using Terraria.GameContent.Bestiary;
+using Windfall.Common.Graphics.Metaballs;
 using Windfall.Common.Systems;
-using Windfall.Content.Items.Lore;
 using Windfall.Content.Projectiles.Boss.Orator;
 
 namespace Windfall.Content.NPCs.Bosses.Orator
@@ -109,9 +103,8 @@ namespace Windfall.Content.NPCs.Bosses.Orator
         private enum Pose
         {
             Default,
-            FingerGun,
             Fist,
-            OpenPalm
+            Palm
         }
         private Pose CurrentPose = Pose.Default;
         public override void AI()
@@ -182,7 +175,14 @@ namespace Windfall.Content.NPCs.Bosses.Orator
                     }
 
                     DeathAshParticle.CreateAshesFromNPC(NPC);
+
+                    for(int i = 0; i < 30; i++)
+                        EmpyreanMetaball.SpawnDefaultParticle(NPC.Center - (NPC.rotation.ToRotationVector2() * (NPC.width / 1.5f)) + (NPC.rotation.ToRotationVector2().RotatedBy(PiOver2) * Main.rand.NextFloat(-16f, 16f)), (NPC.rotation.ToRotationVector2().RotatedBy(Pi + Main.rand.NextFloat(-PiOver4, PiOver4)) * Main.rand.NextFloat(2f, 6f) * 3f), Main.rand.NextFloat(20f, 40f));
                 }
+
+                if (deadCounter < 300)
+                    EmpyreanMetaball.SpawnDefaultParticle(NPC.Center - (NPC.rotation.ToRotationVector2() * (NPC.width / 1.5f)) + (NPC.rotation.ToRotationVector2().RotatedBy(PiOver2) * Main.rand.NextFloat(-16f, 16f)), (NPC.rotation.ToRotationVector2().RotatedBy(Pi + Main.rand.NextFloat(-PiOver4, PiOver4)) * Main.rand.NextFloat(2f, 6f) * (1f + deadCounter / 100f)), Main.rand.NextFloat(20f, 40f));
+
                 if (deadCounter == 420)
                     NPC.active = false;
                 NPC.rotation += (0.025f * NPC.velocity.Length() * -WhatHand);
@@ -210,6 +210,8 @@ namespace Windfall.Content.NPCs.Bosses.Orator
                 NPC.rotation = (-3 * Pi / 2) - (Pi / 8 * WhatHand);
                 NPC.direction = WhatHand;
                 #endregion
+
+                EmpyreanMetaball.SpawnDefaultParticle(NPC.Center - (NPC.rotation.ToRotationVector2() * (NPC.width / 1.5f)) + (NPC.rotation.ToRotationVector2().RotatedBy(PiOver2) * Main.rand.NextFloat(-16f, 16f)), (NPC.rotation.ToRotationVector2().RotatedBy(Pi + Main.rand.NextFloat(-PiOver4, PiOver4)) * Main.rand.NextFloat(2f, 6f)), Main.rand.NextFloat(20f, 40f));
             }
             else
             {                
@@ -219,6 +221,8 @@ namespace Windfall.Content.NPCs.Bosses.Orator
                         Vector2 goalPos = Vector2.Zero;
                         if (aiCounter >= -30)
                         {
+                            CurrentPose = Pose.Default;
+
                             Vector2 goalDirection = (modOrator.target.Center - NPC.Center).SafeNormalize(Vector2.Zero);
                             goalPos = orator.Center + goalDirection * -128f;
                             NPC.direction = -WhatHand;
@@ -238,6 +242,8 @@ namespace Windfall.Content.NPCs.Bosses.Orator
                         }
                         else
                         {
+                            CurrentPose = Pose.Fist;
+
                             aiCounter += 200;
                             if (aiCounter > 110)
                                 NPC.damage = StatCorrections.ScaleContactDamage(Main.masterMode ? 360 : CalamityWorld.death ? 280 : CalamityWorld.revenge ? 268 : Main.expertMode ? 240 : 120);
@@ -359,14 +365,14 @@ namespace Windfall.Content.NPCs.Bosses.Orator
                         }
                         break;
                     case TheOrator.States.DarkStorm:
+                        CurrentPose = Pose.Palm;
+
                         Vector2 goal = new(orator.Center.X + (600 * WhatHand), orator.Center.Y);
                         goal.X += (float)Math.Sin(aiCounter / 20f) * 48f * WhatHand;
 
                         #region Movement
                         NPC.velocity = (goal - NPC.Center).SafeNormalize(Vector2.Zero) * ((goal - NPC.Center).Length() / 10f);
-                        NPC.rotation = Pi;
-                        if (WhatHand == 1)
-                            NPC.rotation += Pi;
+                        NPC.rotation = 3 * PiOver2;
                         NPC.direction = -WhatHand;
                         #endregion
 
@@ -374,6 +380,8 @@ namespace Windfall.Content.NPCs.Bosses.Orator
                     case TheOrator.States.DarkCollision:
                         if(Main.projectile.Any(p => p != null && p.active && p.type == ModContent.ProjectileType<DarkCoalescence>()))
                         {
+                            CurrentPose = Pose.Palm;
+
                             NPC.direction = WhatHand;
                             if (WhatHand == 1)
                             {
@@ -381,12 +389,12 @@ namespace Windfall.Content.NPCs.Bosses.Orator
                                 if (proj.ai[1] == 1)
                                 {
                                     NPC.rotation = 0;
-                                    goal = proj.Center - new Vector2(proj.width / 1.5f, 0);
+                                    goal = proj.Center - new Vector2(proj.width / 1.75f, 0);
                                 }
                                 else
                                 {
                                     NPC.rotation = 3 * Pi / 2;
-                                    goal = proj.Center + new Vector2(0, proj.height / 1.5f);
+                                    goal = proj.Center + new Vector2(0, proj.height / 1.75f);
                                 }
                             }
                             else
@@ -395,18 +403,20 @@ namespace Windfall.Content.NPCs.Bosses.Orator
                                 if (proj.ai[1] == -1)
                                 {
                                     NPC.rotation = Pi;
-                                    goal = proj.Center + new Vector2(proj.width/ 1.5f + NPC.width, 0);
+                                    goal = proj.Center + new Vector2(proj.width/ 1.75f + NPC.width, 0);
                                 }
                                 else
                                 {
                                     NPC.rotation = Pi / 2;
-                                    goal = proj.Center - new Vector2(0, proj.height / 1.5f);
+                                    goal = proj.Center - new Vector2(0, proj.height / 1.75f);
                                 }
                             }
                             NPC.velocity = (goal - NPC.Center).SafeNormalize(Vector2.Zero) * ((goal - NPC.Center).Length() / 8f);
                         }
                         else
                         {
+                            CurrentPose = Pose.Default;
+
                             NPC.damage = 0;
                             goalPos = orator.Center + orator.velocity + new Vector2(124 * WhatHand, +75);
                             goalPos.Y += (float)Math.Sin(aiCounter / 20f) * 16f;
@@ -421,21 +431,23 @@ namespace Windfall.Content.NPCs.Bosses.Orator
                     case TheOrator.States.DarkBarrage:
                         if (aiCounter > 1100) //Attack Transition
                         {
+                            CurrentPose = Pose.Palm;
+
                             NPC.damage = 0;
-                            Vector2 goalDirection = (modOrator.target.Center - NPC.Center).SafeNormalize(Vector2.Zero);
-                            goalPos = orator.Center + goalDirection * 150f;
+                            Vector2 goalDirection = (modOrator.target.Center - orator.Center).SafeNormalize(Vector2.Zero);
+                            goalPos = orator.Center + goalDirection * 175f;
                             NPC.direction = -WhatHand;
-                            if (WhatHand == 1)
+                            if (WhatHand == -1)
                             {
                                 Vector2 rotation = goalDirection.RotatedBy(PiOver2);
-                                goalPos += rotation * 128;
-                                NPC.rotation = rotation.RotatedBy(3 * Pi / 2).ToRotation();
+                                goalPos -= rotation * Lerp(32, 150, (aiCounter - 1100) / 200f);
+                                NPC.rotation = rotation.ToRotation();
                             }
                             else
                             {
-                                Vector2 rotation = goalDirection.RotatedBy(3 * Pi / 2);
-                                goalPos += rotation * 128;
-                                NPC.rotation = rotation.RotatedBy(Pi / 2).ToRotation();
+                                Vector2 rotation = goalDirection.RotatedBy(-PiOver2);
+                                goalPos -= rotation * Lerp(80, 160, (aiCounter - 1100) / 200f);
+                                NPC.rotation = rotation.ToRotation();
                             }
                             NPC.velocity = (goalPos - NPC.Center).SafeNormalize(Vector2.Zero) * ((goalPos - NPC.Center).Length() / 10f);
                         }
@@ -445,6 +457,8 @@ namespace Windfall.Content.NPCs.Bosses.Orator
                             {
                                 if(aiCounter < 240)
                                 {
+                                    CurrentPose = Pose.Palm;
+
                                     goalPos = modOrator.target.Center + new Vector2(600f, (float)Math.Sin(aiCounter / 20D) * 320);
 
                                     NPC.velocity = (goalPos - NPC.Center).SafeNormalize(Vector2.Zero) * ((goalPos - NPC.Center).Length() / 10f);
@@ -465,6 +479,8 @@ namespace Windfall.Content.NPCs.Bosses.Orator
                                 }
                                 else if(aiCounter < 300)
                                 {
+                                    CurrentPose = Pose.Fist;
+
                                     goalPos = modOrator.target.Center + new Vector2(600f, 0);
 
                                     NPC.velocity = (goalPos - NPC.Center).SafeNormalize(Vector2.Zero) * ((goalPos - NPC.Center).Length() / 10f);
@@ -473,6 +489,8 @@ namespace Windfall.Content.NPCs.Bosses.Orator
                                 }
                                 else if(aiCounter < 330)
                                 {
+                                    CurrentPose = Pose.Fist;
+
                                     attackBool = false;
                                     float reelBackSpeedExponent = 2.6f;
                                     float reelBackCompletion = Utils.GetLerpValue(0f, 30, aiCounter - 300, true);
@@ -484,6 +502,8 @@ namespace Windfall.Content.NPCs.Bosses.Orator
                                 }
                                 else if(attackBool == false && aiCounter < 700)
                                 {
+                                    CurrentPose = Pose.Fist;
+
                                     if (aiCounter == 330)
                                     {
                                         NPC.damage = StatCorrections.ScaleContactDamage(Main.masterMode ? 360 : CalamityWorld.death ? 280 : CalamityWorld.revenge ? 268 : Main.expertMode ? 240 : 120);
@@ -495,6 +515,8 @@ namespace Windfall.Content.NPCs.Bosses.Orator
                                 }
                                 else if(aiCounter <= 640)
                                 {
+                                    CurrentPose = Pose.Palm;
+
                                     NPC.damage = 0;
                                     goalPos = modOrator.target.Center + new Vector2(-600f, (float)Math.Sin(aiCounter / 20D) * 320);
 
@@ -516,6 +538,8 @@ namespace Windfall.Content.NPCs.Bosses.Orator
                                 }
                                 else if (aiCounter < 700)
                                 {
+                                    CurrentPose = Pose.Fist;
+
                                     goalPos = modOrator.target.Center + new Vector2(-600f, 0);
 
                                     NPC.velocity = (goalPos - NPC.Center).SafeNormalize(Vector2.Zero) * ((goalPos - NPC.Center).Length() / 10f);
@@ -524,6 +548,8 @@ namespace Windfall.Content.NPCs.Bosses.Orator
                                 }
                                 else if (aiCounter < 730)
                                 {
+                                    CurrentPose = Pose.Fist;
+
                                     attackBool = true;
                                     float reelBackSpeedExponent = 2.6f;
                                     float reelBackCompletion = Utils.GetLerpValue(0f, 30, aiCounter - 700, true);
@@ -535,6 +561,8 @@ namespace Windfall.Content.NPCs.Bosses.Orator
                                 }
                                 else if (attackBool == true && aiCounter < 900)
                                 {
+                                    CurrentPose = Pose.Fist;
+
                                     if (aiCounter == 730)
                                     {
                                         NPC.damage = StatCorrections.ScaleContactDamage(Main.masterMode ? 360 : CalamityWorld.death ? 280 : CalamityWorld.revenge ? 268 : Main.expertMode ? 240 : 120);
@@ -546,6 +574,8 @@ namespace Windfall.Content.NPCs.Bosses.Orator
                                 }
                                 else if (aiCounter < 900)
                                 {
+                                    CurrentPose = Pose.Default;
+
                                     NPC.damage = 0;
                                     goalPos = orator.Center + orator.velocity + new Vector2(124 * WhatHand, 75);
                                     goalPos.Y += (float)Math.Sin(aiCounter / 20f) * 16f;
@@ -556,6 +586,8 @@ namespace Windfall.Content.NPCs.Bosses.Orator
                                 }
                                 else if(aiCounter < 960)
                                 {
+                                    CurrentPose = Pose.Fist;
+
                                     goalPos = modOrator.target.Center + new Vector2(32f, -400);
 
                                     NPC.velocity = (goalPos - NPC.Center).SafeNormalize(Vector2.Zero) * ((goalPos - NPC.Center).Length() / 10f);
@@ -564,6 +596,8 @@ namespace Windfall.Content.NPCs.Bosses.Orator
                                 }
                                 else if (aiCounter < 990)
                                 {
+                                    CurrentPose = Pose.Fist;
+
                                     attackBool = false;
                                     float reelBackSpeedExponent = 2.6f;
                                     float reelBackCompletion = Utils.GetLerpValue(0f, 30, aiCounter - 960, true);
@@ -575,6 +609,8 @@ namespace Windfall.Content.NPCs.Bosses.Orator
                                 }
                                 else if (attackBool == false)
                                 {
+                                    CurrentPose = Pose.Fist;
+
                                     if (aiCounter == 990)
                                     {
                                         NPC.damage = StatCorrections.ScaleContactDamage(Main.masterMode ? 360 : CalamityWorld.death ? 280 : CalamityWorld.revenge ? 268 : Main.expertMode ? 240 : 120);
@@ -583,7 +619,7 @@ namespace Windfall.Content.NPCs.Bosses.Orator
                                         NPC.rotation += Pi;
                                     }
                                     NPC.velocity *= 0.95f;
-                                    if (aiCounter >= 1000 && NPC.velocity.LengthSquared() < 576)
+                                    if (aiCounter >= 1000 && NPC.velocity.LengthSquared() < 784)
                                     {
                                         Vector2 midPoint = new(NPC.Center.X - 32, NPC.Center.Y);
 
@@ -604,6 +640,8 @@ namespace Windfall.Content.NPCs.Bosses.Orator
                                 }
                                 else
                                 {
+                                    CurrentPose = Pose.Default;
+
                                     NPC.damage = 0;
                                     goalPos = orator.Center + orator.velocity + new Vector2(124 * WhatHand, 75);
                                     goalPos.Y += (float)Math.Sin(aiCounter / 20f) * 16f;
@@ -617,6 +655,8 @@ namespace Windfall.Content.NPCs.Bosses.Orator
                             {
                                 if (aiCounter < 360)
                                 {
+                                    CurrentPose = Pose.Palm;
+
                                     goalPos = modOrator.target.Center + new Vector2(-600f, (float)Math.Sin(aiCounter / 20D) * -320);
 
                                     NPC.velocity = (goalPos - NPC.Center).SafeNormalize(Vector2.Zero) * ((goalPos - NPC.Center).Length() / 10f);
@@ -637,6 +677,8 @@ namespace Windfall.Content.NPCs.Bosses.Orator
                                 }
                                 else if (aiCounter < 420)
                                 {
+                                    CurrentPose = Pose.Fist;
+
                                     goalPos = modOrator.target.Center + new Vector2(-600f, 0);
 
                                     NPC.velocity = (goalPos - NPC.Center).SafeNormalize(Vector2.Zero) * ((goalPos - NPC.Center).Length() / 10f);
@@ -645,6 +687,8 @@ namespace Windfall.Content.NPCs.Bosses.Orator
                                 }
                                 else if (aiCounter < 450)
                                 {
+                                    CurrentPose = Pose.Fist;
+
                                     attackBool = false;
                                     float reelBackSpeedExponent = 2.6f;
                                     float reelBackCompletion = Utils.GetLerpValue(0f, 30, aiCounter - 420, true);
@@ -656,6 +700,8 @@ namespace Windfall.Content.NPCs.Bosses.Orator
                                 }
                                 else if (attackBool == false && aiCounter < 700)
                                 {
+                                    CurrentPose = Pose.Fist;
+
                                     if (aiCounter == 450)
                                     {
                                         NPC.damage = StatCorrections.ScaleContactDamage(Main.masterMode ? 360 : CalamityWorld.death ? 280 : CalamityWorld.revenge ? 268 : Main.expertMode ? 240 : 120);
@@ -667,6 +713,8 @@ namespace Windfall.Content.NPCs.Bosses.Orator
                                 }
                                 else if (aiCounter <= 760)
                                 {
+                                    CurrentPose = Pose.Palm;
+
                                     NPC.damage = 0;
                                     goalPos = modOrator.target.Center + new Vector2(600f, (float)Math.Sin(aiCounter / 20D) * -320);
 
@@ -688,6 +736,8 @@ namespace Windfall.Content.NPCs.Bosses.Orator
                                 }
                                 else if (aiCounter < 820)
                                 {
+                                    CurrentPose = Pose.Fist;
+
                                     goalPos = modOrator.target.Center + new Vector2(600f, 0);
 
                                     NPC.velocity = (goalPos - NPC.Center).SafeNormalize(Vector2.Zero) * ((goalPos - NPC.Center).Length() / 10f);
@@ -696,6 +746,8 @@ namespace Windfall.Content.NPCs.Bosses.Orator
                                 }
                                 else if (aiCounter < 850)
                                 {
+                                    CurrentPose = Pose.Fist;
+
                                     attackBool = true;
                                     float reelBackSpeedExponent = 2.6f;
                                     float reelBackCompletion = Utils.GetLerpValue(0f, 30, aiCounter - 820, true);
@@ -707,6 +759,8 @@ namespace Windfall.Content.NPCs.Bosses.Orator
                                 }
                                 else if (attackBool == true && aiCounter < 900)
                                 {
+                                    CurrentPose = Pose.Fist;
+
                                     if (aiCounter == 850)
                                     {
                                         NPC.damage = StatCorrections.ScaleContactDamage(Main.masterMode ? 360 : CalamityWorld.death ? 280 : CalamityWorld.revenge ? 268 : Main.expertMode ? 240 : 120);
@@ -718,6 +772,8 @@ namespace Windfall.Content.NPCs.Bosses.Orator
                                 }
                                 else if (aiCounter < 900)
                                 {
+                                    CurrentPose = Pose.Default;
+
                                     goalPos = orator.Center + orator.velocity + new Vector2(124 * WhatHand, 75);
                                     goalPos.Y += (float)Math.Sin(aiCounter / 20f) * 16f;
 
@@ -727,6 +783,8 @@ namespace Windfall.Content.NPCs.Bosses.Orator
                                 }
                                 else if (aiCounter < 960)
                                 {
+                                    CurrentPose = Pose.Fist;
+
                                     NPC.damage = 0;
                                     goalPos = modOrator.target.Center + new Vector2(-32f, -400);
 
@@ -736,6 +794,8 @@ namespace Windfall.Content.NPCs.Bosses.Orator
                                 }
                                 else if (aiCounter < 990)
                                 {
+                                    CurrentPose = Pose.Fist;
+
                                     attackBool = false;
                                     float reelBackSpeedExponent = 2.6f;
                                     float reelBackCompletion = Utils.GetLerpValue(0f, 30, aiCounter - 960, true);
@@ -747,6 +807,8 @@ namespace Windfall.Content.NPCs.Bosses.Orator
                                 }
                                 else if (attackBool == false)
                                 {
+                                    CurrentPose = Pose.Fist;
+
                                     if (aiCounter == 990)
                                     {
                                         NPC.damage = StatCorrections.ScaleContactDamage(Main.masterMode ? 360 : CalamityWorld.death ? 280 : CalamityWorld.revenge ? 268 : Main.expertMode ? 240 : 120);
@@ -760,6 +822,8 @@ namespace Windfall.Content.NPCs.Bosses.Orator
                                 }
                                 else
                                 {
+                                    CurrentPose = Pose.Default;
+
                                     NPC.damage = 0;
                                     goalPos = orator.Center + orator.velocity + new Vector2(124 * WhatHand, 75);
                                     goalPos.Y += (float)Math.Sin(aiCounter / 20f) * 16f;
@@ -772,6 +836,8 @@ namespace Windfall.Content.NPCs.Bosses.Orator
                         }
                         break;
                     case TheOrator.States.DarkMonster:
+                        CurrentPose = Pose.Default;
+
                         Vector2 goalDir = (modOrator.target.Center - NPC.Center).SafeNormalize(Vector2.Zero);
                         goalPos = orator.Center + goalDir * -48f;
                         NPC.direction = -WhatHand;
@@ -790,6 +856,8 @@ namespace Windfall.Content.NPCs.Bosses.Orator
                         NPC.velocity = (goalPos - NPC.Center).SafeNormalize(Vector2.Zero) * ((goalPos - NPC.Center).Length() / 3f);
                         break;
                     default:
+                        CurrentPose = Pose.Default;
+
                         NPC.damage = 0;
                         goalPos = orator.Center + orator.velocity + new Vector2(124 * WhatHand, +75);
                         goalPos.Y += (float)Math.Sin(aiCounter / 20f) * 16f;
@@ -801,6 +869,7 @@ namespace Windfall.Content.NPCs.Bosses.Orator
                         #endregion
                         break;
                 }
+                EmpyreanMetaball.SpawnDefaultParticle(NPC.Center - (NPC.rotation.ToRotationVector2().RotatedBy(CurrentPose == Pose.Palm ? -PiOver2 * NPC.direction : 0) * (NPC.width / 1.5f)) + (NPC.rotation.ToRotationVector2().RotatedBy(PiOver2 - (CurrentPose == Pose.Palm ? PiOver2 * NPC.direction : 0)) * Main.rand.NextFloat(-16f, 16f)), (NPC.rotation.ToRotationVector2().RotatedBy(Pi + Main.rand.NextFloat(-PiOver4, PiOver4) - (CurrentPose == Pose.Palm ? PiOver2 * NPC.direction : 0)) * Main.rand.NextFloat(2f, 6f)), Main.rand.NextFloat(20f, 40f));
             }
             effectCounter++;
         }
@@ -820,33 +889,36 @@ namespace Windfall.Content.NPCs.Bosses.Orator
             }
         }
         public override void FindFrame(int frameHeight)
-        {
-            /*
-            NPC.frame.Width = ModContent.Request<Texture2D>(this.Texture).Width() / 2;
-            switch(CurrentPose)
+        {            
+            NPC.frame.Width = ModContent.Request<Texture2D>(this.Texture).Width() / 3;
+            //Main.NewText(NPC.frame);
+            switch (CurrentPose)
             {
-                case Pose.FingerGun:
+                case Pose.Fist:
                     NPC.frame.X = NPC.frame.Width;
-                    break;
+                    NPC.frame.Y = 0;
+                    return;
+                case Pose.Palm:
+                    NPC.frame.X = NPC.frame.Width * 2;
+                    NPC.frame.Y = 0;
+                    return;
                 default:
                     NPC.frame.X = 0; 
                     break;
             }
-            */
+            
             if (deadCounter > 300)
                 return;            
             NPC.frameCounter++;
             if (deadCounter > 0 && deadCounter < 300)
-            {
                 NPC.frameCounter += ((deadCounter / 300f) * 4f);
-            }
             if (NPC.frameCounter >= 8)
             {
                 NPC.frameCounter = 0;
                 NPC.frame.Y += frameHeight;
                 if (NPC.frame.Y >= frameHeight * 6)
                     NPC.frame.Y = 0;            
-            }
+            }            
         }
         public override bool CheckActive() => false;
         public override bool PreDraw(SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor)
@@ -859,6 +931,30 @@ namespace Windfall.Content.NPCs.Bosses.Orator
                 spriteEffects = SpriteEffects.FlipVertically;
             spriteBatch.Draw(texture, drawPosition, NPC.frame, NPC.GetAlpha(drawColor), NPC.rotation, origin, NPC.scale, spriteEffects, 0f);
             return false;
+        }
+        Rectangle cuffFrame = new(0, 0, 150, 114);
+        int cuffCounter = 0;
+        public override void PostDraw(SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor)
+        {            
+            Texture2D texture = ModContent.Request<Texture2D>("Windfall/Assets/NPCs/Enemies/OratorHandCuffs").Value;
+            cuffFrame.Width = texture.Width;
+            cuffFrame.Height = texture.Height / 6;
+            cuffCounter++;
+
+            if (cuffCounter >= 16)
+            {
+                cuffCounter = 0;
+                cuffFrame.Y += cuffFrame.Height;
+                if (cuffFrame.Y >= cuffFrame.Height * 6)
+                    cuffFrame.Y = 0;
+            }
+            
+            Vector2 drawPosition = NPC.Center - screenPos + (Vector2.UnitY * NPC.gfxOffY);
+            Vector2 origin = cuffFrame.Size() * 0.5f;
+            SpriteEffects spriteEffects = SpriteEffects.None;
+            if (NPC.direction == -1)
+                spriteEffects = SpriteEffects.FlipVertically;
+            spriteBatch.Draw(texture, drawPosition, cuffFrame, NPC.GetAlpha(drawColor), NPC.rotation - (CurrentPose == Pose.Palm ? PiOver2 * NPC.direction : 0), origin, NPC.scale, spriteEffects, 0f);
         }
     }
 }
