@@ -87,7 +87,7 @@ namespace Windfall.Content.NPCs.WorldEvents.LunarCult
         }
         public override void AI()
         {
-            AIState = States.RitualEvent;
+            //AIState = States.RitualEvent;
             switch (AIState)
             {
                 case States.CafeteriaEvent:

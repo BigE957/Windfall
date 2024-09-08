@@ -20,7 +20,7 @@ namespace Windfall.Content.UI.Dialogue.DialogueStyles
                 startX = speakerRight ? 600f : 125f;
             else
                 startX = speakerRight ? 125f : 600f;
-            SetRectangle(textbox, left: startX, top: spawnBottom ? 1200f : 650f, width: 1200f, height: 300f);
+            SetRectangle(textbox, left: startX, top: spawnBottom ? 1200f : 650f, width: Main.screenWidth / 1.5f, height: Main.screenHeight / 3);
         }
         public override void OnDialogueTextCreate(DialogueText text)
         {
@@ -74,13 +74,18 @@ namespace Windfall.Content.UI.Dialogue.DialogueStyles
         }
         public override void PostUpdateActive(MouseBlockingUIPanel textbox, UIImage speaker, UIImage subSpeaker)
         {
+            float xResolutionScale = Main.screenWidth / 2560f;
+            float yResolutionScale = Main.screenHeight / 1440f;
+
             if (ModContent.GetInstance<DialogueUISystem>().swappingStyle)
             {
                 if (!TextboxOffScreen(textbox))
                 {
-                    textbox.Top.Pixels += (1200f - textbox.Top.Pixels) / 20;
-                    if (1100f - textbox.Top.Pixels < 10)
-                        textbox.Top.Pixels = 1200f;
+                    float goalHeight = 1400f * yResolutionScale;
+
+                    textbox.Top.Pixels += (goalHeight - textbox.Top.Pixels) / 20;
+                    if (goalHeight - textbox.Top.Pixels < 10)
+                        textbox.Top.Pixels = goalHeight;
                 }
                 else
                 {
@@ -94,26 +99,31 @@ namespace Windfall.Content.UI.Dialogue.DialogueStyles
             }
             else
             {
-                if (textbox.Top.Pixels > 650f)
+                float goalHeight = Main.screenHeight / 1.75f;
+
+                if (textbox.Top.Pixels > goalHeight)
                 {
-                    textbox.Top.Pixels -= (textbox.Top.Pixels - 650f) / 10;
-                    if (textbox.Top.Pixels - 650f < 1)
-                        textbox.Top.Pixels = 650f;
+                    textbox.Top.Pixels -= (textbox.Top.Pixels - goalHeight) / 10;
+                    if (textbox.Top.Pixels - goalHeight < 1)
+                        textbox.Top.Pixels = goalHeight;
 
                 }
+                float goalLeft = 125f * xResolutionScale;
+                float goalright = 600f * xResolutionScale;
+
                 if (ModContent.GetInstance<DialogueUISystem>().speakerRight && textbox.Left.Pixels > 125f)
                 {
-                    textbox.Left.Pixels -= (textbox.Left.Pixels - 125f) / 20;
-                    if (textbox.Left.Pixels - 125f < 1)
-                        textbox.Left.Pixels = 125f;
+                    textbox.Left.Pixels -= (-goalLeft + textbox.Left.Pixels) / 20;
+                    if (-goalLeft + textbox.Left.Pixels < 1)
+                        textbox.Left.Pixels = goalLeft;
                 }
                 else if (!ModContent.GetInstance<DialogueUISystem>().speakerRight && textbox.Left.Pixels < 600f)
                 {
-                    textbox.Left.Pixels += (600f - textbox.Left.Pixels) / 20;
-                    if (600f - textbox.Left.Pixels < 1)
-                        textbox.Left.Pixels = 600f;
+                    textbox.Left.Pixels += (goalright - textbox.Left.Pixels) / 20;
+                    if (goalright - textbox.Left.Pixels < 1)
+                        textbox.Left.Pixels = goalright;
                 }
-
+                #region Button Updates
                 DialogueText dialogue = (DialogueText)textbox.Children.Where(c => c.GetType() == typeof(DialogueText)).First();
                 UIElement[] responseButtons;
                 if (ModContent.GetInstance<DialogueUISystem>().DialogueUIState.Children.Where(c => c.GetType() == typeof(UIPanel) && c.Children.First().GetType() == typeof(UIText)).Any())
@@ -158,21 +168,24 @@ namespace Windfall.Content.UI.Dialogue.DialogueStyles
                         child.Top.Pixels = child.Parent.Height.Pixels / 4;
                     }
                 }
+                #endregion
             }
         }
         public override void PostUpdateClosing(MouseBlockingUIPanel textbox, UIImage speaker, UIImage subSpeaker)
         {
             if (!TextboxOffScreen(textbox))
             {
-                textbox.Top.Pixels += (1200f - textbox.Top.Pixels) / 20;
-                if (1100f - textbox.Top.Pixels < 10)
-                    textbox.Top.Pixels = 1200f;
+                float goalHeight = Main.screenHeight * 1.1f;
+
+                textbox.Top.Pixels += (goalHeight - textbox.Top.Pixels) / 20;
+                if (goalHeight - textbox.Top.Pixels < 10)
+                    textbox.Top.Pixels = goalHeight;
             }
 
         }
         public override bool TextboxOffScreen(UIPanel textbox)
         {
-            return textbox.Top.Pixels == 1200f;
+            return textbox.Top.Pixels >= Main.screenHeight * 1.05f;
         }
     }
 }

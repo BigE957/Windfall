@@ -25,6 +25,7 @@ namespace Windfall.Content.UI.Dialogue
             {
                 float xResolutionScale = Main.screenWidth / 2560f;
                 float yResolutionScale = Main.screenHeight / 1440f;
+                Vector2 ResolutionScale = new(Main.screenWidth / 2560f, Main.screenHeight / 1440f);
 
                 CalculatedStyle innerDimensions = GetInnerDimensions();
                 float xPageTop = innerDimensions.X;
@@ -177,6 +178,9 @@ namespace Windfall.Content.UI.Dialogue
             {
                 counter = 0;
 
+                float xResolutionScale = Main.screenWidth / 2560f;
+                float yResolutionScale = Main.screenHeight / 1440f;
+
                 DialogueTree CurrentTree = DialogueTrees[TreeKey];
                 Dialogue CurrentDialogue = CurrentTree.Dialogues[DialogueIndex];
                 Character CurrentSpeaker;
@@ -239,14 +243,14 @@ namespace Windfall.Content.UI.Dialogue
                     };
                     float startPositionX = 0;
                     if (speakerRight)
-                        startPositionX = returningSpeaker ? 1600f : 1500f;
+                        startPositionX = returningSpeaker ? Main.screenWidth / 1.15f : Main.screenWidth / 1.25f;
                     else
-                        startPositionX = returningSpeaker ? 100f : 200f;
+                        startPositionX = returningSpeaker ? Main.screenWidth * 0.15f : Main.screenWidth * 0.25f;
 
                     if (justOpened || newSpeaker)
-                        SetRectangle(Speaker, left: startPositionX, top: 1200f, width: speakerFrameTexture.Width, height: speakerFrameTexture.Height);
+                        SetRectangle(Speaker, left: startPositionX, top: Main.screenHeight, width: speakerFrameTexture.Width, height: speakerFrameTexture.Height);
                     else
-                        SetRectangle(Speaker, left: startPositionX, top: 500f, width: speakerFrameTexture.Width, height: speakerFrameTexture.Height);
+                        SetRectangle(Speaker, left: startPositionX, top: Main.screenHeight / 1.5f, width: speakerFrameTexture.Width, height: speakerFrameTexture.Height);
                     style.PreSpeakerCreate(TreeKey, DialogueIndex, Speaker);
                     Append(Speaker);
                     style.PostSpeakerCreate(TreeKey, DialogueIndex, Speaker);
@@ -298,6 +302,9 @@ namespace Windfall.Content.UI.Dialogue
         {
             base.Update(gameTime);
 
+            float xResolutionScale = Main.screenWidth / 2560f;
+            float yResolutionScale = Main.screenHeight / 1440f;
+
             DialogueTree CurrentTree = DialogueTrees[TreeKey];
             Dialogue CurrentDialogue = CurrentTree.Dialogues[DialogueIndex];
             /*
@@ -316,23 +323,26 @@ namespace Windfall.Content.UI.Dialogue
                 //Main.NewText(SubSpeaker == null);
                 if (Speaker != null)
                 {
-                    if (Speaker.Top.Pixels > 500f)
+                    float goalHeight = Main.screenHeight / 1.5f * yResolutionScale;
+                    if (Speaker.Top.Pixels > goalHeight)
                     {
-                        Speaker.Top.Pixels -= (Speaker.Top.Pixels - 500f) / 15;
-                        if (Speaker.Top.Pixels - 500f < 1)
-                            Speaker.Top.Pixels = 500f;
+                        Speaker.Top.Pixels -= (Speaker.Top.Pixels - goalHeight) / 15;
+                        if (Speaker.Top.Pixels - goalHeight < 1)
+                            Speaker.Top.Pixels = goalHeight;
                     }
-                    if (ModContent.GetInstance<DialogueUISystem>().speakerRight && Speaker.Left.Pixels > 1500f)
+                    float goalLeft = Main.screenWidth / 1.25f;
+                    float goalRight = Main.screenWidth * 0.25f;
+                    if (ModContent.GetInstance<DialogueUISystem>().speakerRight && Speaker.Left.Pixels > goalLeft)
                     {
-                        Speaker.Left.Pixels -= (Speaker.Left.Pixels - 1500f) / 20;
-                        if (Speaker.Left.Pixels - 1500f < 1)
-                            Speaker.Left.Pixels = 1500f;
-                    }
-                    else if (!ModContent.GetInstance<DialogueUISystem>().speakerRight && Speaker.Left.Pixels < 200f)
+                        Speaker.Left.Pixels -= (Speaker.Left.Pixels - goalLeft) / 20;
+                        if (Speaker.Left.Pixels - goalLeft < 1)
+                            Speaker.Left.Pixels = goalLeft;
+                    }                    
+                    else if (!ModContent.GetInstance<DialogueUISystem>().speakerRight && Speaker.Left.Pixels < goalLeft)
                     {
-                        Speaker.Left.Pixels += (200f - Speaker.Left.Pixels) / 20;
-                        if (200f - Speaker.Left.Pixels < 1)
-                            Speaker.Left.Pixels = 200f;
+                        Speaker.Left.Pixels += (goalRight - Speaker.Left.Pixels) / 20;
+                        if (goalLeft - Speaker.Left.Pixels < 1)
+                            Speaker.Left.Pixels = goalRight;
                     }
                     Character speakerCharacter = CurrentTree.Characters[CurrentDialogue.CharacterIndex];
                     Expression currentExpression = speakerCharacter.Expressions[CurrentDialogue.ExpressionIndex];                   
@@ -361,19 +371,22 @@ namespace Windfall.Content.UI.Dialogue
                 {
                     if (ModContent.GetInstance<DialogueUISystem>().dismissSubSpeaker)
                     {
+                        float goalRight = 2200 * xResolutionScale;
+                        float goalLeft = -600 * xResolutionScale;
+
                         if (!ModContent.GetInstance<DialogueUISystem>().speakerRight && SubSpeaker.Left.Pixels < 2200f)
                         {
-                            SubSpeaker.Left.Pixels += (2200 - SubSpeaker.Left.Pixels) / 20;
-                            if (2100f - SubSpeaker.Left.Pixels < 10)
-                                SubSpeaker.Left.Pixels = 2100f;
+                            SubSpeaker.Left.Pixels += (goalRight - SubSpeaker.Left.Pixels) / 20;
+                            if (goalRight - SubSpeaker.Left.Pixels < 10)
+                                SubSpeaker.Left.Pixels = goalRight;
                         }
                         else if (ModContent.GetInstance<DialogueUISystem>().speakerRight && SubSpeaker.Left.Pixels > -600)
                         {
-                            SubSpeaker.Left.Pixels -= (SubSpeaker.Left.Pixels + 600) / 20;
-                            if (SubSpeaker.Left.Pixels + 500 < 10)
-                                SubSpeaker.Left.Pixels = -600;
+                            SubSpeaker.Left.Pixels -= (goalLeft - SubSpeaker.Left.Pixels) / 20;
+                            if (goalLeft - SubSpeaker.Left.Pixels < 10)
+                                SubSpeaker.Left.Pixels = goalLeft;
                         }
-                        if(SubSpeaker.Left.Pixels <= -600 || SubSpeaker.Left.Pixels >= 2100f)
+                        if(SubSpeaker.Left.Pixels <= goalLeft || SubSpeaker.Left.Pixels >= goalRight)
                         {
                             ModContent.GetInstance<DialogueUISystem>().dismissSubSpeaker = false;
                             SubSpeaker.Remove();
@@ -383,17 +396,20 @@ namespace Windfall.Content.UI.Dialogue
                     }
                     else
                     {
+                        float goalRight = 1700 * xResolutionScale;
+                        float goalLeft = 0 * xResolutionScale;
+
                         if (ModContent.GetInstance<DialogueUISystem>().speakerRight && SubSpeaker.Left.Pixels > 0f)
                         {
-                            SubSpeaker.Left.Pixels -= (SubSpeaker.Left.Pixels - 0f) / 20;
-                            if (SubSpeaker.Left.Pixels - 0f < 1)
-                                SubSpeaker.Left.Pixels = 0f;
+                            SubSpeaker.Left.Pixels -= (SubSpeaker.Left.Pixels - goalLeft) / 20;
+                            if (SubSpeaker.Left.Pixels - goalLeft < 1)
+                                SubSpeaker.Left.Pixels = goalLeft;
                         }
                         else if (!ModContent.GetInstance<DialogueUISystem>().speakerRight && SubSpeaker.Left.Pixels < 1700f)
                         {
-                            SubSpeaker.Left.Pixels += (1700f - SubSpeaker.Left.Pixels) / 20;
-                            if (1700f - SubSpeaker.Left.Pixels < 1)
-                                SubSpeaker.Left.Pixels = 1700f;
+                            SubSpeaker.Left.Pixels += (goalRight - SubSpeaker.Left.Pixels) / 20;
+                            if (goalRight - SubSpeaker.Left.Pixels < 1)
+                                SubSpeaker.Left.Pixels = goalRight;
                         }
                     }
                 }
@@ -401,46 +417,49 @@ namespace Windfall.Content.UI.Dialogue
             else
             {
                 style.PostUpdateClosing(Textbox, Speaker, SubSpeaker);
+
+                float goalRight = Main.screenWidth + Speaker.Width.Pixels;
+                float goalLeft = -Speaker.Width.Pixels;
+
                 if (Speaker != null)
                 {
-                    if (ModContent.GetInstance<DialogueUISystem>().speakerRight && Speaker.Left.Pixels < 2200f)
+                    if (ModContent.GetInstance<DialogueUISystem>().speakerRight && Speaker.Left.Pixels < goalRight)
                     {
-                        Speaker.Left.Pixels += (2200 - Speaker.Left.Pixels) / 20;
-                        if (2100f - Speaker.Left.Pixels < 10)
-                            Speaker.Left.Pixels = 2100f;
+                        Speaker.Left.Pixels += (goalRight - Speaker.Left.Pixels) / 20;
+                        if (goalRight - Speaker.Left.Pixels < 10)
+                            Speaker.Left.Pixels = goalRight;
                     }
-                    else if (!ModContent.GetInstance<DialogueUISystem>().speakerRight && Speaker.Left.Pixels > -600)
+                    else if (!ModContent.GetInstance<DialogueUISystem>().speakerRight && Speaker.Left.Pixels > goalLeft)
                     {
-                        Speaker.Left.Pixels -= (Speaker.Left.Pixels + 600) / 20;
-                        if (Speaker.Left.Pixels + 500 < 10)
-                            Speaker.Left.Pixels = -600;
+                        Speaker.Left.Pixels -= (goalLeft - Speaker.Left.Pixels) / 20;
+                        if (goalLeft - Speaker.Left.Pixels < 10)
+                            Speaker.Left.Pixels = goalLeft;
                     }
                 }
                 if (SubSpeaker != null)
                 {
-                    if (!ModContent.GetInstance<DialogueUISystem>().speakerRight && SubSpeaker.Left.Pixels < 2200f)
+                    if (!ModContent.GetInstance<DialogueUISystem>().speakerRight && SubSpeaker.Left.Pixels < goalRight)
                     {
-                        SubSpeaker.Left.Pixels += (2200 - SubSpeaker.Left.Pixels) / 20;
-                        if (2100f - SubSpeaker.Left.Pixels < 10)
-                            SubSpeaker.Left.Pixels = 2100f;
+                        SubSpeaker.Left.Pixels += (goalRight - SubSpeaker.Left.Pixels) / 20;
+                        if (goalRight - SubSpeaker.Left.Pixels < 10)
+                            SubSpeaker.Left.Pixels = goalRight;
                     }
-                    else if (ModContent.GetInstance<DialogueUISystem>().speakerRight && SubSpeaker.Left.Pixels > -600)
+                    else if (ModContent.GetInstance<DialogueUISystem>().speakerRight && SubSpeaker.Left.Pixels > goalLeft)
                     {
-                        SubSpeaker.Left.Pixels -= (SubSpeaker.Left.Pixels + 600) / 20;
-                        if (SubSpeaker.Left.Pixels + 500 < 10)
-                            SubSpeaker.Left.Pixels = -600;
+                        SubSpeaker.Left.Pixels -= (goalLeft - SubSpeaker.Left.Pixels) / 20;
+                        if (goalLeft - SubSpeaker.Left.Pixels < 10)
+                            SubSpeaker.Left.Pixels = goalLeft;
                     }
                 }
                 if
                 (
-                    (Speaker == null || (Speaker.Left.Pixels == 2100f && ModContent.GetInstance<DialogueUISystem>().speakerRight) || (Speaker.Left.Pixels == -600 && !ModContent.GetInstance<DialogueUISystem>().speakerRight))
+                    (Speaker == null || (Speaker.Left.Pixels >= goalRight && ModContent.GetInstance<DialogueUISystem>().speakerRight) || (Speaker.Left.Pixels <= goalLeft && !ModContent.GetInstance<DialogueUISystem>().speakerRight))
                     &&
-                    (SubSpeaker == null || (SubSpeaker.Left.Pixels == 2100f && !ModContent.GetInstance<DialogueUISystem>().speakerRight) || (SubSpeaker.Left.Pixels == -600 && ModContent.GetInstance<DialogueUISystem>().speakerRight))
+                    (SubSpeaker == null || (SubSpeaker.Left.Pixels >= goalRight && !ModContent.GetInstance<DialogueUISystem>().speakerRight) || (SubSpeaker.Left.Pixels <= goalLeft && ModContent.GetInstance<DialogueUISystem>().speakerRight))
                     &&
                     style.TextboxOffScreen(Textbox)
                 )
                     ModContent.GetInstance<DialogueUISystem>().HideDialogueUI();
-
             }
             counter++;
         }
@@ -511,6 +530,9 @@ namespace Windfall.Content.UI.Dialogue
         }
         public void SpawnTextBox(BaseDialogueStyle style)
         {
+            float xResolutionScale = Main.screenWidth / 2560f;
+            float yResolutionScale = Main.screenHeight / 1440f;
+
             DialogueTree CurrentTree = DialogueTrees[TreeKey];
             Dialogue CurrentDialogue = CurrentTree.Dialogues[DialogueIndex];
 
