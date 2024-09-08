@@ -48,6 +48,7 @@
     <None Remove="Assets\NPCs\Enemies\DarkSpawn.png" />
     <None Remove="Assets\NPCs\Enemies\LunarCultistArcher.png" />
     <None Remove="Assets\NPCs\Enemies\OratorHand.png" />
+    <None Remove="Assets\NPCs\Enemies\OratorHandCuffs.png" />
     <None Remove="Assets\NPCs\Enemies\ShadowHand.png" />
     <None Remove="Assets\NPCs\TravellingNPCs\TravellingCultist.png" />
     <None Remove="Assets\NPCs\TravellingNPCs\TravellingCultist_Head.png" />
