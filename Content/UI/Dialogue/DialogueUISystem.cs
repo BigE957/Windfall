@@ -1,383 +1,15 @@
 ﻿using Terraria.UI;
-using Windfall.Common.Systems.WorldEvents;
 using Windfall.Content.UI.Dialogue.DialogueStyles;
 
 namespace Windfall.Content.UI.Dialogue
 {
     public static class DialogueHolder
-    {
-        public static string DebugKey = "Eeveelutions"; //The ID used by the UIDebugItem. Update to the ID of the tree you're testing
-        
-        public static readonly string LocalizationPath = "Mods.Windfall.Dialogue.DialogueTrees.";
-        
-        public static readonly Character[] Characters =
-        [
-            new Character("TheCalamity", [new Expression("Normal", 1, 0), new Expression("Finality",  1, 0)], "[c/FF0000:The Calamity]", textDelay: 3, primaryColor: Color.Black, secondaryColor: Color.Red),
-        ];
-        
-        public static Dictionary<string, DialogueTree> DialogueTrees; //Can be marked readonly once testing is done. Isnt so that it can be updated everytime dialogue is called for testing purposes.
+    {        
+        public static Dictionary<string, Character> Characters = [];
 
-        internal enum CharacterIDs
-        {
-            //Make sure the order of these matches the order of the Characters array
-            TheCalamity,
-        }
-
-        public static Dictionary<string, DialogueTree> PopulateDialogueTrees()
-        {
-            Mod calamityMusic = ModLoader.GetMod("CalamityModMusic");
-            Dictionary<string, DialogueTree> dialogueTrees = new Dictionary<string, DialogueTree>
-            {
-                #region The Calamity Trees
-                {
-                    "Calamitous",
-                    new DialogueTree(
-                    [
-                        new Dialogue
-                        (
-                            [
-                                new Response("What", 1, Main.LocalPlayer.direction == 1),
-                                new Response("Huh", 1, Main.LocalPlayer.direction == -1),
-                            ],
-                            expressionIndex: 0,
-                            musicID: MusicLoader.GetMusicSlot(calamityMusic, "Sounds/Music/CalamitasClone")
-                        ),
-                        new Dialogue
-                        (
-                            [
-                                new Response("Okay", -2)
-                            ],
-                            expressionIndex: 1,
-                            musicID: MusicLoader.GetMusicSlot(calamityMusic, "Sounds/Music/CalamitasClone")
-                        ),
-                        new Dialogue
-                        (
-                            expressionIndex: 1,
-                            musicID: MusicLoader.GetMusicSlot(calamityMusic, "Sounds/Music/CalamitasClone")
-                        ),
-                        new Dialogue
-                        (
-                            expressionIndex: 1,
-                            musicID: MusicLoader.GetMusicSlot(calamityMusic, "Sounds/Music/CalamitasClone")
-                        ),
-                    ],
-                    [
-                        Characters[(int)CharacterIDs.TheCalamity]
-                    ])
-                },
-                #endregion
-                #region The Chef Trees
-                {
-                    "CafeteriaActivityStart",
-                    new DialogueTree(
-                    [
-                        new Dialogue
-                        (
-                            [
-                                new Response("No"),
-                                new Response("Yes"),
-                            ]
-                        ),
-                    ],
-                    [
-                        Characters[(int)CharacterIDs.TheCalamity]
-                    ])
-                },
-                {
-                    "FoodSelection",
-                    new DialogueTree(
-                    [
-                        new Dialogue
-                        (
-                            LunarCultActivitySystem.GetMenuResponses()
-                        ),
-                    ],
-                    [
-                        Characters[(int)CharacterIDs.TheCalamity]
-                    ])
-                },
-                #endregion
-                #region Lunar Bishop Trees
-                {
-                    "SelenicChat",
-                    new DialogueTree(
-                    [
-                        new Dialogue
-                        (
-                            [
-                                new Response("Knowledge", 1),
-                                new Response("Balance", 2),
-                            ]
-                        ),
-                        new Dialogue
-                        (
-                            [
-                                new Response("Me", 3),
-                                new Response("Goal", 4),
-                            ]
-                        ),
-                        new Dialogue
-                        (
-                            [
-                                new Response("Me", 3),
-                                new Response("Goal", 4),
-                            ]
-                        ),
-                        new Dialogue
-                        (
-                            [
-                                new Response("Tablet", 5),
-                            ]
-                        ),
-                        new Dialogue
-                        (
-                            [
-                                new Response("Tablet", 5),
-                            ]
-                        ),
-                        new Dialogue
-                        (
-                            [
-                                new Response("IC", 6),
-                                new Response("Cool", 6),
-                            ]
-                        ),
-                        new Dialogue
-                        (
-                            [
-                                new Response("Bye"),
-                                new Response("Finally"),
-                            ]
-                        ),
-                    ],
-                    [
-                        Characters[(int)CharacterIDs.TheCalamity]
-                    ])
-                },
-                #endregion
-                #region The Orator Trees
-                {
-                    "TutorialChat",
-                    new DialogueTree(
-                    [
-                        new Dialogue
-                        (
-                            musicID: -1
-                        ),
-                        new Dialogue
-                        (
-                            [
-                                new Response("Chef", 2),
-                                new Response("Seamstress", 3),
-                            ]
-                        ),
-                        new Dialogue
-                        (
-                            [
-                                new Response("IC", 4),
-                            ]
-                        ),
-                        new Dialogue
-                        (
-                            [
-                                new Response("IC", 4),
-                            ]
-                        ),
-                        new Dialogue
-                        (
-                            [
-                                new Response("Chef", 2),
-                                new Response("Seamstress", 3),
-                                new Response("You", 5),
-                                new Response("No", 6),
-                            ]
-                        ),
-                        new Dialogue
-                        (
-                            [
-                                new Response("IC", 4)
-                            ]
-                        ),
-                        new Dialogue
-                        (
-                            musicID: -1
-                        ),
-                        new Dialogue
-                        (
-                            musicID: -1
-                        ),
-                        new Dialogue
-                        (
-                            musicID: -1
-                        ),
-                        new Dialogue
-                        (
-                            musicID: -1
-                        ),
-                        new Dialogue
-                        (
-                            musicID: -1
-                        ),
-                    ],
-                    [
-                        Characters[(int)CharacterIDs.TheCalamity]
-                    ])
-                },
-                {
-                    "RitualEvent",
-                    new DialogueTree(
-                    [
-                        new Dialogue
-                        (
-                            [
-                                new Response("No"),
-                                new Response("Yes"),
-                            ]
-                        ),
-                    ],
-                    [
-                        Characters[(int)CharacterIDs.TheCalamity]
-                    ])
-                },
-                #endregion
-                #region Communion Trees
-                {
-                    "CorruptCommunion1",
-                    new DialogueTree(
-                    [
-                        new Dialogue
-                        (
-                            musicID: MusicID.Corruption
-                        ),
-                        new Dialogue
-                        (
-                            musicID: MusicID.Corruption
-                        ),
-                        new Dialogue
-                        (
-                            musicID: MusicID.Corruption
-                        ),
-                        new Dialogue
-                        (
-                            musicID: MusicID.Corruption
-                        ),
-                        new Dialogue
-                        (
-                            musicID: MusicID.Corruption
-                        ),
-                    ],
-                    [
-                        Characters[(int)CharacterIDs.TheCalamity]
-                    ])
-                },
-                {
-                    "CorruptCommunion2",
-                    new DialogueTree(
-                    [
-                        new Dialogue
-                        (
-                            musicID: MusicID.Corruption
-                        ),
-                        new Dialogue
-                        (
-                            musicID: MusicID.Corruption
-                        ),
-                        new Dialogue
-                        (
-                            musicID: MusicID.Corruption
-                        ),
-                        new Dialogue
-                        (
-                            musicID: MusicID.Corruption
-                        ),
-                    ],
-                    [
-                        Characters[(int)CharacterIDs.TheCalamity]
-                    ])
-                },
-                {
-                    "CrimsonCommunion1",
-                    new DialogueTree(
-                    [
-                        new Dialogue
-                        (
-                            musicID: MusicID.Crimson
-                        ),
-                        new Dialogue
-                        (
-                            musicID: MusicID.Crimson
-                        ),
-                        new Dialogue
-                        (
-                            musicID: MusicID.Crimson
-                        ),
-                        new Dialogue
-                        (
-                            musicID: MusicID.Crimson
-                        ),
-                        new Dialogue
-                        (
-                            musicID: MusicID.Crimson
-                        ),
-                    ],
-                    [
-                        Characters[(int)CharacterIDs.TheCalamity]
-                    ])
-                },
-                {
-                    "CrimsonCommunion2",
-                    new DialogueTree(
-                    [
-                        new Dialogue
-                        (
-                            musicID: MusicID.Crimson
-                        ),
-                        new Dialogue
-                        (
-                            musicID: MusicID.Crimson
-                        ),
-                        new Dialogue
-                        (
-                            musicID: MusicID.Crimson
-                        ),
-                        new Dialogue
-                        (
-                            musicID: MusicID.Crimson
-                        ),
-                    ],
-                    [
-                        Characters[(int)CharacterIDs.TheCalamity]
-                    ])
-                },
-                {
-                    "SlimyCommunion",
-                    new DialogueTree(
-                    [
-                        new Dialogue
-                        (
-                            musicID: MusicID.Eerie
-                        ),
-                        new Dialogue
-                        (
-                            musicID: MusicID.Eerie
-                        ),
-                        new Dialogue
-                        (
-                            musicID: MusicID.Eerie
-                        ),
-                        new Dialogue
-                        (
-                            musicID: MusicID.Eerie
-                        ),
-                    ],
-                    [
-                        Characters[(int)CharacterIDs.TheCalamity]
-                    ])
-                },
-                #endregion
-            };
-            return dialogueTrees;
-        }       
+        public static Dictionary<string, string> CharacterAssetPathes = [];
+        
+        public static Dictionary<string, DialogueTree> DialogueTrees = [];          
     }
 
     public delegate void DialogueNotifier(string treeKey, int dialogueID, int buttonID);
@@ -416,12 +48,7 @@ namespace Windfall.Content.UI.Dialogue
 
         public bool styleSwapped = false;
         
-        public int subSpeakerIndex = -1;     
-        
-        public override void PostSetupContent()
-        {
-            DialogueHolder.DialogueTrees = DialogueHolder.PopulateDialogueTrees();
-        }
+        public int subSpeakerIndex = -1;                 
         
         public override void Load()
         {
@@ -449,11 +76,11 @@ namespace Windfall.Content.UI.Dialogue
         
         public override void ModifyInterfaceLayers(List<GameInterfaceLayer> layers)
         {
-            int mouseTextIndex = layers.FindIndex(layer => layer.Name.Equals("Vanilla: Mouse Text"));
+            int mouseTextIndex = layers.FindIndex(layer => layer.Name.Equals("Vanilla: NPC / Sign Dialog"));
             if (mouseTextIndex != -1)
             {
                 layers.Insert(mouseTextIndex, new LegacyGameInterfaceLayer(
-                    "Cascade: Displays the Dialogue UI",
+                    "Windfall: Displays the Dialogue UI",
                     delegate
                     {
                         DialogueUI.Draw(Main.spriteBatch, new GameTime());
@@ -477,11 +104,10 @@ namespace Windfall.Content.UI.Dialogue
             styleSwapped = false;
 
             //Update the DialogueTree array with any new changes (use Hot Reload to apply changes to the function). Use this while testing out your dialogue so you dont have to restart the program every time you add something!
-            DialogueHolder.DialogueTrees = DialogueHolder.PopulateDialogueTrees(); //Can be removed once tesating is done
             DialogueTree currentTree = DialogueHolder.DialogueTrees[TreeKey];
             Dialogue currentDialogue = currentTree.Dialogues[DialogueIndex];
 
-            CurrentSpeaker = currentTree.Characters[currentDialogue.CharacterIndex];
+            CurrentSpeaker = DialogueHolder.Characters[currentTree.Characters[currentDialogue.CharacterID]];
             SubSpeaker = null;
             subSpeakerIndex = -1;
 
@@ -500,7 +126,7 @@ namespace Windfall.Content.UI.Dialogue
         
         public void UpdateDialogueUI(string TreeKey, int DialogueIndex)
         {
-            int formerSpeakerIndex = DialogueHolder.DialogueTrees[DialogueUIState.TreeKey].Dialogues[DialogueUIState.DialogueIndex].CharacterIndex;
+            int formerSpeakerIndex = DialogueHolder.DialogueTrees[DialogueUIState.TreeKey].Dialogues[DialogueUIState.DialogueIndex].CharacterID;
             DialogueTree currentTree = DialogueHolder.DialogueTrees[TreeKey];
             
             Dialogue currentDialogue = currentTree.Dialogues[DialogueIndex];
@@ -508,10 +134,10 @@ namespace Windfall.Content.UI.Dialogue
             //Main.NewText("Current ID: " + CurrentSpeaker.ID);
             //Main.NewText("Subspeaker ID: " + SubSpeaker.ID);
 
-            if (currentTree.Characters[currentDialogue.CharacterIndex].Style != ((Character)CurrentSpeaker).Style)
+            if (DialogueHolder.Characters[currentTree.Characters[currentDialogue.CharacterID]].Style != ((Character)CurrentSpeaker).Style)
                 swappingStyle = true;
 
-            if (currentTree.Characters[currentDialogue.CharacterIndex].ID == ((Character)CurrentSpeaker).ID)
+            if (currentTree.Characters[currentDialogue.CharacterID] == DialogueHolder.Characters.First(c => c.Value == CurrentSpeaker).Key)
             {
                 //Main.NewText("Speaker Unchanged");
                 newSpeaker = false;
@@ -526,7 +152,7 @@ namespace Windfall.Content.UI.Dialogue
                 returningSpeaker = false;
                 SubSpeaker = CurrentSpeaker;
                 subSpeakerIndex = formerSpeakerIndex;
-                CurrentSpeaker = currentTree.Characters[currentDialogue.CharacterIndex];
+                CurrentSpeaker = DialogueHolder.Characters[currentTree.Characters[currentDialogue.CharacterID]];
                 speakerRight = !speakerRight;
             }
             else
@@ -562,7 +188,6 @@ namespace Windfall.Content.UI.Dialogue
         }
         
     }
-    /// <param name="style"></param>
 
     #region Structures
     /// <param name="ID">The identifier for this Character, commonly their name. This is used primarilly to locate this character's Expression Assets within the Character Assets folder.</param>
@@ -574,16 +199,35 @@ namespace Windfall.Content.UI.Dialogue
     /// <returns>
     /// Represents a character able to be used within a <see cref="DialogueTree"/>.
     /// </returns>
-    public struct Character(string ID, Expression[] expressions, string name = null, float scale = 2f, Type style = null, int textDelay = 3, Color? primaryColor = null, Color? secondaryColor = null)
+    public struct Character(Expression[] expressions, string name, float scale = 2f, Type style = null, int textDelay = 3, Color? primaryColor = null, Color? secondaryColor = null)
     {
-        public string ID = ID;
-        public string Name = name ?? ID;
+        public string Name = name;
         public float Scale = scale;
         public Expression[] Expressions = expressions;
         public Type Style = (style ?? typeof(DefaultDialogueStyle));
         public int TextDelay = textDelay;
         public Color? PrimaryColor = primaryColor;
         public Color? SecondaryColor = secondaryColor;
+
+        public static bool operator ==(Character c1, Character c2) => c1.Equals(c2);
+
+        public static bool operator !=(Character c1, Character c2) => !c1.Equals(c2);
+
+        public override bool Equals(object obj)
+        {
+            if(obj == null) return false;
+            if(obj.GetType() != typeof(Character)) return false;
+            if(((Character)obj).Name != Name) return false;
+            if (((Character)obj).Scale != Scale) return false;
+            if (((Character)obj).Expressions != Expressions) return false;
+            if (((Character)obj).Style != Style) return false;
+            return true;
+        }
+
+        public override int GetHashCode()
+        {
+            throw new NotImplementedException();
+        }
     }
     
     /// <param name="dialogues">The array of <see cref="Dialogue"/>s the Tree manages.</param>
@@ -591,10 +235,11 @@ namespace Windfall.Content.UI.Dialogue
     /// <returns>
     /// Represents a Dialogue Tree able to be displayed via the <see cref="DialogueUISystem.DisplayDialogueTree(int, int)"/> function./>s.
     /// </returns>
-    public struct DialogueTree(Dialogue[] dialogues, Character[] characters)
+    public struct DialogueTree(Dialogue[] dialogues, string[] characters, string localizationPath)
     {
         public Dialogue[] Dialogues = dialogues;
-        public Character[] Characters = characters;
+        public string[] Characters = characters;
+        public string LocalizationPath = localizationPath;
     }
 
     /// <param name="responses">The array of <see cref="Response"/>s the player can give. If set to null, clicking on the Textbox itself will proceed to the next Dialogue within the <see cref="DialogueTree"/> or close the Dialogue if there are no more dialogues Defaults to <see cref="null"/>. </param>
@@ -610,7 +255,7 @@ namespace Windfall.Content.UI.Dialogue
     public struct Dialogue(Response[] responses = null, int characterIndex = 0, int expressionIndex = 0, float textScaleX = 1.5f, float textScaleY = 1.5f, int textDelay = -1, int musicID = -1)
     {
         public Response[] Responses = responses;
-        public int CharacterIndex = characterIndex;
+        public int CharacterID = characterIndex;
         public int ExpressionIndex = expressionIndex;
         public Vector2 TextScale = new(textScaleX, textScaleY);
         public int TextDelay = textDelay;
@@ -618,7 +263,7 @@ namespace Windfall.Content.UI.Dialogue
     }
 
     /// <param name="title">The text displayed on the Response Button.</param>
-    /// <param name="dialogueIndex">The index within the <see cref="DialogueTree.Dialogues"/>s array this response leads to. Defaults to <see cref="-1"/>, which closes the dialogue.</param>
+    /// <param name="dialogueIndex">The index within the <see cref="DialogueTree.Dialogues"/> array this response leads to. Defaults to <see cref="-1"/>, which closes the dialogue.</param>
     /// <param name="requirement">A <see cref="Boolean"/> which determines whether or not this response can appear as an option Defaults to <see cref="true"/>.</param>
     /// <param name="cost">A <see cref="ItemStack"/> which applys a cost that is needed in order to select that response Defaults to <see cref="null"/>, meaning there is no cost.</param>
     /// <param name="dismissSubSpeaker">A <see cref="Boolean"/> which will remove the current SubSpeaker, if there is one, from the dialogue when this response is selected.</param>

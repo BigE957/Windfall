@@ -100,10 +100,10 @@ namespace Windfall.Content.NPCs.WorldEvents.LunarCult
             if (LunarCultActivitySystem.IsCafeteriaActivityActive())
             {
                 DialogueHolder.DialogueTrees["FoodSelection"].Dialogues[0].Responses = LunarCultActivitySystem.GetMenuResponses();
-                ModContent.GetInstance<DialogueUISystem>().DisplayDialogueTree("FoodSelection");
+                ModContent.GetInstance<DialogueUISystem>().DisplayDialogueTree("Windfall/FoodSelection");
             }
             else
-                ModContent.GetInstance<DialogueUISystem>().DisplayDialogueTree("CafeteriaActivityStart");
+                ModContent.GetInstance<DialogueUISystem>().DisplayDialogueTree("Windfall/CafeteriaActivityStart");
 
             return "Hey chat!";
         }

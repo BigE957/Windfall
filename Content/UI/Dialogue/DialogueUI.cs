@@ -3,8 +3,6 @@ using Terraria.UI;
 using static Windfall.Content.UI.Dialogue.DialogueHolder;
 using Terraria.UI.Chat;
 using Windfall.Content.UI.Dialogue.DialogueStyles;
-using Terraria;
-using System.Linq.Expressions;
 using Windfall.Common.Utils;
 
 namespace Windfall.Content.UI.Dialogue
@@ -37,7 +35,7 @@ namespace Windfall.Content.UI.Dialogue
                 if (++counter % textDelay == 0 && counter >= 0)
                     textIndex++;
                 List<TextSnippet> fullSnippets = ChatManager.ParseMessage(Text, Color.White);
-                List<TextSnippet> printedSnippets = new();
+                List<TextSnippet> printedSnippets = [];
                 if (textIndex < Text.Length)
                 {
                     crawling = true;
@@ -66,7 +64,7 @@ namespace Windfall.Content.UI.Dialogue
                             else
                             {
                                 string newText = text.Remove(textIndex - CurrentLength);
-                                if (newText.Any() && fullSnippets[i].Color != Color.White)
+                                if (newText.Length != 0 && fullSnippets[i].Color != Color.White)
                                 {
                                     List<TextSnippet> snippets = ChatManager.ParseMessage($"[C/{fullSnippets[i].Color.Hex3()}:{newText}]", Color.White);
                                     TextSnippet snippet = snippets[0];
@@ -96,7 +94,7 @@ namespace Windfall.Content.UI.Dialogue
                 {
                     TextToPrint += printedSnippets[i].TextOriginal;
                 }
-                List<string> textLines = Utils.WordwrapString(TextToPrint, FontAssets.MouseText.Value, (int)((Parent.Width.Pixels + this.Width.Pixels) / 1.5f), 250, out _).ToList();
+                List<string> textLines = [.. Utils.WordwrapString(TextToPrint, FontAssets.MouseText.Value, (int)((Parent.Width.Pixels + this.Width.Pixels) / 1.5f), 250, out _)];
                 textLines.RemoveAll(text => string.IsNullOrEmpty(text));
 
                 string PreviousLineColorHex = "";
@@ -145,7 +143,7 @@ namespace Windfall.Content.UI.Dialogue
                     }
                 }
 
-                List<List<TextSnippet>> dialogLines = new();
+                List<List<TextSnippet>> dialogLines = [];
                 for (int i = 0; i < textLines.Count; i++)
                 {
                     dialogLines.Add(ChatManager.ParseMessage(textLines[i], Color.White));
@@ -158,7 +156,7 @@ namespace Windfall.Content.UI.Dialogue
                     if (dialogLines[i] != null)
                     {
                         int textDrawPositionY = yScale + i * yScale2 + (int)yPageTop;
-                        ChatManager.DrawColorCodedStringWithShadow(spriteBatch, FontAssets.MouseText.Value, dialogLines[i].ToArray(), new Vector2(xPageTop, textDrawPositionY), 0f, Vector2.Zero, textScale, out int hoveredSnippet);
+                        ChatManager.DrawColorCodedStringWithShadow(spriteBatch, FontAssets.MouseText.Value, [.. dialogLines[i]], new Vector2(xPageTop, textDrawPositionY), 0f, Vector2.Zero, textScale, out int hoveredSnippet);
                         //Utils.DrawBorderStringFourWay(spriteBatch, FontAssets.ItemStack.Value, dialogLines[i], xPageTop, textDrawPositionY, Color.White, Color.Black, Vector2.Zero, 1.5f);
                     }
             }
@@ -169,18 +167,20 @@ namespace Windfall.Content.UI.Dialogue
         public UIImage SubSpeaker;
 
         public string TreeKey;
-        public int DialogueIndex;
+        public int DialogueIndex = 0;
         private int counter = 0;
         private int frameCounter = 1;
         public override void OnInitialize()
         {
-            if (DialogueTrees != null)
+            if (DialogueTrees.Count == 0)
+                return;
+            if (DialogueTrees.Count != 0)
             {
                 counter = 0;
 
                 float xResolutionScale = Main.screenWidth / 2560f;
                 float yResolutionScale = Main.screenHeight / 1440f;
-
+                
                 DialogueTree CurrentTree = DialogueTrees[TreeKey];
                 Dialogue CurrentDialogue = CurrentTree.Dialogues[DialogueIndex];
                 Character CurrentSpeaker;
@@ -193,7 +193,7 @@ namespace Windfall.Content.UI.Dialogue
                 bool returningSpeaker = false;
                 bool speakerRight = true;
 
-                BaseDialogueStyle style = (BaseDialogueStyle)Activator.CreateInstance(CurrentTree.Characters[CurrentDialogue.CharacterIndex].Style);
+                BaseDialogueStyle style = (BaseDialogueStyle)Activator.CreateInstance(Characters[CurrentTree.Characters[CurrentDialogue.CharacterID]].Style);
 
                 if (ModContent.GetInstance<DialogueUISystem>() != null)
                 {
@@ -210,17 +210,19 @@ namespace Windfall.Content.UI.Dialogue
                 }
                 else
                 {
-                    CurrentSpeaker = Characters[CurrentDialogue.CharacterIndex];
-                    CurrentSubSpeaker = new Character("None", new Expression[] { new() });
+                    CurrentSpeaker = Characters[CurrentTree.Characters[CurrentDialogue.CharacterID]];
+                    CurrentSubSpeaker = new Character([new()], "Bill");
                 }
                 style.PreUICreate(TreeKey, DialogueIndex);
-                if (CurrentDialogue.CharacterIndex != -1)
+                if (CurrentDialogue.CharacterID != -1)
                 {
                     //Main.NewText("Create Speaker: " + CurrentDialogue.CharacterIndex);
-                    CurrentSpeaker = CurrentTree.Characters[CurrentDialogue.CharacterIndex];
+                    CurrentSpeaker = Characters[CurrentTree.Characters[CurrentDialogue.CharacterID]];
                     string expressionID = CurrentSpeaker.Expressions[CurrentDialogue.ExpressionIndex].Title;
-                    
-                    Texture2D speakerTexture = ModContent.Request<Texture2D>($"{nameof(Windfall)}/Content/UI/Dialogue/CharacterAssets/{CurrentSpeaker.ID}/{CurrentSpeaker.ID}_{expressionID}", AssetRequestMode.ImmediateLoad).Value;
+
+                    string AssetPath = CharacterAssetPathes[Characters.First(c => c.Value == CurrentSpeaker).Key.Split("/")[0].Replace("/", "")];
+                    string SpeakerID = Characters.First(c => c.Value == CurrentSpeaker).Key.Split("/")[1];
+                    Texture2D speakerTexture = ModContent.Request<Texture2D>($"{AssetPath}/{SpeakerID}/{SpeakerID}_{expressionID}", AssetRequestMode.ImmediateLoad).Value;
                     Rectangle speakerFrame = new(0, 0, speakerTexture.Bounds.Width, speakerTexture.Bounds.Height / CurrentSpeaker.Expressions[CurrentDialogue.ExpressionIndex].FrameCount);
 
                     Texture2D speakerFrameTexture = new(Main.graphics.GraphicsDevice, speakerFrame.Width, speakerFrame.Height);
@@ -250,9 +252,11 @@ namespace Windfall.Content.UI.Dialogue
                 if (subSpeakerIndex != -1)
                 {
                     //Main.NewText("Create Sub-Speaker: " + subSpeakerIndex);
-                    CurrentSubSpeaker = CurrentTree.Characters[subSpeakerIndex];
+                    CurrentSubSpeaker = Characters[CurrentTree.Characters[subSpeakerIndex]];
+                    string AssetPath = CharacterAssetPathes[Characters.First(c => c.Value == CurrentSubSpeaker).Key.Split("/")[0].Replace("/", "")];
+                    string subSpeakerID = Characters.First(c => c.Value == CurrentSubSpeaker).Key.Split("/")[1];
                     string expressionID = CurrentSubSpeaker.Expressions[0].Title;
-                    Texture2D subSpeakerTexture = ModContent.Request<Texture2D>($"{nameof(Windfall)}/Content/UI/Dialogue/CharacterAssets/{CurrentSubSpeaker.ID}/{CurrentSubSpeaker.ID}_{expressionID}", AssetRequestMode.ImmediateLoad).Value;
+                    Texture2D subSpeakerTexture = ModContent.Request<Texture2D>($"{AssetPath}/{subSpeakerID}/{subSpeakerID}_{expressionID}", AssetRequestMode.ImmediateLoad).Value;
                     Rectangle subSpeakerFrame = new(0, 0, subSpeakerTexture.Bounds.Width, subSpeakerTexture.Bounds.Height / CurrentSubSpeaker.Expressions[0].FrameCount);
 
                     Texture2D subSpeakerFrameTexture = new(Main.graphics.GraphicsDevice, subSpeakerFrame.Width, subSpeakerFrame.Height);
@@ -336,7 +340,7 @@ namespace Windfall.Content.UI.Dialogue
                         if (goalLeft - Speaker.Left.Pixels < 1)
                             Speaker.Left.Pixels = goalRight;
                     }
-                    Character speakerCharacter = CurrentTree.Characters[CurrentDialogue.CharacterIndex];
+                    Character speakerCharacter = Characters[CurrentTree.Characters[CurrentDialogue.CharacterID]];
                     Expression currentExpression = speakerCharacter.Expressions[CurrentDialogue.ExpressionIndex];                   
                     if (currentExpression.FrameRate != 0 && counter % currentExpression.FrameRate == 0)
                     {
@@ -348,7 +352,10 @@ namespace Windfall.Content.UI.Dialogue
                             else
                                 frameCounter = currentExpression.FrameCount;
                         }
-                        Texture2D speakerTexture = ModContent.Request<Texture2D>($"{nameof(Windfall)}/Content/UI/Dialogue/CharacterAssets/{speakerCharacter.ID}/{speakerCharacter.ID}_{currentExpression.Title}", AssetRequestMode.ImmediateLoad).Value;
+                        string AssetPath = CharacterAssetPathes[Characters.First(c => c.Value == speakerCharacter).Key.Split("/")[0].Replace("/", "")];
+                        string speakerID = Characters.First(c => c.Value == speakerCharacter).Key.Split("/")[1];
+
+                        Texture2D speakerTexture = ModContent.Request<Texture2D>($"{AssetPath}/{speakerID}/{speakerID}_{currentExpression.Title}", AssetRequestMode.ImmediateLoad).Value;
                         Rectangle speakerFrame = speakerTexture.Frame(1, speakerCharacter.Expressions[CurrentDialogue.ExpressionIndex].FrameCount, 0, frameCounter - 1);
 
                         Texture2D speakerFrameTexture = new(Main.graphics.GraphicsDevice, speakerFrame.Width, speakerFrame.Height);
@@ -465,14 +472,15 @@ namespace Windfall.Content.UI.Dialogue
         internal void OnBoxClick(UIMouseEvent evt, UIElement listeningElement)
         {
             DialogueText dialogue = (DialogueText)Textbox.Children.Where(c => c.GetType() == typeof(DialogueText)).First();
-            if (DialogueTrees[TreeKey].Dialogues[DialogueIndex].Responses == null && !dialogue.crawling)
+            DialogueTree CurrentTree = DialogueTrees[TreeKey];
+            if (CurrentTree.Dialogues[DialogueIndex].Responses == null && !dialogue.crawling)
             {
                 ModContent.GetInstance<DialogueUISystem>().ButtonClick?.Invoke(TreeKey, DialogueIndex, 0);
 
-                if (DialogueIndex + 1 >= DialogueTrees[TreeKey].Dialogues.Length)
+                if (DialogueIndex + 1 >= CurrentTree.Dialogues.Length)
                 {
                     ModContent.GetInstance<DialogueUISystem>().isDialogueOpen = false;
-                    ModContent.GetInstance<DialogueUISystem>().DialogueClose?.Invoke(TreeKey, DialogueIndex, 0);                    
+                    ModContent.GetInstance<DialogueUISystem>().DialogueClose?.Invoke(TreeKey, DialogueIndex, 0);
                 }
                 else
                 {
@@ -480,27 +488,32 @@ namespace Windfall.Content.UI.Dialogue
                 }
             }
             else if (dialogue.crawling)
-                dialogue.textIndex = Language.GetTextValue(LocalizationPath + TreeKey + ".Messages." + DialogueIndex).Length;
+            {
+                string key = TreeKey.Split("/")[1];
+                dialogue.textIndex = Language.GetTextValue(CurrentTree.LocalizationPath + key + ".Messages." + DialogueIndex).Length;
+            }
         }
         internal void OnButtonClick(UIMouseEvent evt, UIElement listeningElement)
-        {            
-            int responseCount = DialogueTrees[TreeKey].Dialogues[DialogueIndex].Responses.Count();
+        {
+            DialogueTree CurrentTree = DialogueTrees[TreeKey];
+            int responseCount = CurrentTree.Dialogues[DialogueIndex].Responses.Length;
             UIText text = (UIText)listeningElement.Children.ToArray().First();
             int buttonID = 0;
             for (int i = 0; i < responseCount; i++)
             {
-                if (DialogueTrees[TreeKey].Dialogues[DialogueIndex].Responses[i].Localize)
+                if (CurrentTree.Dialogues[DialogueIndex].Responses[i].Localize)
                 {
-                    if (text.Text == Language.GetTextValue(LocalizationPath + TreeKey + ".Responses." + DialogueTrees[TreeKey].Dialogues[DialogueIndex].Responses[i].Title))
+                    string key = TreeKey.Split("/")[1];
+                    if (text.Text == Language.GetTextValue(CurrentTree.LocalizationPath + key + ".Responses." + CurrentTree.Dialogues[DialogueIndex].Responses[i].Title))
                         buttonID = i;
                 }
                 else
                 {
-                    if (text.Text == DialogueTrees[TreeKey].Dialogues[DialogueIndex].Responses[i].Title)
+                    if (text.Text == CurrentTree.Dialogues[DialogueIndex].Responses[i].Title)
                         buttonID = i;
                 }
             }
-            Response response = DialogueTrees[TreeKey].Dialogues[DialogueIndex].Responses[buttonID];
+            Response response = CurrentTree.Dialogues[DialogueIndex].Responses[buttonID];
             if (response.Cost == null || CanAffordCost(Main.LocalPlayer, response.Cost.Value))
             {
                 ModContent.GetInstance<DialogueUISystem>().ButtonClick?.Invoke(TreeKey, DialogueIndex, buttonID);
@@ -509,12 +522,12 @@ namespace Windfall.Content.UI.Dialogue
                     ModContent.GetInstance<DialogueUISystem>().dismissSubSpeaker = true;
 
                 int heading = response.DialogueIndex;
-                if (heading == -1 || (heading == -2 && !(DialogueTrees[TreeKey].Dialogues.Length > DialogueIndex + 1)))
+                if (heading == -1 || (heading == -2 && !(CurrentTree.Dialogues.Length > DialogueIndex + 1)))
                 {
                     ModContent.GetInstance<DialogueUISystem>().isDialogueOpen = false;
                     ModContent.GetInstance<DialogueUISystem>().DialogueClose?.Invoke(TreeKey, DialogueIndex, buttonID);
                 }
-                else if (heading == -2 && DialogueTrees[TreeKey].Dialogues.Length > DialogueIndex + 1)
+                else if (heading == -2 && CurrentTree.Dialogues.Length > DialogueIndex + 1)
                     ModContent.GetInstance<DialogueUISystem>().UpdateDialogueUI(TreeKey, DialogueIndex + 1);
                 else
                     ModContent.GetInstance<DialogueUISystem>().UpdateDialogueUI(TreeKey, heading);
@@ -527,22 +540,23 @@ namespace Windfall.Content.UI.Dialogue
 
             DialogueTree CurrentTree = DialogueTrees[TreeKey];
             Dialogue CurrentDialogue = CurrentTree.Dialogues[DialogueIndex];
+            Character CurrentCharacter = Characters[CurrentTree.Characters[CurrentDialogue.CharacterID]];
 
             if (ModContent.GetInstance<DialogueUISystem>().swappingStyle)
-                style = (BaseDialogueStyle)Activator.CreateInstance(CurrentTree.Characters[ModContent.GetInstance<DialogueUISystem>().subSpeakerIndex].Style);
+                style = (BaseDialogueStyle)Activator.CreateInstance(Characters[CurrentTree.Characters[ModContent.GetInstance<DialogueUISystem>().subSpeakerIndex]].Style);
             Textbox = new MouseBlockingUIPanel();
 
             if (style.BackgroundColor.HasValue)
                 Textbox.BackgroundColor = style.BackgroundColor.Value;
-            else if (CurrentTree.Characters[CurrentDialogue.CharacterIndex].PrimaryColor.HasValue)
-                Textbox.BackgroundColor = CurrentTree.Characters[CurrentDialogue.CharacterIndex].PrimaryColor.Value;
+            else if (CurrentCharacter.PrimaryColor.HasValue)
+                Textbox.BackgroundColor = CurrentCharacter.PrimaryColor.Value;
             else
                 Textbox.BackgroundColor = new Color(73, 94, 171);
 
             if (style.BackgroundBorderColor.HasValue)
                 Textbox.BorderColor = style.BackgroundBorderColor.Value;
-            else if (CurrentTree.Characters[CurrentDialogue.CharacterIndex].SecondaryColor.HasValue)
-                Textbox.BorderColor = CurrentTree.Characters[CurrentDialogue.CharacterIndex].SecondaryColor.Value;
+            else if (CurrentCharacter.SecondaryColor.HasValue)
+                Textbox.BorderColor = CurrentCharacter.SecondaryColor.Value;
             else
                 Textbox.BorderColor = Color.Black;
 
@@ -551,15 +565,16 @@ namespace Windfall.Content.UI.Dialogue
             Append(Textbox);
             if (!ModContent.GetInstance<DialogueUISystem>().swappingStyle)
             {
+                string key = TreeKey.Split("/")[1];
                 DialogueText DialogueText = new()
                 {
                     boxWidth = Textbox.Width.Pixels,
-                    Text = Language.GetTextValue(LocalizationPath + TreeKey + ".Messages." + DialogueIndex)
+                    Text = Language.GetTextValue(CurrentTree.LocalizationPath + key + ".Messages." + DialogueIndex)
                 };
                 if (CurrentDialogue.TextDelay > 0)
-                    DialogueText.textDelay = CurrentDialogue.TextDelay;
-                else if (Characters[CurrentDialogue.CharacterIndex].TextDelay > 0)
-                    DialogueText.textDelay = Characters[CurrentDialogue.CharacterIndex].TextDelay;
+                    DialogueText.textDelay = CurrentDialogue.TextDelay; 
+                else if (CurrentCharacter.TextDelay > 0)
+                    DialogueText.textDelay = CurrentCharacter.TextDelay;
                 else
                     DialogueText.textDelay = 3;
                 style.OnDialogueTextCreate(DialogueText);
@@ -577,8 +592,8 @@ namespace Windfall.Content.UI.Dialogue
 
                         if (style.ButtonColor.HasValue)
                             color = style.ButtonColor.Value;
-                        else if (CurrentTree.Characters[CurrentDialogue.CharacterIndex].PrimaryColor.HasValue)
-                            color = CurrentTree.Characters[CurrentDialogue.CharacterIndex].PrimaryColor.Value;
+                        else if (CurrentCharacter.PrimaryColor.HasValue)
+                            color = CurrentCharacter.PrimaryColor.Value;
                         else
                             color = new Color(73, 94, 171);
                         color.A = 125;
@@ -586,8 +601,8 @@ namespace Windfall.Content.UI.Dialogue
 
                         if (style.ButtonBorderColor.HasValue)
                             button.BorderColor = style.ButtonBorderColor.Value;
-                        else if (CurrentTree.Characters[CurrentDialogue.CharacterIndex].SecondaryColor.HasValue)
-                            button.BorderColor = CurrentTree.Characters[CurrentDialogue.CharacterIndex].SecondaryColor.Value;
+                        else if (CurrentCharacter.SecondaryColor.HasValue)
+                            button.BorderColor = CurrentCharacter.SecondaryColor.Value;
                         else
                             button.BorderColor = Color.Black;
 
@@ -596,8 +611,10 @@ namespace Windfall.Content.UI.Dialogue
                         Append(button);
 
                         UIText text;
+
+                        key = TreeKey.Split("/")[1];
                         if (availableResponses[i].Localize)
-                            text = new(Language.GetTextValue(LocalizationPath + TreeKey + ".Responses." + availableResponses[i].Title), 0f);
+                            text = new(Language.GetTextValue(CurrentTree.LocalizationPath + key + ".Responses." + availableResponses[i].Title), 0f);
                         else
                             text = new(availableResponses[i].Title, 0f);
                         
@@ -609,14 +626,18 @@ namespace Windfall.Content.UI.Dialogue
                         if (availableResponses[i].Cost != null)
                         {
                             ItemStack cost = (ItemStack)availableResponses[i].Cost;
-                            UIPanel costHolder = new();
-                            costHolder.BorderColor = Color.Transparent;
-                            costHolder.BackgroundColor = Color.Transparent;
-                            costHolder.VAlign = 0.75f;
+                            UIPanel costHolder = new()
+                            {
+                                BorderColor = Color.Transparent,
+                                BackgroundColor = Color.Transparent,
+                                VAlign = 0.75f
+                            };
 
-                            UIText stackText = new($"x{cost.Stack}");
-                            stackText.HAlign = 1f;
-                            stackText.VAlign = 0.5f;
+                            UIText stackText = new($"x{cost.Stack}")
+                            {
+                                HAlign = 1f,
+                                VAlign = 0.5f
+                            };
 
                             Texture2D itemTexture = (Texture2D)ModContent.Request<Texture2D>(ItemLoader.GetItem(cost.Type).Texture);
                             UIImage itemIcon = new(itemTexture);

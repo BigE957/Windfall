@@ -27,7 +27,7 @@ namespace Windfall.Content.Items.Essences
             player.Godly().Evil2Essence = true;
             player.Godly().CorruptCommunion = true;
             SkyManager.Instance.Activate("Windfall:CorruptCommunion", args: Array.Empty<object>());
-            ModContent.GetInstance<DialogueUISystem>().DisplayDialogueTree("CorruptCommunion2");
+            ModContent.GetInstance<DialogueUISystem>().DisplayDialogueTree("Windfall/CorruptCommunion2");
             return true;
         }
     }

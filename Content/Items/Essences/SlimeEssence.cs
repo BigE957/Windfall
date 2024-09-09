@@ -27,7 +27,7 @@ namespace Windfall.Content.Items.Essences
             player.Godly().SlimeGodEssence = true;
             player.Godly().SlimyCommunion = true;
             SkyManager.Instance.Activate("Windfall:SlimyCommunion", args: Array.Empty<object>());
-            ModContent.GetInstance<DialogueUISystem>().DisplayDialogueTree("SlimyCommunion");
+            ModContent.GetInstance<DialogueUISystem>().DisplayDialogueTree("Windfall/SlimyCommunion");
             return true;
         }
     }

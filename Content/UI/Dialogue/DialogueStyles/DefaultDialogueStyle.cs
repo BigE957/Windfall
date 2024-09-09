@@ -46,26 +46,27 @@ namespace Windfall.Content.UI.Dialogue.DialogueStyles
         {
             DialogueTree CurrentTree = DialogueHolder.DialogueTrees[treeKey];
             Dialogue CurrentDialogue = CurrentTree.Dialogues[dialogueIndex];
+            Character CurrentCharacter = DialogueHolder.Characters[CurrentTree.Characters[CurrentDialogue.CharacterID]];
 
             MouseBlockingUIPanel NameBox;
             NameBox = new MouseBlockingUIPanel();
             NameBox.SetPadding(0);
             SetRectangle(NameBox, left: -25f, top: -25f, width: 300f, height: 60f);
-            if (CurrentTree.Characters[CurrentDialogue.CharacterIndex].PrimaryColor.HasValue)
-                NameBox.BackgroundColor = CurrentTree.Characters[CurrentDialogue.CharacterIndex].PrimaryColor.Value;
+            if (CurrentCharacter.PrimaryColor.HasValue)
+                NameBox.BackgroundColor = CurrentCharacter.PrimaryColor.Value;
             else
                 NameBox.BackgroundColor = new Color(73, 94, 171);
 
-            if (CurrentTree.Characters[CurrentDialogue.CharacterIndex].SecondaryColor.HasValue)
-                NameBox.BorderColor = CurrentTree.Characters[CurrentDialogue.CharacterIndex].SecondaryColor.Value;
+            if (CurrentCharacter.SecondaryColor.HasValue)
+                NameBox.BorderColor = CurrentCharacter.SecondaryColor.Value;
 
             textbox.Append(NameBox);
 
             UIText NameText;
-            if (CurrentDialogue.CharacterIndex == -1)
+            if (CurrentDialogue.CharacterID == -1)
                 NameText = new UIText("...");
             else
-                NameText = new UIText(CurrentTree.Characters[CurrentDialogue.CharacterIndex].Name, 1f, true);
+                NameText = new UIText(CurrentCharacter.Name, 1f, true);
             NameText.Width.Pixels = NameBox.Width.Pixels;
             NameText.HAlign = 0.5f;
             NameText.Top.Set(15, 0);

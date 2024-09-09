@@ -136,7 +136,7 @@ namespace Windfall.Content.NPCs.WorldEvents.LunarCult
             Main.CloseNPCChatOrSign();
             if (AIState == States.SelenicChat)
             {
-                ModContent.GetInstance<DialogueUISystem>().DisplayDialogueTree(AIState.ToString());
+                ModContent.GetInstance<DialogueUISystem>().DisplayDialogueTree("Windfall/" + AIState.ToString());
             }
             else
             {
