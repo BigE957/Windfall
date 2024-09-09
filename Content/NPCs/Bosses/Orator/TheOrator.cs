@@ -79,7 +79,7 @@ namespace Windfall.Content.NPCs.Bosses.Orator
         public static bool noSpawnsEscape = true;
         public override void OnSpawn(IEntitySource source)
         {
-            SkyManager.Instance.Activate("Windfall:Orator", args: Array.Empty<object>());
+            SkyManager.Instance.Activate("Windfall:Orator", args: []);
             target = Main.player[Player.FindClosest(NPC.Center, NPC.width, NPC.height)];
 
             //AIState = States.Testing;
@@ -1094,7 +1094,7 @@ namespace Windfall.Content.NPCs.Bosses.Orator
                                     float goalX = border.Center.X + (proj.Center.X < border.Center.X ? -140 : 140);
                                     if (proj.Center.X < border.Center.X && proj.Center.X < goalX || proj.Center.X > goalX)
                                     {
-                                        Vector2 goalPostiion = new Vector2(goalX, proj.Center.Y + (float)Math.Atan(proj.velocity.AngleTo(new Vector2(goalX, proj.Center.Y)) * -proj.Center.Distance(new Vector2(goalX, proj.Center.Y))));
+                                        Vector2 goalPostiion = new(goalX, proj.Center.Y + (float)Math.Atan(proj.velocity.AngleTo(new Vector2(goalX, proj.Center.Y)) * -proj.Center.Distance(new Vector2(goalX, proj.Center.Y))));
                                         float goalLength = (goalPostiion - proj.Center).Length() - 20;
                                         Vector2 spawnOffset = proj.velocity.SafeNormalize(Vector2.Zero) * goalLength;
                                         EmpyreanMetaball.SpawnDefaultParticle(goalPostiion, proj.velocity.SafeNormalize(Vector2.Zero).RotatedBy(Main.rand.NextFloat(-0.25f, 0.25f)) * Main.rand.NextFloat(16f, 18f), 40f);

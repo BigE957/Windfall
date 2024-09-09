@@ -26,9 +26,9 @@ namespace Windfall.Content.NPCs.Bosses.Orator
         }
         public override void SetBestiary(BestiaryDatabase database, BestiaryEntry bestiaryEntry)
         {
-            bestiaryEntry.Info.AddRange(new IBestiaryInfoElement[] {
+            bestiaryEntry.Info.AddRange([
             new FlavorTextBestiaryInfoElement(GetWindfallTextValue($"Bestiary.{nameof(ShadowHand)}")),
-        });
+        ]);
         }
         public override void SetDefaults()
         {
