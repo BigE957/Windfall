@@ -126,8 +126,11 @@ namespace Windfall.Content.NPCs.WorldEvents.LunarCult
             Vector2 drawPos = (NPC.Center - screenPos) + Vector2.UnitY * barScale * (NPC.frame.Height - yOffset);
             Rectangle frameCrop = new Rectangle(0, 0, (int)(TimeCooking / CookTIme * barFG.Width), barFG.Height);
 
-            spriteBatch.Draw(barBG, drawPos, null, Color.Gray, 0f, barOrigin, barScale, 0f, 0f);
-            spriteBatch.Draw(barFG, drawPos, frameCrop, new Color(117, 255, 159) * 0.8f, 0f, barOrigin, barScale, 0f, 0f);
+            Color bgColor = Color.DarkGray * 0.5f;
+            bgColor.A = 255;
+
+            spriteBatch.Draw(barBG, drawPos, null, bgColor, 0f, barOrigin, barScale, 0f, 0f);
+            spriteBatch.Draw(barFG, drawPos, frameCrop, Color.Lerp(Color.Yellow, Color.LimeGreen, TimeCooking / CookTIme), 0f, barOrigin, barScale, 0f, 0f);
         }
         private void ClickEffect(string treeKey, int dialogueID, int buttonID)
         {

@@ -250,7 +250,7 @@ namespace Windfall.Content.UI.Dialogue
                     if (justOpened || newSpeaker)
                         SetRectangle(Speaker, left: startPositionX, top: Main.screenHeight, width: speakerFrameTexture.Width, height: speakerFrameTexture.Height);
                     else
-                        SetRectangle(Speaker, left: startPositionX, top: Main.screenHeight / 1.5f, width: speakerFrameTexture.Width, height: speakerFrameTexture.Height);
+                        SetRectangle(Speaker, left: startPositionX, top: Main.screenHeight / 2.5f, width: speakerFrameTexture.Width, height: speakerFrameTexture.Height);
                     style.PreSpeakerCreate(TreeKey, DialogueIndex, Speaker);
                     Append(Speaker);
                     style.PostSpeakerCreate(TreeKey, DialogueIndex, Speaker);
@@ -287,7 +287,7 @@ namespace Windfall.Content.UI.Dialogue
                         startPositionX = newSpeaker || returningSpeaker ? Main.screenWidth * 0.15f : Main.screenWidth * 0.075f;
                     else
                         startPositionX = newSpeaker || returningSpeaker ? Main.screenWidth / 1.25f : Main.screenWidth / 1.35f;
-                    SetRectangle(SubSpeaker, left: startPositionX, top: Main.screenHeight / 1.5f, width: subSpeakerFrameTexture.Width, height: subSpeakerFrameTexture.Height);
+                    SetRectangle(SubSpeaker, left: startPositionX, top: Main.screenHeight / 2.5f, width: subSpeakerFrameTexture.Width, height: subSpeakerFrameTexture.Height);
                     style.PreSubSpeakerCreate(TreeKey, DialogueIndex, Speaker, SubSpeaker);
                     Append(SubSpeaker);
                     style.PostSubSpeakerCreate(TreeKey, DialogueIndex, Speaker, SubSpeaker);
@@ -323,7 +323,7 @@ namespace Windfall.Content.UI.Dialogue
                 //Main.NewText(SubSpeaker == null);
                 if (Speaker != null)
                 {
-                    float goalHeight = Main.screenHeight / 1.5f * yResolutionScale;
+                    float goalHeight = Main.screenHeight / 2.5f;
                     if (Speaker.Top.Pixels > goalHeight)
                     {
                         Speaker.Top.Pixels -= (Speaker.Top.Pixels - goalHeight) / 15;
@@ -535,7 +535,7 @@ namespace Windfall.Content.UI.Dialogue
 
             DialogueTree CurrentTree = DialogueTrees[TreeKey];
             Dialogue CurrentDialogue = CurrentTree.Dialogues[DialogueIndex];
-
+            /*
             if(ModContent.GetInstance<DialogueUISystem>().swappingStyle)
             {
                 switch (CurrentTree.Characters[ModContent.GetInstance<DialogueUISystem>().subSpeakerIndex].StyleID)
@@ -545,7 +545,8 @@ namespace Windfall.Content.UI.Dialogue
                         break;
                 }
             }
-
+            */
+            style = new DefaultDialogueStyle();
             Textbox = new MouseBlockingUIPanel();
 
             if (style.BackgroundColor.HasValue)
@@ -613,13 +614,13 @@ namespace Windfall.Content.UI.Dialogue
 
                         UIText text;
                         if (availableResponses[i].Localize)
-                            text = new(Language.GetTextValue(LocalizationPath + TreeKey + ".Responses." + availableResponses[i].Title));
+                            text = new(Language.GetTextValue(LocalizationPath + TreeKey + ".Responses." + availableResponses[i].Title), 0f);
                         else
-                            text = new(availableResponses[i].Title);
+                            text = new(availableResponses[i].Title, 0f);
                         
                         text.Width.Pixels = style.ButtonSize.X;
                         text.IsWrapped = true;
-                        text.WrappedTextBottomPadding = 0.5f;
+                        text.WrappedTextBottomPadding = 0.1f;
                         style.OnResponseTextCreate(text);
                         button.Append(text);
                         if (availableResponses[i].Cost != null)

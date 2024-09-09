@@ -2,7 +2,6 @@
 using Terraria.GameContent.UI.Elements;
 using Terraria.UI;
 using Terraria.ModLoader.UI;
-using static System.Net.Mime.MediaTypeNames;
 
 namespace Windfall.Content.UI.Dialogue.DialogueStyles
 {
@@ -17,10 +16,10 @@ namespace Windfall.Content.UI.Dialogue.DialogueStyles
             textbox.SetPadding(0);
             float startX = 0;
             if (newSubSpeaker && !ModContent.GetInstance<DialogueUISystem>().styleSwapped)
-                startX = speakerRight ? 600f : 125f;
+                startX = speakerRight ? Main.screenWidth - textbox.Width.Pixels - (Main.screenWidth / 32f) : Main.screenWidth / 32f;
             else
-                startX = speakerRight ? 125f : 600f;
-            SetRectangle(textbox, left: startX, top: spawnBottom ? 1200f : 650f, width: Main.screenWidth / 1.5f, height: Main.screenHeight / 3);
+                startX = speakerRight ? Main.screenWidth / 32f : Main.screenWidth - textbox.Width.Pixels - (Main.screenWidth / 32f);
+            SetRectangle(textbox, left: startX, top: spawnBottom ? Main.screenHeight * 1.05f : Main.screenHeight / 1.75f, width: Main.screenWidth / 1.3f, height: Main.screenHeight / 3);
         }
         public override void OnDialogueTextCreate(DialogueText text)
         {
@@ -108,8 +107,8 @@ namespace Windfall.Content.UI.Dialogue.DialogueStyles
                         textbox.Top.Pixels = goalHeight;
 
                 }
-                float goalLeft = 125f * xResolutionScale;
-                float goalright = 600f * xResolutionScale;
+                float goalLeft = Main.screenWidth / 12f;
+                float goalright = Main.screenWidth - textbox.Width.Pixels - (Main.screenWidth / 12f);
 
                 if (ModContent.GetInstance<DialogueUISystem>().speakerRight && textbox.Left.Pixels > 125f)
                 {
@@ -138,23 +137,28 @@ namespace Windfall.Content.UI.Dialogue.DialogueStyles
                         if (!textbox.HasChild(button))
                             textbox.AddOrRemoveChild(button, true);
                         button.Top.Set(0, 0);
-                        button.HAlign = 0f;
+                        button.VAlign = 0.86f;
 
                         button.Left.Pixels = textbox.Width.Pixels / (2 * responseButtons.Length) + ((textbox.Width.Pixels * (float)(i / (float)responseButtons.Length)) - (button.Width.Pixels/2));
-                        button.VAlign = 0.8f;
-                        button.Width.Pixels += (ButtonSize.X) / 50;
-                        button.Height.Pixels += ButtonSize.Y / 50;
+                        button.Left.Pixels -= 3;
+
+                        button.Width.Pixels = Clamp(button.Width.Pixels + (ButtonSize.X / 30), 0f, ButtonSize.X);
+                        button.Height.Pixels = Clamp(button.Height.Pixels + (ButtonSize.Y / 30), 0f, ButtonSize.Y);
+                                              
                         button.Top.Pixels += button.Height.Pixels / 2;
 
                         foreach (UIElement child in button.Children)
                         {
                             if (child.GetType() == typeof(UIText))
                             {
+                                if (button.Width.Pixels < ButtonSize.X / 1.5f)
+                                    continue;
                                 //Main.NewText(child.Width.Pixels);
                                 UIText textChild = (UIText)child;
-                                textChild.SetText(textChild.Text, Clamp(0.75f * (button.Width.Pixels / ButtonSize.X), 0f, 0.75f), false);
+                                textChild.SetText(textChild.Text, Clamp(0.875f * ((button.Width.Pixels - ButtonSize.X / 1.5f) / ButtonSize.X) * 3f, 0f, 0.875f), false);
                                 textChild.Top.Pixels = button.Top.Pixels - (int)(button.Height.Pixels / 2) + 4;
-                                textChild.IsWrapped = button.Width.Pixels >= ButtonSize.X / 3;
+                                textChild.IsWrapped = true;
+                                textChild.WrappedTextBottomPadding = -2f;
                                 if (button.Children.Count() > 1)
                                     textChild.Top.Pixels = -4;
                             }
