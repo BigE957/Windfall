@@ -163,7 +163,7 @@ namespace Windfall.Content.UI.Dialogue.DialogueStyles
                                     textChild.Top.Pixels = -4;
                             }
                             else
-                                child.Top.Pixels = -2500;
+                                child.Top.Pixels = -Main.screenHeight * 1.25f;
                         }
                     }
                     else if (button.Children.Count() > 1)

@@ -193,16 +193,8 @@ namespace Windfall.Content.UI.Dialogue
                 bool returningSpeaker = false;
                 bool speakerRight = true;
 
-                /*
-                BaseDialogueStyle style = new();
-                switch(CurrentTree.Characters[CurrentDialogue.CharacterIndex].StyleID)
-                    {
-                        default: 
-                            style = new DefaultDialogueStyle();
-                            break;
-                    }
-                */
-                DefaultDialogueStyle style = new();
+                BaseDialogueStyle style = (BaseDialogueStyle)Activator.CreateInstance(CurrentTree.Characters[CurrentDialogue.CharacterIndex].Style);
+
                 if (ModContent.GetInstance<DialogueUISystem>() != null)
                 {
                     if(ModContent.GetInstance<DialogueUISystem>().CurrentSpeaker != null)
@@ -529,24 +521,15 @@ namespace Windfall.Content.UI.Dialogue
             }
         }
         public void SpawnTextBox(BaseDialogueStyle style)
-        {
+        {           
             float xResolutionScale = Main.screenWidth / 2560f;
             float yResolutionScale = Main.screenHeight / 1440f;
 
             DialogueTree CurrentTree = DialogueTrees[TreeKey];
             Dialogue CurrentDialogue = CurrentTree.Dialogues[DialogueIndex];
-            /*
-            if(ModContent.GetInstance<DialogueUISystem>().swappingStyle)
-            {
-                switch (CurrentTree.Characters[ModContent.GetInstance<DialogueUISystem>().subSpeakerIndex].StyleID)
-                {
-                    default:
-                        style = new DefaultDialogueStyle();
-                        break;
-                }
-            }
-            */
-            style = new DefaultDialogueStyle();
+
+            if (ModContent.GetInstance<DialogueUISystem>().swappingStyle)
+                style = (BaseDialogueStyle)Activator.CreateInstance(CurrentTree.Characters[ModContent.GetInstance<DialogueUISystem>().subSpeakerIndex].Style);
             Textbox = new MouseBlockingUIPanel();
 
             if (style.BackgroundColor.HasValue)

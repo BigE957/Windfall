@@ -1,5 +1,6 @@
 ﻿using Terraria.UI;
 using Windfall.Common.Systems.WorldEvents;
+using Windfall.Content.UI.Dialogue.DialogueStyles;
 
 namespace Windfall.Content.UI.Dialogue
 {
@@ -11,7 +12,7 @@ namespace Windfall.Content.UI.Dialogue
         
         public static readonly Character[] Characters =
         [
-            new Character("TheCalamity", [new Expression("Normal", 1, 0), new Expression("Finality",  1, 0)], "[c/FF0000:The Calamity]", styleID: 0, textDelay: 3, primaryColor: Color.Black, secondaryColor: Color.Red),
+            new Character("TheCalamity", [new Expression("Normal", 1, 0), new Expression("Finality",  1, 0)], "[c/FF0000:The Calamity]", textDelay: 3, primaryColor: Color.Black, secondaryColor: Color.Red),
         ];
         
         public static Dictionary<string, DialogueTree> DialogueTrees; //Can be marked readonly once testing is done. Isnt so that it can be updated everytime dialogue is called for testing purposes.
@@ -507,7 +508,7 @@ namespace Windfall.Content.UI.Dialogue
             //Main.NewText("Current ID: " + CurrentSpeaker.ID);
             //Main.NewText("Subspeaker ID: " + SubSpeaker.ID);
 
-            if (currentTree.Characters[currentDialogue.CharacterIndex].StyleID != ((Character)CurrentSpeaker).StyleID)
+            if (currentTree.Characters[currentDialogue.CharacterIndex].Style != ((Character)CurrentSpeaker).Style)
                 swappingStyle = true;
 
             if (currentTree.Characters[currentDialogue.CharacterIndex].ID == ((Character)CurrentSpeaker).ID)
@@ -561,23 +562,25 @@ namespace Windfall.Content.UI.Dialogue
         }
         
     }
+    /// <param name="style"></param>
+
     #region Structures
     /// <param name="ID">The identifier for this Character, commonly their name. This is used primarilly to locate this character's Expression Assets within the Character Assets folder.</param>
     /// <param name="expressions">An array of identifiers, smililar to a Character's <see cref="ID"/>, used to find individual Expression Assets within the Character Assets Folder.</param>
     /// <param name="name">The actual name of the character, used by the Textbox. Can include spaces and other formatting, unlike the <see cref="ID"/>. Will default to the Character's <see cref="ID"/> if not set.</param>
     /// <param name="scale">Determines the scale the character portrait will be drawn at by the Dialogue System. Defaults to <see cref="2f"/>.</param>
-    /// <param name="styleID">The ID of the Textbox Style associated with this Character. Defaults to <see cref="0"/>.</param>
+    /// <param name="style">The Dialogue Style, in the form of a <see cref="Type"/>, associated with this Character. Defaults to <see cref="null"/>, meaning it will use the <see cref="DefaultDialogueStyle"/>.</param>
     /// <param name="textDelay">The Text Delay associated with this character. Affects how long between characters appearing in the Textbox. Defaults to <see cref="3"/>.</param>
     /// <returns>
     /// Represents a character able to be used within a <see cref="DialogueTree"/>.
     /// </returns>
-    public struct Character(string ID, Expression[] expressions, string name = null, float scale = 2f, int styleID = 0, int textDelay = 3, Color? primaryColor = null, Color? secondaryColor = null)
+    public struct Character(string ID, Expression[] expressions, string name = null, float scale = 2f, Type style = null, int textDelay = 3, Color? primaryColor = null, Color? secondaryColor = null)
     {
         public string ID = ID;
         public string Name = name ?? ID;
         public float Scale = scale;
         public Expression[] Expressions = expressions;
-        public int StyleID = styleID;
+        public Type Style = (style ?? typeof(DefaultDialogueStyle));
         public int TextDelay = textDelay;
         public Color? PrimaryColor = primaryColor;
         public Color? SecondaryColor = secondaryColor;
@@ -597,7 +600,6 @@ namespace Windfall.Content.UI.Dialogue
     /// <param name="responses">The array of <see cref="Response"/>s the player can give. If set to null, clicking on the Textbox itself will proceed to the next Dialogue within the <see cref="DialogueTree"/> or close the Dialogue if there are no more dialogues Defaults to <see cref="null"/>. </param>
     /// <param name="characterIndex">The index of a character within the <see cref="DialogueTree"/>'s <see cref="DialogueTree.Characters"/> array. Represents the character who will be speaking. Defaults to <see cref="0"/>, the first character in the <see cref="DialogueTree.Characters"/> array.</param>
     /// <param name="expressionIndex">The index of an expression within a <see cref="Character"/>'s <see cref="Character.Expressions"/> array. Represents the expression, or asset, the character will use while speaking. Defaults to <see cref="0"/>, the first expression in the <see cref="Character.Expressions"/> array.</param>
-    /// <param name="styleID">The ID of the Textbox Style associated with this Dialogue. Is able to differ from that of its Character's Defaults to 0.</param>
     /// <param name="textScaleX">Scales the size of the text horizontally. Defaults to <see cref="1.5f"/>.</param>
     /// <param name="textScaleY">Scales the size of the text vertically. Defaults to <see cref="1.5f"/>.</param>
     /// <param name="textDelay">The Text Delay associated with this character. Affects how long between characters appearing in the Textbox. Defaults to <see cref="-1"/>, causing it to use the delay associated with the current <see cref="Character"/> if no Character is speaking, it defaults to <see cref="3"/>.</param>
