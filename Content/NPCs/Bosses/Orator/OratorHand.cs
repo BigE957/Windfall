@@ -126,6 +126,7 @@ namespace Windfall.Content.NPCs.Bosses.Orator
             #region Death Scene
             if ((NPC.life == 1 || (NPC.realLife != -1 && Main.npc[NPC.realLife].life == 1)) && NPC.damage == 0)
             {
+                CurrentPose = Pose.Default;
                 if (deadCounter <= 1)
                 {
                     NPC.dontTakeDamage = true;
@@ -367,6 +368,7 @@ namespace Windfall.Content.NPCs.Bosses.Orator
                     case TheOrator.States.DarkStorm:
                         CurrentPose = Pose.Palm;
 
+                        NPC.damage = 0;
                         Vector2 goal = new(orator.Center.X + (600 * WhatHand), orator.Center.Y);
                         goal.X += (float)Math.Sin(aiCounter / 20f) * 48f * WhatHand;
 
