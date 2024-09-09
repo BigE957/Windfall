@@ -148,7 +148,7 @@ namespace Windfall.Common.Systems.WorldEvents
         }
         public override void PreUpdateWorld()
         {
-            if (DownedNPCSystem.downedOrator || LunarCultBaseLocation == new Point(-1, -1))
+            if (NPC.downedAncientCultist || LunarCultBaseLocation == new Point(-1, -1))
                 return;
             //Main.NewText(Main.player[0].Center.Y - CultBaseBridgeArea.Center.Y * 16);
             if (NPC.downedPlantBoss)
@@ -180,11 +180,10 @@ namespace Windfall.Common.Systems.WorldEvents
             //State = SystemState.CheckReqs;
             //ActivityTimer = -1;
             //TutorialComplete = true;
-
             switch (State)
             {
                 case SystemState.CheckReqs:
-                    if (!NPC.downedPlantBoss || Recruits.Count == 4 || OnCooldown || Main.dayTime)
+                    if (!NPC.downedPlantBoss || Recruits.Count == 4 || OnCooldown || Main.dayTime || AnyBossNPCS(true))
                     {
                         if (Main.dayTime)
                         {
