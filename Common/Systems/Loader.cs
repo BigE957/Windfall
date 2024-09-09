@@ -7,7 +7,7 @@ using Windfall.Content.Skies;
 using Windfall.Content.Skies.CorruptCommunion;
 using Windfall.Content.Skies.CrimsonCommunion;
 using Windfall.Content.Skies.SlimyCommunion;
-using Windfall.Content.UI.Dialogue;
+using DialogueHelper.Content.UI.Dialogue;
 using Windfall.Content.UI.Events;
 
 namespace Windfall.Common.Systems

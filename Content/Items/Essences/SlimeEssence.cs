@@ -1,7 +1,7 @@
 ﻿using CalamityMod.Rarities;
 using Terraria;
 using Terraria.Graphics.Effects;
-using Windfall.Content.UI.Dialogue;
+using DialogueHelper.Content.UI.Dialogue;
 
 namespace Windfall.Content.Items.Essences
 {
@@ -26,7 +26,7 @@ namespace Windfall.Content.Items.Essences
         {
             player.Godly().SlimeGodEssence = true;
             player.Godly().SlimyCommunion = true;
-            SkyManager.Instance.Activate("Windfall:SlimyCommunion", args: Array.Empty<object>());
+            SkyManager.Instance.Activate("Windfall:SlimyCommunion", args: []);
             ModContent.GetInstance<DialogueUISystem>().DisplayDialogueTree("Windfall/SlimyCommunion");
             return true;
         }

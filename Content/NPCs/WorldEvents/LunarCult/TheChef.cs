@@ -1,5 +1,5 @@
 ﻿using Windfall.Common.Systems.WorldEvents;
-using Windfall.Content.UI.Dialogue;
+using DialogueHelper.Content.UI.Dialogue;
 
 namespace Windfall.Content.NPCs.WorldEvents.LunarCult
 {
@@ -124,7 +124,7 @@ namespace Windfall.Content.NPCs.WorldEvents.LunarCult
             Vector2 barOrigin = barBG.Size() * 0.5f;
             float yOffset = 23f;
             Vector2 drawPos = (NPC.Center - screenPos) + Vector2.UnitY * barScale * (NPC.frame.Height - yOffset);
-            Rectangle frameCrop = new Rectangle(0, 0, (int)(TimeCooking / CookTIme * barFG.Width), barFG.Height);
+            Rectangle frameCrop = new(0, 0, (int)(TimeCooking / CookTIme * barFG.Width), barFG.Height);
 
             Color bgColor = Color.DarkGray * 0.5f;
             bgColor.A = 255;

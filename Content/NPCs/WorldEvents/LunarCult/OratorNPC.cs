@@ -1,5 +1,5 @@
 ﻿using Windfall.Common.Systems.WorldEvents;
-using Windfall.Content.UI.Dialogue;
+using DialogueHelper.Content.UI.Dialogue;
 
 namespace Windfall.Content.NPCs.WorldEvents.LunarCult
 {

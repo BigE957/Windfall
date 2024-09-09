@@ -1,4 +1,4 @@
 displayName = Calamity: Windfall
 author = Windfall Team
 version = 0.1
-modReferences = CalamityMod, Luminance
+modReferences = CalamityMod, Luminance, DialogueHelper

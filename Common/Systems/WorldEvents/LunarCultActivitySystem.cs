@@ -6,7 +6,7 @@ using Windfall.Common.Graphics.Metaballs;
 using Windfall.Content.Items.Food;
 using Windfall.Content.Items.Quest;
 using Windfall.Content.NPCs.WorldEvents.LunarCult;
-using Windfall.Content.UI.Dialogue;
+using DialogueHelper.Content.UI.Dialogue;
 
 namespace Windfall.Common.Systems.WorldEvents
 {

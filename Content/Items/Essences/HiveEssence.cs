@@ -1,6 +1,6 @@
 ﻿using CalamityMod.Rarities;
 using Terraria.Graphics.Effects;
-using Windfall.Content.UI.Dialogue;
+using DialogueHelper.Content.UI.Dialogue;
 
 namespace Windfall.Content.Items.Essences
 {
@@ -26,7 +26,7 @@ namespace Windfall.Content.Items.Essences
         {
             player.Godly().Evil2Essence = true;
             player.Godly().CorruptCommunion = true;
-            SkyManager.Instance.Activate("Windfall:CorruptCommunion", args: Array.Empty<object>());
+            SkyManager.Instance.Activate("Windfall:CorruptCommunion", args: []);
             ModContent.GetInstance<DialogueUISystem>().DisplayDialogueTree("Windfall/CorruptCommunion2");
             return true;
         }
