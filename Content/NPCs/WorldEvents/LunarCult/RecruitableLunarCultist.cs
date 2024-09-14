@@ -849,6 +849,7 @@ namespace Windfall.Content.NPCs.WorldEvents.LunarCult
                 if (!LunarCultBaseSystem.Recruits.Contains((int)MyName))
                     LunarCultBaseSystem.Recruits.Add((int)MyName);
                 CurrentDialogue = DialogueState.RecruitSuccess;
+                LunarCultBaseSystem.RecruitmentsSkipped = 0;
                 foreach(NPC npc in Main.npc.Where(n => n.active && n.type == ModContent.NPCType<RecruitableLunarCultist>()))
                 {
                     if (npc.ModNPC is RecruitableLunarCultist recruit)

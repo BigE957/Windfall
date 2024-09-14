@@ -102,6 +102,15 @@ Dialogue: {
 			}
 		}
 
+		RitualEvent: {
+			Messages.0: Yo wanna betray the Dragon Cult?
+
+			Responses: {
+				No: No.
+				Yes: Yes.
+			}
+		}
+
 		#Communions
 		CorruptCommunion1: {
 			Messages: {
@@ -426,7 +435,11 @@ Dialogue: {
 					7: He shall guide you...
 					8: ...as you begin your journey with us.
 				}
-
+				Betrayal: {
+					0: Welcome back!
+					1: The Orator wishes to speak with you.
+					2: Best to not keep him waiting...
+				}
 				Ritual: {
 					0: Welcome back!
 					1: We have a task for you.

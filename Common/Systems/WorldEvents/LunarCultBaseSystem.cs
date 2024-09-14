@@ -26,6 +26,10 @@ namespace Windfall.Common.Systems.WorldEvents
 
         public static bool TutorialComplete = false;
 
+        public static int RecruitmentsSkipped = 0;
+
+        public static bool BetrayalActive = false;
+
         private static int spawnChance = 5;
 
         public override void ClearWorld()
@@ -43,6 +47,10 @@ namespace Windfall.Common.Systems.WorldEvents
             CustomerQueue = [];
 
             TutorialComplete = false;
+
+            RecruitmentsSkipped = 0;
+
+            BetrayalActive = false;
 
             spawnChance = 5;
 
@@ -63,6 +71,10 @@ namespace Windfall.Common.Systems.WorldEvents
 
             TutorialComplete = tag.GetBool("TutorialComplete");
 
+            RecruitmentsSkipped = tag.GetInt("RecruitmentsSkipped");
+
+            BetrayalActive = tag.GetBool("BetrayalActive");
+
             spawnChance = tag.GetInt("spawnChance");
         }
         public override void SaveWorldData(TagCompound tag)
@@ -74,6 +86,10 @@ namespace Windfall.Common.Systems.WorldEvents
             tag["AvailableTopics"] = AvailableTopics;
 
             tag["TutorialComplete"] = TutorialComplete;
+
+            tag["RecruitmentsSkipped"] = RecruitmentsSkipped;
+
+            tag["BetrayalActive"] = BetrayalActive;
 
             tag["spawnChance"] = spawnChance;
         }
@@ -318,7 +334,9 @@ namespace Windfall.Common.Systems.WorldEvents
                     #region Activity Chats
                     else
                     {
-                        if (true)//Main.moonPhase == (int)MoonPhase.Full || Main.moonPhase == (int)MoonPhase.Empty) //Ritual
+                        if (RecruitmentsSkipped >= 3)
+                            path += "Betrayal";
+                        else if (true)//Main.moonPhase == (int)MoonPhase.Full || Main.moonPhase == (int)MoonPhase.Empty) //Ritual
                             path += "Ritual.";
                         else if (false)//Main.moonPhase == (int)MoonPhase.QuarterAtLeft || Main.moonPhase == (int)MoonPhase.QuarterAtRight) //Meeting
                             path += "Meeting.";
@@ -365,7 +383,7 @@ namespace Windfall.Common.Systems.WorldEvents
                     if(ActivityTimer == -1)
                     {
                         #region Activity Specific Setup
-                        if (!TutorialComplete) //Orator Visit
+                        if (!TutorialComplete || RecruitmentsSkipped >= 3) //Orator Visit
                         {
                             ActivityCoords = new Point((CultBaseArea.Right - 11) * 16, (CultBaseArea.Top + 30) * 16);
 
@@ -594,13 +612,18 @@ namespace Windfall.Common.Systems.WorldEvents
                     
                     break;
                 case SystemState.OratorVisit:
-                    if(TutorialComplete)
+                    if ((TutorialComplete && RecruitmentsSkipped < 3) || (BetrayalActive && RecruitmentsSkipped >= 3))
                     {
                         Active = false;
                         State = SystemState.End;
                     }
                     else
-                        Main.npc[NPC.FindFirstNPC(ModContent.NPCType<OratorNPC>())].ai[0] = 1;
+                    {
+                        if(RecruitmentsSkipped < 3)
+                            Main.npc[NPC.FindFirstNPC(ModContent.NPCType<OratorNPC>())].ai[0] = 1;
+                        else
+                            Main.npc[NPC.FindFirstNPC(ModContent.NPCType<OratorNPC>())].ai[0] = 3;
+                    }
                     break;
                 case SystemState.Meeting:                     
                     if (Active)
@@ -1060,41 +1083,46 @@ namespace Windfall.Common.Systems.WorldEvents
                 case SystemState.End:
                     ActivityCoords = new(-1, -1);
                     OnCooldown = true;
-                    int currentRecruitCount = Main.npc.Where(n => n.active && n.type == ModContent.NPCType<RecruitableLunarCultist>()).Count();
-                    if (currentRecruitCount < 4)
+                    RecruitmentsSkipped++;
+                    State = SystemState.CheckReqs;
+
+                    if (!BetrayalActive)
                     {
-                        List<string> names =
-                        [
-                            "Tirith",
+                        int currentRecruitCount = Main.npc.Where(n => n.active && n.type == ModContent.NPCType<RecruitableLunarCultist>()).Count();
+                        if (currentRecruitCount < 4)
+                        {
+                            List<string> names =
+                            [
+                                "Tirith",
                             "Vivian",
                             "Tania",
                             "Doro",
                             "Skylar",
                             "Jamie",
                         ];
-                        int availableNames = 6;
-                        for (int i = 0; i < 4 - currentRecruitCount; i++)
-                        {
-                            NPC recruit;
-                            int index = Main.rand.Next(availableNames);
-                            if (NPC.FindFirstNPC(ModContent.NPCType<LunarCultistDevotee>()) != -1)
+                            int availableNames = 6;
+                            for (int i = 0; i < 4 - currentRecruitCount; i++)
                             {
-                                recruit = Main.npc[NPC.FindFirstNPC(ModContent.NPCType<LunarCultistDevotee>())];
-                                Main.npc[NPC.FindFirstNPC(ModContent.NPCType<LunarCultistDevotee>())].Transform(ModContent.NPCType<RecruitableLunarCultist>());
-                                recruit.As<RecruitableLunarCultist>().MyName = (RecruitableLunarCultist.RecruitNames)index;
-                                recruit.ModNPC.OnSpawn(NPC.GetSource_NaturalSpawn());
+                                NPC recruit;
+                                int index = Main.rand.Next(availableNames);
+                                if (NPC.FindFirstNPC(ModContent.NPCType<LunarCultistDevotee>()) != -1)
+                                {
+                                    recruit = Main.npc[NPC.FindFirstNPC(ModContent.NPCType<LunarCultistDevotee>())];
+                                    Main.npc[NPC.FindFirstNPC(ModContent.NPCType<LunarCultistDevotee>())].Transform(ModContent.NPCType<RecruitableLunarCultist>());
+                                    recruit.As<RecruitableLunarCultist>().MyName = (RecruitableLunarCultist.RecruitNames)index;
+                                    recruit.ModNPC.OnSpawn(NPC.GetSource_NaturalSpawn());
+                                }
+                                else
+                                {
+                                    recruit = Main.npc[NPC.FindFirstNPC(ModContent.NPCType<LunarCultistArcher>())];
+                                    Main.npc[NPC.FindFirstNPC(ModContent.NPCType<LunarCultistArcher>())].Transform(ModContent.NPCType<RecruitableLunarCultist>());
+                                    recruit.As<RecruitableLunarCultist>().MyName = (RecruitableLunarCultist.RecruitNames)index;
+                                    recruit.ModNPC.OnSpawn(NPC.GetSource_NaturalSpawn());
+                                }
+                                names.RemoveAt(index);
                             }
-                            else
-                            {
-                                recruit = Main.npc[NPC.FindFirstNPC(ModContent.NPCType<LunarCultistArcher>())];
-                                Main.npc[NPC.FindFirstNPC(ModContent.NPCType<LunarCultistArcher>())].Transform(ModContent.NPCType<RecruitableLunarCultist>());
-                                recruit.As<RecruitableLunarCultist>().MyName = (RecruitableLunarCultist.RecruitNames)index;
-                                recruit.ModNPC.OnSpawn(NPC.GetSource_NaturalSpawn());
-                            }
-                            names.RemoveAt(index);
                         }
-                    }
-                    State = SystemState.CheckReqs;
+                    }                    
                     break;
             }
         }

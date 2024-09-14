@@ -10,6 +10,7 @@ namespace Windfall.Content.NPCs.WorldEvents.LunarCult
             Idle,
             TutorialChat,
             RitualEvent,
+            BetrayalChat,
         }
         private States AIState
         {
@@ -58,11 +59,18 @@ namespace Windfall.Content.NPCs.WorldEvents.LunarCult
                 orator.ai[0] = 0;
                 return;
             }
-            if (treeKey == "Windfall/" + States.RitualEvent.ToString() && buttonID == 1)
+            else if (treeKey == "Windfall/" + States.RitualEvent.ToString() && buttonID == 1)
             {
                 NPC orator = Main.npc.First(n => n.active && n.type == ModContent.NPCType<OratorNPC>() && n.ai[0] == (int)States.RitualEvent);
                 LunarCultBaseSystem.State = LunarCultBaseSystem.SystemState.Ritual;
                 LunarCultBaseSystem.Active = true;
+                orator.ai[0] = 0;
+                return;
+            }
+            else if (treeKey == "Windfall/" + States.BetrayalChat.ToString() && buttonID == 1)
+            {
+                NPC orator = Main.npc.First(n => n.active && n.type == ModContent.NPCType<OratorNPC>() && n.ai[0] == (int)States.TutorialChat);
+                LunarCultBaseSystem.BetrayalActive = true;
                 orator.ai[0] = 0;
                 return;
             }

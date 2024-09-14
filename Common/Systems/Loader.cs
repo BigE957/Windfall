@@ -263,6 +263,23 @@ namespace Windfall.Common.Systems
                     ],
                     LocalizationPath)
                 },
+                {
+                    "Windfall/BetrayalChat",
+                    new DialogueTree(
+                    [
+                        new Dialogue
+                        (
+                            [
+                                new Response("No"),
+                                new Response("Yes"),
+                            ]
+                        ),
+                    ],
+                    [
+                        "Windfall/TheCalamity"
+                    ],
+                    LocalizationPath)
+                },
                 #endregion
                 #region Communion Trees
                 {

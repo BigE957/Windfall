@@ -1,6 +1,7 @@
 ﻿using CalamityMod.NPCs.NormalNPCs;
 using CalamityMod.NPCs.Polterghast;
 using Windfall.Common.Systems;
+using Windfall.Common.Systems.WorldEvents;
 using Windfall.Content.NPCs.Enemies;
 using Windfall.Content.Projectiles.NPCAnimations;
 using Windfall.Content.Projectiles.Other;
@@ -15,7 +16,7 @@ namespace Windfall.Content.NPCs.GlobalNPCs
             Mod calamity = ModLoader.GetMod("CalamityMod");
             if (npc.type == calamity.Find<ModNPC>("Cnidrion").Type)
                 npc.Transform(ModContent.NPCType<WFCnidrion>());
-            if (npc.type == NPCID.CultistArcherBlue || npc.type == NPCID.CultistDevote)
+            if (!LunarCultBaseSystem.BetrayalActive && (npc.type == NPCID.CultistArcherBlue || npc.type == NPCID.CultistDevote))
                 npc.active = false;
             if (npc.type == calamity.Find<ModNPC>("Polterghast").Type)
                 SoundEngine.PlaySound(PolterAmbiance with { Volume = 1f }, npc.Center);
