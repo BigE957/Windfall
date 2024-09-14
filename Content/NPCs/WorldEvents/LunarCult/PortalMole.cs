@@ -55,12 +55,12 @@ namespace Windfall.Content.NPCs.WorldEvents.LunarCult
         {
             NPC.scale = 0;
             dustsIndexs = [];
-            LunarCultActivitySystem.ActivePortals++;
+            LunarCultBaseSystem.ActivePortals++;
             SoundEngine.PlaySound(SoundID.DD2_EtherianPortalSpawnEnemy with { Volume = 1f }, NPC.Center);
         }
         public override bool PreAI()
         {
-            if (LunarCultActivitySystem.PortalsDowned >= LunarCultActivitySystem.RequiredPortalKills)
+            if (LunarCultBaseSystem.PortalsDowned >= LunarCultBaseSystem.RequiredPortalKills)
             {
                 Despawn();
                 return false;
@@ -132,7 +132,7 @@ namespace Windfall.Content.NPCs.WorldEvents.LunarCult
                         else
                             dust.velocity = (NPC.Center - dust.position).SafeNormalize(Vector2.Zero) * 12;
                     }
-                    dustsIndexs.RemoveAll(i => Main.dust[i] == null || !Main.dust[i].active || i == -1);
+                    dustsIndexs.RemoveAll(i => i == -1 || Main.dust[i] == null || !Main.dust[i].active);
                 }
             }
             #region Visuals
@@ -178,10 +178,10 @@ namespace Windfall.Content.NPCs.WorldEvents.LunarCult
         {
             Despawn();
 
-            LunarCultActivitySystem.PortalsDowned++;
+            LunarCultBaseSystem.PortalsDowned++;
             
-            if (LunarCultActivitySystem.PortalsDowned >= LunarCultActivitySystem.RequiredPortalKills)
-                LunarCultActivitySystem.ResetTimer();
+            if (LunarCultBaseSystem.PortalsDowned >= LunarCultBaseSystem.RequiredPortalKills)
+                LunarCultBaseSystem.ResetTimer();
 
             return true;
         }
@@ -198,7 +198,7 @@ namespace Windfall.Content.NPCs.WorldEvents.LunarCult
             }
             ScreenShakeSystem.StartShake(2f);
 
-            LunarCultActivitySystem.ActivePortals--;
+            LunarCultBaseSystem.ActivePortals--;
 
             NPC.active = false;
         }

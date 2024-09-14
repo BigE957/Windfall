@@ -45,6 +45,7 @@
     <None Remove="Assets\NPCs\Bosses\TheOrator_Boss.png" />
     <None Remove="Assets\NPCs\Bosses\TheOrator_Boss_Arm.png" />
     <None Remove="Assets\NPCs\Bosses\TheOrator_Boss_Head.png" />
+    <None Remove="Assets\NPCs\Critters\Fingerling.png" />
     <None Remove="Assets\NPCs\Enemies\DarkSpawn.png" />
     <None Remove="Assets\NPCs\Enemies\LunarCultistArcher.png" />
     <None Remove="Assets\NPCs\Enemies\OratorHand.png" />

@@ -1,7 +1,7 @@
 ﻿using Humanizer;
 using Windfall.Content.Items.Quest.Tailor;
 using Windfall.Content.Items.Summoning;
-using static Windfall.Common.Systems.WorldEvents.LunarCultActivitySystem;
+using static Windfall.Common.Systems.WorldEvents.LunarCultBaseSystem;
 
 namespace Windfall.Content.NPCs.WorldEvents.LunarCult
 {

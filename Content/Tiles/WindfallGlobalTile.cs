@@ -1,6 +1,6 @@
 ﻿using Windfall.Common.Systems;
 using Windfall.Content.NPCs.WorldEvents.DragonCult;
-using static Windfall.Common.Systems.WorldEvents.LunarCultActivitySystem;
+using static Windfall.Common.Systems.WorldEvents.LunarCultBaseSystem;
 
 namespace Windfall.Content.Tiles
 {

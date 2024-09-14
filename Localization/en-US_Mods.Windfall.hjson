@@ -1757,7 +1757,7 @@ NPCs: {
 	WFCnidrion.DisplayName: Cnidrion
 	IlmeranPaladinKnocked.DisplayName: Unconscious Ilmeran Paladin
 	LoneRonin.DisplayName: Lone Ronin
-	LunarCultistArcher.DisplayName: ???
+	LunarCultistArcher.DisplayName: Lunar Cultist Archer
 	LunarCultistDevotee.DisplayName: Lunar Cultist Devotee
 	LunarCultist.DisplayName: Lunar Cultist
 	LunarBishop.DisplayName: Lunar Bishop
@@ -1768,13 +1768,14 @@ NPCs: {
 	GodseekerKnight.DisplayName: Godseeker Knight
 	ShadowHand.DisplayName: Shadow Hand
 	SealingTablet.DisplayName: Sealing Tablet
-	DragonCultist.DisplayName: Dragon Cultist
-	DragonArcher.DisplayName: Dragon Archer
+	DragonCultist.DisplayName: ??
+	DragonArcher.DisplayName: ???
 	GodlyTumor.DisplayName: Hive Tumor
 	Seamstress.DisplayName: Seamstress
 	TheChef.DisplayName: The Chef
 	PortalMole.DisplayName: Enimgatic Rift
 	OratorHand.DisplayName: Malfeasant Grasp
+	Fingerling.DisplayName: Fingerling
 }
 
 Projectiles: {

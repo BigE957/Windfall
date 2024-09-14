@@ -5,7 +5,7 @@ namespace Windfall.Content.Scenes.MusicScenes
     public class TailorMusicScene : ModSceneEffect
     {
         public override int Music => MusicLoader.GetMusicSlot(Windfall.Instance, "Assets/Music/DeathByGlamor");
-        public override bool IsSceneEffectActive(Player player) => LunarCultActivitySystem.IsTailorActivityActive();
+        public override bool IsSceneEffectActive(Player player) => LunarCultBaseSystem.IsTailorActivityActive();
         public override SceneEffectPriority Priority => SceneEffectPriority.Event;
     }
 }

@@ -14,6 +14,7 @@ namespace Windfall.Content.NPCs.WorldEvents.LunarCult
             SelenicChat,
             Greeting,
             CafeteriaEvent,
+            Wandering,
         }
         private States AIState
         {
@@ -25,7 +26,6 @@ namespace Windfall.Content.NPCs.WorldEvents.LunarCult
         public override void SetStaticDefaults()
         {
             this.HideFromBestiary();
-            //NPCID.Sets.ActsLikeTownNPC[Type] = true;
             Main.npcFrameCount[Type] = 1;
             NPCID.Sets.NoTownNPCHappiness[Type] = true;
             ModContent.GetInstance<DialogueUISystem>().DialogueClose += CloseEffect;
@@ -73,8 +73,8 @@ namespace Windfall.Content.NPCs.WorldEvents.LunarCult
                     SoundEngine.PlaySound(SpawnSound, NPC.Center);
                     break;
                 case States.CafeteriaEvent:
-                    NPC.ai[3] = LunarCultActivitySystem.CustomerQueue.Count;
-                    LunarCultActivitySystem.CustomerQueue.Add(new LunarCultActivitySystem.Customer(NPC, LunarCultActivitySystem.MenuFoodIDs[Main.rand.Next(LunarCultActivitySystem.MenuFoodIDs.Count)]));
+                    NPC.ai[3] = LunarCultBaseSystem.CustomerQueue.Count;
+                    LunarCultBaseSystem.CustomerQueue.Add(new LunarCultBaseSystem.Customer(NPC, LunarCultBaseSystem.MenuFoodIDs[Main.rand.Next(LunarCultBaseSystem.MenuFoodIDs.Count)]));
                     NPC.aiStyle = -1;
                     NPC.direction = -1;
                     NPC.noGravity = true;
@@ -84,50 +84,55 @@ namespace Windfall.Content.NPCs.WorldEvents.LunarCult
         }
         public override void AI()
         {
-            if(AIState == States.CafeteriaEvent)
+            switch (AIState)
             {
-                const int queueGap = 50;
-                int queueIndex = (int)NPC.ai[3];
-                if (queueIndex == -1)
-                {
-                    if (NPC.velocity.X < 1.5f)
-                        NPC.velocity.X += 0.05f;
-                    else
-                        NPC.velocity.X = 1.5f;
-                    NPC.direction = 1;
-                    NPC.spriteDirection = 1;
-                    if (NPC.Center.X - ((LunarCultActivitySystem.LunarCultBaseLocation.X * 16) - 850) > 800)
-                        NPC.active = false;
-                }
-                else
-                {
-                    Vector2 goalPosition = new((LunarCultActivitySystem.LunarCultBaseLocation.X * 16) - 850 + (queueGap * queueIndex), (LunarCultActivitySystem.LunarCultBaseLocation.Y * 16) - 96);
-                    NPC.position.Y = goalPosition.Y - (NPC.height);
-                    if (queueIndex != 0 && !LunarCultActivitySystem.CustomerQueue[queueIndex - 1].HasValue)
+                case States.CafeteriaEvent:
+                    const int queueGap = 50;
+                    int queueIndex = (int)NPC.ai[3];
+                    if (queueIndex == -1)
                     {
-                        goalPosition.X -= queueGap;
-                        if (NPC.Center.X - goalPosition.X < (queueGap / 2))
+                        if (NPC.velocity.X < 1.5f)
+                            NPC.velocity.X += 0.05f;
+                        else
+                            NPC.velocity.X = 1.5f;
+                        NPC.direction = 1;
+                        NPC.spriteDirection = 1;
+                        if (NPC.Center.X - ((LunarCultBaseSystem.LunarCultBaseLocation.X * 16) - 850) > 800)
+                            NPC.active = false;
+                    }
+                    else
+                    {
+                        Vector2 goalPosition = new((LunarCultBaseSystem.LunarCultBaseLocation.X * 16) - 850 + (queueGap * queueIndex), (LunarCultBaseSystem.LunarCultBaseLocation.Y * 16) - 96);
+                        NPC.position.Y = goalPosition.Y - (NPC.height);
+                        if (queueIndex != 0 && !LunarCultBaseSystem.CustomerQueue[queueIndex - 1].HasValue)
                         {
-                            LunarCultActivitySystem.CustomerQueue[queueIndex - 1] = LunarCultActivitySystem.CustomerQueue[queueIndex];
-                            if(queueIndex + 1 == LunarCultActivitySystem.CustomerQueue.Count)
-                                LunarCultActivitySystem.CustomerQueue.RemoveAt(queueIndex);
+                            goalPosition.X -= queueGap;
+                            if (NPC.Center.X - goalPosition.X < (queueGap / 2))
+                            {
+                                LunarCultBaseSystem.CustomerQueue[queueIndex - 1] = LunarCultBaseSystem.CustomerQueue[queueIndex];
+                                if (queueIndex + 1 == LunarCultBaseSystem.CustomerQueue.Count)
+                                    LunarCultBaseSystem.CustomerQueue.RemoveAt(queueIndex);
+                                else
+                                    LunarCultBaseSystem.CustomerQueue[queueIndex] = null;
+                                NPC.ai[3] -= 1;
+                            }
+                        }
+                        if (goalPosition.X < NPC.Center.X)
+                            if (NPC.velocity.X > -1.5f)
+                                NPC.velocity.X -= 0.05f;
                             else
-                                LunarCultActivitySystem.CustomerQueue[queueIndex] = null;
-                            NPC.ai[3] -= 1;
+                                NPC.velocity.X = -1.5f;
+                        else
+                        {
+                            NPC.velocity.X = 0;
+                            if (queueIndex == 0 && !Main.projectile.Any(p => p.active && p.type == ModContent.ProjectileType<FoodAlert>() && p.ai[2] == NPC.whoAmI))
+                                Projectile.NewProjectile(Projectile.GetSource_NaturalSpawn(), NPC.Center, new Vector2(Main.rand.NextFloat(0f, 2f), -2.5f), ModContent.ProjectileType<FoodAlert>(), 0, 0f, ai0: LunarCultBaseSystem.CustomerQueue[queueIndex].Value.OrderID, ai1: Main.rand.Next(3), ai2: NPC.whoAmI);
                         }
                     }
-                    if (goalPosition.X < NPC.Center.X)
-                        if(NPC.velocity.X > -1.5f)
-                            NPC.velocity.X -= 0.05f;
-                        else
-                            NPC.velocity.X = -1.5f;
-                    else
-                    {
-                        NPC.velocity.X = 0;
-                        if (queueIndex == 0 && !Main.projectile.Any(p => p.active && p.type == ModContent.ProjectileType<FoodAlert>() && p.ai[2] == NPC.whoAmI) )
-                            Projectile.NewProjectile(Projectile.GetSource_NaturalSpawn(), NPC.Center, new Vector2(Main.rand.NextFloat(0f, 2f), -2.5f), ModContent.ProjectileType<FoodAlert>(), 0, 0f, ai0: LunarCultActivitySystem.CustomerQueue[queueIndex].Value.OrderID, ai1: Main.rand.Next(3), ai2: NPC.whoAmI);
-                    }
-                }
+                    break;
+                case States.Wandering:
+
+                    break;
             }
         }
         public override bool CanChat() => ((AIState == States.SelenicChat) && !ModContent.GetInstance<DialogueUISystem>().isDialogueOpen) || (AIState == States.CafeteriaEvent && NPC.ai[3] == 0 && NPC.velocity.X == 0);
@@ -140,20 +145,20 @@ namespace Windfall.Content.NPCs.WorldEvents.LunarCult
             }
             else
             {
-                if (Main.player[Main.myPlayer].HeldItem.type == LunarCultActivitySystem.CustomerQueue[0].Value.OrderID)
+                if (Main.player[Main.myPlayer].HeldItem.type == LunarCultBaseSystem.CustomerQueue[0].Value.OrderID)
                 {
                     Main.player[Main.myPlayer].HeldItem.stack--;
 
-                    if (LunarCultActivitySystem.CustomerQueue.Count == 1)
-                        LunarCultActivitySystem.CustomerQueue = [];
+                    if (LunarCultBaseSystem.CustomerQueue.Count == 1)
+                        LunarCultBaseSystem.CustomerQueue = [];
                     else
-                        LunarCultActivitySystem.CustomerQueue[0] = null;
+                        LunarCultBaseSystem.CustomerQueue[0] = null;
                     if (Main.projectile.Any(p => p.active && p.type == ModContent.ProjectileType<FoodAlert>() && p.ai[2] == NPC.whoAmI))
                         Main.projectile.First(p => p.active && p.type == ModContent.ProjectileType<FoodAlert>() && p.ai[2] == NPC.whoAmI).ai[2] = -1;
                     NPC.ai[3] = -1;
                     CombatText.NewText(NPC.Hitbox, Color.White, GetWindfallTextValue("Dialogue.LunarCult.LunarBishop.Cafeteria.Thanks." + Main.rand.Next(3)));
-                    LunarCultActivitySystem.SatisfiedCustomers++;
-                    if (LunarCultActivitySystem.SatisfiedCustomers == LunarCultActivitySystem.CustomerGoal)
+                    LunarCultBaseSystem.SatisfiedCustomers++;
+                    if (LunarCultBaseSystem.SatisfiedCustomers == LunarCultBaseSystem.CustomerGoal)
                     {
                         NPC chef = Main.npc[NPC.FindFirstNPC(ModContent.NPCType<TheChef>())];
                         CombatText.NewText(chef.Hitbox, Color.LimeGreen, GetWindfallTextValue("Dialogue.LunarCult.TheChef.Activity.AlmostDone"), true);

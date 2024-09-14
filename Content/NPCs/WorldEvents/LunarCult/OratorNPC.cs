@@ -50,18 +50,19 @@ namespace Windfall.Content.NPCs.WorldEvents.LunarCult
         }
         private void CloseEffect(string treeKey, int dialogueID, int buttonID)
         {
-            if (treeKey == States.TutorialChat.ToString())
+            Main.NewText("Closing Text");
+            if (treeKey == "Windfall/" + States.TutorialChat.ToString())
             {
                 NPC orator = Main.npc.First(n => n.active && n.type == ModContent.NPCType<OratorNPC>() && n.ai[0] == (int)States.TutorialChat);
-                LunarCultActivitySystem.TutorialComplete = true;
+                LunarCultBaseSystem.TutorialComplete = true;
                 orator.ai[0] = 0;
                 return;
             }
-            if (treeKey == States.RitualEvent.ToString() && buttonID == 1)
+            if (treeKey == "Windfall/" + States.RitualEvent.ToString() && buttonID == 1)
             {
                 NPC orator = Main.npc.First(n => n.active && n.type == ModContent.NPCType<OratorNPC>() && n.ai[0] == (int)States.RitualEvent);
-                LunarCultActivitySystem.State = LunarCultActivitySystem.SystemState.Ritual;
-                LunarCultActivitySystem.Active = true;
+                LunarCultBaseSystem.State = LunarCultBaseSystem.SystemState.Ritual;
+                LunarCultBaseSystem.Active = true;
                 orator.ai[0] = 0;
                 return;
             }

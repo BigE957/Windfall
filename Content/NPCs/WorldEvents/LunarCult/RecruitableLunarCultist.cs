@@ -192,47 +192,48 @@ namespace Windfall.Content.NPCs.WorldEvents.LunarCult
                             NPC.direction = -1;
                 }
             }
-            switch(LunarCultActivitySystem.CurrentMeetingTopic)
+            switch(LunarCultBaseSystem.CurrentMeetingTopic)
             {
-                case (LunarCultActivitySystem.MeetingTopic.CurrentEvents):
+                case (LunarCultBaseSystem.MeetingTopic.CurrentEvents):
                     CurrentDialogue = DialogueState.CurrentEventsInitial;
                     break;
-                case (LunarCultActivitySystem.MeetingTopic.Paradise):
+                case (LunarCultBaseSystem.MeetingTopic.Paradise):
                     CurrentDialogue = DialogueState.ParadiseInitial;
                     break;
             }
+            NPC.GivenName = MyName.ToString();
+            switch (MyName)
+            {
+                case (RecruitNames.Tirith):
+                    MyDialogue = TirithDialogue;
+                    break;
+                case (RecruitNames.Vivian):
+                    MyDialogue = VivianDialogue;
+                    break;
+                case (RecruitNames.Tania):
+                    MyDialogue = TaniaDialogue;
+                    break;
+                case (RecruitNames.Doro):
+                    MyDialogue = DoroDialogue;
+                    break;
+                case (RecruitNames.Skylar):
+                    MyDialogue = SkylarDialogue;
+                    break;
+                case (RecruitNames.Jamie):
+                    MyDialogue = JamieDialogue;
+                    break;
+            }
         }
-        public override void AI()
+        public override bool PreAI()
         {            
             if (Chattable)
             {
                 AnimationType = NPCID.Stylist;
                 NPC.aiStyle = NPCAIStyleID.Passive;
+                AIType = NPCID.SkeletonMerchant;
             }
             else
-            {
-                NPC.GivenName = MyName.ToString();
-                switch (MyName)
-                {
-                    case (RecruitNames.Tirith):
-                        MyDialogue = TirithDialogue;
-                        break;
-                    case (RecruitNames.Vivian):
-                        MyDialogue = VivianDialogue;
-                        break;
-                    case (RecruitNames.Tania):
-                        MyDialogue = TaniaDialogue;
-                        break;
-                    case (RecruitNames.Doro):
-                        MyDialogue = DoroDialogue;
-                        break;
-                    case (RecruitNames.Skylar):
-                        MyDialogue = SkylarDialogue;
-                        break;
-                    case (RecruitNames.Jamie):
-                        MyDialogue = JamieDialogue;
-                        break;
-                }
+            {               
                 if (NPC.FindFirstNPC(ModContent.NPCType<LunarBishop>()) != -1)
                 {
                     NPC Bishop = Main.npc[NPC.FindFirstNPC(ModContent.NPCType<LunarBishop>())];
@@ -243,6 +244,7 @@ namespace Windfall.Content.NPCs.WorldEvents.LunarCult
                             NPC.direction = -1;
                 }
             }
+            return true;
         }
         public override bool CanChat()
         {
@@ -254,7 +256,7 @@ namespace Windfall.Content.NPCs.WorldEvents.LunarCult
         public override string GetChat()
         {
             if (CurrentDialogue != DialogueState.Unrecruited && CurrentDialogue != DialogueState.RecruitSuccess && CurrentDialogue != DialogueState.Recruitable && CurrentDialogue != DialogueState.Recruited)
-                return GetWindfallTextValue($"Dialogue.LunarCult.Recruits.{MyName}.{LunarCultActivitySystem.CurrentMeetingTopic}.{CurrentDialogue.ToString().Remove(0, LunarCultActivitySystem.CurrentMeetingTopic.ToString().Length)}");
+                return GetWindfallTextValue($"Dialogue.LunarCult.Recruits.{MyName}.{LunarCultBaseSystem.CurrentMeetingTopic}.{CurrentDialogue.ToString().Remove(0, LunarCultBaseSystem.CurrentMeetingTopic.ToString().Length)}");
             else
                 return GetWindfallTextValue($"Dialogue.LunarCult.Recruits.{MyName}.{CurrentDialogue}");
         }
@@ -844,8 +846,8 @@ namespace Windfall.Content.NPCs.WorldEvents.LunarCult
         {
             if ((CurrentDialogue.ToString().Contains("GoodEnd") || CurrentDialogue == DialogueState.Recruitable) && !firstButton && Recruitable)
             {
-                if (!LunarCultActivitySystem.Recruits.Contains((int)MyName))
-                    LunarCultActivitySystem.Recruits.Add((int)MyName);
+                if (!LunarCultBaseSystem.Recruits.Contains((int)MyName))
+                    LunarCultBaseSystem.Recruits.Add((int)MyName);
                 CurrentDialogue = DialogueState.RecruitSuccess;
                 foreach(NPC npc in Main.npc.Where(n => n.active && n.type == ModContent.NPCType<RecruitableLunarCultist>()))
                 {
@@ -861,7 +863,7 @@ namespace Windfall.Content.NPCs.WorldEvents.LunarCult
                 CurrentDialogue = (DialogueState)GetNPCConversation(MyDialogue, (int)CurrentDialogue, firstButton);
             }
             if (CurrentDialogue != DialogueState.Unrecruited && CurrentDialogue != DialogueState.RecruitSuccess && CurrentDialogue != DialogueState.Recruitable && CurrentDialogue != DialogueState.Recruited)
-                Main.npcChatText = GetWindfallTextValue($"Dialogue.LunarCult.Recruits.{MyName}.{LunarCultActivitySystem.CurrentMeetingTopic}.{CurrentDialogue.ToString().Remove(0, LunarCultActivitySystem.CurrentMeetingTopic.ToString().Length)}");
+                Main.npcChatText = GetWindfallTextValue($"Dialogue.LunarCult.Recruits.{MyName}.{LunarCultBaseSystem.CurrentMeetingTopic}.{CurrentDialogue.ToString().Remove(0, LunarCultBaseSystem.CurrentMeetingTopic.ToString().Length)}");
             else
                 Main.npcChatText = GetWindfallTextValue($"Dialogue.LunarCult.Recruits.{MyName}.{CurrentDialogue}");
         }
@@ -871,12 +873,7 @@ namespace Windfall.Content.NPCs.WorldEvents.LunarCult
             if (CurrentDialogue.ToString().Contains("GoodEnd") || CurrentDialogue == DialogueState.Recruitable)
                 button2 = "Recruit";
         }
-        public override bool CheckActive()
-        {
-            if (!Chattable)
-                return false;
-            return true;
-        }
+        public override bool CheckActive() => Chattable;
         public override void TownNPCAttackStrength(ref int damage, ref float knockback)
         {
             damage = 20;

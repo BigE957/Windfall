@@ -1,5 +1,5 @@
 ﻿using Windfall.Common.Systems;
-using static Windfall.Common.Systems.WorldEvents.LunarCultActivitySystem;
+using static Windfall.Common.Systems.WorldEvents.LunarCultBaseSystem;
 
 namespace Windfall.Content.Tiles
 {

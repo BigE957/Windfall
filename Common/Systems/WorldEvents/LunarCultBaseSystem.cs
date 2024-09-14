@@ -7,10 +7,12 @@ using Windfall.Content.Items.Food;
 using Windfall.Content.Items.Quest;
 using Windfall.Content.NPCs.WorldEvents.LunarCult;
 using DialogueHelper.Content.UI.Dialogue;
+using Windfall.Content.NPCs.Critters;
+using Windfall.Content.Buffs.DoT;
 
 namespace Windfall.Common.Systems.WorldEvents
 {
-    public class LunarCultActivitySystem : ModSystem
+    public class LunarCultBaseSystem : ModSystem
     {
         public static Point LunarCultBaseLocation;
 
@@ -148,9 +150,10 @@ namespace Windfall.Common.Systems.WorldEvents
         }
         public override void PreUpdateWorld()
         {
+            //Main.NewText(LunarCultBaseLocation == new Point(-1, -1));
             if (NPC.downedAncientCultist || LunarCultBaseLocation == new Point(-1, -1))
                 return;
-            //Main.NewText(Main.player[0].Center.Y - CultBaseBridgeArea.Center.Y * 16);
+            //Main.NewText("Active");
             if (NPC.downedPlantBoss)
             {
                 if (!NPC.AnyNPCs(ModContent.NPCType<Seamstress>()))
@@ -159,12 +162,24 @@ namespace Windfall.Common.Systems.WorldEvents
                     NPC.NewNPC(Entity.GetSource_None(), (LunarCultBaseLocation.X * 16) - 1040, (LunarCultBaseLocation.Y * 16) - 110, ModContent.NPCType<TheChef>());
                 if (!NPC.AnyNPCs(ModContent.NPCType<OratorNPC>()))
                     NPC.NewNPC(Entity.GetSource_None(), (CultBaseArea.Right - 11) * 16, (CultBaseArea.Top + 30) * 16, ModContent.NPCType<OratorNPC>());
+                if(Main.npc.Where(n => n.active && (n.type == ModContent.NPCType<LunarCultistArcher>() || n.type == ModContent.NPCType<LunarCultistDevotee>() || n.type == ModContent.NPCType<RecruitableLunarCultist>())).Count() < 10)
+                    AttemptToCultBaseDenizens();
+
+                foreach (NPC npc in Main.npc.Where(n => n.active))
+                {
+                    if (!npc.dontTakeDamage && npc.lifeMax != 1 && !npc.friendly && !npc.boss && npc.type != ModContent.NPCType<PortalMole>())
+                    {
+                        Rectangle inflatedArea = new(CultBaseArea.X - 32, CultBaseArea.Y + 32, CultBaseArea.Width + 64, CultBaseArea.Height + 64);
+                        if (inflatedArea.Contains(npc.Center.ToTileCoordinates()))
+                            npc.AddBuff(ModContent.BuffType<Entropy>(), 2);
+                    }                    
+                }
             }
             if (Main.player.Any(p => p.active && !p.dead && CultBaseArea.Contains(p.Center.ToTileCoordinates())))
                 CalamityWorld.ArmoredDiggerSpawnCooldown = 36000;
-            foreach (Player player in Main.player.Where(p => p.active && !p.dead && CultBaseArea.Contains(p.Center.ToTileCoordinates())))
-            {
-                if (player.Center.Y > (LunarCultBaseLocation.Y + 30) * 16)
+            foreach (Player player in Main.player.Where(p => p.active && !p.dead))
+            {                    
+                if (CultBaseArea.Contains(player.Center.ToTileCoordinates()) && player.Center.Y > (LunarCultBaseLocation.Y + 30) * 16)
                 {
                     for (int i = 0; i <= 20; i++)
                         EmpyreanMetaball.SpawnDefaultParticle(player.Center, Main.rand.NextVector2Circular(5f, 5f), 30 * Main.rand.NextFloat(1.5f, 2.3f));
@@ -584,8 +599,8 @@ namespace Windfall.Common.Systems.WorldEvents
                         Active = false;
                         State = SystemState.End;
                     }
-                    //else
-                        //Main.npc[NPC.FindFirstNPC(ModContent.NPCType<OratorNPC>())].ai[0] = 1;
+                    else
+                        Main.npc[NPC.FindFirstNPC(ModContent.NPCType<OratorNPC>())].ai[0] = 1;
                     break;
                 case SystemState.Meeting:                     
                     if (Active)
@@ -1045,6 +1060,40 @@ namespace Windfall.Common.Systems.WorldEvents
                 case SystemState.End:
                     ActivityCoords = new(-1, -1);
                     OnCooldown = true;
+                    int currentRecruitCount = Main.npc.Where(n => n.active && n.type == ModContent.NPCType<RecruitableLunarCultist>()).Count();
+                    if (currentRecruitCount < 4)
+                    {
+                        List<string> names =
+                        [
+                            "Tirith",
+                            "Vivian",
+                            "Tania",
+                            "Doro",
+                            "Skylar",
+                            "Jamie",
+                        ];
+                        int availableNames = 6;
+                        for (int i = 0; i < 4 - currentRecruitCount; i++)
+                        {
+                            NPC recruit;
+                            int index = Main.rand.Next(availableNames);
+                            if (NPC.FindFirstNPC(ModContent.NPCType<LunarCultistDevotee>()) != -1)
+                            {
+                                recruit = Main.npc[NPC.FindFirstNPC(ModContent.NPCType<LunarCultistDevotee>())];
+                                Main.npc[NPC.FindFirstNPC(ModContent.NPCType<LunarCultistDevotee>())].Transform(ModContent.NPCType<RecruitableLunarCultist>());
+                                recruit.As<RecruitableLunarCultist>().MyName = (RecruitableLunarCultist.RecruitNames)index;
+                                recruit.ModNPC.OnSpawn(NPC.GetSource_NaturalSpawn());
+                            }
+                            else
+                            {
+                                recruit = Main.npc[NPC.FindFirstNPC(ModContent.NPCType<LunarCultistArcher>())];
+                                Main.npc[NPC.FindFirstNPC(ModContent.NPCType<LunarCultistArcher>())].Transform(ModContent.NPCType<RecruitableLunarCultist>());
+                                recruit.As<RecruitableLunarCultist>().MyName = (RecruitableLunarCultist.RecruitNames)index;
+                                recruit.ModNPC.OnSpawn(NPC.GetSource_NaturalSpawn());
+                            }
+                            names.RemoveAt(index);
+                        }
+                    }
                     State = SystemState.CheckReqs;
                     break;
             }
@@ -1070,6 +1119,47 @@ namespace Windfall.Common.Systems.WorldEvents
         public static void ResetTimer()
         {
             ActivityTimer = 0;
+        }
+
+        public static void AttemptToCultBaseDenizens()
+        {
+            if (Main.netMode == NetmodeID.MultiplayerClient)
+                return;          
+
+            for (int i = 0; i < 16; i++)
+            {
+                Rectangle spawnArea = new((LunarCultBaseLocation.X - 70), (LunarCultBaseLocation.Y - 80), 82, 152);
+                int checkPositionX = spawnArea.X + Main.rand.Next(spawnArea.Width);
+                int checkPositionY = spawnArea.Y + Main.rand.Next(spawnArea.Height);
+                Vector2 checkPosition = new(checkPositionX, checkPositionY);
+
+                Tile aboveSpawnTile = CalamityUtils.ParanoidTileRetrieval(checkPositionX, checkPositionY - 1);
+                bool nearCultBase = CalamityUtils.ManhattanDistance(checkPosition, new(LunarCultBaseLocation.X, LunarCultBaseLocation.Y)) < 180f;
+                bool isVaildWall = aboveSpawnTile.WallType == WallID.AncientSilverBrickWall || aboveSpawnTile.WallType == WallID.GreenStainedGlass || aboveSpawnTile.WallType == WallID.EmeraldGemspark;
+                isVaildWall |= aboveSpawnTile.WallType == WallID.PlatinumBrick || aboveSpawnTile.WallType == WallID.PearlstoneBrick;
+                if (!isVaildWall || !nearCultBase || Collision.SolidCollision((checkPosition - new Vector2(2f, 4f)).ToWorldCoordinates(), 4, 8) || aboveSpawnTile.IsTileSolid() || Lighting.Brightness(checkPositionX, checkPositionY - 1) <= 0.4f)
+                    continue;
+
+                WeightedRandom<int> pool = new();
+                pool.Add(NPCID.None, 0f);
+                pool.Add(ModContent.NPCType<Fingerling>(), 0.05f);
+                pool.Add(ModContent.NPCType<LunarCultistArcher>(), 0.025f);
+                pool.Add(ModContent.NPCType<LunarCultistDevotee>(), 0.05f);
+
+                int typeToSpawn = pool.Get();
+                if (typeToSpawn != NPCID.None)
+                {
+                    int spawnedNPC = NPC.NewNPC(NPC.GetSource_NaturalSpawn(), checkPositionX * 16 + 8, checkPositionY * 16, typeToSpawn, ai2: typeToSpawn == ModContent.NPCType<LunarCultistDevotee>() ? 4 : 3);
+
+                    if (Main.netMode == NetmodeID.Server && spawnedNPC < Main.maxNPCs)
+                    {
+                        Main.npc[spawnedNPC].position.Y -= 8f;
+                        
+                        NetMessage.SendData(MessageID.SyncNPC, -1, -1, null, spawnedNPC);
+                        return;
+                    }
+                }
+            }
         }
     }
 }
