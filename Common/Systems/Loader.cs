@@ -38,7 +38,7 @@ namespace Windfall.Common.Systems
 
             Dictionary<string, Character> Characters = new()
             {
-                { "Windfall/TheCalamity", new Character([new Expression("Normal", 1, 0), new Expression("Finality", 1, 0)], "[c/FF0000:The Calamity]", textDelay: 3, primaryColor: Color.Black, secondaryColor: Color.Red)},
+                { "Windfall/TheCalamity", new Character("[c/FF0000:The Calamity]", [new Expression("Normal", 1, 0), new Expression("Finality", 1, 0)], textDelay: 3, primaryColor: Color.Black, secondaryColor: Color.Red)},
             };
 
             DialogueHolder.Characters.AddRange(Characters);
@@ -109,7 +109,7 @@ namespace Windfall.Common.Systems
                     [
                         new Dialogue
                         (
-                            LunarCultActivitySystem.GetMenuResponses()
+                            LunarCultBaseSystem.GetMenuResponses()
                         ),
                     ],
                     [

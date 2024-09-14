@@ -1,4 +1,6 @@
 ﻿
+using Windfall.Common.Systems.WorldEvents;
+
 namespace Windfall.Content.Projectiles
 {
     public class WindfallGlobalProjectile : GlobalProjectile
@@ -10,5 +12,17 @@ namespace Windfall.Content.Projectiles
             hasHitMuck = false;
         }
         public override bool InstancePerEntity => true;
+        public override bool PreAI(Projectile projectile)
+        {
+            if (LunarCultBaseSystem.CultBaseArea.Intersects(new((int)projectile.Center.X / 16, (int)projectile.Center.Y / 16, 1, 1)) || LunarCultBaseSystem.CultBaseBridgeArea.Intersects(new((int)projectile.Center.X / 16, (int)projectile.Center.Y / 16, 1, 1)))
+            {
+                if (projectile.type == ProjectileID.SandBallFalling || projectile.type == ProjectileID.SiltBall || projectile.type == ProjectileID.SlushBall)
+                {
+                    projectile.active = false;
+                    return false;
+                }
+            }
+            return base.PreAI(projectile);
+        }
     }
 }
