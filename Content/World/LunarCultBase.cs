@@ -13,7 +13,7 @@ namespace Windfall.Content.World
     {
         public static bool ShouldAvoidLocation(Point placementPoint, bool careAboutMushroom = false)
         {
-            Tile tile = CalamityUtils.ParanoidTileRetrieval(placementPoint.X, placementPoint.Y);
+            Tile tile = ParanoidTileRetrieval(placementPoint.X, placementPoint.Y);
 
             if (tile.TileType == TileID.BlueDungeonBrick ||
             tile.TileType == TileID.GreenDungeonBrick ||
@@ -38,9 +38,12 @@ namespace Windfall.Content.World
             tile.WallType == WallID.SpiderUnsafe)
                 return true;
 
-            if (tile.TileType == TileID.Mud ||
-            tile.TileType == TileID.MushroomGrass)
-                return true;
+            if (careAboutMushroom)
+            {
+                if (tile.TileType == TileID.Mud ||
+                tile.TileType == TileID.MushroomGrass)
+                    return true;
+            }
 
             if (tile.TileType == ModContent.TileType<LaboratoryPlating>() ||
             tile.WallType == ModContent.WallType<LaboratoryPlatingWall>() ||
@@ -98,7 +101,7 @@ namespace Windfall.Content.World
 
             } while (tries <= 10000);
 
-            LunarCultActivitySystem.LunarCultBaseLocation = placementPoint;
+            LunarCultBaseSystem.LunarCultBaseLocation = placementPoint;
         }
     }
 }
