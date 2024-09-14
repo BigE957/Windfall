@@ -79,18 +79,18 @@ namespace Windfall.Content.NPCs.WanderingNPCs
         public override void SetBestiary(BestiaryDatabase database, BestiaryEntry bestiaryEntry)
         {
             // We can use AddRange instead of calling Add multiple times in order to add multiple items at once
-            bestiaryEntry.Info.AddRange(new IBestiaryInfoElement[] {
+            bestiaryEntry.Info.AddRange([
 			// Sets the preferred biomes of this town NPC listed in the bestiary.
 			// With Town NPCs, you usually set this to what biome it likes the most in regards to NPC happiness.
 			BestiaryDatabaseNPCsPopulator.CommonTags.SpawnConditions.Biomes.Jungle,
 
 			// Sets your NPC's flavor text in the bestiary.
 			new FlavorTextBestiaryInfoElement(GetWindfallTextValue($"Bestiary.{nameof(GodseekerKnight)}")),
-        });
+        ]);
         }
 
         public override ITownNPCProfile TownNPCProfile() => NPCProfile;
-        public override List<string> SetNPCNameList() => new() { "Erahim" };
+        public override List<string> SetNPCNameList() => ["Erahim"];
 
         public override float SpawnChance(NPCSpawnInfo spawnInfo)
         {
@@ -123,8 +123,8 @@ namespace Windfall.Content.NPCs.WanderingNPCs
         private DialogueState Dialogue;
         private string Topic = "";
 
-        private readonly List<dialogueDirections> MyDialogue = new()
-        {
+        private readonly List<dialogueDirections> MyDialogue =
+        [
             #region Initial Conversation
             new dialogueDirections()
             {
@@ -197,7 +197,7 @@ namespace Windfall.Content.NPCs.WanderingNPCs
                 Button2 = new(){name = "That's your job...", heading = (int)DialogueState.Neutral, end = true},
             },
             #endregion
-        };
+        ];
         public override string GetChat()
         {
             Player player = Main.player[Main.myPlayer];

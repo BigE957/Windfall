@@ -507,7 +507,7 @@ namespace Windfall.Content.NPCs.Bosses.Orator
             {
                 NPC.frameCounter = 0;
                 NPC.frame.Y += frameHeight;
-                if (NPC.frame.Y >= frameHeight * 4)
+                if (NPC.frame.Y >= frameHeight * (Main.npcFrameCount[Type] - 1))
                     NPC.frame.Y = 0;
             }
         }

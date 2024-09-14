@@ -1808,7 +1808,7 @@ namespace Windfall.Content.NPCs.Bosses.Orator
 
             Texture2D texture = TextureAssets.Npc[NPC.type].Value;
             Vector2 halfSizeTexture = new(TextureAssets.Npc[NPC.type].Value.Width / 4, TextureAssets.Npc[NPC.type].Value.Height / Main.npcFrameCount[NPC.type] / 2);
-            Vector2 drawPosition = new Vector2(NPC.Center.X, NPC.Center.Y) - screenPos;
+            Vector2 drawPosition = NPC.Center - screenPos + (Vector2.UnitY * NPC.gfxOffY);
             SpriteEffects spriteEffects = SpriteEffects.None;
             if (NPC.spriteDirection == -1)
                 spriteEffects = SpriteEffects.FlipHorizontally;
