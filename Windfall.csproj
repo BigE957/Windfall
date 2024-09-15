@@ -74,6 +74,7 @@
     <None Remove="Assets\Projectiles\Boss\nailshot.png" />
     <None Remove="Assets\Projectiles\Misc\Creeper.png" />
     <None Remove="Assets\Projectiles\Misc\EmpyreanThorn.png" />
+    <None Remove="Assets\Projectiles\NPCAnimations\DoGEyes.png" />
     <None Remove="Assets\Projectiles\NPCAnimations\GodseekerKnightProj.png" />
     <None Remove="Assets\Projectiles\NPCAnimations\IlmeranPaladinDig.png" />
     <None Remove="Assets\Skies\OratorCloudsBack.png" />
@@ -101,6 +102,7 @@
     <None Remove="Content\Items\Journals\JournalOcean.png" />
     <None Remove="Content\Items\Journals\JournalSulphur.png" />
     <None Remove="Content\Items\Journals\JournalTundra.png" />
+    <None Remove="Content\Items\Placeables\Furnature\OratorMonolith.png" />
     <None Remove="Content\Items\Placeables\Special\DatabaseTerminalItem.png" />
     <None Remove="Content\Items\Quest\LunarCoin.png" />
     <None Remove="Content\Items\Utility\DraedonCharger.png" />
@@ -115,6 +117,7 @@
     <None Remove="Content\NPCs\WorldEvents\WanderingPotionSeller.png" />
     <None Remove="Content\Projectiles\Boss\Orator\DarkTide.png" />
     <None Remove="Content\Projectiles\Boss\Orator\OratorBorder.png" />
+    <None Remove="Content\Tiles\Furnature\OratorMonolithTile.png" />
     <None Remove="Content\Tiles\Special\DatabaseTerminal.png" />
     <None Remove="Content\UI\DraedonsDatabase\DraedonUIArrowLeft.png" />
     <None Remove="Content\UI\DraedonsDatabase\DraedonUIArrowRight.png" />

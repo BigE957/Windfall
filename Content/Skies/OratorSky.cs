@@ -1,5 +1,4 @@
 ﻿using CalamityMod.Events;
-using Luminance.Common.Utilities;
 using Terraria.Graphics.Effects;
 using Windfall.Content.NPCs.Bosses.Orator;
 using Windfall.Content.UI.BossBars;
@@ -17,7 +16,7 @@ namespace Windfall.Content.Skies
 
         public override void Deactivate(params object[] args)
         {
-            skyActive = (Main.npc.Any(n => n.active && n.type == ModContent.NPCType<TheOrator>()));
+            skyActive = (Main.npc.Any(n => n.active && n.type == ModContent.NPCType<TheOrator>()) || Main.LocalPlayer.Monolith().OratorMonolith);
         }
 
         public override void Reset()
@@ -57,8 +56,9 @@ namespace Windfall.Content.Skies
                     spriteBatch.Draw(t2D, pos, new Rectangle(0, 0, t2D.Width, t2D.Height), Color.Yellow * star.twinkle * colorMult, star.rotation, origin, star.scale * star.twinkle, SpriteEffects.None, 0f);
                 }
                 #endregion
-
+                               
                 float goalRatio = moveRatio;
+
                 if (NPC.AnyNPCs(ModContent.NPCType<TheOrator>()) && ModContent.GetInstance<OratorBossBar>() != null)
                 {
                     NPC orator = Main.npc[NPC.FindFirstNPC(ModContent.NPCType<TheOrator>())];
@@ -72,11 +72,17 @@ namespace Windfall.Content.Skies
                         goalRatio = 1f;
                         crackRatio = 1f - (orator.life / (float)orator.lifeMax);
                     }
+                    goalRatio = Clamp(goalRatio, 0.1f, 1f);
+                }               
+                if (Main.LocalPlayer.Monolith().OratorMonolith)
+                    moveRatio = 1f;
+                else
+                {
+                    if (moveRatio < goalRatio)
+                        moveRatio += 0.00005f;
+                    moveRatio = Clamp(moveRatio, 0.1f, goalRatio);
                 }
-                goalRatio = Clamp(goalRatio, 0.1f, 1f);
-                if (moveRatio < goalRatio)
-                    moveRatio += 0.00005f;
-                moveRatio = Clamp(moveRatio, 0.1f, goalRatio);
+
 
                 Vector2 position = new(Main.screenWidth / 2, bgTop + Lerp(Main.screenHeight / 7, Main.screenHeight / 1.5f, CalamityUtils.SineOutEasing(moveRatio, 1)));
                 Texture2D bloomCircle = ModContent.Request<Texture2D>("CalamityMod/Particles/LargeBloom", AssetRequestMode.ImmediateLoad).Value;
@@ -120,7 +126,7 @@ namespace Windfall.Content.Skies
         }
         public override void Update(GameTime gameTime)
         {
-            if (!NPC.AnyNPCs(ModContent.NPCType<TheOrator>()) || BossRushEvent.BossRushActive || Main.gameMenu)
+            if ((!NPC.AnyNPCs(ModContent.NPCType<TheOrator>()) && !Main.LocalPlayer.Monolith().OratorMonolith) || BossRushEvent.BossRushActive || Main.gameMenu)
                 skyActive = false;
 
             if (skyActive)

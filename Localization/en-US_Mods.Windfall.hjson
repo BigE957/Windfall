@@ -94,15 +94,6 @@ Dialogue: {
 		}
 
 		RitualEvent: {
-			Messages.0: Shall we begin?
-
-			Responses: {
-				No: No.
-				Yes: Yes.
-			}
-		}
-
-		RitualEvent: {
 			Messages.0: Yo wanna betray the Dragon Cult?
 
 			Responses: {
@@ -122,6 +113,7 @@ Dialogue: {
 			}
 		}
 
+		#Communions
 		CorruptCommunion2: {
 			Messages: {
 				0: How wonderful! You seek further power. You continue to drink of the Essence. Truly wonderful! We shall sate your desire.
@@ -435,11 +427,13 @@ Dialogue: {
 					7: He shall guide you...
 					8: ...as you begin your journey with us.
 				}
+
 				Betrayal: {
 					0: Welcome back!
 					1: The Orator wishes to speak with you.
 					2: Best to not keep him waiting...
 				}
+
 				Ritual: {
 					0: Welcome back!
 					1: We have a task for you.
@@ -512,7 +506,14 @@ Dialogue: {
 						0: Aha!
 						1: Yes, I've found it!
 						2: At last, we may begin...
-						3: Ah shit, nvm.
+						3: How wonderous...
+						#DiaDoGue
+						4: You've grown better at establishing our connection...
+						5: Impressive!
+						6: I have no doubt our goals shall indeed be realized.
+						7: The seal shall shatter.
+						8: Luna shall break.
+						9: Paradise shall awaken unto you.
 					}
 
 					Failure: {
@@ -1511,6 +1512,11 @@ Items: {
 				Right Click to access
 				'''
 		}
+
+		OratorMonolith: {
+			DisplayName: Selenic Monolith
+			Tooltip: "Calls about the beginning of the end."
+		}
 	}
 
 	Fishing: {
@@ -1826,6 +1832,7 @@ Projectiles: {
 	OratorBorder.DisplayName: Orator Border
 	DarkTide.DisplayName: Dark Tide
 	FoodAlert.DisplayName: Food Alert
+	DoGRift.DisplayName: Do G Rift
 }
 
 Buffs: {
