@@ -9,6 +9,7 @@ using Windfall.Content.NPCs.WorldEvents.LunarCult;
 using DialogueHelper.Content.UI.Dialogue;
 using Windfall.Content.NPCs.Critters;
 using Windfall.Content.Buffs.DoT;
+using Windfall.Content.Projectiles.ProjectileAnimations;
 
 namespace Windfall.Common.Systems.WorldEvents
 {
@@ -166,7 +167,6 @@ namespace Windfall.Common.Systems.WorldEvents
         }
         public override void PreUpdateWorld()
         {
-            //Main.NewText(LunarCultBaseLocation == new Point(-1, -1));
             if (NPC.downedAncientCultist || LunarCultBaseLocation == new Point(-1, -1))
                 return;
             //Main.NewText("Active");
@@ -931,10 +931,74 @@ namespace Windfall.Common.Systems.WorldEvents
                             case 240:
                                 DisplayMessage(orator.Hitbox, Color.LimeGreen, "Dialogue.LunarCult.TheOrator.WorldText.Ritual.Success.2");
                                 break;
-                            case 360:
+                            case 400:
+                                if (Main.netMode != NetmodeID.MultiplayerClient)
+                                {
+                                    Vector2 spawnPos = new Vector2(ActivityCoords.X, ActivityCoords.Y - 280);
+                                    Projectile.NewProjectile(Projectile.GetSource_NaturalSpawn(), spawnPos, Vector2.Zero, ModContent.ProjectileType<DoGRift>(), 0, 0f);
+                                }
+                                break;
+                            case 520:
                                 DisplayMessage(orator.Hitbox, Color.LimeGreen, "Dialogue.LunarCult.TheOrator.WorldText.Ritual.Success.3");
                                 break;
-                            case 420:
+                            case 640:
+                                Projectile dogRift = Main.projectile.First(p => p.active && p.type == ModContent.ProjectileType<DoGRift>());
+                                DisplayMessage(dogRift.Hitbox, Color.Aqua, "Dialogue.LunarCult.TheOrator.WorldText.Ritual.Success.4");
+                                break;
+                            case 720:
+                                dogRift = Main.projectile.First(p => p.active && p.type == ModContent.ProjectileType<DoGRift>());
+                                DisplayMessage(dogRift.Hitbox, Color.Aqua, "Dialogue.LunarCult.TheOrator.WorldText.Ritual.Success.5");
+                                break;
+                            case 840:
+                                dogRift = Main.projectile.First(p => p.active && p.type == ModContent.ProjectileType<DoGRift>());
+                                DisplayMessage(dogRift.Hitbox, Color.Aqua, "Dialogue.LunarCult.TheOrator.WorldText.Ritual.Success.6");
+                                break;
+                            case 960:
+                                dogRift = Main.projectile.First(p => p.active && p.type == ModContent.ProjectileType<DoGRift>());
+                                DisplayMessage(dogRift.Hitbox, Color.Aqua, "Dialogue.LunarCult.TheOrator.WorldText.Ritual.Success.7");
+                                break;
+                            case 1080:
+                                dogRift = Main.projectile.First(p => p.active && p.type == ModContent.ProjectileType<DoGRift>());
+                                DisplayMessage(dogRift.Hitbox, Color.Aqua, "Dialogue.LunarCult.TheOrator.WorldText.Ritual.Success.8");
+                                break;
+                            case 1200:
+                                dogRift = Main.projectile.First(p => p.active && p.type == ModContent.ProjectileType<DoGRift>());
+                                DisplayMessage(dogRift.Hitbox, Color.Aqua, "Dialogue.LunarCult.TheOrator.WorldText.Ritual.Success.9");
+                                break;
+                            case 1320:
+                                dogRift = Main.projectile.First(p => p.active && p.type == ModContent.ProjectileType<DoGRift>());
+                                DisplayMessage(dogRift.Hitbox, Color.Aqua, "Dialogue.LunarCult.TheOrator.WorldText.Ritual.Success.10");
+                                break;
+                            case 1440:
+                                dogRift = Main.projectile.First(p => p.active && p.type == ModContent.ProjectileType<DoGRift>());
+                                DisplayMessage(dogRift.Hitbox, Color.Aqua, "Dialogue.LunarCult.TheOrator.WorldText.Ritual.Success.11");
+                                break;
+                            case 1560:
+                                dogRift = Main.projectile.First(p => p.active && p.type == ModContent.ProjectileType<DoGRift>());
+                                DisplayMessage(dogRift.Hitbox, Color.Aqua, "Dialogue.LunarCult.TheOrator.WorldText.Ritual.Success.12");
+                                break;
+                            case 1680:
+                                dogRift = Main.projectile.First(p => p.active && p.type == ModContent.ProjectileType<DoGRift>());
+                                DisplayMessage(dogRift.Hitbox, Color.Aqua, "Dialogue.LunarCult.TheOrator.WorldText.Ritual.Success.13");
+                                break;
+                            case 1800:
+                                dogRift = Main.projectile.First(p => p.active && p.type == ModContent.ProjectileType<DoGRift>());
+                                DisplayMessage(dogRift.Hitbox, Color.Aqua, "Dialogue.LunarCult.TheOrator.WorldText.Ritual.Success.14");
+                                break;
+                            case 1860:
+                                dogRift = Main.projectile.First(p => p.active && p.type == ModContent.ProjectileType<DoGRift>());
+                                dogRift.ai[0] = 1;
+                                break;
+                            case 1920:
+                                DisplayMessage(orator.Hitbox, Color.LimeGreen, "Dialogue.LunarCult.TheOrator.WorldText.Ritual.Success.15");
+                                break;
+                            case 2040:
+                                DisplayMessage(orator.Hitbox, Color.LimeGreen, "Dialogue.LunarCult.TheOrator.WorldText.Ritual.Success.16");
+                                break;
+                            case 2160:
+                                DisplayMessage(orator.Hitbox, Color.LimeGreen, "Dialogue.LunarCult.TheOrator.WorldText.Ritual.Success.17");
+                                break;
+                            case 2220:
                                 if (Main.npc[NPCIndexs[0]].active)
                                 {
                                     for (int i = 0; i <= 50; i++)
@@ -962,7 +1026,7 @@ namespace Windfall.Common.Systems.WorldEvents
                                     Main.npc[NPCIndexs[5]].active = false;
                                 }
                                 break;
-                            case 440:
+                            case 2240:
                                 if (Main.npc[NPCIndexs[1]].active)
                                 {
                                     for (int i = 0; i <= 50; i++)
@@ -990,7 +1054,7 @@ namespace Windfall.Common.Systems.WorldEvents
                                     Main.npc[NPCIndexs[4]].active = false;
                                 }
                                 break;
-                            case 460:
+                            case 2260:
                                 if (Main.npc[NPCIndexs[2]].active)
                                 {
                                     for (int i = 0; i <= 50; i++)
@@ -1018,7 +1082,7 @@ namespace Windfall.Common.Systems.WorldEvents
                                     Main.npc[NPCIndexs[3]].active = false;
                                 }
                                 break;
-                            case 480:
+                            case 2280:
                                 for (int i = 0; i <= 50; i++)
                                 {
                                     int dustStyle = Main.rand.NextBool() ? 66 : 263;
@@ -1094,12 +1158,12 @@ namespace Windfall.Common.Systems.WorldEvents
                             List<string> names =
                             [
                                 "Tirith",
-                            "Vivian",
-                            "Tania",
-                            "Doro",
-                            "Skylar",
-                            "Jamie",
-                        ];
+                                "Vivian",
+                                "Tania",
+                                "Doro",
+                                "Skylar",
+                                "Jamie",
+                            ];
                             int availableNames = 6;
                             for (int i = 0; i < 4 - currentRecruitCount; i++)
                             {
@@ -1120,6 +1184,7 @@ namespace Windfall.Common.Systems.WorldEvents
                                     recruit.ModNPC.OnSpawn(NPC.GetSource_NaturalSpawn());
                                 }
                                 names.RemoveAt(index);
+                                availableNames--;
                             }
                         }
                     }                    

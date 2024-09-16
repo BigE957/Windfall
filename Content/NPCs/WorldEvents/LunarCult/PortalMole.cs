@@ -69,70 +69,73 @@ namespace Windfall.Content.NPCs.WorldEvents.LunarCult
         }
         public override void AI()
         {
-            if(aiCounter > 20)
+            if (LunarCultBaseSystem.Active)
             {
-                if (aiCounter - 20 < 180)
-                {                   
-                    if ((aiCounter - 20) % 60 == 0)
-                    {
-                        Vector2 spawnPosition = NPC.Center;
-                        Color color = Color.Lerp(Color.LimeGreen, new(117, 255, 159), Main.rand.NextFloat(0f, 1f));
-                        CalamityMod.Particles.Particle particle = new PulseRing(spawnPosition, Vector2.Zero, color, 0.25f, 0.9f, 30);
-                        GeneralParticleHandler.SpawnParticle(particle);
-                    }
-                }
-                else
+                if (aiCounter > 20)
                 {
-                    if(aiCounter - 20 == 180)
+                    if (aiCounter - 20 < 180)
                     {
-                        if (Main.npc.Any(n => n != null && n.active && n.type == ModContent.NPCType<LunarCultistDevotee>()))
+                        if ((aiCounter - 20) % 60 == 0)
                         {
-                            int length = Main.npc.Where(n => n != null && n.active && n.type == ModContent.NPCType<LunarCultistDevotee>() && n.velocity.LengthSquared() == 0 && n.ai[2] == 3).Count();
-                            targetIndex = Main.npc.Where(n => n != null && n.active && n.type == ModContent.NPCType<LunarCultistDevotee>() && n.velocity.LengthSquared() == 0 && n.ai[2] == 3).ElementAt(Main.rand.Next(length)).whoAmI;
+                            Vector2 spawnPosition = NPC.Center;
+                            Color color = Color.Lerp(Color.LimeGreen, new(117, 255, 159), Main.rand.NextFloat(0f, 1f));
+                            CalamityMod.Particles.Particle particle = new PulseRing(spawnPosition, Vector2.Zero, color, 0.25f, 0.9f, 30);
+                            GeneralParticleHandler.SpawnParticle(particle);
                         }
-                        else
-                            Despawn();
                     }
-                    if((aiCounter - 20) % 30 == 0)
-                    {
-                        Vector2 spawnPosition = NPC.Center;
-                        Color color = Color.Lerp(Color.LimeGreen, new(117, 255, 159), Main.rand.NextFloat(0f, 1f));
-                        CalamityMod.Particles.Particle particle = new PulseRing(spawnPosition, Vector2.Zero, color, 1.25f, 0.1f, 100);
-                        GeneralParticleHandler.SpawnParticle(particle);
-                    }
-                    NPC target = Main.npc[targetIndex];
-                    if (target == null || !target.active)
-                    {
-                        Despawn();                       
-                        return;
-                    }
-                    target.velocity = (NPC.Center - target.Center).SafeNormalize(Vector2.Zero) * 2;
-                    if (target.Center.X > NPC.Center.X)
-                        target.rotation -= 0.05f;
                     else
-                        target.rotation += 0.05f;
-
-                    int dustStyle = Main.rand.NextBool() ? 66 : 263;
-                    Dust dust = Dust.NewDustPerfect(target.Center, Main.rand.NextBool(3) ? 191 : dustStyle);
-                    dust.scale = Main.rand.NextFloat(1.5f, 2.3f);
-                    dust.velocity = Main.rand.NextVector2Circular(10f, 10f);
-                    dust.noGravity = true;
-                    dust.color = dust.type == dustStyle ? Color.LightGreen : default;
-                    dustsIndexs.Add(dust.dustIndex);
-
-                    for (int j = 0; j < dustsIndexs.Count; j++)
                     {
-                        int i = dustsIndexs[j];
-                        dust = Main.dust[i];
-                        if (NPC.Hitbox.Contains((int)dust.position.X, (int)dust.position.Y))
+                        if (aiCounter - 20 == 180)
                         {
-                            dust.active = false;
-                            dustsIndexs[j] = -1;
+                            if (Main.npc.Any(n => n != null && n.active && n.type == ModContent.NPCType<LunarCultistDevotee>()))
+                            {
+                                int length = Main.npc.Where(n => n != null && n.active && n.type == ModContent.NPCType<LunarCultistDevotee>() && n.velocity.LengthSquared() == 0 && n.ai[2] == 3).Count();
+                                targetIndex = Main.npc.Where(n => n != null && n.active && n.type == ModContent.NPCType<LunarCultistDevotee>() && n.velocity.LengthSquared() == 0 && n.ai[2] == 3).ElementAt(Main.rand.Next(length)).whoAmI;
+                            }
+                            else
+                                Despawn();
                         }
+                        if ((aiCounter - 20) % 30 == 0)
+                        {
+                            Vector2 spawnPosition = NPC.Center;
+                            Color color = Color.Lerp(Color.LimeGreen, new(117, 255, 159), Main.rand.NextFloat(0f, 1f));
+                            CalamityMod.Particles.Particle particle = new PulseRing(spawnPosition, Vector2.Zero, color, 1.25f, 0.1f, 100);
+                            GeneralParticleHandler.SpawnParticle(particle);
+                        }
+                        NPC target = Main.npc[targetIndex];
+                        if (target == null || !target.active)
+                        {
+                            Despawn();
+                            return;
+                        }
+                        target.velocity = (NPC.Center - target.Center).SafeNormalize(Vector2.Zero) * 2;
+                        if (target.Center.X > NPC.Center.X)
+                            target.rotation -= 0.05f;
                         else
-                            dust.velocity = (NPC.Center - dust.position).SafeNormalize(Vector2.Zero) * 12;
+                            target.rotation += 0.05f;
+
+                        int dustStyle = Main.rand.NextBool() ? 66 : 263;
+                        Dust dust = Dust.NewDustPerfect(target.Center, Main.rand.NextBool(3) ? 191 : dustStyle);
+                        dust.scale = Main.rand.NextFloat(1.5f, 2.3f);
+                        dust.velocity = Main.rand.NextVector2Circular(10f, 10f);
+                        dust.noGravity = true;
+                        dust.color = dust.type == dustStyle ? Color.LightGreen : default;
+                        dustsIndexs.Add(dust.dustIndex);
+
+                        for (int j = 0; j < dustsIndexs.Count; j++)
+                        {
+                            int i = dustsIndexs[j];
+                            dust = Main.dust[i];
+                            if (NPC.Hitbox.Contains((int)dust.position.X, (int)dust.position.Y))
+                            {
+                                dust.active = false;
+                                dustsIndexs[j] = -1;
+                            }
+                            else
+                                dust.velocity = (NPC.Center - dust.position).SafeNormalize(Vector2.Zero) * 12;
+                        }
+                        dustsIndexs.RemoveAll(i => i == -1 || Main.dust[i] == null || !Main.dust[i].active);
                     }
-                    dustsIndexs.RemoveAll(i => i == -1 || Main.dust[i] == null || !Main.dust[i].active);
                 }
             }
             #region Visuals
@@ -160,18 +163,26 @@ namespace Windfall.Content.NPCs.WorldEvents.LunarCult
             Vector2 origin = texture.Size() * 0.5f;
             spriteBatch.Draw(texture, drawPosition, null, NPC.GetAlpha(Color.Black), 0f, origin, NPC.scale / 1.8f, SpriteEffects.None, 0f);
 
+            spriteBatch.UseBlendState(BlendState.AlphaBlend);
             texture = ModContent.Request<Texture2D>("Windfall/Assets/NPCs/Ancient_Storm").Value;
             origin = texture.Size() * 0.5f;
             spriteBatch.Draw(texture, drawPosition, null, NPC.GetAlpha(new(117, 255, 159)), -NPC.rotation / 2.25f, origin, NPC.scale * (2.25f + (0.5f * ((float)Math.Sin(aiCounter / -20f) / 2f + 0.5f))), SpriteEffects.None, 0f);
             spriteBatch.Draw(texture, drawPosition, null, NPC.GetAlpha(new(117, 255, 159)), NPC.rotation / 1.75f, origin, NPC.scale * (2.25f + (0.5f * ((float)Math.Sin(aiCounter / 20f) / 2f + 0.5f))), SpriteEffects.None, 0f);
 
+            texture = ModContent.Request<Texture2D>("CalamityMod/Particles/LargeBloom").Value;
+            drawPosition = NPC.Center - Main.screenPosition + (Vector2.UnitY * NPC.gfxOffY);
+            origin = texture.Size() * 0.5f;
+            spriteBatch.Draw(texture, drawPosition, null, NPC.GetAlpha(Color.Black), 0f, origin, NPC.scale / 3f, SpriteEffects.None, 0f);
+
+            spriteBatch.UseBlendState(BlendState.Additive);
             texture = TextureAssets.Npc[NPC.type].Value;
             origin = texture.Size() * 0.5f;
             spriteBatch.Draw(texture, drawPosition, null, new(117, 255, 159, 150), NPC.rotation, origin, NPC.scale / 3.5f, SpriteEffects.None, 0f);
-            spriteBatch.Draw(texture, drawPosition, null, new(Color.LimeGreen.R, Color.LimeGreen.G, Color.LimeGreen.B, 100), -NPC.rotation, origin, NPC.scale / 4f, SpriteEffects.None, 0f);
-            spriteBatch.Draw(texture, drawPosition, null, new(Color.Green.R, Color.Green.G, Color.Green.B, 50), NPC.rotation, origin, NPC.scale / 4.5f, SpriteEffects.None, 0f);
-            spriteBatch.Draw(texture, drawPosition, null, new(Color.Teal.R, Color.Teal.G, Color.Teal.B, 25), -NPC.rotation, origin, NPC.scale / 5f, SpriteEffects.None, 0f);
-            
+            spriteBatch.Draw(texture, drawPosition, null, new(Color.LimeGreen.R, Color.LimeGreen.G, Color.LimeGreen.B, 225), -NPC.rotation, origin, NPC.scale / 3.75f, SpriteEffects.None, 0f);
+            spriteBatch.Draw(texture, drawPosition, null, new(Color.Green.R, Color.Green.G, Color.Green.B, 200), NPC.rotation, origin, NPC.scale / 4.5f, SpriteEffects.None, 0f);
+            spriteBatch.Draw(texture, drawPosition, null, new(Color.Teal.R, Color.Teal.G, Color.Teal.B, 175), -NPC.rotation, origin, NPC.scale / 5f, SpriteEffects.None, 0f);
+
+            spriteBatch.UseBlendState(BlendState.AlphaBlend);
             return false;
         }
         public override bool CheckDead()

@@ -92,8 +92,16 @@ Dialogue: {
 				No: Don't think so.
 			}
 		}
-
 		RitualEvent: {
+			Messages.0: Shall we begin?
+
+			Responses: {
+				No: No.
+				Yes: Yes.
+			}
+		}
+		
+		BetrayalChat: {
 			Messages.0: Yo wanna betray the Dragon Cult?
 
 			Responses: {
@@ -513,7 +521,16 @@ Dialogue: {
 						6: I have no doubt our goals shall indeed be realized.
 						7: The seal shall shatter.
 						8: Luna shall break.
-						9: Paradise shall awaken unto you.
+						9: And Paradise shall awaken unto you.
+						10: That which struck down the Dragons shall too strike down the Gods.
+						11: This stagnant era shall at last conclude.
+						12: Then, together, we shall make something new.
+						13: Something better.
+						14: Won't that be wonderful?
+						#endOFDialDoGue
+						15: It is as our benefactor says.
+						16: Continue our righteous works,
+						17: and we shall be see our Paradise.
 					}
 
 					Failure: {
@@ -1515,7 +1532,7 @@ Items: {
 
 		OratorMonolith: {
 			DisplayName: Selenic Monolith
-			Tooltip: "Calls about the beginning of the end."
+			Tooltip: Calls about the beginning of the end.
 		}
 	}
 
