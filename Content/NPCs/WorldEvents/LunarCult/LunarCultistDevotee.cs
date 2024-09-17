@@ -104,21 +104,61 @@ namespace Windfall.Content.NPCs.WorldEvents.LunarCult
                 case States.CafeteriaEvent:
                     const int queueGap = 50;
                     int queueIndex = (int)NPC.ai[3];
-                    if (queueIndex == -1)
+                    if (queueIndex == -1 || !LunarCultBaseSystem.Active)
                     {
                         if (NPC.velocity.X < 1.5f)
                             NPC.velocity.X += 0.05f;
                         else
                             NPC.velocity.X = 1.5f;
+
+                        float goalY = (LunarCultBaseSystem.LunarCultBaseLocation.Y * 16 - 96) - NPC.height;
+                        if (NPC.velocity.Y >= 0 && NPC.position.Y >= goalY)
+                        {
+                            NPC.position.Y = goalY;
+                            if (NPC.velocity.Y != 0)
+                                NPC.velocity.Y = 0;
+                        }
+                        if (NPC.position.Y < goalY)
+                            NPC.velocity.Y += 0.5f;
+
                         NPC.direction = 1;
                         NPC.spriteDirection = 1;
                         if (NPC.Center.X - (LunarCultBaseSystem.LunarCultBaseLocation.X * 16 - 850) > 800)
+                        {
+                            for (int i = 0; i <= 50; i++)
+                            {
+                                int dustStyle = Main.rand.NextBool() ? 66 : 263;
+                                Vector2 speed = Main.rand.NextVector2Circular(1.5f, 2f);
+                                Dust dust = Dust.NewDustPerfect(NPC.Center, Main.rand.NextBool(3) ? 191 : dustStyle, speed * 3, Scale: Main.rand.NextFloat(1.5f, 2.3f));
+                                dust.noGravity = true;
+                                dust.color = dust.type == dustStyle ? Color.LightGreen : default;
+                            }
+                            SoundEngine.PlaySound(SpawnSound, NPC.Center);
                             NPC.active = false;
+                        }
                     }
                     else
                     {
                         Vector2 goalPosition = new(LunarCultBaseSystem.LunarCultBaseLocation.X * 16 - 850 + queueGap * queueIndex, LunarCultBaseSystem.LunarCultBaseLocation.Y * 16 - 96);
-                        NPC.position.Y = goalPosition.Y - NPC.height;
+                        float angerRatio = (LunarCultBaseSystem.CustomerQueue.Count - 4) / ((float)LunarCultBaseSystem.CustomerLimit - 4);
+                        if (LunarCultBaseSystem.CustomerQueue.Count <= 4)
+                            angerRatio = 0f;
+                        Main.NewText(LunarCultBaseSystem.AtMaxTimer);
+                        if (NPC.velocity.Y >= 0 && NPC.position.Y >= goalPosition.Y - NPC.height)
+                        {
+                            NPC.position.Y = goalPosition.Y - NPC.height;
+                            if (NPC.velocity.Y != 0)
+                                NPC.velocity.Y = 0;
+                        }
+                        if (NPC.velocity.Y == 0 && NPC.position.Y == goalPosition.Y - NPC.height && Main.rand.NextBool(angerRatio))
+                        {
+                            if(Main.rand.NextBool(5))
+                                CombatText.NewText(NPC.Hitbox, Color.Lerp(Color.White, Color.Red, angerRatio), GetWindfallTextValue("Dialogue.LunarCult.LunarBishop.Cafeteria.Madge." + Main.rand.Next(6)));
+                            if (Main.rand.NextBool())
+                                NPC.velocity.Y = -4;
+                        }
+                        if (NPC.position.Y < goalPosition.Y - NPC.height)
+                            NPC.velocity.Y += 0.5f;
                         if (queueIndex != 0 && !LunarCultBaseSystem.CustomerQueue[queueIndex - 1].HasValue)
                         {
                             goalPosition.X -= queueGap;

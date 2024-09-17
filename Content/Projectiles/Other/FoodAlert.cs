@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Windfall.Common.Systems.WorldEvents;
 
 namespace Windfall.Content.Projectiles.Other
 {
@@ -58,7 +59,7 @@ namespace Windfall.Content.Projectiles.Other
 
         public override void AI()
         {
-            if (Projectile.ai[2] != -1)
+            if (Projectile.ai[2] != -1 && LunarCultBaseSystem.Active)
             {
                 if (Obfuscation == ObfuscateType.Faded && ObfuscationRatio > 0f)
                     Projectile.Opacity = ObfuscationRatio;

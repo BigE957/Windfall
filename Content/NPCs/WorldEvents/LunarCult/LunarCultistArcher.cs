@@ -96,7 +96,7 @@ namespace Windfall.Content.NPCs.WorldEvents.LunarCult
                 case States.CafeteriaEvent:
                     const int queueGap = 50;
                     int queueIndex = (int)NPC.ai[3];
-                    if (queueIndex == -1)
+                    if (queueIndex == -1 || !LunarCultBaseSystem.Active)
                     {
                         if (NPC.velocity.X < 1.5f)
                             NPC.velocity.X += 0.05f;
@@ -105,7 +105,18 @@ namespace Windfall.Content.NPCs.WorldEvents.LunarCult
                         NPC.direction = 1;
                         NPC.spriteDirection = 1;
                         if (NPC.Center.X - (LunarCultBaseSystem.LunarCultBaseLocation.X * 16 - 850) > 800)
+                        {
+                            for (int i = 0; i <= 50; i++)
+                            {
+                                int dustStyle = Main.rand.NextBool() ? 66 : 263;
+                                Vector2 speed = Main.rand.NextVector2Circular(1.5f, 2f);
+                                Dust dust = Dust.NewDustPerfect(NPC.Center, Main.rand.NextBool(3) ? 191 : dustStyle, speed * 3, Scale: Main.rand.NextFloat(1.5f, 2.3f));
+                                dust.noGravity = true;
+                                dust.color = dust.type == dustStyle ? Color.LightGreen : default;
+                            }
+                            SoundEngine.PlaySound(SpawnSound, NPC.Center);
                             NPC.active = false;
+                        }
                     }
                     else
                     {

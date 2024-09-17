@@ -153,7 +153,8 @@ namespace Windfall.Common.Systems.WorldEvents
         ];
         public static int SatisfiedCustomers = 0;
         public static int CustomerGoal = 8;
-        private static readonly int CustomerLimit = 12;
+        public static readonly int CustomerLimit = 12;
+        public static int AtMaxTimer = 0;
         #endregion
         #region Ritual Variables
         public static int RemainingCultists = 6;
@@ -168,6 +169,7 @@ namespace Windfall.Common.Systems.WorldEvents
         }
         public override void PreUpdateWorld()
         {
+            //Main.NewText(State);
             RecruitmentsSkipped = 0;
             if (NPC.downedAncientCultist || LunarCultBaseLocation == new Point(-1, -1))
                 return;
@@ -890,27 +892,40 @@ namespace Windfall.Common.Systems.WorldEvents
                 case SystemState.Cafeteria:
                     if(Active)
                     {
-                        if (SatisfiedCustomers < CustomerGoal && CustomerQueue.Count < CustomerLimit && ActivityTimer >= 360 && Main.rand.NextBool(120)) //Spawn New Customer
+                        if (CustomerQueue.Count >= CustomerLimit || AtMaxTimer >= 10 * 60)
                         {
-                            WeightedRandom<int> customerType = new();
-                            customerType.Add(ModContent.NPCType<LunarCultistDevotee>(), 5);
-                            customerType.Add(ModContent.NPCType<LunarCultistArcher>(), 3);
-                            customerType.Add(ModContent.NPCType<LunarBishop>(), 1);
-
-                            Vector2 chefCenter = Main.npc[NPC.FindFirstNPC(ModContent.NPCType<TheChef>())].Center;
-                            ActivityCoords = new((int)chefCenter.X, (int)chefCenter.Y);
-
-                            Point spawnLocation = new(ActivityCoords.X + 1100, ActivityCoords.Y);
-                            NPC.NewNPC(NPC.GetSource_NaturalSpawn(), spawnLocation.X, spawnLocation.Y, customerType, ai2: 2);
-
-                            ActivityTimer = 0;
+                            if (AtMaxTimer >= 10 * 60)
+                            {
+                                //its joever
+                            }
+                            AtMaxTimer++;
                         }
-                        else if (SatisfiedCustomers >= CustomerGoal && CustomerQueue.Count == 0)
+                        else
+                            AtMaxTimer = 0;
+                        if (AtMaxTimer < 10 * 60)
                         {
-                            NPC chef = Main.npc[NPC.FindFirstNPC(ModContent.NPCType<TheChef>())];
-                            DisplayMessage(chef.Hitbox, Color.LimeGreen, "Dialogue.LunarCult.TheChef.Activity.Finished");
-                            Active = false;
-                            return;
+                            if (SatisfiedCustomers < CustomerGoal && CustomerQueue.Count < CustomerLimit && ActivityTimer >= 360 && Main.rand.NextBool(120)) //Spawn New Customer
+                            {
+                                WeightedRandom<int> customerType = new();
+                                customerType.Add(ModContent.NPCType<LunarCultistDevotee>(), 5);
+                                customerType.Add(ModContent.NPCType<LunarCultistArcher>(), 3);
+                                customerType.Add(ModContent.NPCType<LunarBishop>(), 1);
+
+                                Vector2 chefCenter = Main.npc[NPC.FindFirstNPC(ModContent.NPCType<TheChef>())].Center;
+                                ActivityCoords = new((int)chefCenter.X, (int)chefCenter.Y);
+
+                                Point spawnLocation = new(ActivityCoords.X + 1100, ActivityCoords.Y);
+                                NPC.NewNPC(NPC.GetSource_NaturalSpawn(), spawnLocation.X, spawnLocation.Y, customerType, ai2: 2);
+
+                                ActivityTimer = 0;
+                            }
+                            else if (SatisfiedCustomers >= CustomerGoal && CustomerQueue.Count == 0)
+                            {
+                                NPC chef = Main.npc[NPC.FindFirstNPC(ModContent.NPCType<TheChef>())];
+                                DisplayMessage(chef.Hitbox, Color.LimeGreen, "Dialogue.LunarCult.TheChef.Activity.Finished");
+                                Active = false;
+                                return;
+                            }
                         }
                         ActivityTimer++;
                     }

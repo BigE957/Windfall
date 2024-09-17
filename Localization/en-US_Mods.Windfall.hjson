@@ -486,6 +486,15 @@ Dialogue: {
 					1: Can't wait to dig in...
 					2: That looks delicious!
 				}
+
+				Madge: {
+					0: What's taking so long?!
+					1: I'm starving...
+					2: Hurry up!!
+					3: What's the hold up?!
+					4: So hungry...
+					5: What do people taste like?
+				}
 			}
 		}
 
@@ -621,6 +630,14 @@ Dialogue: {
 					0: Order up!
 					1: Voilà!
 					2: And... Done!
+				}
+
+				Failed: {
+					0: Oh bloody hell...
+					1: Shut it down!
+					2: What a mess...
+					3: Maybe try to get those orders in a little quicker next time.
+					4: If, there's a next time...
 				}
 
 				AlmostDone: I think that's everyone! Let's finish up here.

@@ -1,5 +1,6 @@
 ﻿using Windfall.Common.Systems.WorldEvents;
 using DialogueHelper.Content.UI.Dialogue;
+using Microsoft.CodeAnalysis;
 
 namespace Windfall.Content.NPCs.WorldEvents.LunarCult
 {
@@ -70,26 +71,54 @@ namespace Windfall.Content.NPCs.WorldEvents.LunarCult
         public override void AI()
         {
             string chefPath = "Dialogue.LunarCult.TheChef.";
-
-            if (ItemCooking != -1)
+            if (LunarCultBaseSystem.State == LunarCultBaseSystem.SystemState.Cafeteria)
             {
-                TimeCooking++;
-                if (TimeCooking >= CookTIme)
+                if (LunarCultBaseSystem.AtMaxTimer >= 15 * 60)
                 {
-                    Rectangle location = new((int)NPC.Center.X, (int)NPC.Center.Y, NPC.width, NPC.width);
-                    CombatText.NewText(location, Color.LimeGreen, GetWindfallTextValue(chefPath + "Activity.Completed." + Main.rand.Next(3)), true);
-
-                    Item item = Main.item[Item.NewItem(Item.GetSource_NaturalSpawn(), NPC.Center, Vector2.Zero, (int)ItemCooking)];
-                    item.maxStack = 1;
-                    item.velocity = new Vector2(1.75f, Main.rand.NextFloat(-3, 0));
-                    item.LunarCult().madeDuringCafeteriaActivity = true;
                     ItemCooking = -1;
-                    TimeCooking = 0;
+                    int shutdownTimer = LunarCultBaseSystem.AtMaxTimer - (10 * 60);
+                    switch (shutdownTimer)
+                    {
+                        case 0:
+                            CombatText.NewText(NPC.Hitbox, Color.LimeGreen, GetWindfallTextValue(chefPath + "Activity.Failed.0"), true);
+                            break;
+                        case 120:
+                            CombatText.NewText(NPC.Hitbox, Color.LimeGreen, GetWindfallTextValue(chefPath + "Activity.Failed.1"), true);
+                            break;
+                        case 240:
+                            CombatText.NewText(NPC.Hitbox, Color.LimeGreen, GetWindfallTextValue(chefPath + "Activity.Failed.2"), true);
+                            break;
+                        case 360:
+                            CombatText.NewText(NPC.Hitbox, Color.LimeGreen, GetWindfallTextValue(chefPath + "Activity.Failed.3"), true);
+                            break;
+                        case 480:
+                            CombatText.NewText(NPC.Hitbox, Color.LimeGreen, GetWindfallTextValue(chefPath + "Activity.Failed.4"), true);
+                            break;
+                        case 600:
+                            LunarCultBaseSystem.Active = false;
+                            break;
+                    }
+
                 }
-                NPC.direction = -1;
+                if (ItemCooking != -1)
+                {
+                    TimeCooking++;
+                    if (TimeCooking >= CookTIme)
+                    {
+                        CombatText.NewText(NPC.Hitbox, Color.LimeGreen, GetWindfallTextValue(chefPath + "Activity.Completed." + Main.rand.Next(3)), true);
+
+                        Item item = Main.item[Item.NewItem(Item.GetSource_NaturalSpawn(), NPC.Center, Vector2.Zero, (int)ItemCooking)];
+                        item.maxStack = 1;
+                        item.velocity = new Vector2(1.75f, Main.rand.NextFloat(-3, 0));
+                        item.LunarCult().madeDuringCafeteriaActivity = true;
+                        ItemCooking = -1;
+                        TimeCooking = 0;
+                    }
+                    NPC.direction = -1;
+                }
+                else
+                    NPC.direction = 1;
             }
-            else
-                NPC.direction = 1;
             NPC.spriteDirection = NPC.direction;
         }
         public override bool CanChat() => ItemCooking == -1;
@@ -99,7 +128,7 @@ namespace Windfall.Content.NPCs.WorldEvents.LunarCult
 
             if (LunarCultBaseSystem.IsCafeteriaActivityActive())
             {
-                DialogueHolder.DialogueTrees["FoodSelection"].Dialogues[0].Responses = LunarCultBaseSystem.GetMenuResponses();
+                DialogueHolder.DialogueTrees["Windfall/FoodSelection"].Dialogues[0].Responses = LunarCultBaseSystem.GetMenuResponses();
                 ModContent.GetInstance<DialogueUISystem>().DisplayDialogueTree("Windfall/FoodSelection");
             }
             else
@@ -134,9 +163,9 @@ namespace Windfall.Content.NPCs.WorldEvents.LunarCult
         }
         private void ClickEffect(string treeKey, int dialogueID, int buttonID)
         {
-            if(treeKey == "FoodSelection" && dialogueID == 0)
+            if(treeKey == "Windfall/FoodSelection" && dialogueID == 0)
                 Main.npc[NPC.FindFirstNPC(NPC.type)].ai[3] = LunarCultBaseSystem.MenuFoodIDs[buttonID];
-            else if (treeKey == "CafeteriaActivityStart" && buttonID == 1)
+            else if (treeKey == "Windfall/CafeteriaActivityStart" && buttonID == 1)
             {
                 LunarCultBaseSystem.SatisfiedCustomers = 0;
                 LunarCultBaseSystem.State = LunarCultBaseSystem.SystemState.Cafeteria;
