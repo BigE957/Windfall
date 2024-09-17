@@ -10,6 +10,7 @@ using DialogueHelper.Content.UI.Dialogue;
 using Windfall.Content.NPCs.Critters;
 using Windfall.Content.Buffs.DoT;
 using Windfall.Content.Projectiles.ProjectileAnimations;
+using Windfall.Content.UI;
 
 namespace Windfall.Common.Systems.WorldEvents
 {
@@ -167,6 +168,7 @@ namespace Windfall.Common.Systems.WorldEvents
         }
         public override void PreUpdateWorld()
         {
+            RecruitmentsSkipped = 0;
             if (NPC.downedAncientCultist || LunarCultBaseLocation == new Point(-1, -1))
                 return;
             //Main.NewText("Active");
@@ -336,9 +338,9 @@ namespace Windfall.Common.Systems.WorldEvents
                     {
                         if (RecruitmentsSkipped >= 3)
                             path += "Betrayal";
-                        else if (true)//Main.moonPhase == (int)MoonPhase.Full || Main.moonPhase == (int)MoonPhase.Empty) //Ritual
+                        else if (false)//Main.moonPhase == (int)MoonPhase.Full || Main.moonPhase == (int)MoonPhase.Empty) //Ritual
                             path += "Ritual.";
-                        else if (false)//Main.moonPhase == (int)MoonPhase.QuarterAtLeft || Main.moonPhase == (int)MoonPhase.QuarterAtRight) //Meeting
+                        else if (true)//Main.moonPhase == (int)MoonPhase.QuarterAtLeft || Main.moonPhase == (int)MoonPhase.QuarterAtRight) //Meeting
                             path += "Meeting.";
                         else if (false)//Main.moonPhase == (int)MoonPhase.HalfAtLeft || Main.moonPhase == (int)MoonPhase.HalfAtRight) //Tailor
                             path += "Tailor.";
@@ -396,7 +398,7 @@ namespace Windfall.Common.Systems.WorldEvents
                         }
                         else
                         {
-                            if (true)//Main.moonPhase == (int)MoonPhase.Full || Main.moonPhase == (int)MoonPhase.Empty) //Ritual
+                            if (false)//Main.moonPhase == (int)MoonPhase.Full || Main.moonPhase == (int)MoonPhase.Empty) //Ritual
                             {
                                 #region Location Selection
                                 ActivityCoords = new Point(LunarCultBaseLocation.X - 37, LunarCultBaseLocation.Y - 24);
@@ -548,14 +550,14 @@ namespace Windfall.Common.Systems.WorldEvents
                                 }
                                 #endregion
                             }
-                            else if (false)//Main.moonPhase == (int)MoonPhase.HalfAtLeft || Main.moonPhase == (int)MoonPhase.HalfAtRight) //Tailor
+                            else if (true)//Main.moonPhase == (int)MoonPhase.HalfAtLeft || Main.moonPhase == (int)MoonPhase.HalfAtRight) //Tailor
                             {
                                 #region Location Selection
                                 Vector2 seamstressCenter = Main.npc[NPC.FindFirstNPC(ModContent.NPCType<Seamstress>())].Center;
                                 ActivityCoords = new((int)seamstressCenter.X, (int)seamstressCenter.Y);
                                 #endregion
 
-                                AssignedClothing = [];
+                                AssignedClothing = new int[255];
                                 CompletedClothesCount = 0;
                                 ClothesGoal = 5 * (Main.player.Where(p => p.active).Count() + 1);
                             }
@@ -876,6 +878,14 @@ namespace Windfall.Common.Systems.WorldEvents
                 case SystemState.Tailor:
                     if (!Active)
                         State = SystemState.End;
+                    else
+                    {
+                        if (ActivityTimer == 240)
+                            ModContent.GetInstance<TimerUISystem>().TimerStart(2 * 60 * 60);
+                        else if(ActivityTimer > 240 && (ModContent.GetInstance<TimerUISystem>().EventTimer == null || ModContent.GetInstance<TimerUISystem>().EventTimer.timer < 0))
+                            Main.npc[NPC.FindFirstNPC(ModContent.NPCType<Seamstress>())].As<Seamstress>().EndActivity = true;
+                        ActivityTimer++;
+                    }
                     break;
                 case SystemState.Cafeteria:
                     if(Active)

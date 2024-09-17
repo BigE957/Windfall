@@ -12,7 +12,7 @@ namespace Windfall.Content.Items.GlobalItems
         public override void OnCreated(Item item, ItemCreationContext context)
         {
             madeDuringCafeteriaActivity = IsCafeteriaActivityActive();
-            madeDuringTailorActivity = IsCafeteriaActivityActive();
+            madeDuringTailorActivity = IsTailorActivityActive();
         }
 
         public override bool CanUseItem(Item item, Player player)

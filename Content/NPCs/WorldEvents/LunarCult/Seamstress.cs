@@ -1,6 +1,8 @@
 ﻿using Humanizer;
+using Terraria.Enums;
 using Windfall.Content.Items.Quest.Tailor;
 using Windfall.Content.Items.Summoning;
+using Windfall.Content.UI;
 using static Windfall.Common.Systems.WorldEvents.LunarCultBaseSystem;
 
 namespace Windfall.Content.NPCs.WorldEvents.LunarCult
@@ -15,8 +17,7 @@ namespace Windfall.Content.NPCs.WorldEvents.LunarCult
             set => NPC.ai[1] = value;
         }
         private bool BeginActivity = false;
-        private bool EndActivity = false;
-        private bool Test = false;
+        public bool EndActivity = false;
 
         private int yapCounter
         {
@@ -120,35 +121,64 @@ namespace Windfall.Content.NPCs.WorldEvents.LunarCult
                 #region End Activity Dialogue
                 Rectangle location = new((int)NPC.Center.X, (int)NPC.Center.Y, NPC.width, NPC.width);
 
-                switch (yapCounter)
+                if (CompletedClothesCount >= ClothesGoal)
                 {
-                    case 60:
-                        CombatText.NewText(location, Color.LimeGreen, "Wait...", true);
-                        break;
-                    case 180:
-                        CombatText.NewText(location, Color.LimeGreen, "I can't believe it...", true);
-                        break;
-                    case 300:
-                        CombatText text = Main.combatText[CombatText.NewText(location, Color.LimeGreen, "We met our quota!!", true)];
-                        text.lifeTime /= 2;
-                        break;
-                    case 360:
-                        CombatText.NewText(location, Color.LimeGreen, "Great job!", true);
-                        break;
-                    case 480:
-                        CombatText.NewText(location, Color.LimeGreen, "I suppose you've earned this...", true);
-                        break;
-                    case 540:
-                        Item i = Main.item[Item.NewItem(Entity.GetSource_Loot(), NPC.Center, new Vector2(8, 4), ModContent.ItemType<RuneOfGnosi>())];
-                        i.velocity = (Main.player[Main.myPlayer].Center - NPC.Center).SafeNormalize(Vector2.Zero).RotatedBy(Main.rand.NextFloat(-0.5f, 0.5f)) * 4;
-                        break;
-                    case 600:
-                        CombatText.NewText(location, Color.LimeGreen, "I'll look forward to when next we work together!", true);
-                        break;
-                    case 720:
-                        Active = false;
-                        EndActivity = false;
-                        break;
+                    switch (yapCounter)
+                    {
+                        case 60:
+                            CombatText.NewText(location, Color.LimeGreen, "Wait...", true);
+                            break;
+                        case 180:
+                            CombatText.NewText(location, Color.LimeGreen, "I can't believe it...", true);
+                            break;
+                        case 300:
+                            CombatText text = Main.combatText[CombatText.NewText(location, Color.LimeGreen, "We met our quota!!", true)];
+                            text.lifeTime /= 2;
+                            break;
+                        case 360:
+                            CombatText.NewText(location, Color.LimeGreen, "Great job!", true);
+                            break;
+                        case 480:
+                            CombatText.NewText(location, Color.LimeGreen, "I suppose you've earned this...", true);
+                            break;
+                        case 540:
+                            Item i = Main.item[Item.NewItem(Entity.GetSource_Loot(), NPC.Center, new Vector2(8, 4), ModContent.ItemType<RuneOfGnosi>())];
+                            i.velocity = (Main.player[Main.myPlayer].Center - NPC.Center).SafeNormalize(Vector2.Zero).RotatedBy(Main.rand.NextFloat(-0.5f, 0.5f)) * 4;
+                            break;
+                        case 600:
+                            CombatText.NewText(location, Color.LimeGreen, "I'll look forward to when next we work together!", true);
+                            break;
+                        case 720:
+                            Active = false;
+                            EndActivity = false;
+                            break;
+                    }
+                }
+                else
+                {
+                    switch (yapCounter)
+                    {
+                        case 60:
+                            CombatText.NewText(location, Color.LimeGreen, "Alright, y'know what.", true);
+                            break;
+                        case 180:
+                            CombatText.NewText(location, Color.LimeGreen, "I've had it!", true);
+                            break;
+                        case 300:
+                            CombatText text = Main.combatText[CombatText.NewText(location, Color.LimeGreen, "GET OUT!!", true)];
+                            text.lifeTime /= 2;
+                            break;
+                        case 360:
+                            CombatText.NewText(location, Color.LimeGreen, "I'll do this myself.", true);
+                            break;
+                        case 480:
+                            CombatText.NewText(location, Color.LimeGreen, "Can't trust anyone for help these days...", true);
+                            break;
+                        case 600:
+                            Active = false;
+                            EndActivity = false;
+                            break;
+                    }
                 }
                 #endregion
                 yapCounter++;
@@ -214,8 +244,8 @@ namespace Windfall.Content.NPCs.WorldEvents.LunarCult
                 if (CompletedClothesCount >= ClothesGoal)
                 {
                     EndActivity = true;
-                    if (!MyPlayer.LunarCult().SeamstressTalked)
-                        MyPlayer.LunarCult().SeamstressTalked = true;
+                    foreach (Player player in Main.player.Where(p => p.active && CalamityUtils.ManhattanDistance(NPC.Center, p.Center) < 600f))
+                        player.LunarCult().SeamstressTalked = true;
                     return "Done!";
                 }
                 else
@@ -311,6 +341,7 @@ namespace Windfall.Content.NPCs.WorldEvents.LunarCult
                             Rectangle location = new((int)NPC.Center.X, (int)NPC.Center.Y, NPC.width, NPC.width);
                             CombatText.NewText(location, Color.LimeGreen, GetWindfallTextValue(activityPath + "Completed." + Main.rand.Next(3)), true);
                             AssignedClothing[Main.myPlayer] = 0;
+                            ModContent.GetInstance<TimerUISystem>().EventTimer.timer += 30 * 60;
                             CompletedClothesCount++;
                         }
                         else
@@ -332,7 +363,7 @@ namespace Windfall.Content.NPCs.WorldEvents.LunarCult
                 return "Erm, what the sigma?"; //will never actually show up, as the dialogue box is closed lol
                 #endregion
             }
-            else if (Test)//(Main.moonPhase == (int)MoonPhase.HalfAtLeft || Main.moonPhase == (int)MoonPhase.HalfAtRight)
+            else if (true)//Main.moonPhase == (int)MoonPhase.HalfAtLeft || Main.moonPhase == (int)MoonPhase.HalfAtRight && LunarCultbaseSystem.State == LunarCultbaseSystem.SystemStates.Ready)
             {
                 if (CurrentDialogue == 0 && MyPlayer.LunarCult().SeamstressTalked)
                     CurrentDialogue = DialogueState.Start;
@@ -356,7 +387,7 @@ namespace Windfall.Content.NPCs.WorldEvents.LunarCult
                 Active = true;
                 BeginActivity = true;
             }
-            if (Test)
+            if (true)//Main.moonPhase == (int)MoonPhase.HalfAtLeft || Main.moonPhase == (int)MoonPhase.HalfAtRight && LunarCultbaseSystem.State == LunarCultbaseSystem.SystemStates.Ready)
             {
                 Player MyPlayer = Main.player[Main.myPlayer];
                 string seamstressPath = "Dialogue.LunarCult.Seamstress.";
@@ -372,14 +403,13 @@ namespace Windfall.Content.NPCs.WorldEvents.LunarCult
             {
                 //Can eventually be used for other stuff. Only here as this is for testing
                 Main.CloseNPCChatOrSign();
-                Test = true;
             }
         }
         public override void SetChatButtons(ref string button, ref string button2)
         {
-            if (!IsTailorActivityActive() && Test)
+            if (true)//Main.moonPhase == (int)MoonPhase.HalfAtLeft || Main.moonPhase == (int)MoonPhase.HalfAtRight && LunarCultbaseSystem.State == LunarCultbaseSystem.SystemStates.Ready)
                 SetConversationButtons(MyDialogue, (int)CurrentDialogue, ref button, ref button2);
-            if(!Test)
+            else
                 button = "Okay.";
         }
         public override bool CheckActive() => false;

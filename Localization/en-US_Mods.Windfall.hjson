@@ -92,6 +92,7 @@ Dialogue: {
 				No: Don't think so.
 			}
 		}
+
 		RitualEvent: {
 			Messages.0: Shall we begin?
 
@@ -100,7 +101,7 @@ Dialogue: {
 				Yes: Yes.
 			}
 		}
-		
+
 		BetrayalChat: {
 			Messages.0: Yo wanna betray the Dragon Cult?
 
