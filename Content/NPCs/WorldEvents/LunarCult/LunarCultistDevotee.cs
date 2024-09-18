@@ -143,7 +143,6 @@ namespace Windfall.Content.NPCs.WorldEvents.LunarCult
                         float angerRatio = (LunarCultBaseSystem.CustomerQueue.Count - 4) / ((float)LunarCultBaseSystem.CustomerLimit - 4);
                         if (LunarCultBaseSystem.CustomerQueue.Count <= 4)
                             angerRatio = 0f;
-                        Main.NewText(LunarCultBaseSystem.AtMaxTimer);
                         if (NPC.velocity.Y >= 0 && NPC.position.Y >= goalPosition.Y - NPC.height)
                         {
                             NPC.position.Y = goalPosition.Y - NPC.height;

@@ -73,7 +73,7 @@ namespace Windfall.Content.NPCs.WorldEvents.LunarCult
             string chefPath = "Dialogue.LunarCult.TheChef.";
             if (LunarCultBaseSystem.State == LunarCultBaseSystem.SystemState.Cafeteria)
             {
-                if (LunarCultBaseSystem.AtMaxTimer >= 15 * 60)
+                if (LunarCultBaseSystem.AtMaxTimer >= 10 * 60)
                 {
                     ItemCooking = -1;
                     int shutdownTimer = LunarCultBaseSystem.AtMaxTimer - (10 * 60);
@@ -168,6 +168,8 @@ namespace Windfall.Content.NPCs.WorldEvents.LunarCult
             else if (treeKey == "Windfall/CafeteriaActivityStart" && buttonID == 1)
             {
                 LunarCultBaseSystem.SatisfiedCustomers = 0;
+                LunarCultBaseSystem.CustomerQueue = [];
+
                 LunarCultBaseSystem.State = LunarCultBaseSystem.SystemState.Cafeteria;
                 LunarCultBaseSystem.Active = true;
             }
