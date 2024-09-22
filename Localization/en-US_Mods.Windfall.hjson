@@ -514,7 +514,7 @@ Dialogue: {
 					23: You cooking a whole dragon in there?
 					24: Where meal.
 					25: Hell nah.
-					26: [i/p72:3999]
+					26: "[i/p72:3999]"
 				}
 			}
 		}
@@ -1842,7 +1842,7 @@ NPCs: {
 	OratorNPC.DisplayName: The Orator
 	GodseekerKnight.DisplayName: Godseeker Knight
 	ShadowHand.DisplayName: Shadow Hand
-	SealingTablet.DisplayName: Sealing Tablet
+	SealingTablet.DisplayName: ""
 	DragonCultist.DisplayName: ??
 	DragonArcher.DisplayName: ???
 	GodlyTumor.DisplayName: Hive Tumor

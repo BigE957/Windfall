@@ -47,7 +47,15 @@ namespace Windfall.Common.Systems.WorldEvents
         }
         public override void PreUpdateWorld()
         {
-            Player mainPlayer = Main.player[0];
+            if(RitualSequenceSeen)
+            {
+                if (!NPC.AnyNPCs(ModContent.NPCType<SealingTablet>()))
+                    NPC.NewNPC(Entity.GetSource_None(), (int)DungeonCoords.X, (int)DungeonCoords.Y - 128, ModContent.NPCType<SealingTablet>(), Start: 150, ai0: 2);
+                else if (Main.npc[NPC.FindFirstNPC(ModContent.NPCType<SealingTablet>())].ai[0] != 2)
+                    Main.npc[NPC.FindFirstNPC(ModContent.NPCType<SealingTablet>())].ai[0] = 2;
+                
+                return;
+            }
             #region Debugging Stuffs
             //State = SystemState.CheckReqs; RitualTimer = -2; RitualSequenceSeen = false; Active = false;
             //RitualTimer = 60 * 51;
@@ -56,7 +64,7 @@ namespace Windfall.Common.Systems.WorldEvents
             switch (State)
             {
                 case SystemState.CheckReqs:
-                    if (TravellingCultist.RitualQuestProgress != 4 || RitualSequenceSeen)
+                    if (TravellingCultist.RitualQuestProgress != 4)
                        return;
                     else
                     {
@@ -73,8 +81,8 @@ namespace Windfall.Common.Systems.WorldEvents
                         {
                             NPC.NewNPC(Entity.GetSource_None(), (int)(DungeonCoords.X - 240), (int)DungeonCoords.Y - 8, ModContent.NPCType<RecruitableLunarCultist>()),
                             NPC.NewNPC(Entity.GetSource_None(), (int)(DungeonCoords.X - 130), (int)DungeonCoords.Y - 8, ModContent.NPCType<RecruitableLunarCultist>()),
-                            //NPC.NewNPC(Entity.GetSource_None(), (int)(DungeonCoords.X + 130), (int)DungeonCoords.Y - 8, ModContent.NPCType<RecruitableLunarCultist>()),
-                            //NPC.NewNPC(Entity.GetSource_None(), (int)(DungeonCoords.X + 240), (int)DungeonCoords.Y - 8, ModContent.NPCType<RecruitableLunarCultist>()),
+                            NPC.NewNPC(Entity.GetSource_None(), (int)(DungeonCoords.X + 130), (int)DungeonCoords.Y - 8, ModContent.NPCType<RecruitableLunarCultist>()),
+                            NPC.NewNPC(Entity.GetSource_None(), (int)(DungeonCoords.X + 240), (int)DungeonCoords.Y - 8, ModContent.NPCType<RecruitableLunarCultist>()),
                             NPC.NewNPC(Entity.GetSource_None(), (int)DungeonCoords.X, (int)DungeonCoords.Y - 128, ModContent.NPCType<SealingTablet>()),
                             NPC.NewNPC(Entity.GetSource_None(), (int)DungeonCoords.X, (int)DungeonCoords.Y - 8, ModContent.NPCType<TravellingCultist>(), 0, 1),
                             
@@ -94,7 +102,7 @@ namespace Windfall.Common.Systems.WorldEvents
                     }
                     else
                     {
-                        if ((DungeonCoords - mainPlayer.Center).Length() < 150f && !Active)
+                        if ((DungeonCoords - Main.player[Player.FindClosest(DungeonCoords, 16, 16)].Center).Length() < 150f && !Active)
                         {
                             Active = true;
                             RitualTimer = 0;
@@ -279,10 +287,10 @@ namespace Windfall.Common.Systems.WorldEvents
                                         SealingTablet.ai[0] = 0;
                                         break;
                                     case 60 * 65:
-                                        if (mainPlayer.InventoryHas(ModContent.ItemType<SelenicTablet>()))
+                                        foreach (Player player in Main.ActivePlayers)
                                         {
-                                            Main.NewText("The Selenic Tablet hums violently...", Color.Cyan);
-                                            break;
+                                            if (player.InventoryHas(ModContent.ItemType<SelenicTablet>()))
+                                                Main.NewText("The Selenic Tablet hums violently...", Color.Cyan);
                                         }
                                         break;
                                     case 60 * 72:
@@ -325,7 +333,7 @@ namespace Windfall.Common.Systems.WorldEvents
                                         break;
 
                                     case 60 * 90:
-                                        SoundEngine.PlaySound(SoundID.Roar, mainPlayer.Center);
+                                        SoundEngine.PlaySound(SoundID.Roar, Orator.Center);
                                         Orator.Transform(ModContent.NPCType<TheOrator>());
                                         State = SystemState.End;
                                         break;

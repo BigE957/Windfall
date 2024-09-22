@@ -1,6 +1,7 @@
 ﻿using CalamityMod.Buffs.StatDebuffs;
 using CalamityMod.Graphics.Metaballs;
 using Windfall.Content.NPCs.Bosses.Orator;
+using Windfall.Content.NPCs.WorldEvents.LunarCult;
 using Windfall.Content.Projectiles.Boss.Orator;
 using Windfall.Content.Projectiles.Weapons.Summon;
 
@@ -68,7 +69,8 @@ namespace Windfall.Common.Graphics.Metaballs
             AnyProjectiles(ModContent.ProjectileType<DarkTide>()) ||
             AnyProjectiles(ModContent.ProjectileType<ShadowHand_Minion>()) ||
             NPC.AnyNPCs(ModContent.NPCType<ShadowHand>()) ||
-            NPC.AnyNPCs(ModContent.NPCType<OratorHand>())
+            NPC.AnyNPCs(ModContent.NPCType<OratorHand>()) ||
+            NPC.AnyNPCs(ModContent.NPCType<SealingTablet>())
         ;
 
         public override IEnumerable<Texture2D> Layers
@@ -213,13 +215,19 @@ namespace Windfall.Common.Graphics.Metaballs
                     p.ModProjectile.PreDraw(ref c);
                 }
             }
-            foreach (NPC n in Main.npc.Where(n => n.active && (n.type == ModContent.NPCType<ShadowHand>() || n.type == ModContent.NPCType<OratorHand>())))
+            foreach (NPC n in Main.npc.Where(n => n.active && (
+                n.type == ModContent.NPCType<ShadowHand>() || 
+                n.type == ModContent.NPCType<OratorHand>() ||
+                n.type == ModContent.NPCType<SealingTablet>()
+            )))
             {
                 Vector2 drawPosition = n.Center - Main.screenPosition;
                 if (n.type == ModContent.NPCType<ShadowHand>())
                     n.As<ShadowHand>().DrawSelf(drawPosition, n.GetAlpha(Color.White), n.rotation);
-                else
+                else if (n.type == ModContent.NPCType<OratorHand>())
                     n.As<OratorHand>().PostDraw(Main.spriteBatch, Main.screenPosition, n.GetAlpha(Color.White));
+                else if (n.ai[0] == 2)
+                    n.As<SealingTablet>().PostDraw(Main.spriteBatch, Main.screenPosition, n.GetAlpha(Color.White));
             }
         }
         private static float SumofSines(EmpyreanBorderParticle particle, float wavelength, float speed)
