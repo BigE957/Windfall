@@ -39,6 +39,7 @@ namespace Windfall.Common.Systems
             Dictionary<string, Character> Characters = new()
             {
                 { "Windfall/TheCalamity", new Character("[c/FF0000:The Calamity]", [new Expression("Normal", 1, 0), new Expression("Finality", 1, 0)], textDelay: 3, primaryColor: Color.Black, secondaryColor: Color.Red)},
+                { "Windfall/TheOrator", new Character("[c/32CD32:The Orator]", [new Expression("Default", 1, 0)], textDelay: 3, primaryColor: Color.Black, secondaryColor: Color.LimeGreen)},
             };
 
             DialogueHolder.Characters.AddRange(Characters);
@@ -242,7 +243,7 @@ namespace Windfall.Common.Systems
                         ),
                     ],
                     [
-                        "Windfall/TheCalamity"
+                        "Windfall/TheOrator"
                     ],
                     LocalizationPath)
                 },
@@ -259,7 +260,7 @@ namespace Windfall.Common.Systems
                         ),
                     ],
                     [
-                        "Windfall/TheCalamity"
+                        "Windfall/TheOrator"
                     ],
                     LocalizationPath)
                 },
@@ -276,7 +277,7 @@ namespace Windfall.Common.Systems
                         ),
                     ],
                     [
-                        "Windfall/TheCalamity"
+                        "Windfall/TheOrator"
                     ],
                     LocalizationPath)
                 },
