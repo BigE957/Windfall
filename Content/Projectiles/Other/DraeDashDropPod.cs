@@ -102,7 +102,7 @@ namespace Windfall.Content.Projectiles.Other
                                 }
                             }
                             Projectile.NewProjectile(Projectile.GetSource_FromAI(), Projectile.Top + Vector2.UnitY * 72f, Vector2.Zero, ModContent.ProjectileType<AtlasMunitionsDropPodUpper>(), 0, 0f, Projectile.owner);
-                            DraedonUISystem.DraeDashOrder = new Dictionary<string, int>();
+                            DraedonUISystem.DraeDashOrder = [];
                             DraeDash.orderEnRoute = false;
                         }
                     }

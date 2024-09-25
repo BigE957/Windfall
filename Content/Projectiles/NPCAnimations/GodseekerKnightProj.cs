@@ -6,8 +6,8 @@ namespace Windfall.Content.Projectiles.NPCAnimations
     {
         public override string Texture => "Windfall/Assets/Projectiles/NPCAnimations/GodseekerKnightProj";
         internal override string key => "GodseekerKnight.WorldText";
-        internal override List<float> Delays => new()
-        {
+        internal override List<float> Delays =>
+        [
             1,
             3,
             3,
@@ -15,7 +15,7 @@ namespace Windfall.Content.Projectiles.NPCAnimations
             3,
             3,
             3,
-        };
+        ];
         internal override SoundStyle SpawnSound => new("CalamityMod/Sounds/Custom/SCalSounds/BrimstoneHellblastSound");
         internal override int NPCType => ModContent.NPCType<GodseekerKnight>();
         internal override Color TextColor => Color.Gold;

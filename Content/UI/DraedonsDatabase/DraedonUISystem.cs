@@ -10,7 +10,7 @@ namespace Windfall.Content.UI.DraedonsDatabase
         internal DraeDash DraeDashState;
         internal PlutusVault PlutusVaultState;
         internal OrderEnRoute OrderEnRouteState;
-        public static Dictionary<string, int> DraeDashOrder = new Dictionary<string, int>();
+        public static Dictionary<string, int> DraeDashOrder = [];
         public static bool databaseOpen = false;
         public override void PostSetupContent()
         {

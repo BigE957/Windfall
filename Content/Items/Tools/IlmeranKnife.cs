@@ -22,8 +22,8 @@ namespace Windfall.Content.Items.Tools
             internal int MaxStack;
         };
 
-        internal List<lootItem> ClamLootPool = new()
-        {
+        internal List<lootItem> ClamLootPool =
+        [
             new lootItem {Type = ModContent.ItemType<SeaRemains>(), MinStack = 1, MaxStack = 3},
             new lootItem {Type = ItemID.Seashell, MinStack = 3, MaxStack = 5},
             new lootItem {Type = ItemID.Coral, MinStack = 3, MaxStack = 5},
@@ -39,7 +39,7 @@ namespace Windfall.Content.Items.Tools
             new lootItem {Type = ModContent.ItemType<FishboneBoomerang>(), MinStack = 1, MaxStack = 1},
             new lootItem {Type = ModContent.ItemType<RedtideSpear>(), MinStack = 1, MaxStack = 1},
             new lootItem {Type = ModContent.ItemType<VictideHeadSummon>(), MinStack = 1, MaxStack = 1},
-        };
+        ];
         public override void SetDefaults()
         {
             Item.damage = 1;

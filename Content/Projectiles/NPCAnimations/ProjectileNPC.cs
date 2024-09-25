@@ -22,7 +22,7 @@ namespace Windfall.Content.Projectiles.NPCAnimations
         }
         int dialogueCounter = 0;
         internal virtual string key => ""; 
-        internal virtual List<float> Delays => new();
+        internal virtual List<float> Delays => [];
         internal virtual SoundStyle SpawnSound => new();
         internal virtual int NPCType => 0;
         internal virtual Color TextColor => new();

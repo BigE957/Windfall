@@ -292,13 +292,13 @@ namespace Windfall.Content.UI.DraedonsDatabase
     internal class PlutusVault : UIState
     {
         public MouseBlockingUIPanel panel;
-        public static List<int> coins = new()
-        {
+        public static List<int> coins =
+        [
             0,
             0,
             0,
             0,
-        };
+        ];
         public override void OnInitialize()
         {
             panel = new();

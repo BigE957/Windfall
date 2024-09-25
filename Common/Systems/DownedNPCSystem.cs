@@ -66,7 +66,7 @@ namespace Windfall.Common.Systems
 
         public override void SaveWorldData(TagCompound tag)
         {
-            List<string> downed = new();
+            List<string> downed = [];
 
             if (downedCnidrion)
                 downed.Add("Cnidrion");

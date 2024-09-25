@@ -96,7 +96,7 @@ namespace Windfall.Content.NPCs.WanderingNPCs
             }
         }
         public override ITownNPCProfile TownNPCProfile() => NPCProfile;
-        public override List<string> SetNPCNameList() => new() { "Nasser" };
+        public override List<string> SetNPCNameList() => ["Nasser"];
         public override float SpawnChance(NPCSpawnInfo spawnInfo)
         {
             if (spawnInfo.Player.ZoneDesert)

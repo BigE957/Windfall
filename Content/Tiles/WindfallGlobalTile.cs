@@ -21,8 +21,8 @@ namespace Windfall.Content.Tiles
                     if (chest == null)
                         break;
 
-                    List<int> chestXCoords = new() { chest.x, chest.x + 1 };
-                    List<int> chestYCoords = new() { chest.y, chest.y + 1 };
+                    List<int> chestXCoords = [chest.x, chest.x + 1];
+                    List<int> chestYCoords = [chest.y, chest.y + 1];
 
                     if (chestXCoords.Contains(i) && chestYCoords.Contains(j))
                     {

@@ -6,19 +6,19 @@ namespace Windfall.Common.Utils
 {
     public static partial class WindfallUtils
     {
-        private static readonly List<string> PaladinQuests = new()
-        {
+        private static readonly List<string> PaladinQuests =
+        [
             "CnidrionHunt",
             "ScoogHunt",
             "ShuckinClams",
             "ClamHunt",
             "ScoogHunt2",
-        };
-        private static readonly List<string> GodseekerQuests = new()
-        {
+        ];
+        private static readonly List<string> GodseekerQuests =
+        [
             "PestControl",
             "Decontamination",
-        };
+        ];
         public struct dialogueButton
         {
             public string name = "";

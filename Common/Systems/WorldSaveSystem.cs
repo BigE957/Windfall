@@ -72,8 +72,8 @@ namespace Windfall.Common.Systems
                 JournalsCollected[i] = false;
             }
 
-            CreditDataNames = new List<string>();
-            CreditDataCredits = new List<int>();
+            CreditDataNames = [];
+            CreditDataCredits = [];
 
             IlmeranPaladinChats = 0;
             GodseekerKnightChats = 0;

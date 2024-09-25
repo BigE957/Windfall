@@ -23,7 +23,7 @@ namespace Windfall.Common.Systems.WorldEvents
 
         private static bool Active = false;
         private static int RitualTimer = -1;
-        private static List<int> NPCIndexs = new();
+        private static List<int> NPCIndexs = [];
         private static float zoom = 0;
         private static Vector2 DungeonCoords = new Vector2(Main.dungeonX - 4, Main.dungeonY).ToWorldCoordinates();
         private static bool CultistFacePlayer = true;
@@ -77,8 +77,8 @@ namespace Windfall.Common.Systems.WorldEvents
                     {
                         Active = false;
                         zoom = 0;
-                        NPCIndexs = new List<int>
-                        {
+                        NPCIndexs =
+                        [
                             NPC.NewNPC(Entity.GetSource_None(), (int)(DungeonCoords.X - 240), (int)DungeonCoords.Y - 8, ModContent.NPCType<RecruitableLunarCultist>()),
                             NPC.NewNPC(Entity.GetSource_None(), (int)(DungeonCoords.X - 130), (int)DungeonCoords.Y - 8, ModContent.NPCType<RecruitableLunarCultist>()),
                             NPC.NewNPC(Entity.GetSource_None(), (int)(DungeonCoords.X + 130), (int)DungeonCoords.Y - 8, ModContent.NPCType<RecruitableLunarCultist>()),
@@ -86,7 +86,7 @@ namespace Windfall.Common.Systems.WorldEvents
                             NPC.NewNPC(Entity.GetSource_None(), (int)DungeonCoords.X, (int)DungeonCoords.Y - 128, ModContent.NPCType<SealingTablet>()),
                             NPC.NewNPC(Entity.GetSource_None(), (int)DungeonCoords.X, (int)DungeonCoords.Y - 8, ModContent.NPCType<TravellingCultist>(), 0, 1),
                             
-                        };
+                        ];
 
                         #region Character Setup
                         for (int k = 0; k < 2; k++)

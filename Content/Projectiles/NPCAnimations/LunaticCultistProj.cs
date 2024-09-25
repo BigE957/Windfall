@@ -7,8 +7,8 @@ namespace Windfall.Content.Projectiles.NPCAnimations
     {
         public override string Texture => "Windfall/Assets/NPCs/WorldEvents/LunarBishop";
         internal override string key => "DragonCult.LunaticCultist.WorldText";
-        internal override List<float> Delays => new()
-        {
+        internal override List<float> Delays =>
+        [
             1,
             3,
             3,
@@ -16,7 +16,7 @@ namespace Windfall.Content.Projectiles.NPCAnimations
             3,
             2,
             2,
-        };
+        ];
         internal override SoundStyle SpawnSound => new("CalamityMod/Sounds/Custom/SCalSounds/BrimstoneHellblastSound");
         internal override int NPCType => ModContent.NPCType<DragonCultist>();
         internal override Color TextColor => Color.Cyan;

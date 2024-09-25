@@ -8,8 +8,8 @@ namespace Windfall.Content.Projectiles.NPCAnimations
     {
         public override string Texture => "Windfall/Assets/NPCs/WorldEvents/TheOrator_NPC";
         internal override string key => "LunarCult.TheOrator.WorldText.Post-Plant";
-        internal override List<float> Delays => new()
-        {
+        internal override List<float> Delays =>
+        [
             1,
             3,
             3,
@@ -20,7 +20,7 @@ namespace Windfall.Content.Projectiles.NPCAnimations
             3,
             3,
             3,
-        };
+        ];
         internal override SoundStyle SpawnSound => new("CalamityMod/Sounds/Custom/SCalSounds/BrimstoneHellblastSound");
         internal override int NPCType => -1;
         internal override Color TextColor => Color.LightGreen;
