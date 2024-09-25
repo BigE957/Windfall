@@ -1,4 +1,5 @@
 ﻿using CalamityMod.Projectiles.Magic;
+using DialogueHelper.Content.UI.Dialogue;
 using Terraria.GameContent.Bestiary;
 using Terraria.Utilities;
 using Windfall.Common.Systems;
@@ -117,6 +118,7 @@ namespace Windfall.Content.NPCs.TravellingNPCs
             NPCID.Sets.ShimmerTownTransform[Type] = false;
             NPCID.Sets.NoTownNPCHappiness[Type] = true;
             //NPCID.Sets.FaceEmote[Type] = ModContent.EmoteBubbleType<TravellingCultist>();
+            ModContent.GetInstance<DialogueUISystem>().DialogueClose += CloseEffect;
 
             // Influences how the NPC looks in the Bestiary
             NPCID.Sets.NPCBestiaryDrawModifiers drawModifiers = new()
@@ -160,50 +162,24 @@ namespace Windfall.Content.NPCs.TravellingNPCs
         public override ITownNPCProfile TownNPCProfile() => NPCProfile;
         public override List<string> SetNPCNameList()
         {
-            return new List<string>() {
+            return [
                 "Strange Cultist",
                 "Poorly Disguised Cultist",
                 "Suspicious Looking Cultist",
-            };
+            ];
         }
         public static QuestItem QuestArtifact = new(0, 0);
         public static bool QuestComplete = false;
         public static int RitualQuestProgress = 0;
         private enum DialogueState
         {
-            Initial,
-            Weird,
-            ThatsYou,
-            TheCult,
-            HowYouKnow,
-            HowToHelp,
-            ImIn,
+            SearchForHelp,
             Quests1,
-            //post-plantera convo
-            Initial2,
-            Orator,
-            Meeting,
-            HelpThem,
-            HowCanI,
-            Doneish,
-            Tablet,
-            Thanks,
+            LunarCultTalk,
             Quests2,
-            //All recruited dialogue
-            Initial3,
-            Sealing,
-            UhOh,
-            Dragons,
-            MoonLord,
-            Why,
-            WhatNext,
+            AllRecruited,
             Quests3,
-            //Ritual Dialogue
-            Initial4,
-            Where,
-            When,
-            WhatIDo,
-            SoundsGood,
+            RitualTalk,
             QuestsEnd,
         }
         private static DialogueState CurrentDialogue
@@ -211,16 +187,17 @@ namespace Windfall.Content.NPCs.TravellingNPCs
             get => (DialogueState)WorldSaveSystem.cultistChatState;
             set => WorldSaveSystem.cultistChatState = (int)value;
         }
-        public override bool CanChat()
-        {
-            if (NPC.ai[0] == 1)
-                return false;
-            return true;
-        }
+        public override bool CanChat() => NPC.ai[0] != 1 && !ModContent.GetInstance<DialogueUISystem>().isDialogueOpen;
         public override string GetChat()
         {
             if (!CurrentDialogue.ToString().Contains("Quests"))
-                return GetWindfallTextValue($"Dialogue.LunarCult.TravellingCultist.Conversation.{CurrentDialogue}");
+            {
+                Main.CloseNPCChatOrSign();
+
+                ModContent.GetInstance<DialogueUISystem>().DisplayDialogueTree("Windfall/" + CurrentDialogue);
+
+                return base.GetChat();
+            }
             WeightedRandom<string> chat = new();
 
             chat.Add(GetWindfallTextValue("Dialogue.LunarCult.TravellingCultist.Chat.Standard1"));
@@ -244,174 +221,10 @@ namespace Windfall.Content.NPCs.TravellingNPCs
             return chat;
         }
 
-        private readonly List<dialogueDirections> MyDialogue = new()
-        {
-            #region Initial Conversation
-            new dialogueDirections()
-            {
-                MyPos = (int)DialogueState.Initial,
-                Button1 = new(){name = "That's me!", heading = (int)DialogueState.ThatsYou},
-                Button2 = new(){name = "You look... odd...", heading = (int)DialogueState.Weird},
-            },
-            new dialogueDirections()
-            {
-                MyPos = (int)DialogueState.Weird,
-                Button1 = new(){name = "That's me!", heading = (int)DialogueState.ThatsYou},
-                Button2 = null,
-            },
-            new dialogueDirections()
-            {
-                MyPos = (int)DialogueState.ThatsYou,
-                Button1 = new(){name = "What's the problem?", heading = (int)DialogueState.TheCult},
-                Button2 = null,
-            },
-            new dialogueDirections()
-            {
-                MyPos = (int)DialogueState.TheCult,
-                Button1 = new(){name = "How can I help?", heading = (int)DialogueState.HowToHelp},
-                Button2 = new(){name = "How do you know?", heading = (int)DialogueState.HowYouKnow},
-            },
-            new dialogueDirections()
-            {
-                MyPos = (int)DialogueState.HowYouKnow,
-                Button1 = new(){name = "How can I help?", heading = (int)DialogueState.HowToHelp},
-                Button2 = null,
-            },
-            new dialogueDirections()
-            {
-                MyPos = (int)DialogueState.HowToHelp,
-                Button1 = new(){name = "I'm in.", heading = (int)DialogueState.ImIn},
-                Button2 = null,
-            },
-            new dialogueDirections()
-            {
-                MyPos = (int)DialogueState.ImIn,
-                Button1 = new(){name = "Will do!", heading = (int)DialogueState.Quests1, end = true},
-                Button2 = null,
-            },
-            #endregion
-
-            #region Post-Plantera Conversation
-            new dialogueDirections()
-            {
-                MyPos = (int)DialogueState.Initial2,
-                Button1 = new(){name = "Meetings?", heading = (int)DialogueState.Meeting},
-                Button2 = new(){name = "The Orator?", heading = (int)DialogueState.Orator},
-            },
-            new dialogueDirections()
-            {
-                MyPos = (int)DialogueState.Meeting,
-                Button1 = new(){name = "Can we help them?", heading = (int)DialogueState.HelpThem},
-                Button2 = null,
-            },
-            new dialogueDirections()
-            {
-                MyPos = (int)DialogueState.Orator,
-                Button1 = new(){name = "Can we help them?", heading = (int)DialogueState.HelpThem},
-                Button2 = null,
-            },
-            new dialogueDirections()
-            {
-                MyPos = (int)DialogueState.HelpThem,
-                Button1 = new(){name = "How would I do that?", heading = (int)DialogueState.HowCanI},
-                Button2 = null,
-            },
-            new dialogueDirections()
-            {
-                MyPos = (int)DialogueState.HowCanI,
-                Button1 = new(){name = "I see...", heading = (int)DialogueState.Doneish},
-                Button2 = null,
-            },
-            new dialogueDirections()
-            {
-                MyPos = (int)DialogueState.Doneish,
-                Button1 = new(){name = "Oh, this tablet...?", heading = (int)DialogueState.Tablet},
-                Button2 = null,
-            },
-            new dialogueDirections()
-            {
-                MyPos = (int)DialogueState.Tablet,
-                Button1 = new(){name = "Thanks!", heading = (int)DialogueState.Thanks},
-                Button2 = null,
-            },
-            new dialogueDirections()
-            {
-                MyPos = (int)DialogueState.Thanks,
-                Button1 = new(){name = "Bye!", heading = (int)DialogueState.Quests2, end = true},
-                Button2 = null,
-            },
-            #endregion
-
-            #region All Recruited Conversation
-            new dialogueDirections()
-            {
-                MyPos = (int)DialogueState.Initial3,
-                Button1 = new(){name = "Sealing Ritual?", heading = (int)DialogueState.Sealing},
-                Button2 = null,
-            },
-            new dialogueDirections()
-            {
-                MyPos = (int)DialogueState.Sealing,
-                Button1 = new(){name = "Uh oh...", heading = (int)DialogueState.UhOh},
-                Button2 = null,
-            },
-            new dialogueDirections()
-            {
-                MyPos = (int)DialogueState.UhOh,
-                Button1 = new(){name = "Why are they doing this?", heading = (int)DialogueState.Why},
-            },
-            new dialogueDirections()
-            {
-                MyPos = (int)DialogueState.Why,
-                Button1 = new(){name = "What's next?", heading = (int)DialogueState.WhatNext},
-            },
-            new dialogueDirections()
-            {
-                MyPos = (int)DialogueState.WhatNext,
-                Button1 = new(){name = "Understood.", heading = (int)DialogueState.Quests3, end = true},
-                Button2 = new(){name = "Good luck!", heading = (int)DialogueState.Quests3, end = true},
-            },
-            #endregion
-
-            #region Ritual Time Conversation
-            new dialogueDirections()
-            {
-                MyPos = (int)DialogueState.Initial4,
-                Button1 = new(){name = "Where is it?", heading = (int)DialogueState.Where},
-                Button2 = new(){name = "When is it?", heading = (int)DialogueState.When},
-            },
-            new dialogueDirections()
-            {
-                MyPos = (int)DialogueState.Where,
-                Button1 = new(){name = "What do I do?", heading = (int)DialogueState.WhatIDo},
-                Button2 = null,
-            },
-            new dialogueDirections()
-            {
-                MyPos = (int)DialogueState.When,
-                Button1 = new(){name = "What do I do?", heading = (int)DialogueState.WhatIDo},
-                Button2 = null,
-            },
-            new dialogueDirections()
-            {
-                MyPos = (int)DialogueState.WhatIDo,
-                Button1 = new(){name = "Sounds good!", heading = (int)DialogueState.SoundsGood},
-            },
-            new dialogueDirections()
-            {
-                MyPos = (int)DialogueState.SoundsGood,
-                Button1 = new(){name = "Will do.", heading = (int)DialogueState.QuestsEnd, end = true},
-                Button2 = new(){name = "See you there!", heading = (int)DialogueState.QuestsEnd, end = true},
-            },
-            #endregion
-        };
-
         public override void SetChatButtons(ref string button, ref string button2)
         {
             if (CurrentDialogue.ToString().Contains("Quests"))
                 button = Language.GetTextValue("LegacyInterface.64");
-            else
-                SetConversationButtons(MyDialogue, (int)CurrentDialogue, ref button, ref button2);
         }
         public override void OnChatButtonClicked(bool firstButton, ref string shop)
         {
@@ -429,8 +242,6 @@ namespace Windfall.Content.NPCs.TravellingNPCs
                     QuestArtifact = CollectorQuestDialogueHelper(Main.npc[NPC.whoAmI], ref QuestComplete, QuestArtifact, QuestSystem.DungeonQuestItems);
                 return;
             }
-            CurrentDialogue = (DialogueState)GetNPCConversation(MyDialogue, (int)CurrentDialogue, firstButton);
-            Main.npcChatText = GetWindfallTextValue($"Dialogue.LunarCult.TravellingCultist.Conversation.{CurrentDialogue}");
         }
         public override void AI()
         {
@@ -454,5 +265,23 @@ namespace Windfall.Content.NPCs.TravellingNPCs
             attackDelay = 1;
         }
         private static bool MilestoneMet(DialogueState CurrentDialogue) => (CurrentDialogue == DialogueState.Quests1 && NPC.downedPlantBoss) || (CurrentDialogue == DialogueState.Quests2 && LunarCultBaseSystem.Recruits.Count == 4) || (CurrentDialogue == DialogueState.Quests3 && RitualQuestProgress >= 3) || (CurrentDialogue == DialogueState.QuestsEnd && RitualQuestProgress < 4);
+        private void CloseEffect(string treeKey, int dialogueID, int buttonID)
+        {
+            switch(treeKey)
+            {
+                case "Windfall/SearchForHelp":
+                    CurrentDialogue = DialogueState.Quests1;
+                    break;
+                case "Windfall/LunarCultTalk":
+                    CurrentDialogue = DialogueState.Quests2;
+                    break;
+                case "Windfall/AllRecruited":
+                    CurrentDialogue = DialogueState.Quests3;
+                    break;
+                case "Windfall/RitualTalk":
+                    CurrentDialogue = DialogueState.QuestsEnd;
+                    break;
+            }
+        }
     }
 }

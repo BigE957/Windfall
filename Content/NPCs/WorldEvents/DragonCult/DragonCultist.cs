@@ -1,15 +1,9 @@
-﻿namespace Windfall.Content.NPCs.WorldEvents.DragonCult
+﻿using DialogueHelper.Content.UI.Dialogue;
+
+namespace Windfall.Content.NPCs.WorldEvents.DragonCult
 {
     public class DragonCultist : ModNPC
     {
-        private enum DialogueState
-        {
-            Initial,
-            Guardian,
-            Issues,
-            End
-        }
-        private DialogueState CurrentDialogue = 0;
         public override string Texture => "Windfall/Assets/NPCs/WorldEvents/LunarBishop";
         internal static SoundStyle SpawnSound => new("CalamityMod/Sounds/Custom/SCalSounds/BrimstoneHellblastSound");
         public override void SetStaticDefaults()
@@ -18,6 +12,8 @@
             //NPCID.Sets.ActsLikeTownNPC[Type] = true;
             Main.npcFrameCount[Type] = 1;
             NPCID.Sets.NoTownNPCHappiness[Type] = true;
+            ModContent.GetInstance<DialogueUISystem>().DialogueClose += CloseEffect;
+
         }
         public override void SetDefaults()
         {
@@ -37,44 +33,27 @@
         {
             NPC.GivenName = "???";
         }
-        public override bool CanChat() => true;
-        public override string GetChat() => GetWindfallTextValue($"Dialogue.DragonCult.Conversation.{CurrentDialogue}");
+        public override bool CanChat() => !ModContent.GetInstance<DialogueUISystem>().isDialogueOpen;
+        public override string GetChat()
+        {
+            Main.CloseNPCChatOrSign();
 
-        private readonly List<dialogueDirections> MyDialogue = new()
-        {
-            new dialogueDirections()
-            {
-                MyPos = (int)DialogueState.Initial,
-                Button1 = new(){name = "Your guardian?", heading = (int)DialogueState.Guardian},
-                Button2 = new(){name = "What issues?", heading = (int)DialogueState.Issues},
-            },
-            new dialogueDirections()
-            {
-                MyPos = (int)DialogueState.Guardian,
-                Button1 = new(){name = "That's a relief.", heading = (int)DialogueState.End},
-                Button2 = new(){name = "You cursed him...?", heading = (int)DialogueState.End},
-            },
-            new dialogueDirections()
-            {
-                MyPos = (int)DialogueState.Issues,
-                Button1 = new(){name = "I'll see what I can do.", heading = (int)DialogueState.End},
-                Button2 = new(){name = "No promises.", heading = (int)DialogueState.End},
-            },
-            new dialogueDirections()
-            {
-                MyPos = (int)DialogueState.End,
-                Button1 = new(){name = "Goodbye!", heading = (int)DialogueState.End, end = true},
-                Button2 = new(){name = "Took long enough...", heading = (int)DialogueState.End, end = true},
-            },
-        };
-        public override void OnChatButtonClicked(bool firstButton, ref string shop)
-        {
-            CurrentDialogue = (DialogueState)GetNPCConversation(MyDialogue, (int)CurrentDialogue, firstButton);
-            Main.npcChatText = GetWindfallTextValue($"Dialogue.DragonCult.Conversation.{CurrentDialogue}");
+            ModContent.GetInstance<DialogueUISystem>().DisplayDialogueTree("Windfall/" + "SkeletronDefeat");
+
+            return base.GetChat();
         }
-        public override void SetChatButtons(ref string button, ref string button2)
+        private void CloseEffect(string treeKey, int dialogueID, int buttonID)
         {
-            SetConversationButtons(MyDialogue, (int)CurrentDialogue, ref button, ref button2);
+            foreach (NPC npc in Main.npc.Where(n => n.type == NPC.type && n.active))
+            {
+                for (int i = 0; i < 50; i++)
+                {
+                    Vector2 speed = Main.rand.NextVector2Circular(1.5f, 2f);
+                    Dust d = Dust.NewDustPerfect(npc.Center, DustID.GoldFlame, speed * 3, Scale: 1.5f);
+                    d.noGravity = true;
+                }
+                npc.active = false;
+            }
         }
     }
 }

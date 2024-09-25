@@ -122,7 +122,6 @@ Dialogue: {
 			}
 		}
 
-		#Communions
 		CorruptCommunion2: {
 			Messages: {
 				0: How wonderful! You seek further power. You continue to drink of the Essence. Truly wonderful! We shall sate your desire.
@@ -157,6 +156,134 @@ Dialogue: {
 				1: This essence grants you the power to unleash the Ambrosia that's gathered within you in the form of a powerful attack: a barrage of slimy globs.
 				2: Additionally, the muck formed by the rotting corpses of the Gods shall gather around you. Forcing it to converge shall transform it into Ambrosia that you may make use of.
 				3: Truly a potent boon to have at your disposal. Wield it well as you continue our conquest!
+			}
+		}
+		#Dragon Cultists
+		MechanicShed: {
+			Messages: {
+				0: Mind explaining what exactly you're doing here?
+				1: Just a small group keeping an eye on things. Not sure if its any of your business though.
+				2: Don't get any ideas. Not just anyone is allowed into our order... Especially not those who snoop around where they shouldnt't.
+				3: What?! No, nothing of the sort. Don't know what would give you that idea...
+				4: Just exploring, huh? Why's exploring involve snooping around abandoned buildings?
+				5: Hmm, alright. That seems fair enough. Just don't go snooping around where you don't belong, alright?
+				6: Well, we wouldn't want anything bad happening to you now would we? You never know who roams these parts. Being all alone in a dilapitaed cabin? Sounds like a recipe for disaster if you ask me.
+				7: Hm, well you seem to be just fine. You're free to go.
+			}
+			Responses: {
+				Exploring: I'm just exploring.
+				Who: Who are you?
+				Supplies: Just looking for supplies.
+				Matter: What's it matter to you?
+				Interesting: Sounds interesting.
+				Cult: So... a cult?
+				Mind: I'll keep that in mind!
+				No: No thanks...
+				Sense: I guess that makes sense.
+				Surely: Surely...
+				Can: Can do.
+				Fine: Fine.
+				Right: You might be right.
+				Are: Are you...?
+				Thanks: Thank you.
+				Finally: Finally...
+			}
+		}
+		SkeletronDefeat: {
+			Messages: {
+				0: Your success against our guardian was... Unexpected. It was meant to keep out intruders forevermore... However... issues have crept up since it was raised. Perhaps by opening our home to others, they might at last be laid to rest.
+				1: Yes, that construct was made to serve as this dungeon's guardian. That old man became its vessel after trespassing upon our sanctum. Worry not, with the guardian now dead, the man should return to his former self, despite what things might've seemed.
+				2: Yes... Our sanctum become something of a dungeon in recent years. However those it once held have now long since passed, and this site's had an adverse effect upon their souls. Now, its crawling with their reanimated remains. If you'd do us a favor and clean it out a bit, we'd be ever in your debt.
+				3: Now then, enough talk. Till we meet again, wayward traveller. Perhaps our paths might cross again.
+			}
+			Responses: {
+				Guardian: Your guardian?
+				Issues: What issues?
+				Relief: That's a relief.
+				Cursed: You cursed him...?
+				Yes: I'll see what I can do.
+				No: No promises.
+				Bye: Goodbye!
+				Long: Took long enough...
+			}
+		}
+		#Travelling Cultist
+		SearchForHelp: {
+			Messages: {
+				0: Hello! Would you be able to point me to whoever's in charge around here?
+				1: My robes? I just easilly get cold is all; would rather stay bundled up, haha. Anyways, I really need to speak with the person in charge of this little town. You know where I might find them?
+				2: Oh?! Perfect! Nice to meet you! I've heard so much about you, and your heroics. I was wondering if you'd be willing to help me with a matter of grave importance.
+				3: I'm sure you've encountered them by now: The Lunar Cult. Someone like you would certainly get their attention. They're planning something big, something that might threaten the entire world, and I need your help to stop them!
+				4: I've been keeping an eye on them for a while now, and as of late their movement has become bolder and bolder. I worry if they aren't stopped soon, they might just being about something catastrophic!
+				5: For now, I just need you to investigate the Dungeon. Some of my... cohorts took up residence there for a while, and the retrieval of some of our possessions would go a long way in stopping the Lunar Cult. Though, do keep in mind that we abandoned it because of a particularly nasty haunting.
+				6: Wonderful! Let me know when you want to take on your first mission, and I'll let you know what I need.
+			}
+			Responses: {
+				Me: That's me!
+				Odd: You look... Odd.
+				Problem: What's the problem?
+				Help: How can I help?
+				Know: How do you know?
+				In: I'm in!
+				Do: Will do.
+			}
+		}
+		LunarCultTalk: {
+			Messages: {
+				0: You were approached by the Lunar Cult? Oh my... That was the Orator, the Lunar Cult's leader. The fact he's invited you into the cult personally can't be good. However, it may be a opportunity to learn more about their plans...
+				1: The Orator is the mastermind of the entire Lunar Cult's operation. I have yet to able to piece together his true ambition, but he's been dabling with dark forces for a very long time. His manipulations have strung along so many people... Its truly saddening.
+				2: I fear it may not be a simple coincidence... You must be careful. Now that you've been invited, its only a matter of time before you'll be called to the Lunar Cult's base of operations. You'll get to see first hand the truly sickening things the Lunar Cult is willing to put its members through in order to further their goals.
+				3: Help them? Hmm... That might actually be a good idea! Try talking to the members of the cult when you have the chance. Its possible you might find some who are doubting their faith, and you may be able to convince them to join our cause!
+				4: Keep an eye out for people who might seem to be doubting what's being said or seem dissatisfied with the Lunar Cult. Those are the people you might be able to save. Then you just need to convince them to abandon the Lunar Cult. Easier said than done, I know.
+				5: This might just be our best way to deal a real blow to the Lunar Cult! Best of luck with your efforts, and do keep me informed with how your time with the Lunar Cult goes!
+			}
+			Responses: {
+				Invite: Why was I invited?
+				Orator: The Orator?
+				Help: Can we help them?
+				How: How would I do that?
+				See: I see...
+				Thanks: Thanks!
+				Will: Will do!
+			}
+		}
+		AllRecruited: {
+			Messages: {
+				0: Why hello! I have some very good news. I've found our way to put a stop to the Lunar Cult's plans once and for all! Remember the friends I mentioned earlier? One of them just so happens to know of a ritual to seal away the very horrors they are trying to summon!
+				1: Yes, its a ritual that dates back to the Draconic Era. Legend has that those devoted to the Dragons were given this ritual to maintain the seal placed upon their ancient foe. I believe this being is the 'Dark God' that the Lunar Cult seeks to bring to our world, and if they succeed... the world as we know it may cease to be.
+				2: Indeed! It says here that the ritual was meant to be performed once every hundred years to maintain the seal, however I think the demise of the Dragons led to this never being carried out. By performing it now, we may be able to cut off the Lunar Cult's connection to this ancient foe, and stop them from being able to unseal it!
+				Dragons: You don't know of the Dragons? They were once the protectors and keepers of this world. They defended the world from a great and terrible threat, and managed to seal it away; though not without great casualties. Soon after, the remaining Dragons were hunted to extinction by humans who sought to claim their Auric power. Now the Lunar Cult threatens to free this terrible evil, and along with it, threaten the fate of the world once more.
+				MoonLord: Ah, you haven't heard the tale. I cannot blame you, for few still remember it. It was long ago that this galactic terror threatened our world, and if not for the Dragons, our world would have certainly been doomed. The Dragons sealed the great titan within the Moon, where its lied dormant ever since. However now the Lunar Cult threatens to free this terrible evil, and along with it, threaten the fate of the world once more.
+				3: That's something I was never able to find out... The Orator's motives are a mystery to all it seems. However, all that matters now is the dire situation we find ourselves in, and the solution we now hold.
+				4: The ritual requires a few things... In the coming days I'll task you with collecting the required materials for the ritual. For now, sit tight. I'll need to look over these texts further to be sure of everything required.				
+			}
+			Responses: {
+				Ritual: Sealing Ritual?
+				What: What's that?
+				UhOh: Uh oh...
+				Bad: That doesn't sound good...
+				Why: Why are they doing this?
+				What: What would they hope to gain?
+				Next: What's next?
+				Understood: Understood.
+				Luck: Good luck!
+			}
+		}
+		RitualTalk: {
+			Messages: {
+				0: Splendid news! We're ready to begin the Sealing Ritual! I've gotten in contact with those you saved from the Lunar Cult, and they'll be the ones to help us carry out the ritual.
+				1: It'll be held at the entrance to the Dungeon; that place's occult energies will prove useful in bringing out the full power of this ritual.
+				2: Our friends are already there, and waiting! Whenever you're ready, make your way over to the Dungeon, and we can begin.
+				3: To be honest, you won't be playing a major role in the ritual itself; we've got that taken care of. I really want you around to watch our backs. A ritual of this scale may attract the undead of the Dungeon, or some other frightful monsters. Better to be on the safe side, and have a {1} of your prowess around.
+				4: Perfect! I'll head over to the Dungeon myself shortly, and then the ritual can commence! It'll be a relief to have this all finally taken care of.
+			}
+			Responses: {
+				Where: Where is it?
+				When: When is it?
+				What: What do I do?
+				Good: Sounds good!
+				Will: Will do!
+				See: See you there!
 			}
 		}
 	}
@@ -373,13 +500,6 @@ Dialogue: {
 
 	DragonCult: {
 		LunaticCultist: {
-			Conversation: {
-				Initial: Your success against our guardian was... Unexpected. It was meant to keep out intruders forevermore... However... issues have crept up since it was raised. Perhaps by opening our home to others, they might at last be laid to rest.
-				Guardian: Yes, that construct was made to serve as this dungeon's guardian. That old man became its vessel after trespassing upon our sanctum. Worry not, with the guardian now dead, the man should return to his former self, despite what things might've seemed.
-				Issues: Yes... Our sanctum become something of a dungeon in recent years. However those it once held have now long since passed, and this site's had an adverse effect upon their souls. Now, its crawling with their reanimated remains. If you'd do us a favor and clean it out a bit, we'd be ever in your debt.
-				End: Now then, enough talk. Till we meet again, wayward traveller. Perhaps our paths might cross again.
-			}
-
 			WorldText: {
 				0: What is this?
 				1: Our guardian... defeated?
@@ -388,19 +508,6 @@ Dialogue: {
 				4: Enter our sanctum.
 				5: Learn our secrets.
 				6: Perhaps our paths might cross again.
-			}
-		}
-
-		DragonArcher: {
-			MechanicShed: {
-				Initial: Mind explaining what exactly you're doing here?
-				WhoAreWe: Just a small group keeping an eye on things. Not sure if its any of your business though.
-				WannaJoin: Don't get any ideas. Not just anyone is allowed into our order... Especially not those who snoop around where they shouldnt't.
-				NuhUh: What?! No, nothing of the sort. Don't know what would give you that idea...
-				ExploringHuh: Just exploring, huh? Why's exploring involve snooping around abandoned buildings?
-				FairEnough: Hmm, alright. That seems fair enough. Just don't go snooping around where you don't belong, alright?
-				SomethingBad: Well, we wouldn't want anything bad happening to you now would we? You never know who roams these parts. Being all alone in a dilapitaed cabin? Sounds like a recipe for disaster if you ask me.
-				End: Hm, well you seem to be just fine. You're free to go.
 			}
 		}
 	}
@@ -681,41 +788,7 @@ Dialogue: {
 				Doro: Ah! Its Doro! You made quite the good choice in recruiting him to our cause. I've never met a harder worker than he. I'm glad he's no longer being used by the cult.
 				Skylar: So Skylar's come to join us. She... does know that this isn't some 'role-play' now... right? I'm still impressed she managed to believe that for so long...
 				Jamie: Young Jamie's devotion to the Orator was so strong... I'm impressed you managed to sway them to our cause! You're skills never cease to impress.
-			}
-
-			Conversation: {
-				#First Convo
-				Initial: Hello! Would you be able to point me to whoever's in charge around here?
-				Weird: My robes? I just easilly get cold is all; would rather stay bundled up, haha. Anyways, I really need to speak with the person in charge of this little town. You know where I might find them?
-				ThatsYou: Oh?! Perfect! Nice to meet you! I've heard so much about you, and your heroics. I was wondering if you'd be willing to help me with a matter of grave importance.
-				TheCult: I'm sure you've encountered them by now: The Lunar Cult. Someone like you would certainly get their attention. They're planning something big, something that might threaten the entire world, and I need your help to stop them!
-				HowYouKnow: I've been keeping an eye on them for a while now, and as of late their movement has become bolder and bolder. I worry if they aren't stopped soon, they might just being about something catastrophic!
-				HowToHelp: For now, I just need you to investigate the Dungeon. Some of my... cohorts took up residence there for a while, and the retrieval of some of our possessions would go a long way in stopping the Lunar Cult. Though, do keep in mind that we abandoned it because of a particularly nasty haunting.
-				ImIn: Wonderful! Let me know when you want to take on your first mission, and I'll let you know what I need.
-				#Post-Plant Convo
-				Initial2: You were approached by the Lunar Cult? Oh my... That was the Orator, the Lunar Cult's leader. The fact he's invited you to the cult's meetings can't be good. However, it may be a opportunity to learn more about what the cult's plans...
-				Orator: The Orator is the mastermind of the entire Lunar Cult's operation. I have yet to able to piece together his true ambition, but he's been dabling with dark forces for a very long time. His manipulations have strung along so many people... Its truly saddening.
-				Meeting: The cult's meetings are how the cult keeps its members galvanized and devoted to the cause. It's truly sickening what the Lunar Cult is willing to do in order to further their goals. I can't imagine how many lives have been forever ruined by their words alone.
-				HelpThem: Help them? Hmm... That might actually be a good idea! Try talking to the members after the meeting ends. Its possible you might find some who are doubting their faith, and you might just be able to convince them to join our cause!
-				HowCanI: During the meeting, keep an eye out for people who might seem to be doubting what's being said or seem dissatisfied with the current state. Those are the people you might be able to save. Then you just need to convince them to abandon the Lunar Cult.
-				Doneish: This might just be our best way to deal a real blow to the Lunar Cult! Best of luck with your efforts. Is there anything else I can help you with?
-				Tablet: Oh? What's this? A tablet... Well, I don't see any clues on the tablet itself, but it appears to be enchanted. Perhaps this is how they find their next meeting? Try to use it, though do be careful if it's a teleporter... don't want to be caught with your pants down doing such things.
-				Thanks: Happy to help! Do keep me informed with how your upcoming meetings go; best of luck!
-				#All Recruited Convo
-				Initial3: Why hello! I have some very good news. I've found our way to put a stop to the Lunar Cult's plans once and for all! Remember the friends I mentioned earlier? One of them just so happens to know of a ritual to seal away the very horrors they are trying to summon!
-				Sealing: Yes, its a ritual that dates back to the Draconic Era. Legend has that those devoted to the Dragons were given this ritual to maintain the seal placed upon their ancient foe. I believe this being is the 'Dark God' that the Lunar Cult seeks to bring to our world, and if they succeed... the world as we know it may cease to be.
-				UhOh: Indeed! It says here that the ritual was meant to be performed once every hundred years to maintain the seal, however I think the demise of the Dragons led to this never being carried out. By performing it now, we may be able to cut off the Lunar Cult's connection to this ancient foe, and stop them from being able to unseal it!
-				#Dragons: You don't know of the Dragons? They were once the protectors and keepers of this world. They defended the world from a great and terrible threat, and managed to seal it away; though not without great casualties. Soon after, the remaining Dragons were hunted to extinction by humans who sought to claim their Auric power. Now the Lunar Cult threatens to free this terrible evil, and along with it, threaten the fate of the world once more.
-				#MoonLord: Ah, you haven't heard the tale. I cannot blame you, for few still remember it. It was long ago that this galactic terror threatened our world, and if not for the Dragons, our world would have certainly been doomed. The Dragons sealed the great titan within the Moon, where its lied dormant ever since. However now the Lunar Cult threatens to free this terrible evil, and along with it, threaten the fate of the world once more.
-				Why: That's something I was never able to find out... The Orator's motives are a mystery to all it seems. However, all that matters now is the dire situation we find ourselves in, and the solution we now hold.
-				WhatNext: The ritual requires a few things... In the coming days I'll task you with collecting the required materials for the ritual. For now, sit tight. I'll need to look over these texts further to be sure of everything required.
-				#Ritual Time Convo
-				Initial4: Splendid news! We're ready to begin the Sealing Ritual! I've gotten in contact with those you saved from the Lunar Cult, and they'll be the ones to help us carry out the ritual.
-				Where: It'll be held at the entrance to the Dungeon; that place's occult energies will prove useful in bringing out the full power of this ritual.
-				When: Our friends are already there, and waiting! Whenever you're ready, make your way over to the Dungeon, and we can begin.
-				WhatIDo: To be honest, you won't be playing a major role in the ritual itself; we've got that taken care of. I really want you around to watch our backs. A ritual of this scale may attract the undead of the Dungeon, or some other frightful monsters. Better to be on the safe side, and have a {1} of your prowess around.
-				SoundsGood: Perfect! I'll head over to the Dungeon myself shortly, and then the ritual can commence! It'll be a relief to have this all finally taken care of.
-			}
+			}			
 
 			Quests: {
 				Dungeon: {
@@ -738,7 +811,7 @@ Dialogue: {
 					}
 
 					DeificInsignia: {
-						Start: Many of the skeletons which wander that decrepit Dungeon were once devoted soldiers of the Gods; imprisoned within there during the Godseeker's crusade. I'd bet the insignia they bear might still hold some of the deific essence they were gifted. If you get me some, they may prove helpful in combating the Lunar Cult.
+						Start: Many of the skeletons which wander that decrepit Dungeon were once devoted soldiers of the Gods; imprisoned within there during the Godseeker's Crusade. I'd bet the insignia they bear might still hold some of the deific essence they were gifted. If you get me some, they may prove helpful in combating the Lunar Cult.
 						During: Those skeletons are quite angry about their eternal imprisonment within the Dungeon. So don't expect them to part with their patrons' tokens so easilly. If you can get me just five, that should suffice.
 						End: Oh, perfect! Yes, these absolutely reek of deific essence... Though I loathe to handle the stuff, this might just give us an edge.
 					}
@@ -1843,7 +1916,7 @@ NPCs: {
 	GodseekerKnight.DisplayName: Godseeker Knight
 	ShadowHand.DisplayName: Shadow Hand
 	SealingTablet.DisplayName: ""
-	DragonCultist.DisplayName: ??
+	DragonCultist.DisplayName: ???
 	DragonArcher.DisplayName: ???
 	GodlyTumor.DisplayName: Hive Tumor
 	Seamstress.DisplayName: Seamstress
@@ -1888,7 +1961,7 @@ Projectiles: {
 	OratorBorder.DisplayName: Orator Border
 	DarkTide.DisplayName: Dark Tide
 	FoodAlert.DisplayName: Food Alert
-	DoGRift.DisplayName: Do G Rift
+	DoGRift.DisplayName: Devourer Rift
 }
 
 Buffs: {

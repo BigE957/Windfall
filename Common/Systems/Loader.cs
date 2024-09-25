@@ -421,6 +421,302 @@ namespace Windfall.Common.Systems
                     LocalizationPath)
                 },
                 #endregion
+                #region Dragon Cult
+                {
+                    "Windfall/MechanicShed",
+                    new DialogueTree(
+                    [
+                        new Dialogue
+                        (
+                            [
+                                new Response("Exploring", 4),
+                                new Response("Who", 1),
+                            ]
+                        ),
+                        new Dialogue
+                        (
+                            [
+                                new Response("Interesting", 2),
+                                new Response("Cult", 3),
+                            ]
+                        ),
+                        new Dialogue
+                        (
+                            [
+                                new Response("Mind", 7),
+                                new Response("No", 7),
+                            ]
+                        ),
+                        new Dialogue
+                        (
+                            [
+                                new Response("Sense", 7),
+                                new Response("Surely", 7),
+                            ]
+                        ),
+                        new Dialogue
+                        (
+                            [
+                                new Response("Supplies", 5),
+                                new Response("Matter", 6),
+                            ]
+                        ),
+                        new Dialogue
+                        (
+                            [
+                                new Response("Can", 7),
+                                new Response("Fine", 7),
+                            ]
+                        ),
+                        new Dialogue
+                        (
+                            [
+                                new Response("Right", 7),
+                                new Response("Are", 7),
+                            ]
+                        ),
+                        new Dialogue
+                        (
+                            [
+                                new Response("Thanks"),
+                                new Response("Finally"),
+                            ]
+                        ),
+                    ],
+                    [
+                        "Windfall/TheCalamity"
+                    ],
+                    LocalizationPath)
+                },
+                {
+                    "Windfall/SkeletronDefeat",
+                    new DialogueTree(
+                    [
+                        new Dialogue
+                        (
+                            [
+                                new Response("Guardian", 1),
+                                new Response("Issues", 2),
+                            ]
+                        ),
+                        new Dialogue
+                        (
+                            [
+                                new Response("Relief", 3),
+                                new Response("Cursed", 3),
+                            ]
+                        ),
+                        new Dialogue
+                        (
+                            [
+                                new Response("Yes", 3),
+                                new Response("No", 3),
+                            ]
+                        ),
+                        new Dialogue
+                        (
+                            [
+                                new Response("Bye"),
+                                new Response("Long"),
+                            ]
+                        ),
+                    ],
+                    [
+                        "Windfall/TheCalamity"
+                    ],
+                    LocalizationPath)
+                },
+                #region Dragon Cult Quest Giver (Travelling Cultist)
+                { 
+                    "Windfall/SearchForHelp",
+                    new DialogueTree(
+                    [
+                        new Dialogue
+                        (
+                            [
+                                new Response("Me", 2),
+                                new Response("Odd", 1),
+                            ]
+                        ),
+                        new Dialogue
+                        (
+                            [
+                                new Response("Me", 2),
+                            ]
+                        ),
+                        new Dialogue
+                        (
+                            [
+                                new Response("Problem", 3),
+                            ]
+                        ),
+                        new Dialogue
+                        (
+                            [
+                                new Response("Help", 5),
+                                new Response("Know", 4),
+                            ]
+                        ),
+                        new Dialogue
+                        (
+                            [
+                                new Response("Help", 5),
+                            ]
+                        ),
+                        new Dialogue
+                        (
+                            [
+                                new Response("In", 6),
+                            ]
+                        ),
+                        new Dialogue
+                        (
+                            [
+                                new Response("Do"),
+                            ]
+                        ),
+                    ],                    
+                    [
+                        "Windfall/TheCalamity"
+                    ],
+                    LocalizationPath)
+                },
+                {
+                    "Windfall/LunarCultTalk",
+                    new DialogueTree(
+                    [
+                        new Dialogue
+                        (
+                            [
+                                new Response("Invite", 2),
+                                new Response("Orator", 1),
+                            ]
+                        ),
+                        new Dialogue
+                        (
+                            [
+                                new Response("Help", 3),
+                            ]
+                        ),
+                        new Dialogue
+                        (
+                            [
+                                new Response("Help", 3),
+                            ]
+                        ),
+                        new Dialogue
+                        (
+                            [
+                                new Response("How", 4),
+                            ]
+                        ),
+                        new Dialogue
+                        (
+                            [
+                                new Response("See", 5),
+                            ]
+                        ),
+                        new Dialogue
+                        (
+                            [
+                                new Response("Thanks"),
+                                new Response("Will"),
+                            ]
+                        ),
+                    ],
+                    [
+                        "Windfall/TheCalamity"
+                    ],
+                    LocalizationPath)
+                },
+                {
+                    "Windfall/AllRecruited",
+                    new DialogueTree(
+                    [
+                        new Dialogue
+                        (
+                            [
+                                new Response("Ritual", 1),
+                                new Response("What", 1),
+                            ]
+                        ),
+                        new Dialogue
+                        (
+                            [
+                                new Response("UhOh", 2),
+                                new Response("Bad", 2),
+                            ]
+                        ),
+                        new Dialogue
+                        (
+                            [
+                                new Response("Why", 3),
+                                new Response("What", 3),
+                            ]
+                        ),
+                        new Dialogue
+                        (
+                            [
+                                new Response("Next", 4),
+                            ]
+                        ),
+                        new Dialogue
+                        (
+                            [
+                                new Response("Understood"),
+                                new Response("Luck"),
+                            ]
+                        ),
+                    ],
+                    [
+                        "Windfall/TheCalamity"
+                    ],
+                    LocalizationPath)
+                },
+                {
+                    "Windfall/RitualTalk",
+                    new DialogueTree(
+                    [
+                        new Dialogue
+                        (
+                            [
+                                new Response("When", 2),
+                                new Response("Where", 1),
+                            ]
+                        ),
+                        new Dialogue
+                        (
+                            [
+                                new Response("What", 3),
+                            ]
+                        ),
+                        new Dialogue
+                        (
+                            [
+                                new Response("What", 3),
+                            ]
+                        ),
+                        new Dialogue
+                        (
+                            [
+                                new Response("Good", 4),
+                            ]
+                        ),
+                        new Dialogue
+                        (
+                            [
+                                new Response("Will"),
+                                new Response("See"),
+                            ]
+                        ),
+                    ],
+                    [
+                        "Windfall/TheCalamity"
+                    ],
+                    LocalizationPath)
+                },
+                #endregion
+                #endregion
             };
 
             DialogueHolder.DialogueTrees.AddRange(dialogueTrees);
