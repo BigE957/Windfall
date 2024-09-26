@@ -144,32 +144,16 @@ namespace Windfall.Common.Graphics.Metaballs
         {
             switch (layerIndex)
             {
-                // Background.
                 case 0:
                     return Vector2.UnitX * Main.GlobalTimeWrappedHourly * 0.03f;
 
-                // Gaseous skulls.
                 case 1:
                     Vector2 offset = Vector2.One * (float)Math.Cos(Main.GlobalTimeWrappedHourly * 0.041f) * 2f;
                     offset = offset.RotatedBy((float)Math.Cos(Main.GlobalTimeWrappedHourly * 0.08f) * 0.97f);
                     return offset;
 
-                // Spooky faces 1.
                 case 2:
-                    offset = (Main.GlobalTimeWrappedHourly * 2.02f).ToRotationVector2() * 0.036f;
-                    offset.Y += (float)Math.Cos(Main.GlobalTimeWrappedHourly * 0.161f) * 0.5f + 0.5f;
-                    return offset;
-
-                // Spooky faces 2.
-                case 3:
-                    offset = Vector2.UnitX * Main.GlobalTimeWrappedHourly * -0.04f + (Main.GlobalTimeWrappedHourly * 1.89f).ToRotationVector2() * 0.03f;
-                    offset.Y += PerlinNoise2D(Main.GlobalTimeWrappedHourly * 0.187f, Main.GlobalTimeWrappedHourly * 0.193f, 2, 466920161) * 0.025f;
-                    return offset;
-
-                // Spooky faces 3.
-                case 4:
-                    offset = Vector2.UnitX * Main.GlobalTimeWrappedHourly * 0.037f + (Main.GlobalTimeWrappedHourly * 1.77f).ToRotationVector2() * 0.04725f;
-                    offset.Y += PerlinNoise2D(Main.GlobalTimeWrappedHourly * 0.187f, Main.GlobalTimeWrappedHourly * 0.193f, 2, 577215664) * 0.05f;
+                    offset = new(Main.GlobalTimeWrappedHourly * 0.041f * ((float)Math.Cos(Main.GlobalTimeWrappedHourly * 0.08f) * -0.08f), (float)Math.Cos(Main.GlobalTimeWrappedHourly * 0.041f) * 12);
                     return offset;
             }
             return Vector2.Zero;
