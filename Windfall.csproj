@@ -7,11 +7,15 @@
   </PropertyGroup>
   <ItemGroup>
     <None Remove="Assets\Buffs\PerfectFlow.png" />
+    <None Remove="Assets\Graphics\AlphaWavyBlotchNoise1.png" />
+    <None Remove="Assets\Graphics\AlphaWavyBlotchNoise2.png" />
+    <None Remove="Assets\Graphics\Metaballs\AlphaWavyBlotchNoise.png" />
     <None Remove="Assets\Graphics\Metaballs\BasicCircle.png" />
     <None Remove="Assets\Graphics\Metaballs\Empyrean_Metaball\Empyrean_Distortion_Layer1.png" />
     <None Remove="Assets\Graphics\Metaballs\Empyrean_Metaball\Empyrean_Distortion_Layer2.png" />
     <None Remove="Assets\Graphics\Metaballs\Empyrean_Metaball\Empyrean_Distortion_Layer3.png" />
     <None Remove="Assets\Graphics\Metaballs\Selenic_Metaball\Selenic_Mist_Layer1.png" />
+    <None Remove="Assets\Graphics\TurbulentNoise.png" />
     <None Remove="Assets\Items\Debug\DraeDashGiftCard.png" />
     <None Remove="Assets\Items\Debug\SuperCnidrisnack_Glow.png" />
     <None Remove="Assets\Items\Debug\TheZoomer.png" />

@@ -1,5 +1,6 @@
 ﻿using CalamityMod.Buffs.StatDebuffs;
 using CalamityMod.Graphics.Metaballs;
+using Luminance.Assets;
 using Windfall.Content.NPCs.Bosses.Orator;
 using Windfall.Content.NPCs.WorldEvents.LunarCult;
 using Windfall.Content.Projectiles.Boss.Orator;
@@ -94,8 +95,9 @@ namespace Windfall.Common.Graphics.Metaballs
             // Load layer assets.
             layerAssets = [];
 
-            for (int i = 1; i <= 3; i++)
-                layerAssets.Add(ModContent.Request<Texture2D>($"Windfall/Assets/Graphics/Metaballs/Empyrean_Metaball/Empyrean_Distortion_Layer{i}", AssetRequestMode.ImmediateLoad));
+            layerAssets.Add(ModContent.Request<Texture2D>("Windfall/Assets/Graphics/TurbulentNoise"));
+            layerAssets.Add(ModContent.Request<Texture2D>("Windfall/Assets/Graphics/AlphaWavyBlotchNoise1"));
+            layerAssets.Add(ModContent.Request<Texture2D>("Windfall/Assets/Graphics/AlphaWavyBlotchNoise2"));
         }
 
         public override void ClearInstances()
@@ -103,7 +105,6 @@ namespace Windfall.Common.Graphics.Metaballs
             EmpyreanParticles.Clear();
             EmpyreanStickyParticles.Clear();
         }
-
         public static void SpawnDefaultParticle(Vector2 position, Vector2 velocity, float size) =>
             EmpyreanParticles.Add(new(position, velocity, size));
         public static void SpawnBorderParticle(Projectile projectile, Vector2 offset, float sineOffset, float interpolant, float size, float rotation, bool spin = true) =>
