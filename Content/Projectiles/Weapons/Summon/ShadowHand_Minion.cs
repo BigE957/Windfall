@@ -313,7 +313,7 @@ namespace Windfall.Content.Projectiles.Weapons.Summon
         {
             Texture2D texture = TextureAssets.Projectile[Projectile.type].Value;
 
-            Rectangle frame = texture.Frame(1, Main.projFrames[Projectile.type], 0, Projectile.frame);
+            Rectangle frame = texture.Frame(4, Main.projFrames[Projectile.type], 0, Projectile.frame);
 
             SpriteEffects spriteEffects = SpriteEffects.None;
             if (!(Projectile.rotation + Pi > Pi / 2 && Projectile.rotation + Pi < 3 * Pi / 2) && CurrentAI != AIState.Globbing)
@@ -321,7 +321,7 @@ namespace Windfall.Content.Projectiles.Weapons.Summon
             if (attackBool && CurrentAI == AIState.Globbing)
                 spriteEffects = SpriteEffects.FlipVertically;
 
-            Main.EntitySpriteDraw(texture, drawPosition, frame, color, rotation, frame.Size() * 0.5f, Projectile.scale / 2f, spriteEffects, 0);
+            Main.EntitySpriteDraw(texture, drawPosition, frame, color, rotation, frame.Size() * 0.5f, Projectile.scale, spriteEffects, 0);
         }
     }
 }
