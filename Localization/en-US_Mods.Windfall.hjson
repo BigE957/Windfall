@@ -297,6 +297,405 @@ Dialogue: {
 				See: See you there!
 			}
 		}
+
+		#Recruitment Dialogue :fear:
+		Tirith/CurrentEvents: {
+			Messages: {
+				Initial: That was... Quite the meeting today, huh.
+				Scary: I know right?! Its scary how quickly things can change, and I was just beginning to settle into this whole thing too. I really don't know how to keep up...
+				Reassurance: You think so? Perhaps I'm worrying over nothing. This is good news after all, right? Once we succeed, everything will be better.
+				WhyBother: You make a fair point... If I'm unhappy with this life, I can always just leave. I'm back on my feet now. I don't need to keep up with this stuff if I don't want to.
+				Exciting: I guess...? I don't know... I'm not really sure how to feel right now to be honest. This is... quite big news to just drop out of nowhere, right?
+				True: I mean like, couldn't they have given us more of a warning? They're always so vague with these things... It can get hard to hold onto my faith when it keeps being tested like this...
+				Happy: I mean... No, you're right. This is good news. Once we succeed, everything will be better. That's what the Orator promised us, and I shouldn't doubt that he'll deliver.
+				GoodEnd: Thank you for telling me that. I'm not sure I'd have figured this out on my own. I don't need this... between you and me, cult, any more. I'm done here!
+				BadEnd: Yes, I just need to remain faithful. Our reward for these trials shall soon be upon us. Thank you. I really needed to be reminded of that.
+			}
+
+			Responses: {
+				Scary: Kinda scary...
+				Exciting: Quite exciting!
+				Okay: It'll be okay.
+				Why: Why bother then?
+				True: That's true.
+				Happy: You should be happy!
+				OfCCourse: Of course!
+				IDK: I dont know...
+				Yeah: Yeah!
+				UpToYou: That's up to you.
+				Understand: That's understandable.
+				Strong: Be strong.
+				Spirit: That's the spirit!
+				Hang: Hang on-
+				HellYeah: Hell yeah!
+				Welcome: Your welcome.
+			}
+
+			Tirith/Paradise: {
+				Messages: {
+					Initial: Quite the relieving discussion today I'd say! They've told us plenty of times, but its nice to be reminded that thing's will be turning out well. I had been feeling kinda antsy today... Almost reminded me of how I was found by our friends here!
+					Before: I remember it quite vividly... It was during the height of Yharim's Crusade. You see, my city was founded by a goddess, Themis, which put us in their sights. As their legions attacked, our goddess sat atop her spire at the ciy's center, meaning the invaders tore through our city just to reach her... I know not how many died that day, but I had become trapped in the rubble... That's where I was found and saved.
+					SorryToHear: There's no need to worry. Thanks to our friends, I survived, and now I get to work on something... bigger, than myself. That's something I get to be proud of. To be honest, I'm much happier now than I was before my city's fall; a strange thing to say, I know.
+					Themis: Themis was the Goddess of Justice. If my memory serves, she was one of three to claim the souls of some infamous trio of dragons. Hers held the aspect of Power, but I can't recall the other two... After her ascension, she founded our city where she became quite famous as a judge of sorts. Those with disputes would far and wide to our humble city just for her decree on the matter. Though in the end, she died by the Godseeker's hand, as many deities have.
+					Discussion: Paradise, as we refer to it, has always been a somewhat... vague concept. But that's because we simply aren't able to put what it is into proper words! Such a magestic thing... I look forward to its arrival greatly!
+					Why: Well, it is my belief that with its arrival, all conflict shall cease. Such a wonderous being, its able to provide for us all. There would be nothing left to fight over! We shall all live happily together with open arms... such a wonderful thing.
+					Interesting: Worry not, friend. Soon all shall be made right! Just you wait!
+					BadEnd: Well, its been nice talking to you! Hope to see you next time!
+				}
+
+				Responses: {
+					Before: Before?
+					Discussion: Our discussion...
+					Sorry: Sorry to hear...
+					Themis: Who's Themis?
+					Glad: Glad to hear!
+					Interesting: Quite interesting!
+					Why: Why?
+					Intriguing: How intriguing...
+					Wonderful: How wonderful!
+					Will: Will do!
+					Later: Later!
+				}
+			}
+
+			Tirith/Recruitable: {
+				Messages: {
+					Recruitable: Thanks again for that talk. My eyes feel... opened now? Haha, maybe that's weird.
+					RecruitSuccess: Oh my... The Lunar Cult... They're really planning something like that? I'll help if I can. I'll be in touch!
+				}
+
+				Responses: {
+					Recruit: I need to tell you something...
+					Bye: No problem!
+				}
+			}
+
+			Tirith/Recruited: {
+				Messages.Recruited: Let's not talk about this... here, okay?
+				Responses.Okay: Right... Good idea.
+			}
+
+			Tirith/Unrecruited: {
+				Messages.Unrecruited: Be seeing you!
+				Responses.Bye: See you later!
+			}
+
+			Vivian/CurrentEvents: {
+				Messages: {
+					Initial: I guess I'll hang around a little longer... If they've got more to offer- Hey! What the hell do you want?
+					Sorry: Ah... It's fine. I shouldn't have blown up like that. Did you want something?
+					Azafure: I suppose where I come from is quite obvious, huh. Yeah, I managed to get out of there before things went south; wasn't pretty from what I've heard. Its a bit sad to think about, but I think I'm happier now than I was living there. It's a nice change of pace.
+					Now: Life on the surface is very much an improvement from Azafure if you ask me. I'd never seen so much green in my life, and don't get me started on the sky. Its like an everchanging painting... I doubt I could go back to a life underground. Funny, considering we're here right now.
+					WhatHappened: You don't know? I thought the story was common knowledge these days. Azafure was razed by the Brimstone Witch during Yharim's Crusade; that's all you really need to know.
+					Knowledge: Oh yeah, I've been taught a few things by the higher ups around here, mostly about magic. They have some... unorthodox methods, but my magic has certainly improved thanks to them. I'm eager to see what more they have in store...
+					Example: Well, for one, they really helped me hone in my Brimstone magic. Once I told them about it, they took quite an interest in me... Maybe something to do with a certain well known Brimstone magic user. Its kinda annoying always being associated with her...
+					Future: We'll see I suppose. I know the higher ups have something big in the works, though they're often light on the details. I don't exactly mind though. They're offering more than enough to keep me around.
+					BadEnd: Well, this was a nice chat, but I really should be going. Unlike some people here, I've got a life outside of this stuff.
+				}
+
+				Responses: {
+					Sorry: Sorry to hear that...
+					From: Are you from Azafure?
+					Knowledge: Knowledge?
+					Now: How about now?
+					Happened: What happened to Azafure?
+					SuchAs: Such as?
+					HappenNow: What's going to happen now?
+					Nice: That's nice to hear!
+					Wow: Wow...
+					See: I see!
+					Later: Later!
+				}
+			}
+
+			Vivian/Paradise: {
+				Messages: {
+					Initial: God, that was so boring. I don't know how the rest of y'all eat up that slop. Paradise this, Paradise that... If I hear that word one more time, I might just lose it!
+					Trolled: I'LL KILL YOU.
+					Sorry: You're on thin ice, pal... But apology accepted, I suppose. Here I thought these things couldn't get any worse...
+					IKR: I'm glad I'm not the only one who's not buying all this slop... If I could skip these, trust me I would. But the Orator says these'll be 'enlightening', and that they're required for my training... What a joke.
+					Training: The Orator has been kind enough to train me in the ways of magic; he believes I have much potential. His knowledge is most certainly vast, and he has opened my eyes to the vast possibilities of my magic. Though... I can't shake the feeling he's... disappointed in me.
+					Natural: Yeah, you might be on to something. He's still leagues ahead of me so... Guess it is only natural to feel like I'm not up to his standards. Well, what do I care anyway? I'm just here to get what I want from him. Once he's taught me everything, I don't plan on spending another second around here!
+					Calamitas: Ugh, please do not compare me to... her. Though... You might be onto something... Is that the only reason the Orator's training me? To have a Brimstone Witch of his own?! Thats- ...
+					SoundsLikeIt: I can't believe it! That's seriously all he wanted out of me?! I can't believe I was stupid enough to buy his garbage! Screw this! I'm done with him! Done with all of this trash!
+					SurelyNot: Maybe I'm thinking too much about this. Clearly I need to get the hell out of here; this place seems to only be good at pissing me off and stressing me out...
+					WorthIt: Hmm... Never really thought about it like that. My magic and skills have certainly grown, but... I don't really know if there's much more he's got for me. If he were just leading me along so I keep showing up to these things... Well, I'd be pissed that's for sure!
+					ItsPossible: Yeah... He does seem like the type. Well screw him! I'm plenty powerful with my magic now; I don't need his help anymore! And if it means getting out of showing up to these, well that's just the cherry on top!
+					DoubtIt: I mean, I'm getting taught magic from a pretty dang skilled guy so... can't really complain now can I. If he wants me to take part in his little pet project here then fine. I'll survive... Probably.
+					GoodEnd: Well, thanks for the help I guess. Not sure I'd have been able to piece that all together on my own... Makes me feel... kinda stupid, but whatever. I'm happy I can kiss these stupid things goodbye at least!
+					BadEnd: See you around I guess... Though maybe not. Ditching these is sounding real good right about now.
+				}
+
+				Responses: {
+					IKR: I know, right?
+					Troll: Paradise.
+					Sorry: Sorry!
+					Training: Training?
+					Worth: Is it worth it?
+					Natural: That's natural.
+					Calamitas: Calamitas?
+					Agree: Likewise...
+					YuhHuh: Sounds like it.
+					NuhUh: Surely not.
+					Yeah: Hell yeah!
+					Eek: Eek!
+					Probably: Probably...
+					Wait: Wait-
+					True: True!
+					Sure: For sure.
+					GotThis: You got this.
+					GL: Good luck!
+					Okay: It's okay.
+					Bye: Bye.
+				}
+			}
+
+			Vivian/Recruitable: {
+				Messages: {
+					Recruitable: Thanks for the help with all that. Can't wait to never have to come to these stupid things ever again.
+					RecruitSuccess: Stick it to the Orator? That's all you needed to say! I'm already eager for revenge...
+				}
+
+				Responses: {
+					Recruit: I need to tell you something...
+					Bye: No problem!
+				}
+			}
+
+			Vivian/Recruited: {
+				Messages.Recruited: We can meet up later to figure out our sweet, sweet revenge. I'd rather be literally anywhere but here right now.
+				Responses.Okay: Sounds like a plan!
+			}
+
+			Vivian/Unrecruited: {
+				Messages.Unrecruited: See you around.
+				Responses.Bye: Bye!
+			}
+
+			Tania/Paradise: {
+				Messages: {
+					Initial: Another... 'enlightening' experience as always... Even now they don't give us any details on what we're really working towards... Worst of all, we've been given little to do as the end approaches... Hopefully that change soon.
+					Paradise: I still know so little about we're doing... It can be a little frustrating... Though these people showed me kindness when I was at my lowest; it would be wrong to be untrusting. If they promise things will turn out well, I'll believe them.
+					HowKind: Indeed! I was a trader at the time; bringing goods from Ilmeris. After the Incineration I was left with... nothing. I was lucky to be away when it began, but with no home and no goods there was little I could do to get back on my feet. Thankfully, that's when the our friends here found me. The took me in and provided for my needs. I'm not sure I'll ever be able to repay their kindness.
+					SoundsWrong: Wrong you say? What makes you think that?
+					Manipulative: Hmm... That's... a worrying thought... Worrying and... eye opening... The only reason I'm so trusting of them is because they helped me when I was desperate... I was, in retrospect... an easy target... That's... frightening.
+					ChnageHow: I really just want something to do, y'know? If I can be honest, the worst thing over time that hit me after the Incineration was feeling... purposeless. Being here at least gives me that, as well as, y'know, food and shelter.
+					ThatsGood: Our friends here are quite generous! I almost wonder where all their resources come from... We are quite the large operation! Maybe one day I'll be able to find someone in need and bring them into our fold. We'll see!
+					IsThatGood: Huh... That's a uh... Fair point now that you mention it. Relying on them for... well, practically everything isn't exactly the best. It might be time I try to... distance myself a little, huh.
+					GoodEnd: Thanks for the talk... You've given me a lot to think about. I'll be seeing you around hopefully, and if you need anything, all you gotta do is ask.
+					BadEnd: Well, nice talking to you! Glad to find another friend around here. We do have quite the strong community, huh. Be seeing you!
+				}
+
+				Responses: {
+					Confusing: Kinda confusing...
+					Change: Change how?
+					Kind: How kind!
+					Wrong: That sounds... wrong.
+					Glad: Glad they helped!
+					Manipulate: Sounds manipulative.
+					Yeah: Yeah...
+					Good: That's good!
+					NotGood: ...is that good?
+					Hope: Hopefully!
+					Agreed: Agreed.
+					Maybe: Maybe?
+					Will: Will do!
+					Later: Later!
+				}
+			}
+
+			Tania/NotParadise: {
+				Messages: {
+					Initial: Oh... Hello there. Can I... help you?
+					Smth: ...
+					Ilmeris: ...Yes. I was from Ilmeris until... well, I assume you know the rest.
+					WDYM: You don't? What has the world come to... Ilmeris was incinerated by the hand of the Brimstone Witch at the Godseeker's command... So many lives were lost, just to kill two: the gods of Ilmeris... How does that man sleep at night. Do his sins not weigh on him?
+					Godseeker: Such a wicked man, and yet no one knows what's become of him now. There was an attempt on his life, but even they failed. After that he just... disappeared... There must truly be no justice in the world if that man gets to live out the rest of his days unpunished for his countless crimes...
+					IlmeranGods: So much of Ilmeris is already being forgotten... Ilmeris was founded by two gods: Electric Goddess, Otonilou and Tyrian, the God of the Seas. Together they unified the formerly divided tribes of Ilmeris; forming our kingdom. ...I can't believe I'm giving history lessons...
+					BadEnd: Yhadios!
+				}
+			}
+
+			Tania/Recruitable: {
+				Messages: {
+					Recruitable: Hope to see you around! Mainly somewhere that isn't here, haha.
+					RecruitSuccess: You're serious? Oh my... Yes, I'd be happy to help. I'll be in touch!
+				}
+
+				Responses: {
+					Recruit: I need to tell you something...
+					Bye: See you later!
+				}
+			}
+
+			Tania/Recruited: {
+				Messages.Recruited: We can talk more somewhere that... isn't here.
+				Responses.Okay: Right... Good idea.
+			}
+
+			Tania/Unrecruited: {
+				Messages.Unrecruited: See you next time, I suppose.
+				Responses.Bye: Goodbye!
+			}
+
+			Doro/CurrentEvents: {
+				Messages: {
+					Initial: Hey uh, you know what's going on? I'm still kinda confused...
+					NotSure: Really...? Does no one get what's going on around here? How do they run this place...
+					NoClue: I don't really know what I'm still doing here... If things like this keep happening, I might just leave.
+					Faith: Hmm... I suppose you're right. Just gotta remain faithful. That's what they always say, and we're nearing the end I guess. I can hold out a little longer.
+					TellUs: So we just... wait around? I don't know... I wanna know what I'm meant to do, y'know?
+					ThatsOkay: I suppose a break doesn't hurt every now and then. I'm not very used to relaxing.
+					NotNeeded: You think so? I guess if we're near the end, they might not need my help... Maybe it's about time I moved onto something else...
+					GoodEnd: Yeah, you're right! I gotta take charge of things! I'm outta here!
+					BadEnd: Nice talking to you. Hope to see you around!
+				}
+
+				Responses: {
+					IDK: I'm not sure...
+					DW: They'll tell us.
+					Clueless: No clue...
+					Faith: Faith?
+					True: That's true.
+					Happy: You should be happy!
+					Uh: Uh...
+					Yeah: Yeah!
+					Okay: That's okay.
+					Unneeded: Maybe they don't need you?
+					Understand: That's understandable.
+					Strong: Be strong.
+					Good: It'll do you good.
+					Up2U: Up to you.
+					HellYeah: Hell yeah!
+					Same: Same!
+				}
+			}
+
+			Doro/Recruitable: {
+				Messages: {
+					Recruitable: I feel like big things are coming my way now. This is great!
+					RecruitSuccess: Oh my... That's no good. This things a cult? I'll help you out if I can.
+				}
+
+				Responses: {
+					Recruit: I need to tell you something...
+					Bye: Glad to help!
+				}
+			}
+
+			Doro/Recruited: {
+				Messages.Recruited: You sure talking while we're here is smart?
+				Responses.Okay: Right... Probably not.
+			}
+
+			Doro/Unrecruited: {
+				Messages.Unrecruited: See you later!
+				Responses.Bye: Bye!
+			}
+
+			Skylar/Paradise: {
+				Messages: {
+					Initial: What intriguing information! It really seems we're reaching the climax of this story- I mean- of our mission! I can't wait to see where this goes next!
+					Climax: Ah, you joined quite late if I recall... Yes, everything seems to have been building to this moment! It seems we're about to have some really interesting sessions!
+					Sessions: These meetings are so informative! The worldbuilding is really top notch! I must hand it to the Orator he's a talented- or, knowledgeable... scholar of this world's history. Yeah!
+					Joined: Joining this was so cool! The people I met were in character recruiting for the LARP; it was so cool! I knew right then that I just had to join, and now here I am! This whole thing has been a blast!
+					Story: Sorry, that was my mistake. I know you're new, but acting out of character and getting 'meta' is against the rules. Do try to keep that in mind!
+					Rules: Did they really not tell you the LARP's rules when you joined? Wow, that must not have been very fun. Luckily its quite straightforward. As long as you don't break character you're basically fine.
+					Meta: Oh... Of course, yes. I don't actually know what that means either. I've uh... Only heard about it from scholars and mages... Its a uh... form of magic. Yeah.
+					BadEnd: Anyways, I should be heading back. I'll see you at the next session! Or... next meeting I should say. Haha!
+				}
+
+				Responses: {
+					Climax: Climax?
+					Story: Story?
+					Sessions: Sessions?
+					Join: How'd you join?
+					Right: Sounds like it!
+					Info: Informative indeed!
+					Same: Same!
+					Cool: Sounds cool!
+					Rules: What rules?
+					Meta: ...Meta?
+					Gotcha: Oh, gotcha.
+					Hmm: Hmm...
+					Magic: Magic... Yeah.
+					Arcane: How... arcane.
+					Later: Later!
+				}
+			}
+
+			Skylar/Recruitable: {
+				Messages: {
+					Recruitable: You're pretty pog!
+					RecruitSuccess: Sure, I'll join your thingie!
+				}
+
+				Responses: {
+					Recruit: I need to tell you something...
+					Bye: Yes, yes I am.
+				}
+			}
+
+			Skylar/Recruited: {
+				Messages.Recruited: Let's talk later.
+				Responses.Okay: Right... Good idea.
+			}
+
+			Skylar/Unrecruited: {
+				Messages.Unrecruited: Hope to see you again!
+				Responses.Bye: See you later!
+			}
+
+			Jamie/CurrentEvents: {
+				Messages: {
+					Initial: I can't wait to see the Orator again! He's so cool right? Wait, you're new around here... You know the Orator, right?
+					MetHim: You met him personally?! No way! You and Vivian are so lucky... I've only seen him during his speeches. I can't believe he spoke to you directly! I hope he talks to me someday...
+					Vivian: Yeah, they're the one with the flower in their hair. They're kinda spooky if you ask me, all dark and brooding. I don't know what the Orator sees in them. Maybe their magic caught his interest? I don't know.
+					Speeches: Yeah. Once in a blue moon he'll deliver a speech like that bishop did himself. Those are always my favorite speeches. If you ask me, the bishops could really learn a thing or two from him. Their speeches are kinda boring...
+					Who: What?! You don't know who the Orator is? He's like... The leader of this whole thing. He's so awesome and cool... I'm so excited that we'll be seeing more of him soon! I hear he's also SUPER powerful! Though I've never seen him fight anybody... Gosh, what I'd give to see that!
+					Thing: Hmm... I'm not really sure what I'd call us. We're a group of people who wanna make the world a better place. The Orator knows just how to do it. Apparently he's able to commune with 'Dark Gods'. So cool, right? I know how 'Dark God' sound, but they aren't actually evil or anything. The Orator says they want to help us achieve a better future, and with our help, they can make it happen!
+					ComeFrom: Oh, you mean't like that... Uh... No one really knows. His identity is a total mystery. Doesn't matter to me though; just makes him that much cooler!
+					BadEnd: Well, hope I was able to help you out, new guy! I gotta get going. Hope to see you again!
+				}
+
+				Responses: {
+					Met: Yeah, I met him.
+					Who: Who?
+					Vivian: Vivian?
+					Speeches: He gives speeches?
+					Thing: Thing?
+					Where: Where does he come from?
+					Interesting: Interesting.
+					Yeah: Yeah.
+					Really: Really?
+					IC: I see...
+					Gotcha: Gotcha...
+					Thanks: Thanks!
+				}
+			}
+
+			Jamie/Recruitable: {
+				Messages: {
+					Recruitable: You're pretty pog!
+					RecruitSuccess: Sure, I'll join your thingie!
+				}
+
+				Responses: {
+					Recruit: I need to tell you something...
+					Bye: Yes, yes I am.
+				}
+			}
+
+			Jamie/Recruited: {
+				Messages.Recruited: Let's talk later.
+				Responses.Okay: Right... Good idea.
+			}
+
+			Jamie/Unrecruited: {
+				Messages.Unrecruited: See you next time, new guy!
+				Responses.Bye: Goodbye!
+			}
+		}
 	}
 
 	IlmeranPaladin: {
