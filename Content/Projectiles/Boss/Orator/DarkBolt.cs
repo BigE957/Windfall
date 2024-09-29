@@ -30,10 +30,13 @@ namespace Windfall.Content.Projectiles.Boss.Orator
             get => Projectile.ai[1];
             set => Projectile.ai[1] = value;
         }
+        public Color drawColor = Color.White;
         Vector2 DirectionalVelocity = Vector2.Zero;
         public override void OnSpawn(IEntitySource source)
         {
             DirectionalVelocity = Projectile.velocity.SafeNormalize(Vector2.UnitX);
+            if(drawColor == Color.White)
+                drawColor = Color.Lerp(new Color(117, 255, 159), new Color(255, 180, 80), (float)(Math.Sin(Main.GlobalTimeWrappedHourly * 1.25f) / 0.5f) + 0.5f);
         }
         public override void AI()
         {
@@ -47,9 +50,10 @@ namespace Windfall.Content.Projectiles.Boss.Orator
                 Vector2 position = new(Projectile.position.X + 39, Projectile.Center.Y);
                 Vector2 rotation = Projectile.rotation.ToRotationVector2();
                 rotation *= -8;
-                Dust dust = Dust.NewDustPerfect(position + rotation, DustID.Terra);
+                Dust dust = Dust.NewDustPerfect(position + rotation, DustID.RainbowTorch);
                 dust.scale = Main.rand.NextFloat(1f, 2f);
                 dust.noGravity = true;
+                dust.color = drawColor;
             }
             Lighting.AddLight(Projectile.Center, new Vector3(0.32f, 0.92f, 0.71f));
         }
@@ -62,7 +66,7 @@ namespace Windfall.Content.Projectiles.Boss.Orator
         }
         public override bool PreDraw(ref Color lightColor)
         {
-            CalamityUtils.DrawAfterimagesCentered(Projectile, ProjectileID.Sets.TrailingMode[Projectile.type], lightColor, 2);
+            CalamityUtils.DrawAfterimagesCentered(Projectile, ProjectileID.Sets.TrailingMode[Projectile.type], drawColor, 2);
             return false;
         }
     }
