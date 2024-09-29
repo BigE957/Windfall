@@ -46,25 +46,7 @@ namespace Windfall.Content.UI.MenuThemes.Selenic
             }
             #endregion
 
-            //spriteBatch.Draw(TextureAssets.BlackTile.Value, new Rectangle(0, 0, Main.screenWidth * 2, Main.screenHeight * 2), Color.Black * (opacity / 2f));
-
-            Vector2 position = new(Main.screenWidth / 2, bgTop + Main.screenHeight / 1.5f);
-            Texture2D bloomCircle = ModContent.Request<Texture2D>("CalamityMod/Particles/LargeBloom", AssetRequestMode.ImmediateLoad).Value;
-
-            spriteBatch.UseBlendState(BlendState.Additive);
-            Vector2 halfSizeTexture = new(bloomCircle.Width / 2, bloomCircle.Height / 2);
-            spriteBatch.Draw(bloomCircle, position, null, oratorGreen * ((float)(Math.Sin(counter / 20D) / 4f + 0.75f)), 0f, bloomCircle.Size() / 2f, 2.5f + 0.3f, SpriteEffects.None, 0f);
-
-            Texture2D bloomRing = ModContent.Request<Texture2D>("Windfall/Assets/Skies/OratorMoonBloom2", AssetRequestMode.ImmediateLoad).Value;
-            halfSizeTexture = new(bloomRing.Width / 2, bloomRing.Height / 2);
-            spriteBatch.Draw(bloomRing, position, null, Color.LightCyan, counter / 100f, halfSizeTexture, 1.5f + 0.1375f, SpriteEffects.None, 0f);
-
-            spriteBatch.UseBlendState(BlendState.NonPremultiplied);
-            Texture2D moon = ModContent.Request<Texture2D>("Windfall/Assets/Skies/OratorMoon", AssetRequestMode.ImmediateLoad).Value;
-            halfSizeTexture = new(moon.Width / 2, moon.Height / 2);
-            spriteBatch.Draw(moon, position, null, Color.White, 0f, halfSizeTexture, 1.5f + 0.125f, SpriteEffects.None, 0f);
-
-            #region Clouds              
+            #region Back Clouds
             float cloudHeight = bgTop * 2 + (Main.screenHeight * 1.25f);
             float cloudScale = 0.45f;
 
@@ -73,7 +55,24 @@ namespace Windfall.Content.UI.MenuThemes.Selenic
             spriteBatch.Draw(CloudBack, new Vector2(GetBoundedX(backgroundOffset, cloudScale), cloudHeight), CloudBack.Frame(), Color.Gray, 0f, new Vector2(CloudBack.Width / 2, CloudBack.Height / 2), cloudScale, SpriteEffects.None, 0f);
             spriteBatch.Draw(CloudBack, new Vector2(GetBoundedX((backgroundOffset - (CloudBack.Width * (cloudScale))), cloudScale), cloudHeight), CloudBack.Frame(), Color.Gray, 0f, new Vector2(CloudBack.Width / 2, CloudBack.Height / 2), cloudScale, SpriteEffects.None, 0f);
             spriteBatch.Draw(CloudBack, new Vector2(GetBoundedX((backgroundOffset + (CloudBack.Width * (cloudScale))), cloudScale), cloudHeight), CloudBack.Frame(), Color.Gray, 0f, new Vector2(CloudBack.Width / 2, CloudBack.Height / 2), cloudScale, SpriteEffects.None, 0f);
+            #endregion
 
+            Vector2 position = new(Main.screenWidth / 2, bgTop + Main.screenHeight / 1.25f);
+            Texture2D bloomCircle = ModContent.Request<Texture2D>("CalamityMod/Particles/LargeBloom", AssetRequestMode.ImmediateLoad).Value;
+
+            spriteBatch.UseBlendState(BlendState.Additive);
+            spriteBatch.Draw(bloomCircle, position, null, oratorGreen * ((float)(Math.Sin(counter / 20D) / 4f + 0.75f)), 0f, bloomCircle.Size() / 2f, 2.5f + 0.3f, SpriteEffects.None, 0f);
+
+            Texture2D bloomRing = ModContent.Request<Texture2D>("Windfall/Assets/Skies/OratorMoonBloom2", AssetRequestMode.ImmediateLoad).Value;
+            Vector2 halfSizeTexture = new(bloomRing.Width / 2, bloomRing.Height / 2);
+            spriteBatch.Draw(bloomRing, position, null, Color.LightCyan, counter / 100f, halfSizeTexture, 1.5f + 0.1375f, SpriteEffects.None, 0f);
+
+            spriteBatch.UseBlendState(BlendState.NonPremultiplied);
+            Texture2D moon = ModContent.Request<Texture2D>("Windfall/Assets/Skies/OratorMoon", AssetRequestMode.ImmediateLoad).Value;
+            halfSizeTexture = new(moon.Width / 2, moon.Height / 2);
+            spriteBatch.Draw(moon, position, null, Color.White, 0f, halfSizeTexture, 1.5f + 0.125f, SpriteEffects.None, 0f);
+
+            #region Front Clouds                        
             Texture2D CloudMiddle = (Texture2D)ModContent.Request<Texture2D>("Windfall/Assets/Skies/OratorCloudsMiddle", AssetRequestMode.ImmediateLoad);
             backgroundOffset = GetBackgroundOffset(0.2f, CloudMiddle);
             spriteBatch.Draw(CloudMiddle, new Vector2(GetBoundedX(backgroundOffset, cloudScale), cloudHeight), CloudMiddle.Frame(), Color.Gray, 0f, new Vector2(CloudMiddle.Width / 2, CloudMiddle.Height / 2), cloudScale, SpriteEffects.None, 0f);

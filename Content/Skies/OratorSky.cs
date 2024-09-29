@@ -56,7 +56,8 @@ namespace Windfall.Content.Skies
                     spriteBatch.Draw(t2D, pos, new Rectangle(0, 0, t2D.Width, t2D.Height), Color.Yellow * star.twinkle * colorMult, star.rotation, origin, star.scale * star.twinkle, SpriteEffects.None, 0f);
                 }
                 #endregion
-                               
+
+                #region Moon Movement
                 float goalRatio = moveRatio;
 
                 if (NPC.AnyNPCs(ModContent.NPCType<TheOrator>()) && ModContent.GetInstance<OratorBossBar>() != null)
@@ -82,9 +83,21 @@ namespace Windfall.Content.Skies
                         moveRatio += 0.00005f;
                     moveRatio = Clamp(moveRatio, 0.1f, goalRatio);
                 }
+                #endregion
 
+                #region Back Clouds
+                Texture2D CloudBack = (Texture2D)ModContent.Request<Texture2D>("Windfall/Assets/Skies/OratorCloudsBack", AssetRequestMode.ImmediateLoad);
+                float backgroundOffset = GetBackgroundOffset(0.1f, CloudBack);
+                float cloudHeight = bgTop * 2 + (Main.screenHeight * 1.25f);
+                float cloudScale = 0.45f;
 
-                Vector2 position = new(Main.screenWidth / 2, bgTop + Lerp(Main.screenHeight / 7, Main.screenHeight / 1.5f, CalamityUtils.SineOutEasing(moveRatio, 1)));
+                spriteBatch.Draw(CloudBack, new(GetBoundedX(backgroundOffset, cloudScale), cloudHeight), CloudBack.Frame(), Color.Gray * opacity, 0f, new(CloudBack.Width / 2, CloudBack.Height / 2), cloudScale, SpriteEffects.None, 0f);
+                spriteBatch.Draw(CloudBack, new(GetBoundedX((backgroundOffset - (CloudBack.Width * (cloudScale))), cloudScale), cloudHeight), CloudBack.Frame(), Color.Gray * opacity, 0f, new(CloudBack.Width / 2, CloudBack.Height / 2), cloudScale, SpriteEffects.None, 0f);
+                spriteBatch.Draw(CloudBack, new(GetBoundedX((backgroundOffset + (CloudBack.Width * (cloudScale))), cloudScale), cloudHeight), CloudBack.Frame(), Color.Gray * opacity, 0f, new(CloudBack.Width / 2, CloudBack.Height / 2), cloudScale, SpriteEffects.None, 0f);
+                #endregion
+
+                #region Moon
+                Vector2 position = new(Main.screenWidth / 2, bgTop + Lerp(Main.screenHeight / 7, Main.screenHeight / 1.25f, CalamityUtils.SineOutEasing(moveRatio, 1)));
                 Texture2D bloomCircle = ModContent.Request<Texture2D>("CalamityMod/Particles/LargeBloom", AssetRequestMode.ImmediateLoad).Value;
 
                 spriteBatch.UseBlendState(BlendState.Additive);
@@ -99,17 +112,9 @@ namespace Windfall.Content.Skies
                 Texture2D moon = ModContent.Request<Texture2D>("Windfall/Assets/Skies/OratorMoon", AssetRequestMode.ImmediateLoad).Value;
                 halfSizeTexture = new(moon.Width / 2, moon.Height / 2);
                 spriteBatch.Draw(moon, position, null, Color.White * opacity, 0f, halfSizeTexture, 1.5f * CalamityUtils.SineInEasing(moveRatio, 1) + 0.125f, SpriteEffects.None, 0f);
+                #endregion
 
-                #region Clouds              
-                float cloudHeight = bgTop * 2 + (Main.screenHeight * 1.25f);
-                float cloudScale = 0.45f;
-
-                Texture2D CloudBack = (Texture2D)ModContent.Request<Texture2D>("Windfall/Assets/Skies/OratorCloudsBack", AssetRequestMode.ImmediateLoad);
-                float backgroundOffset = GetBackgroundOffset(0.1f, CloudBack);
-                spriteBatch.Draw(CloudBack, new(GetBoundedX(backgroundOffset, cloudScale), cloudHeight), CloudBack.Frame(), Color.Gray * opacity, 0f, new(CloudBack.Width / 2, CloudBack.Height / 2), cloudScale, SpriteEffects.None, 0f);
-                spriteBatch.Draw(CloudBack, new(GetBoundedX((backgroundOffset - (CloudBack.Width * (cloudScale))), cloudScale), cloudHeight), CloudBack.Frame(), Color.Gray * opacity, 0f, new(CloudBack.Width / 2, CloudBack.Height / 2), cloudScale, SpriteEffects.None, 0f);
-                spriteBatch.Draw(CloudBack, new(GetBoundedX((backgroundOffset + (CloudBack.Width * (cloudScale))), cloudScale), cloudHeight), CloudBack.Frame(), Color.Gray * opacity, 0f, new(CloudBack.Width / 2, CloudBack.Height / 2), cloudScale, SpriteEffects.None, 0f);
-
+                #region Front Clouds                                          
                 Texture2D CloudMiddle = (Texture2D)ModContent.Request<Texture2D>("Windfall/Assets/Skies/OratorCloudsMiddle", AssetRequestMode.ImmediateLoad);
                 backgroundOffset = GetBackgroundOffset(0.2f, CloudMiddle);
                 spriteBatch.Draw(CloudMiddle, new(GetBoundedX(backgroundOffset, cloudScale), cloudHeight), CloudMiddle.Frame(), Color.Gray * opacity, 0f, new(CloudMiddle.Width / 2, CloudMiddle.Height / 2), cloudScale, SpriteEffects.None, 0f);
