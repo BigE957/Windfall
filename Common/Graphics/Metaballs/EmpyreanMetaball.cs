@@ -85,7 +85,7 @@ namespace Windfall.Common.Graphics.Metaballs
 
         public override MetaballDrawLayer DrawContext => MetaballDrawLayer.AfterProjectiles;
 
-        public override Color EdgeColor => new(117, 255, 159);
+        public override Color EdgeColor => Color.Lerp(new Color(117, 255, 159), new Color(255, 180, 80), (float)(Math.Sin(Main.GlobalTimeWrappedHourly * 1.25f) / 0.5f) + 0.5f);
 
         public override void Load()
         {
@@ -95,9 +95,8 @@ namespace Windfall.Common.Graphics.Metaballs
             // Load layer assets.
             layerAssets = [];
 
-            layerAssets.Add(ModContent.Request<Texture2D>("Windfall/Assets/Graphics/TurbulentNoise"));
-            layerAssets.Add(ModContent.Request<Texture2D>("Windfall/Assets/Graphics/AlphaWavyBlotchNoise1"));
-            layerAssets.Add(ModContent.Request<Texture2D>("Windfall/Assets/Graphics/AlphaWavyBlotchNoise2"));
+            for(int i = 0; i < 5; i++)
+                layerAssets.Add(ModContent.Request<Texture2D>($"Windfall/Assets/Graphics/Metaballs/Empyrean_Metaball/EmpyreanLayer{i+1}"));
         }
 
         public override void ClearInstances()
@@ -139,7 +138,11 @@ namespace Windfall.Common.Graphics.Metaballs
             if(EmpyreanStickyParticles.Count != 0)
                 EmpyreanStickyParticles.RemoveAll(p => p.Projectile == null || !p.Projectile.active);
         }
-
+        public override void PrepareSpriteBatch(SpriteBatch spriteBatch)
+        {
+            spriteBatch.End();
+            spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.NonPremultiplied, SamplerState.PointClamp, DepthStencilState.Default, Main.Rasterizer, null, Matrix.Identity);
+        }
         public override Vector2 CalculateManualOffsetForLayer(int layerIndex)
         {
             switch (layerIndex)
@@ -148,12 +151,20 @@ namespace Windfall.Common.Graphics.Metaballs
                     return Vector2.UnitX * Main.GlobalTimeWrappedHourly * 0.03f;
 
                 case 1:
-                    Vector2 offset = Vector2.One * (float)Math.Cos(Main.GlobalTimeWrappedHourly * 0.041f) * 2f;
+                    Vector2 offset = Vector2.One * (float)Math.Cos(Main.GlobalTimeWrappedHourly * 0.041f) * 1f;
                     offset = offset.RotatedBy((float)Math.Cos(Main.GlobalTimeWrappedHourly * 0.08f) * 0.97f);
                     return offset;
-
                 case 2:
-                    offset = new(Main.GlobalTimeWrappedHourly * 0.041f * ((float)Math.Cos(Main.GlobalTimeWrappedHourly * 0.08f) * -0.08f), (float)Math.Cos(Main.GlobalTimeWrappedHourly * 0.041f) * 12);
+                    offset = Vector2.One * (float)Math.Cos(Main.GlobalTimeWrappedHourly * 0.04f) * 1f;
+                    offset = -offset.RotatedBy(Main.GlobalTimeWrappedHourly * 0.08f) * 0.76f;
+                    return offset;
+                case 3:
+                    offset = Vector2.One * (float)Math.Cos(Main.GlobalTimeWrappedHourly * 0.045f) * 1f;
+                    offset = -offset.RotatedBy(Main.GlobalTimeWrappedHourly * 0.08f) * 0.84f;
+                    return offset;
+                case 4:
+                    offset = Vector2.One * (float)Math.Cos(Main.GlobalTimeWrappedHourly * 0.05f) * 1f;
+                    offset = -offset.RotatedBy(Main.GlobalTimeWrappedHourly * 0.08f) * 0.97f;
                     return offset;
             }
             return Vector2.Zero;
