@@ -1266,7 +1266,7 @@ namespace Windfall.Content.NPCs.Bosses.Orator
                                 if (NPC.Center.Y > wallTop && NPC.ai[3] == -1)
                                 {
                                     SoundEngine.PlaySound(SoundID.DD2_EtherianPortalDryadTouch, NPC.Center);
-
+                                    dashing = false;
                                     for (int i = 0; i < 32; i++)
                                         EmpyreanMetaball.SpawnDefaultParticle(NPC.Center + new Vector2(Main.rand.NextFloat(-64, 64), 160), Vector2.UnitY * Main.rand.NextFloat(4f, 18f) * -1, Main.rand.NextFloat(110f, 130f));
 
@@ -1362,6 +1362,7 @@ namespace Windfall.Content.NPCs.Bosses.Orator
                                 }
                                 else if (NPC.velocity.LengthSquared() <= 64 && NPC.position.Y < wallTop - 300 && NPC.oldPosition.Y < wallTop - 300)
                                 {
+                                    dashing = false;
                                     target = Main.player[Player.FindClosest(NPC.Center, NPC.width, NPC.height)];
                                     attackCounter++;
                                     aiCounter = 750;
