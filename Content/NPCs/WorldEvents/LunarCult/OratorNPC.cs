@@ -51,7 +51,6 @@ namespace Windfall.Content.NPCs.WorldEvents.LunarCult
         }
         private void CloseEffect(string treeKey, int dialogueID, int buttonID)
         {
-            Main.NewText("Closing Text");
             if (treeKey == "Windfall/" + States.TutorialChat.ToString())
             {
                 NPC orator = Main.npc.First(n => n.active && n.type == ModContent.NPCType<OratorNPC>() && n.ai[0] == (int)States.TutorialChat);
