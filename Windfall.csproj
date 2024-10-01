@@ -69,9 +69,6 @@
     <Reference Include="CalamityMod">
       <HintPath>..\ModAssemblies\CalamityMod.dll</HintPath>
     </Reference>
-    <Reference Include="DialogueHelper">
-      <HintPath>..\..\ModReader\DialogueHelper\DialogueHelper.dll</HintPath>
-    </Reference>
     <Reference Include="Luminance">
       <HintPath>..\..\ModReader\Luminance\Luminance.dll</HintPath>
     </Reference>
