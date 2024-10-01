@@ -1,0 +1,3 @@
+[submodule "DialogueHelper"]
+	path = DialogueHelper
+	url = https://github.com/BigE957/DialogueHelper
