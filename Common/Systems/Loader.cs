@@ -1,17 +1,11 @@
 ﻿using CalamityMod.UI;
-using MonoMod.Utils;
 using System.Reflection;
 using Terraria.Graphics.Effects;
-using Windfall.Common.Systems.WorldEvents;
 using Windfall.Content.Skies;
 using Windfall.Content.Skies.CorruptCommunion;
 using Windfall.Content.Skies.CrimsonCommunion;
 using Windfall.Content.Skies.SlimyCommunion;
-using DialogueHelper.Content.UI.Dialogue;
 using Windfall.Content.UI.Events;
-using System.Text.Json;
-using Terraria.ModLoader;
-using DialogueHelper.Content.UI.Dialogue.DialogueStyles;
 
 namespace Windfall.Common.Systems
 {

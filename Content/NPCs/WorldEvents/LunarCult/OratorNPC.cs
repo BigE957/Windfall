@@ -45,20 +45,20 @@ namespace Windfall.Content.NPCs.WorldEvents.LunarCult
         {
             Main.CloseNPCChatOrSign();
             Main.NewText(AIState);
-            ModContent.GetInstance<DialogueUISystem>().DisplayDialogueTree(Windfall.Instance, AIState.ToString());
+            ModContent.GetInstance<DialogueUISystem>().DisplayDialogueTree(Windfall.Instance, "TheOrator/" + AIState.ToString());
 
             return "In the Cult Base, straight Orating it. And by it i mean, lets just say, my Tablet";
         }
         private void CloseEffect(string treeKey, int dialogueID, int buttonID)
         {
-            if (treeKey == "Windfall/" + States.TutorialChat.ToString())
+            if (treeKey == "TheOrator/" + States.TutorialChat.ToString())
             {
                 NPC orator = Main.npc.First(n => n.active && n.type == ModContent.NPCType<OratorNPC>() && n.ai[0] == (int)States.TutorialChat);
                 LunarCultBaseSystem.TutorialComplete = true;
                 orator.ai[0] = 0;
                 return;
             }
-            else if (treeKey == "Windfall/" + States.RitualEvent.ToString() && buttonID == 1)
+            else if (treeKey == "TheOrator/" + States.RitualEvent.ToString() && buttonID == 1)
             {
                 NPC orator = Main.npc.First(n => n.active && n.type == ModContent.NPCType<OratorNPC>() && n.ai[0] == (int)States.RitualEvent);
                 LunarCultBaseSystem.State = LunarCultBaseSystem.SystemState.Ritual;
@@ -66,7 +66,7 @@ namespace Windfall.Content.NPCs.WorldEvents.LunarCult
                 orator.ai[0] = 0;
                 return;
             }
-            else if (treeKey == "Windfall/" + States.BetrayalChat.ToString() && buttonID == 1)
+            else if (treeKey == "TheOrator/" + States.BetrayalChat.ToString() && buttonID == 1)
             {
                 NPC orator = Main.npc.First(n => n.active && n.type == ModContent.NPCType<OratorNPC>() && n.ai[0] == (int)States.TutorialChat);
                 LunarCultBaseSystem.BetrayalActive = true;

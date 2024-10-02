@@ -128,11 +128,11 @@ namespace Windfall.Content.NPCs.WorldEvents.LunarCult
             if (LunarCultBaseSystem.IsCafeteriaActivityActive())
             {
                 DialogueUISystem uiSystem = ModContent.GetInstance<DialogueUISystem>();
-                uiSystem.DisplayDialogueTree(Windfall.Instance, "FoodSelection");
+                uiSystem.DisplayDialogueTree(Windfall.Instance, "TheChef/FoodSelection");
                 uiSystem.CurrentTree.Dialogues[0].Responses = LunarCultBaseSystem.GetMenuResponses();
             }
             else
-                ModContent.GetInstance<DialogueUISystem>().DisplayDialogueTree(Windfall.Instance, "CafeteriaActivityStart");
+                ModContent.GetInstance<DialogueUISystem>().DisplayDialogueTree(Windfall.Instance, "TheChef/CafeteriaActivityStart");
 
             return "Hey chat!";
         }
@@ -163,9 +163,9 @@ namespace Windfall.Content.NPCs.WorldEvents.LunarCult
         }
         private void ClickEffect(string treeKey, int dialogueID, int buttonID)
         {
-            if(treeKey == "Windfall/FoodSelection" && dialogueID == 0)
+            if(treeKey == "TheChef/FoodSelection" && dialogueID == 0)
                 Main.npc[NPC.FindFirstNPC(NPC.type)].ai[3] = LunarCultBaseSystem.MenuFoodIDs[buttonID];
-            else if (treeKey == "Windfall/CafeteriaActivityStart" && buttonID == 1)
+            else if (treeKey == "TheChef/CafeteriaActivityStart" && buttonID == 1)
             {
                 LunarCultBaseSystem.SatisfiedCustomers = 0;
                 LunarCultBaseSystem.CustomerQueue = [];

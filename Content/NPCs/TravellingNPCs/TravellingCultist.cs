@@ -152,11 +152,11 @@ namespace Windfall.Content.NPCs.TravellingNPCs
         }
         public override void SetBestiary(BestiaryDatabase database, BestiaryEntry bestiaryEntry)
         {
-            bestiaryEntry.Info.AddRange(new IBestiaryInfoElement[] {
+            bestiaryEntry.Info.AddRange([
             BestiaryDatabaseNPCsPopulator.CommonTags.SpawnConditions.Biomes.Surface,
 
             new FlavorTextBestiaryInfoElement(GetWindfallTextValue($"Bestiary.{nameof(TravellingCultist)}")),
-        });
+        ]);
         }
         public override bool CanTownNPCSpawn(int numTownNPCs) => false;
         public override ITownNPCProfile TownNPCProfile() => NPCProfile;
@@ -194,7 +194,7 @@ namespace Windfall.Content.NPCs.TravellingNPCs
             {
                 Main.CloseNPCChatOrSign();
 
-                ModContent.GetInstance<DialogueUISystem>().DisplayDialogueTree(Windfall.Instance, CurrentDialogue.ToString());
+                ModContent.GetInstance<DialogueUISystem>().DisplayDialogueTree(Windfall.Instance, "TravellingCultist/" + CurrentDialogue.ToString());
 
                 return base.GetChat();
             }
@@ -269,16 +269,16 @@ namespace Windfall.Content.NPCs.TravellingNPCs
         {
             switch(treeKey)
             {
-                case "Windfall/SearchForHelp":
+                case "TravellingCultist/SearchForHelp":
                     CurrentDialogue = DialogueState.Quests1;
                     break;
-                case "Windfall/LunarCultTalk":
+                case "TravellingCultist/LunarCultTalk":
                     CurrentDialogue = DialogueState.Quests2;
                     break;
-                case "Windfall/AllRecruited":
+                case "TravellingCultist/AllRecruited":
                     CurrentDialogue = DialogueState.Quests3;
                     break;
-                case "Windfall/RitualTalk":
+                case "TravellingCultist/RitualTalk":
                     CurrentDialogue = DialogueState.QuestsEnd;
                     break;
             }

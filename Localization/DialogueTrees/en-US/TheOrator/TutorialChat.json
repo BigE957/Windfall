@@ -148,7 +148,7 @@
       "TextScale": 1.5,
       "TextDelay": 3,
       "MusicID": -1
-    }
+    },
     {
       "Text": "Do not go in the basement.",
       "Responses": [],
@@ -157,7 +157,7 @@
       "TextScale": 1.5,
       "TextDelay": 3,
       "MusicID": -1
-    }
+    },
     {
       "Text": "That is all.",
       "Responses": [],

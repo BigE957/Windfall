@@ -27,7 +27,7 @@ namespace Windfall.Content.Items.Essences
             player.Godly().Evil2Essence = true;
             player.Godly().CrimsonCommunion = true;
             SkyManager.Instance.Activate("Windfall:CrimsonCommunion", args: []);
-            ModContent.GetInstance<DialogueUISystem>().DisplayDialogueTree(Windfall.Instance, "CrimsonCommunion2");
+            ModContent.GetInstance<DialogueUISystem>().DisplayDialogueTree(Windfall.Instance, "Communions/CrimsonCommunion2");
             return true;
         }
     }
