@@ -1,0 +1,24 @@
+{
+  "Dialogues": [
+    {
+      "Text":  "Skibidi dop dop yes yes",
+      "Responses": [
+        {
+          "Title": "Yes",
+          "Index": 1,
+          "Requirement": true,
+          "Cost": null,
+          "DismissSubSpeaker": false
+        }
+      ],
+      "CharacterIndex": 0,
+      "ExpressionIndex": 0,
+      "TextScale": 1.5,
+      "TextDelay": 3,
+      "MusicID": -1
+    }
+  ],
+  "Characters": [
+    "TheCalamity"
+  ]
+}

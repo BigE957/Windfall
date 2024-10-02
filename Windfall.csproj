@@ -12,6 +12,7 @@
     <None Remove="Assets\Graphics\Metaballs\Empyrean_Metaball\EmpyreanLayer4.png" />
     <None Remove="Assets\Graphics\Metaballs\Empyrean_Metaball\EmpyreanLayer5.png" />
     <None Remove="Assets\Skies\OratorMoon.png" />
+    <None Remove="Assets\UI\CharacterAssets\TheOrator\Default.png" />
     <None Remove="Content\Buffs\Cooldowns\ParryWeapon.png" />
     <None Remove="Content\Buffs\Cooldowns\ParryWeaponOutline.png" />
     <None Remove="Content\Buffs\Cooldowns\ParryWeaponOverlay.png" />
@@ -43,7 +44,6 @@
     <None Remove="Content\Projectiles\Boss\Orator\OratorBorder.png" />
     <None Remove="Content\Tiles\Furnature\OratorMonolithTile.png" />
     <None Remove="Content\Tiles\Special\DatabaseTerminal.png" />
-    <None Remove="Content\UI\Dialogue\CharacterAssets\TheOrator\TheOrator_Default.png" />
     <None Remove="Content\UI\DraedonsDatabase\DraedonUIArrowLeft.png" />
     <None Remove="Content\UI\DraedonsDatabase\DraedonUIArrowRight.png" />
     <None Remove="Content\UI\DraedonsDatabase\DraedonUIBG.png" />

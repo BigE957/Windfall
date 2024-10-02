@@ -9,6 +9,8 @@ using Windfall.Content.Skies.CrimsonCommunion;
 using Windfall.Content.Skies.SlimyCommunion;
 using DialogueHelper.Content.UI.Dialogue;
 using Windfall.Content.UI.Events;
+using System.Text.Json;
+using Terraria.ModLoader;
 
 namespace Windfall.Common.Systems
 {
@@ -32,8 +34,9 @@ namespace Windfall.Common.Systems
         }
         public override void PostSetupContent()
         {
+
             #region Dialogue System
-            string LocalizationPath = "Mods.Windfall.Dialogue.DialogueTrees.";
+            /*
             DialogueHolder.CharacterAssetPathes.Add($"{nameof(Windfall)}", $"{nameof(Windfall)}/Content/UI/Dialogue/CharacterAssets");
 
             Dictionary<string, Character> Characters = new()
@@ -82,8 +85,8 @@ namespace Windfall.Common.Systems
                     ],
                     [
                         "Windfall/TheCalamity"
-                    ],
-                    LocalizationPath)
+                    ]
+                    )
                 },
                 #endregion
                 #region The Chef Trees
@@ -101,8 +104,8 @@ namespace Windfall.Common.Systems
                     ],
                     [
                         "Windfall/TheCalamity"
-                    ],
-                    LocalizationPath)
+                    ]
+                    )
                 },
                 {
                     "Windfall/FoodSelection",
@@ -115,8 +118,8 @@ namespace Windfall.Common.Systems
                     ],
                     [
                         "Windfall/TheCalamity"
-                    ],
-                    LocalizationPath)
+                    ]
+                    )
                 },
                 #endregion
                 #region Lunar Bishop Trees
@@ -174,8 +177,8 @@ namespace Windfall.Common.Systems
                     ],
                     [
                         "Windfall/TheCalamity"
-                    ],
-                    LocalizationPath)
+                    ]
+                    )
                 },
                 #endregion
                 #region The Orator Trees
@@ -244,8 +247,8 @@ namespace Windfall.Common.Systems
                     ],
                     [
                         "Windfall/TheOrator"
-                    ],
-                    LocalizationPath)
+                    ]
+                    )
                 },
                 {
                     "Windfall/RitualEvent",
@@ -261,8 +264,8 @@ namespace Windfall.Common.Systems
                     ],
                     [
                         "Windfall/TheOrator"
-                    ],
-                    LocalizationPath)
+                    ]
+                    )
                 },
                 {
                     "Windfall/BetrayalChat",
@@ -278,8 +281,8 @@ namespace Windfall.Common.Systems
                     ],
                     [
                         "Windfall/TheOrator"
-                    ],
-                    LocalizationPath)
+                    ]
+                    )
                 },
                 #endregion
                 #region Communion Trees
@@ -310,8 +313,8 @@ namespace Windfall.Common.Systems
                     ],
                     [
                         "Windfall/TheCalamity"
-                    ],
-                    LocalizationPath)
+                    ]
+                    )
                 },
                 {
                     "Windfall/CorruptCommunion2",
@@ -336,8 +339,8 @@ namespace Windfall.Common.Systems
                     ],
                     [
                         "Windfall/TheCalamity"
-                    ],
-                    LocalizationPath)
+                    ]
+                    )
                 },
                 {
                     "Windfall/CrimsonCommunion1",
@@ -366,8 +369,8 @@ namespace Windfall.Common.Systems
                     ],
                     [
                         "Windfall/TheCalamity"
-                    ],
-                    LocalizationPath)
+                    ]
+                    )
                 },
                 {
                     "Windfall/CrimsonCommunion2",
@@ -392,8 +395,8 @@ namespace Windfall.Common.Systems
                     ],
                     [
                         "Windfall/TheCalamity"
-                    ],
-                    LocalizationPath)
+                    ]
+                    )
                 },
                 {
                     "Windfall/SlimyCommunion",
@@ -418,8 +421,8 @@ namespace Windfall.Common.Systems
                     ],
                     [
                         "Windfall/TheCalamity"
-                    ],
-                    LocalizationPath)
+                    ]
+                    )
                 },
                 #endregion
                 #region Dragon Cult
@@ -486,8 +489,8 @@ namespace Windfall.Common.Systems
                     ],
                     [
                         "Windfall/TheCalamity"
-                    ],
-                    LocalizationPath)
+                    ]
+                    )
                 },
                 {
                     "Windfall/SkeletronDefeat",
@@ -524,8 +527,8 @@ namespace Windfall.Common.Systems
                     ],
                     [
                         "Windfall/TheCalamity"
-                    ],
-                    LocalizationPath)
+                    ]
+                    )
                 },
                 #region Dragon Cult Quest Giver (Travelling Cultist)
                 { 
@@ -579,8 +582,8 @@ namespace Windfall.Common.Systems
                     ],                    
                     [
                         "Windfall/TheCalamity"
-                    ],
-                    LocalizationPath)
+                    ]
+                    )
                 },
                 {
                     "Windfall/LunarCultTalk",
@@ -627,8 +630,8 @@ namespace Windfall.Common.Systems
                     ],
                     [
                         "Windfall/TheCalamity"
-                    ],
-                    LocalizationPath)
+                    ]
+                    )
                 },
                 {
                     "Windfall/AllRecruited",
@@ -671,8 +674,8 @@ namespace Windfall.Common.Systems
                     ],
                     [
                         "Windfall/TheCalamity"
-                    ],
-                    LocalizationPath)
+                    ]
+                    )
                 },
                 {
                     "Windfall/RitualTalk",
@@ -713,14 +716,15 @@ namespace Windfall.Common.Systems
                     ],
                     [
                         "Windfall/TheCalamity"
-                    ],
-                    LocalizationPath)
+                    ]
+                    )
                 },
                 #endregion
                 #endregion
             };
 
             DialogueHolder.DialogueTrees.AddRange(dialogueTrees);
+            */
             #endregion
 
             #region Event Bars
@@ -731,6 +735,9 @@ namespace Windfall.Common.Systems
             guis.Add(Activator.CreateInstance(typeof(CafeteriaEventBar)) as InvasionProgressUI);
             guis.Add(Activator.CreateInstance(typeof(RitualEventBar)) as InvasionProgressUI);
             #endregion
+        }
+        public override void PostUpdateWorld()
+        {
         }
     }
 }

@@ -35,7 +35,7 @@ namespace Windfall.Content.NPCs.WorldEvents.DragonCult
         {
             Main.CloseNPCChatOrSign();
 
-            ModContent.GetInstance<DialogueUISystem>().DisplayDialogueTree("Windfall/" + "MechanicShed");
+            ModContent.GetInstance<DialogueUISystem>().DisplayDialogueTree(Windfall.Instance, "MechanicShed");
 
             return base.GetChat();
         }

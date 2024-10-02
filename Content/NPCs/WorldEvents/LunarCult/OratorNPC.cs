@@ -45,7 +45,7 @@ namespace Windfall.Content.NPCs.WorldEvents.LunarCult
         {
             Main.CloseNPCChatOrSign();
             Main.NewText(AIState);
-            ModContent.GetInstance<DialogueUISystem>().DisplayDialogueTree("Windfall/" + AIState.ToString());
+            ModContent.GetInstance<DialogueUISystem>().DisplayDialogueTree(Windfall.Instance, AIState.ToString());
 
             return "In the Cult Base, straight Orating it. And by it i mean, lets just say, my Tablet";
         }

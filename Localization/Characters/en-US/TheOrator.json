@@ -1,0 +1,19 @@
+{
+  "Name": "[c/32CD32:The Orator]",
+  "Scale": 2,
+
+  "Expressions": [
+    {
+      "Title": "Default",
+      "Path": "Windfall/Content/UI/Dialogue/CharacterAssets/TheOrator/Default",
+      "FrameCount": 1,
+      "FrameRate": 0,
+      "Loop": false,
+      "AnimateCondition": false
+    }
+  ],
+  "Style": "DefaultDialogueStyle",
+  "TextDelay": 3,
+  "PrimaryColor": "#000000",
+  "SecondaryColor": "#32CD32"
+}

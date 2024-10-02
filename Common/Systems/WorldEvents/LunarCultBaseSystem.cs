@@ -1230,7 +1230,7 @@ namespace Windfall.Common.Systems.WorldEvents
             for (int i = 0; i < MenuFoodIDs.Count; i++)
             {
                 Item item = new(MenuFoodIDs[i]);
-                Responses[i] = new Response(item.Name, localize: false);
+                Responses[i] = new Response{Title = item.Name};
             }
             return Responses;
         }

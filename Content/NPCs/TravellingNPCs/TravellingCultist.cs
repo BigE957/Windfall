@@ -194,7 +194,7 @@ namespace Windfall.Content.NPCs.TravellingNPCs
             {
                 Main.CloseNPCChatOrSign();
 
-                ModContent.GetInstance<DialogueUISystem>().DisplayDialogueTree("Windfall/" + CurrentDialogue);
+                ModContent.GetInstance<DialogueUISystem>().DisplayDialogueTree(Windfall.Instance, CurrentDialogue.ToString());
 
                 return base.GetChat();
             }

@@ -38,7 +38,7 @@ namespace Windfall.Content.NPCs.WorldEvents.DragonCult
         {
             Main.CloseNPCChatOrSign();
 
-            ModContent.GetInstance<DialogueUISystem>().DisplayDialogueTree("Windfall/" + "SkeletronDefeat");
+            ModContent.GetInstance<DialogueUISystem>().DisplayDialogueTree(Windfall.Instance, "SkeletronDefeat");
 
             return base.GetChat();
         }

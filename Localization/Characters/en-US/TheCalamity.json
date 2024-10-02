@@ -1,0 +1,27 @@
+{
+  "Name": "[c/FF0000:The Calamity]",
+  "Scale": 2,
+
+  "Expressions": [
+    {
+      "Title": "Default",
+      "Path": "Windfall/Content/UI/Dialogue/CharacterAssets/TheCalamity/Normal",
+      "FrameCount": 1,
+      "FrameRate": 0,
+      "Loop": false,
+      "AnimateCondition": false
+    },
+    {
+      "Title": "Finality",
+      "Path": "Windfall/Content/UI/Dialogue/CharacterAssets/TheCalamity/Finality",
+      "FrameCount": 1,
+      "FrameRate": 0,
+      "Loop": false,
+      "AnimateCondition": false
+    }
+  ],
+  "Style": "DefaultDialogueStyle",
+  "TextDelay": 3,
+  "PrimaryColor": "#000000",
+  "SecondaryColor": "#FF0000"
+}
