@@ -5,7 +5,7 @@
       "Responses": [
         {
           "Title": "Yes",
-          "Index": 1,
+          "Heading": 1,
           "Requirement": true,
           "Cost": null,
           "DismissSubSpeaker": false

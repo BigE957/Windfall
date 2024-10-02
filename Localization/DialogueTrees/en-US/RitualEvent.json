@@ -1,17 +1,17 @@
 {
   "Dialogues": [
     {
-      "Text": "Ready to begin?",
+      "Text": "Shall we begin?",
       "Responses": [
         {
-          "Title": "Not right now.",
+          "Title": "Uh, one second.",
           "Heading": -1,
           "Requirement": true,
           "Cost": null,
           "DismissSubSpeaker": false
         },
         {
-          "Title": "Yup",
+          "Title": "Yes.",
           "Heading": -1,
           "Requirement": true,
           "Cost": null,
@@ -23,9 +23,9 @@
       "TextScale": 1.5,
       "TextDelay": 3,
       "MusicID": -1
-    },
+    }
   ],
   "Characters": [
-    "TheCalamity"
+    "TheOrator"
   ]
 }

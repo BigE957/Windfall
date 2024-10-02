@@ -1,17 +1,17 @@
 {
   "Dialogues": [
     {
-      "Text": "Ready to begin?",
+      "Text": "Yo wanna betray the Dragon Cult?",
       "Responses": [
         {
-          "Title": "Not right now.",
+          "Title": "No, I'm not a meanie.",
           "Heading": -1,
           "Requirement": true,
           "Cost": null,
           "DismissSubSpeaker": false
         },
         {
-          "Title": "Yup",
+          "Title": "Ah hell yeah.",
           "Heading": -1,
           "Requirement": true,
           "Cost": null,
@@ -23,9 +23,9 @@
       "TextScale": 1.5,
       "TextDelay": 3,
       "MusicID": -1
-    },
+    }
   ],
   "Characters": [
-    "TheCalamity"
+    "TheOrator"
   ]
 }

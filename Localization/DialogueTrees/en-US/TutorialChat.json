@@ -1,0 +1,174 @@
+{
+  "Dialogues": [
+    {
+      "Text": "Welcome! I'm so glad you could join us. I hope you didn't have too much trouble finding our humble abode. It is a tad out of the way, isn't it. I'm hoping that you may soon come to see this place as I do: a home away from home, if you will.",
+      "Responses": [],
+      "CharacterIndex": 0,
+      "ExpressionIndex": 0,
+      "TextScale": 1.5,
+      "TextDelay": 3,
+      "MusicID": -1
+    },
+    {
+      "Text": "As this is your first time here, I only ask that you become aclimated to this new environment, as in the future, you'll be working alongside us in the up keep of our community and in furthering our goals. There's a few people you especially should meet, such as our [c/FFFF00:Chef] and the [c/FFFF00:Seamstress], as you'll be working with them both.",
+      "Responses": [
+        {
+          "Title": "The Chef?",
+          "Heading": 2,
+          "Requirement": true,
+          "Cost": null,
+          "DismissSubSpeaker": false
+        },
+        {
+          "Title": "Seamstress?",
+          "Heading": 3,
+          "Requirement": true,
+          "Cost": null,
+          "DismissSubSpeaker": false
+        }
+      ],
+      "CharacterIndex": 0,
+      "ExpressionIndex": 0,
+      "TextScale": 1.5,
+      "TextDelay": 3,
+      "MusicID": -1
+    },
+    {
+      "Text": "The Chef is in charge of our very own cafeteria, and provides a wide array of meals for our members. You may be called upon to help him in serving food.",
+      "Responses": [
+        {
+          "Title": "I see.",
+          "Heading": 4,
+          "Requirement": true,
+          "Cost": null,
+          "DismissSubSpeaker": false
+        }
+      ],
+      "CharacterIndex": 0,
+      "ExpressionIndex": 0,
+      "TextScale": 1.5,
+      "TextDelay": 3,
+      "MusicID": -1
+    },
+    {
+      "Text": "The Seamstress is responsible for the creation of all our members' garments. From robes to masks, she handles it all. You may be called upon to help her in making these clothes.",
+      "Responses": [
+        {
+          "Title": "I see.",
+          "Heading": 4,
+          "Requirement": true,
+          "Cost": null,
+          "DismissSubSpeaker": false
+        }
+      ],
+      "CharacterIndex": 0,
+      "ExpressionIndex": 0,
+      "TextScale": 1.5,
+      "TextDelay": 3,
+      "MusicID": -1
+    },
+    {
+      "Text": "Is there anyone else you'd like to know about? Getting to know those around you will be vital in becoming a part of the team!",
+      "Responses": [
+        {
+          "Title": "The Chef?",
+          "Heading": 2,
+          "Requirement": true,
+          "Cost": null,
+          "DismissSubSpeaker": false
+        },
+        {
+          "Title": "Seamstress?",
+          "Heading": 3,
+          "Requirement": true,
+          "Cost": null,
+          "DismissSubSpeaker": false
+        },
+        {
+          "Title": "What about you?",
+          "Heading": 5,
+          "Requirement": true,
+          "Cost": null,
+          "DismissSubSpeaker": false
+        },
+        {
+          "Title": "Don't think so.",
+          "Heading": 5,
+          "Requirement": true,
+          "Cost": null,
+          "DismissSubSpeaker": false
+        }
+      ],
+      "CharacterIndex": 0,
+      "ExpressionIndex": 0,
+      "TextScale": 1.5,
+      "TextDelay": 3,
+      "MusicID": -1
+    },
+    {
+      "Text": "Me? Haha, I should have expected that I suppose.",
+      "Responses": [
+        {
+          "Title": "I see.",
+          "Heading": 4,
+          "Requirement": true,
+          "Cost": null,
+          "DismissSubSpeaker": false
+        }
+      ],
+      "CharacterIndex": 0,
+      "ExpressionIndex": 0,
+      "TextScale": 1.5,
+      "TextDelay": 3,
+      "MusicID": -1
+    },
+    {
+      "Text": "I believe that is all then! I do hope this will be a fruitful arrangement for the both of us.",
+      "Responses": [],
+      "CharacterIndex": 0,
+      "ExpressionIndex": 0,
+      "TextScale": 1.5,
+      "TextDelay": 3,
+      "MusicID": -1
+    },
+    {
+      "Text": "...",
+      "Responses": [],
+      "CharacterIndex": 0,
+      "ExpressionIndex": 0,
+      "TextScale": 1.5,
+      "TextDelay": 3,
+      "MusicID": -1
+    },
+    {
+      "Text": "Oh... one other thing.",
+      "Responses": [],
+      "CharacterIndex": 0,
+      "ExpressionIndex": 0,
+      "TextScale": 1.5,
+      "TextDelay": 3,
+      "MusicID": -1
+    }
+    {
+      "Text": "Do not go in the basement.",
+      "Responses": [],
+      "CharacterIndex": 0,
+      "ExpressionIndex": 0,
+      "TextScale": 1.5,
+      "TextDelay": 3,
+      "MusicID": -1
+    }
+    {
+      "Text": "That is all.",
+      "Responses": [],
+      "CharacterIndex": 0,
+      "ExpressionIndex": 0,
+      "TextScale": 1.5,
+      "TextDelay": 3,
+      "MusicID": -1
+    }
+  ],
+  "Characters": [
+    "TheOrator"
+  ]
+}

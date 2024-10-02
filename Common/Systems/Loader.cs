@@ -11,6 +11,7 @@ using DialogueHelper.Content.UI.Dialogue;
 using Windfall.Content.UI.Events;
 using System.Text.Json;
 using Terraria.ModLoader;
+using DialogueHelper.Content.UI.Dialogue.DialogueStyles;
 
 namespace Windfall.Common.Systems
 {
@@ -41,98 +42,6 @@ namespace Windfall.Common.Systems
             Mod calamityMusic = ModLoader.GetMod("CalamityModMusic");
             Dictionary<string, DialogueTree> dialogueTrees = new()
             {
-                #region The Chef Trees
-                {
-                    "Windfall/CafeteriaActivityStart",
-                    new DialogueTree(
-                    [
-                        new Dialogue
-                        (
-                            [
-                                new Response("No"),
-                                new Response("Yes"),
-                            ]
-                        ),
-                    ],
-                    [
-                        "Windfall/TheCalamity"
-                    ]
-                    )
-                },
-                {
-                    "Windfall/FoodSelection",
-                    new DialogueTree(
-                    [
-                        new Dialogue
-                        (
-                            LunarCultBaseSystem.GetMenuResponses()
-                        ),
-                    ],
-                    [
-                        "Windfall/TheCalamity"
-                    ]
-                    )
-                },
-                #endregion
-                #region Lunar Bishop Trees
-                {
-                    "Windfall/SelenicChat",
-                    new DialogueTree(
-                    [
-                        new Dialogue
-                        (
-                            [
-                                new Response("Knowledge", 1),
-                                new Response("Balance", 2),
-                            ]
-                        ),
-                        new Dialogue
-                        (
-                            [
-                                new Response("Me", 3),
-                                new Response("Goal", 4),
-                            ]
-                        ),
-                        new Dialogue
-                        (
-                            [
-                                new Response("Me", 3),
-                                new Response("Goal", 4),
-                            ]
-                        ),
-                        new Dialogue
-                        (
-                            [
-                                new Response("Tablet", 5),
-                            ]
-                        ),
-                        new Dialogue
-                        (
-                            [
-                                new Response("Tablet", 5),
-                            ]
-                        ),
-                        new Dialogue
-                        (
-                            [
-                                new Response("IC", 6),
-                                new Response("Cool", 6),
-                            ]
-                        ),
-                        new Dialogue
-                        (
-                            [
-                                new Response("Bye"),
-                                new Response("Finally"),
-                            ]
-                        ),
-                    ],
-                    [
-                        "Windfall/TheCalamity"
-                    ]
-                    )
-                },
-                #endregion
                 #region The Orator Trees
                 {
                     "Windfall/TutorialChat",
@@ -690,6 +599,7 @@ namespace Windfall.Common.Systems
         }
         public override void PostUpdateWorld()
         {
+            //Main.NewText(typeof(DefaultDialogueStyle).Namespace);
         }
     }
 }

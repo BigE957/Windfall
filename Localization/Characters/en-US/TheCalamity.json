@@ -20,7 +20,7 @@
       "AnimateCondition": false
     }
   ],
-  "Style": "DefaultDialogueStyle",
+  "Style": "DialogueHelper.Content.UI.Dialogue.DialogueStyles.DefaultDialogueStyle",
   "TextDelay": 3,
   "PrimaryColor": "#000000",
   "SecondaryColor": "#FF0000"
