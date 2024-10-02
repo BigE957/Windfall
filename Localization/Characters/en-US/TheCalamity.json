@@ -5,7 +5,7 @@
   "Expressions": [
     {
       "Title": "Default",
-      "Path": "Windfall/Content/UI/Dialogue/CharacterAssets/TheCalamity/Normal",
+      "Path": "Windfall/Assets/UI/CharacterAssets/TheCalamity/Default",
       "FrameCount": 1,
       "FrameRate": 0,
       "Loop": false,
@@ -13,7 +13,7 @@
     },
     {
       "Title": "Finality",
-      "Path": "Windfall/Content/UI/Dialogue/CharacterAssets/TheCalamity/Finality",
+      "Path": "Windfall/Assets/UI/CharacterAssets/TheCalamity/Finality",
       "FrameCount": 1,
       "FrameRate": 0,
       "Loop": false,

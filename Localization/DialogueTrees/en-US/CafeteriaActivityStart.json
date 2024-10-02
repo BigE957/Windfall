@@ -1,0 +1,31 @@
+{
+  "Dialogues": [
+    {
+      "Text": "Ready to begin?",
+      "Responses": [
+        {
+          "Title": "Not right now.",
+          "Index": -1,
+          "Requirement": true,
+          "Cost": null,
+          "DismissSubSpeaker": false
+        },
+        {
+          "Title": "Yup",
+          "Index": -1,
+          "Requirement": true,
+          "Cost": null,
+          "DismissSubSpeaker": false
+        }
+      ],
+      "CharacterIndex": 0,
+      "ExpressionIndex": 0,
+      "TextScale": 1.5,
+      "TextDelay": 3,
+      "MusicID": -1
+    },
+  ],
+  "Characters": [
+    "TheCalamity"
+  ]
+}

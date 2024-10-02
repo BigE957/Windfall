@@ -11,21 +11,6 @@ Dialogue: {
 	}
 
 	DialogueTrees: {
-		Calamitous: {
-			Messages: {
-				0: Things are about to get [c/FF0000:Calamitous!] Tremble in fear!
-				1: Witness the power of a [c/FF0000:Calamity!!!] MWAHAHAHAHAHA!!! SKIBDIDI [c/FF0000:TRISZ EDHEJF DHDJE DFHEDHFDJH] teehee
-				2: Fuck you.
-				3: Bitch.
-			}
-
-			Responses: {
-				Huh: Huh?
-				What: What?
-				Okay: "[c/FF0000:Okay...?]"
-			}
-		}
-
 		#The Chef
 		FoodSelection: {
 			Messages: {

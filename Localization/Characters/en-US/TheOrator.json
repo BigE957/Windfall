@@ -5,7 +5,7 @@
   "Expressions": [
     {
       "Title": "Default",
-      "Path": "Windfall/Content/UI/Dialogue/CharacterAssets/TheOrator/Default",
+      "Path": "Windfall/Assets/UI/CharacterAssets/TheOrator/Default",
       "FrameCount": 1,
       "FrameRate": 0,
       "Loop": false,

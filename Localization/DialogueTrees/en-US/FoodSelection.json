@@ -1,0 +1,23 @@
+{
+  "Dialogues": [
+    {
+      "Text": "Wadaya need?",
+      "CharacterIndex": 0,
+      "ExpressionIndex": 0,
+      "TextScale": 1.5,
+      "TextDelay": 3,
+      "MusicID": -1
+    },
+    {
+      "Text": "On it!",
+      "CharacterIndex": 0,
+      "ExpressionIndex": 0,
+      "TextScale": 1.5,
+      "TextDelay": 3,
+      "MusicID": -1
+    }
+  ],
+  "Characters": [
+    "TheCalamity"
+  ]
+}
