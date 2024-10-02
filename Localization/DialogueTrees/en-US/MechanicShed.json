@@ -1,0 +1,199 @@
+{
+  "Dialogues": [
+    {
+      "Text": "Mind explaining what exactly you're doing here?",
+      "Responses": [
+        {
+          "Title": "I'm just exploring.",
+          "Heading": 4,
+          "Requirement": true,
+          "Cost": null,
+          "DismissSubSpeaker": false
+        },
+        {
+          "Title": "Who are you?",
+          "Heading": 1,
+          "Requirement": true,
+          "Cost": null,
+          "DismissSubSpeaker": false
+        }
+      ],
+      "CharacterIndex": 0,
+      "ExpressionIndex": 0,
+      "TextScale": 1.5,
+      "TextDelay": 3,
+      "MusicID": -1
+    },
+    {
+      "Text": "Just a small group keeping an eye on things. Not sure if its any of your business though.",
+      "Responses": [
+        {
+          "Title": "Sounds interesting.",
+          "Heading": 2,
+          "Requirement": true,
+          "Cost": null,
+          "DismissSubSpeaker": false
+        },
+        {
+          "Title": "So... a cult?",
+          "Heading": 3,
+          "Requirement": true,
+          "Cost": null,
+          "DismissSubSpeaker": false
+        }
+      ],
+      "CharacterIndex": 0,
+      "ExpressionIndex": 0,
+      "TextScale": 1.5,
+      "TextDelay": 3,
+      "MusicID": -1
+    },
+    {
+      "Text": "Don't get any ideas. Not just anyone is allowed into our order... Especially not those who snoop around where they shouldnt't.",
+      "Responses": [
+        {
+          "Title": "Understood.",
+          "Heading": 7,
+          "Requirement": true,
+          "Cost": null,
+          "DismissSubSpeaker": false
+        },
+        {
+          "Title": "Wasn't asking...'",
+          "Heading": 7,
+          "Requirement": true,
+          "Cost": null,
+          "DismissSubSpeaker": false
+        }
+      ],
+      "CharacterIndex": 0,
+      "ExpressionIndex": 0,
+      "TextScale": 1.5,
+      "TextDelay": 3,
+      "MusicID": -1
+    },
+    {
+      "Text": "What?! No, nothing of the sort. Don't know what would give you that idea...",
+      "Responses": [
+        {
+          "Title": "My bad.",
+          "Heading": 7,
+          "Requirement": true,
+          "Cost": null,
+          "DismissSubSpeaker": false
+        },
+        {
+          "Title": "Surely...",
+          "Heading": 7,
+          "Requirement": true,
+          "Cost": null,
+          "DismissSubSpeaker": false
+        }
+      ],
+      "CharacterIndex": 0,
+      "ExpressionIndex": 0,
+      "TextScale": 1.5,
+      "TextDelay": 3,
+      "MusicID": -1
+    },
+    {
+      "Text": "Just exploring, huh? Why's exploring involve snooping around abandoned buildings?",
+      "Responses": [
+        {
+          "Title": "Just looking for supplies.",
+          "Heading": 5,
+          "Requirement": true,
+          "Cost": null,
+          "DismissSubSpeaker": false
+        },
+        {
+          "Title": "What's it matter to you?",
+          "Heading": 6,
+          "Requirement": true,
+          "Cost": null,
+          "DismissSubSpeaker": false
+        }
+      ],
+      "CharacterIndex": 0,
+      "ExpressionIndex": 0,
+      "TextScale": 1.5,
+      "TextDelay": 3,
+      "MusicID": -1
+    },
+    {
+      "Text": "Hmm, okay. That seems fair enough. Just don't go snooping around where you don't belong, alright?",
+      "Responses": [
+        {
+          "Title": "Can do.",
+          "Heading": 7,
+          "Requirement": true,
+          "Cost": null,
+          "DismissSubSpeaker": false
+        },
+        {
+          "Title": "Fine.",
+          "Heading": 7,
+          "Requirement": true,
+          "Cost": null,
+          "DismissSubSpeaker": false
+        }
+      ],
+      "CharacterIndex": 0,
+      "ExpressionIndex": 0,
+      "TextScale": 1.5,
+      "TextDelay": 3,
+      "MusicID": -1
+    },
+    {
+      "Text": "Well, we wouldn't want anything bad happening to you now would we? You never know who roams these parts. Being all alone in a dilapitaed cabin? Sounds like a recipe for disaster if you ask me.",
+      "Responses": [
+        {
+          "Title": "You might be right.",
+          "Heading": 7,
+          "Requirement": true,
+          "Cost": null,
+          "DismissSubSpeaker": false
+        },
+        {
+          "Title": "Are you...?",
+          "Heading": 7,
+          "Requirement": true,
+          "Cost": null,
+          "DismissSubSpeaker": false
+        }
+      ],
+      "CharacterIndex": 0,
+      "ExpressionIndex": 0,
+      "TextScale": 1.5,
+      "TextDelay": 3,
+      "MusicID": -1
+    },
+    {
+      "Text": "Hm, well you seem to be just fine. You're free to go.",
+      "Responses": [
+        {
+          "Title": "Thank you.",
+          "Heading": -1,
+          "Requirement": true,
+          "Cost": null,
+          "DismissSubSpeaker": false
+        },
+        {
+          "Title": "Finally...",
+          "Heading": -1,
+          "Requirement": true,
+          "Cost": null,
+          "DismissSubSpeaker": false
+        }
+      ],
+      "CharacterIndex": 0,
+      "ExpressionIndex": 0,
+      "TextScale": 1.5,
+      "TextDelay": 3,
+      "MusicID": -1
+    }
+  ],
+  "Characters": [
+    "TheCalamity"
+  ]
+}

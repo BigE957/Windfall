@@ -1,0 +1,147 @@
+{
+  "Dialogues": [
+    {
+      "Text": "Hello! Would you be able to point me to whoever's in charge around here? I'm in need of their assistance at once!",
+      "Responses": [
+        {
+          "Title": "That's me.",
+          "Heading": 2,
+          "Requirement": true,
+          "Cost": null,
+          "DismissSubSpeaker": false
+        },
+        {
+          "Title": "You look... odd.",
+          "Heading": 1,
+          "Requirement": true,
+          "Cost": null,
+          "DismissSubSpeaker": false
+        }
+      ],
+      "CharacterIndex": 0,
+      "ExpressionIndex": 0,
+      "TextScale": 1.5,
+      "TextDelay": 3,
+      "MusicID": -1
+    },
+    {
+      "Text": "My robes? I just easilly get cold is all; would rather stay bundled up, haha. Anyways, I really need to speak with the person in charge of this little town. You know where I might find them?",
+      "Responses": [
+        {
+          "Title": "That's me.",
+          "Heading": 2,
+          "Requirement": true,
+          "Cost": null,
+          "DismissSubSpeaker": false
+        }
+      ],
+      "CharacterIndex": 0,
+      "ExpressionIndex": 0,
+      "TextScale": 1.5,
+      "TextDelay": 3,
+      "MusicID": -1
+    },
+    {
+      "Text": "Oh?! Perfect! Nice to meet you! I've heard so much about you, and your heroics. I was wondering if you'd be willing to help me with a matter of grave importance.",
+      "Responses": [
+        {
+          "Title": "What's the problem?",
+          "Heading": 3,
+          "Requirement": true,
+          "Cost": null,
+          "DismissSubSpeaker": false
+        }
+      ],
+      "CharacterIndex": 0,
+      "ExpressionIndex": 0,
+      "TextScale": 1.5,
+      "TextDelay": 3,
+      "MusicID": -1
+    },
+    {
+      "Text": "I'm sure you've encountered them by now: The Lunar Cult. Someone like you would certainly get their attention. They're planning something big, something that might threaten the entire world, and I need your help to stop them!",
+      "Responses": [
+        {
+          "Title": "How can I help?",
+          "Heading": 5,
+          "Requirement": true,
+          "Cost": null,
+          "DismissSubSpeaker": false
+        },
+        {
+          "Title": "How do you know?",
+          "Heading": 4,
+          "Requirement": true,
+          "Cost": null,
+          "DismissSubSpeaker": false
+        }
+      ],
+      "CharacterIndex": 0,
+      "ExpressionIndex": 0,
+      "TextScale": 1.5,
+      "TextDelay": 3,
+      "MusicID": -1
+    },
+    {
+      "Text": "I've been keeping an eye on them for a while now, and as of late their movement has become bolder and bolder. I worry if they aren't stopped soon, they might just being about something catastrophic!",
+      "Responses": [
+        {
+          "Title": "How can I help?",
+          "Heading": 5,
+          "Requirement": true,
+          "Cost": null,
+          "DismissSubSpeaker": false
+        
+      ],
+      "CharacterIndex": 0,
+      "ExpressionIndex": 0,
+      "TextScale": 1.5,
+      "TextDelay": 3,
+      "MusicID": -1
+    },
+    {
+      "Text": "For now, I just need you to investigate the Dungeon. Some of my... cohorts took up residence there for a while, and the retrieval of some of our possessions would go a long way in stopping the Lunar Cult. Though, do keep in mind that we abandoned it because of a particularly nasty haunting.",
+      "Responses": [
+        {
+          "Title": "I'm in!",
+          "Heading": 6,
+          "Requirement": true,
+          "Cost": null,
+          "DismissSubSpeaker": false
+        }
+      ],
+      "CharacterIndex": 0,
+      "ExpressionIndex": 0,
+      "TextScale": 1.5,
+      "TextDelay": 3,
+      "MusicID": -1
+    },
+    {
+      "Text": "Wonderful! Let me know when you want to take on your first mission, and I'll let you know what I need.",
+      "Responses": [
+        {
+          "Title": "Will do.",
+          "Heading": -1,
+          "Requirement": true,
+          "Cost": null,
+          "DismissSubSpeaker": false
+        },
+        {
+          "Title": "Gotcha!",
+          "Heading": -1,
+          "Requirement": true,
+          "Cost": null,
+          "DismissSubSpeaker": false
+        }
+      ],
+      "CharacterIndex": 0,
+      "ExpressionIndex": 0,
+      "TextScale": 1.5,
+      "TextDelay": 3,
+      "MusicID": -1
+    }
+  ],
+  "Characters": [
+    "TheCalamity"
+  ]
+}

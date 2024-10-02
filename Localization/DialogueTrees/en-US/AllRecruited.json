@@ -1,0 +1,120 @@
+{
+  "Dialogues": [
+    {
+      "Text": "Why hello! I have some very good news. I've found our way to put a stop to the Lunar Cult's plans once and for all! Remember the friends I mentioned earlier? One of them just so happens to know of a ritual to seal away the very horrors they are trying to summon!",
+      "Responses": [
+        {
+          "Title": "Sealing Ritual?",
+          "Heading": 1,
+          "Requirement": true,
+          "Cost": null,
+          "DismissSubSpeaker": false
+        },
+        {
+          "Title": "What would they hope to gain?",
+          "Heading": 1,
+          "Requirement": true,
+          "Cost": null,
+          "DismissSubSpeaker": false
+        }
+      ],
+      "CharacterIndex": 0,
+      "ExpressionIndex": 0,
+      "TextScale": 1.5,
+      "TextDelay": 3,
+      "MusicID": -1
+    },
+    {
+      "Text": "Yes, its a ritual that dates back to the Draconic Era. Legend has that those devoted to the Dragons were given this ritual to maintain the seal placed upon their ancient foe. I believe this being is the 'Dark God' that the Lunar Cult seeks to bring to our world, and if they succeed... the world as we know it may cease to be.",
+      "Responses": [
+        {
+          "Title": "Uh oh...",
+          "Heading": 2,
+          "Requirement": true,
+          "Cost": null,
+          "DismissSubSpeaker": false
+        },
+        {
+          "Title": "That doesn't sound good...",
+          "Heading": 2,
+          "Requirement": true,
+          "Cost": null,
+          "DismissSubSpeaker": false
+        }
+      ],
+      "CharacterIndex": 0,
+      "ExpressionIndex": 0,
+      "TextScale": 1.5,
+      "TextDelay": 3,
+      "MusicID": -1
+    },
+    {
+      "Text": "Indeed! It says here that the ritual was meant to be performed once every hundred years to maintain the seal, however I think the demise of the Dragons led to this never being carried out. By performing it now, we may be able to cut off the Lunar Cult's connection to this ancient foe, and stop them from being able to unseal it!",
+      "Responses": [
+        {
+          "Title": "Why are they doing this?",
+          "Heading": 3,
+          "Requirement": true,
+          "Cost": null,
+          "DismissSubSpeaker": false
+        },
+        {
+          "Title": "What would they hope to gain?",
+          "Heading": 3,
+          "Requirement": true,
+          "Cost": null,
+          "DismissSubSpeaker": false
+        }
+      ],
+      "CharacterIndex": 0,
+      "ExpressionIndex": 0,
+      "TextScale": 1.5,
+      "TextDelay": 3,
+      "MusicID": -1
+    },
+    {
+      "Text": "That's something I was never able to find out... The Orator's motives are a mystery to all it seems. However, all that matters now is the dire situation we find ourselves in, and the solution we now hold.",
+      "Responses": [
+        {
+          "Title": "What's next?",
+          "Heading": 4,
+          "Requirement": true,
+          "Cost": null,
+          "DismissSubSpeaker": false
+        }
+      ],
+      "CharacterIndex": 0,
+      "ExpressionIndex": 0,
+      "TextScale": 1.5,
+      "TextDelay": 3,
+      "MusicID": -1
+    },
+    {
+      "Text": "The ritual requires a few things... In the coming days I'll task you with collecting the required materials for the ritual. For now, sit tight. I'll need to look over these texts further to be sure of everything required.",
+      "Responses": [
+        {
+          "Title": "Understood.",
+          "Heading": -1,
+          "Requirement": true,
+          "Cost": null,
+          "DismissSubSpeaker": false
+        },
+        {
+          "Title": "Good luck!",
+          "Heading": -1,
+          "Requirement": true,
+          "Cost": null,
+          "DismissSubSpeaker": false
+        }
+      ],
+      "CharacterIndex": 0,
+      "ExpressionIndex": 0,
+      "TextScale": 1.5,
+      "TextDelay": 3,
+      "MusicID": -1
+    }
+  ],
+  "Characters": [
+    "TheCalamity"
+  ]
+}

@@ -1,0 +1,39 @@
+{
+  "Dialogues": [
+    {
+      "Text": "How wonderful! You seek further power. You continue to drink of the Essence. Truly wonderful! We shall sate your desire.",
+      "CharacterIndex": 0,
+      "ExpressionIndex": 0,
+      "TextScale": 1.5,
+      "TextDelay": 3,
+      "MusicID": -1
+    },
+    {
+      "Text": "With this essence, you may call upon a us to aid you! Whilst the form we take is feeble, when within our reach, you shall be empowered! Though if it is Ambrosia that you thirst for, we can deliver. Destroy us! Feast upon us! Drink of our Ambrosia and be filled!",
+      "CharacterIndex": 0,
+      "ExpressionIndex": 0,
+      "TextScale": 1.5,
+      "TextDelay": 3,
+      "MusicID": -1
+    },
+    {
+      "Text": "As you strike at your foes, our children shall form within you and rise to aid you. Should thee seek further Ambrosia, you may destroy them to quench they thirst.",
+      "CharacterIndex": 0,
+      "ExpressionIndex": 0,
+      "TextScale": 1.5,
+      "TextDelay": 3,
+      "MusicID": -1
+    },
+    {
+      "Text": "Now go forth! Feast upon thy foes in our name! Breed righteous slaughter that we might be avenged!",
+      "CharacterIndex": 0,
+      "ExpressionIndex": 0,
+      "TextScale": 1.5,
+      "TextDelay": 3,
+      "MusicID": -1
+    }
+  ],
+  "Characters": [
+    "TheCalamity"
+  ]
+}

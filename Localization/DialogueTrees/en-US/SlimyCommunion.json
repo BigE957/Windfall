@@ -1,0 +1,39 @@
+{
+  "Dialogues": [
+    {
+      "Text": "Oh my... What a pure essence you've consumed... Undoubtably an essence from the Slime God. Let us see what power it grants...",
+      "CharacterIndex": 0,
+      "ExpressionIndex": 0,
+      "TextScale": 1.5,
+      "TextDelay": 3,
+      "MusicID": -1
+    },
+    {
+      "Text": "This essence grants you the power to unleash the Ambrosia that's gathered within you in the form of a powerful attack: a barrage of slimy globs.",
+      "CharacterIndex": 0,
+      "ExpressionIndex": 0,
+      "TextScale": 1.5,
+      "TextDelay": 3,
+      "MusicID": -1
+    },
+    {
+      "Text": "Additionally, the muck formed by the rotting corpses of the Gods shall gather around you. Forcing it to converge shall transform it into Ambrosia that you may make use of.",
+      "CharacterIndex": 0,
+      "ExpressionIndex": 0,
+      "TextScale": 1.5,
+      "TextDelay": 3,
+      "MusicID": -1
+    },
+    {
+      "Text": "Truly a potent boon to have at your disposal. Wield it well as you continue our conquest!",
+      "CharacterIndex": 0,
+      "ExpressionIndex": 0,
+      "TextScale": 1.5,
+      "TextDelay": 3,
+      "MusicID": -1
+    }
+  ],
+  "Characters": [
+    "TheCalamity"
+  ]
+}

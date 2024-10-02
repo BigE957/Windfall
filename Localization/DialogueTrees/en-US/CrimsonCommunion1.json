@@ -1,0 +1,47 @@
+{
+  "Dialogues": [
+    {
+      "Text": "Aha! What righteous communion! It has been so long since on chose to drink of our might. You seek power, and we can offer it in droves. Our essence spreads throughout your feeble body, and now you may wield a mere fraction of our power.",
+      "CharacterIndex": 0,
+      "ExpressionIndex": 0,
+      "TextScale": 1.5,
+      "TextDelay": 3,
+      "MusicID": -1
+    },
+    {
+      "Text": "With this essence, no foe is safe while within your reach. You may reach out and drain them of their life. Those in your grasp for long enough shall burst at the seams; drenched in our Ichor.",
+      "CharacterIndex": 0,
+      "ExpressionIndex": 0,
+      "TextScale": 1.5,
+      "TextDelay": 3,
+      "MusicID": -1
+    },
+    {
+      "Text": "Our powers often comes with a cost; a fuel required. To wield such abilities you must drink of Ambrosia. Though this power is different. It turns your foes life force into wonderous Ambrosia. Should you continue to feast upon our Essence, new powers shall make a grand use of the Ambrosia you gather.",
+      "CharacterIndex": 0,
+      "ExpressionIndex": 0,
+      "TextScale": 1.5,
+      "TextDelay": 3,
+      "MusicID": -1
+    },
+    {
+      "Text": "As you drink more and more Ambrosia, our children shall rise to fight in your name! Our children's presence shall bolster your fortitude.",
+      "CharacterIndex": 0,
+      "ExpressionIndex": 0,
+      "TextScale": 1.5,
+      "TextDelay": 3,
+      "MusicID": -1
+    },
+    {
+      "Text": "Now go forth! Feast upon thy foes in our name! Breed righteous slaughter that we might be avenged!",
+      "CharacterIndex": 0,
+      "ExpressionIndex": 0,
+      "TextScale": 1.5,
+      "TextDelay": 3,
+      "MusicID": -1
+    }
+  ],
+  "Characters": [
+    "TheCalamity"
+  ]
+}

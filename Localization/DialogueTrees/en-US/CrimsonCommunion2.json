@@ -1,0 +1,39 @@
+{
+  "Dialogues": [
+    {
+      "Text": "How wonderful! You seek further power. You continue to drink of the Essence. Truly wonderful! We shall sate your desire.",
+      "CharacterIndex": 0,
+      "ExpressionIndex": 0,
+      "TextScale": 1.5,
+      "TextDelay": 3,
+      "MusicID": -1
+    },
+    {
+      "Text": "With this essence, none shall be able to escape you! You shall dart forth at a wicked speed, and strike at the hearts of your enemies! Your wrath shall boil their very blood!",
+      "CharacterIndex": 0,
+      "ExpressionIndex": 0,
+      "TextScale": 1.5,
+      "TextDelay": 3,
+      "MusicID": -1
+    },
+    {
+      "Text": "When nearest your foes, every strike shall tear Ambrosia from their very being!",
+      "CharacterIndex": 0,
+      "ExpressionIndex": 0,
+      "TextScale": 1.5,
+      "TextDelay": 3,
+      "MusicID": -1
+    },
+    {
+      "Text": "Now go forth! Conquer thy foes in our name! Breed righteous slaughter that we might be avenged!",
+      "CharacterIndex": 0,
+      "ExpressionIndex": 0,
+      "TextScale": 1.5,
+      "TextDelay": 3,
+      "MusicID": -1
+    }
+  ],
+  "Characters": [
+    "TheCalamity"
+  ]
+}
