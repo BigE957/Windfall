@@ -5,24 +5,11 @@
       "Responses": [
         {
           "Title": "No, I'm not a meanie.",
-          "Heading": -1,
-          "Requirement": true,
-          "Cost": null,
-          "DismissSubSpeaker": false
         },
         {
           "Title": "Ah hell yeah.",
-          "Heading": -1,
-          "Requirement": true,
-          "Cost": null,
-          "DismissSubSpeaker": false
         }
-      ],
-      "CharacterIndex": 0,
-      "ExpressionIndex": 0,
-      "TextScale": 1.5,
-      "TextDelay": 3,
-      "MusicID": -1
+      ]
     }
   ],
   "Characters": [

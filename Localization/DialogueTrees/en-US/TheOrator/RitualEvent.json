@@ -5,24 +5,11 @@
       "Responses": [
         {
           "Title": "Uh, one second.",
-          "Heading": -1,
-          "Requirement": true,
-          "Cost": null,
-          "DismissSubSpeaker": false
         },
         {
           "Title": "Yes.",
-          "Heading": -1,
-          "Requirement": true,
-          "Cost": null,
-          "DismissSubSpeaker": false
         }
-      ],
-      "CharacterIndex": 0,
-      "ExpressionIndex": 0,
-      "TextScale": 1.5,
-      "TextDelay": 3,
-      "MusicID": -1
+      ]
     }
   ],
   "Characters": [

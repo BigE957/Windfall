@@ -1,0 +1,22 @@
+{
+	"Dialogues": [
+		{
+			"Text": "Hope to see you around! Mainly somewhere that isn't here, haha.",
+			"Responses": [
+				{
+					"Title": "I need to tell you something...",
+					"Heading": 1
+				},
+				{
+					"Title": "See you later!"
+				}
+			]
+		},
+		{
+			"Text": "You're serious? Oh my... Yes, I'd be happy to help. I'll be in touch!"
+		}
+	],
+	"Characters": [
+		"TheCalamity"
+	]
+}

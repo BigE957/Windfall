@@ -1,0 +1,119 @@
+{
+  "Dialogues": [
+    {
+      "Text": "Hey uh, you know what's going on? I'm still kinda confused...",
+      "Responses": [
+        {
+          "Title": "I'm not sure...'",
+          "Heading": 1
+        },
+        {
+          "Title": "They'll tell us.'",
+          "Heading": 4
+        }
+      ]
+    },
+    {
+      "Text": "Really...? Does no one get what's going on around here? How do they run this place...",
+      "Responses": [
+        {
+          "Title": "No clue.",
+          "Heading": 2
+        },
+        {
+          "Title": "Faith?",
+          "Heading": 3
+        }
+      ]
+    },
+    {
+      "Text": "I don't really know what I'm still doing here... If things like this keep happening, I might just leave.",
+      "Responses": [
+        {
+          "Title": "That's true.",
+          "Heading": 7
+        },
+        {
+          "Title": "You should be happy!",
+          "Heading": 7
+        }
+      ]
+    },
+    {
+      "Text": "Hmm... I suppose you're right. Just gotta remain faithful. That's what they always say, and we're nearing the end I guess. I can hold out a little longer.",
+      "Responses": [
+        {
+          "Title": "Uh...",
+          "Heading": 8
+        },
+        {
+          "Title": "Yeah.",
+          "Heading": 8
+        }
+      ]
+    },
+    {
+      "Text": "So we just... wait around? I don't know... I wanna know what I'm meant to do, y'know?",
+      "Responses": [
+        {
+          "Title": "That's okay.",
+          "Heading": 5
+        },
+        {
+          "Title": "Maybe they don't need you?",
+          "Heading": 6
+        }
+      ]
+    },
+    {
+      "Text": "I suppose a break doesn't hurt every now and then. I'm not very used to relaxing.",
+      "Responses": [
+        {
+          "Title": "That's understandable.",
+          "Heading": 8
+        },
+        {
+          "Title": "Be strong.",
+          "Heading": 8
+        }
+      ]
+    },
+    {
+      "Text": "You think so? I guess if we're near the end, they might not need my help... Maybe it's about time I moved onto something else...",
+      "Responses": [
+        {
+          "Title": "It's up to you.",
+          "Heading": 7
+        },
+        {
+          "Title": "Could be a good idea.",
+          "Heading": 7
+        }
+      ]
+    },
+    {
+      "Text": "Yeah, you're right! I gotta take charge of things! I'm outta here!",
+      "Responses": [
+        {
+          "Title": "Hell yeah!"
+        },
+        {
+          "Title": "I need to tell you something...",
+          "Heading": 1,
+          "SwapToTreeKey": "Doro/Recruitable"
+        }
+      ]
+    },
+    {
+      "Text": "Nice talking to you. Hope to see you around!",
+      "Responses": [
+        {
+          "Title": "Same."
+        }
+      ]
+    }
+  ],
+  "Characters": [
+    "TheCalamity"
+  ]
+}

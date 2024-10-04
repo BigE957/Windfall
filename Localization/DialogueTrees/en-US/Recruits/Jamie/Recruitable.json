@@ -1,0 +1,22 @@
+{
+	"Dialogues": [
+		{
+			"Text": "You're pretty pog!'",
+			"Responses": [
+				{
+					"Title": "I need to tell you something...",
+					"Heading": 1
+				},
+				{
+					"Title": "No problem!"
+				}
+			],
+		},
+		{
+			"Text": "Sure, I'll join your thingie!"
+		}
+	],
+	"Characters": [
+		"TheCalamity"
+	]
+}

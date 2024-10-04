@@ -1,0 +1,22 @@
+{
+	"Dialogues": [
+		{
+			"Text": "Thanks again for that talk. My eyes feel... opened now? Haha, maybe that's weird.",
+			"Responses": [
+				{
+					"Title": "I need to tell you something...",
+					"Heading": 1
+				},
+				{
+					"Title": "No problem!"
+				}
+			],
+		},
+		{
+			"Text": "Oh my... The Lunar Cult... They're really planning something like that? I'll help if I can. I'll be in touch!"
+		}
+	],
+	"Characters": [
+		"TheCalamity"
+	]
+}

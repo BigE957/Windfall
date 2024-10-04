@@ -1,0 +1,106 @@
+{
+  "Dialogues": [
+    {
+      "Text": "What intriguing information! It really seems we're reaching the climax of this story- I mean- of our mission! I can't wait to see where this goes next!",
+      "Responses": [
+        {
+          "Title": "Climax?",
+          "Heading": 1
+        },
+        {
+          "Title": "Story?",
+          "Heading": 4
+        }
+      ]
+    },
+    {
+      "Text": "Ah, you joined quite late if I recall... Yes, everything seems to have been building to this moment! It seems we're about to have some really interesting sessions!",
+      "Responses": [
+        {
+          "Title": "Sessions?",
+          "Heading": 2
+        },
+        {
+          "Title": "How'd you join?",
+          "Heading": 3
+        }
+      ]
+    },
+    {
+      "Text": "These meetings are so informative! The worldbuilding is really top notch! I must hand it to the Orator he's a talented- or, knowledgeable... truly a scholar of this world's history. Yeah!",
+      "Responses": [
+        {
+          "Title": "Sounds like it!",
+          "Heading": 7
+        },
+        {
+          "Title": "Informative indeed!",
+          "Heading": 7
+        }
+      ]
+    },
+    {
+      "Text": "Joining this was just, amazing! The people I met were in character recruiting for the LARP; it was so cool! I knew right then that I just had to join, and now here I am! This whole thing has been a blast!",
+      "Responses": [
+        {
+          "Title": "Same!",
+          "Heading": 7
+        },
+        {
+          "Title": "They're so dedicated!",
+          "Heading": 7
+        }
+      ]
+    },
+    {
+      "Text": "Sorry, that was my mistake. I know you're new, but acting out of character and getting 'meta' is against the rules. Do try to keep that in mind!",
+      "Responses": [
+        {
+          "Title": "What rules?",
+          "Heading": 5
+        },
+        {
+          "Title": "...Meta?",
+          "Heading": 6
+        }
+      ]
+    },
+    {
+      "Text": "Did they really not tell you the LARP's rules when you joined? Wow, that must not have been very fun. Luckily its quite straightforward. As long as you don't break character you're basically fine.",
+      "Responses": [
+        {
+          "Title": "Oh, gotcha.",
+          "Heading": 5
+        },
+        {
+          "Title": "Hmm...",
+          "Heading": 6
+        }
+      ]
+    },
+    {
+      "Text": "Oh... Of course, yes. I don't actually know what that means either. I've uh... Only heard about it from scholars and mages... Its a uh... form of magic. Yeah.",
+      "Responses": [
+        {
+          "Title": "Magic... Yeah.",
+          "Heading": 5
+        },
+        {
+          "Title": "How... Arcane.",
+          "Heading": 6
+        }
+      ]
+    },
+    {
+      "Text": "Anyways, I should be heading back. I'll see you at the next session! Or... next meeting I should say. Haha!",
+      "Responses": [
+        {
+          "Title": "Later!"
+        }
+      ]
+    }
+  ],
+  "Characters": [
+    "TheCalamity"
+  ]
+}

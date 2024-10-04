@@ -1,13 +1,10 @@
 {
   "Dialogues": [
     {
-      "Text": "Ready to begin?",
+      "Text": "I'm needed elsewhere. Be seeing you.",
       "Responses": [
         {
-          "Title": "Not right now.",
-        },
-        {
-          "Title": "Yeah!",
+          "Title": "See you later!"
         }
       ]
     }

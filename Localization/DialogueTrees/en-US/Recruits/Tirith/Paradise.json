@@ -1,0 +1,94 @@
+{
+  "Dialogues": [
+    {
+      "Text": "Quite the relieving discussion today I'd say! They've told us plenty of times, but its nice to be reminded that thing's will be turning out well. I had been feeling kinda antsy today... Almost reminded me of how I was found by our friends here!",
+      "Responses": [
+        {
+          "Title": "Before?",
+          "Heading": 1
+        },
+        {
+          "Title": "Our discussion...",
+          "Heading": 4
+        }
+      ]
+    },
+    {
+      "Text": "I remember it quite vividly... It was during the height of Yharim's Crusade. You see, my city was founded by a goddess, Themis, which put us in their sights. As their legions attacked, our goddess sat atop her spire at the ciy's center, meaning the invaders tore through our city just to reach her... I know not how many died that day, but I had become trapped in the rubble... That's where I was found and saved.",
+      "Responses": [
+        {
+          "Title": "Sorry to hear...",
+          "Heading": 2
+        },
+        {
+          "Title": "Who's Themis?",
+          "Heading": 3
+        }
+      ]
+    },
+    {
+      "Text": "There's no need to worry. Thanks to our friends here in the Order, I survived, and now I get to work on something... bigger, than myself. That's something I get to be proud of. To be honest, I'm much happier now than I was before my city's fall; a strange thing to say, I know.",
+      "Responses": [
+        {
+          "Title": "Glad to hear!",
+          "Heading": 7
+        }
+      ]
+    },
+    {
+      "Text": "Themis was the Goddess of Justice. If my memory serves, she was one of three to claim the souls of some infamous trio of dragons. Hers held the aspect of Power, but I can't recall the other two... After her ascension, she founded our city where she became quite famous as a judge of sorts. Those with disputes would far and wide to our humble city just for her decree on the matter. Though in the end, she died by the Godseeker's hand, as many deities have.",
+      "Responses": [
+        {
+          "Title": "Quite interesting!",
+          "Heading": 7
+        }
+      ]
+    },
+    {
+      "Text": "Paradise, as we refer to it, has always been a somewhat... vague concept. But that's because we simply aren't able to put what it is into proper words! Such a magestic thing... I look forward to its arrival greatly!",
+      "Responses": [
+        {
+          "Title": "Why?",
+          "Heading": 5
+        },
+        {
+          "Title": "How intriguing...",
+          "Heading": 6
+        }
+      ]
+    },
+    {
+      "Text": "Well, it is my belief that with its arrival, all conflict shall cease. Such a wonderous being, its able to provide for us all. There would be nothing left to fight over! We shall all live happily together with open arms... such a wonderful thing.",
+      "Responses": [
+        {
+          "Title": "How wonderful!",
+          "Heading": 7
+        }
+      ]
+    },
+    {
+      "Text": "Worry not, friend. Soon all shall be made right! Just you wait!",
+      "Responses": [
+        {
+          "Title": "Will do!",
+          "Heading": 7
+        }
+      ]
+    },
+    {
+      "Text": "Well, it's been nice talking to you! Hope to see you next time!",
+      "Responses": [
+        {
+          "Title": ""
+        },
+        {
+          "Title": "",
+          "Heading": -1
+        }
+      ]
+    }
+  ],
+  "Characters": [
+    "TheCalamity"
+  ]
+}

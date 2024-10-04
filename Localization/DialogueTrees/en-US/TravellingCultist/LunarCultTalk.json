@@ -5,116 +5,60 @@
       "Responses": [
         {
           "Title": "Why was I invited?",
-          "Heading": 2,
-          "Requirement": true,
-          "Cost": null,
-          "DismissSubSpeaker": false
+          "Heading": 2
         },
         {
           "Title": "The Orator?",
-          "Heading": 1,
-          "Requirement": true,
-          "Cost": null,
-          "DismissSubSpeaker": false
+          "Heading": 1
         }
-      ],
-      "CharacterIndex": 0,
-      "ExpressionIndex": 0,
-      "TextScale": 1.5,
-      "TextDelay": 3,
-      "MusicID": -1
+      ]
     },
     {
       "Text": "The Orator is the mastermind of the entire Lunar Cult's operation. I have yet to able to piece together his true ambition, but he's been dabling with dark forces for a very long time. His manipulations have strung along so many people... Its truly saddening.",
       "Responses": [
         {
           "Title": "Can we help them?",
-          "Heading": 3,
-          "Requirement": true,
-          "Cost": null,
-          "DismissSubSpeaker": false
+          "Heading": 3
         }
-      ],
-      "CharacterIndex": 0,
-      "ExpressionIndex": 0,
-      "TextScale": 1.5,
-      "TextDelay": 3,
-      "MusicID": -1
+      ]
     },
     {
       "Text": "I fear it may not be a simple coincidence... You must be careful. Now that you've been invited, its only a matter of time before you'll be called to the Lunar Cult's base of operations. You'll get to see first hand the truly sickening things the Lunar Cult is willing to put its members through in order to further their goals.",
       "Responses": [
         {
           "Title": "Can we help them?",
-          "Heading": 3,
-          "Requirement": true,
-          "Cost": null,
-          "DismissSubSpeaker": false
+          "Heading": 3
         }
-      ],
-      "CharacterIndex": 0,
-      "ExpressionIndex": 0,
-      "TextScale": 1.5,
-      "TextDelay": 3,
-      "MusicID": -1
+      ]
     },
     {
       "Text": "Help them? Hmm... That might actually be a good idea! Try talking to the members of the cult when you have the chance. Its possible you might find some who are doubting their faith, and you may be able to convince them to join our cause!",
       "Responses": [
         {
           "Title": "How would I do that?",
-          "Heading": 4,
-          "Requirement": true,
-          "Cost": null,
-          "DismissSubSpeaker": false
+          "Heading": 4
         }
-      ],
-      "CharacterIndex": 0,
-      "ExpressionIndex": 0,
-      "TextScale": 1.5,
-      "TextDelay": 3,
-      "MusicID": -1
+      ]
     },
     {
       "Text": "Keep an eye out for people who might seem to be doubting what's being said or seem dissatisfied with the Lunar Cult. Those are the people you might be able to save. Then you just need to convince them to abandon the Lunar Cult. Easier said than done, I know.",
       "Responses": [
         {
           "Title": "I see...",
-          "Heading": 5,
-          "Requirement": true,
-          "Cost": null,
-          "DismissSubSpeaker": false
+          "Heading": 5
         }
-      ],
-      "CharacterIndex": 0,
-      "ExpressionIndex": 0,
-      "TextScale": 1.5,
-      "TextDelay": 3,
-      "MusicID": -1
+      ]
     },
     {
       "Text": "This might just be our best way to deal a real blow to the Lunar Cult! Best of luck with your efforts, and do keep me informed with how your time with the Lunar Cult goes!",
       "Responses": [
         {
-          "Title": "Thanks!",
-          "Heading": -1,
-          "Requirement": true,
-          "Cost": null,
-          "DismissSubSpeaker": false
+          "Title": "Thanks!"
         },
         {
-          "Title": "Will do!",
-          "Heading": -1,
-          "Requirement": true,
-          "Cost": null,
-          "DismissSubSpeaker": false
+          "Title": "Will do!"
         }
-      ],
-      "CharacterIndex": 0,
-      "ExpressionIndex": 0,
-      "TextScale": 1.5,
-      "TextDelay": 3,
-      "MusicID": -1
+      ]
     }
   ],
   "Characters": [

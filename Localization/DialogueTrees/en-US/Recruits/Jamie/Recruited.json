@@ -1,0 +1,15 @@
+{
+	"Dialogues": [
+		{
+			"Text": "Let's not talk about this... here, okay?",
+			"Responses": [
+				{
+					"Title": "Right... Good idea."
+				}
+			]
+		}
+	],
+	"Characters": [
+		"TheCalamity"
+	]
+}

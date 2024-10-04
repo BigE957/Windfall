@@ -1,0 +1,184 @@
+{
+  "Dialogues": [
+    {
+      "Text": "God, that was so boring. I don't know how the rest of y'all eat up that slop. Paradise this, Paradise that... If I hear that word one more time, I might just lose it!",
+      "Responses": [
+        {
+          "Title": "I know, right?",
+          "Heading": 3
+        },
+        {
+          "Title": "Paradise.",
+          "Heading": 1
+        }
+      ]
+    },
+    {
+      "Text": "I'LL KILL YOU.",
+      "Responses": [
+        {
+          "Title": "Sorry!",
+          "Heading": 2
+        },
+        {
+          "Title": "Sorry!",
+          "Heading": 2
+        },
+        {
+          "Title": "Sorry!",
+          "Heading": 2
+        },
+        {
+          "Title": "Sorry!",
+          "Heading": 2
+        }
+      ]
+    },
+    {
+      "Text": "You're on thin ice, pal... But apology accepted, I suppose. Here I thought these things couldn't get any worse...",
+      "Responses": [
+        {
+          "Title": "I know, right?",
+          "Heading": 3
+        }
+      ]
+    },
+    {
+      "Text": "I'm glad I'm not the only one who's not buying all this slop... If I could skip these, trust me I would. But the Orator says these'll be 'enlightening', and that they're required for my training... What a joke.",
+      "Responses": [
+        {
+          "Title": "Training?",
+          "Heading": 4
+        },
+        {
+          "Title": "Is it worth it?",
+          "Heading": 9
+        }
+      ]
+    },
+    {
+      "Text": "The Orator has been kind enough to train me in the ways of magic; he believes I have much potential. His knowledge is most certainly vast, and he has opened my eyes to the vast possibilities of my magic. Though... I can't shake the feeling he's... disappointed in me.",
+      "Responses": [
+        {
+          "Title": "That's natural.",
+          "Heading": 5
+        },
+        {
+          "Title": "Perhaps because of Calamitas?",
+          "Heading": 6
+        }
+      ]
+    },
+    {
+      "Text": "Yeah, you might be on to something. He's still leagues ahead of me so... Guess it is only natural to feel like I'm not up to his standards. Well, what do I care anyway? I'm just here to get what I want from him. Once he's taught me everything, I don't plan on spending another second around here!",
+      "Responses": [
+        {
+          "Title": "Likewise...",
+          "Heading": 13
+        }
+      ]
+    },
+    {
+      "Text": "Ugh, please do not compare me to... her. Though... You might be onto something... Is that the only reason the Orator's training me? To have a Brimstone Witch of his own?! Thats- ...",
+      "Responses": [
+        {
+          "Title": "Sounds like it.",
+          "Heading": 7
+        },
+        {
+          "Title": "Surely not.",
+          "Heading": 8
+        }
+      ]
+    },
+    {
+      "Text": "I can't believe it! That's seriously all he wanted out of me?! I can't believe I was so stupid! Screw this!! I'm DONE!!! Done with all of this dumb garbage!",
+      "Responses": [
+        {
+          "Title": "Hell yeah!",
+          "Heading": 12
+        },
+        {
+          "Title": "Eek-!!",
+          "Heading": 12
+        }
+      ]
+    },
+    {
+      "Text": "Maybe I'm thinking too much about this. Clearly I need to get the hell out of here; this place seems to only be good at pissing me off and stressing me out...",
+      "Responses": [
+        {
+          "Title": "Probably.",
+          "Heading": 13
+        },
+        {
+          "Title": "Wait-",
+          "Heading": 13
+        }
+      ]
+    },
+    {
+      "Text": "Hmm... Never really thought about it like that. My magic and skills have certainly grown, but... I don't really know if there's much more he's got for me. If he were just leading me along so I keep showing up to these things... Well, I'd be pissed that's for sure!",
+      "Responses": [
+        {
+          "Title": "It's possible.",
+          "Heading": 10
+        },
+        {
+          "Title": "Doubt it.",
+          "Heading": 11
+        }
+      ]
+    },
+    {
+      "Text": "Yeah... He does seem like the type. Well screw him! I'm plenty powerful with my magic now; I don't need his help anymore! And if it means getting out of showing up to these, well that's just the cherry on top!",
+      "Responses": [
+        {
+          "Title": "True!",
+          "Heading": 12
+        },
+        {
+          "Title": "For sure.",
+          "Heading": 12
+        }
+      ]
+    },
+    {
+      "Text": "I mean, I'm getting taught magic from a pretty dang skilled guy so... can't really complain now can I. If he wants me to take part in his little pet project here then fine. I'll survive... Probably.",
+      "Responses": [
+        {
+          "Title": "You got this.",
+          "Heading": 13
+        },
+        {
+          "Title": "Good luck!",
+          "Heading": 13
+        }
+      ]
+    },
+    {
+      "Text": "Well, thanks for the help I guess. Not sure I'd have been able to piece that all together on my own... Makes me feel... kinda stupid, but whatever. I'm happy I can kiss these stupid things goodbye at least!",
+      "Responses": [
+        {
+          "Title": "It's okay."
+        },
+        {
+          "Title": "I need to tell you something...",
+          "Heading": 1,
+          "SwapToTreeKey": "Vivian/Recruitable"
+        }
+      ]
+    },
+    {
+      "Text": "See you around I guess... Though maybe not. Ditching these is sounding real good right about now.",
+      "Responses": [
+        {
+          "Title": "Bye."
+        }
+      ]
+    }
+  ],
+  "Characters": [
+    "TheCalamity"
+  ]
+}

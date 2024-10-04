@@ -1,13 +1,10 @@
 {
   "Dialogues": [
     {
-      "Text": "Ready to begin?",
+      "Text": "See you next time, I suppose.",
       "Responses": [
         {
-          "Title": "Not right now.",
-        },
-        {
-          "Title": "Yeah!",
+          "Title": "Goodbye!"
         }
       ]
     }

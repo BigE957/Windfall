@@ -1,0 +1,205 @@
+{
+  "Dialogues": [
+    {
+      "Text": "I guess I'll hang around a little longer... If they've got more to offer- Hey! What the hell do you want?",
+      "Responses": [
+        {
+          "Title": "Oh, sorry.",
+          "Heading": 1,
+          "Requirement": true,
+          "Cost": null,
+          "DismissSubSpeaker": false
+        },
+        {
+          "Title": "...To talk?",
+          "Heading": 1,
+          "Requirement": true,
+          "Cost": null,
+          "DismissSubSpeaker": false
+        }
+      ],
+      "CharacterIndex": 0,
+      "ExpressionIndex": 0,
+      "TextScale": 1.5,
+      "TextDelay": 3,
+      "MusicID": -1
+    },
+    {
+      "Text": "Ah... It's fine. I shouldn't have blown up like that. Did you want something?",
+      "Responses": [
+        {
+          "Title": "Are you from Azafure?",
+          "Heading": 2,
+          "Requirement": true,
+          "Cost": null,
+          "DismissSubSpeaker": false
+        },
+        {
+          "Title": "What'd they mean 'Knowledge'.",
+          "Heading": 5,
+          "Requirement": true,
+          "Cost": null,
+          "DismissSubSpeaker": false
+        }
+      ],
+      "CharacterIndex": 0,
+      "ExpressionIndex": 0,
+      "TextScale": 1.5,
+      "TextDelay": 3,
+      "MusicID": -1
+    },
+    {
+      "Text": "I suppose where I come from is quite obvious, huh. Yeah, I managed to get out of there before things went south; wasn't pretty from what I've heard. Its a bit sad to think about, but I think I'm happier now than I was living there. It's a nice change of pace.",
+      "Responses": [
+        {
+          "Title": "How about now?",
+          "Heading": 3,
+          "Requirement": true,
+          "Cost": null,
+          "DismissSubSpeaker": false
+        },
+        {
+          "Title": "What happened to Azafure?",
+          "Heading": 4,
+          "Requirement": true,
+          "Cost": null,
+          "DismissSubSpeaker": false
+        }
+      ],
+      "CharacterIndex": 0,
+      "ExpressionIndex": 0,
+      "TextScale": 1.5,
+      "TextDelay": 3,
+      "MusicID": -1
+    },
+    {
+      "Text": "Life on the surface is very much an improvement from Azafure if you ask me. I'd never seen so much green in my life, and don't get me started on the sky. Its like an everchanging painting... I doubt I could go back to a life underground. Funny, considering we're here right now.",
+      "Responses": [
+        {
+          "Title": "That's nice to hear!",
+          "Heading": 8,
+          "Requirement": true,
+          "Cost": null,
+          "DismissSubSpeaker": false
+        }
+      ],
+      "CharacterIndex": 0,
+      "ExpressionIndex": 0,
+      "TextScale": 1.5,
+      "TextDelay": 3,
+      "MusicID": -1
+    },
+    {
+      "Text": "You don't know? I thought the story was common knowledge these days; it is where the infamous Brimstone Witch got her start after all. All you really need to know is that Azafure was razed to the ground amidst a battle between the Brimstone Witch and Azafure's patron Elemental. Now the place is in ruins; haunted by the spirits of those caught in the flames...",
+      "Responses": [
+        {
+          "Title": "Oh...",
+          "Heading": 9,
+          "Requirement": true,
+          "Cost": null,
+          "DismissSubSpeaker": false
+        }
+      ],
+      "CharacterIndex": 0,
+      "ExpressionIndex": 0,
+      "TextScale": 1.5,
+      "TextDelay": 3,
+      "MusicID": -1
+    },
+    {
+      "Text": "Oh yeah, I've been taught a few things by the higher ups around here, mostly about magic. They have some... unorthodox methods, but my magic has certainly improved thanks to them. I'm eager to see what more they have in store...",
+      "Responses": [
+        {
+          "Title": "Such as...?",
+          "Heading": 2,
+          "Requirement": true,
+          "Cost": null,
+          "DismissSubSpeaker": false
+        },
+        {
+          "Title": "What's going to happen now?",
+          "Heading": 5,
+          "Requirement": true,
+          "Cost": null,
+          "DismissSubSpeaker": false
+        }
+      ],
+      "CharacterIndex": 0,
+      "ExpressionIndex": 0,
+      "TextScale": 1.5,
+      "TextDelay": 3,
+      "MusicID": -1
+    },
+    {
+      "Text": "Well, for one, they really helped me hone in my Brimstone magic. Once I told them about it, they took quite an interest in me... Maybe something to do with a certain well known Brimstone magic user. Its kinda annoying always being associated with her...",
+      "Responses": [
+        {
+          "Title": "I'd imagine...",
+          "Heading": 8,
+          "Requirement": true,
+          "Cost": null,
+          "DismissSubSpeaker": false
+        }
+      ],
+      "CharacterIndex": 0,
+      "ExpressionIndex": 0,
+      "TextScale": 1.5,
+      "TextDelay": 3,
+      "MusicID": -1
+    },
+    {
+      "Text": "We'll see I suppose. I know the higher ups have something big in the works, though they're often light on the details. I don't exactly mind though. They're offering more than enough to keep me around.",
+      "Responses": [
+        {
+          "Title": "Gotcha.",
+          "Heading": 8,
+          "Requirement": true,
+          "Cost": null,
+          "DismissSubSpeaker": false
+        }
+      ],
+      "CharacterIndex": 0,
+      "ExpressionIndex": 0,
+      "TextScale": 1.5,
+      "TextDelay": 3,
+      "MusicID": -1
+    },
+    {
+      "Text": "Well, this was a nice chat, but I really should be going. Unlike some people here, I've got a life outside of this stuff.",
+      "Responses": [
+        {
+          "Title": "Later.",
+          "Heading": -1,
+          "Requirement": true,
+          "Cost": null,
+          "DismissSubSpeaker": false
+        }
+      ],
+      "CharacterIndex": 0,
+      "ExpressionIndex": 0,
+      "TextScale": 1.5,
+      "TextDelay": 3,
+      "MusicID": -1
+    },
+    {
+      "Text": "...I have to get going. I have... places to be.",
+      "Responses": [
+        {
+          "Title": "Oh... Bye.",
+          "Heading": -1,
+          "Requirement": true,
+          "Cost": null,
+          "DismissSubSpeaker": false
+        }
+      ],
+      "CharacterIndex": 0,
+      "ExpressionIndex": 0,
+      "TextScale": 1.5,
+      "TextDelay": 3,
+      "MusicID": -1
+    }
+  ],
+  "Characters": [
+    "TheCalamity"
+  ]
+}
