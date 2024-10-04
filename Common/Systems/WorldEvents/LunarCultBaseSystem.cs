@@ -488,19 +488,19 @@ namespace Windfall.Common.Systems.WorldEvents
                                                 {
                                                     case 1:
                                                         Recruit.MyName = RecruitableLunarCultist.RecruitNames.Tirith;
-                                                        Recruit.Recruitable = true;
+                                                        Recruit.canRecruit = true;
                                                         break;
                                                     case 2:
                                                         Recruit.MyName = RecruitableLunarCultist.RecruitNames.Vivian;
-                                                        Recruit.Recruitable = false;
+                                                        Recruit.canRecruit = false;
                                                         break;
                                                     case 3:
                                                         Recruit.MyName = RecruitableLunarCultist.RecruitNames.Doro;
-                                                        Recruit.Recruitable = true;
+                                                        Recruit.canRecruit = true;
                                                         break;
                                                     case 4:
                                                         Recruit.MyName = RecruitableLunarCultist.RecruitNames.Jamie;
-                                                        Recruit.Recruitable = false;
+                                                        Recruit.canRecruit = false;
                                                         break;
                                                 }
                                                 break;
@@ -509,19 +509,19 @@ namespace Windfall.Common.Systems.WorldEvents
                                                 {
                                                     case 1:
                                                         Recruit.MyName = RecruitableLunarCultist.RecruitNames.Doro;
-                                                        Recruit.Recruitable = false;
+                                                        Recruit.canRecruit = false;
                                                         break;
                                                     case 2:
                                                         Recruit.MyName = RecruitableLunarCultist.RecruitNames.Skylar;
-                                                        Recruit.Recruitable = true;
+                                                        Recruit.canRecruit = true;
                                                         break;
                                                     case 3:
                                                         Recruit.MyName = RecruitableLunarCultist.RecruitNames.Tania;
-                                                        Recruit.Recruitable = false;
+                                                        Recruit.canRecruit = false;
                                                         break;
                                                     case 4:
                                                         Recruit.MyName = RecruitableLunarCultist.RecruitNames.Jamie;
-                                                        Recruit.Recruitable = true;
+                                                        Recruit.canRecruit = true;
                                                         break;
                                                 }
                                                 break;
@@ -530,19 +530,19 @@ namespace Windfall.Common.Systems.WorldEvents
                                                 {
                                                     case 1:
                                                         Recruit.MyName = RecruitableLunarCultist.RecruitNames.Vivian;
-                                                        Recruit.Recruitable = true;
+                                                        Recruit.canRecruit = true;
                                                         break;
                                                     case 2:
                                                         Recruit.MyName = RecruitableLunarCultist.RecruitNames.Tania;
-                                                        Recruit.Recruitable = true;
+                                                        Recruit.canRecruit = true;
                                                         break;
                                                     case 3:
                                                         Recruit.MyName = RecruitableLunarCultist.RecruitNames.Skylar;
-                                                        Recruit.Recruitable = false;
+                                                        Recruit.canRecruit = false;
                                                         break;
                                                     case 4:
                                                         Recruit.MyName = RecruitableLunarCultist.RecruitNames.Tirith;
-                                                        Recruit.Recruitable = false;
+                                                        Recruit.canRecruit = false;
                                                         break;
                                                 }
                                                 break;
