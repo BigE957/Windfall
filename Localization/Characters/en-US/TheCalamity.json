@@ -6,22 +6,12 @@
     {
       "Title": "Default",
       "Path": "Windfall/Assets/UI/CharacterAssets/TheCalamity/Default",
-      "FrameCount": 1,
-      "FrameRate": 0,
-      "Loop": false,
-      "AnimateCondition": false
     },
     {
       "Title": "Finality",
       "Path": "Windfall/Assets/UI/CharacterAssets/TheCalamity/Finality",
-      "FrameCount": 1,
-      "FrameRate": 0,
-      "Loop": false,
-      "AnimateCondition": false
     }
   ],
-  "Style": "DialogueHelper.Content.UI.Dialogue.DialogueStyles.DefaultDialogueStyle",
-  "TextDelay": 3,
   "PrimaryColor": "#000000",
   "SecondaryColor": "#FF0000"
 }
