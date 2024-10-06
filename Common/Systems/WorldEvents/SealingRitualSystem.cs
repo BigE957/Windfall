@@ -1,4 +1,6 @@
-﻿using Luminance.Core.Graphics;
+﻿using CalamityMod.NPCs.TownNPCs;
+using Luminance.Core.Graphics;
+using Terraria;
 using Terraria.ModLoader.IO;
 using Windfall.Common.Graphics.Metaballs;
 using Windfall.Content.Items.Quest;
@@ -31,7 +33,7 @@ namespace Windfall.Common.Systems.WorldEvents
         public static bool RitualSequenceSeen = false;
         public override void ClearWorld()
         {
-            RitualSequenceSeen = false;
+            RitualSequenceSeen = false;            
         }
         public override void LoadWorldData(TagCompound tag)
         {
@@ -45,9 +47,23 @@ namespace Windfall.Common.Systems.WorldEvents
         {
             DungeonCoords = new Vector2(Main.dungeonX - 4, Main.dungeonY).ToWorldCoordinates();
         }
+        public override void OnWorldUnload()
+        {
+            State = SystemState.CheckReqs;
+            zoom = 0;
+            CameraPanSystem.Zoom = 0;
+        }
         public override void PreUpdateWorld()
         {
-            if(RitualSequenceSeen)
+            #region Debugging Stuffs
+            //RitualSequenceSeen = false;
+            //Recruits = [0, 1, 3, 4];
+            //State = SystemState.CheckReqs; RitualTimer = -2; RitualSequenceSeen = false; Active = false;
+            //Main.NewText($"{RitualTimer}, {State}, {(DungeonCoords - Main.LocalPlayer.Center).Length()}, {RitualSequenceSeen}");
+            //TravellingCultist.RitualQuestProgress = 4;
+            #endregion
+
+            if (RitualSequenceSeen)
             {
                 if (!NPC.AnyNPCs(ModContent.NPCType<SealingTablet>()))
                     NPC.NewNPC(Entity.GetSource_None(), (int)DungeonCoords.X, (int)DungeonCoords.Y - 128, ModContent.NPCType<SealingTablet>(), Start: 150, ai0: 2);
@@ -56,11 +72,7 @@ namespace Windfall.Common.Systems.WorldEvents
                 
                 return;
             }
-            #region Debugging Stuffs
-            //State = SystemState.CheckReqs; RitualTimer = -2; RitualSequenceSeen = false; Active = false;
-            //RitualTimer = 60 * 51;
-            //DisplayLocalizedText($"{RitualTimer}, {State}, {(DungeonCoords - mainPlayer.Center).Length()}, {RitualSequenceSeen}");
-            #endregion
+            
             switch (State)
             {
                 case SystemState.CheckReqs:
@@ -79,17 +91,17 @@ namespace Windfall.Common.Systems.WorldEvents
                         zoom = 0;
                         NPCIndexs =
                         [
-                            NPC.NewNPC(Entity.GetSource_None(), (int)(DungeonCoords.X - 240), (int)DungeonCoords.Y - 8, ModContent.NPCType<RecruitableLunarCultist>()),
-                            NPC.NewNPC(Entity.GetSource_None(), (int)(DungeonCoords.X - 130), (int)DungeonCoords.Y - 8, ModContent.NPCType<RecruitableLunarCultist>()),
-                            NPC.NewNPC(Entity.GetSource_None(), (int)(DungeonCoords.X + 130), (int)DungeonCoords.Y - 8, ModContent.NPCType<RecruitableLunarCultist>()),
-                            NPC.NewNPC(Entity.GetSource_None(), (int)(DungeonCoords.X + 240), (int)DungeonCoords.Y - 8, ModContent.NPCType<RecruitableLunarCultist>()),
+                            NPC.NewNPC(Entity.GetSource_None(), (int)(DungeonCoords.X - 220), (int)DungeonCoords.Y - 8, ModContent.NPCType<RecruitableLunarCultist>()),
+                            NPC.NewNPC(Entity.GetSource_None(), (int)(DungeonCoords.X - 150), (int)DungeonCoords.Y - 8, ModContent.NPCType<RecruitableLunarCultist>()),
+                            NPC.NewNPC(Entity.GetSource_None(), (int)(DungeonCoords.X + 150), (int)DungeonCoords.Y - 8, ModContent.NPCType<RecruitableLunarCultist>()),
+                            NPC.NewNPC(Entity.GetSource_None(), (int)(DungeonCoords.X + 220), (int)DungeonCoords.Y - 8, ModContent.NPCType<RecruitableLunarCultist>()),
                             NPC.NewNPC(Entity.GetSource_None(), (int)DungeonCoords.X, (int)DungeonCoords.Y - 128, ModContent.NPCType<SealingTablet>()),
                             NPC.NewNPC(Entity.GetSource_None(), (int)DungeonCoords.X, (int)DungeonCoords.Y - 8, ModContent.NPCType<TravellingCultist>(), 0, 1),
                             
                         ];
 
                         #region Character Setup
-                        for (int k = 0; k < 2; k++)
+                        for (int k = 0; k < 4; k++)
                         {
                             NPC npc = Main.npc[k];
                             if (npc.ModNPC is RecruitableLunarCultist Recruit && npc.type == ModContent.NPCType<RecruitableLunarCultist>() && k != 0)
@@ -114,10 +126,10 @@ namespace Windfall.Common.Systems.WorldEvents
                             NPC Recruit2 = Main.npc[NPCIndexs[1]];
                             NPC Recruit3 = Main.npc[NPCIndexs[2]];
                             NPC Recruit4 = Main.npc[NPCIndexs[3]];
-                            NPC SealingTablet = Main.npc[NPCIndexs[2]]; //[4]
+                            NPC SealingTablet = Main.npc[NPCIndexs[4]];
                             NPC LunaticCultist = null;
-                            if (NPCIndexs.Count == 4)
-                                LunaticCultist = Main.npc[NPCIndexs[3]]; //[5]
+                            if (NPCIndexs.Count == 6)
+                                LunaticCultist = Main.npc[NPCIndexs[5]];
 
                             NPC Orator = null;
                             if (NPC.FindFirstNPC(ModContent.NPCType<OratorNPC>()) != -1)
@@ -139,7 +151,7 @@ namespace Windfall.Common.Systems.WorldEvents
                             CombatText Text;
                             Color TextColor = Color.Cyan;
                             string key = "LunarCult.TravellingCultist.SealingRitual.";
-                            if (RitualTimer > 60 * 65)
+                            if (RitualTimer > 60 * 61)
                                 key = "LunarCult.TheOrator.WorldText.SealingRitual.Initial.";
                             if (Recruit1.ModNPC is RecruitableLunarCultist Recruitable1 && Recruit2.ModNPC is RecruitableLunarCultist Recruitable2 && Recruit3.ModNPC is RecruitableLunarCultist Recruitable3 && Recruit4.ModNPC is RecruitableLunarCultist Recruitable4)
                             {
@@ -212,6 +224,12 @@ namespace Windfall.Common.Systems.WorldEvents
                                         DisplayMessage(Recruit4Location, TextColor, "Emoticons.Shock");
                                         break;
                                     case 60 * 22:
+                                        for(int i = 0; i < 30; i++)
+                                        {
+                                            Vector2 speed = Main.rand.NextVector2Circular(1.5f, 2f);
+                                            Dust d = Dust.NewDustPerfect(SealingTablet.Center + Main.rand.NextVector2CircularEdge(24, 24), DustID.GoldFlame, speed * 2, Scale: 1.5f);
+                                            d.noGravity = true;
+                                        }
                                         SealingTablet.ai[0] = 1;
                                         break;
                                     case 60 * 23:
@@ -280,20 +298,19 @@ namespace Windfall.Common.Systems.WorldEvents
                                         Text.lifeTime = 60;
                                         break;
                                     case 60 * 58:
-                                        NPCIndexs.Remove(2);
+                                        NPCIndexs.Remove(4);
                                         LunaticCultist.immortal = false;
                                         LunaticCultist.StrikeInstantKill();
                                         Recruit1.noGravity = false; Recruit2.noGravity = false; Recruit3.noGravity = false; Recruit4.noGravity = false;
                                         SealingTablet.ai[0] = 0;
                                         break;
-                                    case 60 * 65:
-                                        foreach (Player player in Main.ActivePlayers)
-                                        {
-                                            if (player.InventoryHas(ModContent.ItemType<SelenicTablet>()))
-                                                Main.NewText("The Selenic Tablet hums violently...", Color.Cyan);
-                                        }
+                                    case 60 * 63:
+                                        NPC orator = NPC.NewNPCDirect(Entity.GetSource_NaturalSpawn(), (int)DungeonCoords.X, (int)DungeonCoords.Y - 8, ModContent.NPCType<OratorNPC>());
+                                        SoundEngine.PlaySound(SoundID.DD2_EtherianPortalDryadTouch, orator.Center);
+                                        for (int i = 0; i < 32; i++)
+                                            EmpyreanMetaball.SpawnDefaultParticle(orator.Center + new Vector2(Main.rand.NextFloat(-64, 64), 64), Vector2.UnitY * Main.rand.NextFloat(4f, 24f) * -1, Main.rand.NextFloat(110f, 130f));
                                         break;
-                                    case 60 * 72:
+                                    case 60 * 64:
                                         Recruit1.velocity.Y = Recruit2.velocity.Y = Recruit3.velocity.Y = Recruit4.velocity.Y = -5;
 
                                         GetRecruitValues(Recruitable1.MyName.ToString(), ref TextColor, ref key);
@@ -309,33 +326,37 @@ namespace Windfall.Common.Systems.WorldEvents
                                         DisplayMessage(Recruit4Location, TextColor, "Emoticons.Shock");
 
                                         break;
-                                    case 60 * 74:
+                                    case 60 * 66:
                                         Text = DisplayMessage(OratorLocation, Color.LightGreen, key + "0");
                                         break;
-                                    case 60 * 76:
+                                    case 60 * 68:
                                         Text = DisplayMessage(OratorLocation, Color.LightGreen, key + "1");
                                         break;
-                                    case 60 * 78:
+                                    case 60 * 70:
                                         Text = DisplayMessage(OratorLocation, Color.LightGreen, key + "2");
                                         Text.lifeTime = 60;
                                         break;
-                                    case 60 * 79:
+                                    case 60 * 71:
                                         Text = DisplayMessage(OratorLocation, Color.LightGreen, key + "3");
                                         break;
-                                    case 60 * 82:
+                                    case 60 * 74:
                                         Text = DisplayMessage(OratorLocation, Color.LightGreen, key + "4");
                                         break;
-                                    case 60 * 85:
+                                    case 60 * 77:
                                         Text = DisplayMessage(OratorLocation, Color.LightGreen, key + "5");
                                         break;
-                                    case 60 * 88:
+                                    case 60 * 80:
                                         Text = DisplayMessage(OratorLocation, Color.LightGreen, key + "6");
                                         break;
 
-                                    case 60 * 90:
-                                        SoundEngine.PlaySound(SoundID.Roar, Orator.Center);
-                                        Orator.Transform(ModContent.NPCType<TheOrator>());
-                                        State = SystemState.End;
+                                    default:
+                                        if (RitualTimer > 60 * 82)
+                                        {
+                                            SoundEngine.PlaySound(SoundID.Roar, Orator.Center);
+                                            Orator.Transform(ModContent.NPCType<TheOrator>());
+                                            Orator.ModNPC.OnSpawn(NPC.GetSource_NaturalSpawn());
+                                            State = SystemState.End;
+                                        }
                                         break;
                                 }
                             }
@@ -345,39 +366,28 @@ namespace Windfall.Common.Systems.WorldEvents
                                 zoom = 0.4f;
                             CameraPanSystem.Zoom = zoom;
                             CameraPanSystem.PanTowards(new Vector2(DungeonCoords.X, DungeonCoords.Y - 150), zoom);
-
-                            if (RitualTimer >= 60 * 62 && RitualTimer <= 60 * 72)
-                            {
-                                if ((RitualTimer < 60 * 68 && Main.rand.NextBool(3)) || RitualTimer > 60 * 68)
-                                {
-                                    for (int i = 0; i < RitualTimer / (60 * 62); i++)
-                                        EmpyreanMetaball.SpawnDefaultParticle(new Vector2(DungeonCoords.X + Main.rand.NextFloat(-16, 16), DungeonCoords.Y), new Vector2(Main.rand.Next(-2, 2), Main.rand.Next(-10, -5)), Main.rand.NextFloat(25f, 50f));
-                                }
-                            }
-                            if (RitualTimer == 60 * 70)
-                                NPC.NewNPC(Entity.GetSource_NaturalSpawn(), (int)DungeonCoords.X, (int)DungeonCoords.Y - 8, ModContent.NPCType<OratorNPC>());
-
-                            if (Recruit1.Center.Y <= SealingTablet.Center.Y)
-                                Recruit1.velocity = Vector2.Zero;
-                            if (RitualTimer >= 60 * 18 && RitualTimer <= 60 * 58)
+                            //Main.NewText(RitualTimer / 60);
+                            #region Additional Visuals 
+                            #region Recruit Hover
+                            if (RitualTimer >= 60 * 20 && RitualTimer <= 60 * 58)
                             {
                                 Vector2 speed = Main.rand.NextVector2Circular(1.5f, 2f);
                                 Dust d = Dust.NewDustPerfect(Recruit1.Center + new Vector2(Main.rand.Next(Recruit1.width * -1, Recruit1.width), Main.rand.Next(Recruit1.height * -1, Recruit1.height)), DustID.GoldFlame, speed * 2, Scale: 1.5f);
                                 d.noGravity = true;
-                                if (RitualTimer >= 60 * 19)
+                                if (RitualTimer >= 60 * 21)
                                 {
                                     Recruit1.velocity.Y = (float)(1 * Math.Sin(RitualTimer / 10));
                                 }
-                                else if (Recruit2.velocity.Length() < 2)
+                                else if (Recruit1.velocity.Length() < 2)
                                     Recruit1.velocity.Y -= 0.1f;
                             }
 
-                            if (RitualTimer >= 60 * 20 && RitualTimer <= 60 * 58)
+                            if (RitualTimer >= 60 * 18 && RitualTimer <= 60 * 58)
                             {
                                 Vector2 speed = Main.rand.NextVector2Circular(1.5f, 2f);
                                 Dust d = Dust.NewDustPerfect(Recruit2.Center + new Vector2(Main.rand.Next(Recruit2.width * -1, Recruit2.width), Main.rand.Next(Recruit2.height * -1, Recruit2.height)), DustID.GoldFlame, speed * 2, Scale: 1.5f);
                                 d.noGravity = true;
-                                if (RitualTimer >= 60 * 21)
+                                if (RitualTimer >= 60 * 19)
                                 {
                                     Recruit2.velocity.Y = (float)(1 * Math.Sin((RitualTimer + 10) / 10));
                                 }
@@ -385,7 +395,46 @@ namespace Windfall.Common.Systems.WorldEvents
                                     Recruit2.velocity.Y -= 0.1f;
                             }
 
-                            if (RitualTimer < 60 * 58)
+                            if (RitualTimer >= 60 * 19 && RitualTimer <= 60 * 58)
+                            {
+                                Vector2 speed = Main.rand.NextVector2Circular(1.5f, 2f);
+                                Dust d = Dust.NewDustPerfect(Recruit3.Center + new Vector2(Main.rand.Next(Recruit3.width * -1, Recruit3.width), Main.rand.Next(Recruit3.height * -1, Recruit3.height)), DustID.GoldFlame, speed * 2, Scale: 1.5f);
+                                d.noGravity = true;
+                                if (RitualTimer >= 60 * 20)
+                                {
+                                    Recruit3.velocity.Y = (float)(1 * Math.Sin(RitualTimer / 10));
+                                }
+                                else if (Recruit3.velocity.Length() < 2)
+                                    Recruit3.velocity.Y -= 0.1f;
+                            }
+
+                            if (RitualTimer >= 60 * 21 && RitualTimer <= 60 * 58)
+                            {
+                                Vector2 speed = Main.rand.NextVector2Circular(1.5f, 2f);
+                                Dust d = Dust.NewDustPerfect(Recruit4.Center + new Vector2(Main.rand.Next(Recruit4.width * -1, Recruit4.width), Main.rand.Next(Recruit4.height * -1, Recruit4.height)), DustID.GoldFlame, speed * 2, Scale: 1.5f);
+                                d.noGravity = true;
+                                if (RitualTimer >= 60 * 22)
+                                {
+                                    Recruit4.velocity.Y = (float)(1 * Math.Sin((RitualTimer + 10) / 10));
+                                }
+                                else if (Recruit4.velocity.Length() < 2)
+                                    Recruit4.velocity.Y -= 0.1f;
+                            }
+                            #endregion
+                            if (RitualTimer >= 60 * 50 && RitualTimer <= 60 * 63)
+                            {
+                                float ratio = Clamp((RitualTimer - (60 * 50)) / 60f, 0f, 1f);
+                                Main.NewText(ratio);
+                                float width = 96f * ExpInEasing(ratio, 1);
+                                width = Clamp(width, 0f, 72f);
+                                for (int i = 0; i < 18; i++)
+                                    EmpyreanMetaball.SpawnDefaultParticle(new Vector2(DungeonCoords.X + Main.rand.NextFloat(-width, width), DungeonCoords.Y + Main.rand.NextFloat(0, 24f)), new Vector2(Main.rand.Next(-2, 2), Main.rand.Next(-3, -1) * SineInEasing(ratio, 1)), Main.rand.NextFloat(14f, 28f) * ratio);
+                            }
+
+                            if (Recruit1.Center.Y <= SealingTablet.Center.Y)
+                                Recruit1.velocity = Vector2.Zero;
+                            #endregion
+                            if (LunaticCultist != null && RitualTimer < 60 * 51)
                                 if (CultistFacePlayer)
                                     LunaticCultist.aiStyle = 0;
                                 else

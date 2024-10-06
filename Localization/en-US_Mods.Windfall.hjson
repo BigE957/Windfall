@@ -10,22 +10,6 @@ Dialogue: {
 		Silent: ...
 	}
 
-	DialogueTrees: {
-		#Recruitment Dialogue :fear:
-			Tania/NotParadise: {
-				Messages: {
-					Initial: Oh... Hello there. Can I... help you?
-					Smth: ...
-					Ilmeris: ...Yes. I was from Ilmeris until... well, I assume you know the rest.
-					WDYM: You don't? What has the world come to... Ilmeris was incinerated by the hand of the Brimstone Witch at the Godseeker's command... So many lives were lost, just to kill two: the gods of Ilmeris... How does that man sleep at night. Do his sins not weigh on him?
-					Godseeker: Such a wicked man, and yet no one knows what's become of him now. There was an attempt on his life, but even they failed. After that he just... disappeared... There must truly be no justice in the world if that man gets to live out the rest of his days unpunished for his countless crimes...
-					IlmeranGods: So much of Ilmeris is already being forgotten... Ilmeris was founded by two gods: Electric Goddess, Otonilou and Tyrian, the God of the Seas. Together they unified the formerly divided tribes of Ilmeris; forming our kingdom. ...I can't believe I'm giving history lessons...
-					BadEnd: Yhadios!
-				}
-			}
-		}
-	}
-
 	IlmeranPaladin: {
 		Chat: {
 			FirstChat: Why, hello there! You don't look like the type to frequent these parts. Anything I can do for you?

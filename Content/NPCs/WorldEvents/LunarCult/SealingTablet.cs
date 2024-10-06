@@ -35,8 +35,7 @@ namespace Windfall.Content.NPCs.WorldEvents.LunarCult
         public override void AI()
         {
             if (!AnyBossNPCS(true) && !NPC.AnyNPCs(ModContent.NPCType<TheOrator>()) && NPC.ai[0] == 2)
-            {
-                
+            {                
                 Player closestPlayer = Main.player[Player.FindClosest(NPC.Center, NPC.width, NPC.height)];
                 if ((closestPlayer.Center - NPC.Center).Length() < 200f)
                     summonRatio += 0.001f;
@@ -56,7 +55,7 @@ namespace Windfall.Content.NPCs.WorldEvents.LunarCult
                     float width = 124f * ExpInEasing((summonRatio - 0.75f) / 0.25f, 1);
                     width = Clamp(width, 0f, 96f);
                     //Main.NewText(width);
-                    for (int i = 0; i < (18); i++)
+                    for (int i = 0; i < 18; i++)
                         EmpyreanMetaball.SpawnDefaultParticle(new Vector2(DungeonCoords.X + Main.rand.NextFloat(-width, width), DungeonCoords.Y + Main.rand.NextFloat(0, 24f)), new Vector2(Main.rand.Next(-2, 2), Main.rand.Next(-5, -1) * SineInEasing((summonRatio - 0.75f) / 0.25f, 1)), Main.rand.NextFloat(15f, 25f) * ((summonRatio - 0.75f) / 0.25f) * 2f);
                 }
                 if (summonRatio >= 1f && !NPC.AnyNPCs(ModContent.NPCType<TheOrator>()))
@@ -92,6 +91,8 @@ namespace Windfall.Content.NPCs.WorldEvents.LunarCult
         }
         public override void PostDraw(SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor)
         {
+            if (NPC.ai[0] != 2)
+                return;
             Texture2D texture = ModContent.Request<Texture2D>("Windfall/Assets/NPCs/WorldEvents/SealingTabletCrack").Value;
             Vector2 drawPosition = NPC.Center - screenPos + (Vector2.UnitY * NPC.gfxOffY);
             drawPosition.Y -= 4;
