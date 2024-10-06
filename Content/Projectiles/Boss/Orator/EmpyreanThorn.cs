@@ -44,7 +44,7 @@
             }
         }
 
-        public override Color? GetAlpha(Color lightColor) => Color.Lerp(lightColor, Color.Black, 0.36f) * Projectile.Opacity;
+        public override Color? GetAlpha(Color lightColor) => lightColor * Projectile.Opacity;
 
         public override bool ShouldUpdatePosition() => true;
 
