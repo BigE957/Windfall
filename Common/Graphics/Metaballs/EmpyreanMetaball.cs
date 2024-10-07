@@ -69,6 +69,7 @@ namespace Windfall.Common.Graphics.Metaballs
             AnyProjectiles(ModContent.ProjectileType<OratorBorder>()) ||
             AnyProjectiles(ModContent.ProjectileType<DarkTide>()) ||
             AnyProjectiles(ModContent.ProjectileType<ShadowHand_Minion>()) ||
+            AnyProjectiles(ModContent.ProjectileType<HandRing>()) ||
             NPC.AnyNPCs(ModContent.NPCType<ShadowHand>()) ||
             NPC.AnyNPCs(ModContent.NPCType<OratorHand>()) ||
             NPC.AnyNPCs(ModContent.NPCType<SealingTablet>())
@@ -196,13 +197,20 @@ namespace Windfall.Common.Graphics.Metaballs
                 p.type == ModContent.ProjectileType<DarkCoalescence>() || 
                 p.type == ModContent.ProjectileType<OratorBorder>() || 
                 p.type == ModContent.ProjectileType<DarkTide>() ||
-                p.type == ModContent.ProjectileType<ShadowHand_Minion>()
+                p.type == ModContent.ProjectileType<ShadowHand_Minion>() ||
+                p.type == ModContent.ProjectileType<HandRing>()
             )))
             {
                 if(p.type == ModContent.ProjectileType<ShadowHand_Minion>())
                 {
                     Vector2 drawPosition = p.Center - Main.screenPosition;
                     p.As<ShadowHand_Minion>().DrawSelf(drawPosition, p.GetAlpha(Color.White), p.rotation);
+                }
+                else if(p.type == ModContent.ProjectileType<HandRing>())
+                {
+                    Color c = Color.White;
+                    c.A = 0;
+                    p.ModProjectile.PostDraw(c);
                 }
                 else
                 {

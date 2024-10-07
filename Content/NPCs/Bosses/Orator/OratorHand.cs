@@ -299,10 +299,14 @@ namespace Windfall.Content.NPCs.Bosses.Orator
 
                                             ScreenShakeSystem.StartShake(12.5f);
                                             SoundEngine.PlaySound(SoundID.DD2_MonkStaffGroundImpact, midPoint);
-                                            for (int i = 0; i < 24; i++)
+                                            if (Main.netMode != NetmodeID.MultiplayerClient)
                                             {
-                                                if (Main.netMode != NetmodeID.MultiplayerClient)
-                                                    Projectile.NewProjectile(Terraria.Entity.GetSource_NaturalSpawn(), midPoint, (TwoPi / 24 * i).ToRotationVector2(), ModContent.ProjectileType<DarkBolt>(), TheOrator.BoltDamage, 0f, -1, 0, i % 2 == 0 ? -10 : 0);
+                                                int projCount = 16;
+                                                for (int i = 0; i < projCount; i++)
+                                                {
+                                                    for(int j = 0; j < 6; j++)
+                                                        Projectile.NewProjectile(Terraria.Entity.GetSource_NaturalSpawn(), midPoint, (TwoPi / projCount * i).ToRotationVector2() * (i % 2 == 0 ? j * 3.25f : j * 3.75f), ModContent.ProjectileType<HandRing>(), TheOrator.BoltDamage, 0f);
+                                                }
                                             }
                                             CalamityMod.Particles.Particle pulse = new PulseRing(midPoint, Vector2.Zero, Color.Teal, 0f, 3f, 16);
                                             GeneralParticleHandler.SpawnParticle(pulse);
@@ -627,10 +631,11 @@ namespace Windfall.Content.NPCs.Bosses.Orator
 
                                         ScreenShakeSystem.StartShake(12.5f);
                                         SoundEngine.PlaySound(SoundID.DD2_MonkStaffGroundImpact, midPoint);
-                                        for (int i = 0; i < 24; i++)
+                                        int projCount = 16;
+                                        for (int i = 0; i < projCount; i++)
                                         {
-                                            if (Main.netMode != NetmodeID.MultiplayerClient)
-                                                Projectile.NewProjectile(Terraria.Entity.GetSource_NaturalSpawn(), midPoint, (TwoPi / 24 * i).ToRotationVector2(), ModContent.ProjectileType<DarkBolt>(), TheOrator.BoltDamage, 0f, -1, 0, i % 2 == 0 ? -10 : 0);
+                                            for (int j = 2; j < 8; j++)
+                                                Projectile.NewProjectile(Terraria.Entity.GetSource_NaturalSpawn(), midPoint, (TwoPi / projCount * i).ToRotationVector2() * (i % 2 == 0 ? j * 2 : j * 3), ModContent.ProjectileType<HandRing>(), TheOrator.BoltDamage, 0f);
                                         }
                                         CalamityMod.Particles.Particle pulse = new PulseRing(midPoint, Vector2.Zero, Color.Teal, 0f, 3f, 16);
                                         GeneralParticleHandler.SpawnParticle(pulse);

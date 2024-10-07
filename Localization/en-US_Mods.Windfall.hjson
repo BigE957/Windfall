@@ -1535,6 +1535,7 @@ Projectiles: {
 	DarkTide.DisplayName: Dark Tide
 	FoodAlert.DisplayName: Food Alert
 	DoGRift.DisplayName: Devourer Rift
+	HandRing.DisplayName: Hand Ring
 }
 
 Buffs: {
