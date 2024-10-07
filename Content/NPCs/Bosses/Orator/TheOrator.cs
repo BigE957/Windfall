@@ -1076,7 +1076,7 @@ namespace Windfall.Content.NPCs.Bosses.Orator
                         {
                             bool left = Main.rand.NextBool();
                             Vector2 spawnPosition = border.Center + new Vector2(left ? -275 : 275, Main.rand.NextFloat(-700f, 700f));
-                            Projectile.NewProjectile(Terraria.Entity.GetSource_NaturalSpawn(), spawnPosition, (Vector2.UnitX * (left ? 1 : -1)).RotatedBy(Main.rand.NextFloat(-0.5f, 0.5f)), ModContent.ProjectileType<EmpyreanThorn>(), GlobDamage, 0f);
+                            Projectile.NewProjectile(Terraria.Entity.GetSource_NaturalSpawn(), spawnPosition, (Vector2.UnitX * (left ? 1 : -1)).RotatedBy(Main.rand.NextFloat(-0.5f, 0.5f)), ModContent.ProjectileType<EmpyreanThorn>(), GlobDamage, 0f, ai0: 120);
                         }
                     }
                     else if (aiCounter >= tideOut + 120 && aiCounter < attackDuration - 100)

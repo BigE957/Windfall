@@ -32,6 +32,18 @@ namespace Windfall.Content.Projectiles.Boss.Orator
         }
         int aiCounter = 0;
         Vector2 initialPoint = Vector2.Zero;
+        public override void OnSpawn(IEntitySource source)
+        {
+            if (Projectile.ai[0] != -1)
+            {
+                Projectile.timeLeft = (int)Projectile.ai[0] + 180;
+                Projectile.rotation = Projectile.velocity.ToRotation();
+                Projectile.velocity = Vector2.Zero;
+                Projectile.scale = Main.rand.NextFloat(1.5f, 2f);
+                initialPoint = Projectile.Center + (Projectile.rotation.ToRotationVector2() * 64f * Projectile.scale);
+            }
+        }
+
         public override void AI()
         {
             if (Projectile.ai[0] == -1)
@@ -52,21 +64,15 @@ namespace Windfall.Content.Projectiles.Boss.Orator
             }
             else
             {
-                if (aiCounter == 0)
-                {
-                    Projectile.timeLeft = 300;
-                    Projectile.rotation = Projectile.velocity.ToRotation();
-                    Projectile.velocity = Vector2.Zero;
-                    Projectile.scale = Main.rand.NextFloat(1.5f, 2f);
-                    initialPoint = Projectile.Center + (Projectile.rotation.ToRotationVector2() * 64f * Projectile.scale);
-                }
-                if (aiCounter < 150)
+                int delay = (int)Projectile.ai[0];
+                
+                if (aiCounter < delay + 30)
                     EmpyreanMetaball.SpawnDefaultParticle(initialPoint, Projectile.rotation.ToRotationVector2().RotatedBy(Main.rand.NextFloat(-0.15f, 0.15f)) * Main.rand.NextFloat(16f, 18f), 40f);
-                if(aiCounter >= 120)
+                if(aiCounter >= delay)
                 {
-                    if(aiCounter == 120)
+                    if(aiCounter == delay)
                         Projectile.velocity = Projectile.rotation.ToRotationVector2() * 24f;
-                    if (aiCounter < 180)
+                    if (aiCounter < delay + 60)
                         Projectile.velocity *= 0.9f;
                     else
                         Projectile.velocity -= Projectile.rotation.ToRotationVector2() * 0.1f;
