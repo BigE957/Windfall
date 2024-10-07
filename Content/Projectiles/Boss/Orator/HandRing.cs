@@ -49,9 +49,8 @@ namespace Windfall.Content.Projectiles.Boss.Orator
             if (Projectile.timeLeft > 90)
             {
                 truePosition = Projectile.Center;
-                Lighting.AddLight(Projectile.Center, drawColor.ToVector3());
 
-                if (Projectile.velocity.LengthSquared() < 16f)
+                if (Projectile.velocity.LengthSquared() < 1f)
                 {
                     Projectile.tileCollide = true;
                     Projectile.timeLeft = 90;
@@ -63,6 +62,8 @@ namespace Windfall.Content.Projectiles.Boss.Orator
                 Projectile.Center += Main.rand.NextVector2Circular(4f, 4f);
                 Projectile.tileCollide = true;
             }
+            Lighting.AddLight(Projectile.Center, drawColor.ToVector3());
+
         }
         public override bool PreDraw(ref Color lightColor)
         {
