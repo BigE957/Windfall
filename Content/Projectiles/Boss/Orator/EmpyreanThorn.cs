@@ -1,4 +1,6 @@
-﻿namespace Windfall.Content.Projectiles.Boss.Orator
+﻿using Windfall.Common.Graphics.Metaballs;
+
+namespace Windfall.Content.Projectiles.Boss.Orator
 {
     public class EmpyreanThorn : ModProjectile
     {
@@ -8,6 +10,8 @@
         public override void SetStaticDefaults()
         {
             Main.projFrames[Projectile.type] = 6;
+            ProjectileID.Sets.TrailingMode[Projectile.type] = 2;
+            ProjectileID.Sets.TrailCacheLength[Projectile.type] = 1;
         }
 
         public override void SetDefaults()
@@ -26,21 +30,48 @@
             Projectile.timeLeft = 420;
             Projectile.penetrate = -1;
         }
-
+        int aiCounter = 0;
+        Vector2 initialPoint = Vector2.Zero;
         public override void AI()
         {
-            if (Projectile.velocity.Length() >= 1f && Projectile.timeLeft > 60)
+            if (Projectile.ai[0] == -1)
             {
-                Projectile.rotation = Projectile.velocity.ToRotation();
-                Projectile.velocity -= Projectile.velocity.SafeNormalize(Vector2.Zero) * 2;
+                if (Projectile.velocity.Length() >= 1f && Projectile.timeLeft > 60)
+                {
+                    Projectile.rotation = Projectile.velocity.ToRotation();
+                    Projectile.velocity -= Projectile.velocity.SafeNormalize(Vector2.Zero) * 2;
+                }
+                else
+                    Projectile.velocity = Vector2.Zero;
+
+                if (Projectile.timeLeft <= 60)
+                {
+                    Projectile.Opacity -= 0.1f;
+                    Projectile.velocity -= Projectile.rotation.ToRotationVector2() * 4f;
+                }
             }
             else
-                Projectile.velocity = Vector2.Zero;
-
-            if(Projectile.timeLeft <= 60)
             {
-                Projectile.Opacity -= 0.1f;
-                Projectile.velocity -= Projectile.rotation.ToRotationVector2() * 4;
+                if (aiCounter == 0)
+                {
+                    Projectile.timeLeft = 300;
+                    Projectile.rotation = Projectile.velocity.ToRotation();
+                    Projectile.velocity = Vector2.Zero;
+                    Projectile.scale = Main.rand.NextFloat(1.5f, 2f);
+                    initialPoint = Projectile.Center + (Projectile.rotation.ToRotationVector2() * 64f * Projectile.scale);
+                }
+                if (aiCounter < 150)
+                    EmpyreanMetaball.SpawnDefaultParticle(initialPoint, Projectile.rotation.ToRotationVector2().RotatedBy(Main.rand.NextFloat(-0.15f, 0.15f)) * Main.rand.NextFloat(16f, 18f), 40f);
+                if(aiCounter >= 120)
+                {
+                    if(aiCounter == 120)
+                        Projectile.velocity = Projectile.rotation.ToRotationVector2() * 24f;
+                    if (aiCounter < 180)
+                        Projectile.velocity *= 0.9f;
+                    else
+                        Projectile.velocity -= Projectile.rotation.ToRotationVector2() * 0.1f;
+                }
+                aiCounter++;
             }
         }
 
