@@ -625,10 +625,10 @@ namespace Windfall.Content.NPCs.Bosses.Orator
                                         NPC.rotation += Pi;
                                     }
                                     NPC.velocity *= 0.95f;
-                                    if (aiCounter >= 1000 && NPC.velocity.LengthSquared() < 784)
+                                    Vector2 midPoint = new(NPC.Center.X - 32, NPC.Center.Y);
+                                    Tile tile = Main.tile[midPoint.ToTileCoordinates()];
+                                    if (aiCounter >= 1000 && (NPC.velocity.LengthSquared() < 784 || (tile.HasTile && (tile.IsTileSolid() || TileID.Sets.Platforms[tile.TileType]) && midPoint.Y > modOrator.target.Center.Y)))
                                     {
-                                        Vector2 midPoint = new(NPC.Center.X - 32, NPC.Center.Y);
-
                                         ScreenShakeSystem.StartShake(12.5f);
                                         SoundEngine.PlaySound(SoundID.DD2_MonkStaffGroundImpact, midPoint);
                                         int projCount = 16;
