@@ -3,7 +3,7 @@
     public class EmpyreanThorn : ModProjectile
     {
         public new static string LocalizationCategory => "Projectiles.Boss";
-        public override string Texture => "Windfall/Assets/Projectiles/Misc/EmpyreanThorn";
+        public override string Texture => "Windfall/Assets/Projectiles/Boss/EmpyreanThorn";
         public ref float Time => ref Projectile.ai[0];
         public override void SetStaticDefaults()
         {
@@ -45,8 +45,6 @@
         }
 
         public override Color? GetAlpha(Color lightColor) => lightColor * Projectile.Opacity;
-
-        public override bool ShouldUpdatePosition() => true;
 
         public override bool PreDraw(ref Color lightColor)
         {

@@ -91,7 +91,8 @@ namespace Windfall.Content.NPCs.WorldEvents.LunarCult
                             NPC.direction = -1;
                 }
             }
-            State = DialogueState.Talkable;
+            else
+                State = DialogueState.Talkable;
         }
         public override bool PreAI()
         {            
@@ -102,7 +103,7 @@ namespace Windfall.Content.NPCs.WorldEvents.LunarCult
                 AIType = NPCID.SkeletonMerchant;
             }
             else
-            {               
+            {
                 if (NPC.FindFirstNPC(ModContent.NPCType<LunarBishop>()) != -1)
                 {
                     NPC Bishop = Main.npc[NPC.FindFirstNPC(ModContent.NPCType<LunarBishop>())];

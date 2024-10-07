@@ -1,9 +1,6 @@
-﻿using CalamityMod.NPCs.TownNPCs;
-using Luminance.Core.Graphics;
-using Terraria;
+﻿using Luminance.Core.Graphics;
 using Terraria.ModLoader.IO;
 using Windfall.Common.Graphics.Metaballs;
-using Windfall.Content.Items.Quest;
 using Windfall.Content.NPCs.Bosses.Orator;
 using Windfall.Content.NPCs.TravellingNPCs;
 using Windfall.Content.NPCs.WorldEvents.LunarCult;
@@ -80,12 +77,12 @@ namespace Windfall.Common.Systems.WorldEvents
                        return;
                     else
                     {
-                        RitualTimer = -10;
+                        RitualTimer = -2;
                         State = SystemState.Spawn;
                     }
                     break;
                 case SystemState.Spawn:
-                    if (RitualTimer == -1)
+                    if (RitualTimer == -2)
                     {
                         Active = false;
                         zoom = 0;
@@ -102,14 +99,21 @@ namespace Windfall.Common.Systems.WorldEvents
 
                         #region Character Setup
                         for (int k = 0; k < 4; k++)
-                        {
-                            NPC npc = Main.npc[k];
-                            if (npc.ModNPC is RecruitableLunarCultist Recruit && npc.type == ModContent.NPCType<RecruitableLunarCultist>() && k != 0)
+                        {                           
+                            NPC npc = Main.npc[NPCIndexs[k]];
+                            if (npc.ModNPC is RecruitableLunarCultist Recruit && npc.type == ModContent.NPCType<RecruitableLunarCultist>())
                             {
                                 Recruit.MyName = (RecruitableLunarCultist.RecruitNames)Recruits[k];
+                                npc.GivenName = ((RecruitableLunarCultist.RecruitNames)Recruits[k]).ToString();
                             }
+                            if (Main.dungeonX > Main.spawnTileX)
+                                npc.direction = -1;
+                            else
+                                npc.direction = 1;
+                            if (k > 1)
+                                npc.direction *= -1;
                         }
-                        zoom = 0;
+                        RitualTimer = -1;
                         #endregion
                     }
                     else
@@ -439,9 +443,9 @@ namespace Windfall.Common.Systems.WorldEvents
                                     LunaticCultist.aiStyle = 0;
                                 else
                                     LunaticCultist.aiStyle = -1;
+                            RitualTimer++;
                         }
-                    }
-                    RitualTimer++;
+                    }                    
                     break;
                 case SystemState.End:
                     Active = false;
