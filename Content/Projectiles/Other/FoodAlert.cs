@@ -136,7 +136,7 @@ namespace Windfall.Content.Projectiles.Other
             
             origin = FramedTexture.Size() / 2f;
             
-            Main.EntitySpriteDraw(FramedTexture, position, new Rectangle(0, 0, FramedTexture.Width, FramedTexture.Height), lightColor * Projectile.Opacity * endFade, Projectile.rotation, origin, Projectile.scale, spriteEffects, 0);
+            Main.EntitySpriteDraw(FramedTexture, position, new Rectangle(0, 0, FramedTexture.Width, FramedTexture.Height), lightColor * Projectile.Opacity * endFade, Projectile.rotation, origin, Projectile.scale, spriteEffects);
             return false;
         }
     }
