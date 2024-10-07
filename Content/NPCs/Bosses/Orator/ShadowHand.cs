@@ -45,6 +45,7 @@ namespace Windfall.Content.NPCs.Bosses.Orator
             NPC.Calamity().VulnerableToElectricity = true;
             NPC.Calamity().VulnerableToWater = true;
             NPC.Calamity().canBreakPlayerDefense = true;
+            NPC.Opacity = 0f;
         }
         internal enum AIState
         {
@@ -78,6 +79,7 @@ namespace Windfall.Content.NPCs.Bosses.Orator
         private Pose CurrentPose = Pose.Default;
         public override void OnSpawn(IEntitySource source)
         {
+            NPC.Opacity = 0f;
             CurrentAI = AIState.Spawning;
             NPC.velocity = Main.rand.NextFloat(0, TwoPi).ToRotationVector2() * Main.rand.Next(10, 15);
             NPC.rotation = NPC.velocity.ToRotation();
@@ -87,6 +89,7 @@ namespace Windfall.Content.NPCs.Bosses.Orator
         bool movingBackward = false;
         public override void AI()
         {
+            NPC.Opacity = 1f;
             Player target = Main.player[Player.FindClosest(NPC.Center, NPC.width, NPC.height)];
             NPC Orator = null;
             if (NPC.FindFirstNPC(ModContent.NPCType<TheOrator>()) != -1)
