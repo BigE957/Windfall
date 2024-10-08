@@ -105,7 +105,8 @@ namespace Windfall.Content.Projectiles.Boss.Orator
 
         public override void DrawBehind(int index, List<int> drawCacheProjsBehindNPCsAndTiles, List<int> drawCacheProjsBehindNPCs, List<int> drawCacheProjsBehindProjectiles, List<int> drawCacheProjsOverWiresUI, List<int> overWiresUI)
         {
-            drawCacheProjsBehindNPCsAndTiles.Add(index);
+            if(Projectile.ai[0] == -1)
+                drawCacheProjsBehindNPCsAndTiles.Add(index);
         }
     }
 }
