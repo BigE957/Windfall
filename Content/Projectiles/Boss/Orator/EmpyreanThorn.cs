@@ -6,7 +6,8 @@ namespace Windfall.Content.Projectiles.Boss.Orator
     {
         public new static string LocalizationCategory => "Projectiles.Boss";
         public override string Texture => "Windfall/Assets/Projectiles/Boss/EmpyreanThorn";
-        public ref float Time => ref Projectile.ai[0];
+        public ref float InitialScale => ref Projectile.ai[2];
+        public ref float StabVelocity => ref Projectile.ai[1];
         public override void SetStaticDefaults()
         {
             Main.projFrames[Projectile.type] = 6;
@@ -40,7 +41,7 @@ namespace Windfall.Content.Projectiles.Boss.Orator
                 Projectile.timeLeft = (int)Projectile.ai[0] + 180;
                 Projectile.rotation = Projectile.velocity.ToRotation();
                 Projectile.velocity = Vector2.Zero;
-                Projectile.scale = Main.rand.NextFloat(1.5f, 2f);
+                Projectile.scale = InitialScale + Main.rand.NextFloat(-0.5f, 0.5f);
                 initialPoint = Projectile.Center + (Projectile.rotation.ToRotationVector2() * 64f * Projectile.scale);
             }
         }
@@ -72,11 +73,11 @@ namespace Windfall.Content.Projectiles.Boss.Orator
                 if(aiCounter >= delay)
                 {
                     if(aiCounter == delay)
-                        Projectile.velocity = Projectile.rotation.ToRotationVector2() * 24f;
+                        Projectile.velocity = Projectile.rotation.ToRotationVector2() * StabVelocity;
                     if (aiCounter < delay + 60)
                         Projectile.velocity *= 0.9f;
                     else
-                        Projectile.velocity -= Projectile.rotation.ToRotationVector2() * 0.1f;
+                        Projectile.velocity -= Projectile.rotation.ToRotationVector2() * 0.15f;
                 }
                 aiCounter++;
             }

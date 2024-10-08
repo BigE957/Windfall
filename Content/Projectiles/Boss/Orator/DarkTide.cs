@@ -1,4 +1,6 @@
-﻿using Windfall.Content.Buffs.DoT;
+﻿using Terraria;
+using Windfall.Content.Buffs.DoT;
+using Windfall.Content.NPCs.Bosses.Orator;
 using static Windfall.Common.Graphics.Metaballs.EmpyreanMetaball;
 
 
@@ -66,8 +68,22 @@ namespace Windfall.Content.Projectiles.Boss.Orator
                         moveCount += Projectile.velocity.Length();
                     }
                     else
+                    {
+                        if(holdCounter == holdDuration / 2 && NPC.AnyNPCs(ModContent.NPCType<TheOrator>()))
+                        {
+                            TheOrator Orator = Main.npc[NPC.FindFirstNPC(ModContent.NPCType<TheOrator>())].As<TheOrator>();
+                            if(Orator.AIState == TheOrator.States.DarkTides)
+                            {
+                                for(int i = 0; i < 16; i++)
+                                {
+                                    Vector2 position = Projectile.Center + (Projectile.rotation.ToRotationVector2() * (Projectile.width / 2.75f)) + (Projectile.rotation.ToRotationVector2().RotatedBy(PiOver2) * Main.rand.NextFloat(-Projectile.width / 2, Projectile.width / 2));
+                                    Projectile.NewProjectile(Terraria.Entity.GetSource_NaturalSpawn(), position, Projectile.rotation.ToRotationVector2().RotatedBy(Main.rand.NextFloat(-0.5f, 0.5f)), ModContent.ProjectileType<EmpyreanThorn>(), TheOrator.BoltDamage, 0f, ai0: 60, ai1: 36f, ai2: 3f);
+                                }
+                            }
+                        }
                         Projectile.velocity = Vector2.Zero;
-                        particleVelocity = Main.rand.NextFloat(6f, 8f);
+                    }
+                    particleVelocity = Main.rand.NextFloat(6f, 8f);
                     holdCounter++;
                 }
             }
@@ -76,13 +92,10 @@ namespace Windfall.Content.Projectiles.Boss.Orator
                 particleVelocity *= (Projectile.velocity.Length()/2.5f);
                 moveCount += Projectile.velocity.Length();
             }
-            foreach (Player player in Main.player)
+            foreach (Player player in Main.player.Where(p => p != null && p.active && !p.dead))
             {
-                if(player != null && player.active && !player.dead)
-                {
-                    if(!isLeft(Projectile.Center + new Vector2(Projectile.width / 2, Projectile.height / 2).RotatedBy(Projectile.rotation), Projectile.Center + new Vector2(Projectile.width / 2, -Projectile.height / 2).RotatedBy(Projectile.rotation), player.Center))
-                        player.AddBuff(ModContent.BuffType<Entropy>(), 5);
-                }
+                 if(!isLeft(Projectile.Center + new Vector2(Projectile.width / 2, Projectile.height / 2).RotatedBy(Projectile.rotation), Projectile.Center + new Vector2(Projectile.width / 2, -Projectile.height / 2).RotatedBy(Projectile.rotation), player.Center))
+                    player.AddBuff(ModContent.BuffType<Entropy>(), 5);
             }
             Vector2 spawnPosition = Projectile.Center + (Projectile.rotation.ToRotationVector2() * (Projectile.width / 2.05f)) + (Projectile.rotation.ToRotationVector2().RotatedBy(PiOver2) * Main.rand.NextFloat(-Projectile.width / 2, Projectile.width / 2));
             SpawnDefaultParticle(spawnPosition, Projectile.rotation.ToRotationVector2().RotatedBy(Main.rand.NextFloat(-Pi/2, Pi/2)) * particleVelocity, Main.rand.NextFloat(80f, 120f));

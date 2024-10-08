@@ -26,9 +26,9 @@ namespace Windfall.Content.NPCs.Bosses.Orator
         public static readonly SoundStyle Dash = new("CalamityMod/Sounds/Item/DeadSunShot") { PitchVariance = 0.35f, Volume = 0.5f };
         public static readonly SoundStyle DashWarn = new("CalamityMod/Sounds/Item/DeadSunRicochet") { Volume = 0.5f };
         public static readonly SoundStyle HurtSound = new("CalamityMod/Sounds/NPCHit/ShieldHit", 3);
-        private static int MonsterDamage;
-        internal static int GlobDamage;
-        internal static int BoltDamage;
+        public static int MonsterDamage;
+        public static int GlobDamage;
+        public static int BoltDamage;
         private static int DashDelay;
         public override void SetStaticDefaults()
         {
@@ -768,13 +768,11 @@ namespace Windfall.Content.NPCs.Bosses.Orator
                             {
                                 scytheSpin = true;
                                 for (int i = 0; i < 6; i++)
-                                {
                                     if (Main.netMode != NetmodeID.MultiplayerClient)
                                         Projectile.NewProjectile(Terraria.Entity.GetSource_NaturalSpawn(), NPC.Center, (target.Center - NPC.Center).SafeNormalize(Vector2.Zero).RotatedBy(TwoPi / 6 * i) * 20, ModContent.ProjectileType<DarkBolt>(), BoltDamage, 0f, -1, 0, -20);
-                                }
                             }
-                            if (Main.netMode != NetmodeID.MultiplayerClient && aiCounter % 30 == 0)
-                                Projectile.NewProjectile(Terraria.Entity.GetSource_NaturalSpawn(), NPC.Center, Vector2.Zero, ModContent.ProjectileType<OratorJavelin>(), BoltDamage, 0f);
+                            if (Main.netMode != NetmodeID.MultiplayerClient)
+                                Projectile.NewProjectile(Terraria.Entity.GetSource_NaturalSpawn(), NPC.Center, (target.Center - NPC.Center).SafeNormalize(Vector2.Zero) * 8, ModContent.ProjectileType<DarkGlob>(), GlobDamage, 0f, -1, 2, 0.5f);
                         }
                         else if (aiCounter >= 1680 && aiCounter % 45 == 0)
                         {
@@ -965,8 +963,8 @@ namespace Windfall.Content.NPCs.Bosses.Orator
 
                     break;
                 case States.DarkTides:
-                    int attackFrequency = CalamityWorld.death ? 500 : CalamityWorld.revenge ? 600 : 700;
-                    int attackGap = CalamityWorld.death ? 275 : CalamityWorld.revenge ? 300 : 335;
+                    int attackFrequency = CalamityWorld.death ? 750 : CalamityWorld.revenge ? 800 : 850;
+                    int attackGap = CalamityWorld.death ? 375 : CalamityWorld.revenge ? 400 : 425;
                     if (aiCounter < attackFrequency * 3 - 20)
                     {
                         border = Main.projectile.First(p => p.active && p.type == ModContent.ProjectileType<OratorBorder>());
@@ -975,7 +973,7 @@ namespace Windfall.Content.NPCs.Bosses.Orator
                             attackCounter = Main.rand.NextFloatDirection();
                             if (Main.netMode != NetmodeID.MultiplayerClient)
                             {
-                                Projectile p = Projectile.NewProjectileDirect(Terraria.Entity.GetSource_NaturalSpawn(), border.Center, attackCounter.ToRotationVector2(), ModContent.ProjectileType<DarkTide>(), 0, 0f, ai0: 60, ai1: 1500, ai2: 6);
+                                Projectile p = Projectile.NewProjectileDirect(Terraria.Entity.GetSource_NaturalSpawn(), border.Center, attackCounter.ToRotationVector2(), ModContent.ProjectileType<DarkTide>(), 0, 0f, ai0: 180, ai1: 1500, ai2: 6);
                                 SoundEngine.PlaySound(SoundID.DD2_EtherianPortalSpawnEnemy with { Volume = 10f }, p.Center);
                             }
                         }
@@ -996,7 +994,7 @@ namespace Windfall.Content.NPCs.Bosses.Orator
                             }
                             if (Main.netMode != NetmodeID.MultiplayerClient)
                             {
-                                Projectile p = Projectile.NewProjectileDirect(Terraria.Entity.GetSource_NaturalSpawn(), border.Center, -attackCounter.ToRotationVector2(), ModContent.ProjectileType<DarkTide>(), 0, 0f, ai0: 60, ai1: 1500, ai2: 6);
+                                Projectile p = Projectile.NewProjectileDirect(Terraria.Entity.GetSource_NaturalSpawn(), border.Center, -attackCounter.ToRotationVector2(), ModContent.ProjectileType<DarkTide>(), 0, 0f, ai0: 180, ai1: 1500, ai2: 6);
                                 SoundEngine.PlaySound(SoundID.DD2_EtherianPortalSpawnEnemy with { Volume = 10f }, p.Center);
                             }
                         }
@@ -1051,7 +1049,7 @@ namespace Windfall.Content.NPCs.Bosses.Orator
                         {
                             bool left = Main.rand.NextBool();
                             Vector2 spawnPosition = border.Center + new Vector2(left ? -275 : 275, Main.rand.NextFloat(-700f, 700f));
-                            Projectile.NewProjectile(Terraria.Entity.GetSource_NaturalSpawn(), spawnPosition, (Vector2.UnitX * (left ? 1 : -1)).RotatedBy(Main.rand.NextFloat(-0.5f, 0.5f)), ModContent.ProjectileType<EmpyreanThorn>(), GlobDamage, 0f, ai0: 120);
+                            Projectile.NewProjectile(Terraria.Entity.GetSource_NaturalSpawn(), spawnPosition, (Vector2.UnitX * (left ? 1 : -1)).RotatedBy(Main.rand.NextFloat(-0.5f, 0.5f)), ModContent.ProjectileType<EmpyreanThorn>(), GlobDamage, 0f, ai0: 120, ai1: 24f, ai2: 2f);
                         }
                     }
                     else if (aiCounter >= tideOut + 120 && aiCounter < attackDuration - 100)
