@@ -1536,6 +1536,7 @@ Projectiles: {
 	FoodAlert.DisplayName: Food Alert
 	DoGRift.DisplayName: Devourer Rift
 	HandRing.DisplayName: Hand Ring
+	OratorJavelin.DisplayName: Orator Javelin
 }
 
 Buffs: {

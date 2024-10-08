@@ -237,12 +237,16 @@ namespace Windfall.Content.NPCs.Bosses.Orator
                     break;
                 case States.DarkSpawn:
                     #region Movement
-                    Vector2 homeInV = target.Center + Vector2.UnitY * -300;
+                    Vector2 homeInV = target.Center + Vector2.UnitY * -250;
                     
                     NPC.velocity = (homeInV - NPC.Center).SafeNormalize(Vector2.Zero) * ((homeInV - NPC.Center).Length() / 10f);
-                    #endregion                                       
-                    NPC.damage = 0;
+                    #endregion
                     const int EndTime = 1500;
+
+                    if (aiCounter > 150 && aiCounter < EndTime - 100 && aiCounter % 90 == 0 && Main.netMode != NetmodeID.MultiplayerClient)
+                        Projectile.NewProjectile(Terraria.Entity.GetSource_NaturalSpawn(), NPC.Center, Vector2.Zero, ModContent.ProjectileType<OratorJavelin>(), BoltDamage, 0f);
+
+                    NPC.damage = 0;
                     int SpawnCount = CalamityWorld.death ? 3 : CalamityWorld.revenge || Main.expertMode ? 2 : 1;
                     if (!CalamityWorld.death && Main.npc.Where(n => n.type == ModContent.NPCType<ShadowHand>() && n.active).Count() <= SpawnCount + 1)
                         SpawnCount++;
@@ -310,42 +314,13 @@ namespace Windfall.Content.NPCs.Bosses.Orator
                     if (aiCounter <= 1100)
                     {
                         #region Movement
-                        Vector2 goal = target.Center + Vector2.UnitY * -300;
+                        Vector2 goal = target.Center + Vector2.UnitY * -250;
                         NPC.velocity = (goal - NPC.Center).SafeNormalize(Vector2.Zero) * ((goal - NPC.Center).Length() / 10f);
                         #endregion
 
-                        #region Scrapped Projectiles
-                        /*
-                        if (aiCounter > 0)
-                        {                           
-                            if (aiCounter % 45 == 0)
-                            {
-                                if (aiCounter % 90 == 0)
-                                {
-                                    scytheSpin = true;
-                                    int radialCounter = CalamityWorld.death ? 12 : CalamityWorld.revenge ? 10 : 8;
-                                    for (int i = 0; i < radialCounter; i++)
-                                    {
-                                        if (Main.netMode != NetmodeID.MultiplayerClient)
-                                        {
-                                            Vector2 rotationVector = (target.Center - NPC.Center).SafeNormalize(Vector2.Zero).RotatedBy(TwoPi / radialCounter * i);
-                                            Projectile.NewProjectile(Terraria.Entity.GetSource_NaturalSpawn(), NPC.Center + NPC.velocity + rotationVector * 40, rotationVector * 20, ModContent.ProjectileType<DarkBolt>(), BoltDamage, 0f, -1, 0, 5);
-                                        }
-                                    }
-                                }
-                                else
-                                {
-                                    SoundEngine.PlaySound(SoundID.DD2_EtherianPortalSpawnEnemy with { Volume = 10f }, NPC.Center);
-                                    int radialCounter = CalamityWorld.death ? 30 : CalamityWorld.revenge ? 28 : 24;
-                                    for (int i = 0; i < radialCounter; i++)
-                                    {
-                                        if (Main.netMode != NetmodeID.MultiplayerClient)
-                                            Projectile.NewProjectile(Terraria.Entity.GetSource_NaturalSpawn(), NPC.Center + NPC.velocity, (target.Center - NPC.Center).SafeNormalize(Vector2.Zero).RotatedBy(TwoPi / radialCounter * i) * 6, ModContent.ProjectileType<DarkGlob>(), GlobDamage, 0f, -1, 0, Main.rand.NextFloat(1f, 2f));
-                                    }
-                                }
-                            }                            
-                        }
-                        */
+                        #region Projectiles
+                        if (aiCounter > 0 && aiCounter < 1000 && aiCounter % 90 == 0 && Main.netMode != NetmodeID.MultiplayerClient)
+                            Projectile.NewProjectile(Terraria.Entity.GetSource_NaturalSpawn(), NPC.Center, Vector2.Zero, ModContent.ProjectileType<OratorJavelin>(), BoltDamage, 0f);
                         #endregion
                     }
                     if (aiCounter > 1100 || !NPC.AnyNPCs(ModContent.NPCType<OratorHand>()))
@@ -501,7 +476,7 @@ namespace Windfall.Content.NPCs.Bosses.Orator
                     if (aiCounter > 60 && NPC.Center.Y < target.Center.Y - 50)
                     {
                         Projectile proj;
-                        if (Main.netMode != NetmodeID.MultiplayerClient && NPC.AnyNPCs(ModContent.NPCType<OratorHand>()) && aiCounter % 10 == 0)
+                        if (Main.netMode != NetmodeID.MultiplayerClient && NPC.AnyNPCs(ModContent.NPCType<OratorHand>()) && aiCounter > 120 && aiCounter % 10 == 0)
                         {
                             //Anti-Cheesers
                             NPC hand = Main.npc[NPC.FindFirstNPC(ModContent.NPCType<OratorHand>())]; ;
@@ -687,7 +662,7 @@ namespace Windfall.Content.NPCs.Bosses.Orator
                                 VectorToTarget = target.Center - NPC.Center;
                             float reelBackSpeedExponent = 2.6f;
                             float reelBackCompletion = Utils.GetLerpValue(0f, DashDelay, (aiCounter - NPC.ai[3]) + DashDelay, true);
-                            float reelBackSpeed = MathHelper.Lerp(2.5f, 16f, MathF.Pow(reelBackCompletion, reelBackSpeedExponent));
+                            float reelBackSpeed = Lerp(2.5f, 16f, MathF.Pow(reelBackCompletion, reelBackSpeedExponent));
                             Vector2 reelBackVelocity = NPC.DirectionTo(target.Center) * -reelBackSpeed;
                             NPC.velocity = Vector2.Lerp(NPC.velocity, reelBackVelocity, 0.25f);
                         }

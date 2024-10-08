@@ -308,9 +308,9 @@ namespace Windfall.Content.NPCs.Bosses.Orator
                                                         Projectile.NewProjectile(Terraria.Entity.GetSource_NaturalSpawn(), midPoint, (TwoPi / projCount * i).ToRotationVector2() * (i % 2 == 0 ? j * 3.25f : j * 3.75f), ModContent.ProjectileType<HandRing>(), TheOrator.BoltDamage, 0f);
                                                 }
                                             }
-                                            CalamityMod.Particles.Particle pulse = new PulseRing(midPoint, Vector2.Zero, Color.Teal, 0f, 3f, 16);
+                                            CalamityMod.Particles.Particle pulse = new PulseRing(midPoint, Vector2.Zero, new(253, 189, 53), 0f, 3f, 16);
                                             GeneralParticleHandler.SpawnParticle(pulse);
-                                            CalamityMod.Particles.Particle explosion = new DetailedExplosion(midPoint, Vector2.Zero, new(117, 255, 159), new Vector2(1f, 1f), 0f, 0f, 1f, 16);
+                                            CalamityMod.Particles.Particle explosion = new DetailedExplosion(midPoint, Vector2.Zero, new(255, 133, 187), new Vector2(1f, 1f), 0f, 0f, 1f, 16);
                                             GeneralParticleHandler.SpawnParticle(explosion);
 
                                             NPC.velocity = Vector2.Zero;
@@ -474,13 +474,13 @@ namespace Windfall.Content.NPCs.Bosses.Orator
                                     if(aiCounter % 60 == 0)
                                     {
                                         Vector2 ToTarget = (modOrator.target.Center - NPC.Center).SafeNormalize(Vector2.Zero);
-                                        float startSpeed = CalamityWorld.death ? 5 : CalamityWorld.revenge ? 2.5f : Main.expertMode ? 0f : -2.5f;
+                                        float startSpeed = CalamityWorld.death ? 2f : CalamityWorld.revenge ? 1f : Main.expertMode ? 0f : -1f;
                                         SoundEngine.PlaySound(SoundID.DD2_OgreSpit, NPC.Center);
                                         Projectile.NewProjectile(Terraria.Entity.GetSource_NaturalSpawn(), NPC.Center, (ToTarget), ModContent.ProjectileType<DarkBolt>(), TheOrator.BoltDamage, 0f, -1, 0, startSpeed);
-                                        Projectile.NewProjectile(Terraria.Entity.GetSource_NaturalSpawn(), NPC.Center, (ToTarget).RotatedBy(Pi / 8), ModContent.ProjectileType<DarkBolt>(), TheOrator.BoltDamage, 0f, -1, 0, startSpeed);
-                                        Projectile.NewProjectile(Terraria.Entity.GetSource_NaturalSpawn(), NPC.Center, (ToTarget).RotatedBy(-Pi / 8), ModContent.ProjectileType<DarkBolt>(), TheOrator.BoltDamage, 0f, -1, 0, startSpeed);
-                                        Projectile.NewProjectile(Terraria.Entity.GetSource_NaturalSpawn(), NPC.Center, (ToTarget).RotatedBy(PiOver4), ModContent.ProjectileType<DarkBolt>(), TheOrator.BoltDamage, 0f, -1, 0, startSpeed);
-                                        Projectile.NewProjectile(Terraria.Entity.GetSource_NaturalSpawn(), NPC.Center, (ToTarget).RotatedBy(-PiOver4), ModContent.ProjectileType<DarkBolt>(), TheOrator.BoltDamage, 0f, -1, 0, startSpeed);
+                                        Projectile.NewProjectile(Terraria.Entity.GetSource_NaturalSpawn(), NPC.Center, (ToTarget).RotatedBy(Pi / 6), ModContent.ProjectileType<DarkBolt>(), TheOrator.BoltDamage, 0f, -1, 0, startSpeed);
+                                        Projectile.NewProjectile(Terraria.Entity.GetSource_NaturalSpawn(), NPC.Center, (ToTarget).RotatedBy(-Pi / 6), ModContent.ProjectileType<DarkBolt>(), TheOrator.BoltDamage, 0f, -1, 0, startSpeed);
+                                        //Projectile.NewProjectile(Terraria.Entity.GetSource_NaturalSpawn(), NPC.Center, (ToTarget).RotatedBy(PiOver4), ModContent.ProjectileType<DarkBolt>(), TheOrator.BoltDamage, 0f, -1, 0, startSpeed);
+                                        //Projectile.NewProjectile(Terraria.Entity.GetSource_NaturalSpawn(), NPC.Center, (ToTarget).RotatedBy(-PiOver4), ModContent.ProjectileType<DarkBolt>(), TheOrator.BoltDamage, 0f, -1, 0, startSpeed);
                                     }
                                 }
                                 else if(aiCounter < 300)
@@ -533,13 +533,13 @@ namespace Windfall.Content.NPCs.Bosses.Orator
                                     if (aiCounter % 60 == 0)
                                     {
                                         Vector2 ToTarget = (modOrator.target.Center - NPC.Center).SafeNormalize(Vector2.Zero);
-                                        float startSpeed = CalamityWorld.death ? 5 : CalamityWorld.revenge ? 2.5f : Main.expertMode ? 0f : -2.5f;
+                                        float startSpeed = CalamityWorld.death ? 2f : CalamityWorld.revenge ? 1f : Main.expertMode ? 0f : -1f;
                                         SoundEngine.PlaySound(SoundID.DD2_OgreSpit, NPC.Center);
                                         Projectile.NewProjectile(Terraria.Entity.GetSource_NaturalSpawn(), NPC.Center, (ToTarget), ModContent.ProjectileType<DarkBolt>(), TheOrator.BoltDamage, 0f, -1, 0, startSpeed);
-                                        Projectile.NewProjectile(Terraria.Entity.GetSource_NaturalSpawn(), NPC.Center, (ToTarget).RotatedBy(Pi / 8), ModContent.ProjectileType<DarkBolt>(), TheOrator.BoltDamage, 0f, -1, 0, startSpeed);
-                                        Projectile.NewProjectile(Terraria.Entity.GetSource_NaturalSpawn(), NPC.Center, (ToTarget).RotatedBy(-Pi / 8), ModContent.ProjectileType<DarkBolt>(), TheOrator.BoltDamage, 0f, -1, 0, startSpeed);
-                                        Projectile.NewProjectile(Terraria.Entity.GetSource_NaturalSpawn(), NPC.Center, (ToTarget).RotatedBy(PiOver4), ModContent.ProjectileType<DarkBolt>(), TheOrator.BoltDamage, 0f, -1, 0, startSpeed);
-                                        Projectile.NewProjectile(Terraria.Entity.GetSource_NaturalSpawn(), NPC.Center, (ToTarget).RotatedBy(-PiOver4), ModContent.ProjectileType<DarkBolt>(), TheOrator.BoltDamage, 0f, -1, 0, startSpeed);
+                                        Projectile.NewProjectile(Terraria.Entity.GetSource_NaturalSpawn(), NPC.Center, (ToTarget).RotatedBy(Pi / 6), ModContent.ProjectileType<DarkBolt>(), TheOrator.BoltDamage, 0f, -1, 0, startSpeed);
+                                        Projectile.NewProjectile(Terraria.Entity.GetSource_NaturalSpawn(), NPC.Center, (ToTarget).RotatedBy(-Pi / 6), ModContent.ProjectileType<DarkBolt>(), TheOrator.BoltDamage, 0f, -1, 0, startSpeed);
+                                        //Projectile.NewProjectile(Terraria.Entity.GetSource_NaturalSpawn(), NPC.Center, (ToTarget).RotatedBy(PiOver4), ModContent.ProjectileType<DarkBolt>(), TheOrator.BoltDamage, 0f, -1, 0, startSpeed);
+                                        //Projectile.NewProjectile(Terraria.Entity.GetSource_NaturalSpawn(), NPC.Center, (ToTarget).RotatedBy(-PiOver4), ModContent.ProjectileType<DarkBolt>(), TheOrator.BoltDamage, 0f, -1, 0, startSpeed);
                                     }
                                 }
                                 else if (aiCounter < 700)
@@ -637,9 +637,9 @@ namespace Windfall.Content.NPCs.Bosses.Orator
                                             for (int j = 2; j < 8; j++)
                                                 Projectile.NewProjectile(Terraria.Entity.GetSource_NaturalSpawn(), midPoint, (TwoPi / projCount * i).ToRotationVector2() * (i % 2 == 0 ? j * 2 : j * 3), ModContent.ProjectileType<HandRing>(), TheOrator.BoltDamage, 0f);
                                         }
-                                        CalamityMod.Particles.Particle pulse = new PulseRing(midPoint, Vector2.Zero, Color.Teal, 0f, 3f, 16);
+                                        CalamityMod.Particles.Particle pulse = new PulseRing(midPoint, Vector2.Zero, new(253, 189, 53), 0f, 3f, 16);
                                         GeneralParticleHandler.SpawnParticle(pulse);
-                                        CalamityMod.Particles.Particle explosion = new DetailedExplosion(midPoint, Vector2.Zero, new(117, 255, 159), new Vector2(1f, 1f), 0f, 0f, 1f, 16);
+                                        CalamityMod.Particles.Particle explosion = new DetailedExplosion(midPoint, Vector2.Zero, new(255, 133, 187), new Vector2(1f, 1f), 0f, 0f, 1f, 16);
                                         GeneralParticleHandler.SpawnParticle(explosion);
 
                                         attackBool = true;
@@ -670,16 +670,16 @@ namespace Windfall.Content.NPCs.Bosses.Orator
                                     NPC.direction = -WhatHand;
                                     NPC.rotation = 0;
 
-                                    if (aiCounter % 60 == 0)
+                                    if ((aiCounter + 30) % 60 == 0)
                                     {
                                         Vector2 ToTarget = (modOrator.target.Center - NPC.Center).SafeNormalize(Vector2.Zero);
-                                        float startSpeed = CalamityWorld.death ? 5 : CalamityWorld.revenge ? 2.5f : Main.expertMode ? 0f : -2.5f;
+                                        float startSpeed = CalamityWorld.death ? 2f : CalamityWorld.revenge ? 1f : Main.expertMode ? 0f : -1f;
                                         SoundEngine.PlaySound(SoundID.DD2_OgreSpit, NPC.Center);
                                         Projectile.NewProjectile(Terraria.Entity.GetSource_NaturalSpawn(), NPC.Center, (ToTarget), ModContent.ProjectileType<DarkBolt>(), TheOrator.BoltDamage, 0f, -1, 0, startSpeed);
-                                        Projectile.NewProjectile(Terraria.Entity.GetSource_NaturalSpawn(), NPC.Center, (ToTarget).RotatedBy(Pi / 8), ModContent.ProjectileType<DarkBolt>(), TheOrator.BoltDamage, 0f, -1, 0, startSpeed);
-                                        Projectile.NewProjectile(Terraria.Entity.GetSource_NaturalSpawn(), NPC.Center, (ToTarget).RotatedBy(-Pi / 8), ModContent.ProjectileType<DarkBolt>(), TheOrator.BoltDamage, 0f, -1, 0, startSpeed);
-                                        Projectile.NewProjectile(Terraria.Entity.GetSource_NaturalSpawn(), NPC.Center, (ToTarget).RotatedBy(PiOver4), ModContent.ProjectileType<DarkBolt>(), TheOrator.BoltDamage, 0f, -1, 0, startSpeed);
-                                        Projectile.NewProjectile(Terraria.Entity.GetSource_NaturalSpawn(), NPC.Center, (ToTarget).RotatedBy(-PiOver4), ModContent.ProjectileType<DarkBolt>(), TheOrator.BoltDamage, 0f, -1, 0, startSpeed);
+                                        Projectile.NewProjectile(Terraria.Entity.GetSource_NaturalSpawn(), NPC.Center, (ToTarget).RotatedBy(Pi / 6), ModContent.ProjectileType<DarkBolt>(), TheOrator.BoltDamage, 0f, -1, 0, startSpeed);
+                                        Projectile.NewProjectile(Terraria.Entity.GetSource_NaturalSpawn(), NPC.Center, (ToTarget).RotatedBy(-Pi / 6), ModContent.ProjectileType<DarkBolt>(), TheOrator.BoltDamage, 0f, -1, 0, startSpeed);
+                                        //Projectile.NewProjectile(Terraria.Entity.GetSource_NaturalSpawn(), NPC.Center, (ToTarget).RotatedBy(PiOver4), ModContent.ProjectileType<DarkBolt>(), TheOrator.BoltDamage, 0f, -1, 0, startSpeed);
+                                        //Projectile.NewProjectile(Terraria.Entity.GetSource_NaturalSpawn(), NPC.Center, (ToTarget).RotatedBy(-PiOver4), ModContent.ProjectileType<DarkBolt>(), TheOrator.BoltDamage, 0f, -1, 0, startSpeed);
                                     }
                                 }
                                 else if (aiCounter < 420)
@@ -729,16 +729,16 @@ namespace Windfall.Content.NPCs.Bosses.Orator
                                     NPC.direction = WhatHand;
                                     NPC.rotation = Pi;
 
-                                    if (aiCounter % 60 == 0)
+                                    if ((aiCounter + 30) % 60 == 0)
                                     {
                                         Vector2 ToTarget = (modOrator.target.Center - NPC.Center).SafeNormalize(Vector2.Zero);
-                                        float startSpeed = CalamityWorld.death ? 5 : CalamityWorld.revenge ? 2.5f : Main.expertMode ? 0f : -2.5f;
+                                        float startSpeed = CalamityWorld.death ? 2f : CalamityWorld.revenge ? 1f : Main.expertMode ? 0f : -1f;
                                         SoundEngine.PlaySound(SoundID.DD2_OgreSpit, NPC.Center);
                                         Projectile.NewProjectile(Terraria.Entity.GetSource_NaturalSpawn(), NPC.Center, (ToTarget), ModContent.ProjectileType<DarkBolt>(), TheOrator.BoltDamage, 0f, -1, 0, startSpeed);
-                                        Projectile.NewProjectile(Terraria.Entity.GetSource_NaturalSpawn(), NPC.Center, (ToTarget).RotatedBy(Pi / 8), ModContent.ProjectileType<DarkBolt>(), TheOrator.BoltDamage, 0f, -1, 0, startSpeed);
-                                        Projectile.NewProjectile(Terraria.Entity.GetSource_NaturalSpawn(), NPC.Center, (ToTarget).RotatedBy(-Pi / 8), ModContent.ProjectileType<DarkBolt>(), TheOrator.BoltDamage, 0f, -1, 0, startSpeed);
-                                        Projectile.NewProjectile(Terraria.Entity.GetSource_NaturalSpawn(), NPC.Center, (ToTarget).RotatedBy(PiOver4), ModContent.ProjectileType<DarkBolt>(), TheOrator.BoltDamage, 0f, -1, 0, startSpeed);
-                                        Projectile.NewProjectile(Terraria.Entity.GetSource_NaturalSpawn(), NPC.Center, (ToTarget).RotatedBy(-PiOver4), ModContent.ProjectileType<DarkBolt>(), TheOrator.BoltDamage, 0f, -1, 0, startSpeed);
+                                        Projectile.NewProjectile(Terraria.Entity.GetSource_NaturalSpawn(), NPC.Center, (ToTarget).RotatedBy(Pi / 6), ModContent.ProjectileType<DarkBolt>(), TheOrator.BoltDamage, 0f, -1, 0, startSpeed);
+                                        Projectile.NewProjectile(Terraria.Entity.GetSource_NaturalSpawn(), NPC.Center, (ToTarget).RotatedBy(-Pi / 6), ModContent.ProjectileType<DarkBolt>(), TheOrator.BoltDamage, 0f, -1, 0, startSpeed);
+                                        //Projectile.NewProjectile(Terraria.Entity.GetSource_NaturalSpawn(), NPC.Center, (ToTarget).RotatedBy(PiOver4), ModContent.ProjectileType<DarkBolt>(), TheOrator.BoltDamage, 0f, -1, 0, startSpeed);
+                                        //Projectile.NewProjectile(Terraria.Entity.GetSource_NaturalSpawn(), NPC.Center, (ToTarget).RotatedBy(-PiOver4), ModContent.ProjectileType<DarkBolt>(), TheOrator.BoltDamage, 0f, -1, 0, startSpeed);
                                     }
                                 }
                                 else if (aiCounter < 820)

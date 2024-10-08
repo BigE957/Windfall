@@ -67,17 +67,29 @@ namespace Windfall.Content.Projectiles.Boss.Orator
         }
         public override bool PreDraw(ref Color lightColor)
         {
-            Rectangle frame;
-            if (Projectile.timeLeft > 90)
+            Texture2D WhiteOutTexture = ModContent.Request<Texture2D>("Windfall/Assets/Projectiles/Boss/HandRingsWhiteOut" + (Projectile.ai[2] == 0 ? 0 : 1)).Value;
+            Color color = Color.Black;
+            switch (Projectile.ai[1])
             {
-                Texture2D WhiteOutTexture = ModContent.Request<Texture2D>("Windfall/Assets/Projectiles/Boss/HandRingsWhiteOut" + (Projectile.ai[2] == 0 ? 0 : 1)).Value;
-                DrawAfterimagesCentered(Projectile, ProjectileID.Sets.TrailingMode[Projectile.type], drawColor, 2, texture: WhiteOutTexture);
+                case 0:
+                    color = new(255, 133, 187);
+                    break;
+                case 1:
+                    color = new(253, 189, 53); 
+                    break;
+                case 2:
+                    color = new(220, 216, 155);
+                    break;
             }
+            if(Projectile.timeLeft <= 90)
+                color = Color.Lerp(color, drawColor, (90 - Projectile.timeLeft) / 60f);
+            DrawAfterimagesCentered(Projectile, ProjectileID.Sets.TrailingMode[Projectile.type], color, 2, texture: WhiteOutTexture);
+            
             Texture2D tex = ModContent.Request<Texture2D>(Texture).Value;
             Vector2 drawPosition = Projectile.Center - Main.screenPosition;
-            frame = tex.Frame(3, 4, (int)Projectile.ai[1], (int)Projectile.ai[2]);
+            Rectangle frame = tex.Frame(3, 4, (int)Projectile.ai[1], (int)Projectile.ai[2]);
 
-            Main.EntitySpriteDraw(tex, drawPosition, frame, lightColor, Projectile.rotation, frame.Size() * 0.5f, Projectile.scale, SpriteEffects.None);
+            Main.EntitySpriteDraw(tex, drawPosition, frame, Color.White * Projectile.Opacity, Projectile.rotation, frame.Size() * 0.5f, Projectile.scale, SpriteEffects.None);
 
             return false;
         }
