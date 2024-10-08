@@ -32,7 +32,7 @@ namespace Windfall.Content.Skies
             counter = 0;
             windOffset = 0;
         }
-        public override Color OnTileColor(Color inColor) => Color.Lerp(inColor, new(117, 255, 159, inColor.A), opacity / Lerp(8f, 1f, moveRatio));
+        public override Color OnTileColor(Color inColor) => Color.Lerp(inColor, Color.AliceBlue, opacity / Lerp(8f, 1f, moveRatio));
         public override void Draw(SpriteBatch spriteBatch, float minDepth, float maxDepth)
         {
             Color oratorGreen = new(117, 255, 159);            
