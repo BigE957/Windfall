@@ -29,6 +29,7 @@ namespace Windfall.Content.Projectiles.Boss.Orator
             Projectile.localNPCHitCooldown = -1;
             Projectile.timeLeft = 420;
             Projectile.penetrate = -1;
+            Projectile.damage = 100;
         }
         int aiCounter = 0;
         Vector2 initialPoint = Vector2.Zero;

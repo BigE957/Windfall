@@ -237,7 +237,7 @@ namespace Windfall.Content.NPCs.Bosses.Orator
                     break;
                 case States.DarkSpawn:
                     #region Movement
-                    Vector2 homeInV = target.Center + Vector2.UnitY * -250;
+                    Vector2 homeInV = target.Center + Vector2.UnitY * -300;
                     
                     NPC.velocity = (homeInV - NPC.Center).SafeNormalize(Vector2.Zero) * ((homeInV - NPC.Center).Length() / 10f);
                     #endregion
@@ -314,7 +314,7 @@ namespace Windfall.Content.NPCs.Bosses.Orator
                     if (aiCounter <= 1100)
                     {
                         #region Movement
-                        Vector2 goal = target.Center + Vector2.UnitY * -250;
+                        Vector2 goal = target.Center + Vector2.UnitY * -300;
                         NPC.velocity = (goal - NPC.Center).SafeNormalize(Vector2.Zero) * ((goal - NPC.Center).Length() / 10f);
                         #endregion
 
@@ -773,8 +773,8 @@ namespace Windfall.Content.NPCs.Bosses.Orator
                                         Projectile.NewProjectile(Terraria.Entity.GetSource_NaturalSpawn(), NPC.Center, (target.Center - NPC.Center).SafeNormalize(Vector2.Zero).RotatedBy(TwoPi / 6 * i) * 20, ModContent.ProjectileType<DarkBolt>(), BoltDamage, 0f, -1, 0, -20);
                                 }
                             }
-                            if (Main.netMode != NetmodeID.MultiplayerClient)
-                                Projectile.NewProjectile(Terraria.Entity.GetSource_NaturalSpawn(), NPC.Center, (target.Center - NPC.Center).SafeNormalize(Vector2.Zero) * 8, ModContent.ProjectileType<DarkGlob>(), GlobDamage, 0f, -1, 2, 0.5f);
+                            if (Main.netMode != NetmodeID.MultiplayerClient && aiCounter % 30 == 0)
+                                Projectile.NewProjectile(Terraria.Entity.GetSource_NaturalSpawn(), NPC.Center, Vector2.Zero, ModContent.ProjectileType<OratorJavelin>(), BoltDamage, 0f);
                         }
                         else if (aiCounter >= 1680 && aiCounter % 45 == 0)
                         {
@@ -1047,7 +1047,7 @@ namespace Windfall.Content.NPCs.Bosses.Orator
                     }
                     else if ((aiCounter > 150 && aiCounter < tideOut) || (aiCounter > attackDuration + 120 && aiCounter < attackDuration + tideOut))
                     {
-                        if (Main.netMode != NetmodeID.MultiplayerClient && aiCounter % 20 == 0)
+                        if (Main.netMode != NetmodeID.MultiplayerClient && aiCounter % 15 == 0)
                         {
                             bool left = Main.rand.NextBool();
                             Vector2 spawnPosition = border.Center + new Vector2(left ? -275 : 275, Main.rand.NextFloat(-700f, 700f));
