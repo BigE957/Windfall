@@ -1045,7 +1045,7 @@ namespace Windfall.Content.NPCs.Bosses.Orator
                     }
                     else if ((aiCounter > 150 && aiCounter < tideOut) || (aiCounter > attackDuration + 120 && aiCounter < attackDuration + tideOut))
                     {
-                        if (Main.netMode != NetmodeID.MultiplayerClient && aiCounter % 15 == 0)
+                        if (Main.netMode != NetmodeID.MultiplayerClient && aiCounter % 16 == 0)
                         {
                             bool left = Main.rand.NextBool();
                             Vector2 spawnPosition = border.Center + new Vector2(left ? -275 : 275, Main.rand.NextFloat(-700f, 700f));
