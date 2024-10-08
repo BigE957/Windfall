@@ -133,11 +133,10 @@ namespace Windfall.Content.NPCs.Bosses.Orator
                 case AIState.Spawning:
                     NPC.velocity *= 0.98f;
 
-                    int dustStyle = Main.rand.NextBool() ? 66 : 263;
-                    Dust dust = Dust.NewDustPerfect(NPC.Center + Vector2.UnitY * Main.rand.NextFloat(-16, 16) + new Vector2(-54, 0).RotatedBy(NPC.rotation), Main.rand.NextBool(3) ? 191 : dustStyle);
+                    Dust dust = Dust.NewDustPerfect(NPC.Center + Vector2.UnitY * Main.rand.NextFloat(-16, 16) + new Vector2(-54, 0).RotatedBy(NPC.rotation), DustID.RainbowTorch);
                     dust.scale = Main.rand.NextFloat(1.5f, 2.3f);
                     dust.noGravity = true;
-                    dust.color = dust.type == dustStyle ? Color.LightGreen : default;
+                    dust.color = Color.Lerp(new Color(117, 255, 159), new Color(255, 180, 80), (float)(Math.Sin(Main.GlobalTimeWrappedHourly * 1.25f) / 0.5f) + 0.5f);
 
                     if (NPC.velocity.Length() < 2)
                     {
@@ -264,12 +263,12 @@ namespace Windfall.Content.NPCs.Bosses.Orator
 
                         NPC.velocity = NPC.velocity.RotateTowards((target.Center - NPC.Center).ToRotation(), 0.02f);
                         NPC.rotation = NPC.velocity.ToRotation();
-                        dustStyle = Main.rand.NextBool() ? 66 : 263;
-                        dust = Dust.NewDustPerfect(NPC.Center + Vector2.UnitY * Main.rand.NextFloat(-16, 16) + new Vector2(-54, 0).RotatedBy(NPC.rotation), Main.rand.NextBool(3) ? 191 : dustStyle);
+
+                        dust = Dust.NewDustPerfect(NPC.Center + Vector2.UnitY * Main.rand.NextFloat(-16, 16) + new Vector2(-54, 0).RotatedBy(NPC.rotation), DustID.RainbowTorch);
                         dust.scale = Main.rand.NextFloat(1.5f, 2.3f);
                         dust.noGravity = true;
-                        dust.color = dust.type == dustStyle ? Color.LightGreen : default;
-                        
+                        dust.color = Color.Lerp(new Color(117, 255, 159), new Color(255, 180, 80), (float)(Math.Sin(Main.GlobalTimeWrappedHourly * 1.25f) / 0.5f) + 0.5f);
+
                         if (NPC.velocity.LengthSquared() < 64f)
                         {
                             CurrentAI = AIState.Hunting;
