@@ -14,7 +14,6 @@ namespace Windfall.Content.Projectiles.Boss.Orator
     {
         public new static string LocalizationCategory => "Projectiles.Boss";
         public override string Texture => "Windfall/Assets/Projectiles/Boss/OratorJavelin";
-        public ref float Time => ref Projectile.ai[0];
         public override void SetStaticDefaults()
         {
             Main.projFrames[Projectile.type] = 3;
@@ -46,12 +45,18 @@ namespace Windfall.Content.Projectiles.Boss.Orator
             {
                 NPC orator = Main.npc[NPC.FindFirstNPC(ModContent.NPCType<TheOrator>())];
                 target = orator.As<TheOrator>().target;
+
             }
-            Angle = (target.Center - Projectile.Center).ToRotation() + Main.rand.NextFloat(PiOver2, Pi + PiOver2);
+            Angle = (target.Center - Projectile.Center).ToRotation();
+            Angle -= PiOver2;
+            if (Main.rand.NextBool())
+                Angle += Pi;
+            Angle += Main.rand.NextFloat(-Pi / 4, Pi / 4);
             Projectile.ai[2] = Main.rand.Next(3);
             centerPosition = Projectile.Center;
             Projectile.netUpdate = true;
         }
+        private int Time = 0;
         public override void AI()
         {
             Player target = Main.player[Player.FindClosest(Projectile.Center, Projectile.width, Projectile.height)];
@@ -62,12 +67,12 @@ namespace Windfall.Content.Projectiles.Boss.Orator
                 target = orator.As<TheOrator>().target;
             }
             if (Projectile.Opacity < 1f)
-                Projectile.Opacity += 0.045f;
+                Projectile.Opacity += 0.05f;
             if (Time < 120)
             {                
                 Projectile.Center = centerPosition + Angle.ToRotationVector2() * 150f;
                 Projectile.rotation = (target.Center - Projectile.Center).ToRotation();
-                Angle += 0.1f * ((120 - Time) / 120f);
+                Angle += 0.105f * ((120 - Time) / 120f);
             }
             else
             {
