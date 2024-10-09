@@ -23,8 +23,8 @@ namespace Windfall.Content.Projectiles.Boss.Orator
 
         public override void SetDefaults()
         {
-            Projectile.width = 4;
-            Projectile.height = 4;
+            Projectile.width = 12;
+            Projectile.height = 12;
             Projectile.hostile = true;
             Projectile.tileCollide = false;
             Projectile.ignoreWater = true;
@@ -97,6 +97,11 @@ namespace Windfall.Content.Projectiles.Boss.Orator
             //Lighting.AddLight(Projectile.Center, Color.White.ToVector3() / 3f);
             Time++;
         }
+        public override void ModifyDamageHitbox(ref Rectangle hitbox)
+        {
+            Vector2 rotation = Projectile.rotation.ToRotationVector2() * 42f;
+            hitbox.Location = new Point((int)(hitbox.Location.X + rotation.X), (int)(hitbox.Location.Y + rotation.Y));
+        }
         public override bool PreDraw(ref Color lightColor)
         {
             Texture2D WhiteOutTexture = ModContent.Request<Texture2D>(Texture + "WhiteOut").Value;
@@ -125,20 +130,7 @@ namespace Windfall.Content.Projectiles.Boss.Orator
         }
 
         public override void PostDraw(Color lightColor)
-        {
-            /*
-            if (Projectile.timeLeft > 90)
-                return;
-
-            Texture2D WhiteOutTexture = ModContent.Request<Texture2D>("Windfall/Assets/Projectiles/Boss/HandRingsWhiteOut" + (Projectile.ai[2] == 0 ? 0 : 1)).Value;
-
-            Vector2 drawPosition = Projectile.Center - Main.screenPosition;
-            float ratio = 0f;
-            if (Projectile.timeLeft <= 90)
-                ratio = (90 - Projectile.timeLeft) / 60f;
-            ratio = Clamp(ratio, 0f, 1f);
-            Main.EntitySpriteDraw(WhiteOutTexture, drawPosition, WhiteOutTexture.Frame(), Color.White, Projectile.rotation, WhiteOutTexture.Frame().Size() * 0.5f, Projectile.scale * ratio, SpriteEffects.None);
-            */        
+        {       
         }
 
         public override void OnKill(int timeLeft)
