@@ -105,13 +105,7 @@ namespace Windfall.Content.Projectiles.Boss.Orator
                     centerPosition = orator.Center;
                     target = orator.As<TheOrator>().target;
                 }
-                Main.NewText((target.Center - Projectile.Center).Length());
-                /*
-                Vector2 dustPos = target.Center + ((Projectile.rotation + Pi).ToRotationVector2().RotatedBy(Main.rand.NextFloat(-PiOver4, PiOver4)) * Main.rand.NextFloat(0f, 1000f));
-                Dust d = Dust.NewDustDirect(dustPos, 4, 4, DustID.AncientLight);
-                d.noGravity = true;
-                d.scale *= 3f;
-                */
+
                 if (Time < 120)
                 {
                     Projectile.Center = centerPosition + Angle.ToRotationVector2() * 150f;
