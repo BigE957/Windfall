@@ -1,12 +1,4 @@
 ﻿using CalamityMod.Buffs.StatDebuffs;
-using CalamityMod.Projectiles.Summon;
-using System;
-using System.Collections.Generic;
-using System.Diagnostics.Metrics;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Terraria;
 using Windfall.Common.Graphics.Metaballs;
 using Windfall.Content.NPCs.Bosses.Orator;
 
@@ -24,8 +16,8 @@ namespace Windfall.Content.Projectiles.Boss.Orator
 
         public override void SetDefaults()
         {
-            Projectile.width = 24;
-            Projectile.height = 24;
+            Projectile.width = 32;
+            Projectile.height = 32;
             Projectile.hostile = true;
             Projectile.tileCollide = false;
             Projectile.ignoreWater = true;
@@ -71,17 +63,12 @@ namespace Windfall.Content.Projectiles.Boss.Orator
 
             if (haveImpaled)
             {
-                //Main.NewText("Have Impaled");
-
                 if (impaleTarget != null)
-                {
-                    //Main.NewText("Impaling");
-                    
+                {                    
                     if (impaleTarget.active && !impaleTarget.dead)
                     {
                         impaleTarget.AddBuff(ModContent.BuffType<WhisperingDeath>(), 2);
                         Projectile.Center = impaleTarget.Center + new Vector2(impaleOffset.X * (impaleTarget.direction != initialTargetDir ? -1 : 1), impaleOffset.Y + impaleTarget.gfxOffY);
-                        //Projectile.velocity = impaleTarget.velocity;
                         Projectile.rotation =  (impaleTarget.direction != initialTargetDir ? (new Vector2(-impaleRotation.ToRotationVector2().X, impaleRotation.ToRotationVector2().Y)).ToRotation() : impaleRotation);
                     }
                     else
@@ -130,9 +117,7 @@ namespace Windfall.Content.Projectiles.Boss.Orator
                         Projectile.velocity = Projectile.velocity.SafeNormalize(Vector2.UnitX) * -60;
                     }
                     else
-                    {
                         Projectile.velocity *= 0.985f;
-                    }
                 }
             }
             if (Projectile.timeLeft <= 90)
@@ -223,7 +208,7 @@ namespace Windfall.Content.Projectiles.Boss.Orator
         }
         public override void ModifyDamageHitbox(ref Rectangle hitbox)
         {
-            Vector2 rotation = Projectile.rotation.ToRotationVector2() * 40f;
+            Vector2 rotation = Projectile.rotation.ToRotationVector2() * 38f;
             hitbox.Location = new Point((int)(hitbox.Location.X + rotation.X), (int)(hitbox.Location.Y + rotation.Y));
         }
         public override bool PreDraw(ref Color lightColor)
@@ -251,17 +236,9 @@ namespace Windfall.Content.Projectiles.Boss.Orator
             Vector2 drawPosition = Projectile.Center - Main.screenPosition;
             Rectangle frame = tex.Frame(1, 3, 0, (int)Projectile.ai[2]);
 
-            SpriteEffects effects = SpriteEffects.None;
-            //if (impaleTarget != null && impaleTarget.direction != initialTargetDir)
-            //    effects = SpriteEffects.FlipHorizontally;
-
-            Main.EntitySpriteDraw(tex, drawPosition, frame, Color.White * Projectile.Opacity, Projectile.rotation, frame.Size() * 0.5f, Projectile.scale, effects);
+            Main.EntitySpriteDraw(tex, drawPosition, frame, Color.White * Projectile.Opacity, Projectile.rotation, frame.Size() * 0.5f, Projectile.scale, SpriteEffects.None);
 
             return false;
-        }
-
-        public override void PostDraw(Color lightColor)
-        {
         }
 
         public override void DrawBehind(int index, List<int> drawCacheProjsBehindNPCsAndTiles, List<int> drawCacheProjsBehindNPCs, List<int> drawCacheProjsBehindProjectiles, List<int> drawCacheProjsOverWiresUI, List<int> overWiresUI)
