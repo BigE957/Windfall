@@ -496,13 +496,13 @@ namespace Windfall.Content.NPCs.Bosses.Orator
                             }
                             if (Main.netMode != NetmodeID.MultiplayerClient)
                             {
-                                proj = Projectile.NewProjectileDirect(Terraria.Entity.GetSource_NaturalSpawn(), NPC.Center, new Vector2((float)(10 * Math.Sin(aiCounter)), -10), ModContent.ProjectileType<DarkGlob>(), GlobDamage, 0f, -1, 1, 0.5f);
+                                proj = Projectile.NewProjectileDirect(Terraria.Entity.GetSource_NaturalSpawn(), NPC.Center, new Vector2((float)(10 * Math.Sin(aiCounter)), -5), ModContent.ProjectileType<DarkGlob>(), GlobDamage, 0f, -1, 1, 0.5f);
                                 proj.Calamity().DealsDefenseDamage = true;
-                                proj = Projectile.NewProjectileDirect(Terraria.Entity.GetSource_NaturalSpawn(), NPC.Center, new Vector2((float)(-10 * Math.Sin(aiCounter)), -10), ModContent.ProjectileType<DarkGlob>(), GlobDamage, 0f, -1, 1, 0.5f);
+                                proj = Projectile.NewProjectileDirect(Terraria.Entity.GetSource_NaturalSpawn(), NPC.Center, new Vector2((float)(-10 * Math.Sin(aiCounter)), -5), ModContent.ProjectileType<DarkGlob>(), GlobDamage, 0f, -1, 1, 0.5f);
                                 proj.Calamity().DealsDefenseDamage = true;
                                 if (CalamityWorld.revenge && aiCounter % 20 == 0)
                                 {
-                                    proj = Projectile.NewProjectileDirect(Terraria.Entity.GetSource_NaturalSpawn(), NPC.Center, new Vector2(0, -10), ModContent.ProjectileType<DarkGlob>(), GlobDamage, 0f, -1, 1, 0.5f);
+                                    proj = Projectile.NewProjectileDirect(Terraria.Entity.GetSource_NaturalSpawn(), NPC.Center, new Vector2(0, -5), ModContent.ProjectileType<DarkGlob>(), GlobDamage, 0f, -1, 1, 0.5f);
                                     proj.Calamity().DealsDefenseDamage = true;
                                 }
                             }
@@ -1322,33 +1322,74 @@ namespace Windfall.Content.NPCs.Bosses.Orator
                     break;
                 //Animations
                 case States.Spawning:
-                    DashDelay = CalamityWorld.death ? 20 : CalamityWorld.revenge ? 25 : 30;
                     target = Main.player[Player.FindClosest(NPC.Center, NPC.width, NPC.height)];
-                    int height = 300;
-                    if (aiCounter > 270)
-                        height = 500;
-                    homeInVec = target.Center - NPC.Center;
-                    targetDist = homeInVec.Length();
-                    homeInVec.Normalize();
-                    if (targetDist > height)
-                        NPC.velocity = (NPC.velocity * 40f + homeInVec * 16f) / 41f;
+                    #region Movement
+                    if (aiCounter < 30)
+                    {
+                        if(aiCounter == 0)
+                            NPC.velocity = Vector2.UnitY * -8f;
+                        NPC.velocity *= 0.945f;
+                    }
                     else
                     {
-                        if (targetDist < height - 50)
-                            NPC.velocity = (NPC.velocity * 40f + homeInVec * -16f) / 41f;
+                        int dist = 400;
+                        homeInVec = target.Center - NPC.Center;
+                        targetDist = homeInVec.Length();
+                        homeInVec.Normalize();
+                        if (targetDist > dist)
+                            NPC.velocity = (NPC.velocity * 40f + homeInVec * 16f) / 41f;
                         else
-                            NPC.velocity *= 0.975f;
-                    }
-                    if (Main.netMode != NetmodeID.MultiplayerClient)
-                    {
-                        if (aiCounter == 1)
                         {
-                            NPC.NewNPC(null, (int)NPC.Center.X, (int)NPC.Center.Y, ModContent.NPCType<OratorHand>());
-                            NPC.NewNPC(null, (int)NPC.Center.X, (int)NPC.Center.Y, ModContent.NPCType<OratorHand>());
+                            if (targetDist < dist - 50)
+                                NPC.velocity = (NPC.velocity * 40f + homeInVec * -16f) / 41f;
+                            else
+                                NPC.velocity *= 0.975f;
                         }
                     }
+                    #endregion            
+                    if(aiCounter > 90 && aiCounter <= 150)
+                    {
+                        float ratio = (aiCounter - 90) / 45f;
+                        float EasedRatio = ExpInEasing(ratio, 1);
+                        float width = Clamp(96f * EasedRatio, 0f, 64f);
+
+                        for (int i = 0; i < 12; i++)
+                            EmpyreanMetaball.SpawnDefaultParticle(NPC.Center + new Vector2(128 + Main.rand.NextFloat(-width, width), Main.rand.NextFloat(-24, 0)).RotatedBy(-PiOver4), new Vector2(Main.rand.Next(-2, 2), Main.rand.Next(1, 5) * SineInEasing(ratio, 1)).RotatedBy(-PiOver4), Main.rand.NextFloat(15f, 25f) * (ratio * 2f));
+                    }
+                    if (Main.netMode != NetmodeID.MultiplayerClient && aiCounter == 150)
+                    {
+                        SoundEngine.PlaySound(SoundID.DD2_EtherianPortalDryadTouch, NPC.Center);
+                        Vector2 spawnPos = new(NPC.Center.X + 128, NPC.Center.Y);
+                        NPC hand = NPC.NewNPCDirect(NPC.GetSource_FromAI(), (int)spawnPos.X, (int)spawnPos.Y, ModContent.NPCType<OratorHand>());
+                        for (int i = 0; i < 24; i++)
+                            EmpyreanMetaball.SpawnDefaultParticle(hand.Center + new Vector2(Main.rand.NextFloat(-64, 64), -32).RotatedBy(-PiOver4), Vector2.UnitY.RotatedBy(-PiOver4) * Main.rand.NextFloat(2f, 18f), Main.rand.NextFloat(110f, 130f));
+                    }
+                    if (aiCounter > 180 && aiCounter <= 240)
+                    {
+                        float ratio = (aiCounter - 180) / 45f;
+                        float EasedRatio = ExpInEasing(ratio, 1);
+                        float width = Clamp(96f * EasedRatio, 0f, 64f);
+
+                        for (int i = 0; i < 12; i++)
+                            EmpyreanMetaball.SpawnDefaultParticle(NPC.Center + new Vector2(-128 + Main.rand.NextFloat(-width, width), Main.rand.NextFloat(-24, 0)).RotatedBy(PiOver4), new Vector2(Main.rand.Next(-2, 2), Main.rand.Next(1, 5) * SineInEasing(ratio, 1)).RotatedBy(PiOver4), Main.rand.NextFloat(15f, 25f) * (ratio * 2f));
+                    }
+                    if (Main.netMode != NetmodeID.MultiplayerClient && aiCounter == 240)
+                    {
+                        SoundEngine.PlaySound(SoundID.DD2_EtherianPortalDryadTouch, NPC.Center);
+                        Vector2 spawnPos = new(NPC.Center.X - 128, NPC.Center.Y);
+                        NPC hand = NPC.NewNPCDirect(NPC.GetSource_FromAI(), (int)spawnPos.X, (int)spawnPos.Y, ModContent.NPCType<OratorHand>());
+                        for (int i = 0; i < 24; i++)
+                            EmpyreanMetaball.SpawnDefaultParticle(hand.Center + new Vector2(Main.rand.NextFloat(-64, 64), -32).RotatedBy(PiOver4), Vector2.UnitY.RotatedBy(PiOver4) * Main.rand.NextFloat(2f, 18f), Main.rand.NextFloat(110f, 130f));
+                    }
+
                     if (aiCounter == 360)
                     {
+                        if(!NPC.AnyNPCs(ModContent.NPCType<OratorHand>()))
+                        {
+                            NPC.NewNPCDirect(NPC.GetSource_FromAI(), (int)NPC.Center.X, (int)NPC.Center.Y, ModContent.NPCType<OratorHand>());
+                            NPC.NewNPCDirect(NPC.GetSource_FromAI(), (int)NPC.Center.X, (int)NPC.Center.Y, ModContent.NPCType<OratorHand>());
+                        }
+                        DashDelay = CalamityWorld.death ? 20 : CalamityWorld.revenge ? 25 : 30;
                         aiCounter = -30;
                         attackCounter = 0;
                         AIState = States.DarkSlice;
