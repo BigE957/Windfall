@@ -30,7 +30,6 @@ namespace Windfall.Content.NPCs.TravellingNPCs
                 // Here we despawn the NPC and send a message stating that the NPC has despawned
                 if(NPC.active)
                     DisplayLocalizedText("The " + DisplayName + " has departed!", new(50, 125, 255));
-                NPC.active = false;
                 NPC.netSkip = -1;
                 NPC.active = false;
                 return false;
@@ -41,15 +40,20 @@ namespace Windfall.Content.NPCs.TravellingNPCs
         {
             bool travelerIsThere = (NPC.FindFirstNPC(ModContent.NPCType<TravellingCultist>()) != -1);
 
-            if (Main.dayTime && Main.time == 0)
+            if (Main.dayTime && Main.time == 10)
+            {
                 if (!travelerIsThere && (Main.rand.NextBool(4) || WorldSaveSystem.PlanteraJustDowned))
                 {
+                    Main.NewText("Buddy Inbound");
                     spawnTime = GetRandomSpawnTime(5400, 8100);
                     WorldSaveSystem.PlanteraJustDowned = false;
                 }
                 else
+                {
+                    Main.NewText("No buddy");
                     spawnTime = double.MaxValue;
-
+                }
+            }
             if (!travelerIsThere && CanSpawnNow())
             {
                 int newTraveler = NPC.NewNPC(Terraria.Entity.GetSource_TownSpawn(), Main.spawnTileX * 16, Main.spawnTileY * 16, ModContent.NPCType<TravellingCultist>(), 1); // Spawning at the world spawn
@@ -68,15 +72,15 @@ namespace Windfall.Content.NPCs.TravellingNPCs
         }
         private static bool CanSpawnNow()
         {
+            //progression locks
+            if (!Main.hardMode || !NPC.downedBoss3)// || SealingRitualSystem.RitualSequenceSeen)
+                return false;
             // can't spawn if any events are running
             if (Main.eclipse || Main.invasionType > 0 && Main.invasionDelay == 0 && Main.invasionSize > 0)
                 return false;
 
             // can't spawn if the sundial is active
             if (Main.IsFastForwardingTime())
-                return false;
-            //progression locks
-            if (!Main.hardMode || !NPC.downedBoss3 || NPC.downedAncientCultist)
                 return false;
             // can spawn if daytime, and between the spawn and despawn times
             return Main.dayTime && Main.time >= spawnTime && Main.time < despawnTime;
