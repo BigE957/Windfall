@@ -83,7 +83,7 @@ namespace Windfall.Content.NPCs.Bosses.Orator
             {
                 NPC.life = 1;
             }
-            NPC mainHand = Main.npc.First(n => n != null && n.active && n.type == NPC.type);
+            NPC mainHand = Main.npc.First(n => n != null && n.active && n.type == NPC.type && n.As<OratorHand>().WhatHand == 1);
             if (Main.npc.Where(n => n != null && n.active && n.type == NPC.type).Count() == 1)
             {
                 NPC.realLife = -1;
@@ -145,7 +145,7 @@ namespace Windfall.Content.NPCs.Bosses.Orator
                     NPC.velocity = (orator.Center - NPC.Center).SafeNormalize(Vector2.Zero) * 8f * (modOrator.AIState == TheOrator.States.DarkCollision ? 2.5f : (orator.Center - NPC.Center).Length() > 300f ? 1.5f : -1);
                 }
 
-                NPC otherHand = Main.npc.Last(n => n != null && n.active && n.type == NPC.type);
+                NPC otherHand = Main.npc.First(n => n != null && n.active && n.type == NPC.type && n.As<OratorHand>().WhatHand == -1);
 
                 NPC.Center -= shakeOffset;
 
@@ -234,7 +234,7 @@ namespace Windfall.Content.NPCs.Bosses.Orator
 
             }
             else
-            {                
+            {
                 switch (modOrator.AIState)
                 {
                     case TheOrator.States.DarkSlice:
@@ -277,12 +277,12 @@ namespace Windfall.Content.NPCs.Bosses.Orator
                                     direction = direction.RotatedBy(Lerp(0.15f, 0.025f, aiCounter / 90f));
                                     direction.Normalize();
                                     //direction *= WhatHand;
-                                    goalPos = Main.LocalPlayer.Center + (direction * 500);
+                                    goalPos = modOrator.target.Center + (direction * 500);
 
                                     #region Movement
                                     NPC.velocity = (goalPos - NPC.Center).SafeNormalize(Vector2.Zero) * ((goalPos - NPC.Center).Length() / 10f);
-                                    NPC.rotation = NPC.DirectionTo(Main.LocalPlayer.Center).ToRotation();
-                                    if (NPC.Center.X > Main.LocalPlayer.Center.X)
+                                    NPC.rotation = NPC.DirectionTo(modOrator.target.Center).ToRotation();
+                                    if (NPC.Center.X > modOrator.target.Center.X)
                                         NPC.direction = -1;
                                     else
                                         NPC.direction = 1;
@@ -294,7 +294,7 @@ namespace Windfall.Content.NPCs.Bosses.Orator
                                     {
                                         if (aiCounter == 90)//CalamityWorld.death || CalamityWorld.revenge && aiCounter < -10 || Main.expertMode && aiCounter < -20)
                                         {
-                                            direction = (Main.LocalPlayer.Center - NPC.Center).SafeNormalize(Vector2.UnitX * NPC.direction);
+                                            direction = (modOrator.target.Center - NPC.Center).SafeNormalize(Vector2.UnitX * NPC.direction);
                                             attackBool = false;
                                         }
                                         float reelBackSpeedExponent = 2.6f;
@@ -308,13 +308,14 @@ namespace Windfall.Content.NPCs.Bosses.Orator
                                         if (aiCounter == 110)
                                             NPC.velocity = direction * 75;
                                         NPC.velocity *= 0.93f;
-                                        NPC subHand = Main.npc.Last(n => n != null && n.active && n.type == NPC.type);
+                                        NPC subHand = Main.npc.First(n => n != null && n.active && n.type == NPC.type && n.As<OratorHand>().WhatHand == -1);
                                         if (NPC.Hitbox.Intersects(subHand.Hitbox) && !attackBool)
                                         {
-                                            NPC.Center -= NPC.velocity * 1.5f;
-                                            subHand.Center -= subHand.velocity * 1.5f;
-
                                             Vector2 midPoint = NPC.Center + ((subHand.Center - NPC.Center) / 2);
+
+                                            NPC.Center = midPoint - (NPC.rotation.ToRotationVector2() * (NPC.width/3f));
+                                            subHand.Center = midPoint - (subHand.rotation.ToRotationVector2() * (subHand.width / 3f));
+
 
                                             ScreenShakeSystem.StartShake(12.5f);
                                             SoundEngine.PlaySound(SoundID.DD2_MonkStaffGroundImpact, midPoint);
@@ -349,7 +350,7 @@ namespace Windfall.Content.NPCs.Bosses.Orator
                             {
                                 if (aiCounter >= 0)
                                 {
-                                    NPC mainHand = Main.npc.First(n => n != null && n.active && n.type == NPC.type);
+                                    NPC mainHand = Main.npc.First(n => n != null && n.active && n.type == NPC.type && n.As<OratorHand>().WhatHand == 1);
                                     direction = mainHand.As<OratorHand>().direction;
                                     if (aiCounter < 90)
                                     {
