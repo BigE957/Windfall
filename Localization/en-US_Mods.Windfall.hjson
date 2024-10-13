@@ -1537,6 +1537,10 @@ Projectiles: {
 	DoGRift.DisplayName: Devourer Rift
 	HandRing.DisplayName: Hand Ring
 	OratorJavelin.DisplayName: Orator Javelin
+	OratorScythe.DisplayName: Orator Scythe
+	BurningAltar.DisplayName: Burning Altar
+	RitualTorch.DisplayName: Ritual Torch
+	BookPile.DisplayName: Book Pile
 }
 
 Buffs: {

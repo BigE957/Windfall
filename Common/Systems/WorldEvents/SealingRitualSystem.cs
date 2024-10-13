@@ -5,6 +5,7 @@ using Windfall.Content.NPCs.Bosses.Orator;
 using Windfall.Content.NPCs.TravellingNPCs;
 using Windfall.Content.NPCs.WorldEvents.LunarCult;
 using Windfall.Content.Projectiles.Boss.Orator;
+using Windfall.Content.Projectiles.Other.RitualFurnature;
 using static Windfall.Common.Systems.WorldEvents.LunarCultBaseSystem;
 
 namespace Windfall.Common.Systems.WorldEvents
@@ -53,8 +54,8 @@ namespace Windfall.Common.Systems.WorldEvents
         public override void PreUpdateWorld()
         {
             #region Debugging Stuffs
-            //RitualSequenceSeen = false;
-            //Recruits = [0, 1, 3, 4];
+            RitualSequenceSeen = true;
+            Recruits = [0, 1, 3, 4];
             //State = SystemState.CheckReqs; RitualTimer = -2; RitualSequenceSeen = false; Active = false;
             //Main.NewText($"{RitualTimer}, {State}, {(DungeonCoords - Main.LocalPlayer.Center).Length()}, {RitualSequenceSeen}");
             //TravellingCultist.RitualQuestProgress = 4;
@@ -62,6 +63,10 @@ namespace Windfall.Common.Systems.WorldEvents
 
             if (RitualSequenceSeen)
             {
+                if (!Main.projectile.Any(p => p.active && p.type == ModContent.ProjectileType<BurningAltar>()))
+                    Projectile.NewProjectile(Projectile.GetSource_NaturalSpawn(), new Vector2(DungeonCoords.X, DungeonCoords.Y - 52), Vector2.Zero, ModContent.ProjectileType<BurningAltar>(), 0, 0f, ai0: 1);
+                else if (Main.projectile.First(p => p.active && p.type == ModContent.ProjectileType<BurningAltar>()).ai[0] == 0)
+                    Main.projectile.First(p => p.active && p.type == ModContent.ProjectileType<BurningAltar>()).ai[0] = 1;
                 if (!NPC.AnyNPCs(ModContent.NPCType<SealingTablet>()))
                     NPC.NewNPC(Entity.GetSource_None(), (int)DungeonCoords.X, (int)DungeonCoords.Y - 128, ModContent.NPCType<SealingTablet>(), Start: 150, ai0: 2);
                 else if (Main.npc[NPC.FindFirstNPC(ModContent.NPCType<SealingTablet>())].ai[0] != 2)
@@ -96,6 +101,15 @@ namespace Windfall.Common.Systems.WorldEvents
                             NPC.NewNPC(Entity.GetSource_None(), (int)DungeonCoords.X, (int)DungeonCoords.Y - 8, ModContent.NPCType<TravellingCultist>(), 0, 1),
                             
                         ];
+                        Projectile.NewProjectile(Projectile.GetSource_NaturalSpawn(), new Vector2(DungeonCoords.X, DungeonCoords.Y - 52), Vector2.Zero, ModContent.ProjectileType<BurningAltar>(), 0, 0f, ai0: 0);
+                        Projectile.NewProjectile(Projectile.GetSource_NaturalSpawn(), new Vector2(DungeonCoords.X + 64, DungeonCoords.Y - 32), Vector2.Zero, ModContent.ProjectileType<RitualTorch>(), 0, 0f);
+                        Projectile.NewProjectile(Projectile.GetSource_NaturalSpawn(), new Vector2(DungeonCoords.X - 64, DungeonCoords.Y - 32), Vector2.Zero, ModContent.ProjectileType<RitualTorch>(), 0, 0f);
+                        Projectile.NewProjectile(Projectile.GetSource_NaturalSpawn(), new Vector2(DungeonCoords.X + 185, DungeonCoords.Y - 16), Vector2.Zero, ModContent.ProjectileType<BookPile>(), 0, 0f, ai0: 1);
+                        Projectile.NewProjectile(Projectile.GetSource_NaturalSpawn(), new Vector2(DungeonCoords.X - 185, DungeonCoords.Y - 16), Vector2.Zero, ModContent.ProjectileType<BookPile>(), 0, 0f);
+                        Projectile.NewProjectile(Projectile.GetSource_NaturalSpawn(), new Vector2(DungeonCoords.X + 255, DungeonCoords.Y - 16), Vector2.Zero, ModContent.ProjectileType<BookPile>(), 0, 0f);
+                        Projectile.NewProjectile(Projectile.GetSource_NaturalSpawn(), new Vector2(DungeonCoords.X - 255, DungeonCoords.Y - 16), Vector2.Zero, ModContent.ProjectileType<BookPile>(), 0, 0f, ai0: 1);
+                        Projectile.NewProjectile(Projectile.GetSource_NaturalSpawn(), new Vector2(DungeonCoords.X + 115, DungeonCoords.Y - 16), Vector2.Zero, ModContent.ProjectileType<BookPile>(), 0, 0f);
+                        Projectile.NewProjectile(Projectile.GetSource_NaturalSpawn(), new Vector2(DungeonCoords.X - 115, DungeonCoords.Y - 16), Vector2.Zero, ModContent.ProjectileType<BookPile>(), 0, 0f, ai0: 1);
 
                         #region Character Setup
                         for (int k = 0; k < 4; k++)
