@@ -52,11 +52,12 @@ namespace Windfall.Content.UI.MenuThemes.Selenic
 
             Texture2D CloudBack = (Texture2D)ModContent.Request<Texture2D>("Windfall/Assets/Skies/OratorCloudsBack", AssetRequestMode.ImmediateLoad);
             float backgroundOffset = GetBackgroundOffset(0.1f, CloudBack);
-            spriteBatch.Draw(CloudBack, new Vector2(GetBoundedX(backgroundOffset, cloudScale), cloudHeight), CloudBack.Frame(), Color.Gray, 0f, new Vector2(CloudBack.Width / 2, CloudBack.Height / 2), cloudScale, SpriteEffects.None, 0f);
-            spriteBatch.Draw(CloudBack, new Vector2(GetBoundedX((backgroundOffset - (CloudBack.Width * (cloudScale))), cloudScale), cloudHeight), CloudBack.Frame(), Color.Gray, 0f, new Vector2(CloudBack.Width / 2, CloudBack.Height / 2), cloudScale, SpriteEffects.None, 0f);
-            spriteBatch.Draw(CloudBack, new Vector2(GetBoundedX((backgroundOffset + (CloudBack.Width * (cloudScale))), cloudScale), cloudHeight), CloudBack.Frame(), Color.Gray, 0f, new Vector2(CloudBack.Width / 2, CloudBack.Height / 2), cloudScale, SpriteEffects.None, 0f);
+            spriteBatch.Draw(CloudBack, new Vector2(GetBoundedX(backgroundOffset, cloudScale), cloudHeight - (450 * cloudScale)), CloudBack.Frame(), Color.Gray, 0f, new Vector2(CloudBack.Width / 2, CloudBack.Height / 2), cloudScale, SpriteEffects.None, 0f);
+            spriteBatch.Draw(CloudBack, new Vector2(GetBoundedX((backgroundOffset - (CloudBack.Width * (cloudScale))), cloudScale), cloudHeight - (450 * cloudScale)), CloudBack.Frame(), Color.Gray, 0f, new Vector2(CloudBack.Width / 2, CloudBack.Height / 2), cloudScale, SpriteEffects.None, 0f);
+            spriteBatch.Draw(CloudBack, new Vector2(GetBoundedX((backgroundOffset + (CloudBack.Width * (cloudScale))), cloudScale), cloudHeight - (450 * cloudScale)), CloudBack.Frame(), Color.Gray, 0f, new Vector2(CloudBack.Width / 2, CloudBack.Height / 2), cloudScale, SpriteEffects.None, 0f);
             #endregion
 
+            #region Moon
             Vector2 position = new(Main.screenWidth / 2, bgTop + Main.screenHeight / 1.25f);
             Texture2D bloomCircle = ModContent.Request<Texture2D>("CalamityMod/Particles/LargeBloom", AssetRequestMode.ImmediateLoad).Value;
 
@@ -71,19 +72,21 @@ namespace Windfall.Content.UI.MenuThemes.Selenic
             Texture2D moon = ModContent.Request<Texture2D>("Windfall/Assets/Skies/OratorMoon", AssetRequestMode.ImmediateLoad).Value;
             halfSizeTexture = new(moon.Width / 2, moon.Height / 2);
             spriteBatch.Draw(moon, position, null, Color.White, 0f, halfSizeTexture, 1.5f + 0.125f, SpriteEffects.None, 0f);
+            #endregion
 
-            #region Front Clouds                        
+            #region Front Clouds       
+            /*
             Texture2D CloudMiddle = (Texture2D)ModContent.Request<Texture2D>("Windfall/Assets/Skies/OratorCloudsMiddle", AssetRequestMode.ImmediateLoad);
             backgroundOffset = GetBackgroundOffset(0.2f, CloudMiddle);
             spriteBatch.Draw(CloudMiddle, new Vector2(GetBoundedX(backgroundOffset, cloudScale), cloudHeight), CloudMiddle.Frame(), Color.Gray, 0f, new Vector2(CloudMiddle.Width / 2, CloudMiddle.Height / 2), cloudScale, SpriteEffects.None, 0f);
             spriteBatch.Draw(CloudMiddle, new Vector2(GetBoundedX((backgroundOffset - (CloudMiddle.Width * (cloudScale))), cloudScale), cloudHeight), CloudMiddle.Frame(), Color.Gray, 0f, new Vector2(CloudMiddle.Width / 2, CloudMiddle.Height / 2), cloudScale, SpriteEffects.None, 0f);
             spriteBatch.Draw(CloudMiddle, new Vector2(GetBoundedX((backgroundOffset + (CloudMiddle.Width * (cloudScale))), cloudScale), cloudHeight), CloudMiddle.Frame(), Color.Gray, 0f, new Vector2(CloudMiddle.Width / 2, CloudMiddle.Height / 2), cloudScale, SpriteEffects.None, 0f);
-
+            */
             Texture2D CloudFront = (Texture2D)ModContent.Request<Texture2D>("Windfall/Assets/Skies/OratorCloudsFront", AssetRequestMode.ImmediateLoad);
             backgroundOffset = GetBackgroundOffset(0.3f, CloudFront);
-            spriteBatch.Draw(CloudFront, new Vector2(GetBoundedX(backgroundOffset, cloudScale), cloudHeight), CloudFront.Frame(), Color.Gray, 0f, new Vector2(CloudFront.Width / 2, CloudFront.Height / 2), cloudScale, SpriteEffects.None, 0f);
-            spriteBatch.Draw(CloudFront, new Vector2(GetBoundedX((backgroundOffset - (CloudFront.Width * (cloudScale))), cloudScale), cloudHeight), CloudFront.Frame(), Color.Gray, 0f, new Vector2(CloudFront.Width / 2, CloudFront.Height / 2), cloudScale, SpriteEffects.None, 0f);
-            spriteBatch.Draw(CloudFront, new Vector2(GetBoundedX((backgroundOffset + (CloudFront.Width * (cloudScale))), cloudScale), cloudHeight), CloudFront.Frame(), Color.Gray, 0f, new Vector2(CloudFront.Width / 2, CloudFront.Height / 2), cloudScale, SpriteEffects.None, 0f);
+            spriteBatch.Draw(CloudFront, new Vector2(GetBoundedX(backgroundOffset, cloudScale), cloudHeight - (190 * cloudScale)), CloudFront.Frame(), Color.Gray, 0f, new Vector2(CloudFront.Width / 2, CloudFront.Height / 2), cloudScale, SpriteEffects.None, 0f);
+            spriteBatch.Draw(CloudFront, new Vector2(GetBoundedX((backgroundOffset - (CloudFront.Width * (cloudScale))), cloudScale), cloudHeight - (190 * cloudScale)), CloudFront.Frame(), Color.Gray, 0f, new Vector2(CloudFront.Width / 2, CloudFront.Height / 2), cloudScale, SpriteEffects.None, 0f);
+            spriteBatch.Draw(CloudFront, new Vector2(GetBoundedX((backgroundOffset + (CloudFront.Width * (cloudScale))), cloudScale), cloudHeight - (190 * cloudScale)), CloudFront.Frame(), Color.Gray, 0f, new Vector2(CloudFront.Width / 2, CloudFront.Height / 2), cloudScale, SpriteEffects.None, 0f);
             #endregion
 
             counter++;
@@ -108,6 +111,6 @@ namespace Windfall.Content.UI.MenuThemes.Selenic
         {
             return -100000 - (counter * parallaxMultiplier);
         }
-        private float GetBoundedX(float initialX, float scale) => (initialX % (Main.screenWidth * (3.4f * scale)) + (Main.screenWidth * (2.8f * scale)));
+        private static float GetBoundedX(float initialX, float scale) => (initialX % (Main.screenWidth * (3.425f * scale)) + (Main.screenWidth * (2.9f * scale)));
     }
 }

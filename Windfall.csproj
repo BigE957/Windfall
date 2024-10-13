@@ -47,6 +47,8 @@
     <None Remove="Content\NPCs\WorldEvents\WanderingPotionSeller.png" />
     <None Remove="Content\Projectiles\Boss\Orator\DarkTide.png" />
     <None Remove="Content\Projectiles\Boss\Orator\OratorBorder.png" />
+    <None Remove="Content\Projectiles\Other\RitualFurnature\BurningAltar.png" />
+    <None Remove="Content\Projectiles\Other\RitualFurnature\RitualFurnatureAtlas.png" />
     <None Remove="Content\Tiles\Furnature\OratorMonolithTile.png" />
     <None Remove="Content\Tiles\Special\DatabaseTerminal.png" />
     <None Remove="Content\UI\DraedonsDatabase\DraedonUIArrowLeft.png" />
