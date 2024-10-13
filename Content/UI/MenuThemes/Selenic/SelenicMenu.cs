@@ -111,6 +111,6 @@ namespace Windfall.Content.UI.MenuThemes.Selenic
         {
             return -100000 - (counter * parallaxMultiplier);
         }
-        private static float GetBoundedX(float initialX, float scale) => (initialX % (Main.screenWidth * (3.425f * scale)) + (Main.screenWidth * (2.9f * scale)));
+        private static float GetBoundedX(float initialX, float scale) => (initialX % (Main.screenWidth * (3.425f * scale)) + (Main.screenWidth * (2.8f * scale)));
     }
 }
