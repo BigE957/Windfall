@@ -36,7 +36,7 @@ namespace Windfall.Content.Items.Placeables.Furnature
         {
             if (player.whoAmI == Main.myPlayer)
             {
-                player.Monolith().OratorMonolith = true;
+                player.Monolith().OratorMonolith = 30;
             }
         }
 
@@ -44,7 +44,7 @@ namespace Windfall.Content.Items.Placeables.Furnature
         {
             if (player.whoAmI == Main.myPlayer)
             {
-                player.Monolith().OratorMonolith = true;
+                player.Monolith().OratorMonolith = 30;
             }
         }
     }

@@ -16,11 +16,12 @@ namespace Windfall.Content.Skies
 
         public override void Deactivate(params object[] args)
         {
-            skyActive = (Main.npc.Any(n => n.active && n.type == ModContent.NPCType<TheOrator>()) || Main.LocalPlayer.Monolith().OratorMonolith);
+            skyActive = (Main.npc.Any(n => n.active && n.type == ModContent.NPCType<TheOrator>()) || Main.LocalPlayer.Monolith().OratorMonolith > 0);
         }
 
         public override void Reset()
         {
+            Main.LocalPlayer.Monolith().OratorMonolith = 0;
             skyActive = false;
         }
 
@@ -104,14 +105,14 @@ namespace Windfall.Content.Skies
         }
         public override void Update(GameTime gameTime)
         {
-            if ((!NPC.AnyNPCs(ModContent.NPCType<TheOrator>()) && !Main.LocalPlayer.Monolith().OratorMonolith) || BossRushEvent.BossRushActive || Main.gameMenu)
+            if ((!NPC.AnyNPCs(ModContent.NPCType<TheOrator>()) && Main.LocalPlayer.Monolith().OratorMonolith <= 0) || BossRushEvent.BossRushActive || Main.gameMenu)
                 skyActive = false;
 
             if (skyActive)
             {
                 if (opacity < 1f)
                     opacity += 0.02f;
-                else
+                else if(NPC.AnyNPCs(ModContent.NPCType<TheOrator>()))
                 {
                     Main.dayTime = false;
                     Main.time = 16200;

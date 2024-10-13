@@ -14,7 +14,7 @@ namespace Windfall.Content.Tiles.Furnature
             TileObjectData.newTile.CopyFrom(TileObjectData.Style3x4);
             TileObjectData.newTile.Width = 3;
             TileObjectData.newTile.Origin = new Point16(2, 3);
-            TileObjectData.newTile.CoordinateHeights = new[] { 16, 16, 16, 18 };
+            TileObjectData.newTile.CoordinateHeights = [16, 16, 16, 18];
             TileObjectData.newTile.LavaDeath = false;
             TileObjectData.newTile.UsesCustomCanPlace = true;
             TileObjectData.newTile.AnchorBottom = new AnchorData(AnchorType.SolidTile | AnchorType.SolidWithTop, 3, 0);
@@ -23,7 +23,7 @@ namespace Windfall.Content.Tiles.Furnature
             AddMapEntry(Color.LimeGreen);
 
             DustType = DustID.Terra;
-            AnimationFrameHeight = 70;
+            AnimationFrameHeight = 72;
         }
 
         public override void NearbyEffects(int i, int j, bool closer)
@@ -34,17 +34,10 @@ namespace Windfall.Content.Tiles.Furnature
                 return;
 
             if (Main.tile[i, j].TileFrameY < AnimationFrameHeight)
-            {
-                if (player.active)
-                    Main.LocalPlayer.Monolith().NearActiveMonolith = false;
                 return;
-            }       
 
             if (player.active)
-            {
-                Main.LocalPlayer.Monolith().NearActiveMonolith = true;
-                Main.LocalPlayer.Monolith().OratorMonolith = true;
-            }
+                player.Monolith().OratorMonolith = 30;
 
             if (Main.tile[i, j + 1].TileType != Type && Main.tile[i - 1 , j].TileType != Type)
             {
@@ -73,17 +66,16 @@ namespace Windfall.Content.Tiles.Furnature
         {
             int x = i - Main.tile[i, j].TileFrameX / 18 % 4;
             int y = j - Main.tile[i, j].TileFrameY / 18 % 4;
-            int tileXX18 = AnimationFrameHeight;
             for (int l = x; l < x + 4; l++)
             {
                 for (int m = y; m < y + 4; m++)
                 {
                     if (Main.tile[l, m].HasTile && Main.tile[l, m].TileType == Type)
                     {
-                        if (Main.tile[l, m].TileFrameY < tileXX18)
-                            Main.tile[l, m].TileFrameY += (short)(tileXX18);
+                        if (Main.tile[l, m].TileFrameY < AnimationFrameHeight)
+                            Main.tile[l, m].TileFrameY += (short)(AnimationFrameHeight);
                         else
-                            Main.tile[l, m].TileFrameY -= (short)(tileXX18);
+                            Main.tile[l, m].TileFrameY -= (short)(AnimationFrameHeight);
                     }
                 }
             }
@@ -108,8 +100,6 @@ namespace Windfall.Content.Tiles.Furnature
 
             if (player is null)
                 return;
-
-            player.Monolith().NearActiveMonolith = false;
         }
 
         public override bool PreDraw(int i, int j, SpriteBatch spriteBatch)
@@ -128,7 +118,7 @@ namespace Windfall.Content.Tiles.Furnature
             {
                 animate = Main.tileFrame[Type] * AnimationFrameHeight;
             }
-            Main.spriteBatch.Draw(texture, new Vector2(i * 16 - (int)Main.screenPosition.X, j * 16 - (int)Main.screenPosition.Y) + zero, new Rectangle(tile.TileFrameX, tile.TileFrameY + animate, 16, height), Lighting.GetColor(i, j), 0f, default(Vector2), 1f, SpriteEffects.None, 0f);
+            Main.spriteBatch.Draw(texture, new Vector2(i * 16 - (int)Main.screenPosition.X, j * 16 - (int)Main.screenPosition.Y) + zero, new Rectangle(tile.TileFrameX, tile.TileFrameY + animate, 16, height), Lighting.GetColor(i, j), 0f, default, 1f, SpriteEffects.None, 0f);
             return false;
         }
     }
