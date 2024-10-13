@@ -1,4 +1,5 @@
 ﻿using CalamityMod.Buffs.StatDebuffs;
+using Terraria;
 using Windfall.Common.Graphics.Metaballs;
 using Windfall.Content.NPCs.Bosses.Orator;
 
@@ -149,10 +150,14 @@ namespace Windfall.Content.Projectiles.Boss.Orator
             }
             Projectile.damage = 0;
             Projectile.velocity = Vector2.Zero;
+            Point hitLocation = new();
+
             for (int i = 0; i < 64; i++)
             {
-                Projectile.Center -= Projectile.rotation.ToRotationVector2();
                 Rectangle hitbox = new((int)Projectile.position.X, (int)Projectile.position.Y, Projectile.width, Projectile.height);
+                hitLocation = hitbox.Center.ToVector2().ToTileCoordinates();
+                Projectile.Center -= Projectile.rotation.ToRotationVector2();
+                hitbox = new((int)Projectile.position.X, (int)Projectile.position.Y, Projectile.width, Projectile.height);
                 ModifyDamageHitbox(ref hitbox);
                 if (!Main.tile[hitbox.Center.ToVector2().ToTileCoordinates()].IsTileSolid())
                 {
@@ -162,19 +167,16 @@ namespace Windfall.Content.Projectiles.Boss.Orator
 
                     Projectile.Center = hitbox.Center() + ((Projectile.Center - hitbox.Center())/2f);
                 }
-                
             }
+            WorldGen.KillTile(hitLocation.X, hitLocation.Y, effectOnly: true);
             Projectile.timeLeft = 180;
             return false;
         }
-
         private static float sign(Vector2 p1, Vector2 p2, Vector2 p3) => (p1.X - p3.X) * (p2.Y - p3.Y) - (p2.X - p3.X) * (p1.Y - p3.Y);
-
         private static bool PointInTriangle(Vector2 pt, Vector2 v1, Vector2 v2, Vector2 v3)
         {
             float d1, d2, d3;
             bool has_neg, has_pos;
-
             d1 = sign(pt, v1, v2);
             d2 = sign(pt, v2, v3);
             d3 = sign(pt, v3, v1);

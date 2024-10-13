@@ -79,7 +79,7 @@ namespace Windfall.Common.Systems.WorldEvents
                 Point point = Utilities.FindGroundVertical((target.Center + new Vector2(Main.rand.NextFloatDirection() * 1200f, -560f)).ToTileCoordinates());
                 bool sandBelow = ParanoidTileRetrieval(point.X, point.Y).TileType == TileID.Sand;
                 if (sandBelow)
-                    Dust.NewDustPerfect(new Vector2(point.ToWorldCoordinates().X, point.ToWorldCoordinates().Y) + new Vector2(Main.rand.NextFloatDirection() * 8f, -8f), 32, Main.rand.NextVector2Circular(1.5f, 1.5f) - Vector2.UnitY * 1.5f);
+                    Dust.NewDustPerfect(new Vector2(point.ToWorldCoordinates().X, point.ToWorldCoordinates().Y) + new Vector2(Main.rand.NextFloatDirection() * 8f, -8f), DustID.Sand, Main.rand.NextVector2Circular(1.5f, 1.5f) - Vector2.UnitY * 1.5f);
             }
             // Create screen shake effects.
             ScreenShakeSystem.StartShake((float)(MathF.Pow(groundShakeInterpolant, 1.81f) * 10f));
