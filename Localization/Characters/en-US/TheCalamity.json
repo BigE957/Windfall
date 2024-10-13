@@ -5,11 +5,11 @@
   "Expressions": [
     {
       "Title": "Default",
-      "Path": "Windfall/Assets/UI/CharacterAssets/TheCalamity/Default",
+      "Path": "Windfall/Assets/UI/CharacterAssets/TheCalamity/Default"
     },
     {
       "Title": "Finality",
-      "Path": "Windfall/Assets/UI/CharacterAssets/TheCalamity/Finality",
+      "Path": "Windfall/Assets/UI/CharacterAssets/TheCalamity/Finality"
     }
   ],
   "PrimaryColor": "#000000",

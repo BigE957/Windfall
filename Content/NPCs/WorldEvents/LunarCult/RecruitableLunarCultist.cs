@@ -135,6 +135,8 @@ namespace Windfall.Content.NPCs.WorldEvents.LunarCult
         }
         private void CloseEffect(string treeKey, int dialogueID, int buttonID)
         {
+            if(!treeKey.Contains("Recruits") || !treeKey.Contains(Name))
+                return;
             NPC me = Main.npc.First(n => n.active && n.type == NPC.type && n.As<RecruitableLunarCultist>().Name == Name);
 
             if (treeKey.Contains("Recruitable") && dialogueID == 1 && canRecruit)
