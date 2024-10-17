@@ -55,7 +55,8 @@ namespace Windfall.Content.NPCs.WorldEvents.LunarCult
         {
             NPC.scale = 0;
             dustsIndexs = [];
-            LunarCultBaseSystem.ActivePortals++;
+            if(LunarCultBaseSystem.IsRitualActivityActive())
+                LunarCultBaseSystem.ActivePortals++;
             SoundEngine.PlaySound(SoundID.DD2_EtherianPortalSpawnEnemy with { Volume = 1f }, NPC.Center);
         }
         public override bool PreAI()
