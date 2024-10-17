@@ -122,11 +122,12 @@ namespace Windfall.Common.Systems.WorldEvents
         #region Meeting Variables
         public enum MeetingTopic
         {
+            None,
             CurrentEvents,
             Mission,
             Paradise
         }
-        public static MeetingTopic CurrentMeetingTopic;
+        public static MeetingTopic CurrentMeetingTopic = MeetingTopic.None;
         #endregion
         #region Tailor Variables
         public static int[] AssignedClothing = new int[255];
@@ -273,7 +274,8 @@ namespace Windfall.Common.Systems.WorldEvents
 
                         if (!Main.npc.Any(n => n.active && n.type == ModContent.NPCType<LunarBishop>() && n.ai[2] == 2))
                             NPC.NewNPC(Entity.GetSource_None(), ActivityCoords.X, ActivityCoords.Y, ModContent.NPCType<LunarBishop>(), ai2: 2);
-                        ActivityTimer++;
+                        ActivityTimer = 0;
+                        CurrentMeetingTopic = MeetingTopic.None;
                     }
                     #region Player Proximity
                     Player closestPlayer = Main.player[Player.FindClosest(new Vector2(ActivityCoords.X, ActivityCoords.Y), 300, 300)];
@@ -576,8 +578,6 @@ namespace Windfall.Common.Systems.WorldEvents
                         ActivityTimer = 0;
                         zoom = 0;
                     }
-
-                    //Main.NewText( Main.player[0].Center - new Vector2(ActivityCoords.X, ActivityCoords.Y));                  
 
                     #region Player Proximity
                     closestPlayer = Main.player[Player.FindClosest(new Vector2(ActivityCoords.X, ActivityCoords.Y), 300, 300)];

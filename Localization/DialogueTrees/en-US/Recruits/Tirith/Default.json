@@ -1,0 +1,41 @@
+{
+  "Dialogues": [
+    {
+      "Text": "I'm not so sure how I feel about the Selenic Order... Should I stay?",
+      "Responses": [
+        {
+          "Title": "Fuck no!",
+          "Heading": 1
+        },
+        {
+          "Title": "Yeah, you should.",
+          "Heading":  2
+        }
+      ]
+    },
+    {
+      "Text": "Alright! Goodbye Selenic Order!",
+      "Responses": [
+        {
+          "Title": "Bye!"
+        },
+        {
+          "Title": "I need to tell you something...",
+          "Heading": 1,
+          "SwapToTreeKey": "Tirith/Recruitable"
+        }
+      ]
+    },
+    {
+      "Text": "Yeah, you're probably right.",
+      "Responses": [
+        {
+          "Title": "Your Welcome."
+        }
+      ]
+    }
+  ],
+  "Characters": [
+    "TheCalamity"
+  ]
+}

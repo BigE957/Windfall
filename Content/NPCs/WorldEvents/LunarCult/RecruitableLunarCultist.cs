@@ -116,19 +116,18 @@ namespace Windfall.Content.NPCs.WorldEvents.LunarCult
             }
             return true;
         }
-        public override bool CanChat()
-        {
-            if (!Chattable || NPC.FindFirstNPC(ModContent.NPCType<TheOrator>()) != -1)
-                return false;
-            else
-                return true;
-        }
+        public override bool CanChat() => Chattable && NPC.FindFirstNPC(ModContent.NPCType<TheOrator>()) == -1;
         public override string GetChat()
         {
             Main.CloseNPCChatOrSign();
-            
+
             if (State != DialogueState.Unrecruited && State != DialogueState.Recruitable && State != DialogueState.Recruited)
-                ModContent.GetInstance<DialogueUISystem>().DisplayDialogueTree(Windfall.Instance, "Recruits/" + MyName + "/" + LunarCultBaseSystem.CurrentMeetingTopic);
+            {
+                if(LunarCultBaseSystem.CurrentMeetingTopic == 0)
+                    ModContent.GetInstance<DialogueUISystem>().DisplayDialogueTree(Windfall.Instance, "Recruits/" + MyName + "/Default");
+                else
+                    ModContent.GetInstance<DialogueUISystem>().DisplayDialogueTree(Windfall.Instance, "Recruits/" + MyName + "/" + LunarCultBaseSystem.CurrentMeetingTopic);
+            }
             else
                 ModContent.GetInstance<DialogueUISystem>().DisplayDialogueTree(Windfall.Instance, "Recruits/" + MyName + "/" + State);
             return base.GetChat();
