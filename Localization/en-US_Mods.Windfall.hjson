@@ -1121,6 +1121,11 @@ Items: {
 				DisplayName: Cnidri-Snack
 				Tooltip: A Cnidrion's favorite treat!
 			}
+
+			RiftWeaver: {
+				DisplayName: Rift Weaver
+				Tooltip: It silently hums its silken song...
+			}
 		}
 
 		Summon: {
@@ -1510,7 +1515,12 @@ Projectiles: {
 	StatisProj.DisplayName: Statis
 	StatiParry.DisplayName: Parry!
 	ParryBladeProj.DisplayName: Parry Blade
-	Melee.ParryBladeProj.DisplayName: Parry Blade
+
+	Melee: {
+		ParryBladeProj.DisplayName: Parry Blade
+		RiftWeaverStab.DisplayName: Rift Weaver Stab
+	}
+
 	LunarBishopProj.DisplayName: Lunar Bishop
 	OratorProj.DisplayName: Orator Proj
 	OratorEntourageSpawner.DisplayName: Orator Entourage Spawner
@@ -1541,6 +1551,8 @@ Projectiles: {
 	BurningAltar.DisplayName: Burning Altar
 	RitualTorch.DisplayName: Ritual Torch
 	BookPile.DisplayName: Book Pile
+	RiftWeaverProj.DisplayName: Rift Weaver Proj
+	RiftWeaverThrow.DisplayName: Rift Weaver Throw
 }
 
 Buffs: {
