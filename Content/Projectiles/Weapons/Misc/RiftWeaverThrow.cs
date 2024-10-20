@@ -84,7 +84,7 @@ namespace Windfall.Content.Projectiles.Weapons.Misc
                                 Projectile.Center = Target.Center + positionDiff;
                                 Projectile.velocity = Target.velocity;
                             }
-                            else
+                            else if(Target != null)
                             {
                                 impaled = false;
                                 Target = null;
