@@ -1,6 +1,8 @@
-﻿using Luminance.Common.VerletIntergration;
+﻿using CalamityMod.Particles;
+using Luminance.Common.VerletIntergration;
 using Luminance.Core.Graphics;
 using Microsoft.Build.Tasks;
+using System.Threading;
 using static Windfall.Content.NPCs.Bosses.Orator.TheOrator;
 
 namespace Windfall.Content.Projectiles.Weapons.Misc
@@ -11,8 +13,8 @@ namespace Windfall.Content.Projectiles.Weapons.Misc
         private List<VerletSegment> NeedleString = [];
         public override void SetDefaults()
         {
-            Projectile.width = 40;
-            Projectile.height = 40;
+            Projectile.width = 20;
+            Projectile.height = 20;
             Projectile.DamageType = DamageClass.Default;
             Projectile.friendly = true;
             Projectile.penetrate = -1;
@@ -52,7 +54,9 @@ namespace Windfall.Content.Projectiles.Weapons.Misc
             Throwing,
         }
         AIState state = AIState.Aiming;
-
+        float charge = 0f;
+        int chargeCounter = 0;
+        bool fullChargeThrow = false;
         public override void AI()
         {
             Player owner = Main.player[Projectile.owner];
@@ -64,13 +68,36 @@ namespace Windfall.Content.Projectiles.Weapons.Misc
                     Projectile.rotation = (owner.Calamity().mouseWorld - Projectile.Center).ToRotation();
                     owner.SetCompositeArmFront(true, Player.CompositeArmStretchAmount.Quarter, (Pi - (Pi/3f)) * owner.direction);
                     owner.heldProj = Projectile.whoAmI;
-
-                    if (!owner.channel)
+                    if (!Main.mouseRight)
                     {
                         SoundEngine.PlaySound(SoundID.DD2_DarkMageAttack, owner.Center);
+                        if (charge >= 0.985f)
+                            fullChargeThrow = true;
+                        int count = 8;
+                        for (int i = 1; i < count; i++)
+                        {
+                            CalamityMod.Particles.Particle particle = new GlowOrbParticle(Projectile.Center + (owner.Calamity().mouseWorld - Projectile.Center).SafeNormalize(Vector2.Zero) * (620f * charge * (i / (float)count)), (owner.Calamity().mouseWorld - Projectile.Center).SafeNormalize(Vector2.Zero) * 0.01f + owner.velocity, false, 8 * i, 0.5f, i % 2 == 0 ? Color.Cyan : Color.LimeGreen);
+                            GeneralParticleHandler.SpawnParticle(particle);
+                        }
+
                         Projectile.damage = damage;
-                        Projectile.velocity = Projectile.rotation.ToRotationVector2() * 80f;
+                        if(fullChargeThrow)
+                            Projectile.velocity = Projectile.rotation.ToRotationVector2() * 120f;
+                        else
+                            Projectile.velocity = Projectile.rotation.ToRotationVector2() * (80f * charge);
                         state = AIState.Throwing;
+                    }
+                    else
+                    {
+                        int count = 8;
+                        for (int i = 1; i < count; i++)
+                        {
+                            CalamityMod.Particles.Particle particle = new GlowOrbParticle(Projectile.Center + (owner.Calamity().mouseWorld - Projectile.Center).SafeNormalize(Vector2.Zero) * (620f * charge * (i / (float)count)), (owner.Calamity().mouseWorld - Projectile.Center).SafeNormalize(Vector2.Zero) * 0.01f + owner.velocity, false, 4, 0.5f, i % 2 == 0 ? Color.Cyan : Color.LimeGreen);
+                            GeneralParticleHandler.SpawnParticle(particle);
+                        }
+
+                        chargeCounter++;
+                        charge = Clamp(ExpOutEasing(chargeCounter / 120f, 1), 0f, 1f);
                     }
                     break;
 
@@ -88,8 +115,8 @@ namespace Windfall.Content.Projectiles.Weapons.Misc
                             {
                                 impaled = false;
                                 Target = null;
-                                aiCounter = 45;
-                                Projectile.velocity = (owner.Center - Projectile.Center).SafeNormalize(Vector2.Zero) * 8f;
+                                aiCounter = fullChargeThrow ? 30 : 45;
+                                Projectile.velocity = (owner.Center - Projectile.Center).SafeNormalize(Vector2.Zero) * 12f;
                             }
                         }
                         else
@@ -107,32 +134,48 @@ namespace Windfall.Content.Projectiles.Weapons.Misc
                             }
                             impaled = false;
                             Target = null;
-                            aiCounter = 45;
-                            Projectile.velocity = (owner.Center - Projectile.Center).SafeNormalize(Vector2.Zero) * 8f;
+                            aiCounter = fullChargeThrow ? 30 : 45;
+                            Projectile.velocity = (owner.Center - Projectile.Center).SafeNormalize(Vector2.Zero) * 12f;
                         }
                         impaleCounter++;
                     }
                     else
                     {
-                        if (aiCounter < 45 && (owner.Center - Projectile.Center).Length() < 600f)
+                        int timeOut = fullChargeThrow ? 25 : 40;
+                        if(aiCounter < timeOut && Projectile.velocity.Length() > 5f && (fullChargeThrow || Main.rand.NextBool(3)))
                         {
-                            Projectile.velocity *= 0.85f;
+                            for (int i = 0; i < (fullChargeThrow ? 2 : 1); i++)
+                            {
+                                Vector2 particleSpeed = Projectile.velocity.SafeNormalize(Vector2.Zero) * -1 * Clamp(Projectile.velocity.Length() / 6f, 4f, 10f);
+                                CalamityMod.Particles.Particle speedline = new LineParticle(Projectile.Center + Main.rand.NextVector2Circular(20f, 20f), particleSpeed, false, 30, 1f, Main.rand.NextBool() ? Color.Cyan : Color.LimeGreen);
+                                GeneralParticleHandler.SpawnParticle(speedline);
+                            }
+                        }
+                        if (aiCounter < timeOut && (owner.Center - Projectile.Center).Length() < 600f)
+                        {
+                            if(fullChargeThrow)
+                                Projectile.velocity *= 0.78f;
+                            else
+                                Projectile.velocity *= 0.85f;                           
                         }
                         else
                         {
                             Projectile.tileCollide = false;
                             if (Projectile.damage > 0)
                                 Projectile.damage = 0;
-                            if (aiCounter < 45)
-                                aiCounter = 45;
+                            if (aiCounter < timeOut)
+                                aiCounter = timeOut;
                             if (Projectile.velocity.Length() < 64f)
                             {
                                 Projectile.velocity = (owner.Center - Projectile.Center).SafeNormalize(Vector2.Zero) * Projectile.velocity.Length();
-                                Projectile.velocity *= 1.1f;
+                                if (fullChargeThrow)
+                                    Projectile.velocity *= 1.15f;
+                                else
+                                    Projectile.velocity *= 1.1f;
                             }
                             else
                                 Projectile.velocity = (owner.Center - Projectile.Center).SafeNormalize(Vector2.Zero) * 64f;
-                            if (owner.Hitbox.Intersects(Projectile.Hitbox))
+                            if ((bool)Colliding(Projectile.Hitbox, owner.Hitbox))
                                 Projectile.active = false;
                         }
                         Projectile.rotation = (owner.Center - Projectile.Center).ToRotation() + Pi;
@@ -144,6 +187,12 @@ namespace Windfall.Content.Projectiles.Weapons.Misc
         }
         public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
         {
+            bool colorCombo = Main.rand.NextBool();
+            CalamityMod.Particles.Particle pulse = new PulseRing(target.Center + (Projectile.Center - target.Center) / 7f, Vector2.Zero, colorCombo ? Color.Cyan : Color.LimeGreen, 0f, 0.5f, 30);
+            GeneralParticleHandler.SpawnParticle(pulse);
+            pulse = new PulseRing(target.Center + (Projectile.Center - target.Center) / 7f, Vector2.Zero, colorCombo ? Color.LimeGreen : Color.Cyan, 0f, 0.3f, 30);
+            GeneralParticleHandler.SpawnParticle(pulse);
+
             if (!impaled)
             {
                 Projectile.damage = 0;
@@ -163,8 +212,56 @@ namespace Windfall.Content.Projectiles.Weapons.Misc
             impaled = true;
             Projectile.velocity = Vector2.Zero;
             Projectile.tileCollide = false;
-            Projectile.Center += Projectile.rotation.ToRotationVector2() * 16f;
+            /*
+            Vector2 rotVector = oldVelocity.SafeNormalize(Projectile.rotation.ToRotationVector2()) / 10f;
+            Rectangle box = new((int)Projectile.position.X, (int)Projectile.position.Y, Projectile.width, Projectile.height);
+            ModifyDamageHitbox(ref box);
+            Point hitLocation = (box.Center.ToVector2() + (rotVector * box.Width)).ToTileCoordinates();
+
+            Main.NewText(Main.tile[hitLocation].IsTileSolid());
+            if(!Main.tile[hitLocation].IsTileSolid())
+            {
+                Projectile.Center += rotVector * 32;
+                box = new((int)Projectile.position.X, (int)Projectile.position.Y, Projectile.width, Projectile.height);
+                ModifyDamageHitbox(ref box);
+                hitLocation = (box.Center.ToVector2() + (rotVector * box.Width)).ToTileCoordinates();
+                Main.NewText(Main.tile[hitLocation].IsTileSolid());
+            }
+            
+            for (int i = 0; i < 64; i++)
+            {
+                Rectangle hitbox = new((int)Projectile.position.X, (int)Projectile.position.Y, Projectile.width, Projectile.height);
+                ModifyDamageHitbox(ref hitbox);
+                hitLocation = hitbox.Center.ToVector2().ToTileCoordinates();
+                Projectile.Center -= Projectile.rotation.ToRotationVector2();
+                hitbox = new((int)Projectile.position.X, (int)Projectile.position.Y, Projectile.width, Projectile.height);
+                ModifyDamageHitbox(ref hitbox);
+                if (!Main.tile[hitbox.Center.ToVector2().ToTileCoordinates()].IsTileSolid())
+                {
+                    Projectile.Center += Projectile.rotation.ToRotationVector2();
+                    hitbox = new((int)Projectile.position.X, (int)Projectile.position.Y, Projectile.width, Projectile.height);
+                    ModifyDamageHitbox(ref hitbox);
+
+                    Projectile.Center = hitbox.Center() + ((Projectile.Center - hitbox.Center()) / 2f);
+                }
+            }
+            WorldGen.KillTile(hitLocation.X, hitLocation.Y, effectOnly: true);
+            */
             return false;
+        }
+        public override void ModifyDamageHitbox(ref Rectangle hitbox)
+        {
+            /*
+            if (aiCounter < (fullChargeThrow ? 25 : 40))
+            {
+                Vector2 rotation = Projectile.rotation.ToRotationVector2() * (30f * (aiCounter > (fullChargeThrow ? 25 : 40) ? -1 : 1));
+                hitbox.Location = new Point((int)(hitbox.Location.X + rotation.X), (int)(hitbox.Location.Y + rotation.Y));
+            }
+            */
+        }
+        public override bool? Colliding(Rectangle projHitbox, Rectangle targetHitbox)
+        {         
+            return CalamityUtils.RotatingHitboxCollision(Projectile, targetHitbox.TopLeft(), targetHitbox.Size());
         }
 
         public override bool PreDraw(ref Color lightColor)

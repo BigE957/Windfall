@@ -67,20 +67,32 @@ namespace Windfall.Content.Projectiles.Weapons.Misc
             hitCount++;
             if (hitCount >= 5)
             {
-                hitCount = 0;
-                Owner.velocity = (target.Center - Owner.Center).SafeNormalize(Vector2.Zero) * -12f;
-                if(Math.Abs(Owner.velocity.Y) < 8f)
-                    Owner.velocity.Y = -8;
-                if (Owner.velocity.Y > 0)
-                    Owner.velocity.Y *= -1;
-                Owner.velocity.X /= 2f;
+                bool colorCombo = Main.rand.NextBool();
+                Particle pulse = new PulseRing(target.Center + (Owner.Center - target.Center) / 7f, Vector2.Zero, colorCombo ? Color.Cyan : Color.LimeGreen, 0f, 0.5f, 30);
+                GeneralParticleHandler.SpawnParticle(pulse);
+                pulse = new PulseRing(target.Center + (Owner.Center - target.Center) / 7f, Vector2.Zero, colorCombo ? Color.LimeGreen : Color.Cyan, 0f, 0.3f, 30);
+                GeneralParticleHandler.SpawnParticle(pulse);
+
+                Owner.velocity.Y = -12;
+                Owner.velocity.X = target.Center.X > Owner.Center.X ? -4 : 4;
+
                 if (target.type == ModContent.NPCType<PortalMole>())
                     target.life = 0;
+
+                hitCount = 0;
             }
-            else if (Owner.velocity.Y != 0)
+            else
             {
-                Owner.velocity.X /= 2f;
-                Owner.velocity.Y = -4f;
+                Particle pulse = new PulseRing(target.Center + (Owner.Center - target.Center) / 7f, Vector2.Zero, Main.rand.NextBool() ? Color.Cyan : Color.LimeGreen, 0f, 0.3f, 30);
+                GeneralParticleHandler.SpawnParticle(pulse);
+                if (Owner.velocity.Y != 0)
+                {
+                    Owner.velocity.X /= 2f;
+                    if (Owner.velocity.Y / 2f < -4f)
+                        Owner.velocity.Y /= 2f;
+                    else
+                        Owner.velocity.Y = -4f;
+                }
             }
         }
     }
