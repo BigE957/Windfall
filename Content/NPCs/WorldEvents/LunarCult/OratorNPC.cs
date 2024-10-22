@@ -1,5 +1,11 @@
 ﻿using Windfall.Common.Systems.WorldEvents;
 using DialogueHelper.Content.UI.Dialogue;
+using CalamityMod.Items.Accessories;
+using Windfall.Common.Utils;
+using Windfall.Content.Items.Fishing;
+using Windfall.Content.Items.Utility;
+using Windfall.Content.Items.Weapons.Misc;
+using Windfall.Content.Items.Quest;
 
 namespace Windfall.Content.NPCs.WorldEvents.LunarCult
 {
@@ -73,6 +79,17 @@ namespace Windfall.Content.NPCs.WorldEvents.LunarCult
                 orator.ai[0] = 0;
                 return;
             }
+        }
+        public override void AddShops()
+        {
+            int lunarCoinID = ModContent.ItemType<LunarCoin>();
+            var shop = new NPCShop(Type);
+            shop.Add(new Item(ModContent.ItemType<RiftWeaver>())
+            {
+                shopCustomPrice = 3,
+                shopSpecialCurrency = lunarCoinID
+            });
+            shop.Register();
         }
     }
 }
