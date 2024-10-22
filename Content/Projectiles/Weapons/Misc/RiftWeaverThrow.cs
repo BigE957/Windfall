@@ -13,7 +13,7 @@ namespace Windfall.Content.Projectiles.Weapons.Misc
         private List<VerletSegment> NeedleString = [];
         public override void SetDefaults()
         {
-            Projectile.width = 20;
+            Projectile.width = 70;
             Projectile.height = 20;
             Projectile.DamageType = DamageClass.Default;
             Projectile.friendly = true;
@@ -80,7 +80,7 @@ namespace Windfall.Content.Projectiles.Weapons.Misc
                             GeneralParticleHandler.SpawnParticle(particle);
                         }
 
-                        Projectile.damage = damage;
+                        Projectile.damage = (int)(damage * 1.5f * charge);
                         if(fullChargeThrow)
                             Projectile.velocity = Projectile.rotation.ToRotationVector2() * 120f;
                         else
@@ -147,7 +147,7 @@ namespace Windfall.Content.Projectiles.Weapons.Misc
                             for (int i = 0; i < (fullChargeThrow ? 2 : 1); i++)
                             {
                                 Vector2 particleSpeed = Projectile.velocity.SafeNormalize(Vector2.Zero) * -1 * Clamp(Projectile.velocity.Length() / 6f, 4f, 10f);
-                                CalamityMod.Particles.Particle speedline = new LineParticle(Projectile.Center + Main.rand.NextVector2Circular(20f, 20f), particleSpeed, false, 30, 1f, Main.rand.NextBool() ? Color.Cyan : Color.LimeGreen);
+                                CalamityMod.Particles.Particle speedline = new SparkParticle(Projectile.Center + Main.rand.NextVector2Circular(20f, 20f), particleSpeed, false, 30, 1f, Main.rand.NextBool() ? Color.Cyan : Color.LimeGreen);
                                 GeneralParticleHandler.SpawnParticle(speedline);
                             }
                         }
@@ -175,7 +175,7 @@ namespace Windfall.Content.Projectiles.Weapons.Misc
                             }
                             else
                                 Projectile.velocity = (owner.Center - Projectile.Center).SafeNormalize(Vector2.Zero) * 64f;
-                            if ((bool)Colliding(Projectile.Hitbox, owner.Hitbox))
+                            if ((bool)Colliding(Projectile.Hitbox, owner.Hitbox) || (Projectile.Center - owner.Center).LengthSquared() < 16f)
                                 Projectile.active = false;
                         }
                         Projectile.rotation = (owner.Center - Projectile.Center).ToRotation() + Pi;
@@ -260,8 +260,14 @@ namespace Windfall.Content.Projectiles.Weapons.Misc
             */
         }
         public override bool? Colliding(Rectangle projHitbox, Rectangle targetHitbox)
-        {         
-            return CalamityUtils.RotatingHitboxCollision(Projectile, targetHitbox.TopLeft(), targetHitbox.Size());
+        {
+            if (CalamityUtils.RotatingHitboxCollision(Projectile, targetHitbox.TopLeft(), targetHitbox.Size()))
+                return true;
+            Projectile.Center -= Projectile.velocity / 2f;
+            if(CalamityUtils.RotatingHitboxCollision(Projectile, targetHitbox.TopLeft(), targetHitbox.Size()))
+                return true;
+            Projectile.Center += Projectile.velocity / 2f;
+            return false;
         }
 
         public override bool PreDraw(ref Color lightColor)
