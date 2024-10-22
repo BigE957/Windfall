@@ -11,9 +11,12 @@
     <None Remove="Assets\Graphics\Metaballs\Empyrean_Metaball\EmpyreanLayer3.png" />
     <None Remove="Assets\Graphics\Metaballs\Empyrean_Metaball\EmpyreanLayer4.png" />
     <None Remove="Assets\Graphics\Metaballs\Empyrean_Metaball\EmpyreanLayer5.png" />
+    <None Remove="Assets\Items\Essences\EoWEssence.png" />
+    <None Remove="Assets\Items\Essences\PerfEssence.png" />
     <None Remove="Assets\Items\Essences\SlimeEssence.png" />
     <None Remove="Assets\Items\Weapons\Misc\RiftWeaver.png" />
     <None Remove="Assets\Items\Weapons\Misc\RiftWeaverGlow.png" />
+    <None Remove="Assets\Items\Weapons\Summon\ShadowHandStaff.png" />
     <None Remove="Assets\Projectiles\Boss\HandRings.png" />
     <None Remove="Assets\Projectiles\Boss\HandRingsWhiteOut0.png" />
     <None Remove="Assets\Projectiles\Boss\HandRingsWhiteOut1.png" />

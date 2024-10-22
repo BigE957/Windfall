@@ -7,7 +7,7 @@ namespace Windfall.Content.Items.Weapons.Summon
     public class ShadowHandStaff : ModItem, ILocalizedModType
     {
         public new string LocalizationCategory => "Items.Weapons.Summon";
-        public override string Texture => "CalamityMod/Items/Weapons/Magic/TomeofFates";
+        public override string Texture => "Windfall/Assets/Items/Weapons/Summon/ShadowHandStaff";
         public override void SetDefaults()
         {
             Item.width = 28;
