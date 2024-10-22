@@ -1196,6 +1196,22 @@ Items: {
 			Tooltip: Echoes a sound burned deep into the memory of all Ilmeran Paladins
 		}
 
+		Moonlight: {
+			DisplayName: Moonlight
+			Tooltip: Shifts the phase of the Moon.
+		}
+
+		MoonPhaseChanges: {
+			0: The Moon's light shines at its fullest.
+			1: The Moon shifts to a Waning Gibbous.
+			2: The Moon reaches its Third Quarter.
+			3: The Moon shifts to a Waning Crescent.
+			4: The Moon's light fades completely.
+			5: The Moon shifts to Waxing Crescent.
+			6: The Moon reaches its First Quarter.
+			7: The Moon shifts to a Waxing Gibbous.
+		}
+
 		LunarCultBaseSeeker: {
 			DisplayName: Lunar Cult Base Seeker
 			Tooltip: ""
@@ -1379,6 +1395,11 @@ Items: {
 
 		Mask: {
 			DisplayName: Mask
+			Tooltip: ""
+		}
+
+		LunarCoin: {
+			DisplayName: Lunar Coin
 			Tooltip: ""
 		}
 	}

@@ -89,6 +89,11 @@ namespace Windfall.Content.NPCs.WorldEvents.LunarCult
                 shopCustomPrice = 3,
                 shopSpecialCurrency = lunarCoinID
             });
+            shop.Add(new Item(ModContent.ItemType<Moonlight>())
+            {
+                shopCustomPrice = 1,
+                shopSpecialCurrency = lunarCoinID
+            });
             shop.Register();
         }
     }
