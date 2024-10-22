@@ -11,7 +11,7 @@ using Windfall.Content.NPCs.Critters;
 using Windfall.Content.Buffs.DoT;
 using Windfall.Content.Projectiles.ProjectileAnimations;
 using Windfall.Content.UI;
-using Terraria;
+using Terraria.Enums;
 
 namespace Windfall.Common.Systems.WorldEvents
 {
@@ -58,7 +58,7 @@ namespace Windfall.Common.Systems.WorldEvents
             spawnChance = 5;
 
             Active = false;
-            State = SystemState.CheckReqs;
+            State = SystemStates.CheckReqs;
         }
         public override void LoadWorldData(TagCompound tag)
         {
@@ -97,7 +97,7 @@ namespace Windfall.Common.Systems.WorldEvents
             tag["spawnChance"] = spawnChance;
         }
 
-        public enum SystemState
+        public enum SystemStates
         {
             CheckReqs,
             CheckChance,
@@ -111,7 +111,7 @@ namespace Windfall.Common.Systems.WorldEvents
             Ritual,
             End,
         }
-        public static SystemState State = SystemState.CheckReqs;
+        public static SystemStates State = SystemStates.CheckReqs;
 
         private static bool OnCooldown = true;
         public static bool Active = false;
@@ -219,7 +219,7 @@ namespace Windfall.Common.Systems.WorldEvents
             //TutorialComplete = true;
             switch (State)
             {
-                case SystemState.CheckReqs:
+                case SystemStates.CheckReqs:
                     if (!NPC.downedPlantBoss || Recruits.Count == 4 || OnCooldown || Main.dayTime || AnyBossNPCS(true))
                     {
                         if (Main.dayTime)
@@ -233,15 +233,15 @@ namespace Windfall.Common.Systems.WorldEvents
                     }
                     else
                     {
-                        State = SystemState.CheckChance;
+                        State = SystemStates.CheckChance;
                         break;
                     }
-                case SystemState.CheckChance:
+                case SystemStates.CheckChance:
                     if (spawnChance < 1)
                         spawnChance = 1;
                     if (Main.rand.NextBool(spawnChance))
                     {
-                        State = SystemState.Waiting;
+                        State = SystemStates.Waiting;
                         spawnChance = 5;
                         #region Activity Alert
                         foreach (Player player in Main.player)
@@ -262,10 +262,10 @@ namespace Windfall.Common.Systems.WorldEvents
                         if(spawnChance > 1)
                             spawnChance--;
                         OnCooldown = true;
-                        State = SystemState.CheckReqs;
+                        State = SystemStates.CheckReqs;
                     }
                     break;
-                case SystemState.Waiting:
+                case SystemStates.Waiting:
                     if (ActivityTimer == -1)
                     { 
                         ActivityCoords = new Point(LunarCultBaseLocation.X + 63, LunarCultBaseLocation.Y - 6);
@@ -282,18 +282,18 @@ namespace Windfall.Common.Systems.WorldEvents
                     Player closestPlayer = Main.player[Player.FindClosest(new Vector2(ActivityCoords.X, ActivityCoords.Y), 300, 300)];
                     float PlayerDistFromHideout = new Vector2(closestPlayer.Center.X - ActivityCoords.X, closestPlayer.Center.Y - ActivityCoords.Y).Length();
                     if (PlayerDistFromHideout < 160f && closestPlayer.Center.Y < ActivityCoords.Y + 16)
-                        State = SystemState.Yap;
+                        State = SystemStates.Yap;
                     #endregion
                     #region Despawn
                     if (Main.dayTime)
                     {
                         ActivityCoords = new(-1, -1);
-                        State = SystemState.CheckReqs;
+                        State = SystemStates.CheckReqs;
                         OnCooldown = true;
                     }
                     #endregion
                     break;
-                case SystemState.Yap:
+                case SystemStates.Yap:
                     NPC bishop = Main.npc.First(n => n.active && n.type == ModContent.NPCType<LunarBishop>() && n.ai[2] == 2);
                     string path = "Dialogue.LunarCult.LunarBishop.Greeting.";
 
@@ -332,7 +332,7 @@ namespace Windfall.Common.Systems.WorldEvents
                                 break;
                             case 1020:
                                 bishop.As<LunarBishop>().Despawn();
-                                State = SystemState.Ready;
+                                State = SystemStates.Ready;
                                 break;
                         }
                     }
@@ -343,11 +343,11 @@ namespace Windfall.Common.Systems.WorldEvents
                     {
                         if (RecruitmentsSkipped >= 3)
                             path += "Betrayal";
-                        else if (false)//Main.moonPhase == (int)MoonPhase.Full || Main.moonPhase == (int)MoonPhase.Empty) //Ritual
+                        else if (Main.moonPhase == (int)MoonPhase.Full || Main.moonPhase == (int)MoonPhase.Empty) //Ritual
                             path += "Ritual.";
-                        else if (true)//Main.moonPhase == (int)MoonPhase.QuarterAtLeft || Main.moonPhase == (int)MoonPhase.QuarterAtRight) //Meeting
+                        else if (Main.moonPhase == (int)MoonPhase.QuarterAtLeft || Main.moonPhase == (int)MoonPhase.QuarterAtRight) //Meeting
                             path += "Meeting.";
-                        else if (false)//Main.moonPhase == (int)MoonPhase.HalfAtLeft || Main.moonPhase == (int)MoonPhase.HalfAtRight) //Tailor
+                        else if (Main.moonPhase == (int)MoonPhase.HalfAtLeft || Main.moonPhase == (int)MoonPhase.HalfAtRight) //Tailor
                             path += "Tailor.";
                         else //Cafeteria
                             path += "Cafeteria.";
@@ -364,7 +364,7 @@ namespace Windfall.Common.Systems.WorldEvents
                                 break;
                             case 360:
                                 bishop.As<LunarBishop>().Despawn();
-                                State = SystemState.Ready;
+                                State = SystemStates.Ready;
                                 break;
                         }
                     }
@@ -380,13 +380,13 @@ namespace Windfall.Common.Systems.WorldEvents
                     #endregion
 
                     ActivityTimer++;
-                    if (State == SystemState.Ready)
+                    if (State == SystemStates.Ready)
                     {
                         ActivityTimer = -1;
                         return;
                     }
                     break;
-                case SystemState.Ready:     
+                case SystemStates.Ready:     
                     if(ActivityTimer == -1)
                     {
                         #region Activity Specific Setup
@@ -398,12 +398,12 @@ namespace Windfall.Common.Systems.WorldEvents
                                 NPC.NewNPC(Entity.GetSource_None(), (CultBaseArea.Right - 11) * 16, (CultBaseArea.Top + 30) * 16, ModContent.NPCType<OratorNPC>(), ai0: 1);
                             else
                                 Main.npc[NPC.FindFirstNPC(ModContent.NPCType<OratorNPC>())].ai[0] = 1;
-                            State = SystemState.OratorVisit;
+                            State = SystemStates.OratorVisit;
                             Active = true;
                         }
                         else
                         {
-                            if (false)//Main.moonPhase == (int)MoonPhase.Full || Main.moonPhase == (int)MoonPhase.Empty) //Ritual
+                            if (Main.moonPhase == (int)MoonPhase.Full || Main.moonPhase == (int)MoonPhase.Empty) //Ritual
                             {
                                 #region Location Selection
                                 ActivityCoords = new Point(LunarCultBaseLocation.X - 37, LunarCultBaseLocation.Y - 24);
@@ -451,7 +451,7 @@ namespace Windfall.Common.Systems.WorldEvents
 
                                 #endregion
                             }
-                            else if (false)//Main.moonPhase == (int)MoonPhase.QuarterAtLeft || Main.moonPhase == (int)MoonPhase.QuarterAtRight) //Meeting
+                            else if (Main.moonPhase == (int)MoonPhase.QuarterAtLeft || Main.moonPhase == (int)MoonPhase.QuarterAtRight) //Meeting
                             {
                                 #region Location Selection
                                 ActivityCoords = new Point(LunarCultBaseLocation.X - 48, LunarCultBaseLocation.Y + 18);
@@ -555,7 +555,7 @@ namespace Windfall.Common.Systems.WorldEvents
                                 }
                                 #endregion
                             }
-                            else if (true)//Main.moonPhase == (int)MoonPhase.HalfAtLeft || Main.moonPhase == (int)MoonPhase.HalfAtRight) //Tailor
+                            else if (Main.moonPhase == (int)MoonPhase.HalfAtLeft || Main.moonPhase == (int)MoonPhase.HalfAtRight) //Tailor
                             {
                                 #region Location Selection
                                 Vector2 seamstressCenter = Main.npc[NPC.FindFirstNPC(ModContent.NPCType<Seamstress>())].Center;
@@ -567,7 +567,7 @@ namespace Windfall.Common.Systems.WorldEvents
                                 ClothesGoal = 5 * (Main.player.Where(p => p.active).Count() + 1);
                             }
                             else //Cafeteria
-                            {
+                            {                                
                                 Vector2 chefCenter = Main.npc[NPC.FindFirstNPC(ModContent.NPCType<TheChef>())].Center;
                                 ActivityCoords = new((int)chefCenter.X, (int)chefCenter.Y);
 
@@ -606,7 +606,7 @@ namespace Windfall.Common.Systems.WorldEvents
                     else if (Main.dayTime && !Active && PlayerDistFromHideout > 4000f)
                     {
                         ActivityCoords = new(-1, -1);
-                        State = SystemState.CheckReqs;
+                        State = SystemStates.CheckReqs;
                         OnCooldown = true;
                         foreach (int k in NPCIndexs)
                         {
@@ -616,11 +616,11 @@ namespace Windfall.Common.Systems.WorldEvents
                     #endregion
                     
                     break;
-                case SystemState.OratorVisit:
+                case SystemStates.OratorVisit:
                     if ((TutorialComplete && RecruitmentsSkipped < 3) || (BetrayalActive && RecruitmentsSkipped >= 3))
                     {
                         Active = false;
-                        State = SystemState.End;
+                        State = SystemStates.End;
                     }
                     else
                     {
@@ -630,7 +630,7 @@ namespace Windfall.Common.Systems.WorldEvents
                             Main.npc[NPC.FindFirstNPC(ModContent.NPCType<OratorNPC>())].ai[0] = 3;
                     }
                     break;
-                case SystemState.Meeting:                     
+                case SystemStates.Meeting:                     
                     if (Active)
                     {
                         #region Meeting Scene
@@ -858,8 +858,8 @@ namespace Windfall.Common.Systems.WorldEvents
                             NPC npc = Main.npc[i];
                             if (npc.type == ModContent.NPCType<LunarBishop>())
                             {
-                                Item i = Main.item[Item.NewItem(npc.GetSource_Loot(), npc.Center, new Vector2(8, 4), ModContent.ItemType<LunarCoin>())];
-                                i.velocity = Vector2.UnitY * -4;
+                                Item item = Main.item[Item.NewItem(npc.GetSource_Loot(), npc.Center, new Vector2(8, 4), ModContent.ItemType<LunarCoin>())];
+                                item.velocity = Vector2.UnitY * -4;
 
                                 for (int j = 0; j < 50; j++)
                                 {
@@ -878,12 +878,12 @@ namespace Windfall.Common.Systems.WorldEvents
                         }
                         #endregion
 
-                        State = SystemState.End;
+                        State = SystemStates.End;
                     }
                     break;
-                case SystemState.Tailor:
+                case SystemStates.Tailor:
                     if (!Active)
-                        State = SystemState.End;
+                        State = SystemStates.End;
                     else
                     {
                         if (ActivityTimer == 240)
@@ -893,7 +893,7 @@ namespace Windfall.Common.Systems.WorldEvents
                         ActivityTimer++;
                     }
                     break;
-                case SystemState.Cafeteria:
+                case SystemStates.Cafeteria:
                     if(Active)
                     {
                         if (CustomerQueue.Count >= CustomerLimit || AtMaxTimer >= 10 * 60)
@@ -930,9 +930,9 @@ namespace Windfall.Common.Systems.WorldEvents
                         ActivityTimer++;
                     }
                     else
-                        State = SystemState.End;
+                        State = SystemStates.End;
                     break;
-                case SystemState.Ritual:
+                case SystemStates.Ritual:
                     //ActivePortals = 0;
                     if (PortalsDowned < RequiredPortalKills && RemainingCultists > 0 && ActivePortals < RemainingCultists && ActivityTimer >= 60 && Main.rand.NextBool(100)) //Spawn New Customer
                     {
@@ -959,7 +959,7 @@ namespace Windfall.Common.Systems.WorldEvents
                             case 400:
                                 if (Main.netMode != NetmodeID.MultiplayerClient)
                                 {
-                                    Vector2 spawnPos = new Vector2(ActivityCoords.X, ActivityCoords.Y - 280);
+                                    Vector2 spawnPos = new(ActivityCoords.X, ActivityCoords.Y - 280);
                                     Projectile.NewProjectile(Projectile.GetSource_NaturalSpawn(), spawnPos, Vector2.Zero, ModContent.ProjectileType<DoGRift>(), 0, 0f);
                                 }
                                 break;
@@ -1026,7 +1026,7 @@ namespace Windfall.Common.Systems.WorldEvents
                             case 2220:
                                 if (Main.npc[NPCIndexs[0]].active)
                                 {
-                                    for (int i = 0; i <= 50; i++)
+                                    for (int j = 0; j <= 50; j++)
                                     {
                                         int dustStyle = Main.rand.NextBool() ? 66 : 263;
                                         Vector2 speed = Main.rand.NextVector2Circular(1.5f, 2f);
@@ -1039,7 +1039,7 @@ namespace Windfall.Common.Systems.WorldEvents
                                 }
                                 if (Main.npc[NPCIndexs[5]].active)
                                 {
-                                    for (int i = 0; i <= 50; i++)
+                                    for (int j = 0; j <= 50; j++)
                                     {
                                         int dustStyle = Main.rand.NextBool() ? 66 : 263;
                                         Vector2 speed = Main.rand.NextVector2Circular(1.5f, 2f);
@@ -1054,7 +1054,7 @@ namespace Windfall.Common.Systems.WorldEvents
                             case 2240:
                                 if (Main.npc[NPCIndexs[1]].active)
                                 {
-                                    for (int i = 0; i <= 50; i++)
+                                    for (int j = 0; j <= 50; j++)
                                     {
                                         int dustStyle = Main.rand.NextBool() ? 66 : 263;
                                         Vector2 speed = Main.rand.NextVector2Circular(1.5f, 2f);
@@ -1067,7 +1067,7 @@ namespace Windfall.Common.Systems.WorldEvents
                                 }
                                 if (Main.npc[NPCIndexs[4]].active)
                                 {
-                                    for (int i = 0; i <= 50; i++)
+                                    for (int j = 0; j <= 50; j++)
                                     {
                                         int dustStyle = Main.rand.NextBool() ? 66 : 263;
                                         Vector2 speed = Main.rand.NextVector2Circular(1.5f, 2f);
@@ -1082,7 +1082,7 @@ namespace Windfall.Common.Systems.WorldEvents
                             case 2260:
                                 if (Main.npc[NPCIndexs[2]].active)
                                 {
-                                    for (int i = 0; i <= 50; i++)
+                                    for (int j = 0; j <= 50; j++)
                                     {
                                         int dustStyle = Main.rand.NextBool() ? 66 : 263;
                                         Vector2 speed = Main.rand.NextVector2Circular(1.5f, 2f);
@@ -1095,7 +1095,7 @@ namespace Windfall.Common.Systems.WorldEvents
                                 }
                                 if (Main.npc[NPCIndexs[3]].active)
                                 {
-                                    for (int i = 0; i <= 50; i++)
+                                    for (int j = 0; j <= 50; j++)
                                     {
                                         int dustStyle = Main.rand.NextBool() ? 66 : 263;
                                         Vector2 speed = Main.rand.NextVector2Circular(1.5f, 2f);
@@ -1117,7 +1117,7 @@ namespace Windfall.Common.Systems.WorldEvents
                                 DisplayMessage(orator.Hitbox, Color.LimeGreen, "Dialogue.LunarCult.TheOrator.WorldText.Ritual.Success.19");
                                 break;
                             case 2560:
-                                for (int i = 0; i <= 50; i++)
+                                for (int j = 0; j <= 50; j++)
                                 {
                                     int dustStyle = Main.rand.NextBool() ? 66 : 263;
                                     Vector2 speed = Main.rand.NextVector2Circular(2f, 2.5f);
@@ -1179,13 +1179,13 @@ namespace Windfall.Common.Systems.WorldEvents
                     else
                         ActivityTimer++;
                     if(!Active)
-                        State = SystemState.End;
+                        State = SystemStates.End;
                     break;
-                case SystemState.End:
+                case SystemStates.End:
                     ActivityCoords = new(-1, -1);
                     OnCooldown = true;
                     RecruitmentsSkipped++;
-                    State = SystemState.CheckReqs;
+                    State = SystemStates.CheckReqs;
 
                     if (!BetrayalActive)
                     {
@@ -1233,9 +1233,9 @@ namespace Windfall.Common.Systems.WorldEvents
             CombatText MyDialogue = Main.combatText[CombatText.NewText(location, color, GetWindfallTextValue(text), true)];
             return MyDialogue;
         }
-        public static bool IsTailorActivityActive() => Active && State == SystemState.Tailor;
-        public static bool IsCafeteriaActivityActive() => Active && State == SystemState.Cafeteria;
-        public static bool IsRitualActivityActive() => Active && State == SystemState.Ritual;
+        public static bool IsTailorActivityActive() => Active && State == SystemStates.Tailor;
+        public static bool IsCafeteriaActivityActive() => Active && State == SystemStates.Cafeteria;
+        public static bool IsRitualActivityActive() => Active && State == SystemStates.Ritual;
         public static Response[] GetMenuResponses()
         {
             Response[] Responses = new Response[MenuFoodIDs.Count];

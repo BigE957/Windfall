@@ -1,6 +1,7 @@
 ﻿using Humanizer;
 using Terraria;
 using Terraria.Enums;
+using Windfall.Common.Systems.WorldEvents;
 using Windfall.Content.Items.Quest;
 using Windfall.Content.Items.Quest.Tailor;
 using Windfall.Content.Items.Summoning;
@@ -144,15 +145,13 @@ namespace Windfall.Content.NPCs.WorldEvents.LunarCult
                             CombatText.NewText(location, Color.LimeGreen, "I suppose you've earned this...", true);
                             break;
                         case 540:
-                            Item i = Main.item[Item.NewItem(Entity.GetSource_Loot(), NPC.Center, new Vector2(8, 4), ModContent.ItemType<RuneOfGnosi>())];
+                            Item i = Main.item[Item.NewItem(NPC.GetSource_Loot(), NPC.Center, new Vector2(8, 4), ModContent.ItemType<LunarCoin>())];
                             i.velocity = (Main.player[Main.myPlayer].Center - NPC.Center).SafeNormalize(Vector2.Zero).RotatedBy(Main.rand.NextFloat(-0.5f, 0.5f)) * 4;
                             break;
                         case 600:
                             CombatText.NewText(location, Color.LimeGreen, "I'll look forward to when next we work together!", true);
                             break;
                         case 720:
-                            Item i = Main.item[Item.NewItem(NPC.GetSource_Loot(), NPC.Center, new Vector2(8, 4), ModContent.ItemType<LunarCoin>())];
-                            i.velocity = Vector2.UnitY * -4;
                             Active = false;
                             EndActivity = false;
                             break;
@@ -367,7 +366,7 @@ namespace Windfall.Content.NPCs.WorldEvents.LunarCult
                 return "Erm, what the sigma?"; //will never actually show up, as the dialogue box is closed lol
                 #endregion
             }
-            else if (true)//Main.moonPhase == (int)MoonPhase.HalfAtLeft || Main.moonPhase == (int)MoonPhase.HalfAtRight && LunarCultbaseSystem.State == LunarCultbaseSystem.SystemStates.Ready)
+            else if (Main.moonPhase == (int)MoonPhase.HalfAtLeft || Main.moonPhase == (int)MoonPhase.HalfAtRight && State == SystemStates.Ready)
             {
                 if (CurrentDialogue == 0 && MyPlayer.LunarCult().SeamstressTalked)
                     CurrentDialogue = DialogueState.Start;
@@ -387,11 +386,11 @@ namespace Windfall.Content.NPCs.WorldEvents.LunarCult
             if (!firstButton && (CurrentDialogue == DialogueState.Initial || CurrentDialogue == DialogueState.End || CurrentDialogue == DialogueState.Start || (int)CurrentDialogue == -1))
             {
                 CompletedClothesCount = 0;
-                State = SystemState.Tailor;
+                State = SystemStates.Tailor;
                 Active = true;
                 BeginActivity = true;
             }
-            if (true)//Main.moonPhase == (int)MoonPhase.HalfAtLeft || Main.moonPhase == (int)MoonPhase.HalfAtRight && LunarCultbaseSystem.State == LunarCultbaseSystem.SystemStates.Ready)
+            if (Main.moonPhase == (int)MoonPhase.HalfAtLeft || Main.moonPhase == (int)MoonPhase.HalfAtRight && State == SystemStates.Ready)
             {
                 Player MyPlayer = Main.player[Main.myPlayer];
                 string seamstressPath = "Dialogue.LunarCult.Seamstress.";
@@ -411,7 +410,7 @@ namespace Windfall.Content.NPCs.WorldEvents.LunarCult
         }
         public override void SetChatButtons(ref string button, ref string button2)
         {
-            if (true)//Main.moonPhase == (int)MoonPhase.HalfAtLeft || Main.moonPhase == (int)MoonPhase.HalfAtRight && LunarCultbaseSystem.State == LunarCultbaseSystem.SystemStates.Ready)
+            if (Main.moonPhase == (int)MoonPhase.HalfAtLeft || Main.moonPhase == (int)MoonPhase.HalfAtRight && State == SystemStates.Ready)
                 SetConversationButtons(MyDialogue, (int)CurrentDialogue, ref button, ref button2);
             else
                 button = "Okay.";

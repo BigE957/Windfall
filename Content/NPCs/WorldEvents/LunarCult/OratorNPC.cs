@@ -61,7 +61,7 @@ namespace Windfall.Content.NPCs.WorldEvents.LunarCult
             else if (treeKey == "TheOrator/" + States.RitualEvent.ToString() && buttonID == 1)
             {
                 NPC orator = Main.npc.First(n => n.active && n.type == ModContent.NPCType<OratorNPC>() && n.ai[0] == (int)States.RitualEvent);
-                LunarCultBaseSystem.State = LunarCultBaseSystem.SystemState.Ritual;
+                LunarCultBaseSystem.State = LunarCultBaseSystem.SystemStates.Ritual;
                 LunarCultBaseSystem.Active = true;
                 orator.ai[0] = 0;
                 return;

@@ -1,5 +1,7 @@
 ﻿using Windfall.Common.Systems.WorldEvents;
 using DialogueHelper.Content.UI.Dialogue;
+using Terraria.Enums;
+using static Windfall.Common.Systems.WorldEvents.LunarCultBaseSystem;
 
 namespace Windfall.Content.NPCs.WorldEvents.LunarCult
 {
@@ -70,7 +72,7 @@ namespace Windfall.Content.NPCs.WorldEvents.LunarCult
         public override void AI()
         {
             string chefPath = "Dialogue.LunarCult.TheChef.";
-            if (LunarCultBaseSystem.State == LunarCultBaseSystem.SystemState.Cafeteria)
+            if (LunarCultBaseSystem.State == LunarCultBaseSystem.SystemStates.Cafeteria)
             {
                 if (LunarCultBaseSystem.AtMaxTimer >= 10 * 60)
                 {
@@ -125,13 +127,13 @@ namespace Windfall.Content.NPCs.WorldEvents.LunarCult
         {
             Main.CloseNPCChatOrSign();
 
-            if (LunarCultBaseSystem.IsCafeteriaActivityActive())
+            if (IsCafeteriaActivityActive())
             {
                 DialogueUISystem uiSystem = ModContent.GetInstance<DialogueUISystem>();
                 uiSystem.DisplayDialogueTree(Windfall.Instance, "TheChef/FoodSelection");
                 uiSystem.CurrentTree.Dialogues[0].Responses = LunarCultBaseSystem.GetMenuResponses();
             }
-            else
+            else if((Main.moonPhase == (int)MoonPhase.ThreeQuartersAtLeft || Main.moonPhase == (int)MoonPhase.ThreeQuartersAtRight) && State == SystemStates.Ready)
                 ModContent.GetInstance<DialogueUISystem>().DisplayDialogueTree(Windfall.Instance, "TheChef/CafeteriaActivityStart");
 
             return "Hey chat!";
@@ -170,7 +172,7 @@ namespace Windfall.Content.NPCs.WorldEvents.LunarCult
                 LunarCultBaseSystem.SatisfiedCustomers = 0;
                 LunarCultBaseSystem.CustomerQueue = [];
 
-                LunarCultBaseSystem.State = LunarCultBaseSystem.SystemState.Cafeteria;
+                LunarCultBaseSystem.State = LunarCultBaseSystem.SystemStates.Cafeteria;
                 LunarCultBaseSystem.Active = true;
             }
         }
