@@ -1,6 +1,6 @@
 ﻿namespace Windfall.Content.Items.Quest
 {
-    public class DeificInsignia : ModItem, ILocalizedModType
+    public class LunarCoin : ModItem, ILocalizedModType
     {
         public new string LocalizationCategory => "Items.Quest";
         public override void SetDefaults()

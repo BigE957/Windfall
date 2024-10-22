@@ -1,5 +1,7 @@
 ﻿using Humanizer;
+using Terraria;
 using Terraria.Enums;
+using Windfall.Content.Items.Quest;
 using Windfall.Content.Items.Quest.Tailor;
 using Windfall.Content.Items.Summoning;
 using Windfall.Content.UI;
@@ -149,6 +151,8 @@ namespace Windfall.Content.NPCs.WorldEvents.LunarCult
                             CombatText.NewText(location, Color.LimeGreen, "I'll look forward to when next we work together!", true);
                             break;
                         case 720:
+                            Item i = Main.item[Item.NewItem(NPC.GetSource_Loot(), NPC.Center, new Vector2(8, 4), ModContent.ItemType<LunarCoin>())];
+                            i.velocity = Vector2.UnitY * -4;
                             Active = false;
                             EndActivity = false;
                             break;

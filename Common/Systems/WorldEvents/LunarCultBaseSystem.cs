@@ -11,6 +11,7 @@ using Windfall.Content.NPCs.Critters;
 using Windfall.Content.Buffs.DoT;
 using Windfall.Content.Projectiles.ProjectileAnimations;
 using Windfall.Content.UI;
+using Terraria;
 
 namespace Windfall.Common.Systems.WorldEvents
 {
@@ -857,6 +858,9 @@ namespace Windfall.Common.Systems.WorldEvents
                             NPC npc = Main.npc[i];
                             if (npc.type == ModContent.NPCType<LunarBishop>())
                             {
+                                Item i = Main.item[Item.NewItem(npc.GetSource_Loot(), npc.Center, new Vector2(8, 4), ModContent.ItemType<LunarCoin>())];
+                                i.velocity = Vector2.UnitY * -4;
+
                                 for (int j = 0; j < 50; j++)
                                 {
                                     Vector2 speed = Main.rand.NextVector2Circular(1.5f, 2f);
@@ -884,7 +888,7 @@ namespace Windfall.Common.Systems.WorldEvents
                     {
                         if (ActivityTimer == 240)
                             ModContent.GetInstance<TimerUISystem>().TimerStart(2 * 60 * 60);
-                        else if(ActivityTimer > 240 && (ModContent.GetInstance<TimerUISystem>().EventTimer == null || ModContent.GetInstance<TimerUISystem>().EventTimer.timer < 0))
+                        else if (ActivityTimer > 240 && (ModContent.GetInstance<TimerUISystem>().EventTimer == null || ModContent.GetInstance<TimerUISystem>().EventTimer.timer < 0))
                             Main.npc[NPC.FindFirstNPC(ModContent.NPCType<Seamstress>())].As<Seamstress>().EndActivity = true;
                         ActivityTimer++;
                     }
@@ -893,13 +897,7 @@ namespace Windfall.Common.Systems.WorldEvents
                     if(Active)
                     {
                         if (CustomerQueue.Count >= CustomerLimit || AtMaxTimer >= 10 * 60)
-                        {
-                            if (AtMaxTimer >= 10 * 60)
-                            {
-                                //its joever
-                            }
                             AtMaxTimer++;
-                        }
                         else
                             AtMaxTimer = 0;
                         if (AtMaxTimer < 10 * 60)
@@ -923,6 +921,8 @@ namespace Windfall.Common.Systems.WorldEvents
                             {
                                 NPC chef = Main.npc[NPC.FindFirstNPC(ModContent.NPCType<TheChef>())];
                                 DisplayMessage(chef.Hitbox, Color.LimeGreen, "Dialogue.LunarCult.TheChef.Activity.Finished");
+                                Item i = Main.item[Item.NewItem(chef.GetSource_Loot(), chef.Center, new Vector2(8, 4), ModContent.ItemType<LunarCoin>())];
+                                i.velocity = Vector2.UnitY * -4;
                                 Active = false;
                                 return;
                             }
@@ -1107,7 +1107,16 @@ namespace Windfall.Common.Systems.WorldEvents
                                     Main.npc[NPCIndexs[3]].active = false;
                                 }
                                 break;
-                            case 2280:
+                            case 2290:
+                                DisplayMessage(orator.Hitbox, Color.LimeGreen, "Dialogue.LunarCult.TheOrator.WorldText.Ritual.Success.18");
+                                break;
+                            case 2410:
+                                DisplayMessage(orator.Hitbox, Color.LimeGreen, "Dialogue.LunarCult.TheOrator.WorldText.Ritual.Success.19");
+                                break;
+                            case 2530:
+                                DisplayMessage(orator.Hitbox, Color.LimeGreen, "Dialogue.LunarCult.TheOrator.WorldText.Ritual.Success.19");
+                                break;
+                            case 2560:
                                 for (int i = 0; i <= 50; i++)
                                 {
                                     int dustStyle = Main.rand.NextBool() ? 66 : 263;
@@ -1117,7 +1126,10 @@ namespace Windfall.Common.Systems.WorldEvents
                                     dust.color = dust.type == dustStyle ? Color.LightGreen : default;
                                 }
                                 SoundEngine.PlaySound(LunarCultistDevotee.SpawnSound, orator.Center);
-                                
+
+                                Item i = Main.item[Item.NewItem(orator.GetSource_Loot(), orator.Center, new Vector2(8, 4), ModContent.ItemType<LunarCoin>())];
+                                i.velocity = Vector2.UnitY * -4;
+
                                 Main.npc[NPCIndexs[6]].active = false;
                                 
                                 NPCIndexs = [];

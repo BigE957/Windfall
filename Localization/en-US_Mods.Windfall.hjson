@@ -381,6 +381,9 @@ Dialogue: {
 						15: It is as our benefactor says.
 						16: Continue our righteous works,
 						17: and we shall be see our Paradise.
+						18: And you!
+						19: Well done.
+						20: Your help is, as always, appreciated.
 					}
 
 					Failure: {
