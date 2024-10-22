@@ -429,18 +429,7 @@ Dialogue: {
 		}
 
 		Seamstress: {
-			Conversation: {
-				Tutorial: {
-					Initial: So you're the runt who's gonna be helping me tonight? Great... Just lemme know when you're ready to get started.
-					What: You don't even know what you're doing here...? Great... I guess I'll just have to give you the run down. You're gonna be helping me make some more uniforms. Y'know... robes, hoods, masks... all the good stuff! I'll assign you a specific piece of clothing and give you the materials to make it. All the work stations you'll need to do that are all right here. Once you're done, you bring it back to me, and I give you another. So on and so forth until we've met our quota for the night. Got it?
-					End: Perfect. Then lemme know when you're ready!
-				}
-			}
-
 			Activity: {
-				Ready: So, are you ready to get started?
-				Start: Ah... If it isnt my favorite little underling! Guess you got stuck with helping me again, huh. Welp, lemme know when you're ready!
-
 				Request: {
 					0: Get me a {0}, stat!
 					1: I need a {0} ASAP!!

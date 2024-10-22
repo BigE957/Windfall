@@ -1,0 +1,18 @@
+{
+  "Dialogues": [
+    {
+      "Text": "So, are you ready to get started?",
+      "Responses": [
+        {
+          "Title": "One moment."
+        },
+        {
+          "Title": "I'm ready!"
+        }
+      ]
+    }
+  ],
+  "Characters": [
+    "TheCalamity"
+  ]
+}

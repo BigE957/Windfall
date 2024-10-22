@@ -1,0 +1,18 @@
+{
+  "Dialogues": [
+    {
+      "Text": "Ah... If it isnt my favorite little underling! Guess you got stuck with helping me again, huh. Welp, lemme know when you're ready!",
+      "Responses": [
+        {
+          "Title": "One moment."
+        },
+        {
+          "Title": "I'm ready!"
+        }
+      ]
+    }
+  ],
+  "Characters": [
+    "TheCalamity"
+  ]
+}
