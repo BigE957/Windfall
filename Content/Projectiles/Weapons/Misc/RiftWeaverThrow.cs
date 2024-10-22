@@ -3,6 +3,7 @@ using Luminance.Common.VerletIntergration;
 using Luminance.Core.Graphics;
 using Microsoft.Build.Tasks;
 using System.Threading;
+using Windfall.Content.NPCs.WorldEvents.LunarCult;
 using static Windfall.Content.NPCs.Bosses.Orator.TheOrator;
 
 namespace Windfall.Content.Projectiles.Weapons.Misc
@@ -11,11 +12,16 @@ namespace Windfall.Content.Projectiles.Weapons.Misc
     {
         public override string Texture => "Windfall/Assets/Items/Weapons/Misc/RiftWeaverProj";
         private List<VerletSegment> NeedleString = [];
+        private bool SpacialDamage
+        {
+            get => Projectile.ai[2] != 0;
+            set => Projectile.ai[2] = value ? 1 : 0;
+        }
         public override void SetDefaults()
         {
             Projectile.width = 70;
             Projectile.height = 20;
-            Projectile.DamageType = DamageClass.Default;
+            Projectile.DamageType = SpacialDamage ? DamageClass.Default : DamageClass.Melee;
             Projectile.friendly = true;
             Projectile.penetrate = -1;
             Projectile.timeLeft = int.MaxValue;
@@ -185,6 +191,8 @@ namespace Windfall.Content.Projectiles.Weapons.Misc
             }
             VerletSimulations.RopeVerletSimulation(NeedleString, Projectile.Center - (Vector2.UnitX * 32f).RotatedBy(Projectile.rotation), 200f, new(), owner.Center);
         }
+        public override bool? CanHitNPC(NPC target) => target.type == ModContent.NPCType<PortalMole>() || !SpacialDamage;
+
         public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
         {
             bool colorCombo = Main.rand.NextBool();

@@ -9,6 +9,11 @@ namespace Windfall.Content.Projectiles.Weapons.Misc
         public override float FadeInDuration => 4f;
         public override float FadeOutDuration => 0f;
         public override float TotalDuration => 12f;
+        private bool SpacialDamage 
+        {  
+            get => Projectile.ai[2] != 0; 
+            set => Projectile.ai[2] = value ? 1 : 0;
+        }
         public override void SetDefaults()
         {
             Projectile.Size = new Vector2(24); // This sets width and height to the same value (important when projectiles can rotate)
@@ -17,7 +22,7 @@ namespace Windfall.Content.Projectiles.Weapons.Misc
             Projectile.penetrate = -1;
             Projectile.tileCollide = false;
             Projectile.scale = 1f;
-            Projectile.DamageType = DamageClass.Default;
+            Projectile.DamageType = SpacialDamage ? DamageClass.Default : DamageClass.Melee;
             Projectile.ownerHitCheck = true; // Prevents hits through tiles. Most melee weapons that use projectiles have this
             Projectile.extraUpdates = 1; // Update 1+extraUpdates times per tick
             Projectile.timeLeft = 360; // This value does not matter since we manually kill it earlier, it just has to be higher than the duration we use in AI
@@ -56,7 +61,7 @@ namespace Windfall.Content.Projectiles.Weapons.Misc
         }
         private static NPC Target = null;
         private static int hitCount = 0;
-
+        public override bool? CanHitNPC(NPC target) => target.type == ModContent.NPCType<PortalMole>() || !SpacialDamage;
         public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
         {
             if (Target == null || Target != target)

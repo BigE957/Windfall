@@ -46,14 +46,15 @@ namespace Windfall.Content.Items.Weapons.Misc
             if (player.altFunctionUse == 2)
             {
                 if (!Main.projectile.Any(p => p.active && p.owner == player.whoAmI && p.type == ModContent.ProjectileType<RiftWeaverThrow>()))
-                    Projectile.NewProjectile(Projectile.GetSource_NaturalSpawn(), player.Center - (Vector2.UnitY * player.height / 2.5f) - (Vector2.UnitX * player.width / 2f * player.direction), Vector2.Zero, ModContent.ProjectileType<RiftWeaverThrow>(), Item.damage, Item.knockBack * 1.5f);
+                    Projectile.NewProjectile(source, player.Center - (Vector2.UnitY * player.height / 2.5f) - (Vector2.UnitX * player.width / 2f * player.direction), Vector2.Zero, ModContent.ProjectileType<RiftWeaverThrow>(), damage, knockback * 1.5f, ai2: 1);
                 else
                     return false;
             }
             else if (!AnyProjectiles(ModContent.ProjectileType<RiftWeaverThrow>()))
             {
                 SoundEngine.PlaySound(SoundID.Item1 with { Pitch = 0.6f }, player.Center);
-                return true;
+                Projectile.NewProjectile(source, position, velocity, type, damage, knockback, ai2: 1);
+                return false;
             }
             else
             {
