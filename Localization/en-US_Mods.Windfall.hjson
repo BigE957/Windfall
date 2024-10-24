@@ -481,15 +481,15 @@ Dialogue: {
 			Chat: {
 				Standard1: Do I stand out...?
 				Standard2: I always get the feeling I'm being watched...
-				Standard3: The Lunar Cult grows stronger with each passing day... I hope there's something we can do.
+				Standard3: The Selenic Order grows stronger with each passing day... I hope there's something we can do.
 				Mechanic: That mechanic you have there... she seems familiar. No, no, I'm sure it's nothing.
 				Clothier: ... not much point in guarding such a haunted place anyways. Oh! You! Don't mind me, just thinking out loud.
 				Skeletron: I'm still impressed you managed to take down the Dungeon's guardian. I've heard the cultists who formed it were... very powerful. Very powerful indeed.
-				SkeletronRare: I'm still impressed you managed to take down the Dungeon's guardian. I've heard the cultists who formed it were... very powerful. Very powerful indeed... Handsome too... And quite humble.
-				Tirith: So Tirith has decided to join our cause. His story is a sad one, and the Lunar Cult recruited him at his very lowest... I'm glad he's no longer in their clutches.
-				Vivian: Ah, so you've recruited Vivian to our cause! I remember the cult taking a great interest in them due to their magical capabilities. I think the cult wished to have their own 'Supreme Witch' in the event Yharim ever set his sights on them. Though frankly, I doubt Vivian could ever reach the Supreme Witch's level of power.
-				Tania: Its good to see Tania. Despite the hardships she's endured, she's still as kind as ever. Its a shame the Lunar Cult sees such kindness as a weakness to be exploited.
-				Doro: Ah! Its Doro! You made quite the good choice in recruiting him to our cause. I've never met a harder worker than he. I'm glad he's no longer being used by the cult.
+				SkeletronRare: I'm still impressed you managed to take down the Dungeon's guardian. I've heard the cultists who formed it were... very powerful. Very powerful indeed... Handsome too... And incredibly humble.
+				Tirith: So Tirith has decided to join our cause. His story is a sad one, and the Selenic Order recruited him at his very lowest... I'm glad he's no longer in their clutches.
+				Vivian: Ah, so you've recruited Vivian to our cause! I remember the Orator taking a great interest in them due to their magical capabilities. I think the Order wished to have their own 'Supreme Witch' in the event Yharim ever set his sights on them. Though frankly, I doubt Vivian could ever reach the Supreme Witch's level of power.
+				Tania: Its good to see Tania. Despite the hardships she's endured, she's still as kind as ever. Its a shame the Selenic Order sees such kindness as a weakness to be exploited.
+				Doro: Ah! Its Doro! You made quite the good choice in recruiting him to our cause. I've never met a harder worker than he. I'm glad he's no longer being used by that cult.
 				Skylar: So Skylar's come to join us. She... does know that this isn't some 'role-play' now... right? I'm still impressed she managed to believe that for so long...
 				Jamie: Young Jamie's devotion to the Orator was so strong... I'm impressed you managed to sway them to our cause! You're skills never cease to impress.
 			}
@@ -499,7 +499,7 @@ Dialogue: {
 					NoQuest: You've done a great job! I'll be back when I next need you.
 
 					Bone: {
-						Start: Fun fact: The bones in the Dungeon are packed full of curses! If we can get enough of them, maybe we'll be able to figure out a spell to stop the Lunar Cult. Oh, and don't ask where they got the curses. You don't want to know.
+						Start: Fun fact: The bones in the Dungeon are packed full of curses! If we can get enough of them, maybe we'll be able to figure out a spell to stop the Selenic Order. Oh, and don't ask where they got the curses. You don't want to know.
 						During: Pretty much all of the undead you'll find in the Dungeon are prime sources for the accursed bones we're looking for. About 50 should be enough. Only hard part is getting their owners to part with them, haha.
 						End: Yes, these'll do nicely! I'd uh... Wash your hands after handling this many... With holy water... Actually maybe get a full on baptism... Sorry.
 					}
@@ -507,15 +507,15 @@ Dialogue: {
 					WaterBolt: {
 						Start:
 							'''
-							I hear those Dark Casters carry tend to carry with them a magic tome full of potent water magic. I'd be curious to figure out the origin of these tomes, and if they hold any connection to the Lunar Cult. I mean, how can you be dedicated to the moon and not use water magic?
-							Though, now that I think of it, why would the Lunar Cult care for something so trivial...
+							I hear those Dark Casters carry tend to carry with them a magic tome full of potent water magic. I'd be curious to figure out the origin of these tomes, and if they hold any connection to the Selenic Order. I mean, how can you be dedicated to the moon and not use water magic?
+							Though, now that I think of it, why would the Selenic Order care for something so trivial...
 							'''
-						During: The tome is said to carry with it potent water magic. Why would the Lunar Cult care for such simple forms of magic though...
-						End: Ah! You found it! That does indeed look like the right tome, and considering its age, I can imagine it fitting in the hands of those casters nicely. Thank you! I'll let you know if I find any connection between this and the cult.
+						During: The tome is said to carry with it potent water magic. Why would the Selenic Order care for such simple forms of magic though...
+						End: Ah! You found it! That does indeed look like the right tome, and considering its age, I can imagine it fitting in the hands of those casters nicely. Thank you! I'll let you know if I find any connection between this and that wreched cult.
 					}
 
 					DeificInsignia: {
-						Start: Many of the skeletons which wander that decrepit Dungeon were once devoted soldiers of the Gods; imprisoned within there during the Godseeker's Crusade. I'd bet the insignia they bear might still hold some of the deific essence they were gifted. If you get me some, they may prove helpful in combating the Lunar Cult.
+						Start: Many of the skeletons which wander that decrepit Dungeon were once devoted soldiers of the Gods; imprisoned within there during the Godseeker's Crusade. I'd bet the insignia they bear might still hold some of the deific essence they were gifted. If you get me some, they may prove helpful in combating the Selenic Order.
 						During: Those skeletons are quite angry about their eternal imprisonment within the Dungeon. So don't expect them to part with their patrons' tokens so easilly. If you can get me just five, that should suffice.
 						End: Oh, perfect! Yes, these absolutely reek of deific essence... Though I loathe to handle the stuff, this might just give us an edge.
 					}
@@ -539,7 +539,7 @@ Dialogue: {
 					PrimalLight: {
 						Start: Good news! We need just one more thing before we're ready to begin the sealing ritual! Though... This may be the most difficult thing to acquire. Legend states that the Dragon King used the power of "Primordial Light" to ultimately seal away the behemoth. There's only one entity I know of that might allow us to harness this power: the self-appointed "Empress of Light". Perhaps she holds something that would allow us to harness the power of the Light, as the Dragons' mighty King once did.
 						During: I must warn you not to face the Empress during the day. As light bathes the land, she too can harness Primordial Light. Facing her at night would be a far wiser choice.
-						End: Ah ha! This shard certainly holds a unique power. Its radiance... this must be what we're looking for! I'll need some time to finish preparing for the ritual, but I'll notify you once we're ready. I can taste our victory over the Lunar Cult just over the horizon.
+						End: Ah ha! This shard certainly holds a unique power. Its radiance... this must be what we're looking for! I'll need some time to finish preparing for the ritual, but I'll notify you once we're ready. I can taste our victory over the Selenic Order just over the horizon.
 					}
 				}
 			}
@@ -548,7 +548,7 @@ Dialogue: {
 				0: Ah! You're here!
 				1: We can finally get this thing started!
 				# Recruit1: So this thing will stop the apocalypse?
-				2: Indeed! With this ritual, the Lunar Cult's plans will be stopped in their tracks!
+				2: Indeed! With this ritual, the Selenic Order's plans will be stopped in their tracks!
 				# Recruit2: To think we were helping such a villainous group...
 				3: Yes, yes, I'm aware of how regretful you all are.
 				4: However, we really must get started with this.
@@ -564,9 +564,9 @@ Dialogue: {
 				13: It'd have taken so much longer otherwise...
 				14: Oh, don't look at me like that...
 				15: Their sacrifice will pave our path forward.
-				16: Its the least they can do to atone for their service in the Lunar Cult.
+				16: Its the least they can do to atone for their service in that vile cult.
 				17: ...and four lives are nothing when compared to that of a whole species.
-				18: With the Lunar Cult dealt with, nothing will stop the return of the Dragons!
+				18: With the Selenic Order dealt with, nothing will stop the return of the Dragons!
 				19: To think the Orator really thought he'd be able to usurp *us*!
 				20: Once we're done here I'll put an end to that-
 				21: ...fool?
@@ -1213,7 +1213,7 @@ Items: {
 		}
 
 		LunarCultBaseSeeker: {
-			DisplayName: Lunar Cult Base Seeker
+			DisplayName: Cult Base Seeker
 			Tooltip: ""
 		}
 	}
@@ -1290,13 +1290,13 @@ Items: {
 			Tooltip: ""
 			SeekerTooltip:
 				'''
-				A tablet used by the Lunar Cult for covert communications.
-				Use to detect the location of an active Cult Meeting.
+				A tablet used by the Selenic Order for covert communications.
+				Use to detect the location of the Order's hideout.
 				'''
-			SummonTooltip:
+			SilentTooltip:
 				'''
-				A tablet used by the Lunar Cult for covert communications.
-				It hums near constantly... Calling to you.
+				A tablet used by the Selenic Order for covert communications.
+				It's fallen silent as of recent...
 				'''
 		}
 
@@ -1329,53 +1329,53 @@ Items: {
 
 		LunarArcherMask: {
 			DisplayName: Lunar Archer Mask
-			Tooltip: A freshly made mask to be worn by the Lunar Cult's eyes and ears.
+			Tooltip: A freshly made mask to be worn by the Selenic Order's eyes and ears.
 		}
 
 		LunarBishopHood: {
 			DisplayName: Lunar Bishop Hood
 			Tooltip:
 				'''
-				Hoods such as these are worn only by the most trusted of the Lunar Cult; 
+				Hoods such as these are worn only by the most trusted of the Selenic Order; 
 				those a part of the Orator's inner circle.
 				'''
 		}
 
 		LunarBishopMask: {
 			DisplayName: Lunar Bishop Mask
-			Tooltip: A freshly made mask to be worn by those blessed with the Lunar Cult's deepest knowledge.
+			Tooltip: A freshly made mask to be worn by those blessed with the Selenic Order's deepest knowledge.
 		}
 
 		LunarBishopRobes: {
 			DisplayName: Lunar Bishop Robes
 			Tooltip:
 				'''
-				Ornate robes decorated with various sigils of the Lunar Cult. 
-				Robes such as these place their wearer above the rest amongst the cult.
+				Ornate robes decorated with various sigils of the Selenic Order. 
+				Robes such as these place their wearer above the rest amongst the Order.
 				'''
 		}
 
 		LunarCultistHood: {
-			DisplayName: Lunar Cultist Hood
+			DisplayName: Selenic Disciple Hood
 			Tooltip:
 				'''
-				A simple hood made for low ranked Lunar Cult members. 
-				Alongside a mask, these ensure that the cult's members are indistinguishable from one another.
+				A simple hood made for low ranked Selenic Order members. 
+				Alongside a mask, these ensure that the Order's members are indistinguishable from one another.
 				'''
 		}
 
 		LunarCultistRobes: {
-			DisplayName: Lunar Cultist Robes
+			DisplayName: Selenic Disciple Robes
 			Tooltip:
 				'''
-				Light robes to be worn by the Lunar Cult's rank and file. 
+				Light robes to be worn by the Selenic Order's rank and file. 
 				Such robes allow for quick and stealthy movement.
 				'''
 		}
 
 		LunarDevoteeMask: {
 			DisplayName: Lunar Devotee Mask
-			Tooltip: A freshly made mask to be worn by initiates of the Lunar Cult.
+			Tooltip: A freshly made mask to be worn by initiates of the Selenic Order.
 		}
 
 		DyedHood: {
@@ -1400,7 +1400,7 @@ Items: {
 
 		LunarCoin: {
 			DisplayName: Lunar Coin
-			Tooltip: ""
+			Tooltip: "Currency for trading within the Selenic Order"
 		}
 	}
 
@@ -1496,9 +1496,8 @@ NPCs: {
 	WFCnidrion.DisplayName: Cnidrion
 	IlmeranPaladinKnocked.DisplayName: Unconscious Ilmeran Paladin
 	LoneRonin.DisplayName: Lone Ronin
-	LunarCultistArcher.DisplayName: Lunar Cultist Archer
-	LunarCultistDevotee.DisplayName: Lunar Cultist Devotee
-	LunarCultist.DisplayName: Lunar Cultist
+	LunarCultistArcher.DisplayName: Lunar Archer
+	LunarCultistDevotee.DisplayName: Lunar Devotee
 	LunarBishop.DisplayName: Lunar Bishop
 	TravellingCultist.DisplayName: Travelling Cultist
 	TheOrator.DisplayName: The Orator
@@ -1593,9 +1592,9 @@ Buffs: {
 Status: {
 	Death: {
 		Orator: {
-			1: "{0} was no match for the master of the Lunar Cult."
-			2: "{0} should have joined the Lunar Cult."
-			3: Perhaps the Orator was wrong about {0}.
+			1: "{0} was no match for the master of the Selenic Order."
+			2: "{0} should have joined the Selenic Order."
+			3: The Orator was right to doubt {0}.
 		}
 
 		Entropy: {
@@ -1700,11 +1699,11 @@ LoreItems: {
 Bestiary: {
 	GodseekerKnight: The Godseeker Knights were once the most feared warriors across the lands. Now, few still remain agter the collapse of Yharim's empire. Those who remain however, still hold a fierce loyalty to their master, and still carry out their duty to eradicate the gods.
 	IlmeranPaladin: One of few to have survived the Incineration of Ilmeris, this paladin wanders the remnants of Ilmeris; keeping an eternal vigil over the sands of his former home.
-	TravellingCultist: A strange fellow who's recently begun showing up out of nowhere. He claims to want to fight against the Lunar Cult, but can he really be trusted...?
-	TheOrator: The enigmatic leader of the Lunar Cult, the Orator's motives are unknown, however, their cult has now succeeded in their goal. The titan responsible for the Dragons' extinction now descends upon the world...
+	TravellingCultist: A strange fellow who's recently begun showing up out of nowhere. He claims to want to fight against the Selenic Order, but can he really be trusted...?
+	TheOrator: The enigmatic leader of the Selenic Order and a scholar of forbidden magicks. The Orator's motives are unknown, however, they've now succeeded in their goal. The titan responsible for the Dragons' extinction now descends upon the world... What the Orator could have hoped to gain from this is a mystery; for now.
 	ShadowHand: The strange matter the Orator wields traces its origins to the Distortion. How he manages to handle such potent, otherworldly power is unknown, but that which he is able to conjure through it is all the proof one needs to see the mastery he has attained. Though he seems to lack control over these unstable creations...
-	PortalMole: These strange vortexes are drawn to the reality bending rituals of the Lunar Cult; whatever is making them attempting to feast upon unwitting ritualists. The Lunar Cult does little to protect their members from these rifts, uncaring for whatever fate might befall their members.
-	OratorHand: Some of the Orator's finest creations, he wields full control over these puppets; able to wield them in crushing any foe who'd dare stand in his way. While they hold some of the Distortion's power, they aren't entirely made of it; instead being comprised primarilly of flesh. Where could he have gotten enough to make these...?
+	PortalMole: These strange vortexes are drawn to the reality bending rituals of the Selenic Order; whatever is making them attempting to feast upon unwitting ritualists. The Selenic Order does little to protect their members from these rifts, uncaring for whatever fate might befall their members.
+	OratorHand: Some of the Orator's finest creations, he wields full control over these puppets; capable of crushing any foe who'd dare stand in his way. While they hold some of the Distortion's power, they aren't entirely made of it; instead being comprised primarilly of flesh. Where he could have gotten enough to make them one must wonder...
 }
 
 ModCompat: {
@@ -1755,4 +1754,9 @@ Events: {
 	Tailor: Fashion Frenzy
 	Cafeteria: Lunch-Time Lunacy
 	Ritual: Lunar Communion
+}
+
+Currencies: {
+	LunarCoinCurrency: Lunar Coins
+	SkibidiCurrency: toilets
 }
