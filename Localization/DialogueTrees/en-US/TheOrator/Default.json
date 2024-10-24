@@ -1,0 +1,18 @@
+{
+  "Dialogues": [
+    {
+      "Text": "Can I help you?",
+      "Responses": [
+        {
+          "Title": "Lunar Coins?"
+        },
+        {
+          "Title": "Just wanted to say hi..."
+        }
+      ]
+    }
+  ],
+  "Characters": [
+    "TheOrator"
+  ]
+}

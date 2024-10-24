@@ -6,6 +6,10 @@ using Windfall.Content.Items.Fishing;
 using Windfall.Content.Items.Utility;
 using Windfall.Content.Items.Weapons.Misc;
 using Windfall.Content.Items.Quest;
+using Terraria;
+using Terraria.ModLoader;
+using Windfall.Content.Items.Lore;
+using Terraria.Map;
 
 namespace Windfall.Content.NPCs.WorldEvents.LunarCult
 {
@@ -46,53 +50,69 @@ namespace Windfall.Content.NPCs.WorldEvents.LunarCult
             NPC.knockBackResist = 0f;
             NPC.immortal = true;
         }
-        public override bool CanChat() => NPC.ai[0] != 0 && !ModContent.GetInstance<DialogueUISystem>().isDialogueOpen;
+        public override bool CanChat() => !ModContent.GetInstance<DialogueUISystem>().isDialogueOpen;
         public override string GetChat()
         {
             Main.CloseNPCChatOrSign();
-            Main.NewText(AIState);
-            ModContent.GetInstance<DialogueUISystem>().DisplayDialogueTree(Windfall.Instance, "TheOrator/" + AIState.ToString());
+
+            if (NPC.ai[0] == 0)
+                ModContent.GetInstance<DialogueUISystem>().DisplayDialogueTree(Windfall.Instance, "TheOrator/Default");
+            else
+                ModContent.GetInstance<DialogueUISystem>().DisplayDialogueTree(Windfall.Instance, "TheOrator/" + AIState.ToString());           
 
             return "In the Cult Base, straight Orating it. And by it i mean, lets just say, my Tablet";
         }
         private void CloseEffect(string treeKey, int dialogueID, int buttonID)
         {
-            if (treeKey == "TheOrator/" + States.TutorialChat.ToString())
+            switch(treeKey)
             {
-                NPC orator = Main.npc.First(n => n.active && n.type == ModContent.NPCType<OratorNPC>() && n.ai[0] == (int)States.TutorialChat);
-                LunarCultBaseSystem.TutorialComplete = true;
-                orator.ai[0] = 0;
-                return;
+                case "TheOrator/TutorialChat":
+                    NPC orator = Main.npc.First(n => n.active && n.type == ModContent.NPCType<OratorNPC>() && n.ai[0] == (int)States.TutorialChat);
+                    LunarCultBaseSystem.TutorialComplete = true;
+                    orator.ai[0] = 0;
+                    break;
+                case "TheOrator/RitualEvent":
+                    orator = Main.npc.First(n => n.active && n.type == ModContent.NPCType<OratorNPC>() && n.ai[0] == (int)States.RitualEvent);
+                    LunarCultBaseSystem.State = LunarCultBaseSystem.SystemStates.Ritual;
+                    LunarCultBaseSystem.Active = true;
+                    orator.ai[0] = 0;
+                    break;
+                case "TheOrator/BetrayalChat":
+                    orator = Main.npc.First(n => n.active && n.type == ModContent.NPCType<OratorNPC>() && n.ai[0] == (int)States.TutorialChat);
+                    LunarCultBaseSystem.BetrayalActive = true;
+                    orator.ai[0] = 0;
+                    break;
+                case "TheOrator/Default":
+                    if(buttonID == 0)
+                    {
+                        orator = Main.npc.First(n => n.active && n.type == ModContent.NPCType<OratorNPC>() && n.ai[0] == 0);
+                        Main.playerInventory = true;
+                        Main.stackSplit = 9999;
+                        Main.npcChatText = "";
+                        Main.LocalPlayer.SetTalkNPC(orator.whoAmI);
+                        Main.SetNPCShopIndex(1);
+                        Main.instance.shop[Main.npcShop].SetupShop(NPCShopDatabase.GetShopName(orator.type, "Shop"), orator);
+                        SoundEngine.PlaySound(SoundID.MenuTick);
+                    }
+                    break;
             }
-            else if (treeKey == "TheOrator/" + States.RitualEvent.ToString() && buttonID == 1)
-            {
-                NPC orator = Main.npc.First(n => n.active && n.type == ModContent.NPCType<OratorNPC>() && n.ai[0] == (int)States.RitualEvent);
-                LunarCultBaseSystem.State = LunarCultBaseSystem.SystemStates.Ritual;
-                LunarCultBaseSystem.Active = true;
-                orator.ai[0] = 0;
-                return;
-            }
-            else if (treeKey == "TheOrator/" + States.BetrayalChat.ToString() && buttonID == 1)
-            {
-                NPC orator = Main.npc.First(n => n.active && n.type == ModContent.NPCType<OratorNPC>() && n.ai[0] == (int)States.TutorialChat);
-                LunarCultBaseSystem.BetrayalActive = true;
-                orator.ai[0] = 0;
-                return;
-            }
+        }
+        public override void OnChatButtonClicked(bool firstButton, ref string shopName)
+        {
+            shopName = "Shop";
         }
         public override void AddShops()
         {
-            int lunarCoinID = ModContent.ItemType<LunarCoin>();
             var shop = new NPCShop(Type);
             shop.Add(new Item(ModContent.ItemType<RiftWeaver>())
             {
                 shopCustomPrice = 3,
-                shopSpecialCurrency = lunarCoinID
+                shopSpecialCurrency = Windfall.LunarCoinCurrencyID
             });
             shop.Add(new Item(ModContent.ItemType<Moonlight>())
             {
-                shopCustomPrice = 1,
-                shopSpecialCurrency = lunarCoinID
+                shopCustomPrice = 2,
+                shopSpecialCurrency = Windfall.LunarCoinCurrencyID
             });
             shop.Register();
         }
