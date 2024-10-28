@@ -4,10 +4,10 @@
       "Text": "Ready to begin?",
       "Responses": [
         {
-          "Title": "Not right now.",
+          "Title": "Not right now."
         },
         {
-          "Title": "Yeah!",
+          "Title": "Yeah!"
         }
       ]
     }

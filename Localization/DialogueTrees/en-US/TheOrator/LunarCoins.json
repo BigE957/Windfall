@@ -1,0 +1,24 @@
+{
+  "Dialogues": [
+    {
+      "Text": "Ah, you are not yet familiar with our Order's inner workings... I should have explained this to you sooner; my apologies."
+    },
+    {
+      "Text": "Your efforts in working with us will not go unrewarded. For every task you complete, you shall be rewarded a [c/FFFF00:Lunar Coin]. THey themselves lack any value of course, but instead represent your efforts. In return for these coins, I have an offering of rewards. I'm sure you shall find something that peaks your interests."
+    },
+    {
+      "Text": "Would you like to have a look?",
+      "Responses": [
+        {
+          "Title": "Yes please!"
+        },
+        {
+          "Title": "No, thank you."
+        }
+      ]
+    }
+  ],
+  "Characters": [
+    "TheOrator"
+  ]
+}

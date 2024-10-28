@@ -4,10 +4,19 @@
       "Text": "Shall we begin?",
       "Responses": [
         {
-          "Title": "Uh, one second.",
+          "Title": "Uh, one second."
         },
         {
           "Title": "Yes.",
+          "Heading": 1
+        }
+      ]
+    },
+    {
+      "Text": "What tool do you wish to use?",
+      "Responses": [
+        {
+          "Title": "Rift Weaver`"
         }
       ]
     }

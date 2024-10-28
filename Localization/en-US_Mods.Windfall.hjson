@@ -1400,7 +1400,7 @@ Items: {
 
 		LunarCoin: {
 			DisplayName: Lunar Coin
-			Tooltip: "Currency for trading within the Selenic Order"
+			Tooltip: Currency for trading within the Selenic Order
 		}
 	}
 
