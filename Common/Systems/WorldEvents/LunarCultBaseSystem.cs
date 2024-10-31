@@ -142,7 +142,7 @@ namespace Windfall.Common.Systems.WorldEvents
             public int OrderID = orderIDs;
         }
         public static List<Customer?> CustomerQueue = [];
-        public static List<int> MenuFoodIDs =
+        public static readonly List<int> FoodIDs =
         [
             ModContent.ItemType<AbyssalInkPasta>(),
             ModContent.ItemType<AzafurianPallela>(),
@@ -151,8 +151,8 @@ namespace Windfall.Common.Systems.WorldEvents
             ModContent.ItemType<FriedToxicatfishSandwich>(),
             ModContent.ItemType<GlimmeringNigiri>(),
             ModContent.ItemType<LemonButterHermititanLegs>(),
-
         ];
+        public static List<int> MenuFoodIDs = [];
         public static int SatisfiedCustomers = 0;
         public static int CustomerGoal = 8;
         public static readonly int CustomerLimit = 12;
@@ -570,6 +570,10 @@ namespace Windfall.Common.Systems.WorldEvents
                             {                                
                                 Vector2 chefCenter = Main.npc[NPC.FindFirstNPC(ModContent.NPCType<TheChef>())].Center;
                                 ActivityCoords = new((int)chefCenter.X, (int)chefCenter.Y);
+
+                                MenuFoodIDs = FoodIDs;
+                                while(MenuFoodIDs.Count > 5)
+                                    MenuFoodIDs.Remove(Main.rand.Next(MenuFoodIDs.Count));
 
                                 CustomerQueue = [];
                                 SatisfiedCustomers = 0;
