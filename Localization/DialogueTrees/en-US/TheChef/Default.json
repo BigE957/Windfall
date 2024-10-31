@@ -1,0 +1,34 @@
+{
+  "Dialogues": [
+    {
+      "Text": "Why, hello there! I don't think you're helping me out today. Is there something I can do for ya?",
+      "Responses": [
+        {
+          "Title": "I'd like to ask you something.",
+          "Heading": 3
+        },
+        {
+          "Title": "I'm kinda hungry...",
+          "Heading": 1
+        }
+      ]
+    },
+    {
+      "Text": "Well you came to the right place! What can I get for ya?"
+    },
+    {
+      "Text": "Well that's just perfect! I happen to have some leftovers; here you go. Enjoy!",
+      "Responses": [
+        {
+          "Title": "Thank you!"
+        }
+      ]
+    },
+    { //Expand on default dialogue from here
+      "Text": "I'm not in the mood for chit chat. >:("
+    }
+  ],
+  "Characters": [
+    "TheCalamity"
+  ]
+}

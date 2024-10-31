@@ -185,7 +185,7 @@ namespace Windfall.Common.Systems.WorldEvents
                 if (!NPC.AnyNPCs(ModContent.NPCType<OratorNPC>()))
                     NPC.NewNPC(Entity.GetSource_None(), (CultBaseArea.Right - 11) * 16, (CultBaseArea.Top + 30) * 16, ModContent.NPCType<OratorNPC>());
                 if(Main.npc.Where(n => n.active && (n.type == ModContent.NPCType<LunarCultistArcher>() || n.type == ModContent.NPCType<LunarCultistDevotee>() || n.type == ModContent.NPCType<RecruitableLunarCultist>())).Count() < 10)
-                    AttemptToCultBaseDenizens();
+                    AttemptToSpawnCultBaseDenizens();
 
                 foreach (NPC npc in Main.npc.Where(n => n.active))
                 {
@@ -386,8 +386,8 @@ namespace Windfall.Common.Systems.WorldEvents
                         return;
                     }
                     break;
-                case SystemStates.Ready:     
-                    if(ActivityTimer == -1)
+                case SystemStates.Ready:
+                    if (ActivityTimer == -1)
                     {
                         #region Activity Specific Setup
                         if (!TutorialComplete || RecruitmentsSkipped >= 3) //Orator Visit
@@ -419,7 +419,7 @@ namespace Windfall.Common.Systems.WorldEvents
 
                                 #region Character Setup   
                                 if (NPC.AnyNPCs(ModContent.NPCType<OratorNPC>()))
-                                    foreach(NPC npc in Main.npc.Where(n => n != null && n.active && n.type == ModContent.NPCType<OratorNPC>()))
+                                    foreach (NPC npc in Main.npc.Where(n => n != null && n.active && n.type == ModContent.NPCType<OratorNPC>()))
                                     {
                                         npc.active = false;
                                     }
@@ -567,12 +567,12 @@ namespace Windfall.Common.Systems.WorldEvents
                                 ClothesGoal = 5 * (Main.player.Where(p => p.active).Count() + 1);
                             }
                             else //Cafeteria
-                            {                                
+                            {
                                 Vector2 chefCenter = Main.npc[NPC.FindFirstNPC(ModContent.NPCType<TheChef>())].Center;
                                 ActivityCoords = new((int)chefCenter.X, (int)chefCenter.Y);
 
                                 MenuFoodIDs = FoodIDs;
-                                while(MenuFoodIDs.Count > 5)
+                                while (MenuFoodIDs.Count > 5)
                                     MenuFoodIDs.Remove(Main.rand.Next(MenuFoodIDs.Count));
 
                                 CustomerQueue = [];
@@ -582,6 +582,10 @@ namespace Windfall.Common.Systems.WorldEvents
                         #endregion                        
                         ActivityTimer = 0;
                         zoom = 0;
+                        foreach (Player player in Main.player.Where(p => p.active))
+                        {
+                            player.LunarCult().hasRecievedChefMeal = false;
+                        }
                     }
 
                     #region Player Proximity
@@ -898,7 +902,7 @@ namespace Windfall.Common.Systems.WorldEvents
                     }
                     break;
                 case SystemStates.Cafeteria:
-                    if(Active)
+                    if (Active)
                     {
                         if (CustomerQueue.Count >= CustomerLimit || AtMaxTimer >= 10 * 60)
                             AtMaxTimer++;
@@ -934,7 +938,10 @@ namespace Windfall.Common.Systems.WorldEvents
                         ActivityTimer++;
                     }
                     else
+                    {
+                        MenuFoodIDs = [];
                         State = SystemStates.End;
+                    }
                     break;
                 case SystemStates.Ritual:
                     //ActivePortals = 0;
@@ -1242,6 +1249,12 @@ namespace Windfall.Common.Systems.WorldEvents
         public static bool IsRitualActivityActive() => Active && State == SystemStates.Ritual;
         public static Response[] GetMenuResponses()
         {
+            if(MenuFoodIDs.Count == 0)
+            {
+                MenuFoodIDs = FoodIDs;
+                while (MenuFoodIDs.Count > 5)
+                    MenuFoodIDs.Remove(Main.rand.Next(MenuFoodIDs.Count));
+            }
             Response[] Responses = new Response[MenuFoodIDs.Count];
             for (int i = 0; i < MenuFoodIDs.Count; i++)
             {
@@ -1250,12 +1263,9 @@ namespace Windfall.Common.Systems.WorldEvents
             }
             return Responses;
         }
-        public static void ResetTimer()
-        {
-            ActivityTimer = 0;
-        }
+        public static void ResetTimer() => ActivityTimer = 0;
 
-        public static void AttemptToCultBaseDenizens()
+        public static void AttemptToSpawnCultBaseDenizens()
         {
             if (Main.netMode == NetmodeID.MultiplayerClient)
                 return;          

@@ -133,8 +133,23 @@ namespace Windfall.Content.NPCs.WorldEvents.LunarCult
                 uiSystem.DisplayDialogueTree(Windfall.Instance, "TheChef/FoodSelection");
                 uiSystem.CurrentTree.Dialogues[0].Responses = GetMenuResponses();
             }
-            else if((Main.moonPhase == (int)MoonPhase.ThreeQuartersAtLeft || Main.moonPhase == (int)MoonPhase.ThreeQuartersAtRight) && State == SystemStates.Ready)
+            else if ((Main.moonPhase == (int)MoonPhase.ThreeQuartersAtLeft || Main.moonPhase == (int)MoonPhase.ThreeQuartersAtRight) && State == SystemStates.Ready)
                 ModContent.GetInstance<DialogueUISystem>().DisplayDialogueTree(Windfall.Instance, "TheChef/CafeteriaActivityStart");
+            else
+            {
+                DialogueUISystem uiSystem = ModContent.GetInstance<DialogueUISystem>();
+                uiSystem.DisplayDialogueTree(Windfall.Instance, "TheChef/Default");
+                if (Main.LocalPlayer.LunarCult().hasRecievedChefMeal)
+                {
+                    uiSystem.CurrentTree.Dialogues[0].Responses[1] = null;
+                    return "";
+                }
+                uiSystem.CurrentTree.Dialogues[1].Responses = GetMenuResponses();
+                for (int i = 0; i < uiSystem.CurrentTree.Dialogues[1].Responses.Length; i++)
+                {
+                    uiSystem.CurrentTree.Dialogues[1].Responses[i].Heading = 2;
+                }
+            }
 
             return "Hey chat!";
         }
@@ -170,6 +185,12 @@ namespace Windfall.Content.NPCs.WorldEvents.LunarCult
 
                 State = SystemStates.Cafeteria;
                 Active = true;
+            }
+            else if(treeKey == "TheChef/Default" && dialogueID == 1)
+            {
+                Main.LocalPlayer.LunarCult().hasRecievedChefMeal = true;
+                Item item = Main.item[Item.NewItem(Item.GetSource_NaturalSpawn(), NPC.Center, Vector2.Zero, MenuFoodIDs[buttonID])];
+                item.velocity = new Vector2(1.75f, Main.rand.NextFloat(-3, 0));
             }
         }
     }
