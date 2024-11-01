@@ -585,6 +585,8 @@ namespace Windfall.Common.Systems.WorldEvents
                         foreach (Player player in Main.player.Where(p => p.active))
                         {
                             player.LunarCult().hasRecievedChefMeal = false;
+                            if (Main.LocalPlayer.LunarCult().apostleQuestTracker == 2)
+                                Main.LocalPlayer.LunarCult().apostleQuestTracker = 3;
                         }
                     }
 
