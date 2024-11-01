@@ -25,7 +25,76 @@
       ]
     },
     { //Expand on default dialogue from here
-      "Text": "I'm not in the mood for chit chat. >:("
+      "Text": "Oh? Well, I'll see if i can help... Shoot.",
+      "Responses": [
+        {
+          "Title": "How'd you learn to cook so well?",
+          "Heading": 5
+        },
+        {
+          "Title": "How'd you meet the Orator?",
+          "Heading": 6
+        },
+        {
+          "Title": "What do you think of the Seamstress?",
+          "Heading": 7
+        }
+      ]
+    },
+    { //Loop point
+      "Text": "Is there anything else you'd like to ask?",
+      "Responses": [
+        {
+          "Title": "That's all."
+        },
+        {
+          "Title": "How'd you learn to cook so well?",
+          "Heading": 5
+        },
+        {
+          "Title": "How'd you meet the Orator?",
+          "Heading": 6
+        },
+        {
+          "Title": "What do you think of the Seamstress?",
+          "Heading": 7
+        }
+      ]
+    },
+    {
+      "Text": "Hah! I guess its only natural to be interested in how one makes such fine cuisines. Before settling down here, I actually was quite well travelled! I've journeyed across the world, and picked up cooking techniques from a wide variety of cultures. I'm glad I'm able to carry on these techniques, even after the fall of some of those civilizations...",
+      "Responses": [
+        {
+          "Title": "How interesting!",
+          "Heading": 4
+        },
+        {
+          "Title": "I'm glad as well.",
+          "Heading": 4
+        }
+      ]
+    },
+    {
+      "Text": "Oh... I uh... I'm not sure I should be talking about such things without good reason. He's not the type you should go talking about behind his back. All I'll say is that I met him along my travels quite a while ago, and he's put my talents to good use. Cooking for you all is quite a fulfilling job!",
+      "Responses": [
+        {
+          "Title": "Gotcha...",
+          "Heading": 4
+        },
+        {
+          "Title": "That's nice to hear!",
+          "Heading": 4
+        }
+      ]
+    },
+    {
+      "Text": "She's a good friend! It might come as a shock, but behind her... abrasive persona, she's actually quite sweet. I mean, where do you think my apron and hat came from? [c/FFFF00:Send her my regards when next you see her!] Oh, though she can be especially, er... distrusting, of newcomers; be warned. I promise she's a lot nicer once you get to know her though!",
+      "Responses": [
+        {
+          "Title": "Will do!",
+          "Heading": 4
+        }
+      ]
     }
   ],
   "Characters": [

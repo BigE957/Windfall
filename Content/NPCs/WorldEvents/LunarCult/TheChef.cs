@@ -186,11 +186,16 @@ namespace Windfall.Content.NPCs.WorldEvents.LunarCult
                 State = SystemStates.Cafeteria;
                 Active = true;
             }
-            else if(treeKey == "TheChef/Default" && dialogueID == 1)
+            else if(treeKey == "TheChef/Default")
             {
-                Main.LocalPlayer.LunarCult().hasRecievedChefMeal = true;
-                Item item = Main.item[Item.NewItem(Item.GetSource_NaturalSpawn(), NPC.Center, Vector2.Zero, MenuFoodIDs[buttonID])];
-                item.velocity = new Vector2(1.75f, Main.rand.NextFloat(-3, 0));
+                if (dialogueID == 1)
+                {
+                    Main.LocalPlayer.LunarCult().hasRecievedChefMeal = true;
+                    Item item = Main.item[Item.NewItem(Item.GetSource_NaturalSpawn(), NPC.Center, Vector2.Zero, MenuFoodIDs[buttonID])];
+                    item.velocity = new Vector2(1.75f, Main.rand.NextFloat(-3, 0));
+                }
+                else if (Main.LocalPlayer.LunarCult().apostleQuestTracker == 0 && dialogueID == 7)
+                    Main.LocalPlayer.LunarCult().apostleQuestTracker++;
             }
         }
     }

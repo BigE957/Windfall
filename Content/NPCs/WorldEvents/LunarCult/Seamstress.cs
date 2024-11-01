@@ -196,7 +196,7 @@ namespace Windfall.Content.NPCs.WorldEvents.LunarCult
         {
             Main.CloseNPCChatOrSign();
             Player MyPlayer = Main.player[Main.myPlayer];
-            
+
             if (IsTailorActivityActive())
             {
                 #region Active Activity
@@ -312,7 +312,7 @@ namespace Windfall.Content.NPCs.WorldEvents.LunarCult
                             item.SetDefaults(AssignedClothing[Main.myPlayer]);
                             string name = item.Name;
 
-                            if(MyPlayer.inventory.Where(i => i.type == AssignedClothing[Main.myPlayer]).Any())
+                            if (MyPlayer.inventory.Where(i => i.type == AssignedClothing[Main.myPlayer]).Any())
                                 CombatText.NewText(location, Color.LimeGreen, GetWindfallTextValue(activityPath + "Garbage." + Main.rand.Next(3)).FormatWith(name), true);
                             else
                                 CombatText.NewText(location, Color.LimeGreen, GetWindfallTextValue(activityPath + "Repeat." + Main.rand.Next(3)).FormatWith(name), true);
@@ -334,7 +334,24 @@ namespace Windfall.Content.NPCs.WorldEvents.LunarCult
                         ModContent.GetInstance<DialogueUISystem>().DisplayDialogueTree(Windfall.Instance, "TheSeamstress/TailorTutorial");
                 }
             }
-            return "Why are you talking to me."; //Can eventually be used for randomized dialogue.
+            else
+            {
+                int questTracker = Main.LocalPlayer.LunarCult().apostleQuestTracker;
+                DialogueUISystem uiSystem = ModContent.GetInstance<DialogueUISystem>();
+                uiSystem.DisplayDialogueTree(Windfall.Instance, "TheSeamstress/Default");
+                if(questTracker != 1)
+                    uiSystem.CurrentTree.Dialogues[1].Responses[2] = null;
+                if (questTracker == 3)
+                    uiSystem.CurrentTree.Dialogues[1].Responses[2] = uiSystem.CurrentTree.Dialogues[1].Responses[3];
+                uiSystem.CurrentTree.Dialogues[1].Responses[3] = null;
+                if(questTracker < 4)
+                {
+                    uiSystem.CurrentTree.Dialogues[12].Responses[3] = null;
+                    uiSystem.CurrentTree.Dialogues[13].Responses[4] = null;
+                }
+            }
+
+            return "";
         }
         public override bool CheckActive() => false;
 
@@ -350,6 +367,10 @@ namespace Windfall.Content.NPCs.WorldEvents.LunarCult
                     BeginActivity = true;
                 }
             }
+            if (treeKey == "TheSeamstress/Default" && dialogueID == 5 && Main.LocalPlayer.LunarCult().apostleQuestTracker == 1)
+                Main.LocalPlayer.LunarCult().apostleQuestTracker++;
+            if (treeKey == "TheSeamstress/Default" && dialogueID == 11 && Main.LocalPlayer.LunarCult().apostleQuestTracker == 3)
+                Main.LocalPlayer.LunarCult().apostleQuestTracker++;
         }
 
         private static bool HasItem(Player player, int id)
