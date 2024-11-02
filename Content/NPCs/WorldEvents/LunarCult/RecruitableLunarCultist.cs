@@ -95,7 +95,7 @@ namespace Windfall.Content.NPCs.WorldEvents.LunarCult
                 State = DialogueState.Talkable;
         }
         public override bool PreAI()
-        {            
+        {
             if (Chattable)
             {
                 AnimationType = NPCID.Stylist;
@@ -134,11 +134,12 @@ namespace Windfall.Content.NPCs.WorldEvents.LunarCult
         }
         private void CloseEffect(string treeKey, int dialogueID, int buttonID)
         {
-            if(!treeKey.Contains("Recruits") || !treeKey.Contains(Name))
+            //Main.NewText($"{treeKey}, {NPC.FullName}");
+            if (!treeKey.Contains("Recruits") || !treeKey.Contains(NPC.FullName))
                 return;
-            NPC me = Main.npc.First(n => n.active && n.type == NPC.type && n.As<RecruitableLunarCultist>().Name == Name);
+            NPC me = Main.npc.First(n => n.active && n.type == ModContent.NPCType<RecruitableLunarCultist>() && n.As<RecruitableLunarCultist>().MyName == MyName);
 
-            if (treeKey.Contains("Recruitable") && dialogueID == 1 && canRecruit)
+            if (treeKey.Contains("Recruitable") && dialogueID == 1)
             {
                 if (!LunarCultBaseSystem.Recruits.Contains((int)MyName))
                     LunarCultBaseSystem.Recruits.Add((int)MyName);
@@ -146,7 +147,7 @@ namespace Windfall.Content.NPCs.WorldEvents.LunarCult
                 LunarCultBaseSystem.RecruitmentsSkipped = 0;
                 foreach (NPC npc in Main.npc.Where(n => n.active && n.type == ModContent.NPCType<RecruitableLunarCultist>()))
                 {
-                    if (npc.ModNPC is RecruitableLunarCultist recruit && recruit.State != DialogueState.Recruited)
+                    if (npc.ModNPC is RecruitableLunarCultist recruit && recruit.State != DialogueState.Recruited && npc.FullName != me.FullName)
                     {
                         recruit.canRecruit = false;
                         recruit.State = DialogueState.Unrecruited;

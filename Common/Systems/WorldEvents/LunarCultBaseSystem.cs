@@ -550,6 +550,7 @@ namespace Windfall.Common.Systems.WorldEvents
                                                 }
                                                 break;
                                         }
+                                        Recruit.OnSpawn(NPC.GetSource_NaturalSpawn());
                                     }
                                     y++;
                                 }
@@ -572,8 +573,8 @@ namespace Windfall.Common.Systems.WorldEvents
                                 ActivityCoords = new((int)chefCenter.X, (int)chefCenter.Y);
 
                                 MenuFoodIDs = FoodIDs;
-                                while (MenuFoodIDs.Count > 5)
-                                    MenuFoodIDs.Remove(Main.rand.Next(MenuFoodIDs.Count));
+                                while(MenuFoodIDs.Count > 5)
+                                    MenuFoodIDs.RemoveAt(Main.rand.Next(MenuFoodIDs.Count));
 
                                 CustomerQueue = [];
                                 SatisfiedCustomers = 0;
@@ -593,23 +594,10 @@ namespace Windfall.Common.Systems.WorldEvents
                     #region Player Proximity
                     closestPlayer = Main.player[Player.FindClosest(new Vector2(ActivityCoords.X, ActivityCoords.Y), 300, 300)];
                     PlayerDistFromHideout = new Vector2(closestPlayer.Center.X - ActivityCoords.X, closestPlayer.Center.Y - ActivityCoords.Y).Length();
-
-                    if (PlayerDistFromHideout < 300f && closestPlayer.Center.Y < ActivityCoords.Y)
+                    if ((Main.moonPhase == (int)MoonPhase.QuarterAtLeft || Main.moonPhase == (int)MoonPhase.QuarterAtRight) && PlayerDistFromHideout < 300f)
                     {
-                        /*
-                        Actual Code
-                        if (Main.moonPhase == (int)MoonPhase.Full || Main.moonPhase == (int)MoonPhase.Empty)
-                            State = SystemState.Ritual;
-                        else if (Main.moonPhase == (int)MoonPhase.QuarterAtLeft || Main.moonPhase == (int)MoonPhase.QuarterAtRight)
-                            State = SystemState.Meeting;
-                        else if (Main.moonPhase == (int)MoonPhase.HalfAtLeft || Main.moonPhase == (int)MoonPhase.HalfAtRight)
-                            State = SystemState.Tailor;
-                        else
-                            State = SystemState.Cafeteria;
-                        */
-                        //State = SystemState.Ritual;
-
-                        //Active = true;
+                        State = SystemStates.Meeting;
+                        Active = true;
                     }
                     #endregion
                     #region Despawn  
@@ -906,7 +894,7 @@ namespace Windfall.Common.Systems.WorldEvents
                 case SystemStates.Cafeteria:
                     if (Active)
                     {
-                        if (CustomerQueue.Count >= CustomerLimit || AtMaxTimer >= 10 * 60)
+                        if (CustomerQueue.Where(c => c.HasValue).Count() >= CustomerLimit || AtMaxTimer >= 10 * 60)
                             AtMaxTimer++;
                         else
                             AtMaxTimer = 0;
@@ -947,6 +935,7 @@ namespace Windfall.Common.Systems.WorldEvents
                     break;
                 case SystemStates.Ritual:
                     //ActivePortals = 0;
+                    //Main.NewText(ActivePortals);
                     if (PortalsDowned < RequiredPortalKills && RemainingCultists > 0 && ActivePortals < RemainingCultists && ActivityTimer >= 60 && Main.rand.NextBool(100)) //Spawn New Customer
                     {
                         Point spawnLocation = new(ActivityCoords.X + Main.rand.Next(-450, 450), ActivityCoords.Y - Main.rand.Next(120, 300));
@@ -1127,7 +1116,7 @@ namespace Windfall.Common.Systems.WorldEvents
                                 DisplayMessage(orator.Hitbox, Color.LimeGreen, "Dialogue.LunarCult.TheOrator.WorldText.Ritual.Success.19");
                                 break;
                             case 2530:
-                                DisplayMessage(orator.Hitbox, Color.LimeGreen, "Dialogue.LunarCult.TheOrator.WorldText.Ritual.Success.19");
+                                DisplayMessage(orator.Hitbox, Color.LimeGreen, "Dialogue.LunarCult.TheOrator.WorldText.Ritual.Success.20");
                                 break;
                             case 2560:
                                 for (int j = 0; j <= 50; j++)
@@ -1222,17 +1211,19 @@ namespace Windfall.Common.Systems.WorldEvents
                                 if (NPC.FindFirstNPC(ModContent.NPCType<LunarCultistDevotee>()) != -1)
                                 {
                                     recruit = Main.npc[NPC.FindFirstNPC(ModContent.NPCType<LunarCultistDevotee>())];
-                                    Main.npc[NPC.FindFirstNPC(ModContent.NPCType<LunarCultistDevotee>())].Transform(ModContent.NPCType<RecruitableLunarCultist>());
-                                    recruit.As<RecruitableLunarCultist>().MyName = (RecruitableLunarCultist.RecruitNames)index;
-                                    recruit.ModNPC.OnSpawn(NPC.GetSource_NaturalSpawn());
+                                    Main.npc[NPC.FindFirstNPC(ModContent.NPCType<LunarCultistDevotee>())].Transform(ModContent.NPCType<RecruitableLunarCultist>());                                   
                                 }
                                 else
                                 {
                                     recruit = Main.npc[NPC.FindFirstNPC(ModContent.NPCType<LunarCultistArcher>())];
                                     Main.npc[NPC.FindFirstNPC(ModContent.NPCType<LunarCultistArcher>())].Transform(ModContent.NPCType<RecruitableLunarCultist>());
-                                    recruit.As<RecruitableLunarCultist>().MyName = (RecruitableLunarCultist.RecruitNames)index;
-                                    recruit.ModNPC.OnSpawn(NPC.GetSource_NaturalSpawn());
                                 }
+                                RecruitableLunarCultist Recruit = recruit.As<RecruitableLunarCultist>();
+                                Recruit.MyName = (RecruitableLunarCultist.RecruitNames)index;
+                                Recruit.Chattable = true;
+                                Recruit.canRecruit = true;
+                                Recruit.OnSpawn(NPC.GetSource_NaturalSpawn());
+
                                 names.RemoveAt(index);
                                 availableNames--;
                             }
@@ -1250,12 +1241,12 @@ namespace Windfall.Common.Systems.WorldEvents
         public static bool IsCafeteriaActivityActive() => Active && State == SystemStates.Cafeteria;
         public static bool IsRitualActivityActive() => Active && State == SystemStates.Ritual;
         public static Response[] GetMenuResponses()
-        {
+        {           
             if(MenuFoodIDs.Count == 0)
             {
                 MenuFoodIDs = FoodIDs;
                 while (MenuFoodIDs.Count > 5)
-                    MenuFoodIDs.Remove(Main.rand.Next(MenuFoodIDs.Count));
+                    MenuFoodIDs.RemoveAt(Main.rand.Next(MenuFoodIDs.Count));
             }
             Response[] Responses = new Response[MenuFoodIDs.Count];
             for (int i = 0; i < MenuFoodIDs.Count; i++)

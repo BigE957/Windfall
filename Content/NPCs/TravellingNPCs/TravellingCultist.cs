@@ -44,13 +44,11 @@ namespace Windfall.Content.NPCs.TravellingNPCs
             {
                 if (!travelerIsThere && (Main.rand.NextBool(4) || WorldSaveSystem.PlanteraJustDowned))
                 {
-                    Main.NewText("Buddy Inbound");
                     spawnTime = GetRandomSpawnTime(5400, 8100);
                     WorldSaveSystem.PlanteraJustDowned = false;
                 }
                 else
                 {
-                    Main.NewText("No buddy");
                     spawnTime = double.MaxValue;
                 }
             }

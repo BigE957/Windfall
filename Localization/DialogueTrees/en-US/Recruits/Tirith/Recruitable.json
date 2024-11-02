@@ -10,10 +10,15 @@
 				{
 					"Title": "No problem!"
 				}
-			],
+			]
 		},
 		{
-			"Text": "Oh my... The Lunar Cult... They're really planning something like that? I'll help if I can. I'll be in touch!"
+			"Text": "Oh my... The Lunar Cult... They're really planning something like that? I'll help if I can. I'll be in touch!",
+			"Responses": [
+				{
+					"Title": "Thank you!"
+				}
+			]
 		}
 	],
 	"Characters": [

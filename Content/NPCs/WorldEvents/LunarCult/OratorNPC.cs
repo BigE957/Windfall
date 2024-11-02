@@ -43,7 +43,7 @@ namespace Windfall.Content.NPCs.WorldEvents.LunarCult
             NPC.knockBackResist = 0f;
             NPC.immortal = true;
         }
-        public override bool CanChat() => !ModContent.GetInstance<DialogueUISystem>().isDialogueOpen;
+        public override bool CanChat() => !ModContent.GetInstance<DialogueUISystem>().isDialogueOpen && !LunarCultBaseSystem.IsRitualActivityActive();
         public override string GetChat()
         {
             Main.CloseNPCChatOrSign();

@@ -82,7 +82,7 @@ namespace Windfall.Content.Projectiles.Weapons.Misc
                 Owner.velocity.X = target.Center.X > Owner.Center.X ? -4 : 4;
 
                 if (target.type == ModContent.NPCType<PortalMole>())
-                    target.life = 0;
+                    target.StrikeInstantKill();
 
                 hitCount = 0;
             }
@@ -99,6 +99,7 @@ namespace Windfall.Content.Projectiles.Weapons.Misc
                         Owner.velocity.Y = -4f;
                 }
             }
+            Projectile.damage = 0;
         }
     }
 }

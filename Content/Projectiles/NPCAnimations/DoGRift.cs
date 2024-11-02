@@ -26,6 +26,9 @@ namespace Windfall.Content.Projectiles.ProjectileAnimations
         }
         public override void AI()
         {
+            Lighting.AddLight(Projectile.Center, Color.Violet.ToVector3() * (5f * Projectile.scale));
+            Projectile.rotation += 0.05f;
+
             if (Projectile.ai[0] == 1)
             {
                 if (eyeOpacity > 0f)
@@ -49,8 +52,7 @@ namespace Windfall.Content.Projectiles.ProjectileAnimations
             }
             if (aiCounter > 60 && eyeOpacity < 1f)
                 eyeOpacity += 0.025f;
-            Lighting.AddLight(Projectile.Center, Color.Violet.ToVector3() * (5f * Projectile.scale));
-            Projectile.rotation += 0.05f;
+            
             aiCounter++;
         }
         public override bool PreDraw(ref Color lightColor)

@@ -13,7 +13,12 @@
 			]
 		},
 		{
-			"Text": "Stick it to the Orator? That's all you needed to say! I'm already eager for revenge..."
+			"Text": "Stick it to the Orator? That's all you needed to say! I'm already eager for revenge...",
+			"Responses": [
+				{
+					"Title": "Awesome!"
+				}
+			]
 		}
 	],
 	"Characters": [

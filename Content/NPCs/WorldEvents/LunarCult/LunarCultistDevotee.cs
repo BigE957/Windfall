@@ -140,8 +140,8 @@ namespace Windfall.Content.NPCs.WorldEvents.LunarCult
                     else
                     {
                         Vector2 goalPosition = new(LunarCultBaseSystem.LunarCultBaseLocation.X * 16 - 850 + queueGap * queueIndex, LunarCultBaseSystem.LunarCultBaseLocation.Y * 16 - 96);
-                        float angerRatio = (LunarCultBaseSystem.CustomerQueue.Count - 4) / ((float)LunarCultBaseSystem.CustomerLimit - 4);
-                        if (LunarCultBaseSystem.CustomerQueue.Count <= 4)
+                        float angerRatio = (LunarCultBaseSystem.CustomerQueue.Where(c => c.HasValue).Count() - 4) / ((float)LunarCultBaseSystem.CustomerLimit - 4);
+                        if (LunarCultBaseSystem.CustomerQueue.Where(c => c.HasValue).Count() <= 4)
                             angerRatio = 0f;
                         if (NPC.velocity.Y >= 0 && NPC.position.Y >= goalPosition.Y - NPC.height)
                         {

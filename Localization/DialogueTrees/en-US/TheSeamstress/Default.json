@@ -12,23 +12,26 @@
       ]
     },
     {
-      "Text": "Ah, well, well! To think, my favorite underling's come to see me when we don't even have work to do! Now, what exactly brings you here?",
+      "Text": "Ah, well, well! To think, my favorite underling's come to see me when we don't even have work to do! I guess nobody can keep away from my magnetic personality."
+    },
+    {
+      "Text": "I'm just kidding, of couse. I assume you've got a reason you're here. How can I help?",
       "Responses": [
         {
           "Title": "Could I ask you something?",
-          "Heading": 12
+          "Heading": 13
         },
         {
-          "Title": "I was wondering if you could make something for me...",
-          "Heading": 2
-        },
-        {
-          "Title": "The Chef wanted me to send his regards.",
+          "Title": "Some Function TM",
           "Heading": 3
         },
         {
-          "Title": "So that thing you were looking into...?",
-          "Heading": 6
+          "Title": "The Chef sends his regards.",
+          "Heading": 4
+        },
+        {
+          "Title": "Last we spoke...",
+          "Heading": 7
         }
       ]
     },
@@ -91,19 +94,19 @@
       "Responses": [
         {
           "Title": "Where'd you learn your skills?",
-          "Heading": 14
-        },
-        {
-          "Title": "How'd you meet the Orator?",
           "Heading": 15
         },
         {
-          "Title": "Why don't you trust newcomers to the Order?",
+          "Title": "How'd you meet the Orator?",
           "Heading": 16
         },
         {
-          "Title": "How do you normally become an Apostle?",
+          "Title": "Why don't you trust newcomers?",
           "Heading": 17
+        },
+        {
+          "Title": "How do you normally become an Apostle?",
+          "Heading": 18
         }
       ]
     },
@@ -115,19 +118,19 @@
         },
         {
           "Title": "Where'd you learn your skills?",
-          "Heading": 14
-        },
-        {
-          "Title": "How'd you meet the Orator?",
           "Heading": 15
         },
         {
-          "Title": "Why don't you trust newcomers to the Order?",
+          "Title": "How'd you meet the Orator?",
           "Heading": 16
         },
         {
-          "Title": "How do you normally become an Apostle?",
+          "Title": "Why don't you trust newcomers?",
           "Heading": 17
+        },
+        {
+          "Title": "How do you normally become an Apostle?",
+          "Heading": 18
         }
       ]
     },
@@ -136,11 +139,11 @@
       "Responses": [
         {
           "Title": "Gotcha..",
-          "Heading": 13
+          "Heading": 14
         },
         {
           "Title": "I can imagine!",
-          "Heading": 13
+          "Heading": 14
         }
       ]
     },
@@ -149,11 +152,11 @@
       "Responses": [
         {
           "Title": "Actually, it was pretty interesting!",
-          "Heading": 13
+          "Heading": 14
         },
         {
           "Title": "Yeah, thanks anyway.",
-          "Heading": 13
+          "Heading": 14
         }
       ]
     },
@@ -162,11 +165,11 @@
       "Responses": [
         {
           "Title": "Of course!",
-          "Heading": 13
+          "Heading": 14
         },
         {
           "Title": "No promises.",
-          "Heading": 13
+          "Heading": 14
         }
       ]
     },
@@ -184,11 +187,11 @@
       "Responses": [
         {
           "Title": "Totally!",
-          "Heading": 13
+          "Heading": 14
         },
         {
           "Title": "I'll see what I can do.",
-          "Heading": 13
+          "Heading": 14
         }
       ]
     }

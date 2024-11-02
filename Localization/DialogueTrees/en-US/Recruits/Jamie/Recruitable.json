@@ -10,10 +10,15 @@
 				{
 					"Title": "No problem!"
 				}
-			],
+			]
 		},
 		{
-			"Text": "Sure, I'll join your thingie!"
+			"Text": "Sure, I'll join your thingie!",
+			"Responses": [
+				{
+					"Title": "Thank you!"
+				}
+			]
 		}
 	],
 	"Characters": [

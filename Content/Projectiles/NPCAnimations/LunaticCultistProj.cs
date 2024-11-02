@@ -34,6 +34,7 @@ namespace Windfall.Content.Projectiles.NPCAnimations
                 Dust d = Dust.NewDustPerfect(Projectile.Center, DustID.GoldFlame, speed * 3, Scale: 1.5f);
                 d.noGravity = true;
             }
+            Projectile.alpha = 0;
             SoundEngine.PlaySound(SpawnSound, Projectile.Center);
         }
         public override void SetStaticDefaults()

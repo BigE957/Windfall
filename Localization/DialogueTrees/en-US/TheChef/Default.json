@@ -24,7 +24,7 @@
         }
       ]
     },
-    { //Expand on default dialogue from here
+    {
       "Text": "Oh? Well, I'll see if i can help... Shoot.",
       "Responses": [
         {
@@ -36,12 +36,12 @@
           "Heading": 6
         },
         {
-          "Title": "What do you think of the Seamstress?",
+          "Title": "Thoughts on the Seamstress?",
           "Heading": 7
         }
       ]
     },
-    { //Loop point
+    {
       "Text": "Is there anything else you'd like to ask?",
       "Responses": [
         {

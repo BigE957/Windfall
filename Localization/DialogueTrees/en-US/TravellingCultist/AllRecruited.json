@@ -1,7 +1,7 @@
 {
   "Dialogues": [
     {
-      "Text": "Why hello! I have some very good news. I've found our way to put a stop to the Lunar Cult's plans once and for all! Remember the friends I mentioned earlier? One of them just so happens to know of a ritual to seal away the very horrors they are trying to summon!",
+      "Text": "Why hello! I have some very good news. I've found our way to put a stop to the Selenic Order's plans once and for all! Remember the friends I mentioned earlier? One of them just so happens to know of a ritual to seal away the very horrors they are trying to summon!",
       "Responses": [
         {
           "Title": "Sealing Ritual?",
@@ -14,7 +14,7 @@
       ]
     },
     {
-      "Text": "Yes, its a ritual that dates back to the Draconic Era. Legend has that those devoted to the Dragons were given this ritual to maintain the seal placed upon their ancient foe. I believe this being is the 'Dark God' that the Lunar Cult seeks to bring to our world, and if they succeed... the world as we know it may cease to be.",
+      "Text": "Yes, its a ritual that dates back to the Draconic Era. Legend has that those devoted to the Dragons were given this ritual to maintain the seal placed upon their ancient foe. I believe this being is the 'Paradise' that the Selenic Order seeks to bring upon world, and if they succeed... the world as we know it may cease to be.",
       "Responses": [
         {
           "Title": "Uh oh...",
@@ -27,7 +27,7 @@
       ]
     },
     {
-      "Text": "Indeed! It says here that the ritual was meant to be performed once every hundred years to maintain the seal, however I think the demise of the Dragons led to this never being carried out. By performing it now, we may be able to cut off the Lunar Cult's connection to this ancient foe, and stop them from being able to unseal it!",
+      "Text": "Indeed! It says here that the ritual was meant to be performed once every hundred years to maintain the seal, however I think the demise of the Dragons led to this never being carried out. By performing it now, we may be able to cut off the Selenic Order's connection to this ancient foe, and stop them from being able to unseal it!",
       "Responses": [
         {
           "Title": "Why are they doing this?",

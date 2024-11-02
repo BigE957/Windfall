@@ -26,6 +26,7 @@ namespace Windfall.Content.NPCs.WorldEvents.LunarCult
             NPCID.Sets.ActsLikeTownNPC[Type] = true;
             Main.npcFrameCount[Type] = 1;
             NPCID.Sets.NoTownNPCHappiness[Type] = true;
+            ModContent.GetInstance<DialogueUISystem>().DialogueOpen += ModifyTree;
             ModContent.GetInstance<DialogueUISystem>().ButtonClick += ClickEffect;
         }
         public override void SetDefaults()
@@ -128,29 +129,11 @@ namespace Windfall.Content.NPCs.WorldEvents.LunarCult
             Main.CloseNPCChatOrSign();
 
             if (IsCafeteriaActivityActive())
-            {
-                DialogueUISystem uiSystem = ModContent.GetInstance<DialogueUISystem>();
-                uiSystem.DisplayDialogueTree(Windfall.Instance, "TheChef/FoodSelection");
-                uiSystem.CurrentTree.Dialogues[0].Responses = GetMenuResponses();
-            }
+                ModContent.GetInstance<DialogueUISystem>().DisplayDialogueTree(Windfall.Instance, "TheChef/FoodSelection");               
             else if ((Main.moonPhase == (int)MoonPhase.ThreeQuartersAtLeft || Main.moonPhase == (int)MoonPhase.ThreeQuartersAtRight) && State == SystemStates.Ready)
                 ModContent.GetInstance<DialogueUISystem>().DisplayDialogueTree(Windfall.Instance, "TheChef/CafeteriaActivityStart");
             else
-            {
-                DialogueUISystem uiSystem = ModContent.GetInstance<DialogueUISystem>();
-                uiSystem.DisplayDialogueTree(Windfall.Instance, "TheChef/Default");
-                if (Main.LocalPlayer.LunarCult().hasRecievedChefMeal)
-                {
-                    uiSystem.CurrentTree.Dialogues[0].Responses[1] = null;
-                    return "";
-                }
-                uiSystem.CurrentTree.Dialogues[1].Responses = GetMenuResponses();
-                for (int i = 0; i < uiSystem.CurrentTree.Dialogues[1].Responses.Length; i++)
-                {
-                    uiSystem.CurrentTree.Dialogues[1].Responses[i].Heading = 2;
-                }
-            }
-
+                ModContent.GetInstance<DialogueUISystem>().DisplayDialogueTree(Windfall.Instance, "TheChef/Default");                
             return "Hey chat!";
         }
         public override bool CheckActive() => false;
@@ -173,6 +156,30 @@ namespace Windfall.Content.NPCs.WorldEvents.LunarCult
 
             spriteBatch.Draw(barBG, drawPos, null, bgColor, 0f, barOrigin, barScale, 0f, 0f);
             spriteBatch.Draw(barFG, drawPos, frameCrop, Color.Lerp(Color.Yellow, Color.LimeGreen, TimeCooking / CookTIme), 0f, barOrigin, barScale, 0f, 0f);
+        }
+        private void ModifyTree(string treeKey, int dialogueID, int buttonID)
+        {
+            DialogueUISystem uiSystem = ModContent.GetInstance<DialogueUISystem>();
+            switch (treeKey)
+            {
+                case "TheChef/FoodSelection":
+                    uiSystem.CurrentTree.Dialogues[0].Responses = GetMenuResponses();
+                    break;
+                case "TheChef/Default":
+                    List<Response> response = new(uiSystem.CurrentTree.Dialogues[0].Responses);
+                    if (Main.LocalPlayer.LunarCult().hasRecievedChefMeal)
+                    {
+                        response[1] = null;
+                        uiSystem.CurrentTree.Dialogues[0].Responses = response.Where(r => r != null).ToArray();
+                        return;
+                    }
+                    uiSystem.CurrentTree.Dialogues[1].Responses = GetMenuResponses();
+                    for (int i = 0; i < uiSystem.CurrentTree.Dialogues[1].Responses.Length; i++)
+                    {
+                        uiSystem.CurrentTree.Dialogues[1].Responses[i].Heading = 2;
+                    }
+                    break;
+            }
         }
         private void ClickEffect(string treeKey, int dialogueID, int buttonID)
         {
