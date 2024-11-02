@@ -10,8 +10,9 @@ namespace Windfall.Content.Items.Journals
         public override string Texture => "Windfall/Assets/Items/Journals/WandererJournal";
         public override void SetDefaults()
         {
-            Item.width = 28;
-            Item.height = 28;
+            Item.width = 16;
+            Item.height = 16;
+            Item.scale = 0.75f;
             Item.rare = ItemRarityID.Blue;
             Item.useAnimation = Item.useTime = 20;
             Item.useStyle = ItemUseStyleID.HoldUp;
@@ -24,7 +25,6 @@ namespace Windfall.Content.Items.Journals
                 if (!JournalUISystem.isJournalOpen)
                 {
                     JournalText.JournalContents = "";
-                    //JournalText.JournalContents = "Mfw I'm the compilation item and therefore do not need to tell you my contents because I'm the coolest :sunglasses:";
                     for (JournalTypes i = 0; (int)i < 12; i++)
                     {
                         if (WorldSaveSystem.JournalsCollected[(int)i])
@@ -33,11 +33,11 @@ namespace Windfall.Content.Items.Journals
                             {
                                 if (JournalUISystem.whichEvilJournal == "Crimson")
                                 {
-                                    JournalText.JournalContents = Language.GetOrRegister($"Mods.{nameof(Windfall)}.JournalContents.Crimson").Value;
+                                    JournalText.JournalContents = GetWindfallTextValue("UI.JournalContents.Crimson");
                                 }
                                 else if (JournalUISystem.whichEvilJournal == "Corruption")
                                 {
-                                    JournalText.JournalContents = Language.GetOrRegister($"Mods.{nameof(Windfall)}.JournalContents.Corruption").Value;
+                                    JournalText.JournalContents = GetWindfallTextValue("UI.JournalContents.Corruption");
                                 }
                                 else
                                 {
@@ -46,7 +46,8 @@ namespace Windfall.Content.Items.Journals
                             }
                             else
                             {
-                                JournalText.JournalContents = Language.GetOrRegister($"Mods.{nameof(Windfall)}.JournalContents.{i}").Value;
+                                JournalText.JournalContents = GetWindfallTextValue($"UI.JournalContents.{i}");
+
                             }
                             PageNumber = (int)i;
                             break;
