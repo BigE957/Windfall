@@ -54,8 +54,8 @@ namespace Windfall.Common.Systems.WorldEvents
         public override void PreUpdateWorld()
         {
             #region Debugging Stuffs
-            RitualSequenceSeen = true;
-            Recruits = [0, 1, 3, 4];
+            //RitualSequenceSeen = false;
+            //Recruits = [1,2,3,4];
             //State = SystemState.CheckReqs; RitualTimer = -2; RitualSequenceSeen = false; Active = false;
             //Main.NewText($"{RitualTimer}, {State}, {(DungeonCoords - Main.LocalPlayer.Center).Length()}, {RitualSequenceSeen}");
             //TravellingCultist.RitualQuestProgress = 4;
@@ -78,7 +78,7 @@ namespace Windfall.Common.Systems.WorldEvents
             switch (State)
             {
                 case SystemState.CheckReqs:
-                    if (TravellingCultist.RitualQuestProgress != 4)
+                    if (TravellingCultist.RitualQuestProgress != 4 || Recruits.Count < 4)
                        return;
                     else
                     {
