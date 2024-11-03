@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using Terraria.GameContent.Bestiary;
 using Windfall.Common.Systems;
 using Windfall.Common.Systems.WorldEvents;
+using Windfall.Content.Projectiles.Weapons.Misc;
 
 namespace Windfall.Content.NPCs.WorldEvents.LunarCult
 {
@@ -156,6 +157,15 @@ namespace Windfall.Content.NPCs.WorldEvents.LunarCult
             NPC.rotation += 0.05f;
             #endregion
             aiCounter++;
+        }
+        private readonly int[] ValidProjectiles =
+        [
+            ModContent.ProjectileType<RiftWeaverStab>(),
+            ModContent.ProjectileType<RiftWeaverThrow>(),
+        ];
+        public override bool? CanBeHitByProjectile(Projectile projectile)
+        {
+            return ValidProjectiles.Contains(projectile.type);
         }
         public override bool PreDraw(SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor)
         {
