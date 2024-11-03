@@ -7,7 +7,7 @@ namespace Windfall.Content.Items.Essences
     public class HiveEssence : ModItem, ILocalizedModType
     {
         public new string LocalizationCategory => "Items.Essence";
-        public override string Texture => "CalamityMod/Items/Ammo/BloodRune";
+        public override string Texture => "Windfall/Assets/Items/Essences/HiveEssence";
 
         public override void SetDefaults()
         {
