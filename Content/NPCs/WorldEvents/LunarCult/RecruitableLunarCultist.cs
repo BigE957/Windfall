@@ -10,6 +10,7 @@ namespace Windfall.Content.NPCs.WorldEvents.LunarCult
     {
         public override string Texture => "Windfall/Assets/NPCs/WorldEvents/Recruits/Recruits_Cultist";
         internal static SoundStyle SpawnSound => new("CalamityMod/Sounds/Custom/SCalSounds/BrimstoneHellblastSound");
+        private static int TalkingTo = -1;
         public enum RecruitNames
         {
             Tirith,
@@ -120,8 +121,8 @@ namespace Windfall.Content.NPCs.WorldEvents.LunarCult
         public override string GetChat()
         {
             Main.CloseNPCChatOrSign();
-
-            if (State != DialogueState.Unrecruited && State != DialogueState.Recruitable && State != DialogueState.Recruited)
+            TalkingTo = (int)MyName;
+            if (State == DialogueState.Talkable)
             {
                 if(LunarCultBaseSystem.CurrentMeetingTopic == 0)
                     ModContent.GetInstance<DialogueUISystem>().DisplayDialogueTree(Windfall.Instance, "Recruits/" + MyName + "/Default");
@@ -134,25 +135,25 @@ namespace Windfall.Content.NPCs.WorldEvents.LunarCult
         }
         private void CloseEffect(string treeKey, int dialogueID, int buttonID)
         {
-            //Main.NewText($"{treeKey}, {NPC.FullName}");
-            if (!treeKey.Contains("Recruits") || !treeKey.Contains(NPC.FullName))
+            if (!treeKey.Contains("Recruits") || !treeKey.Contains(((RecruitNames)TalkingTo).ToString()))
                 return;
-            NPC me = Main.npc.First(n => n.active && n.type == ModContent.NPCType<RecruitableLunarCultist>() && n.As<RecruitableLunarCultist>().MyName == MyName);
-
+            if (treeKey.Contains("Recruited") || treeKey.Contains("Unrecruited"))
+                return;
+            NPC me = Main.npc.First(n => n.active && n.type == ModContent.NPCType<RecruitableLunarCultist>() && (int)n.As<RecruitableLunarCultist>().MyName == TalkingTo);
             if (treeKey.Contains("Recruitable") && dialogueID == 1)
             {
-                if (!LunarCultBaseSystem.Recruits.Contains((int)MyName))
-                    LunarCultBaseSystem.Recruits.Add((int)MyName);
-                me.As<RecruitableLunarCultist>().State = DialogueState.Recruited;
+                if (!LunarCultBaseSystem.Recruits.Contains(TalkingTo))
+                    LunarCultBaseSystem.Recruits.Add(TalkingTo);
                 LunarCultBaseSystem.RecruitmentsSkipped = 0;
                 foreach (NPC npc in Main.npc.Where(n => n.active && n.type == ModContent.NPCType<RecruitableLunarCultist>()))
                 {
-                    if (npc.ModNPC is RecruitableLunarCultist recruit && recruit.State != DialogueState.Recruited && npc.FullName != me.FullName)
+                    if (npc.ModNPC is RecruitableLunarCultist recruit)
                     {
                         recruit.canRecruit = false;
                         recruit.State = DialogueState.Unrecruited;
                     }
-                }             
+                }
+                me.As<RecruitableLunarCultist>().State = DialogueState.Recruited;
             }
             else
             {
@@ -161,6 +162,7 @@ namespace Windfall.Content.NPCs.WorldEvents.LunarCult
                 else
                     me.As<RecruitableLunarCultist>().State = DialogueState.Recruitable;
             }
+            TalkingTo = -1;
         }
         public override bool CheckActive() => Chattable;
         public override void TownNPCAttackStrength(ref int damage, ref float knockback)

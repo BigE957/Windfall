@@ -85,8 +85,8 @@ namespace Windfall.Content.NPCs.WorldEvents.LunarCult
                         {
                             case 0: itemID = ModContent.ItemType<RiftWeaver>(); break;
                         }
-                        Item i = Main.item[Item.NewItem(Entity.GetSource_Loot(), NPC.Center, new Vector2(8, 4), itemID)];
-                        i.velocity = new Vector2(NPC.direction, 0) * -4;
+                        Item i = Main.item[Item.NewItem(Entity.GetSource_Loot(), orator.Center, new Vector2(8, 4), itemID)];
+                        i.velocity = new Vector2(orator.direction, 0) * -4;
                     }
                     break;
                 case "TheOrator/BetrayalChat":

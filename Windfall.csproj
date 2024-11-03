@@ -11,7 +11,9 @@
     <None Remove="Assets\Graphics\Metaballs\Empyrean_Metaball\EmpyreanLayer3.png" />
     <None Remove="Assets\Graphics\Metaballs\Empyrean_Metaball\EmpyreanLayer4.png" />
     <None Remove="Assets\Graphics\Metaballs\Empyrean_Metaball\EmpyreanLayer5.png" />
+    <None Remove="Assets\Items\Essences\BoCEssence.png" />
     <None Remove="Assets\Items\Essences\EoWEssence.png" />
+    <None Remove="Assets\Items\Essences\HiveEssence.png" />
     <None Remove="Assets\Items\Essences\PerfEssence.png" />
     <None Remove="Assets\Items\Essences\SlimeEssence.png" />
     <None Remove="Assets\Items\Weapons\Misc\RiftWeaver.png" />

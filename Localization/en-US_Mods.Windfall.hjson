@@ -532,7 +532,7 @@ Dialogue: {
 				Ritual: {
 					NoQuest: You've done a great job! I'll be back when I find out what the next thing we need is.
 
-					TabletFrags: {
+					TabletFragment: {
 						Start: Alright, the first thing we'll need is a tablet, which'll act as the ritual's vessel. The Lihzahrds are well versed in rituals such as these; I'm certain they have the materials required to create such a tablet. No followers of the Gods would spare the slightest expense on their toys; I'm sure it'll have the materials we're looking for.
 						During: I'm not telling you to smash their ancient idol and bring me pieces of it... Buuuuuut if something horrible were to happen to that golem unexpectedly, I wouldn't be complaining... and it'd only be right to make something useful out of its parts, right?
 						End: Ah, you got the materials! Yes... These should do perfectly for our tablet. Maybe lets not poke around the Lihzahrds' temple anymore though... you look awfully banged up.

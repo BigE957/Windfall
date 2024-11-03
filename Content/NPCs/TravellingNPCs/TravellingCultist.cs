@@ -25,7 +25,7 @@ namespace Windfall.Content.NPCs.TravellingNPCs
 
         public override bool PreAI()
         {
-            if (NPC.ai[0] == 0 && (!Main.dayTime || Main.time >= despawnTime) && !IsNpcOnscreen(NPC.Center)) // If it's past the despawn time and the NPC isn't onscreen
+            if (NPC.ai[3] == 0 && (!Main.dayTime || Main.time >= despawnTime) && !IsNpcOnscreen(NPC.Center)) // If it's past the despawn time and the NPC isn't onscreen
             {
                 // Here we despawn the NPC and send a message stating that the NPC has despawned
                 if(NPC.active)
@@ -85,7 +85,7 @@ namespace Windfall.Content.NPCs.TravellingNPCs
         }
         public override void OnSpawn(IEntitySource source)
         {
-            if (NPC.ai[0] == 1)
+            if (NPC.ai[3] == 1)
             {
                 NPC.aiStyle = -1;
                 NPC.direction = 1;
@@ -189,7 +189,7 @@ namespace Windfall.Content.NPCs.TravellingNPCs
             get => (DialogueState)WorldSaveSystem.cultistChatState;
             set => WorldSaveSystem.cultistChatState = (int)value;
         }
-        public override bool CanChat() => NPC.ai[0] != 1 && !ModContent.GetInstance<DialogueUISystem>().isDialogueOpen;
+        public override bool CanChat() => NPC.ai[3] != 1 && !ModContent.GetInstance<DialogueUISystem>().isDialogueOpen;
         public override string GetChat()
         {
             if (!CurrentDialogue.ToString().Contains("Quests"))
@@ -236,8 +236,6 @@ namespace Windfall.Content.NPCs.TravellingNPCs
             {
                 if (CurrentDialogue == DialogueState.Quests3)
                 {
-                    if (QuestArtifact.Stack == 0)
-                        QuestArtifact = QuestSystem.RitualQuestItems[RitualQuestProgress];
                     QuestArtifact = CollectorQuestDialogueHelper(Main.npc[NPC.whoAmI], ref QuestComplete, QuestArtifact, QuestSystem.RitualQuestItems);
                     if (QuestArtifact.Stack == 0)
                         RitualQuestProgress++;

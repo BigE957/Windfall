@@ -172,7 +172,6 @@ namespace Windfall.Common.Systems.WorldEvents
         public override void PreUpdateWorld()
         {
             //Main.NewText(State);
-            RecruitmentsSkipped = 0;
             if (NPC.downedAncientCultist || LunarCultBaseLocation == new Point(-1, -1))
                 return;
             //Main.NewText("Active");
@@ -1203,11 +1202,10 @@ namespace Windfall.Common.Systems.WorldEvents
                                 "Skylar",
                                 "Jamie",
                             ];
-                            int availableNames = 6;
                             for (int i = 0; i < 4 - currentRecruitCount; i++)
                             {
                                 NPC recruit;
-                                int index = Main.rand.Next(availableNames);
+                                int index = Main.rand.Next(names.Count);
                                 if (NPC.FindFirstNPC(ModContent.NPCType<LunarCultistDevotee>()) != -1)
                                 {
                                     recruit = Main.npc[NPC.FindFirstNPC(ModContent.NPCType<LunarCultistDevotee>())];
@@ -1225,7 +1223,6 @@ namespace Windfall.Common.Systems.WorldEvents
                                 Recruit.OnSpawn(NPC.GetSource_NaturalSpawn());
 
                                 names.RemoveAt(index);
-                                availableNames--;
                             }
                         }
                     }                    

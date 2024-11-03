@@ -98,7 +98,7 @@ namespace Windfall.Common.Systems.WorldEvents
                             NPC.NewNPC(Entity.GetSource_None(), (int)(DungeonCoords.X + 150), (int)DungeonCoords.Y - 8, ModContent.NPCType<RecruitableLunarCultist>()),
                             NPC.NewNPC(Entity.GetSource_None(), (int)(DungeonCoords.X + 220), (int)DungeonCoords.Y - 8, ModContent.NPCType<RecruitableLunarCultist>()),
                             NPC.NewNPC(Entity.GetSource_None(), (int)DungeonCoords.X, (int)DungeonCoords.Y - 128, ModContent.NPCType<SealingTablet>()),
-                            NPC.NewNPC(Entity.GetSource_None(), (int)DungeonCoords.X, (int)DungeonCoords.Y - 8, ModContent.NPCType<TravellingCultist>(), 0, 1),
+                            NPC.NewNPC(Entity.GetSource_None(), (int)DungeonCoords.X, (int)DungeonCoords.Y - 8, ModContent.NPCType<TravellingCultist>(), ai3: 1),
                             
                         ];
                         Projectile.NewProjectile(Projectile.GetSource_NaturalSpawn(), new Vector2(DungeonCoords.X, DungeonCoords.Y - 52), Vector2.Zero, ModContent.ProjectileType<BurningAltar>(), 0, 0f, ai0: 0);
@@ -171,6 +171,7 @@ namespace Windfall.Common.Systems.WorldEvents
                             string key = "LunarCult.TravellingCultist.SealingRitual.";
                             if (RitualTimer > 60 * 61)
                                 key = "LunarCult.TheOrator.WorldText.SealingRitual.Initial.";
+
                             if (Recruit1.ModNPC is RecruitableLunarCultist Recruitable1 && Recruit2.ModNPC is RecruitableLunarCultist Recruitable2 && Recruit3.ModNPC is RecruitableLunarCultist Recruitable3 && Recruit4.ModNPC is RecruitableLunarCultist Recruitable4)
                             {
                                 switch (RitualTimer)
@@ -304,7 +305,7 @@ namespace Windfall.Common.Systems.WorldEvents
                                         break;
                                     case 60 * 52:
                                         SoundEngine.PlaySound(SoundID.Item71, DungeonCoords);
-                                        Projectile.NewProjectile(Entity.GetSource_NaturalSpawn(), DungeonCoords, new Vector2(0, -20), ModContent.ProjectileType<EmpyreanThorn>(), 200, 0f);
+                                        Projectile.NewProjectile(Entity.GetSource_NaturalSpawn(), DungeonCoords, new Vector2(0, -20), ModContent.ProjectileType<EmpyreanThorn>(), 200, 0f, ai0: -1);
                                         CultistFacePlayer = false;
                                         LunaticCultist.noGravity = true;
                                         LunaticCultist.position.Y -= 64;
@@ -316,7 +317,7 @@ namespace Windfall.Common.Systems.WorldEvents
                                         Text.lifeTime = 60;
                                         break;
                                     case 60 * 58:
-                                        NPCIndexs.Remove(4);
+                                        NPCIndexs.RemoveAt(4);
                                         LunaticCultist.immortal = false;
                                         LunaticCultist.StrikeInstantKill();
                                         Recruit1.noGravity = false; Recruit2.noGravity = false; Recruit3.noGravity = false; Recruit4.noGravity = false;
@@ -442,7 +443,7 @@ namespace Windfall.Common.Systems.WorldEvents
                             if (RitualTimer >= 60 * 50 && RitualTimer <= 60 * 63)
                             {
                                 float ratio = Clamp((RitualTimer - (60 * 50)) / 60f, 0f, 1f);
-                                Main.NewText(ratio);
+                                //Main.NewText(ratio);
                                 float width = 64f * ExpInEasing(ratio, 1);
                                 width = Clamp(width, 0f, 72f);
                                 for (int i = 0; i < 18; i++)

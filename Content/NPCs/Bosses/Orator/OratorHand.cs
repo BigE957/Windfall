@@ -72,7 +72,7 @@ namespace Windfall.Content.NPCs.Bosses.Orator
             }
         }
         public override bool PreAI()
-        {
+        {            
             if (Main.npc[OratorIndex] == null)
                 return true;
             NPC orator = Main.npc[OratorIndex];
@@ -83,6 +83,8 @@ namespace Windfall.Content.NPCs.Bosses.Orator
             {
                 NPC.life = 1;
             }
+            if (!Main.npc.Any(n => n != null && n.active && n.type == NPC.type && n.As<OratorHand>().WhatHand == 1))
+                return true;
             NPC mainHand = Main.npc.First(n => n != null && n.active && n.type == NPC.type && n.As<OratorHand>().WhatHand == 1);
             if (Main.npc.Where(n => n != null && n.active && n.type == NPC.type).Count() == 1)
             {
