@@ -319,7 +319,7 @@ namespace Windfall.Content.NPCs.Bosses.Orator
                         #endregion
 
                         #region Projectiles
-                        if (aiCounter > 0 && aiCounter < 1000 && aiCounter % 90 == 0 && Main.netMode != NetmodeID.MultiplayerClient)
+                        if (CalamityWorld.revenge && aiCounter > 0 && aiCounter < 1000 && aiCounter % (CalamityWorld.death ? 90 : 120) == 0 && Main.netMode != NetmodeID.MultiplayerClient)
                             Projectile.NewProjectile(Terraria.Entity.GetSource_NaturalSpawn(), NPC.Center, Vector2.Zero, ModContent.ProjectileType<OratorJavelin>(), BoltDamage, 0f);
                         #endregion
                     }
