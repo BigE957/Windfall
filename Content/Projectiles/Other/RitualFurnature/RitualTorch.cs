@@ -1,4 +1,6 @@
-﻿namespace Windfall.Content.Projectiles.Other.RitualFurnature
+﻿using Windfall.Common.Systems.WorldEvents;
+
+namespace Windfall.Content.Projectiles.Other.RitualFurnature
 {
     public class RitualTorch : ModProjectile
     {
@@ -26,6 +28,12 @@
         public override void AI()
         {
             Lighting.AddLight(Projectile.Center - Vector2.UnitY * (Projectile.height / 2f), TorchID.Torch);
+            if (SealingRitualSystem.RitualSequenceSeen)
+            {
+                Player closestPlayer = Main.player[Player.FindClosest(Projectile.Center, Projectile.width, Projectile.height)];
+                if (CalamityUtils.ManhattanDistance(Projectile.Center, closestPlayer.Center) > 800f)
+                    Projectile.active = false;
+            }
         }
 
         public override void DrawBehind(int index, List<int> behindNPCsAndTiles, List<int> behindNPCs, List<int> behindProjectiles, List<int> overPlayers, List<int> overWiresUI)
