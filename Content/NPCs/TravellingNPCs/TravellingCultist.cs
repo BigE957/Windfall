@@ -227,6 +227,8 @@ namespace Windfall.Content.NPCs.TravellingNPCs
         {
             if (CurrentDialogue.ToString().Contains("Quests"))
                 button = Language.GetTextValue("LegacyInterface.64");
+            if (CurrentDialogue == DialogueState.Quests2)
+                button2 = "Recruits";
         }
         public override void OnChatButtonClicked(bool firstButton, ref string shop)
         {
@@ -243,6 +245,27 @@ namespace Windfall.Content.NPCs.TravellingNPCs
                 else
                     QuestArtifact = CollectorQuestDialogueHelper(Main.npc[NPC.whoAmI], ref QuestComplete, QuestArtifact, QuestSystem.DungeonQuestItems);
                 return;
+            }
+            else if (!firstButton && CurrentDialogue == DialogueState.Quests2)
+            {
+                switch (LunarCultBaseSystem.Recruits.Count)
+                {
+                    case 0:
+                        Main.npcChatText = GetWindfallTextValue("Dialogue.LunarCult.TravellingCultist.Recruits.None");
+                        break;
+                    case 1:
+                        Main.npcChatText = GetWindfallLocalText("Dialogue.LunarCult.TravellingCultist.Recruits.One").Format((RecruitableLunarCultist.RecruitNames)LunarCultBaseSystem.Recruits[0]);
+                        break;
+                    case 2:
+                        Main.npcChatText = GetWindfallLocalText("Dialogue.LunarCult.TravellingCultist.Recruits.Two").Format((RecruitableLunarCultist.RecruitNames)LunarCultBaseSystem.Recruits[0], (RecruitableLunarCultist.RecruitNames)LunarCultBaseSystem.Recruits[1]);
+                        break;
+                    case 3:
+                        Main.npcChatText = GetWindfallLocalText("Dialogue.LunarCult.TravellingCultist.Recruits.Three").Format((RecruitableLunarCultist.RecruitNames)LunarCultBaseSystem.Recruits[0], (RecruitableLunarCultist.RecruitNames)LunarCultBaseSystem.Recruits[1], (RecruitableLunarCultist.RecruitNames)LunarCultBaseSystem.Recruits[2]);
+                        break;
+                    case 4:
+                        Main.npcChatText = GetWindfallTextValue("Dialogue.LunarCult.TravellingCultist.Recruits.Four");
+                        break;
+                }
             }
         }
         public override void AI()

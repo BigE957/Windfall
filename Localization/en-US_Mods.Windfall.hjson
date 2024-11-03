@@ -494,6 +494,14 @@ Dialogue: {
 				Jamie: Young Jamie's devotion to the Orator was so strong... I'm impressed you managed to sway them to our cause! You're skills never cease to impress.
 			}
 
+			Recruits: {
+				None: You haven't managed to recruit anyone from the Selenic Order to our cause just yet... Keep at it! I'm sure you'll find those who have doubts about that wretched cult.
+				One: We've swayed one person to our cause so far; {0} was their name. Keep up the good work!
+				Two: We've swayed a couple people to our cause! {0} and {1} will be a big help in our efforts; I'm sure!
+				Three: Wow! To think there were so many within the Selenic Order who had such doubts... {0}, {1}, and {2} will all be valuable assets in our fight against that vile cult!
+				Four: You shouldn't be seeing this! If you are, then go tell Big E they goofed something up!
+			}
+
 			Quests: {
 				Dungeon: {
 					NoQuest: You've done a great job! I'll be back when I next need you.
