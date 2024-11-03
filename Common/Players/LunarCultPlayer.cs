@@ -8,12 +8,14 @@ namespace Windfall.Common.Players
         public bool awareOfLunarCoins = false;
         public bool hasRecievedChefMeal = false;
         public int apostleQuestTracker = 0;
+        public bool spokeToAbandonedChef = false;
         public override void LoadData(TagCompound tag)
         {
             SeamstressTalked = tag.GetBool("SeamstressTalked");
             awareOfLunarCoins = tag.GetBool("awareOfLunarCoins");
             hasRecievedChefMeal = tag.GetBool("hasRecievedChefMeal");
             apostleQuestTracker = tag.GetInt("talkQuestTracker");
+            spokeToAbandonedChef = tag.GetBool("spokeToAbandonedChef");
         }
         public override void SaveData(TagCompound tag)
         {
@@ -25,6 +27,8 @@ namespace Windfall.Common.Players
                 tag["hasRecievedChefMeal"] = hasRecievedChefMeal;
             if (apostleQuestTracker != 0)
                 tag["talkQuestTracker"] = apostleQuestTracker;
+            if (spokeToAbandonedChef)
+                tag["spokeToAbandonedChef"] = spokeToAbandonedChef;
         }
     }
 }

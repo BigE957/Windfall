@@ -1,0 +1,60 @@
+{
+  "Dialogues": [
+    {
+      "Text": "Oh hey! Finally, I was beginning to think it was just me and Chef alone here! You know what the hell happened to everyone? Chef mentioned hearing something, but didn't elaborate...",
+      "Responses": [
+        {
+          "Title": "No clue.",
+          "Heading": 1
+        },
+        {
+          "Title": "I saw The Orator and...",
+          "Heading": 3
+        },
+        {
+          "Title": "I talked to him and...",
+          "Heading": 4
+        }
+      ]
+    },
+    {
+      "Text": "Geez, that's really weird. Not even the Orator's around. He disappears to go do something or another on the occasion though. Maybe he and the rest of everybody are doing something? I know he'd been hyping everybody up recently...",
+      "Responses": [
+        {
+          "Title": "Maybe?",
+          "Heading": 2
+        }
+      ]
+    },
+    {
+      "Text": "Well, I do appreciate the break though. Haven't had to do a single bit of work! Guess I should just enjoy that, and not worry.",
+      "Responses": [
+        {
+          "Title": "Sounds like a good idea."
+        }
+      ]
+    },
+    {
+      "Text": "Oh my... I know the Orator certainly wasn't a fan of the Dragon Cult, and vice versa... I'd watch your back, and I certainly wouldn't go meddling with that Tablet again. I'm sure the Orator wouldn't hesitate to finish what he started if you did...",
+      "Responses": [
+        {
+          "Title": "Thanks for the advice."
+        }
+      ]
+    },
+    {
+      "Text": "Oh geez... Sounds pretty spooky. Wait- Why didn't he tell me any of that?! That stupid chef is gonna get it next time I see him!",
+      "Responses": [
+        {
+          "Title": "Uh oh!"
+        },
+        {
+          "Title": "Poor him..."
+        }
+      ]
+    }
+  ],
+  "Characters": [
+    "TheCalamity"
+  ]
+}

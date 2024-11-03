@@ -1,7 +1,6 @@
 ﻿using DialogueHelper.Content.UI.Dialogue;
 using Humanizer;
 using Terraria.Enums;
-using Terraria.ModLoader;
 using Windfall.Common.Systems.WorldEvents;
 using Windfall.Content.Items.Quest;
 using Windfall.Content.Items.Quest.Tailor;
@@ -335,6 +334,8 @@ namespace Windfall.Content.NPCs.WorldEvents.LunarCult
                         ModContent.GetInstance<DialogueUISystem>().DisplayDialogueTree(Windfall.Instance, "TheSeamstress/TailorTutorial");
                 }
             }
+            else if (SealingRitualSystem.RitualSequenceSeen)
+                ModContent.GetInstance<DialogueUISystem>().DisplayDialogueTree(Windfall.Instance, "TheSeamstress/Abandoned");
             else
                 ModContent.GetInstance<DialogueUISystem>().DisplayDialogueTree(Windfall.Instance, "TheSeamstress/Default", MyPlayer.LunarCult().SeamstressTalked ? 1 : 0);
                 
@@ -370,6 +371,16 @@ namespace Windfall.Content.NPCs.WorldEvents.LunarCult
                         };
                         uiSystem.CurrentTree.Dialogues[14].Responses = response.Where(r => r != null).ToArray();
 
+                    }
+                    break;
+                case "TheSeamstress/Abandoned":
+                    if(!Main.LocalPlayer.LunarCult().spokeToAbandonedChef)
+                    {
+                        response = new(uiSystem.CurrentTree.Dialogues[0].Responses)
+                        {
+                            [2] = null
+                        };
+                        uiSystem.CurrentTree.Dialogues[0].Responses = response.Where(r => r != null).ToArray();
                     }
                     break;
             }

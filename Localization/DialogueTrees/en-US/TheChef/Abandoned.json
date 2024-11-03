@@ -1,0 +1,33 @@
+{
+  "Dialogues": [
+    {
+      "Text": "Oh! Good to see another face around here. Seems like everybody's off doing... something or another. Its just Seamstress and I here now. It's... a tad unsettling, to be honest. This place is usually quite full of life.",
+      "Responses": [
+        {
+          "Title": "Where is everyone?",
+          "Heading": 1
+        }
+      ]
+    },
+    {
+      "Text": "I can't say I'm entirely sure... The Orator called some sort of meeting upstairs for every Bishop and Devotee present at the time."
+    },
+    {
+      "Text": "I could hear everyone's voices clamoring above me, and then, suddenly, there was a loud sort of roar. Everyone went silent, and then... that was it."
+    },
+    {
+      "Text": "I haven't seen a soul besides the Seamstress since. I haven't even seen the Orator! I can only assume something happened. Perhaps a ritual relating to our Order's goal of 'Paradise'? Maybe something to do with that otherworldy voice I sometimes hear up there? I'm not yet certain...",
+      "Responses": [
+        {
+          "Title": "That's pretty spooky!",
+        },
+        {
+          "Title": "How strange..."
+        }
+      ]
+    }
+  ],
+  "Characters": [
+    "TheCalamity"
+  ]
+}

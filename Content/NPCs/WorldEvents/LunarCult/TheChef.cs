@@ -1,6 +1,6 @@
-﻿using Windfall.Common.Systems.WorldEvents;
-using DialogueHelper.Content.UI.Dialogue;
+﻿using DialogueHelper.Content.UI.Dialogue;
 using Terraria.Enums;
+using Windfall.Common.Systems.WorldEvents;
 using static Windfall.Common.Systems.WorldEvents.LunarCultBaseSystem;
 
 namespace Windfall.Content.NPCs.WorldEvents.LunarCult
@@ -28,6 +28,8 @@ namespace Windfall.Content.NPCs.WorldEvents.LunarCult
             NPCID.Sets.NoTownNPCHappiness[Type] = true;
             ModContent.GetInstance<DialogueUISystem>().DialogueOpen += ModifyTree;
             ModContent.GetInstance<DialogueUISystem>().ButtonClick += ClickEffect;
+            ModContent.GetInstance<DialogueUISystem>().DialogueClose += CloseEffect;
+
         }
         public override void SetDefaults()
         {
@@ -132,6 +134,8 @@ namespace Windfall.Content.NPCs.WorldEvents.LunarCult
                 ModContent.GetInstance<DialogueUISystem>().DisplayDialogueTree(Windfall.Instance, "TheChef/FoodSelection");               
             else if ((Main.moonPhase == (int)MoonPhase.ThreeQuartersAtLeft || Main.moonPhase == (int)MoonPhase.ThreeQuartersAtRight) && State == SystemStates.Ready)
                 ModContent.GetInstance<DialogueUISystem>().DisplayDialogueTree(Windfall.Instance, "TheChef/CafeteriaActivityStart");
+            else if(SealingRitualSystem.RitualSequenceSeen)
+                ModContent.GetInstance<DialogueUISystem>().DisplayDialogueTree(Windfall.Instance, "TheChef/Abandoned");
             else
                 ModContent.GetInstance<DialogueUISystem>().DisplayDialogueTree(Windfall.Instance, "TheChef/Default");                
             return "Hey chat!";
@@ -204,6 +208,12 @@ namespace Windfall.Content.NPCs.WorldEvents.LunarCult
                 else if (Main.LocalPlayer.LunarCult().apostleQuestTracker == 0 && dialogueID == 7)
                     Main.LocalPlayer.LunarCult().apostleQuestTracker++;
             }
+        }
+
+        private void CloseEffect(string treeKey, int dialogueID, int buttonID)
+        {
+            if (treeKey == "TheChef/Abandoned")
+                Main.LocalPlayer.LunarCult().spokeToAbandonedChef = true;
         }
     }
 }
