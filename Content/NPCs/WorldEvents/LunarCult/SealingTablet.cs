@@ -35,7 +35,8 @@ namespace Windfall.Content.NPCs.WorldEvents.LunarCult
         public override void AI()
         {
             if (!AnyBossNPCS(true) && !NPC.AnyNPCs(ModContent.NPCType<TheOrator>()) && NPC.ai[0] == 2)
-            {                
+            {
+                Lighting.AddLight(NPC.Center, Color.Lerp(new Color(117, 255, 159), new Color(255, 180, 80), (float)(Math.Sin(Main.GlobalTimeWrappedHourly * 1.25f) / 0.5f) + 0.5f).ToVector3() * (summonRatio + 0.25f));
                 Player closestPlayer = Main.player[Player.FindClosest(NPC.Center, NPC.width, NPC.height)];
                 if ((closestPlayer.Center - NPC.Center).Length() < 200f)
                     summonRatio += 0.001f;
@@ -66,7 +67,6 @@ namespace Windfall.Content.NPCs.WorldEvents.LunarCult
                     for (int i = 0; i < 32; i++)
                         EmpyreanMetaball.SpawnDefaultParticle(boss.Center + new Vector2(Main.rand.NextFloat(-64, 64), 64), Vector2.UnitY * Main.rand.NextFloat(4f, 24f) * -1, Main.rand.NextFloat(110f, 130f));
                 }
-
             }
         }
         public override bool CheckActive() => false;
