@@ -42,6 +42,13 @@ namespace Windfall.Content.Projectiles.Boss.Orator
         {
             int holdDuration = (int)holdtime;
             float particleVelocity = Main.rand.NextFloat(6f, 8f);
+            if (!NPC.AnyNPCs(ModContent.NPCType<TheOrator>()))
+            {
+                if(moveCount < moveDistance)
+                    moveDistance = moveCount;
+                if(holdCounter < holdDuration)
+                    holdCounter = holdDuration;
+            }
             if (moveCount < 0)
                 Projectile.active = false;
             else if (moveCount >= moveDistance || holdCounter != 0)
