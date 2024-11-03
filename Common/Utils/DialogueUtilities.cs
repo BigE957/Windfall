@@ -182,29 +182,29 @@ namespace Windfall.Common.Utils
         /// <returns>
         /// Handles NPC dialogue for NPCs with Randomized Quests (quests that are randomly selected from a pool). Does not interact with <see cref="QuestSystem"/>.
         /// </returns>
-        public static QuestItem CollectorQuestDialogueHelper(NPC npc, ref bool QuestComplete, QuestItem CurrentQuestItem, List<QuestItem> MyQuestItems)
+        public static QuestItem CollectorQuestDialogueHelper(NPC npc, ref bool QuestComplete, QuestItem CurrentQuestItem, List<QuestItem> MyQuestItems, int index = -1)
         {
             string Path = null;
             if (npc.type == ModContent.NPCType<TravellingCultist>())
             {
-                if (QuestSystem.RitualQuestItems.Contains(CurrentQuestItem))
+                if (npc.ModNPC is TravellingCultist cultist && WorldSaveSystem.cultistChatState == 5)
                     Path = "LunarCult.TravellingCultist.Quests.Ritual";
                 else
                     Path = "LunarCult.TravellingCultist.Quests.Dungeon";
             }
-            int index = -1;
             if (!QuestComplete)
             {
                 bool questActive = true;
                 if (CurrentQuestItem.Stack == 0)
                 {
-                    index = Main.rand.Next(0, MyQuestItems.Count);
+                    if(index == -1)
+                        index = Main.rand.Next(0, MyQuestItems.Count);
                     CurrentQuestItem = MyQuestItems[index];
                     questActive = false;
                 }
                 else
                     index = MyQuestItems.IndexOf(CurrentQuestItem);
-                string ItemName = ContentSamples.ItemsByType[CurrentQuestItem.Type].Name.Replace(" ", "");
+                string ItemName = ContentSamples.ItemsByType[CurrentQuestItem.Type].ModItem.Name;
 
                 if (!questActive)
                 {

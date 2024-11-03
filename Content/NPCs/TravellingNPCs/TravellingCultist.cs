@@ -4,6 +4,7 @@ using Terraria.GameContent.Bestiary;
 using Terraria.Utilities;
 using Windfall.Common.Systems;
 using Windfall.Common.Systems.WorldEvents;
+using Windfall.Content.Items.Quest.SealingRitual;
 using Windfall.Content.NPCs.WorldEvents.LunarCult;
 
 namespace Windfall.Content.NPCs.TravellingNPCs
@@ -71,7 +72,7 @@ namespace Windfall.Content.NPCs.TravellingNPCs
         private static bool CanSpawnNow()
         {
             //progression locks
-            if (!Main.hardMode || !NPC.downedBoss3)// || SealingRitualSystem.RitualSequenceSeen)
+            if (!Main.hardMode || !NPC.downedBoss3 || SealingRitualSystem.RitualSequenceSeen)
                 return false;
             // can't spawn if any events are running
             if (Main.eclipse || Main.invasionType > 0 && Main.invasionDelay == 0 && Main.invasionSize > 0)
@@ -236,7 +237,7 @@ namespace Windfall.Content.NPCs.TravellingNPCs
             {
                 if (CurrentDialogue == DialogueState.Quests3)
                 {
-                    QuestArtifact = CollectorQuestDialogueHelper(Main.npc[NPC.whoAmI], ref QuestComplete, QuestArtifact, QuestSystem.RitualQuestItems);
+                    QuestArtifact = CollectorQuestDialogueHelper(Main.npc[NPC.whoAmI], ref QuestComplete, QuestArtifact, QuestSystem.RitualQuestItems, RitualQuestProgress);
                     if (QuestArtifact.Stack == 0)
                         RitualQuestProgress++;
                 }
