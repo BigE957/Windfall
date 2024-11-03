@@ -181,6 +181,8 @@ namespace Windfall.Common.Systems.WorldEvents
                     NPC.NewNPC(Entity.GetSource_None(), (LunarCultBaseLocation.X * 16) + 242, (LunarCultBaseLocation.Y * 16) + 300, ModContent.NPCType<Seamstress>());
                 if (!NPC.AnyNPCs(ModContent.NPCType<TheChef>()))
                     NPC.NewNPC(Entity.GetSource_None(), (LunarCultBaseLocation.X * 16) - 1040, (LunarCultBaseLocation.Y * 16) - 110, ModContent.NPCType<TheChef>());
+                if (SealingRitualSystem.RitualSequenceSeen)
+                    return;
                 if (!NPC.AnyNPCs(ModContent.NPCType<OratorNPC>()))
                     NPC.NewNPC(Entity.GetSource_None(), (CultBaseArea.Right - 11) * 16, (CultBaseArea.Top + 30) * 16, ModContent.NPCType<OratorNPC>());
                 if(Main.npc.Where(n => n.active && (n.type == ModContent.NPCType<LunarCultistArcher>() || n.type == ModContent.NPCType<LunarCultistDevotee>() || n.type == ModContent.NPCType<RecruitableLunarCultist>())).Count() < 10)

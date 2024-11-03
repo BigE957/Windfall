@@ -22,6 +22,7 @@
             AddMusic("Assets/Music/CanYouReallyCallThisAHotelIDidntReceiveAMintOnMyPillowOrAnything", "Cafeteria");
             AddMusic("Assets/Music/ItsRainingSomewhereElse", "LunarCultBase");
             AddMusic("Assets/Music/Amalgam", "Ritual");
+            AddMusic("Assets/Music/Premonition", "EmptyBase");
         }
     }
 }

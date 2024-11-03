@@ -1742,6 +1742,11 @@ ModCompat: {
 			DisplayName: Amalgam
 			Author: by Toby Fox
 		}
+
+		EmptyBase: {
+			DisplayName: Premonition
+			Author: by Toby Fox
+		}
 	}
 
 	BossChecklist: {
