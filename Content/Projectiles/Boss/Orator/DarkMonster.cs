@@ -126,7 +126,7 @@ namespace Windfall.Content.Projectiles.Boss.Orator
                     if (Projectile.velocity.Length() < 1f)
                         Projectile.velocity = Vector2.Zero;
                     const float ShakeBy = 25f;
-                    Projectile.position += new Vector2(Main.rand.NextFloat(-ShakeBy, ShakeBy) / (Projectile.scale - 0.5f), Main.rand.NextFloat(-ShakeBy, ShakeBy) / (Projectile.scale * 2));
+                    Projectile.position += new Vector2(Main.rand.NextFloat(-ShakeBy, ShakeBy) / (Projectile.scale * 2), Main.rand.NextFloat(-ShakeBy, ShakeBy) / (Projectile.scale * 2));
                     break;
                 case States.Exploding:
                     SoundEngine.PlaySound(SoundID.DD2_EtherianPortalDryadTouch, Projectile.Center);
@@ -138,23 +138,18 @@ namespace Windfall.Content.Projectiles.Boss.Orator
                     NPC Orator = null;
                     if (NPC.FindFirstNPC(ModContent.NPCType<TheOrator>()) != -1)
                         Orator = Main.npc[NPC.FindFirstNPC(ModContent.NPCType<TheOrator>())];
-                    if (Orator != null && Orator.ai[0] == 2 && (float)Orator.life / (float)Orator.lifeMax > 0.1f)
+                    if (Main.netMode != NetmodeID.MultiplayerClient && Orator != null && Orator.ai[0] == 2 && (float)Orator.life / (float)Orator.lifeMax > 0.1f)
                     {
                         for (int i = 0; i < (CalamityWorld.death ? 10 : CalamityWorld.revenge ? 8 : Main.expertMode ? 7 : 6); i++)
                         {
-
-                            if (Main.netMode != NetmodeID.MultiplayerClient)
-                                NPC.NewNPC(Terraria.Entity.GetSource_NaturalSpawn(), (int)Projectile.Center.X, (int)Projectile.Center.Y, ModContent.NPCType<ShadowHand>());
+                            NPC.NewNPC(Terraria.Entity.GetSource_NaturalSpawn(), (int)Projectile.Center.X, (int)Projectile.Center.Y, ModContent.NPCType<ShadowHand>());
                         }
 
                         for (int i = 0; i < 24; i++)
                         {
-                            if (Main.netMode != NetmodeID.MultiplayerClient)
-                            {
-                                Projectile.NewProjectile(Terraria.Entity.GetSource_NaturalSpawn(), Projectile.Center, (TwoPi / 24 * i).ToRotationVector2(), ModContent.ProjectileType<DarkBolt>(), TheOrator.BoltDamage, 0f, -1, 0, i % 2 == 0 ? -10 : 0);
-                                for (int j = 0; j < 2; j++)
-                                    Projectile.NewProjectile(Terraria.Entity.GetSource_NaturalSpawn(), Projectile.Center, Main.rand.NextVector2Circular(12f, 12f), ModContent.ProjectileType<DarkGlob>(), TheOrator.GlobDamage, 0f, -1, 0, Main.rand.NextFloat(0.75f, 1.5f));
-                            }
+                            Projectile.NewProjectile(Terraria.Entity.GetSource_NaturalSpawn(), Projectile.Center, (TwoPi / 24 * i).ToRotationVector2(), ModContent.ProjectileType<DarkBolt>(), TheOrator.BoltDamage, 0f, -1, 0, i % 2 == 0 ? -10 : 0);
+                            for (int j = 0; j < 2; j++)
+                                Projectile.NewProjectile(Terraria.Entity.GetSource_NaturalSpawn(), Projectile.Center, Main.rand.NextVector2Circular(12f, 12f), ModContent.ProjectileType<DarkGlob>(), TheOrator.GlobDamage, 0f, -1, 0, Main.rand.NextFloat(0.75f, 1.5f));
                         }
                     }
                     CalamityMod.Particles.Particle pulse = new PulseRing(Projectile.Center, Vector2.Zero, Color.Teal, 0f, 2.5f, 16);

@@ -1,6 +1,4 @@
-﻿using CalamityMod.Buffs.StatDebuffs;
-using CalamityMod.Graphics.Metaballs;
-using Luminance.Assets;
+﻿using CalamityMod.Graphics.Metaballs;
 using Windfall.Content.NPCs.Bosses.Orator;
 using Windfall.Content.NPCs.WorldEvents.LunarCult;
 using Windfall.Content.Projectiles.Boss.Orator;
@@ -70,6 +68,7 @@ namespace Windfall.Common.Graphics.Metaballs
             AnyProjectiles(ModContent.ProjectileType<DarkTide>()) ||
             AnyProjectiles(ModContent.ProjectileType<ShadowHand_Minion>()) ||
             AnyProjectiles(ModContent.ProjectileType<HandRing>()) ||
+            AnyProjectiles(ModContent.ProjectileType<UnstableDarkness>()) ||
             NPC.AnyNPCs(ModContent.NPCType<ShadowHand>()) ||
             NPC.AnyNPCs(ModContent.NPCType<OratorHand>()) ||
             NPC.AnyNPCs(ModContent.NPCType<SealingTablet>())
@@ -198,7 +197,8 @@ namespace Windfall.Common.Graphics.Metaballs
                 p.type == ModContent.ProjectileType<OratorBorder>() || 
                 p.type == ModContent.ProjectileType<DarkTide>() ||
                 p.type == ModContent.ProjectileType<ShadowHand_Minion>() ||
-                p.type == ModContent.ProjectileType<HandRing>()
+                p.type == ModContent.ProjectileType<HandRing>() ||
+                p.type == ModContent.ProjectileType<UnstableDarkness>()
             )))
             {
                 if(p.type == ModContent.ProjectileType<ShadowHand_Minion>())

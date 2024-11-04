@@ -1573,6 +1573,7 @@ Projectiles: {
 	BookPile.DisplayName: Book Pile
 	RiftWeaverProj.DisplayName: Rift Weaver Proj
 	RiftWeaverThrow.DisplayName: Rift Weaver Throw
+	UnstableDarkness.DisplayName: Unstable Darkness
 }
 
 Buffs: {
