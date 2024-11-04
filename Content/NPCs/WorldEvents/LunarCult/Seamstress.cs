@@ -341,7 +341,7 @@ namespace Windfall.Content.NPCs.WorldEvents.LunarCult
                 
             return "";
         }
-        public override bool CheckActive() => false;
+        public override bool CheckActive() => !NPC.downedAncientCultist;
         private void ModifyTree(string treeKey, int dialogueID, int buttonID)
         {
             DialogueUISystem uiSystem = ModContent.GetInstance<DialogueUISystem>();

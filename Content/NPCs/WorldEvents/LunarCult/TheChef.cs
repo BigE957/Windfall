@@ -140,7 +140,7 @@ namespace Windfall.Content.NPCs.WorldEvents.LunarCult
                 ModContent.GetInstance<DialogueUISystem>().DisplayDialogueTree(Windfall.Instance, "TheChef/Default");                
             return "Hey chat!";
         }
-        public override bool CheckActive() => false;
+        public override bool CheckActive() => !NPC.downedAncientCultist;
         public override void PostDraw(SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor)
         {
             if (ItemCooking == -1)
