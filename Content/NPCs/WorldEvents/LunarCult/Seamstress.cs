@@ -1,10 +1,10 @@
-﻿using DialogueHelper.Content.UI.Dialogue;
-using Humanizer;
+﻿using Humanizer;
 using Terraria.Enums;
 using Windfall.Common.Systems.WorldEvents;
 using Windfall.Content.Items.Quest;
 using Windfall.Content.Items.Quest.Tailor;
 using Windfall.Content.UI;
+using Windfall.SubModules.DialogueHelper.UI.Dialogue;
 using static Windfall.Common.Systems.WorldEvents.LunarCultBaseSystem;
 
 namespace Windfall.Content.NPCs.WorldEvents.LunarCult

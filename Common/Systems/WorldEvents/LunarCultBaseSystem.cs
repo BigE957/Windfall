@@ -6,12 +6,12 @@ using Windfall.Common.Graphics.Metaballs;
 using Windfall.Content.Items.Food;
 using Windfall.Content.Items.Quest;
 using Windfall.Content.NPCs.WorldEvents.LunarCult;
-using DialogueHelper.Content.UI.Dialogue;
 using Windfall.Content.NPCs.Critters;
 using Windfall.Content.Buffs.DoT;
 using Windfall.Content.Projectiles.ProjectileAnimations;
 using Windfall.Content.UI;
 using Terraria.Enums;
+using Windfall.SubModules.DialogueHelper.UI.Dialogue;
 
 namespace Windfall.Common.Systems.WorldEvents
 {

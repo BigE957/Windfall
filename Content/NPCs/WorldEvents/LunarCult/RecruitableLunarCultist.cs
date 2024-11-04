@@ -1,8 +1,8 @@
 ﻿using CalamityMod.Projectiles.Ranged;
 using CalamityMod.Projectiles.Rogue;
-using DialogueHelper.Content.UI.Dialogue;
 using Windfall.Common.Systems.WorldEvents;
 using Windfall.Content.NPCs.Bosses.Orator;
+using Windfall.SubModules.DialogueHelper.UI.Dialogue;
 
 namespace Windfall.Content.NPCs.WorldEvents.LunarCult
 {

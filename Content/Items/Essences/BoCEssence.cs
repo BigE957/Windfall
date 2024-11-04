@@ -1,6 +1,6 @@
 ﻿using CalamityMod.Rarities;
 using Terraria.Graphics.Effects;
-using DialogueHelper.Content.UI.Dialogue;
+using Windfall.SubModules.DialogueHelper.UI.Dialogue;
 
 namespace Windfall.Content.Items.Essences
 {

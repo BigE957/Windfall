@@ -8,7 +8,7 @@ using Windfall.Common.Systems;
 using Windfall.Content.Buffs.StatBuffs;
 using Windfall.Content.NPCs.PlayerNPCs;
 using Windfall.Content.Projectiles.GodlyAbilities;
-using DialogueHelper.Content.UI.Dialogue;
+using Windfall.SubModules.DialogueHelper.UI.Dialogue;
 
 namespace Windfall.Common.Players
 {
