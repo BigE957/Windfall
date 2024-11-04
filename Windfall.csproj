@@ -25,6 +25,7 @@
     <None Remove="Assets\Projectiles\Boss\OratorJavelin.png" />
     <None Remove="Assets\Projectiles\Boss\OratorJavelinWhiteOut.png" />
     <None Remove="Assets\Skies\OratorMoon.png" />
+    <None Remove="Assets\UI\CharacterAssets\DragonArcher\Default.png" />
     <None Remove="Assets\UI\CharacterAssets\LunaticCultist\Default.png" />
     <None Remove="Assets\UI\CharacterAssets\TheOrator\Default.png" />
     <None Remove="Content\Buffs\Cooldowns\ParryWeapon.png" />

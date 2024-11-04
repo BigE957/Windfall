@@ -1,0 +1,19 @@
+{
+  "Name": "[c/FFFF00: ???]",
+  "Scale": 1.5,
+
+  "Expressions": [
+    {
+      "Title": "Default",
+      "Path": "Windfall/Assets/UI/CharacterAssets/DragonArcher/Default",
+      "FrameCount": 1,
+      "FrameRate": 0,
+      "Loop": false,
+      "AnimateCondition": false
+    }
+  ],
+  "Style": "DialogueHelper.UI.Dialogue.DialogueStyles.DefaultDialogueStyle",
+  "TextDelay": 3,
+  "PrimaryColor": "#1434A4",
+  "SecondaryColor": "#FFFF00"
+}
