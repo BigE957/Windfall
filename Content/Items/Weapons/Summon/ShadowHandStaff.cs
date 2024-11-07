@@ -15,7 +15,7 @@ namespace Windfall.Content.Items.Weapons.Summon
             Item.damage = 280;
             Item.mana = 10;
             Item.useTime = Item.useAnimation = 34;
-            Item.useStyle = ItemUseStyleID.HoldUp;
+            Item.useStyle = ItemUseStyleID.Swing;
             Item.noMelee = true;
             Item.knockBack = 0.5f;
             Item.value = CalamityGlobalItem.RarityRedBuyPrice;
