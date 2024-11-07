@@ -82,6 +82,7 @@
     <Folder Include="Content\Items\Armor\Selenic\" />
     <Folder Include="Content\Items\Quest\Cafeteria\" />
     <Folder Include="Content\UI\Dialogue\DialogueStyles\" />
+    <Folder Include="SubModules\" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="CalamityMod">

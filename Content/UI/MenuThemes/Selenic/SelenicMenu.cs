@@ -43,15 +43,15 @@
 
             Texture2D CloudBack = (Texture2D)ModContent.Request<Texture2D>("Windfall/Assets/Skies/OratorCloudsBack", AssetRequestMode.ImmediateLoad);
             float backgroundOffset = GetBackgroundOffset(0.1f);
-            spriteBatch.Draw(CloudBack, new Vector2(GetBoundedX(backgroundOffset,                                  cloudScale), cloudHeight - (450 * cloudScale)), CloudBack.Frame(), Color.Gray, 0f, new Vector2(CloudBack.Width / 2, CloudBack.Height / 2), cloudScale, SpriteEffects.None, 0f);
-            spriteBatch.Draw(CloudBack, new Vector2(GetBoundedX(backgroundOffset - (CloudBack.Width * cloudScale), cloudScale), cloudHeight - (450 * cloudScale)), CloudBack.Frame(), Color.Gray, 0f, new Vector2(CloudBack.Width / 2, CloudBack.Height / 2), cloudScale, SpriteEffects.None, 0f);
-            spriteBatch.Draw(CloudBack, new Vector2(GetBoundedX(backgroundOffset + (CloudBack.Width * cloudScale), cloudScale), cloudHeight - (450 * cloudScale)), CloudBack.Frame(), Color.Gray, 0f, new Vector2(CloudBack.Width / 2, CloudBack.Height / 2), cloudScale, SpriteEffects.None, 0f);
+            spriteBatch.Draw(CloudBack, new Vector2(GetBoundedX(backgroundOffset,                                  cloudScale, CloudBack), cloudHeight - (450 * cloudScale)), CloudBack.Frame(), Color.Gray, 0f, new Vector2(CloudBack.Width / 2, CloudBack.Height / 2), cloudScale, SpriteEffects.None, 0f);
+            spriteBatch.Draw(CloudBack, new Vector2(GetBoundedX(backgroundOffset - (CloudBack.Width * cloudScale), cloudScale, CloudBack), cloudHeight - (450 * cloudScale)), CloudBack.Frame(), Color.Gray, 0f, new Vector2(CloudBack.Width / 2, CloudBack.Height / 2), cloudScale, SpriteEffects.None, 0f);
+            spriteBatch.Draw(CloudBack, new Vector2(GetBoundedX(backgroundOffset + (CloudBack.Width * cloudScale), cloudScale, CloudBack), cloudHeight - (450 * cloudScale)), CloudBack.Frame(), Color.Gray, 0f, new Vector2(CloudBack.Width / 2, CloudBack.Height / 2), cloudScale, SpriteEffects.None, 0f);
             #endregion
 
             #region Moon
             Vector2 position = new(Main.screenWidth / 2f, Main.screenHeight / 1.8f);
             Texture2D bloomCircle = ModContent.Request<Texture2D>("CalamityMod/Particles/LargeBloom", AssetRequestMode.ImmediateLoad).Value;
-
+            
             spriteBatch.End();
             spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.Additive, SamplerState.LinearClamp, DepthStencilState.None, Main.Rasterizer, null, Main.UIScaleMatrix);
             spriteBatch.Draw(bloomCircle, position, null, Color.AliceBlue * ((float)(Math.Sin(counter / 20D) / 4f + 0.75f)), 0f, bloomCircle.Size() / 2f, 2.4f * resolutionScale.X, SpriteEffects.None, 0f);
@@ -78,9 +78,9 @@
             Texture2D CloudFront = (Texture2D)ModContent.Request<Texture2D>("Windfall/Assets/Skies/OratorCloudsFront", AssetRequestMode.ImmediateLoad);
             backgroundOffset = GetBackgroundOffset(0.3f);
             cloudHeight = Main.screenHeight / -3.5f + (Main.screenHeight * 1.25f);
-            spriteBatch.Draw(CloudFront, new Vector2(GetBoundedX(backgroundOffset, cloudScale), cloudHeight - (250 * cloudScale)), CloudFront.Frame(), Color.Gray, 0f, new Vector2(CloudFront.Width / 2, CloudFront.Height / 2), cloudScale, SpriteEffects.None, 0f);
-            spriteBatch.Draw(CloudFront, new Vector2(GetBoundedX(backgroundOffset - (CloudFront.Width * cloudScale), cloudScale), cloudHeight - (250 * cloudScale)), CloudFront.Frame(), Color.Gray, 0f, new Vector2(CloudFront.Width / 2, CloudFront.Height / 2), cloudScale, SpriteEffects.None, 0f);
-            spriteBatch.Draw(CloudFront, new Vector2(GetBoundedX(backgroundOffset + (CloudFront.Width * cloudScale), cloudScale), cloudHeight - (250 * cloudScale)), CloudFront.Frame(), Color.Gray, 0f, new Vector2(CloudFront.Width / 2, CloudFront.Height / 2), cloudScale, SpriteEffects.None, 0f);
+            spriteBatch.Draw(CloudFront, new Vector2(GetBoundedX(backgroundOffset,                                   cloudScale, CloudFront), cloudHeight - (250 * cloudScale)), CloudFront.Frame(), Color.Gray, 0f, new Vector2(CloudFront.Width / 2, CloudFront.Height / 2), cloudScale, SpriteEffects.None, 0f);
+            spriteBatch.Draw(CloudFront, new Vector2(GetBoundedX(backgroundOffset - (CloudFront.Width * cloudScale), cloudScale, CloudFront), cloudHeight - (250 * cloudScale)), CloudFront.Frame(), Color.Gray, 0f, new Vector2(CloudFront.Width / 2, CloudFront.Height / 2), cloudScale, SpriteEffects.None, 0f);
+            spriteBatch.Draw(CloudFront, new Vector2(GetBoundedX(backgroundOffset + (CloudFront.Width * cloudScale), cloudScale, CloudFront), cloudHeight - (250 * cloudScale)), CloudFront.Frame(), Color.Gray, 0f, new Vector2(CloudFront.Width / 2, CloudFront.Height / 2), cloudScale, SpriteEffects.None, 0f);
             #endregion
 
             counter++;
@@ -105,6 +105,7 @@
         {
             return -100000 - (counter * parallaxMultiplier);
         }
-        private static float GetBoundedX(float initialX, float scale) => (initialX % (Main.screenWidth * (2.9265f * scale)) + (Main.screenWidth * (2.3f * scale)));
+        private static float GetBoundedX(float initialX, float scale, Texture2D tex) => initialX % (tex.Width * 3 * scale) + (Main.screenWidth * 1.3f);
+
     }
 }
