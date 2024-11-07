@@ -47,7 +47,7 @@ namespace Windfall.Content.NPCs.Bosses.Orator
             NPC.defense = 100;
             NPC.noGravity = true;
             NPC.noTileCollide = true;
-            NPC.LifeMaxNERB(Main.masterMode ? 180000 : Main.expertMode ? 120000 : 90000, 150000);
+            NPC.LifeMaxNERB(Main.masterMode ? 140000 : Main.expertMode ? 80000 : 75000, 100000);
             NPC.knockBackResist = 0f;
             NPC.scale = 1.25f;
             NPC.HitSound = SoundID.DD2_LightningBugHurt with { Volume = 0.5f };
@@ -485,7 +485,7 @@ namespace Windfall.Content.NPCs.Bosses.Orator
 
                             if (WhatHand == 1)
                             {
-                                if(aiCounter < 240)
+                                if(aiCounter < 270)
                                 {
                                     CurrentPose = Pose.Palm;
 
@@ -495,7 +495,7 @@ namespace Windfall.Content.NPCs.Bosses.Orator
                                     NPC.direction = -WhatHand;
                                     NPC.rotation = Pi;
 
-                                    if(aiCounter % 90 == 0 && aiCounter != 0)
+                                    if((aiCounter + 45) % 90 == 0 && aiCounter != 0)
                                     {
                                         Vector2 ToTarget = (modOrator.target.Center - NPC.Center).SafeNormalize(Vector2.Zero);
                                         SoundEngine.PlaySound(SoundID.DD2_OgreSpit, NPC.Center);
@@ -682,7 +682,7 @@ namespace Windfall.Content.NPCs.Bosses.Orator
                             }
                             else
                             {
-                                if (aiCounter < 360)
+                                if (aiCounter < 390)
                                 {
                                     CurrentPose = Pose.Palm;
 
@@ -692,7 +692,7 @@ namespace Windfall.Content.NPCs.Bosses.Orator
                                     NPC.direction = -WhatHand;
                                     NPC.rotation = 0;
 
-                                    if ((aiCounter + 45) % 90 == 0)
+                                    if ((aiCounter+90) % 90 == 0)
                                     {
                                         Vector2 ToTarget = (modOrator.target.Center - NPC.Center).SafeNormalize(Vector2.Zero);
                                         SoundEngine.PlaySound(SoundID.DD2_OgreSpit, NPC.Center);

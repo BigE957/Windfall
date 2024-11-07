@@ -75,20 +75,18 @@ namespace Windfall.Content.Projectiles.Boss.Orator
                         moveCount += Projectile.velocity.Length();
                     }
                     else
+                        Projectile.velocity = Vector2.Zero;
+                    if (holdCounter == holdDuration / 3 && NPC.AnyNPCs(ModContent.NPCType<TheOrator>()))
                     {
-                        if(holdCounter == holdDuration / 2 && NPC.AnyNPCs(ModContent.NPCType<TheOrator>()))
+                        TheOrator Orator = Main.npc[NPC.FindFirstNPC(ModContent.NPCType<TheOrator>())].As<TheOrator>();
+                        if (Orator.AIState == TheOrator.States.DarkTides)
                         {
-                            TheOrator Orator = Main.npc[NPC.FindFirstNPC(ModContent.NPCType<TheOrator>())].As<TheOrator>();
-                            if(Orator.AIState == TheOrator.States.DarkTides)
+                            for (int i = 0; i < 16; i++)
                             {
-                                for(int i = 0; i < 16; i++)
-                                {
-                                    Vector2 position = Projectile.Center + (Projectile.rotation.ToRotationVector2() * (Projectile.width / 2.75f)) + (Projectile.rotation.ToRotationVector2().RotatedBy(PiOver2) * Main.rand.NextFloat(-Projectile.width / 2, Projectile.width / 2));
-                                    Projectile.NewProjectile(Terraria.Entity.GetSource_NaturalSpawn(), position, Projectile.rotation.ToRotationVector2().RotatedBy(Main.rand.NextFloat(-0.5f, 0.5f)), ModContent.ProjectileType<EmpyreanThorn>(), TheOrator.BoltDamage, 0f, ai0: 60, ai1: 36f, ai2: 3f);
-                                }
+                                Vector2 position = Projectile.Center + (Projectile.rotation.ToRotationVector2() * (Projectile.width / 2.75f)) + (Projectile.rotation.ToRotationVector2().RotatedBy(PiOver2) * Main.rand.NextFloat(-Projectile.width / 2, Projectile.width / 2));
+                                Projectile.NewProjectile(Terraria.Entity.GetSource_NaturalSpawn(), position, Projectile.rotation.ToRotationVector2().RotatedBy(Main.rand.NextFloat(-0.5f, 0.5f)), ModContent.ProjectileType<EmpyreanThorn>(), TheOrator.BoltDamage, 0f, ai0: 90, ai1: 36f, ai2: 3f);
                             }
                         }
-                        Projectile.velocity = Vector2.Zero;
                     }
                     particleVelocity = Main.rand.NextFloat(6f, 8f);
                     holdCounter++;

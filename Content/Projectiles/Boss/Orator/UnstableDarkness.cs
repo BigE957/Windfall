@@ -57,14 +57,6 @@ namespace Windfall.Content.Projectiles.Boss.Orator
         }
         public override void AI()
         {
-            Player target;
-            if (NPC.AnyNPCs(ModContent.NPCType<TheOrator>()))
-                target = Main.npc[NPC.FindFirstNPC(ModContent.NPCType<TheOrator>())].As<TheOrator>().target;
-            else
-                target = Main.player[Player.FindClosest(Projectile.Center, Projectile.width, Projectile.height)];
-            float Acceleration = CalamityWorld.death ? 0.75f : CalamityWorld.revenge ? 0.5f : Main.expertMode ? 0.45f : 0.4f;
-            int MaxSpeed = CalamityWorld.death ? 15 : CalamityWorld.revenge ? 12 : 10;
-
             if (aiCounter <= 30)
             {
                 Projectile.scale += 1.5f / 30f;
@@ -72,12 +64,12 @@ namespace Windfall.Content.Projectiles.Boss.Orator
             }
             else
             {
-                Projectile.scale -= (0.005f * (1 + (aiCounter / 8)));
+                Projectile.scale -= (0.004f * (1 + (aiCounter / 8)));
                 if (Projectile.scale <= 0.5f)
                     Explode();
                 if (Projectile.velocity.Length() > 0f)
                 {
-                    Projectile.velocity *= 0.99f;
+                    Projectile.velocity *= 0.995f;
                     EmitGhostGas();
                 }
                 if (Projectile.velocity.Length() < 1f)

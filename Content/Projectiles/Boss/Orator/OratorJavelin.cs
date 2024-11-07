@@ -1,4 +1,5 @@
 ﻿using CalamityMod.Buffs.StatDebuffs;
+using CalamityMod.World;
 using Terraria;
 using Windfall.Common.Graphics.Metaballs;
 using Windfall.Content.NPCs.Bosses.Orator;
@@ -115,7 +116,7 @@ namespace Windfall.Content.Projectiles.Boss.Orator
                     {
                         Projectile.hostile = true;
                         Projectile.tileCollide = true;
-                        Projectile.velocity = Projectile.velocity.SafeNormalize(Vector2.UnitX) * -60;
+                        Projectile.velocity = Projectile.velocity.SafeNormalize(Vector2.UnitX) * -(CalamityWorld.death ? 60 : CalamityWorld.revenge ? 50 : 40);
                     }
                     else
                         Projectile.velocity *= 0.985f;

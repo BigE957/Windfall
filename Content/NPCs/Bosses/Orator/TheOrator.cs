@@ -750,31 +750,38 @@ namespace Windfall.Content.NPCs.Bosses.Orator
                     border = Main.projectile.First(p => p.active && p.type == ModContent.ProjectileType<OratorBorder>());
                     OratorBorder oratorBorder = border.ModProjectile as OratorBorder;
                     #region Movement
-                    if (aiCounter < 1620)
-                        homeInV = border.Center - (target.Center - NPC.Center).SafeNormalize(Vector2.Zero) * 64 - NPC.Center;
-                    else
-                        homeInV = border.Center - NPC.Center;
+                    homeInV = border.Center - NPC.Center;
                     velo = 60;
                     homeInV.Normalize();
                     NPC.velocity = (NPC.velocity * velo + homeInV * 18f) / (velo + 1f);
+                    if (NPC.velocity.Length() > velo / 2f)
+                        NPC.velocity = NPC.velocity.SafeNormalize(-Vector2.UnitY) * velo / 2f;
                     #endregion
                     if (aiCounter < 1500 && oratorBorder.trueScale > 1.5f)
-                        oratorBorder.trueScale -= 0.001f;
+                        oratorBorder.trueScale -= 0.001f;                   
                     if (aiCounter % 5 == 0 && aiCounter > 120)
                     {
-                        if (aiCounter < 1620)
+                        if (aiCounter < 1400)
                         {
                             if (Main.expertMode && aiCounter % 120 == 0)
                             {
-                                scytheSpin = true;
-                                for (int i = 0; i < 6; i++)
+                                int projectileCount = CalamityWorld.revenge ? 8 : 6;
+                                for (int i = 0; i < projectileCount; i++)
                                     if (Main.netMode != NetmodeID.MultiplayerClient)
-                                        Projectile.NewProjectile(Terraria.Entity.GetSource_NaturalSpawn(), NPC.Center, (target.Center - NPC.Center).SafeNormalize(Vector2.Zero).RotatedBy(TwoPi / 6 * i) * 20, ModContent.ProjectileType<DarkBolt>(), BoltDamage, 0f, -1, 0, -20);
+                                        Projectile.NewProjectile(Terraria.Entity.GetSource_NaturalSpawn(), NPC.Center, (target.Center - NPC.Center).SafeNormalize(Vector2.Zero).RotatedBy(TwoPi / projectileCount * i) * 3f, ModContent.ProjectileType<DarkGlob>(), GlobDamage, 0f, -1, 2, 0.75f);
                             }
                             if (Main.netMode != NetmodeID.MultiplayerClient)
-                                Projectile.NewProjectile(Terraria.Entity.GetSource_NaturalSpawn(), NPC.Center, (target.Center - NPC.Center).SafeNormalize(Vector2.Zero) * 8, ModContent.ProjectileType<DarkGlob>(), GlobDamage, 0f, -1, 2, 0.5f);
+                            {
+                                int projectileCount = CalamityWorld.revenge ? 3 : 2;
+                                for (int i = 0; i < projectileCount; i++)
+                                {
+                                    Vector2 spawnPos = border.Center + Vector2.UnitY.RotatedBy((TwoPi / projectileCount * i) + (0.015f * aiCounter)) * -700;
+                                    Projectile glob = Projectile.NewProjectileDirect(Terraria.Entity.GetSource_NaturalSpawn(), spawnPos, (border.Center - spawnPos).SafeNormalize(Vector2.UnitX) * 8f, ModContent.ProjectileType<DarkGlob>(), GlobDamage, 0f, -1, 2, 0.5f);
+                                    glob.timeLeft = 90;
+                                }
+                            }
                         }
-                        else if (aiCounter >= 1680 && aiCounter % 45 == 0)
+                        else if (aiCounter >= 2140 && aiCounter % 45 == 0)
                         {
                             scytheSpin = true;
                             Vector2 dir = Main.rand.NextVector2CircularEdge(1f, 1f);
@@ -785,8 +792,41 @@ namespace Windfall.Content.NPCs.Bosses.Orator
                                     Projectile.NewProjectile(Terraria.Entity.GetSource_NaturalSpawn(), NPC.Center, dir.RotatedBy(TwoPi / projCount * i) * 20, ModContent.ProjectileType<DarkBolt>(), BoltDamage, 0f, -1, 0, -20);
                             }
                         }
+                        else
+                        {
+                            switch(aiCounter - 1400)
+                            {
+                                case 60:
+                                    for(int i = 0; i < 10; i++)
+                                        Projectile.NewProjectile(Terraria.Entity.GetSource_NaturalSpawn(), border.Center - new Vector2(540f, 240f) + (Vector2.UnitY * 60 * i), (Vector2.UnitX).RotatedBy(Main.rand.NextFloat(-0.1f, 0.1f)), ModContent.ProjectileType<EmpyreanThorn>(), BoltDamage, 0f, ai0: 60, ai1: 36f, ai2: 3f);
+                                    break;
+                                case 180:
+                                    for (int i = 0; i < 10; i++)
+                                        Projectile.NewProjectile(Terraria.Entity.GetSource_NaturalSpawn(), border.Center - new Vector2(-540f, 240f) + (Vector2.UnitY * 60 * i), (-Vector2.UnitX).RotatedBy(Main.rand.NextFloat(-0.1f, 0.1f)), ModContent.ProjectileType<EmpyreanThorn>(), BoltDamage, 0f, ai0: 60, ai1: 36f, ai2: 3f);
+                                    break;
+                                case 300:
+                                    for (int i = 0; i < 10; i++)
+                                    {
+                                        Projectile.NewProjectile(Terraria.Entity.GetSource_NaturalSpawn(), border.Center - new Vector2(240f, 630f) + (Vector2.UnitX * 60 * i), (Vector2.UnitY).RotatedBy(Main.rand.NextFloat(-0.1f, 0.1f)), ModContent.ProjectileType<EmpyreanThorn>(), BoltDamage, 0f, ai0: 60, ai1: 36f, ai2: 2f);
+                                        Projectile.NewProjectile(Terraria.Entity.GetSource_NaturalSpawn(), border.Center - new Vector2(240f, -630f) + (Vector2.UnitX * 60 * i), (-Vector2.UnitY).RotatedBy(Main.rand.NextFloat(-0.1f, 0.1f)), ModContent.ProjectileType<EmpyreanThorn>(), BoltDamage, 0f, ai0: 60, ai1: 36f, ai2: 2f);
+                                    }
+                                    break;
+                                case 420:
+                                    for (int i = 0; i < 5; i++)
+                                    {
+                                        Projectile.NewProjectile(Terraria.Entity.GetSource_NaturalSpawn(), border.Center - new Vector2(640f, 80f) + (Vector2.UnitY * 30 * i), (Vector2.UnitX).RotatedBy(Main.rand.NextFloat(-0.1f, 0.1f)), ModContent.ProjectileType<EmpyreanThorn>(), BoltDamage, 0f, ai0: 60, ai1: 36f, ai2: 4f);
+                                        Projectile.NewProjectile(Terraria.Entity.GetSource_NaturalSpawn(), border.Center - new Vector2(-640f, 80f) + (Vector2.UnitY * 30 * i), (-Vector2.UnitX).RotatedBy(Main.rand.NextFloat(-0.1f, 0.1f)), ModContent.ProjectileType<EmpyreanThorn>(), BoltDamage, 0f, ai0: 60, ai1: 36f, ai2: 4f);
+                                    }
+                                    break;
+                                case 540:
+                                    int count = 24;
+                                    for (int i = 0; i < count; i++)
+                                        Projectile.NewProjectile(Terraria.Entity.GetSource_NaturalSpawn(), border.Center - (Vector2.UnitX * 650f).RotatedBy(TwoPi / count * i), (Vector2.UnitX).RotatedBy(TwoPi / count * i + Main.rand.NextFloat(-0.1f, 0.1f)), ModContent.ProjectileType<EmpyreanThorn>(), BoltDamage, 0f, ai0: 60, ai1: 36f, ai2: 2f);
+                                    break;
+                            }
+                        }
                     }
-                    if (aiCounter >= 1620)
+                    if (aiCounter >= 2420)
                     {
                         oratorBorder.trueScale += 0.003f;
                         if (oratorBorder.trueScale >= 3f)
@@ -835,17 +875,15 @@ namespace Windfall.Content.NPCs.Bosses.Orator
                     {
                         EmpyreanMetaball.SpawnDefaultParticle(NPC.Center + (target.Center - NPC.Center).SafeNormalize(Vector2.Zero) * 80f, Main.rand.NextVector2Circular(5f, 5f), Lerp(0f, 1f, (aiCounter - 400) % 120));
                         if (Main.netMode != NetmodeID.MultiplayerClient && (aiCounter - 400) % 120 == 0)
-                            Projectile.NewProjectile(Projectile.GetSource_NaturalSpawn(), NPC.Center + (target.Center - NPC.Center).SafeNormalize(Vector2.Zero) * 80f, (target.Center - NPC.Center).SafeNormalize(Vector2.Zero) * 8f, ModContent.ProjectileType<UnstableDarkness>(), BoltDamage, 0.5f);
+                            Projectile.NewProjectile(Projectile.GetSource_NaturalSpawn(), NPC.Center + (target.Center - NPC.Center).SafeNormalize(Vector2.Zero) * 80f, (target.Center - NPC.Center).SafeNormalize(Vector2.Zero) * 6f, ModContent.ProjectileType<UnstableDarkness>(), BoltDamage, 0.5f);
                     }
 
                     #region Ambiant Projectiles
-                    /*
-                    if (Main.netMode != NetmodeID.MultiplayerClient && aiCounter > 0 && aiCounter % 60 == 0)
+                    if (Main.netMode != NetmodeID.MultiplayerClient && aiCounter > 0 && aiCounter % 120 == 0)
                     {
                         Vector2 spawnPosition = border.Center + (Vector2.UnitX * (oratorBorder.Radius + 200)).RotatedBy(Main.rand.NextFloat(TwoPi));
                         Projectile.NewProjectile(Terraria.Entity.GetSource_NaturalSpawn(), spawnPosition, (border.Center - spawnPosition).SafeNormalize(Vector2.Zero).RotatedBy(Main.rand.NextFloat(-0.75f, 0.75f)) * Main.rand.NextFloat(4f, 6f), ModContent.ProjectileType<DarkGlob>(), GlobDamage, 0f, -1, 2, 0.5f);
                     }
-                    */
                     #endregion
 
                     if(aiCounter >= 2200)
@@ -877,7 +915,7 @@ namespace Windfall.Content.NPCs.Bosses.Orator
                             attackCounter = Main.rand.NextFloatDirection();
                             if (Main.netMode != NetmodeID.MultiplayerClient)
                             {
-                                Projectile p = Projectile.NewProjectileDirect(Terraria.Entity.GetSource_NaturalSpawn(), border.Center, attackCounter.ToRotationVector2(), ModContent.ProjectileType<DarkTide>(), 0, 0f, ai0: 180, ai1: 1500, ai2: 6);
+                                Projectile p = Projectile.NewProjectileDirect(Terraria.Entity.GetSource_NaturalSpawn(), border.Center, attackCounter.ToRotationVector2(), ModContent.ProjectileType<DarkTide>(), 0, 0f, ai0: 180, ai1: 1500, ai2: CalamityWorld.death ? 6f : CalamityWorld.revenge ? 5.5f : 5f);
                                 SoundEngine.PlaySound(SoundID.DD2_EtherianPortalSpawnEnemy with { Volume = 10f }, p.Center);
                             }
                         }
@@ -886,19 +924,19 @@ namespace Windfall.Content.NPCs.Bosses.Orator
                             Vector2 initialPos = border.Center + attackCounter.ToRotationVector2() * 175;
                             if (Main.expertMode)
                             {
-                                for (int i = 0; i < (CalamityWorld.death ? 25 : CalamityWorld.revenge ? 20 : 10); i++)
+                                for (int i = 0; i < (CalamityWorld.death ? 20 : CalamityWorld.revenge ? 15 : 10); i++)
                                 {
                                     if (Main.netMode != NetmodeID.MultiplayerClient)
                                     {
                                         Vector2 myPos = initialPos + attackCounter.ToRotationVector2() * Main.rand.NextFloat(-500, 0) + (attackCounter + PiOver2).ToRotationVector2() * Main.rand.NextFloat(-800, 800);
-                                        Projectile proj = Projectile.NewProjectileDirect(Terraria.Entity.GetSource_NaturalSpawn(), myPos, Vector2.Zero, ModContent.ProjectileType<DarkGlob>(), GlobDamage, 0f, -1, 0, Main.rand.NextFloat(0.5f, 1.5f));
+                                        Projectile proj = Projectile.NewProjectileDirect(Terraria.Entity.GetSource_NaturalSpawn(), myPos, Vector2.Zero, ModContent.ProjectileType<DarkGlob>(), GlobDamage, 0f, -1, 0, Main.rand.NextFloat(0.5f, 1f));
                                         proj.timeLeft = attackGap * 2;
                                     }
                                 }
                             }
                             if (Main.netMode != NetmodeID.MultiplayerClient)
                             {
-                                Projectile p = Projectile.NewProjectileDirect(Terraria.Entity.GetSource_NaturalSpawn(), border.Center, -attackCounter.ToRotationVector2(), ModContent.ProjectileType<DarkTide>(), 0, 0f, ai0: 180, ai1: 1500, ai2: 6);
+                                Projectile p = Projectile.NewProjectileDirect(Terraria.Entity.GetSource_NaturalSpawn(), border.Center, -attackCounter.ToRotationVector2(), ModContent.ProjectileType<DarkTide>(), 0, 0f, ai0: 180, ai1: 1500, ai2: CalamityWorld.death ? 6f : 5f);
                                 SoundEngine.PlaySound(SoundID.DD2_EtherianPortalSpawnEnemy with { Volume = 10f }, p.Center);
                             }
                         }
@@ -937,36 +975,57 @@ namespace Windfall.Content.NPCs.Bosses.Orator
                     velo = 60;
                     homeInV.Normalize();
                     NPC.velocity = (NPC.velocity * velo + homeInV * 18f) / (velo + 1f);
+                    if (NPC.velocity.Length() > velo / 2f)
+                        NPC.velocity = NPC.velocity.SafeNormalize(-Vector2.UnitY) * velo / 2f;
                     #endregion
-                    int attackDuration = 2000;
+                    int attackDuration = 800;
                     int tideOut = 600;
                     if (Main.netMode != NetmodeID.MultiplayerClient && aiCounter % attackDuration == 0)
                     {
                         SoundEngine.PlaySound(SoundID.DD2_EtherianPortalSpawnEnemy);
                         int tightness = CalamityWorld.death ? 1050 : CalamityWorld.revenge ? 1025 : 1000;
-                        Projectile.NewProjectile(Terraria.Entity.GetSource_NaturalSpawn(), border.Center, Vector2.UnitX, ModContent.ProjectileType<DarkTide>(), 0, 0f, ai0: tideOut, ai1: tightness, ai2: 8);
-                        Projectile.NewProjectile(Terraria.Entity.GetSource_NaturalSpawn(), border.Center, Vector2.UnitX * -1, ModContent.ProjectileType<DarkTide>(), 0, 0f, ai0: tideOut, ai1: tightness, ai2: 8);
+                        if (aiCounter == 0)
+                        {
+                            Projectile.NewProjectile(Terraria.Entity.GetSource_NaturalSpawn(), border.Center, Vector2.UnitX, ModContent.ProjectileType<DarkTide>(), 0, 0f, ai0: tideOut, ai1: tightness, ai2: 8);
+                            Projectile.NewProjectile(Terraria.Entity.GetSource_NaturalSpawn(), border.Center, Vector2.UnitX * -1, ModContent.ProjectileType<DarkTide>(), 0, 0f, ai0: tideOut, ai1: tightness, ai2: 8);
+                        }
+                        else
+                        {
+                            Projectile.NewProjectile(Terraria.Entity.GetSource_NaturalSpawn(), border.Center, Vector2.UnitY, ModContent.ProjectileType<DarkTide>(), 0, 0f, ai0: tideOut, ai1: tightness, ai2: 8);
+                            Projectile.NewProjectile(Terraria.Entity.GetSource_NaturalSpawn(), border.Center, Vector2.UnitY * -1, ModContent.ProjectileType<DarkTide>(), 0, 0f, ai0: tideOut, ai1: tightness, ai2: 8);
+                        }
+                        VectorToTarget = new(-1,-1);
                     }
-                    else if ((aiCounter > 150 && aiCounter < tideOut) || (aiCounter > attackDuration + 120 && aiCounter < attackDuration + tideOut))
+                    else if ((aiCounter > 150 && aiCounter < tideOut))
                     {
-                        if (Main.netMode != NetmodeID.MultiplayerClient && aiCounter % 16 == 0)
+                        if (Main.netMode != NetmodeID.MultiplayerClient && aiCounter % 18 == 0)
                         {
                             bool left = Main.rand.NextBool();
                             Vector2 spawnPosition = border.Center + new Vector2(left ? -275 : 275, Main.rand.NextFloat(-700f, 700f));
+                            if(VectorToTarget != new Vector2(-1,-1))
+                            {
+                                while(Math.Abs(VectorToTarget.Y - spawnPosition.Y) < 50)
+                                {
+                                    spawnPosition = border.Center + new Vector2(left ? -275 : 275, Main.rand.NextFloat(-700f, 700f));
+                                }
+                            }
                             Projectile.NewProjectile(Terraria.Entity.GetSource_NaturalSpawn(), spawnPosition, (Vector2.UnitX * (left ? 1 : -1)).RotatedBy(Main.rand.NextFloat(-0.5f, 0.5f)), ModContent.ProjectileType<EmpyreanThorn>(), GlobDamage, 0f, ai0: 120, ai1: 24f, ai2: 2f);
                         }
                     }
-                    else if (aiCounter >= tideOut + 120 && aiCounter < attackDuration - 100)
+                    else if ((aiCounter > attackDuration + 120 && aiCounter < attackDuration + tideOut))
                     {
-                        if (aiCounter > tideOut + 260)
+                        if (Main.netMode != NetmodeID.MultiplayerClient && aiCounter % 18 == 0)
                         {
-                            /*
-                            if(aiCounter % 60 == 0)
-                                for (int i = 0; i < 8; i++)
-                                    Projectile.NewProjectile(Projectile.GetSource_NaturalSpawn(), NPC.Center + Main.rand.NextVector2Circular(64f, 64f), (target.Center - NPC.Center).SafeNormalize(Vector2.Zero) * 8, ModContent.ProjectileType<DarkGlob>(), GlobDamage, 0f, -1, 2, 0.5f);
-                            */
-                            if (Main.netMode != NetmodeID.MultiplayerClient && aiCounter % 8 == 0)
-                                Projectile.NewProjectile(Terraria.Entity.GetSource_NaturalSpawn(), NPC.Center + (Vector2.UnitX * ((float)(Math.Sin(aiCounter / 20f) * 100f) - 16)), new Vector2(0, -10), ModContent.ProjectileType<DarkGlob>(), GlobDamage, 0f, -1, 1, 0.75f);
+                            bool left = Main.rand.NextBool();
+                            Vector2 spawnPosition = border.Center + new Vector2(Main.rand.NextFloat(-700f, 700f), left ? -275 : 275);
+                            if (VectorToTarget != new Vector2(-1, -1))
+                            {
+                                while (Math.Abs(VectorToTarget.Y - spawnPosition.Y) < 50)
+                                {
+                                    spawnPosition = border.Center + new Vector2(Main.rand.NextFloat(-700f, 700f), left ? -275 : 275);
+                                }
+                            }
+                            Projectile.NewProjectile(Terraria.Entity.GetSource_NaturalSpawn(), spawnPosition, (Vector2.UnitY * (left ? 1 : -1)).RotatedBy(Main.rand.NextFloat(-0.5f, 0.5f)), ModContent.ProjectileType<EmpyreanThorn>(), GlobDamage, 0f, ai0: 120, ai1: 24f, ai2: 2f);
                         }
                     }
                     else if (aiCounter == attackDuration + tideOut + 120)
@@ -978,36 +1037,6 @@ namespace Windfall.Content.NPCs.Bosses.Orator
                             AIState = States.Defeat;
                         else
                             AIState = States.DarkFlight;
-                    }
-                    if (aiCounter >= tideOut && aiCounter < attackDuration && aiCounter % 60 == 0) //Large orb columns (must be fired earlier and for a bit longer than what's otherwise allowed)
-                    {
-                        SoundEngine.PlaySound(SoundID.DD2_OgreSpit);
-                        if (aiCounter % 120 == 0) //top
-                        {
-                            for (int i = 0; i < 3; i++)
-                            {
-                                if (Main.netMode != NetmodeID.MultiplayerClient)
-                                {
-                                    Projectile proj = Projectile.NewProjectileDirect(Terraria.Entity.GetSource_NaturalSpawn(), border.Center + new Vector2(200 + 250 * i - 80, -900), Vector2.UnitY * 4, ModContent.ProjectileType<DarkGlob>(), GlobDamage, 0f, -1, 2, 2f);
-                                    proj.timeLeft += 180;
-                                    proj = Projectile.NewProjectileDirect(Terraria.Entity.GetSource_NaturalSpawn(), border.Center + new Vector2(-200 - 250 * i - 80, -900), Vector2.UnitY * 4, ModContent.ProjectileType<DarkGlob>(), GlobDamage, 0f, -1, 2, 2f);
-                                    proj.timeLeft += 180;
-                                }
-                            }
-                        }
-                        else //bottom
-                        {
-                            for (int i = 0; i < 2; i++)
-                            {
-                                if (Main.netMode != NetmodeID.MultiplayerClient)
-                                {
-                                    Projectile proj = Projectile.NewProjectileDirect(Terraria.Entity.GetSource_NaturalSpawn(), border.Center + new Vector2(325 + 250 * i - 80, 900), Vector2.UnitY * -4, ModContent.ProjectileType<DarkGlob>(), GlobDamage, 0f, -1, 2, 2f);
-                                    proj.timeLeft += 180;
-                                    proj = Projectile.NewProjectileDirect(Terraria.Entity.GetSource_NaturalSpawn(), border.Center + new Vector2(-325 - 250 * i - 80, 900), Vector2.UnitY * -4, ModContent.ProjectileType<DarkGlob>(), GlobDamage, 0f, -1, 2, 2f);
-                                    proj.timeLeft += 180;
-                                }
-                            }
-                        }
                     }
                     break;
                 case States.DarkFlood:
@@ -1123,14 +1152,14 @@ namespace Windfall.Content.NPCs.Bosses.Orator
                                     for (int i = 0; i < 32; i++)
                                         EmpyreanMetaball.SpawnDefaultParticle(NPC.Center + new Vector2(Main.rand.NextFloat(-64, 64), 160), Vector2.UnitY * Main.rand.NextFloat(4f, 18f) * -1, Main.rand.NextFloat(110f, 130f));
 
-                                    for (int i = 0; i < 10; i++)
+                                    for (int i = 0; i < (CalamityWorld.death ? 16 : CalamityWorld.revenge ? 12 : 10); i++)
                                     {
                                         if (Main.netMode != NetmodeID.MultiplayerClient)
                                         {
                                             Projectile proj;
-                                            proj = Projectile.NewProjectileDirect(Terraria.Entity.GetSource_NaturalSpawn(), NPC.Center + Vector2.UnitY * 64, new Vector2(-4, -2 * i), ModContent.ProjectileType<DarkGlob>(), GlobDamage, 0f, -1, 1, 0.5f);
+                                            proj = Projectile.NewProjectileDirect(Terraria.Entity.GetSource_NaturalSpawn(), NPC.Center + Vector2.UnitY * 64, new Vector2(-5, (CalamityWorld.revenge ? -2.5f : -3f) * i), ModContent.ProjectileType<DarkGlob>(), GlobDamage, 0f, -1, 1, 0.5f);
                                             proj.Calamity().DealsDefenseDamage = true;
-                                            proj = Projectile.NewProjectileDirect(Terraria.Entity.GetSource_NaturalSpawn(), NPC.Center + Vector2.UnitY * 64, new Vector2(4, -2 * i), ModContent.ProjectileType<DarkGlob>(), GlobDamage, 0f, -1, 1, 0.5f);
+                                            proj = Projectile.NewProjectileDirect(Terraria.Entity.GetSource_NaturalSpawn(), NPC.Center + Vector2.UnitY * 64, new Vector2(5, (CalamityWorld.revenge ? -2.5f : -3f) * i), ModContent.ProjectileType<DarkGlob>(), GlobDamage, 0f, -1, 1, 0.5f);
                                             proj.Calamity().DealsDefenseDamage = true;
                                         }
                                     }
@@ -1201,14 +1230,14 @@ namespace Windfall.Content.NPCs.Bosses.Orator
                                     for (int i = 0; i < 32; i++)
                                         EmpyreanMetaball.SpawnDefaultParticle(NPC.Center + new Vector2(Main.rand.NextFloat(-64, 64), 64), Vector2.UnitY * Main.rand.NextFloat(4f, 24f) * -1, Main.rand.NextFloat(110f, 130f));
 
-                                    for (int i = 0; i < 10; i++)
+                                    for (int i = 0; i < (CalamityWorld.death ? 16 : CalamityWorld.revenge ? 12 : 10); i++)
                                     {
                                         if (Main.netMode != NetmodeID.MultiplayerClient)
                                         {
                                             Projectile proj;
-                                            proj = Projectile.NewProjectileDirect(Terraria.Entity.GetSource_NaturalSpawn(), NPC.Center + Vector2.UnitY * 64, new Vector2(-4, -2 * i), ModContent.ProjectileType<DarkGlob>(), GlobDamage, 0f, -1, 1, 0.5f);
+                                            proj = Projectile.NewProjectileDirect(Terraria.Entity.GetSource_NaturalSpawn(), NPC.Center + Vector2.UnitY * 64, new Vector2(-5, (CalamityWorld.revenge ? -2.5f : -3f) * i), ModContent.ProjectileType<DarkGlob>(), GlobDamage, 0f, -1, 1, 0.5f);
                                             proj.Calamity().DealsDefenseDamage = true;
-                                            proj = Projectile.NewProjectileDirect(Terraria.Entity.GetSource_NaturalSpawn(), NPC.Center + Vector2.UnitY * 64, new Vector2(4, -2 * i), ModContent.ProjectileType<DarkGlob>(), GlobDamage, 0f, -1, 1, 0.5f);
+                                            proj = Projectile.NewProjectileDirect(Terraria.Entity.GetSource_NaturalSpawn(), NPC.Center + Vector2.UnitY * 64, new Vector2(5, (CalamityWorld.revenge ? -2.5f : -3f) * i), ModContent.ProjectileType<DarkGlob>(), GlobDamage, 0f, -1, 1, 0.5f);
                                             proj.Calamity().DealsDefenseDamage = true;
                                         }
                                     }
@@ -1677,12 +1706,12 @@ namespace Windfall.Content.NPCs.Bosses.Orator
         public override void FindFrame(int frameHeight)
         {
             NPC.frame.Width = frameHeight;
-            if (scytheSlice || scytheSpin || Main.projectile.Any(p => p.active && p.type == ModContent.ProjectileType<OratorScythe>()))
+            if (scytheSlice || scytheSpin)
             {
                 NPC.frame.Y = frameHeight;
                 NPC.frame.X = frameHeight;
             }
-            else if (AIState == States.DarkStorm || AIState == States.DarkEmbrace || AIState == States.DarkMonster || AIState == States.DarkCollision)
+            else if (AIState == States.DarkStorm || AIState == States.DarkEmbrace || AIState == States.DarkMonster || AIState == States.DarkCollision || Main.projectile.Any(p => p.active && p.type == ModContent.ProjectileType<OratorScythe>()))
             {
                 NPC.frame.Y = frameHeight;
                 NPC.frame.X = 0;

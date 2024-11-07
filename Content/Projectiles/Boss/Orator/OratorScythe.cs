@@ -58,6 +58,9 @@ namespace Windfall.Content.Projectiles.Boss.Orator
             {
                 orator = Main.npc[NPC.FindFirstNPC(ModContent.NPCType<TheOrator>())];
                 target = orator.As<TheOrator>().target;
+
+                if (orator.As<TheOrator>().AIState == TheOrator.States.DarkTides || orator.As<TheOrator>().AIState == TheOrator.States.Defeat)
+                    behavior = (BehaviorType)4;
             }
             /*
             else
@@ -68,8 +71,7 @@ namespace Windfall.Content.Projectiles.Boss.Orator
             }
             */
             bool attackBool = false;
-            if (orator.As<TheOrator>().AIState == TheOrator.States.DarkTides)
-                behavior = (BehaviorType)4;
+            
             switch(behavior)
             {
                 case BehaviorType.Chase:
@@ -87,8 +89,8 @@ namespace Windfall.Content.Projectiles.Boss.Orator
                             Projectile.velocity = Projectile.velocity.SafeNormalize(Vector2.UnitX) * -40;
                         else
                         {
-                            Projectile.velocity = Projectile.velocity.RotateTowards((target.Center - Projectile.Center).ToRotation(), 0.002f * (Time - 30));
-                            Projectile.velocity *= 0.97f;
+                            Projectile.velocity = Projectile.velocity.RotateTowards((target.Center - Projectile.Center).ToRotation(), CalamityWorld.death ? 0.00175f : 0.0015f * (Time - 30));
+                            Projectile.velocity *= CalamityWorld.death ? 0.97f : 0.975f;
                             if (Projectile.velocity.LengthSquared() < 25)
                                 Time = 0;
                         }
@@ -97,7 +99,7 @@ namespace Windfall.Content.Projectiles.Boss.Orator
                 case BehaviorType.Circle:
                     break;
                 default:
-                    Projectile.velocity = Projectile.velocity.RotateTowards((orator.Center - Projectile.Center).ToRotation(), 0.05f).SafeNormalize(Vector2.Zero) * Clamp(Projectile.velocity.Length() * 1.05f, 0f, 30f);
+                    Projectile.velocity = Projectile.velocity.RotateTowards((orator.Center - Projectile.Center).ToRotation(), 0.09f).SafeNormalize(Vector2.Zero) * Clamp(Projectile.velocity.Length() * 1.05f, 0f, 30f);
                     if (Projectile.Hitbox.Intersects(orator.Hitbox))
                         Projectile.active = false;
                     break;
