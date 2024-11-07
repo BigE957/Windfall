@@ -3,9 +3,8 @@ using Terraria.GameContent.Bestiary;
 using Terraria.Utilities;
 using Windfall.Common.Systems;
 using Windfall.Common.Systems.WorldEvents;
-using Windfall.Content.Items.Quest.SealingRitual;
 using Windfall.Content.NPCs.WorldEvents.LunarCult;
-using Windfall.SubModules.DialogueHelper.UI.Dialogue;
+using DialogueHelper.UI.Dialogue;
 
 namespace Windfall.Content.NPCs.TravellingNPCs
 {

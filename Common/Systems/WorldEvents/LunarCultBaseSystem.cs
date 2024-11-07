@@ -11,7 +11,7 @@ using Windfall.Content.Buffs.DoT;
 using Windfall.Content.Projectiles.ProjectileAnimations;
 using Windfall.Content.UI;
 using Terraria.Enums;
-using Windfall.SubModules.DialogueHelper.UI.Dialogue;
+using DialogueHelper.UI.Dialogue;
 
 namespace Windfall.Common.Systems.WorldEvents
 {

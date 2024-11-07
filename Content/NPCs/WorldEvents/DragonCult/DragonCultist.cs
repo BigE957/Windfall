@@ -1,4 +1,4 @@
-﻿using Windfall.SubModules.DialogueHelper.UI.Dialogue;
+﻿using DialogueHelper.UI.Dialogue;
 
 namespace Windfall.Content.NPCs.WorldEvents.DragonCult
 {

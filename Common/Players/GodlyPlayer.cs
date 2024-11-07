@@ -1,6 +1,7 @@
 ﻿using CalamityMod.Buffs.DamageOverTime;
 using CalamityMod.Buffs.StatDebuffs;
 using CalamityMod.NPCs.NormalNPCs;
+using DialogueHelper.UI.Dialogue;
 using Terraria;
 using Terraria.Graphics.Effects;
 using Terraria.ModLoader.IO;
@@ -8,7 +9,6 @@ using Windfall.Common.Systems;
 using Windfall.Content.Buffs.StatBuffs;
 using Windfall.Content.NPCs.PlayerNPCs;
 using Windfall.Content.Projectiles.GodlyAbilities;
-using Windfall.SubModules.DialogueHelper.UI.Dialogue;
 
 namespace Windfall.Common.Players
 {

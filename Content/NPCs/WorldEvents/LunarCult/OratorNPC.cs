@@ -1,7 +1,7 @@
 ﻿using Windfall.Common.Systems.WorldEvents;
 using Windfall.Content.Items.Utility;
 using Windfall.Content.Items.Weapons.Misc;
-using Windfall.SubModules.DialogueHelper.UI.Dialogue;
+using DialogueHelper.UI.Dialogue;
 
 namespace Windfall.Content.NPCs.WorldEvents.LunarCult
 {

@@ -1,8 +1,6 @@
-﻿using Terraria.ModLoader;
-using Windfall.Common.Systems.WorldEvents;
-using Windfall.Common.Utils;
+﻿using Windfall.Common.Systems.WorldEvents;
 using Windfall.Content.Projectiles.Other;
-using Windfall.SubModules.DialogueHelper.UI.Dialogue;
+using DialogueHelper.UI.Dialogue;
 
 namespace Windfall.Content.NPCs.WorldEvents.LunarCult
 {

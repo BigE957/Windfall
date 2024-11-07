@@ -1,6 +1,6 @@
 ﻿using Terraria.Enums;
 using Windfall.Common.Systems.WorldEvents;
-using Windfall.SubModules.DialogueHelper.UI.Dialogue;
+using DialogueHelper.UI.Dialogue;
 using static Windfall.Common.Systems.WorldEvents.LunarCultBaseSystem;
 
 namespace Windfall.Content.NPCs.WorldEvents.LunarCult
