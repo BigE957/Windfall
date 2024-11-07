@@ -7,7 +7,7 @@ namespace Windfall.Content.Items.Essences
     public class PerfEssence : ModItem, ILocalizedModType
     {
         public new string LocalizationCategory => "Items.Essence";
-        public override string Texture => "Windfall/Assets/Items/Essences/SlimeEssence";
+        public override string Texture => "Windfall/Assets/Items/Essences/PerfEssence";
 
         public override void SetDefaults()
         {
