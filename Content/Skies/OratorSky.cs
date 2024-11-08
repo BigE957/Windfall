@@ -43,8 +43,8 @@ namespace Windfall.Content.Skies
 
             if (Main.netMode != NetmodeID.Server)
             {
-                float bgTop = -Main.LocalPlayer.Center.Y / 50f;
-                Vector2 resolutionScale = new(Main.screenWidth / 1366f, Main.screenHeight / 768);
+                Vector2 resolutionScale = new(Main.screenWidth / 1366f, Main.screenHeight / 768f);
+                float bgTop = -Main.LocalPlayer.Center.Y / 50f * resolutionScale.Y;
 
                 #region Stars
                 float colorMult = 1f * opacity;
@@ -93,9 +93,9 @@ namespace Windfall.Content.Skies
                 Texture2D CloudFront = (Texture2D)ModContent.Request<Texture2D>("Windfall/Assets/Skies/OratorCloudsFront", AssetRequestMode.ImmediateLoad);
                 backgroundOffset = GetBackgroundOffset(0.3f);
                 //cloudHeight = Main.screenHeight / -3.5f + (Main.screenHeight * 1.25f);
-                spriteBatch.Draw(CloudFront, new Vector2(GetBoundedX(backgroundOffset,                                   cloudScale, CloudFront), cloudHeight - (75 * resolutionScale.Y)), CloudFront.Frame(), Color.Gray * opacity, 0f, CloudFront.Size() / 2f, cloudScale, SpriteEffects.None, 0f);
-                spriteBatch.Draw(CloudFront, new Vector2(GetBoundedX(backgroundOffset - (CloudFront.Width * cloudScale), cloudScale, CloudFront), cloudHeight - (75 * resolutionScale.Y)), CloudFront.Frame(), Color.Gray * opacity, 0f, CloudFront.Size() / 2f, cloudScale, SpriteEffects.None, 0f);
-                spriteBatch.Draw(CloudFront, new Vector2(GetBoundedX(backgroundOffset + (CloudFront.Width * cloudScale), cloudScale, CloudFront), cloudHeight - (75 * resolutionScale.Y)), CloudFront.Frame(), Color.Gray * opacity, 0f, CloudFront.Size() / 2f, cloudScale, SpriteEffects.None, 0f);
+                spriteBatch.Draw(CloudFront, new Vector2(GetBoundedX(backgroundOffset,                                   cloudScale, CloudFront), cloudHeight - (100 * resolutionScale.Y)), CloudFront.Frame(), Color.Gray * opacity, 0f, CloudFront.Size() / 2f, cloudScale, SpriteEffects.None, 0f);
+                spriteBatch.Draw(CloudFront, new Vector2(GetBoundedX(backgroundOffset - (CloudFront.Width * cloudScale), cloudScale, CloudFront), cloudHeight - (100 * resolutionScale.Y)), CloudFront.Frame(), Color.Gray * opacity, 0f, CloudFront.Size() / 2f, cloudScale, SpriteEffects.None, 0f);
+                spriteBatch.Draw(CloudFront, new Vector2(GetBoundedX(backgroundOffset + (CloudFront.Width * cloudScale), cloudScale, CloudFront), cloudHeight - (100 * resolutionScale.Y)), CloudFront.Frame(), Color.Gray * opacity, 0f, CloudFront.Size() / 2f, cloudScale, SpriteEffects.None, 0f);
                 #endregion
             }
         }
@@ -107,11 +107,11 @@ namespace Windfall.Content.Skies
             Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.Additive, SamplerState.LinearClamp, DepthStencilState.None, Main.Rasterizer, null, Utilities.GetCustomSkyBackgroundMatrix());
 
             Texture2D bloomCircle = ModContent.Request<Texture2D>("CalamityMod/Particles/LargeBloom", AssetRequestMode.ImmediateLoad).Value;
-            spriteBatch.Draw(bloomCircle, position, null, Color.AliceBlue * ((float)(Math.Sin(counter / 20D) / 4f + 0.75f)), 0f, bloomCircle.Size() / 2f, 2.4f * resolutionScale.X, SpriteEffects.None, 0f);
+            spriteBatch.Draw(bloomCircle, position, null, Color.AliceBlue * Opacity * ((float)(Math.Sin(counter / 20D) / 4f + 0.75f)), 0f, bloomCircle.Size() / 2f, 2.4f * resolutionScale.X, SpriteEffects.None, 0f);
 
             Texture2D bloomRing = ModContent.Request<Texture2D>("Windfall/Assets/Skies/OratorMoonBloom2", AssetRequestMode.ImmediateLoad).Value;
             Vector2 halfSizeTexture = new(bloomRing.Width / 2, bloomRing.Height / 2);
-            spriteBatch.Draw(bloomRing, position, null, Color.DarkOliveGreen, counter / 100f, halfSizeTexture, 1.4375f * resolutionScale.X, SpriteEffects.None, 0f);
+            spriteBatch.Draw(bloomRing, position, null, Color.DarkOliveGreen * Opacity, counter / 100f, halfSizeTexture, 1.4375f * resolutionScale.X, SpriteEffects.None, 0f);
             Main.spriteBatch.End();
             Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.LinearClamp, DepthStencilState.None, Main.Rasterizer, null, Utilities.GetCustomSkyBackgroundMatrix());
         }
