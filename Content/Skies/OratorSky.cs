@@ -43,7 +43,7 @@ namespace Windfall.Content.Skies
 
             if (Main.netMode != NetmodeID.Server)
             {
-                float bgTop = (float)((-Main.screenPosition.Y) / (Main.worldSurface * 16.0 - 600.0) * 200.0);
+                float bgTop = -Main.LocalPlayer.Center.Y / 50f;
                 Vector2 resolutionScale = new(Main.screenWidth / 1366f, Main.screenHeight / 768);
 
                 #region Stars
@@ -73,7 +73,7 @@ namespace Windfall.Content.Skies
                 #endregion
 
                 #region Moon
-                Vector2 position = new(Main.screenWidth / 2f, bgTop + Main.screenHeight / 1.5f);
+                Vector2 position = new(Main.screenWidth / 2f, bgTop + Main.screenHeight / 1.4f);
                 
                 DrawAura(spriteBatch, position);
 
@@ -93,9 +93,9 @@ namespace Windfall.Content.Skies
                 Texture2D CloudFront = (Texture2D)ModContent.Request<Texture2D>("Windfall/Assets/Skies/OratorCloudsFront", AssetRequestMode.ImmediateLoad);
                 backgroundOffset = GetBackgroundOffset(0.3f);
                 //cloudHeight = Main.screenHeight / -3.5f + (Main.screenHeight * 1.25f);
-                spriteBatch.Draw(CloudFront, new Vector2(GetBoundedX(backgroundOffset,                                   cloudScale, CloudFront), cloudHeight - (350 * cloudScale)), CloudFront.Frame(), Color.Gray * opacity, 0f, CloudFront.Size() / 2f, cloudScale, SpriteEffects.None, 0f);
-                spriteBatch.Draw(CloudFront, new Vector2(GetBoundedX(backgroundOffset - (CloudFront.Width * cloudScale), cloudScale, CloudFront), cloudHeight - (350 * cloudScale)), CloudFront.Frame(), Color.Gray * opacity, 0f, CloudFront.Size() / 2f, cloudScale, SpriteEffects.None, 0f);
-                spriteBatch.Draw(CloudFront, new Vector2(GetBoundedX(backgroundOffset + (CloudFront.Width * cloudScale), cloudScale, CloudFront), cloudHeight - (350 * cloudScale)), CloudFront.Frame(), Color.Gray * opacity, 0f, CloudFront.Size() / 2f, cloudScale, SpriteEffects.None, 0f);
+                spriteBatch.Draw(CloudFront, new Vector2(GetBoundedX(backgroundOffset,                                   cloudScale, CloudFront), cloudHeight - (75 * resolutionScale.Y)), CloudFront.Frame(), Color.Gray * opacity, 0f, CloudFront.Size() / 2f, cloudScale, SpriteEffects.None, 0f);
+                spriteBatch.Draw(CloudFront, new Vector2(GetBoundedX(backgroundOffset - (CloudFront.Width * cloudScale), cloudScale, CloudFront), cloudHeight - (75 * resolutionScale.Y)), CloudFront.Frame(), Color.Gray * opacity, 0f, CloudFront.Size() / 2f, cloudScale, SpriteEffects.None, 0f);
+                spriteBatch.Draw(CloudFront, new Vector2(GetBoundedX(backgroundOffset + (CloudFront.Width * cloudScale), cloudScale, CloudFront), cloudHeight - (75 * resolutionScale.Y)), CloudFront.Frame(), Color.Gray * opacity, 0f, CloudFront.Size() / 2f, cloudScale, SpriteEffects.None, 0f);
                 #endregion
             }
         }
@@ -140,9 +140,9 @@ namespace Windfall.Content.Skies
         public override float GetCloudAlpha() => 1f;
         private float GetBackgroundOffset(float parallaxMultiplier)
         {
-            windOffset += (Main.windSpeedCurrent);
+            windOffset += Main.windSpeedCurrent;
             return -100000 - (((Main.LocalPlayer.Center.X / 10) - windOffset) * parallaxMultiplier);
         }
-        private static float GetBoundedX(float initialX, float scale, Texture2D tex) => initialX % (tex.Width * 3 * scale) - (tex.Width * scale / 2f);
+        private static float GetBoundedX(float initialX, float scale, Texture2D tex) => initialX % (tex.Width * 3 * scale) + Main.screenWidth + (tex.Width * scale / 2f);
     }
 }
