@@ -7,30 +7,29 @@ using System.Threading.Tasks;
 using Terraria.Graphics.Effects;
 using Terraria.Graphics.Shaders;
 
-namespace Windfall.Content.Skies.CorruptCommunion
+namespace Windfall.Content.Skies.CorruptCommunion;
+
+public class CorruptCommunionScreenShaderData : ScreenShaderData
 {
-    public class CorruptCommunionScreenShaderData : ScreenShaderData
+    public CorruptCommunionScreenShaderData(string passName)
+        : base(passName)
     {
-        public CorruptCommunionScreenShaderData(string passName)
-            : base(passName)
-        {
-        }
+    }
 
-        public override void Update(GameTime gameTime)
+    public override void Update(GameTime gameTime)
+    {
+        if (!Main.LocalPlayer.Godly().CorruptCommunion)
         {
-            if (!Main.LocalPlayer.Godly().CorruptCommunion)
-            {
-                Filters.Scene["Windfall:CorruptCommunion"].Deactivate();
-            }
+            Filters.Scene["Windfall:CorruptCommunion"].Deactivate();
         }
+    }
 
-        public override void Apply()
+    public override void Apply()
+    {
+        if (Main.LocalPlayer.Godly().CorruptCommunion)
         {
-            if (Main.LocalPlayer.Godly().CorruptCommunion)
-            {
-                UseTargetPosition(Main.LocalPlayer.Center);
-            }
-            base.Apply();
+            UseTargetPosition(Main.LocalPlayer.Center);
         }
+        base.Apply();
     }
 }

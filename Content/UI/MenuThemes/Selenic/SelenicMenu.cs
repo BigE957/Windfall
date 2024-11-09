@@ -1,5 +1,4 @@
-﻿namespace Windfall.Content.UI.MenuThemes.Selenic
-{
+﻿namespace Windfall.Content.UI.MenuThemes.Selenic;
     public class SelenicMenu : ModMenu
     {
         private int counter = 0;
@@ -101,4 +100,3 @@
         private static float GetBoundedX(float initialX, float scaledWidth) => initialX % (scaledWidth * 3) + Main.screenWidth + (scaledWidth / 2f);
 
     }
-}

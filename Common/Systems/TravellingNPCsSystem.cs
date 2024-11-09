@@ -6,34 +6,33 @@ using System.Threading.Tasks;
 using Terraria.ModLoader.IO;
 using Windfall.Content.NPCs.TravellingNPCs;
 
-namespace Windfall.Common.Systems
+namespace Windfall.Common.Systems;
+
+public class TravellingNPCsSystem : ModSystem
 {
-    public class TravellingNPCsSystem : ModSystem
+    public override void PreUpdateWorld()
     {
-        public override void PreUpdateWorld()
-        {
-            TravellingCultist.UpdateTravelingMerchant();
-        }
+        TravellingCultist.UpdateTravelingMerchant();
+    }
 
-        public override void SaveWorldData(TagCompound tag)
+    public override void SaveWorldData(TagCompound tag)
+    {
+        if (TravellingCultist.spawnTime != double.MaxValue)
         {
-            if (TravellingCultist.spawnTime != double.MaxValue)
-            {
-                tag["spawnTime"] = TravellingCultist.spawnTime;
-            }
+            tag["spawnTime"] = TravellingCultist.spawnTime;
         }
+    }
 
-        public override void LoadWorldData(TagCompound tag)
-        {
-            if (!tag.TryGet("spawnTime", out TravellingCultist.spawnTime))
-            {
-                TravellingCultist.spawnTime = double.MaxValue;
-            }
-        }
-
-        public override void ClearWorld()
+    public override void LoadWorldData(TagCompound tag)
+    {
+        if (!tag.TryGet("spawnTime", out TravellingCultist.spawnTime))
         {
             TravellingCultist.spawnTime = double.MaxValue;
         }
+    }
+
+    public override void ClearWorld()
+    {
+        TravellingCultist.spawnTime = double.MaxValue;
     }
 }

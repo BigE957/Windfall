@@ -8,33 +8,32 @@ using System.Threading.Tasks;
 using Windfall.Common.Players;
 using Windfall.Content.Projectiles.Weapons.Summon;
 
-namespace Windfall.Content.Buffs.Weapons.Minions
-{
-    public class ShadowHandBuff : ModBuff
-    {
-        public override void SetStaticDefaults()
-        {
-            Main.buffNoTimeDisplay[Type] = true;
-            Main.buffNoSave[Type] = true;
-            //Main.persistentBuff[Type] = true;
-        }
+namespace Windfall.Content.Buffs.Weapons.Minions;
 
-        public override void Update(Player player, ref int buffIndex)
-        {           
-            BuffPlayer buffPlayer = player.Buff();
-            if (player.ownedProjectileCounts[ModContent.ProjectileType<ShadowHand_Minion>()] > 0)
-            {
-                buffPlayer.DeepSeeker = true;
-            }
-            if (!buffPlayer.DeepSeeker)
-            {
-                player.DelBuff(buffIndex);
-                buffIndex--;
-            }
-            else
-            {
-                player.buffTime[buffIndex] = 18000;
-            }
+public class ShadowHandBuff : ModBuff
+{
+    public override void SetStaticDefaults()
+    {
+        Main.buffNoTimeDisplay[Type] = true;
+        Main.buffNoSave[Type] = true;
+        //Main.persistentBuff[Type] = true;
+    }
+
+    public override void Update(Player player, ref int buffIndex)
+    {           
+        BuffPlayer buffPlayer = player.Buff();
+        if (player.ownedProjectileCounts[ModContent.ProjectileType<ShadowHand_Minion>()] > 0)
+        {
+            buffPlayer.DeepSeeker = true;
+        }
+        if (!buffPlayer.DeepSeeker)
+        {
+            player.DelBuff(buffIndex);
+            buffIndex--;
+        }
+        else
+        {
+            player.buffTime[buffIndex] = 18000;
         }
     }
 }

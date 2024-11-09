@@ -1,48 +1,47 @@
 ﻿using System.Runtime.InteropServices;
 
-namespace Windfall.Common.Systems
+namespace Windfall.Common.Systems;
+
+public class StatCorrections : ModSystem
 {
-    public class StatCorrections : ModSystem
+    [StructLayout(LayoutKind.Sequential, Size = 1)]
+    internal struct EnemyStats
     {
-        [StructLayout(LayoutKind.Sequential, Size = 1)]
-        internal struct EnemyStats
-        {
-            public static SortedDictionary<int, double> ExpertDamageMultiplier;
+        public static SortedDictionary<int, double> ExpertDamageMultiplier;
 
-            public static SortedDictionary<int, int[]> ContactDamageValues;
+        public static SortedDictionary<int, int[]> ContactDamageValues;
 
-            public static SortedDictionary<Tuple<int, int>, int[]> ProjectileDamageValues;
+        public static SortedDictionary<Tuple<int, int>, int[]> ProjectileDamageValues;
 
-            public static SortedDictionary<int, Tuple<bool, int[]>> DebuffImmunities;
-        }
+        public static SortedDictionary<int, Tuple<bool, int[]>> DebuffImmunities;
+    }
 
-        private const double ExpertContactVanillaMultiplier = 2.0;
+    private const double ExpertContactVanillaMultiplier = 2.0;
 
-        private const double MasterContactVanillaMultiplier = 3.0;
+    private const double MasterContactVanillaMultiplier = 3.0;
 
-        private const double NormalProjectileVanillaMultiplier = 2.0;
+    private const double NormalProjectileVanillaMultiplier = 2.0;
 
-        private const double ExpertProjectileVanillaMultiplier = 4.0;
+    private const double ExpertProjectileVanillaMultiplier = 4.0;
 
-        private const double MasterProjectileVanillaMultiplier = 6.0;
+    private const double MasterProjectileVanillaMultiplier = 6.0;
 
-        public static int ScaleContactDamage(int damage)
-        {
-            double damageAdjustment = 0.8 * (Main.masterMode ? MasterContactVanillaMultiplier : Main.expertMode ? ExpertContactVanillaMultiplier : 1);
-            // If the assigned value would be -1, don't actually assign it. This allows for conditionally disabling the system.
-            int damageToUse = (int)Math.Round(damage / damageAdjustment);
-            return damageToUse;
-        }
+    public static int ScaleContactDamage(int damage)
+    {
+        double damageAdjustment = 0.8 * (Main.masterMode ? MasterContactVanillaMultiplier : Main.expertMode ? ExpertContactVanillaMultiplier : 1);
+        // If the assigned value would be -1, don't actually assign it. This allows for conditionally disabling the system.
+        int damageToUse = (int)Math.Round(damage / damageAdjustment);
+        return damageToUse;
+    }
 
-        // Gets the amount of damage a given projectile should do from this NPC.
-        // Automatically compensates for Terraria's internal spaghetti scaling.
-        public static int ScaleProjectileDamage(int damage)
-        {
-            double damageAdjustment = Main.masterMode ? MasterProjectileVanillaMultiplier : Main.expertMode ? ExpertProjectileVanillaMultiplier : NormalProjectileVanillaMultiplier;
+    // Gets the amount of damage a given projectile should do from this NPC.
+    // Automatically compensates for Terraria's internal spaghetti scaling.
+    public static int ScaleProjectileDamage(int damage)
+    {
+        double damageAdjustment = Main.masterMode ? MasterProjectileVanillaMultiplier : Main.expertMode ? ExpertProjectileVanillaMultiplier : NormalProjectileVanillaMultiplier;
 
-            int damageToUse = (int)Math.Round(damage / damageAdjustment);
+        int damageToUse = (int)Math.Round(damage / damageAdjustment);
 
-            return damageToUse;
-        }
+        return damageToUse;
     }
 }
