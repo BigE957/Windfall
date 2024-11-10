@@ -12,7 +12,8 @@
       ]
     },
     {
-      "Text": "Ah, well, well! To think, my favorite underling's come to see me when we don't even have work to do! I guess nobody can keep away from my magnetic personality."
+      "Text": "Ah, well, well! To think, my favorite underling's come to see me when we don't even have work to do! I guess nobody can keep away from my magnetic personality.",
+      "ExpressionIndex": 1
     },
     {
       "Text": "I'm just kidding, of couse. I assume you've got a reason you're here. How can I help?",
@@ -64,16 +65,19 @@
       ]
     },
     {
-      "Text": "Right! Yes! I have some good news!"
+      "Text": "Right! Yes! I have some good news!",
+      "ExpressionIndex": 1
     },
     {
       "Text": "As I'm sure you're aware, the Selenic Order is divided into Ranks: Devotees and Bishops. Then, there's those such as myself who lie outside ranking. However, there is a rank above Bishop, and with how you've proven yourself, I inquired with the Orator if you could be promoted directly to such a rank..."
     },
     {
-      "Text": "...and he agreed!"
+      "Text": "...and he agreed!",
+      "ExpressionIndex": 1
     },
     {
-      "Text": "The rank above bishop is Apostle, and starting today, you'll be on the path to become one! You can thank me for putting in a good word later."
+      "Text": "The rank above bishop is Apostle, and starting today, you'll be on the path to become one! You can thank me for putting in a good word later.",
+      "ExpressionIndex": 1
     },
     {
       "Text": "You likely haven't actually met any Apostles here. You see, they act in direct service of the Orator, and are often sent out on quite lengthy missions. Come to think of it, I don't actually know if their work effects us at all... All I know is they carry out the Orator's wishes. To become one, you'll need to prove yourself capable!"
@@ -105,7 +109,7 @@
           "Heading": 17
         },
         {
-          "Title": "How do you normally become an Apostle?",
+          "Title": "Becoming an Apostle...?",
           "Heading": 18
         }
       ]
@@ -129,7 +133,7 @@
           "Heading": 17
         },
         {
-          "Title": "How do you normally become an Apostle?",
+          "Title": "Becoming an Apostle...?",
           "Heading": 18
         }
       ]
@@ -177,10 +181,12 @@
       "Text": "You mean without my generous reccomendation? Well, you see... Uh... Hmm..."
     },
     {
-      "Text": "Now that you mention it, I'm not sure there's ever been a new Apostle appointed after I joined. They were all around way before me."
+      "Text": "Now that you mention it, I'm not sure there's ever been a new Apostle appointed after I joined. They were all around way before me.",
+      "ExpressionIndex": 3
     },
     {
-      "Text": "I'm not actually that sure how many of our Order's members even know about them... Their work has never seemed to really effect us in a noticeable way."
+      "Text": "I'm not actually that sure how many of our Order's members even know about them... Their work has never seemed to really effect us in a noticeable way.",
+      "ExpressionIndex": 3
     },
     {
       "Text": "Maybe they just get to sit around all day! I could certainly use a vacation... You better give me the scoop once you get promoted; you hear?",
@@ -197,6 +203,6 @@
     }
   ],
   "Characters": [
-    "TheCalamity"
+    "Seamstress"
   ]
 }

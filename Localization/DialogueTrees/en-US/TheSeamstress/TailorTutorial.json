@@ -35,10 +35,11 @@
         {
           "Title": "I'm ready!"
         }
-      ]
+      ],
+      "ExpressionIndex": 1
     }
   ],
   "Characters": [
-    "TheCalamity"
+    "Seamstress"
   ]
 }

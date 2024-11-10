@@ -1,30 +1,36 @@
 {
   "Dialogues": [
     {
-      "Text": "Oh hey! Finally, I was beginning to think it was just me and Chef alone here! You know what the hell happened to everyone? Chef mentioned hearing something, but didn't elaborate...",
+      "Text": "Oh hey! Finally, I was beginning to think it was just me and Chef alone here!",
+      "ExpressionIndex": 1
+    },
+    {
+      "Text": "You know what the hell happened to everyone? Chef mentioned hearing something, but didn't elaborate...",
       "Responses": [
         {
           "Title": "No clue.",
-          "Heading": 1
+          "Heading": 2
         },
         {
           "Title": "I saw The Orator and...",
-          "Heading": 3
+          "Heading": 4
         },
         {
           "Title": "I talked to him and...",
-          "Heading": 4
+          "Heading": 5
         }
-      ]
+      ],
+      "ExpressionIndex": 3
     },
     {
       "Text": "Geez, that's really weird. Not even the Orator's around. He disappears to go do something or another on the occasion though. Maybe he and the rest of everybody are doing something? I know he'd been hyping everybody up recently...",
       "Responses": [
         {
           "Title": "Maybe?",
-          "Heading": 2
+          "Heading": 3
         }
-      ]
+      ],
+      "ExpressionIndex": 3
     },
     {
       "Text": "Well, I do appreciate the break though. Haven't had to do a single bit of work! Guess I should just enjoy that, and not worry.",
@@ -40,10 +46,15 @@
         {
           "Title": "Thanks for the advice."
         }
-      ]
+      ],
+      "ExpressionIndex": 3
     },
     {
-      "Text": "Oh geez... Sounds pretty spooky. Wait- Why didn't he tell me any of that?! That stupid chef is gonna get it next time I see him!",
+      "Text": "Oh geez... Sounds pretty spooky. Wait-",
+      "ExpressionIndex": 3
+    },
+    {
+      "Text": "Why didn't he tell me any of that?! That stupid chef is gonna get it next time I see him!",
       "Responses": [
         {
           "Title": "Uh oh!"
@@ -55,6 +66,6 @@
     }
   ],
   "Characters": [
-    "TheCalamity"
+    "Seamstress"
   ]
 }

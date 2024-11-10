@@ -1,0 +1,43 @@
+{
+  "Name": "[c/32CD32:Seamstress]",
+  "Scale": 1,
+
+  "Expressions": [
+    {
+      "Title": "Default",
+      "Path": "Windfall/Assets/UI/CharacterAssets/Seamstress/Default",
+      "FrameCount": 1,
+      "FrameRate": 0,
+      "Loop": false,
+      "AnimateCondition": false
+    },
+    {
+      "Title": "Happy",
+      "Path": "Windfall/Assets/UI/CharacterAssets/Seamstress/Happy",
+      "FrameCount": 1,
+      "FrameRate": 0,
+      "Loop": false,
+      "AnimateCondition": false
+    },
+    {
+      "Title": "Mysterious",
+      "Path": "Windfall/Assets/UI/CharacterAssets/Seamstress/Mysterious",
+      "FrameCount": 1,
+      "FrameRate": 0,
+      "Loop": false,
+      "AnimateCondition": false
+    },
+    {
+      "Title": "Worried",
+      "Path": "Windfall/Assets/UI/CharacterAssets/Seamstress/Worried",
+      "FrameCount": 1,
+      "FrameRate": 0,
+      "Loop": false,
+      "AnimateCondition": false
+    }
+  ],
+  "Style": "DialogueHelper.UI.Dialogue.DialogueStyles.DefaultDialogueStyle",
+  "TextDelay": 3,
+  "PrimaryColor": "#000000",
+  "SecondaryColor": "#32CD32"
+}
