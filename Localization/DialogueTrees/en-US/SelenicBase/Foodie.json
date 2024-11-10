@@ -1,0 +1,18 @@
+{
+  "Dialogues": [
+    {
+      "Text": "Fuck wagies",
+      "Responses": [
+        {
+          "Title": "Not right now."
+        },
+        {
+          "Title": "Yeah!"
+        }
+      ]
+    }
+  ],
+  "Characters": [
+    "TheCalamity"
+  ]
+}

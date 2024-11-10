@@ -12,13 +12,21 @@ public class LunarBishop : ModNPC
         SelenicChat,
         Greeting,
         CafeteriaEvent,
-        Wandering,
+        StaticCharacter,
     }
     private States AIState
     {
         get => (States)NPC.ai[2];
         set => NPC.ai[2] = (float)value;
     }
+    public enum Character
+    {
+        Foodie,
+        Speaker
+    }
+    public Character myCharacter;
+    public bool characterSpokenTo = false;
+
     public override string Texture => "Windfall/Assets/NPCs/WorldEvents/LunarBishop";
     internal static SoundStyle SpawnSound => new("CalamityMod/Sounds/Custom/SCalSounds/BrimstoneHellblastSound");
     public override void SetStaticDefaults()
@@ -77,6 +85,10 @@ public class LunarBishop : ModNPC
                 NPC.direction = -1;
                 NPC.noGravity = true;
                 NPC.noTileCollide = true;
+                break;
+            case States.StaticCharacter:
+                NPC.alpha = 0;
+                NPC.noGravity = false;
                 break;
         }
     }
@@ -167,44 +179,49 @@ public class LunarBishop : ModNPC
                     }
                 }
                 break;
-            case States.Wandering:
+            case States.StaticCharacter:
 
                 break;
         }
     }
-    public override bool CanChat() => ((AIState == States.SelenicChat) && !ModContent.GetInstance<DialogueUISystem>().isDialogueOpen) || (AIState == States.CafeteriaEvent && NPC.ai[3] == 0 && NPC.velocity.X == 0);
+    public override bool CanChat() => ((AIState == States.SelenicChat || AIState == States.StaticCharacter) && !ModContent.GetInstance<DialogueUISystem>().isDialogueOpen) || (AIState == States.CafeteriaEvent && NPC.ai[3] == 0 && NPC.velocity.X == 0);
     public override string GetChat()
     {
         Main.CloseNPCChatOrSign();
-        if (AIState == States.SelenicChat)
-        {
-            ModContent.GetInstance<DialogueUISystem>().DisplayDialogueTree(Windfall.Instance, AIState.ToString());
-        }
-        else
-        {
-            if (Main.player[Main.myPlayer].HeldItem.type == LunarCultBaseSystem.CustomerQueue[0].Value.OrderID)
-            {
-                Main.player[Main.myPlayer].HeldItem.stack--;
 
-                if (LunarCultBaseSystem.CustomerQueue.Count == 1)
-                    LunarCultBaseSystem.CustomerQueue = [];
-                else
-                    LunarCultBaseSystem.CustomerQueue[0] = null;
-                if (Main.projectile.Any(p => p.active && p.type == ModContent.ProjectileType<FoodAlert>() && p.ai[2] == NPC.whoAmI))
-                    Main.projectile.First(p => p.active && p.type == ModContent.ProjectileType<FoodAlert>() && p.ai[2] == NPC.whoAmI).ai[2] = -1;
-                NPC.ai[3] = -1;
-                CombatText.NewText(NPC.Hitbox, Color.White, GetWindfallTextValue("Dialogue.LunarCult.LunarBishop.Cafeteria.Thanks." + Main.rand.Next(3)));
-                LunarCultBaseSystem.SatisfiedCustomers++;
-                if (LunarCultBaseSystem.SatisfiedCustomers == LunarCultBaseSystem.CustomerGoal)
+        switch (AIState)
+        {
+            case States.SelenicChat:
+                ModContent.GetInstance<DialogueUISystem>().DisplayDialogueTree(Windfall.Instance, AIState.ToString());
+                break;
+            case States.StaticCharacter:
+                ModContent.GetInstance<DialogueUISystem>().DisplayDialogueTree(Windfall.Instance, $"SelenicBase/{myCharacter}", characterSpokenTo ? 1 : 0);
+                break;
+            case States.CafeteriaEvent:
+                if (Main.player[Main.myPlayer].HeldItem.type == LunarCultBaseSystem.CustomerQueue[0].Value.OrderID)
                 {
-                    NPC chef = Main.npc[NPC.FindFirstNPC(ModContent.NPCType<TheChef>())];
-                    CombatText.NewText(chef.Hitbox, Color.LimeGreen, GetWindfallTextValue("Dialogue.LunarCult.TheChef.Activity.AlmostDone"), true);
+                    Main.player[Main.myPlayer].HeldItem.stack--;
+
+                    if (LunarCultBaseSystem.CustomerQueue.Count == 1)
+                        LunarCultBaseSystem.CustomerQueue = [];
+                    else
+                        LunarCultBaseSystem.CustomerQueue[0] = null;
+                    if (Main.projectile.Any(p => p.active && p.type == ModContent.ProjectileType<FoodAlert>() && p.ai[2] == NPC.whoAmI))
+                        Main.projectile.First(p => p.active && p.type == ModContent.ProjectileType<FoodAlert>() && p.ai[2] == NPC.whoAmI).ai[2] = -1;
+                    NPC.ai[3] = -1;
+                    CombatText.NewText(NPC.Hitbox, Color.White, GetWindfallTextValue("Dialogue.LunarCult.LunarBishop.Cafeteria.Thanks." + Main.rand.Next(3)));
+                    LunarCultBaseSystem.SatisfiedCustomers++;
+                    if (LunarCultBaseSystem.SatisfiedCustomers == LunarCultBaseSystem.CustomerGoal)
+                    {
+                        NPC chef = Main.npc[NPC.FindFirstNPC(ModContent.NPCType<TheChef>())];
+                        CombatText.NewText(chef.Hitbox, Color.LimeGreen, GetWindfallTextValue("Dialogue.LunarCult.TheChef.Activity.AlmostDone"), true);
+                    }
                 }
-            }
-            else
-            {
-                CombatText.NewText(NPC.Hitbox, Color.White, GetWindfallTextValue("Dialogue.LunarCult.LunarBishop.Cafeteria.Where." + Main.rand.Next(3)));
-            }               
+                else
+                {
+                    CombatText.NewText(NPC.Hitbox, Color.White, GetWindfallTextValue("Dialogue.LunarCult.LunarBishop.Cafeteria.Where." + Main.rand.Next(3)));
+                }
+                break;
         }
         return "Rizz"; //Won't actually be seen.
     }
@@ -215,6 +232,11 @@ public class LunarBishop : ModNPC
         {
             NPC bishop = Main.npc.First(n => n.active && n.type == ModContent.NPCType<LunarBishop>() && n.ai[2] == (int)States.SelenicChat);
             bishop.As<LunarBishop>().Despawn();
+        }
+        else if(treeKey == "SelenicBase/Speaker" || treeKey == "SelenicBase/Foodie")
+        {
+            NPC me = Main.npc.First(n => n.active && n.type == ModContent.NPCType<LunarBishop>() && n.ai[2] == 4 && treeKey.Contains(n.As<LunarBishop>().myCharacter.ToString()));
+            me.As<LunarBishop>().characterSpokenTo = true;
         }
     }
     public void Despawn()

@@ -1,7 +1,4 @@
-﻿using CalamityMod.NPCs.TownNPCs;
-using System.IO;
-using Terraria.GameContent.Bestiary;
-using Terraria.ID;
+﻿using Terraria.GameContent.Bestiary;
 
 namespace Windfall.Content.NPCs.Critters;
 

@@ -1,0 +1,18 @@
+{
+  "Dialogues": [
+    {
+      "Text": "Ritual Spooky",
+      "Responses": [
+        {
+          "Title": "Not right now."
+        },
+        {
+          "Title": "Yeah!"
+        }
+      ]
+    }
+  ],
+  "Characters": [
+    "TheCalamity"
+  ]
+}

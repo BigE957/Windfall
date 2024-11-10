@@ -1,4 +1,4 @@
-﻿using Microsoft.CodeAnalysis.CSharp.Syntax;
+﻿using DialogueHelper.UI.Dialogue;
 using Windfall.Common.Systems.WorldEvents;
 using Windfall.Content.Projectiles.Other;
 
@@ -12,13 +12,21 @@ public class LunarCultistDevotee : ModNPC
         Chatting,
         CafeteriaEvent,
         RitualEvent,
-        Wandering,
+        StaticCharacter,
     }
     private States AIState
     {
         get => (States)NPC.ai[2];
         set => NPC.ai[2] = (float)value;
     }
+    public enum Character
+    {
+        NewClothes,
+        Eeper
+    }
+    public Character myCharacter;
+    public bool characterSpokenTo = false;
+
     public Vector2 goalPosition = Vector2.Zero;
     public override string Texture => "Windfall/Assets/NPCs/WorldEvents/LunarCultistDevotee";
     internal static SoundStyle SpawnSound => new("CalamityMod/Sounds/Custom/SCalSounds/BrimstoneHellblastSound");
@@ -28,6 +36,7 @@ public class LunarCultistDevotee : ModNPC
         Main.npcFrameCount[Type] = 6;
         NPCID.Sets.NoTownNPCHappiness[Type] = true;
         NPCID.Sets.AllowDoorInteraction[Type] = true;
+        ModContent.GetInstance<DialogueUISystem>().DialogueClose += CloseEffect;
     }
     public override void SetDefaults()
     {
@@ -47,7 +56,7 @@ public class LunarCultistDevotee : ModNPC
     }
     public override void OnSpawn(IEntitySource source)
     {
-        if(AIState == States.CafeteriaEvent || AIState == States.RitualEvent || AIState == States.Wandering)
+        if(AIState == States.CafeteriaEvent || AIState == States.RitualEvent || AIState == States.StaticCharacter)
             NPC.aiStyle = -1;
         switch (AIState)
         {
@@ -60,14 +69,9 @@ public class LunarCultistDevotee : ModNPC
                 AnimationType = NPCID.BartenderUnconscious;
                 NPC.frame.X = 3;
                 break;
-            case States.Wandering:
+            case States.StaticCharacter:
                 NPC.alpha = 0;
                 NPC.noGravity = false;
-                NPC.aiStyle = NPCAIStyleID.Passive;
-                NPC.knockBackResist = 0.5f;
-                NPC.height = 48;
-                NPC.width /= 2;
-                AIType = NPCID.SkeletonMerchant;
                 break;
             default:
                 NPC.alpha = 255;
@@ -96,8 +100,7 @@ public class LunarCultistDevotee : ModNPC
         }
     }
     public override void AI()
-    {
-        
+    {       
         //AIState = States.RitualEvent;
         switch (AIState)
         {
@@ -253,46 +256,57 @@ public class LunarCultistDevotee : ModNPC
                 }
 
                 break;
-            case States.Wandering:
+            case States.StaticCharacter:
 
                 break;
         }
     }
-    public override bool CanChat() => AIState == States.Chatting || AIState == States.CafeteriaEvent && NPC.ai[3] == 0 && NPC.velocity.X == 0;
+    public override bool CanChat() => AIState == States.StaticCharacter || AIState == States.CafeteriaEvent && NPC.ai[3] == 0 && NPC.velocity.X == 0;
     public override string GetChat()
     {
-        if (AIState == States.Chatting)
-            return GetWindfallTextValue($"Dialogue.LunarCult.OcularDevotee.0");
-        else
+        Main.CloseNPCChatOrSign();
+
+        switch(AIState)
         {
-            Main.CloseNPCChatOrSign();
-
-            if (Main.player[Main.myPlayer].HeldItem.type == LunarCultBaseSystem.CustomerQueue[0].Value.OrderID)
-            {
-                Main.player[Main.myPlayer].HeldItem.stack--;
-
-                if (LunarCultBaseSystem.CustomerQueue.Count == 1)
-                    LunarCultBaseSystem.CustomerQueue = [];
-                else
-                    LunarCultBaseSystem.CustomerQueue[0] = null;
-                if (Main.projectile.Any(p => p.active && p.type == ModContent.ProjectileType<FoodAlert>() && p.ai[2] == NPC.whoAmI))
-                    Main.projectile.First(p => p.active && p.type == ModContent.ProjectileType<FoodAlert>() && p.ai[2] == NPC.whoAmI).ai[2] = -1;
-                NPC.ai[3] = -1;
-                CombatText.NewText(NPC.Hitbox, Color.White, GetWindfallTextValue("Dialogue.LunarCult.LunarBishop.Cafeteria.Thanks." + Main.rand.Next(3)));
-                LunarCultBaseSystem.SatisfiedCustomers++;
-                if (LunarCultBaseSystem.SatisfiedCustomers == LunarCultBaseSystem.CustomerGoal)
+            case States.StaticCharacter:
+                ModContent.GetInstance<DialogueUISystem>().DisplayDialogueTree(Windfall.Instance, $"SelenicBase/{myCharacter}", characterSpokenTo ? 1 : 0);
+                break;
+            case States.CafeteriaEvent:
+                if (Main.player[Main.myPlayer].HeldItem.type == LunarCultBaseSystem.CustomerQueue[0].Value.OrderID)
                 {
-                    NPC chef = Main.npc[NPC.FindFirstNPC(ModContent.NPCType<TheChef>())];
-                    CombatText.NewText(chef.Hitbox, Color.LimeGreen, GetWindfallTextValue("Dialogue.LunarCult.TheChef.Activity.AlmostDone"), true);
-                }
-            }
-            else
-            {
-                CombatText.NewText(NPC.Hitbox, Color.White, GetWindfallTextValue("Dialogue.LunarCult.LunarBishop.Cafeteria.Where." + Main.rand.Next(3)));
-            }
+                    Main.player[Main.myPlayer].HeldItem.stack--;
 
-            return "Rizz"; //Won't actually be seen.
+                    if (LunarCultBaseSystem.CustomerQueue.Count == 1)
+                        LunarCultBaseSystem.CustomerQueue = [];
+                    else
+                        LunarCultBaseSystem.CustomerQueue[0] = null;
+                    if (Main.projectile.Any(p => p.active && p.type == ModContent.ProjectileType<FoodAlert>() && p.ai[2] == NPC.whoAmI))
+                        Main.projectile.First(p => p.active && p.type == ModContent.ProjectileType<FoodAlert>() && p.ai[2] == NPC.whoAmI).ai[2] = -1;
+                    NPC.ai[3] = -1;
+                    CombatText.NewText(NPC.Hitbox, Color.White, GetWindfallTextValue("Dialogue.LunarCult.LunarBishop.Cafeteria.Thanks." + Main.rand.Next(3)));
+                    LunarCultBaseSystem.SatisfiedCustomers++;
+                    if (LunarCultBaseSystem.SatisfiedCustomers == LunarCultBaseSystem.CustomerGoal)
+                    {
+                        NPC chef = Main.npc[NPC.FindFirstNPC(ModContent.NPCType<TheChef>())];
+                        CombatText.NewText(chef.Hitbox, Color.LimeGreen, GetWindfallTextValue("Dialogue.LunarCult.TheChef.Activity.AlmostDone"), true);
+                    }
+                }
+                else
+                    CombatText.NewText(NPC.Hitbox, Color.White, GetWindfallTextValue("Dialogue.LunarCult.LunarBishop.Cafeteria.Where." + Main.rand.Next(3)));
+                break;
+        }
+
+        return "Rizz"; //Won't actually be seen.
+    }
+
+    private void CloseEffect(string treeKey, int dialogueID, int buttonID)
+    {
+        if (treeKey == "SelenicBase/NewClothes" || treeKey == "SelenicBase/Eeper")
+        {
+            NPC me = Main.npc.First(n => n.active && n.type == ModContent.NPCType<LunarCultistDevotee>() && n.ai[2] == 4 && treeKey.Contains(n.As<LunarCultistDevotee>().myCharacter.ToString()));
+            me.As<LunarCultistDevotee>().characterSpokenTo = true;
         }
     }
-    public override bool CheckActive() => AIState == States.Wandering;
+
+    public override bool CheckActive() => false;
 }
