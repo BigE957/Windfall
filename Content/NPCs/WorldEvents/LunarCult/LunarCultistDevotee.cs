@@ -36,7 +36,6 @@ public class LunarCultistDevotee : ModNPC
         Main.npcFrameCount[Type] = 6;
         NPCID.Sets.NoTownNPCHappiness[Type] = true;
         NPCID.Sets.AllowDoorInteraction[Type] = true;
-        ModContent.GetInstance<DialogueUISystem>().DialogueClose += CloseEffect;
     }
     public override void SetDefaults()
     {
@@ -72,6 +71,7 @@ public class LunarCultistDevotee : ModNPC
             case States.StaticCharacter:
                 NPC.alpha = 0;
                 NPC.noGravity = false;
+                NPC.aiStyle = -1;
                 break;
             default:
                 NPC.alpha = 255;
@@ -257,7 +257,14 @@ public class LunarCultistDevotee : ModNPC
 
                 break;
             case States.StaticCharacter:
-
+                if (myCharacter == Character.Eeper)
+                {
+                    if (!characterSpokenTo && (Main.GlobalTimeWrappedHourly - (int)Main.GlobalTimeWrappedHourly) < 0.015)
+                    {
+                        CombatText z = Main.combatText[CombatText.NewText(new((int)NPC.Center.X, (int)NPC.Bottom.Y, 1, 1), Color.LimeGreen, "Z", true)];
+                        z.lifeTime /= 2;
+                    }
+                }
                 break;
         }
     }
@@ -270,6 +277,7 @@ public class LunarCultistDevotee : ModNPC
         {
             case States.StaticCharacter:
                 ModContent.GetInstance<DialogueUISystem>().DisplayDialogueTree(Windfall.Instance, $"SelenicBase/{myCharacter}", characterSpokenTo ? 1 : 0);
+                characterSpokenTo = true;
                 break;
             case States.CafeteriaEvent:
                 if (Main.player[Main.myPlayer].HeldItem.type == LunarCultBaseSystem.CustomerQueue[0].Value.OrderID)
@@ -297,15 +305,6 @@ public class LunarCultistDevotee : ModNPC
         }
 
         return "Rizz"; //Won't actually be seen.
-    }
-
-    private void CloseEffect(string treeKey, int dialogueID, int buttonID)
-    {
-        if (treeKey == "SelenicBase/NewClothes" || treeKey == "SelenicBase/Eeper")
-        {
-            NPC me = Main.npc.First(n => n.active && n.type == ModContent.NPCType<LunarCultistDevotee>() && n.ai[2] == 4 && treeKey.Contains(n.As<LunarCultistDevotee>().myCharacter.ToString()));
-            me.As<LunarCultistDevotee>().characterSpokenTo = true;
-        }
     }
 
     public override bool CheckActive() => false;

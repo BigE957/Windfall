@@ -89,6 +89,7 @@ public class LunarBishop : ModNPC
             case States.StaticCharacter:
                 NPC.alpha = 0;
                 NPC.noGravity = false;
+                NPC.aiStyle = -1;
                 break;
         }
     }
@@ -196,6 +197,7 @@ public class LunarBishop : ModNPC
                 break;
             case States.StaticCharacter:
                 ModContent.GetInstance<DialogueUISystem>().DisplayDialogueTree(Windfall.Instance, $"SelenicBase/{myCharacter}", characterSpokenTo ? 1 : 0);
+                characterSpokenTo = true;
                 break;
             case States.CafeteriaEvent:
                 if (Main.player[Main.myPlayer].HeldItem.type == LunarCultBaseSystem.CustomerQueue[0].Value.OrderID)
@@ -232,11 +234,6 @@ public class LunarBishop : ModNPC
         {
             NPC bishop = Main.npc.First(n => n.active && n.type == ModContent.NPCType<LunarBishop>() && n.ai[2] == (int)States.SelenicChat);
             bishop.As<LunarBishop>().Despawn();
-        }
-        else if(treeKey == "SelenicBase/Speaker" || treeKey == "SelenicBase/Foodie")
-        {
-            NPC me = Main.npc.First(n => n.active && n.type == ModContent.NPCType<LunarBishop>() && n.ai[2] == 4 && treeKey.Contains(n.As<LunarBishop>().myCharacter.ToString()));
-            me.As<LunarBishop>().characterSpokenTo = true;
         }
     }
     public void Despawn()

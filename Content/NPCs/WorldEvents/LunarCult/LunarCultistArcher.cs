@@ -35,7 +35,6 @@ public class LunarCultistArcher : ModNPC
         Main.npcFrameCount[Type] = 5;
         NPCID.Sets.NoTownNPCHappiness[Type] = true;
         NPCID.Sets.AllowDoorInteraction[Type] = true;
-        ModContent.GetInstance<DialogueUISystem>().DialogueClose += CloseEffect;
     }
     public override void SetDefaults()
     {
@@ -92,6 +91,7 @@ public class LunarCultistArcher : ModNPC
             case States.StaticCharacter:
                 NPC.alpha = 0;
                 NPC.noGravity = false;
+                NPC.aiStyle = -1;
                 break;
         }
     }
@@ -160,7 +160,7 @@ public class LunarCultistArcher : ModNPC
         }
     }
     public override bool CheckActive() => false;
-    public override bool CanChat() => AIState == States.Chatting || AIState == States.CafeteriaEvent && NPC.ai[3] == 0 && NPC.velocity.X == 0;
+    public override bool CanChat() => AIState == States.StaticCharacter || AIState == States.Chatting || AIState == States.CafeteriaEvent && NPC.ai[3] == 0 && NPC.velocity.X == 0;
     public override string GetChat()
     {
         Main.CloseNPCChatOrSign();
@@ -168,6 +168,7 @@ public class LunarCultistArcher : ModNPC
         {
             case States.StaticCharacter:
                 ModContent.GetInstance<DialogueUISystem>().DisplayDialogueTree(Windfall.Instance, $"SelenicBase/{myCharacter}", characterSpokenTo ? 1 : 0);
+                characterSpokenTo = true;
                 break;
             case States.CafeteriaEvent:
                 if (Main.player[Main.myPlayer].HeldItem.type == LunarCultBaseSystem.CustomerQueue[0].Value.OrderID)
@@ -194,13 +195,5 @@ public class LunarCultistArcher : ModNPC
                 break;
         }
         return "Rizz"; //Won't actually be seen.
-    }
-    private void CloseEffect(string treeKey, int dialogueID, int buttonID)
-    {
-        if (treeKey == "SelenicBase/RitualWarn" || treeKey == "SelenicBase/Foodie")
-        {
-            NPC me = Main.npc.First(n => n.active && n.type == ModContent.NPCType<LunarCultistArcher>() && n.ai[2] == 4 && treeKey.Contains(n.As<LunarCultistArcher>().myCharacter.ToString()));
-            me.As<LunarCultistArcher>().characterSpokenTo = true;
-        }
     }
 }

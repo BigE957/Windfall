@@ -187,6 +187,11 @@ public class LunarCultBaseSystem : ModSystem
             if (!NPC.AnyNPCs(ModContent.NPCType<OratorNPC>()))
                 NPC.NewNPC(Entity.GetSource_None(), (CultBaseArea.Right - 11) * 16, (CultBaseArea.Top + 30) * 16, ModContent.NPCType<OratorNPC>());
 
+            Player closestPlayer = Main.player[Player.FindClosest(new Vector2(CultBaseArea.X * 16, CultBaseArea.Y * 16), CultBaseArea.Width * 16, CultBaseArea.Height * 16)];
+            float PlayerDistFromHideout = (closestPlayer.Center - (CultBaseArea.Center() * 16)).Length();
+            if (PlayerDistFromHideout < 1600 && Main.npc.Where(n => n.active && n.type == ModContent.NPCType<Fingerling>()).Count() < 16)
+                SpawnFingerling();
+
             foreach (NPC npc in Main.npc.Where(n => n.active))
             {
                 if (!npc.dontTakeDamage && npc.lifeMax != 1 && !npc.friendly && !npc.boss && npc.type != ModContent.NPCType<PortalMole>())
@@ -317,7 +322,7 @@ public class LunarCultBaseSystem : ModSystem
                     switch(PlannedActivity)
                     {
                         case SystemStates.Ritual:
-                            NPC warn = NPC.NewNPCDirect(Entity.GetSource_None(), (LunarCultBaseLocation.X + 37) * 16, (LunarCultBaseLocation.Y - 56) * 16, ModContent.NPCType<LunarCultistArcher>(), ai2: 4);
+                            NPC warn = NPC.NewNPCDirect(Entity.GetSource_None(), (LunarCultBaseLocation.X + 39) * 16, (LunarCultBaseLocation.Y - 24) * 16, ModContent.NPCType<LunarCultistArcher>(), ai2: 4);
                             warn.As<LunarCultistArcher>().myCharacter = LunarCultistArcher.Character.RitualWarn;
                             break;
                         case SystemStates.Meeting:               
@@ -333,21 +338,29 @@ public class LunarCultBaseSystem : ModSystem
                     {
                         NPC speaker = NPC.NewNPCDirect(Entity.GetSource_None(), (LunarCultBaseLocation.X - 22) * 16, (LunarCultBaseLocation.Y + 24) * 16, ModContent.NPCType<LunarBishop>(), ai2: 4);
                         speaker.As<LunarBishop>().myCharacter = LunarBishop.Character.Speaker;
+                        speaker.spriteDirection *= -1;
 
-                        NPC eeper = NPC.NewNPCDirect(Entity.GetSource_None(), (LunarCultBaseLocation.X - 32) * 16, (LunarCultBaseLocation.Y + 24), ModContent.NPCType<LunarCultistDevotee>(), ai2: 4);
+                        NPC eeper = NPC.NewNPCDirect(Entity.GetSource_None(), (LunarCultBaseLocation.X - 60) * 16, (LunarCultBaseLocation.Y + 24) * 16, ModContent.NPCType<LunarCultistDevotee>(), ai2: 4);
                         eeper.As<LunarCultistDevotee>().myCharacter = LunarCultistDevotee.Character.Eeper;
+                        eeper.spriteDirection *= -1;
                     }
                     if (PlannedActivity != SystemStates.Cafeteria)
                     {
                         Vector2 chefCenter = Main.npc[NPC.FindFirstNPC(ModContent.NPCType<TheChef>())].Center;
-                        NPC speaker = NPC.NewNPCDirect(Entity.GetSource_None(), (int)chefCenter.X + 256, (int)chefCenter.Y, ModContent.NPCType<LunarBishop>(), ai2: 4);
-                        speaker.As<LunarBishop>().myCharacter = LunarBishop.Character.Foodie;
+                        NPC foodie = NPC.NewNPCDirect(Entity.GetSource_None(), (int)chefCenter.X + 280, (int)chefCenter.Y, ModContent.NPCType<LunarBishop>(), ai2: 4);
+                        foodie.As<LunarBishop>().myCharacter = LunarBishop.Character.Foodie;
+                        foodie.spriteDirection *= -1;
                     }
                     if (PlannedActivity != SystemStates.Tailor)
                     {
                         Vector2 seamstressCenter = Main.npc[NPC.FindFirstNPC(ModContent.NPCType<Seamstress>())].Center;
-                        NPC dripped = NPC.NewNPCDirect(Entity.GetSource_None(), (int)seamstressCenter.X - 256, (int)seamstressCenter.Y, ModContent.NPCType<LunarCultistDevotee>(), ai2: 4);
+                        NPC dripped = NPC.NewNPCDirect(Entity.GetSource_None(), (int)seamstressCenter.X - 400, (int)seamstressCenter.Y, ModContent.NPCType<LunarCultistDevotee>(), ai2: 4);
                         dripped.As<LunarCultistDevotee>().myCharacter = LunarCultistDevotee.Character.NewClothes;
+                    }
+                    if (PlannedActivity != SystemStates.OratorVisit)
+                    {
+                        NPC broke = NPC.NewNPCDirect(Entity.GetSource_None(), (LunarCultBaseLocation.X + 6) * 16, (LunarCultBaseLocation.Y - 46) * 16, ModContent.NPCType<LunarCultistArcher>(), ai2: 4);
+                        broke.As<LunarCultistArcher>().myCharacter = LunarCultistArcher.Character.Broke;
                     }
                     #endregion
                     if (!Main.npc.Any(n => n.active && n.type == ModContent.NPCType<LunarBishop>() && n.ai[2] == 2))
@@ -1303,36 +1316,47 @@ public class LunarCultBaseSystem : ModSystem
                     int currentRecruitCount = Main.npc.Where(n => n.active && n.type == ModContent.NPCType<RecruitableLunarCultist>()).Count();
                     if (currentRecruitCount < 4)
                     {
-                        List<string> names =
+                        List<int> IDs =
                         [
-                            "Tirith",
-                            "Vivian",
-                            "Tania",
-                            "Doro",
-                            "Skylar",
-                            "Jamie",
+                            0,//"Tirith",
+                            1,//"Vivian",
+                            2,//"Tania",
+                            3,//"Doro",
+                            4,//"Skylar",
+                            5//"Jamie",
                         ];
                         for (int i = 0; i < 4 - currentRecruitCount; i++)
                         {
-                            NPC recruit;
-                            int index = Main.rand.Next(names.Count);
-                            if (NPC.FindFirstNPC(ModContent.NPCType<LunarCultistDevotee>()) != -1)
+                            NPC recruit = null;
+                            int index = Main.rand.Next(IDs.Count);
+                            switch(IDs[index])
                             {
-                                recruit = Main.npc[NPC.FindFirstNPC(ModContent.NPCType<LunarCultistDevotee>())];
-                                Main.npc[NPC.FindFirstNPC(ModContent.NPCType<LunarCultistDevotee>())].Transform(ModContent.NPCType<RecruitableLunarCultist>());                                   
-                            }
-                            else
-                            {
-                                recruit = Main.npc[NPC.FindFirstNPC(ModContent.NPCType<LunarCultistArcher>())];
-                                Main.npc[NPC.FindFirstNPC(ModContent.NPCType<LunarCultistArcher>())].Transform(ModContent.NPCType<RecruitableLunarCultist>());
+                                case 0:
+                                    recruit = NPC.NewNPCDirect(NPC.GetSource_NaturalSpawn(), (CultBaseArea.Center.X - 4) * 16, CultBaseArea.Center.Y * 16, ModContent.NPCType<RecruitableLunarCultist>());
+                                    break;
+                                case 1:
+                                    recruit = NPC.NewNPCDirect(NPC.GetSource_NaturalSpawn(), (CultBaseArea.Center.X - 8) * 16, CultBaseArea.Center.Y * 16, ModContent.NPCType<RecruitableLunarCultist>());
+                                    break;
+                                case 2:
+                                    recruit = NPC.NewNPCDirect(NPC.GetSource_NaturalSpawn(), (CultBaseArea.Center.X - 16) * 16, CultBaseArea.Center.Y * 16, ModContent.NPCType<RecruitableLunarCultist>());
+                                    break;
+                                case 3:
+                                    recruit = NPC.NewNPCDirect(NPC.GetSource_NaturalSpawn(), (CultBaseArea.Center.X + 4) * 16, CultBaseArea.Center.Y * 16, ModContent.NPCType<RecruitableLunarCultist>());
+                                    break;
+                                case 4:
+                                    recruit = NPC.NewNPCDirect(NPC.GetSource_NaturalSpawn(), (CultBaseArea.Center.X + 8) * 16, CultBaseArea.Center.Y * 16, ModContent.NPCType<RecruitableLunarCultist>());
+                                    break;
+                                case 5:
+                                    recruit = NPC.NewNPCDirect(NPC.GetSource_NaturalSpawn(), (CultBaseArea.Center.X + 16) * 16, CultBaseArea.Center.Y * 16, ModContent.NPCType<RecruitableLunarCultist>());
+                                    break;
                             }
                             RecruitableLunarCultist Recruit = recruit.As<RecruitableLunarCultist>();
-                            Recruit.MyName = (RecruitableLunarCultist.RecruitNames)index;
+                            Recruit.MyName = (RecruitableLunarCultist.RecruitNames)IDs[index];
                             Recruit.Chattable = true;
                             Recruit.canRecruit = true;
                             Recruit.OnSpawn(NPC.GetSource_NaturalSpawn());
 
-                            names.RemoveAt(index);
+                            IDs.RemoveAt(index);
                         }
                     }
                 }                    
@@ -1364,4 +1388,35 @@ public class LunarCultBaseSystem : ModSystem
         return Responses;
     }
     public static void ResetTimer() => ActivityTimer = 0;
+
+    public static void SpawnFingerling()
+    {
+        if (Main.netMode == NetmodeID.MultiplayerClient)
+            return;
+
+        for (int i = 0; i < 16; i++)
+        {
+            Rectangle spawnArea = new((LunarCultBaseLocation.X - 70), (LunarCultBaseLocation.Y - 80), 82, 152);
+            int checkPositionX = spawnArea.X + Main.rand.Next(spawnArea.Width);
+            int checkPositionY = spawnArea.Y + Main.rand.Next(spawnArea.Height);
+            Vector2 checkPosition = new(checkPositionX, checkPositionY);
+
+            Tile aboveSpawnTile = CalamityUtils.ParanoidTileRetrieval(checkPositionX, checkPositionY - 1);
+            bool nearCultBase = CalamityUtils.ManhattanDistance(checkPosition, new(LunarCultBaseLocation.X, LunarCultBaseLocation.Y)) < 180f;
+            bool isVaildWall = aboveSpawnTile.WallType == WallID.AncientSilverBrickWall || aboveSpawnTile.WallType == WallID.GreenStainedGlass || aboveSpawnTile.WallType == WallID.EmeraldGemspark;
+            isVaildWall |= aboveSpawnTile.WallType == WallID.PlatinumBrick || aboveSpawnTile.WallType == WallID.PearlstoneBrick;
+            if (!isVaildWall || !nearCultBase || Collision.SolidCollision((checkPosition - new Vector2(2f, 4f)).ToWorldCoordinates(), 4, 8) || aboveSpawnTile.IsTileSolid() || Lighting.Brightness(checkPositionX, checkPositionY - 1) <= 0.4f)
+                continue;
+
+            int spawnedNPC = NPC.NewNPC(NPC.GetSource_NaturalSpawn(), checkPositionX * 16 + 8, checkPositionY * 16, ModContent.NPCType<Fingerling>());
+
+            if (Main.netMode == NetmodeID.Server && spawnedNPC < Main.maxNPCs)
+            {
+                Main.npc[spawnedNPC].position.Y -= 8f;
+
+                NetMessage.SendData(MessageID.SyncNPC, -1, -1, null, spawnedNPC);
+                return;
+            }
+        }
+    }
 }
