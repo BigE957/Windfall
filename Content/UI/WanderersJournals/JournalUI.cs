@@ -7,13 +7,9 @@ namespace Windfall.Content.UI.WanderersJournals;
 internal class JournalFullUIState : UIState
 {
     public int i = 0;
-#pragma warning disable CS0649 // Field 'JournalFullUIState.UIPanel' is never assigned to, and will always have its default value null
     public DraggableUIPanel UIPanel;
-#pragma warning restore CS0649 // Field 'JournalFullUIState.UIPanel' is never assigned to, and will always have its default value null
     public JournalText JournalContents;
-#pragma warning disable CS0649 // Field 'JournalFullUIState.Page' is never assigned to, and will always have its default value null
     public UIImage Page;
-#pragma warning restore CS0649 // Field 'JournalFullUIState.Page' is never assigned to, and will always have its default value null
     public static int PageNumber = 0;
     public enum JournalTypes
     {
