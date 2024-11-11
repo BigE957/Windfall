@@ -85,6 +85,10 @@
             counter++;
             #endregion
 
+            drawColor = Color.White;
+            Main.time = 27000;
+            Main.dayTime = true;
+
             Vector2 drawPos = new (Main.screenWidth / 2f, 100f);
             spriteBatch.End();
             spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.NonPremultiplied, SamplerState.LinearClamp, DepthStencilState.None, Main.Rasterizer, null, Main.UIScaleMatrix);
