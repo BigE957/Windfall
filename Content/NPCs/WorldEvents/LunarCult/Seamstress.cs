@@ -13,6 +13,7 @@ public class Seamstress : ModNPC
 {
     public override string Texture => "Windfall/Assets/NPCs/WorldEvents/LunarBishop";
     private static SoundStyle SpawnSound => new("CalamityMod/Sounds/Custom/SCalSounds/BrimstoneHellblastSound");
+    private static readonly string seamstressPath = "Dialogue.LunarCult.Seamstress.";
     private float TalkDelay
     {
         get => NPC.ai[1];
@@ -97,22 +98,22 @@ public class Seamstress : ModNPC
             {
                 case 60:
                     Rectangle location = new((int)NPC.Center.X, (int)NPC.Center.Y, NPC.width, NPC.width);
-                    CombatText text = Main.combatText[CombatText.NewText(location, Color.LimeGreen, "3!", true)];
+                    CombatText text = Main.combatText[CombatText.NewText(location, Color.LimeGreen, GetWindfallTextValue(seamstressPath + "Activity.Start.0"), true)];
                     text.lifeTime /= 2;
                     break;
                 case 120:
                     location = new((int)NPC.Center.X, (int)NPC.Center.Y, NPC.width, NPC.width);
-                    text = Main.combatText[CombatText.NewText(location, Color.LimeGreen, "2!", true)];
+                    text = Main.combatText[CombatText.NewText(location, Color.LimeGreen, GetWindfallTextValue(seamstressPath + "Activity.Start.1"), true)];
                     text.lifeTime /= 2;
                     break;
                 case 180:
                     location = new((int)NPC.Center.X, (int)NPC.Center.Y, NPC.width, NPC.width);
-                    text = Main.combatText[CombatText.NewText(location, Color.LimeGreen, "1!", true)];
+                    text = Main.combatText[CombatText.NewText(location, Color.LimeGreen, GetWindfallTextValue(seamstressPath + "Activity.Start.2"), true)];
                     text.lifeTime /= 2;
                     break;
                 case 240:
                     location = new((int)NPC.Center.X, (int)NPC.Center.Y, NPC.width, NPC.width);
-                    CombatText.NewText(location, Color.LimeGreen, "Go!", true);
+                    CombatText.NewText(location, Color.LimeGreen, GetWindfallTextValue(seamstressPath + "Activity.Start.3"), true);
 
                     BeginActivity = false;
                     break;
@@ -130,27 +131,27 @@ public class Seamstress : ModNPC
                 switch (yapCounter)
                 {
                     case 60:
-                        CombatText.NewText(location, Color.LimeGreen, "Wait...", true);
+                        CombatText.NewText(location, Color.LimeGreen, GetWindfallTextValue(seamstressPath + "Activity.GoodEnd.0"), true);
                         break;
                     case 180:
-                        CombatText.NewText(location, Color.LimeGreen, "I can't believe it...", true);
+                        CombatText.NewText(location, Color.LimeGreen, GetWindfallTextValue(seamstressPath + "Activity.GoodEnd.1"), true);
                         break;
                     case 300:
-                        CombatText text = Main.combatText[CombatText.NewText(location, Color.LimeGreen, "We met our quota!!", true)];
+                        CombatText text = Main.combatText[CombatText.NewText(location, Color.LimeGreen, GetWindfallTextValue(seamstressPath + "Activity.GoodEnd.2"), true)];
                         text.lifeTime /= 2;
                         break;
                     case 360:
-                        CombatText.NewText(location, Color.LimeGreen, "Great job!", true);
+                        CombatText.NewText(location, Color.LimeGreen, GetWindfallTextValue(seamstressPath + "Activity.GoodEnd.3"), true);
                         break;
                     case 480:
-                        CombatText.NewText(location, Color.LimeGreen, "I suppose you've earned this...", true);
+                        CombatText.NewText(location, Color.LimeGreen, GetWindfallTextValue(seamstressPath + "Activity.GoodEnd.4"), true);
                         break;
                     case 540:
                         Item i = Main.item[Item.NewItem(NPC.GetSource_Loot(), NPC.Center, new Vector2(8, 4), ModContent.ItemType<LunarCoin>())];
                         i.velocity = (Main.player[Main.myPlayer].Center - NPC.Center).SafeNormalize(Vector2.Zero).RotatedBy(Main.rand.NextFloat(-0.5f, 0.5f)) * 4;
                         break;
                     case 600:
-                        CombatText.NewText(location, Color.LimeGreen, "I'll look forward to when next we work together!", true);
+                        CombatText.NewText(location, Color.LimeGreen, GetWindfallTextValue(seamstressPath + "Activity.GoodEnd.5"), true);
                         break;
                     case 720:
                         Active = false;
@@ -163,20 +164,20 @@ public class Seamstress : ModNPC
                 switch (yapCounter)
                 {
                     case 60:
-                        CombatText.NewText(location, Color.LimeGreen, "Alright, y'know what.", true);
+                        CombatText.NewText(location, Color.LimeGreen, GetWindfallTextValue(seamstressPath + "Activity.BadEnd.0"), true);
                         break;
                     case 180:
-                        CombatText.NewText(location, Color.LimeGreen, "I've had it!", true);
+                        CombatText.NewText(location, Color.LimeGreen, GetWindfallTextValue(seamstressPath + "Activity.BadEnd.1"), true);
                         break;
                     case 300:
-                        CombatText text = Main.combatText[CombatText.NewText(location, Color.LimeGreen, "GET OUT!!", true)];
+                        CombatText text = Main.combatText[CombatText.NewText(location, Color.LimeGreen, GetWindfallTextValue(seamstressPath + "Activity.BadEnd.2"), true)];
                         text.lifeTime /= 2;
                         break;
                     case 360:
-                        CombatText.NewText(location, Color.LimeGreen, "I'll do this myself.", true);
+                        CombatText.NewText(location, Color.LimeGreen, GetWindfallTextValue(seamstressPath + "Activity.BadEnd.3"), true);
                         break;
                     case 480:
-                        CombatText.NewText(location, Color.LimeGreen, "Can't trust anyone for help these days...", true);
+                        CombatText.NewText(location, Color.LimeGreen, GetWindfallTextValue(seamstressPath + "Activity.BadEnd.4"), true);
                         break;
                     case 600:
                         Active = false;
@@ -200,7 +201,6 @@ public class Seamstress : ModNPC
         if (IsTailorActivityActive())
         {
             #region Active Activity
-            string activityPath = "Dialogue.LunarCult.Seamstress.Activity.";
             if (CompletedClothesCount >= ClothesGoal)
             {
                 EndActivity = true;
@@ -220,7 +220,7 @@ public class Seamstress : ModNPC
                     item.SetDefaults(AssignedClothing[Main.myPlayer]);
                     string name = item.Name;
 
-                    CombatText.NewText(location, Color.LimeGreen, GetWindfallTextValue(activityPath + "Request." + Main.rand.Next(3)).FormatWith(name), true);
+                    CombatText.NewText(location, Color.LimeGreen, GetWindfallTextValue(seamstressPath + "Activity.Request." + Main.rand.Next(3)).FormatWith(name), true);
 
                     #region Item Dispensing
                     switch (item.ModItem)
@@ -299,7 +299,7 @@ public class Seamstress : ModNPC
                     if (HasItem(MyPlayer, AssignedClothing[Main.myPlayer]))
                     {
                         Rectangle location = new((int)NPC.Center.X, (int)NPC.Center.Y, NPC.width, NPC.width);
-                        CombatText.NewText(location, Color.LimeGreen, GetWindfallTextValue(activityPath + "Completed." + Main.rand.Next(3)), true);
+                        CombatText.NewText(location, Color.LimeGreen, GetWindfallTextValue(seamstressPath + "Activity.Completed." + Main.rand.Next(3)), true);
                         AssignedClothing[Main.myPlayer] = 0;
                         ModContent.GetInstance<TimerUISystem>().EventTimer.timer += 30 * 60;
                         CompletedClothesCount++;
@@ -313,9 +313,9 @@ public class Seamstress : ModNPC
                         string name = item.Name;
 
                         if (MyPlayer.inventory.Where(i => i.type == AssignedClothing[Main.myPlayer]).Any())
-                            CombatText.NewText(location, Color.LimeGreen, GetWindfallTextValue(activityPath + "Garbage." + Main.rand.Next(3)).FormatWith(name), true);
+                            CombatText.NewText(location, Color.LimeGreen, GetWindfallTextValue(seamstressPath + "Activity.Garbage." + Main.rand.Next(3)).FormatWith(name), true);
                         else
-                            CombatText.NewText(location, Color.LimeGreen, GetWindfallTextValue(activityPath + "Repeat." + Main.rand.Next(3)).FormatWith(name), true);
+                            CombatText.NewText(location, Color.LimeGreen, GetWindfallTextValue(seamstressPath + "Activity.Repeat." + Main.rand.Next(3)).FormatWith(name), true);
                     }
                 }
             }

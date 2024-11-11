@@ -409,6 +409,30 @@ Dialogue: {
 					1: Get that TRASH out of my SIGHT!!!
 					2: THAT is AWFUL! Do it again!
 				}
+
+				Start: {
+					0: 3!
+					1: 2!
+					2: 1!
+					3: Go!
+				}
+
+				GoodEnd: {
+					0: Wait...
+					1: I can't believe it...
+					2: We met our quota!!
+					3: Great job!
+					4: I suppose you've earned this...
+					5: I'll look forward to when next we work together!
+				}
+
+				BadEnd: {
+					0: Alright, y'know what.
+					1: I've had it!
+					2: GET OUT!!
+					3: I'll do this myself.
+					4: Can't trust anyone for help these days...
+				}
 			}
 		}
 
@@ -489,6 +513,7 @@ Dialogue: {
 					2: Go to the Tailor downstairs.
 				}
 			}
+
 			Skibidi: Toilet
 		}
 
@@ -1508,6 +1533,11 @@ Items: {
 		DisplayName: Lemon Butter Hermititan Legs
 		Tooltip: ""
 	}
+
+	ChefMenu: {
+		DisplayName: Chef Menu
+		Tooltip: ""
+	}
 }
 
 NPCs: {
@@ -1537,6 +1567,7 @@ NPCs: {
 	PortalMole.DisplayName: Enimgatic Rift
 	OratorHand.DisplayName: Malfeasant Grasp
 	Fingerling.DisplayName: Fingerling
+	Watchman.DisplayName: Watchman
 }
 
 Projectiles: {
