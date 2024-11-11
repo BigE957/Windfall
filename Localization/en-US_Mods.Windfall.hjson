@@ -464,6 +464,18 @@ Dialogue: {
 					2: And... Done!
 				}
 
+				Awoken: {
+					0: Huh? Oh, my bad.
+					1: *Yawn* Alright, alright...
+					2: Oh, right. One second.
+				}
+
+				Interuptted: {
+					0: I'm working on it!
+					1: Kinda busy at the moment.
+					2: Gimme a second!
+				}
+
 				Failed: {
 					0: Oh bloody hell...
 					1: Shut it down!

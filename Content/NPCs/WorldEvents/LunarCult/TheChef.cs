@@ -9,12 +9,14 @@ public class TheChef : ModNPC
 {
     public override string Texture => "Windfall/Assets/NPCs/WorldEvents/LunarBishop";
     private static SoundStyle SpawnSound => new("CalamityMod/Sounds/Custom/SCalSounds/BrimstoneHellblastSound");
+    private static readonly string chefPath = "Dialogue.LunarCult.TheChef.";
+
     private float TimeCooking
     {
         get => NPC.ai[2];
         set => NPC.ai[2] = value;
     }
-    private const int CookTIme = 120;
+    private const int CookTime = 120;
     private float ItemCooking
     {
         get => NPC.ai[3];
@@ -72,14 +74,17 @@ public class TheChef : ModNPC
         NPC.spriteDirection = 1;
         SoundEngine.PlaySound(SpawnSound, NPC.Center);
     }
+    private bool dozedOff = false;
+    private int interuptedTimer = 0;
     public override void AI()
     {
-        string chefPath = "Dialogue.LunarCult.TheChef.";
         if (State == SystemStates.Cafeteria)
         {
             if (AtMaxTimer >= 10 * 60)
             {
                 ItemCooking = -1;
+                interuptedTimer = 0;
+                dozedOff = false;
                 int shutdownTimer = AtMaxTimer - (10 * 60);
                 switch (shutdownTimer)
                 {
@@ -104,37 +109,68 @@ public class TheChef : ModNPC
                 }
 
             }
+            
             if (ItemCooking != -1)
             {
-                TimeCooking++;
-                if (TimeCooking >= CookTIme)
+                if (!dozedOff && interuptedTimer == 0)
                 {
-                    CombatText.NewText(NPC.Hitbox, Color.LimeGreen, GetWindfallTextValue(chefPath + "Activity.Completed." + Main.rand.Next(3)), true);
+                    TimeCooking++;
 
-                    Item item = Main.item[Item.NewItem(Item.GetSource_NaturalSpawn(), NPC.Center, Vector2.Zero, (int)ItemCooking)];
-                    item.maxStack = 1;
-                    item.velocity = new Vector2(1.75f, Main.rand.NextFloat(-3, 0));
-                    item.LunarCult().madeDuringCafeteriaActivity = true;
-                    ItemCooking = -1;
-                    TimeCooking = 0;
+                    if(TimeCooking == CookTime / 2 && Main.rand.NextBool(3))
+                        dozedOff = true;
+
+                    if (TimeCooking >= CookTime)
+                    {
+                        CombatText.NewText(NPC.Hitbox, Color.LimeGreen, GetWindfallTextValue(chefPath + "Activity.Completed." + Main.rand.Next(3)), true);
+
+                        Item item = Main.item[Item.NewItem(Item.GetSource_NaturalSpawn(), NPC.Center, Vector2.Zero, (int)ItemCooking)];
+                        item.maxStack = 1;
+                        item.velocity = new Vector2(1.75f, Main.rand.NextFloat(-3, 0));
+                        item.LunarCult().madeDuringCafeteriaActivity = true;
+                        ItemCooking = -1;
+                        TimeCooking = 0;
+                    }
                 }
-                NPC.direction = -1;
+                else if (interuptedTimer > 0)
+                    interuptedTimer--;
+                NPC.direction = interuptedTimer == 0 ? -1 : 1;
             }
             else
                 NPC.direction = 1;
+
+            if (dozedOff && (Main.GlobalTimeWrappedHourly - (int)Main.GlobalTimeWrappedHourly) < 0.015)
+            {
+                CombatText z = Main.combatText[CombatText.NewText(new((int)NPC.Center.X, (int)NPC.Bottom.Y, 1, 1), Color.LimeGreen, "Z", true)];
+                z.lifeTime /= 2;
+            }
         }
         NPC.spriteDirection = NPC.direction;
     }
-    public override bool CanChat() => ItemCooking == -1;
+    public override bool CanChat() => interuptedTimer == 0;
     public override string GetChat()
     {
         Main.CloseNPCChatOrSign();
 
         if (IsCafeteriaActivityActive())
-            ModContent.GetInstance<DialogueUISystem>().DisplayDialogueTree(Windfall.Instance, "TheChef/FoodSelection");               
+        {
+            if(dozedOff)
+            {
+                dozedOff = false;
+                interuptedTimer = 30;
+                CombatText.NewText(NPC.Hitbox, Color.LimeGreen, GetWindfallTextValue(chefPath + "Activity.Awoken." + Main.rand.Next(3)), true);
+                return "";
+            }
+            else if(ItemCooking != -1)
+            {
+                interuptedTimer = 60;
+                CombatText.NewText(NPC.Hitbox, Color.LimeGreen, GetWindfallTextValue(chefPath + "Activity.Interuptted." + Main.rand.Next(3)), true);
+                return "";
+            }
+            ModContent.GetInstance<DialogueUISystem>().DisplayDialogueTree(Windfall.Instance, "TheChef/FoodSelection");
+        }
         else if ((Main.moonPhase == (int)MoonPhase.ThreeQuartersAtLeft || Main.moonPhase == (int)MoonPhase.ThreeQuartersAtRight) && State == SystemStates.Ready)
             ModContent.GetInstance<DialogueUISystem>().DisplayDialogueTree(Windfall.Instance, "TheChef/CafeteriaActivityStart");
-        else if(SealingRitualSystem.RitualSequenceSeen)
+        else if (SealingRitualSystem.RitualSequenceSeen)
             ModContent.GetInstance<DialogueUISystem>().DisplayDialogueTree(Windfall.Instance, "TheChef/Abandoned");
         else
             ModContent.GetInstance<DialogueUISystem>().DisplayDialogueTree(Windfall.Instance, "TheChef/Default");                
@@ -153,13 +189,13 @@ public class TheChef : ModNPC
         Vector2 barOrigin = barBG.Size() * 0.5f;
         float yOffset = 23f;
         Vector2 drawPos = (NPC.Center - screenPos) + Vector2.UnitY * barScale * (NPC.frame.Height - yOffset);
-        Rectangle frameCrop = new(0, 0, (int)(TimeCooking / CookTIme * barFG.Width), barFG.Height);
+        Rectangle frameCrop = new(0, 0, (int)(TimeCooking / CookTime * barFG.Width), barFG.Height);
 
         Color bgColor = Color.DarkGray * 0.5f;
         bgColor.A = 255;
 
         spriteBatch.Draw(barBG, drawPos, null, bgColor, 0f, barOrigin, barScale, 0f, 0f);
-        spriteBatch.Draw(barFG, drawPos, frameCrop, Color.Lerp(Color.Yellow, Color.LimeGreen, TimeCooking / CookTIme), 0f, barOrigin, barScale, 0f, 0f);
+        spriteBatch.Draw(barFG, drawPos, frameCrop, Color.Lerp(Color.Yellow, Color.LimeGreen, TimeCooking / CookTime), 0f, barOrigin, barScale, 0f, 0f);
     }
     private void ModifyTree(string treeKey, int dialogueID, int buttonID)
     {
