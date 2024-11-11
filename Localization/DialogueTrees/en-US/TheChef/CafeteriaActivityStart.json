@@ -1,7 +1,7 @@
 {
   "Dialogues": [
     {
-      "Text": "Ready to begin?",
+      "Text": "You ready to get started?",
       "Responses": [
         {
           "Title": "Not right now."

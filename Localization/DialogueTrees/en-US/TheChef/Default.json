@@ -1,7 +1,7 @@
 {
   "Dialogues": [
     {
-      "Text": "Why, hello there! I don't think you're helping me out today. Is there something I can do for ya?",
+      "Text": "Well, hey there! I don't think you're helping me out today. Is there something I can do for ya?",
       "Responses": [
         {
           "Title": "I'd like to ask you something.",
@@ -17,7 +17,7 @@
       "Text": "Well you came to the right place! What can I get for ya?"
     },
     {
-      "Text": "Well that's just perfect! I happen to have some leftovers; here you go. Enjoy!",
+      "Text": "Well that's just perfect! I've got some leftovers; here you go! Enjoy!",
       "Responses": [
         {
           "Title": "Thank you!"
@@ -42,7 +42,7 @@
       ]
     },
     {
-      "Text": "Is there anything else you'd like to ask?",
+      "Text": "Anything else I can help ya with?",
       "Responses": [
         {
           "Title": "That's all."
@@ -62,7 +62,7 @@
       ]
     },
     {
-      "Text": "Hah! I guess its only natural to be interested in how one makes such fine cuisines. Before settling down here, I actually was quite well travelled! I've journeyed across the world, and picked up cooking techniques from a wide variety of cultures. I'm glad I'm able to carry on these techniques, even after the fall of some of those civilizations...",
+      "Text": "Hah! I guess its only natural to be interested in the craft behind dishesas good as these. Before settling down here, I actually was quite well travelled! I journeyed across the world, and picked up cooking techniques from a whole lot of different places; some of which barely exist anymore! I'm happy to be able to carry on at least a part of those lost cultures, y'know?",
       "Responses": [
         {
           "Title": "How interesting!",
@@ -75,7 +75,7 @@
       ]
     },
     {
-      "Text": "Oh... I uh... I'm not sure I should be talking about such things without good reason. He's not the type you should go talking about behind his back. All I'll say is that I met him along my travels quite a while ago, and he's put my talents to good use. Cooking for you all is quite a fulfilling job!",
+      "Text": "Oh... I uh... I'm not too sure I should be talking about them without good reason. They're not the type you should go talking about too loosely. All I'll say is that I met them along my travels quite a while ago, and they put my talents to good use. Cooking for you all is quite a fulfilling job!",
       "Responses": [
         {
           "Title": "Gotcha...",
