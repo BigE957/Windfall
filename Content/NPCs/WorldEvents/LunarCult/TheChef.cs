@@ -1,7 +1,7 @@
-﻿using Terraria.Enums;
-using Windfall.Common.Systems.WorldEvents;
+﻿using Windfall.Common.Systems.WorldEvents;
 using DialogueHelper.UI.Dialogue;
 using static Windfall.Common.Systems.WorldEvents.LunarCultBaseSystem;
+using Windfall.Content.Items.Quest.Cafeteria;
 
 namespace Windfall.Content.NPCs.WorldEvents.LunarCult;
 
@@ -223,15 +223,13 @@ public class TheChef : ModNPC
     }
     private void ClickEffect(string treeKey, int dialogueID, int buttonID)
     {
-        if(treeKey == "TheChef/FoodSelection" && dialogueID == 0)
-            Main.npc[NPC.FindFirstNPC(NPC.type)].ai[3] = MenuFoodIDs[buttonID];
-        else if (treeKey == "TheChef/CafeteriaActivityStart" && buttonID == 1)
+        NPC chef = Main.npc[NPC.FindFirstNPC(ModContent.NPCType<TheChef>())];
+        if (treeKey == "TheChef/FoodSelection" && dialogueID == 0)
+            chef.ai[3] = MenuFoodIDs[buttonID];
+        else if (treeKey == "TheChef/CafeteriaActivityStart" && dialogueID == 0 && buttonID == 1)
         {
-            SatisfiedCustomers = 0;
-            CustomerQueue = [];
-
-            State = SystemStates.Cafeteria;
-            Active = true;
+            Item i = Main.item[Item.NewItem(Entity.GetSource_Loot(), chef.Center, new Vector2(8, 4), ModContent.ItemType<ChefMenu>())];
+            i.velocity = Vector2.UnitX * -4;
         }
         else if(treeKey == "TheChef/Default")
         {
@@ -250,5 +248,13 @@ public class TheChef : ModNPC
     {
         if (treeKey == "TheChef/Abandoned")
             Main.LocalPlayer.LunarCult().spokeToAbandonedChef = true;
+        else if (treeKey == "TheChef/CafeteriaActivityStart" && dialogueID == 1)
+        {
+            SatisfiedCustomers = 0;
+            CustomerQueue = [];
+
+            State = SystemStates.Cafeteria;
+            Active = true;
+        }
     }
 }

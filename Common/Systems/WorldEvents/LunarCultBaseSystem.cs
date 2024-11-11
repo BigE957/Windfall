@@ -12,6 +12,8 @@ using Windfall.Content.Projectiles.ProjectileAnimations;
 using Windfall.Content.UI;
 using Terraria.Enums;
 using DialogueHelper.UI.Dialogue;
+using Terraria.ID;
+using Windfall.Content.Items.Quest.Cafeteria;
 
 namespace Windfall.Common.Systems.WorldEvents;
 
@@ -165,6 +167,7 @@ public class LunarCultBaseSystem : ModSystem
     public static int PortalsDowned = 0;
     public static int RequiredPortalKills = 10;
     #endregion
+
     private static SoundStyle TeleportSound => new("CalamityMod/Sounds/Custom/SCalSounds/BrimstoneHellblastSound");
     public override void OnWorldLoad()
     {
@@ -1050,6 +1053,13 @@ public class LunarCultBaseSystem : ModSystem
                 else
                 {
                     MenuFoodIDs = [];
+                    foreach(Player player in Main.ActivePlayers)
+                    {
+                        foreach (Item item in player.inventory.Where(i => i.type == ModContent.ItemType<ChefMenu>())
+                        {
+                            item.stack = 0;
+                        }
+                    }
                     State = SystemStates.End;
                 }
                 break;
