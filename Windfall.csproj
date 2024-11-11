@@ -86,6 +86,7 @@
     <Folder Include="Content\Items\Armor\Selenic\" />
     <Folder Include="Content\UI\Dialogue\DialogueStyles\" />
     <Folder Include="SubModules\" />
+    <Folder Include="SubModules\DialogueHelper\" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="CalamityMod">
