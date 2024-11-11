@@ -322,7 +322,7 @@ public class Seamstress : ModNPC
             TalkDelay = 120;
             #endregion
         }
-        else if (Main.moonPhase == (int)MoonPhase.HalfAtLeft || Main.moonPhase == (int)MoonPhase.HalfAtRight && State == SystemStates.Ready)
+        else if (PlannedActivity == SystemStates.Tailor && State == SystemStates.Ready)
         {
             if (DeclinedStartActivity)
                 ModContent.GetInstance<DialogueUISystem>().DisplayDialogueTree(Windfall.Instance, "TheSeamstress/ReActivityStart");

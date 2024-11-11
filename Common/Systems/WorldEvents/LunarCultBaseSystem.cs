@@ -182,6 +182,8 @@ public class LunarCultBaseSystem : ModSystem
                 NPC.NewNPC(Entity.GetSource_None(), (LunarCultBaseLocation.X * 16) + 242, (LunarCultBaseLocation.Y * 16) + 300, ModContent.NPCType<Seamstress>());
             if (!NPC.AnyNPCs(ModContent.NPCType<TheChef>()))
                 NPC.NewNPC(Entity.GetSource_None(), (LunarCultBaseLocation.X * 16) - 1040, (LunarCultBaseLocation.Y * 16) - 110, ModContent.NPCType<TheChef>());
+            if (!Main.npc.Any(n => n.active && n.type == ModContent.NPCType<Watchman>()))
+                NPC.NewNPC(Entity.GetSource_None(), (LunarCultBaseLocation.X + 58) * 16, (LunarCultBaseLocation.Y - 6) * 16 - 5, ModContent.NPCType<Watchman>());
             if (SealingRitualSystem.RitualSequenceSeen)
                 return;
             if (!NPC.AnyNPCs(ModContent.NPCType<OratorNPC>()))
@@ -257,6 +259,8 @@ public class LunarCultBaseSystem : ModSystem
                     spawnChance = 5;
 
                     CurrentMeetingTopic = MeetingTopic.None;
+
+                    Main.npc.First(n => n.active && n.type == ModContent.NPCType<Watchman>()).ai[2] = 0;
                     #endregion
 
                     #region Assumed upcoming Activity
@@ -363,8 +367,7 @@ public class LunarCultBaseSystem : ModSystem
                         broke.As<LunarCultistArcher>().myCharacter = LunarCultistArcher.Character.Broke;
                     }
                     #endregion
-                    if (!Main.npc.Any(n => n.active && n.type == ModContent.NPCType<LunarBishop>() && n.ai[2] == 2))
-                        NPC.NewNPC(Entity.GetSource_None(), ActivityCoords.X, ActivityCoords.Y, ModContent.NPCType<LunarBishop>(), ai2: 2);
+                    
                     ActivityTimer = 0;
                 }
                 #region Player Proximity
@@ -421,8 +424,8 @@ public class LunarCultBaseSystem : ModSystem
                 #endregion
                 break;
             case SystemStates.Yap:
-                NPC bishop = Main.npc.First(n => n.active && n.type == ModContent.NPCType<LunarBishop>() && n.ai[2] == 2);
-                string path = "Dialogue.LunarCult.LunarBishop.Greeting.";
+                NPC watchman = Main.npc.First(n => n.active && n.type == ModContent.NPCType<Watchman>());
+                string path = "Dialogue.LunarCult.Watchman.Greeting.";
 
                 #region First Time Chat
                 if (!TutorialComplete)
@@ -431,34 +434,34 @@ public class LunarCultBaseSystem : ModSystem
                     switch(ActivityTimer)
                     {
                         case 30:
-                            DisplayMessage(bishop.Hitbox, Color.LimeGreen, path + 0);
+                            DisplayMessage(watchman.Hitbox, Color.LimeGreen, path + 0);
                             break;
                         case 120:
-                            DisplayMessage(bishop.Hitbox, Color.LimeGreen, path + 1);
+                            DisplayMessage(watchman.Hitbox, Color.LimeGreen, path + 1);
                             break;
                         case 240:
-                            DisplayMessage(bishop.Hitbox, Color.LimeGreen, path + 2);
+                            DisplayMessage(watchman.Hitbox, Color.LimeGreen, path + 2);
                             break;
                         case 360:
-                            DisplayMessage(bishop.Hitbox, Color.LimeGreen, path + 3);
+                            DisplayMessage(watchman.Hitbox, Color.LimeGreen, path + 3);
                             break;
                         case 480:
-                            DisplayMessage(bishop.Hitbox, Color.LimeGreen, path + 4);
+                            DisplayMessage(watchman.Hitbox, Color.LimeGreen, path + 4);
                             break;
                         case 600:
-                            DisplayMessage(bishop.Hitbox, Color.LimeGreen, path + 5);
+                            DisplayMessage(watchman.Hitbox, Color.LimeGreen, path + 5);
                             break;
                         case 720:
-                            DisplayMessage(bishop.Hitbox, Color.LimeGreen, path + 6);
+                            DisplayMessage(watchman.Hitbox, Color.LimeGreen, path + 6);
                             break;
                         case 840:
-                            DisplayMessage(bishop.Hitbox, Color.LimeGreen, path + 7);
+                            DisplayMessage(watchman.Hitbox, Color.LimeGreen, path + 7);
                             break;
                         case 960:
-                            DisplayMessage(bishop.Hitbox, Color.LimeGreen, path + 8);
+                            DisplayMessage(watchman.Hitbox, Color.LimeGreen, path + 8);
                             break;
                         case 1020:
-                            bishop.As<LunarBishop>().Despawn();
+                            watchman.ai[2]++;
                             State = SystemStates.Ready;
                             break;
                     }
@@ -470,27 +473,22 @@ public class LunarCultBaseSystem : ModSystem
                 {
                     if (RecruitmentsSkipped >= 3)
                         path += "Betrayal";
-                    else if (Main.moonPhase == (int)MoonPhase.Full || Main.moonPhase == (int)MoonPhase.Empty) //Ritual
-                        path += "Ritual.";
-                    else if (Main.moonPhase == (int)MoonPhase.QuarterAtLeft || Main.moonPhase == (int)MoonPhase.QuarterAtRight) //Meeting
-                        path += "Meeting.";
-                    else if (Main.moonPhase == (int)MoonPhase.HalfAtLeft || Main.moonPhase == (int)MoonPhase.HalfAtRight) //Tailor
-                        path += "Tailor.";
-                    else //Cafeteria
-                        path += "Cafeteria.";
+                    else
+                        path += PlannedActivity.ToString() + ".";
+
                     switch (ActivityTimer)
                     {
                         case 30:
-                            DisplayMessage(bishop.Hitbox, Color.LimeGreen, path + 0);
+                            DisplayMessage(watchman.Hitbox, Color.LimeGreen, path + 0);
                             break;
                         case 120:
-                            DisplayMessage(bishop.Hitbox, Color.LimeGreen, path + 1);
+                            DisplayMessage(watchman.Hitbox, Color.LimeGreen, path + 1);
                             break;
                         case 240:
-                            DisplayMessage(bishop.Hitbox, Color.LimeGreen, path + 2);
+                            DisplayMessage(watchman.Hitbox, Color.LimeGreen, path + 2);
                             break;
                         case 360:
-                            bishop.As<LunarBishop>().Despawn();
+                            watchman.ai[2]++;
                             State = SystemStates.Ready;
                             break;
                     }
@@ -499,7 +497,7 @@ public class LunarCultBaseSystem : ModSystem
 
                 #region Camera Setup
                 if (ActivityTimer < 100)
-                    zoom = Lerp(zoom, 0.4f, 0.075f);
+                    zoom = Lerp(zoom, 0.4f, ActivityTimer / 100f);
                 else
                     zoom = 0.4f;
                 CameraPanSystem.Zoom = zoom;
@@ -716,7 +714,7 @@ public class LunarCultBaseSystem : ModSystem
                 #region Player Proximity
                 closestPlayer = Main.player[Player.FindClosest(new Vector2(ActivityCoords.X, ActivityCoords.Y), 300, 300)];
                 PlayerDistFromHideout = new Vector2(closestPlayer.Center.X - ActivityCoords.X, closestPlayer.Center.Y - ActivityCoords.Y).Length();
-                if ((Main.moonPhase == (int)MoonPhase.QuarterAtLeft || Main.moonPhase == (int)MoonPhase.QuarterAtRight) && PlayerDistFromHideout < 300f)
+                if (PlannedActivity == SystemStates.Meeting && PlayerDistFromHideout < 300f)
                 {
                     State = SystemStates.Meeting;
                     Active = true;
