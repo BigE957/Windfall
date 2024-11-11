@@ -1055,7 +1055,7 @@ public class LunarCultBaseSystem : ModSystem
                     MenuFoodIDs = [];
                     foreach(Player player in Main.ActivePlayers)
                     {
-                        foreach (Item item in player.inventory.Where(i => i.type == ModContent.ItemType<ChefMenu>())
+                        foreach (Item item in player.inventory.Where(i => i.type == ModContent.ItemType<ChefMenu>()))
                         {
                             item.stack = 0;
                         }
