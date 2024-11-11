@@ -10,7 +10,7 @@ public class LunarBishop : ModNPC
     {
         Idle,
         SelenicChat,
-        Greeting,
+        Something,
         CafeteriaEvent,
         StaticCharacter,
     }

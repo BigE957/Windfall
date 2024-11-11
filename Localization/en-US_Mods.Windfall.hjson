@@ -243,50 +243,6 @@ Dialogue: {
 		}
 
 		LunarBishop: {
-			Greeting: {
-				First: {
-					0: Ah! You finally arrived.
-					1: I know some didn't think you actually would.
-					2: We welcome you into our sanctum.
-					3: Have a look around, and once you are done...
-					4: The Orator shall meet with you.
-					5: Head up the stairs.
-					6: You'll find him at our sanctum's peak.
-					7: He shall guide you...
-					8: ...as you begin your journey with us.
-				}
-
-				Betrayal: {
-					0: Welcome back!
-					1: The Orator wishes to speak with you.
-					2: Best to not keep him waiting...
-				}
-
-				Ritual: {
-					0: Welcome back!
-					1: We have a task for you.
-					2: Go to the Ritual Site upstairs.
-				}
-
-				Meeting: {
-					0: Welcome back!
-					1: We have a task for you.
-					2: Go to the Meeting Hall downstairs.
-				}
-
-				Cafeteria: {
-					0: Welcome back!
-					1: We have a task for you.
-					2: Go to the Cafeteria across the hall.
-				}
-
-				Tailor: {
-					0: Welcome back!
-					1: We have a task for you.
-					2: Go to the Tailor downstairs.
-				}
-			}
-
 			Cafeteria: {
 				Unfresh: {
 					0: That doesn't look very fresh...
@@ -487,6 +443,53 @@ Dialogue: {
 				AlmostDone: I think that's everyone! Let's finish up here.
 				Finished: We did it! Well done!
 			}
+		}
+
+		Watchman: {
+			Greeting: {
+				First: {
+					0: Ah! You finally arrived.
+					1: I know some didn't think you actually would.
+					2: We welcome you into our sanctum.
+					3: Have a look around, and once you are done...
+					4: The Orator shall meet with you.
+					5: Head up the stairs.
+					6: You'll find him at our sanctum's peak.
+					7: He shall guide you...
+					8: ...as you begin your journey with us.
+				}
+
+				Betrayal: {
+					0: Welcome back!
+					1: The Orator wishes to speak with you.
+					2: Best to not keep him waiting...
+				}
+
+				Ritual: {
+					0: Welcome back!
+					1: We have a task for you.
+					2: Go to the Ritual Site upstairs.
+				}
+
+				Meeting: {
+					0: Welcome back!
+					1: We have a task for you.
+					2: Go to the Meeting Hall downstairs.
+				}
+
+				Cafeteria: {
+					0: Welcome back!
+					1: We have a task for you.
+					2: Go to the Cafeteria across the hall.
+				}
+
+				Tailor: {
+					0: Welcome back!
+					1: We have a task for you.
+					2: Go to the Tailor downstairs.
+				}
+			}
+			Skibidi: Toilet
 		}
 
 		TravellingCultist: {
