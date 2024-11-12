@@ -1004,7 +1004,16 @@ public class LunarCultBaseSystem : ModSystem
                 break;
             case SystemStates.Tailor:
                 if (!Active)
+                {
+                    foreach (Player player in Main.ActivePlayers)
+                    {
+                        foreach (Item item in player.inventory.Where(i => i.type == ModContent.ItemType<TailorInstructions>()))
+                        {
+                            item.stack = 0;
+                        }
+                    }
                     State = SystemStates.End;
+                }
                 else
                 {
                     if (ActivityTimer == 240)

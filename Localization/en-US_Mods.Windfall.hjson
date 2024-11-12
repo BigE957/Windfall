@@ -1538,6 +1538,11 @@ Items: {
 		DisplayName: Chef Menu
 		Tooltip: ""
 	}
+
+	TailorInstructions: {
+		DisplayName: Tailor Instructions
+		Tooltip: ""
+	}
 }
 
 NPCs: {

@@ -6,6 +6,7 @@ using Windfall.Content.Items.Quest.Tailor;
 using Windfall.Content.UI;
 using DialogueHelper.UI.Dialogue;
 using static Windfall.Common.Systems.WorldEvents.LunarCultBaseSystem;
+using Windfall.Content.Items.Quest.Cafeteria;
 
 namespace Windfall.Content.NPCs.WorldEvents.LunarCult;
 
@@ -96,6 +97,10 @@ public class Seamstress : ModNPC
             #region Start Activity Dialogue
             switch (yapCounter)
             {
+                case 0:
+                    Item i = Main.item[Item.NewItem(Entity.GetSource_Loot(), NPC.Center, new Vector2(8, 4), ModContent.ItemType<ChefMenu>())];
+                    i.velocity = Vector2.UnitX * -4;
+                    break;
                 case 60:
                     Rectangle location = new((int)NPC.Center.X, (int)NPC.Center.Y, NPC.width, NPC.width);
                     CombatText text = Main.combatText[CombatText.NewText(location, Color.LimeGreen, GetWindfallTextValue(seamstressPath + "Activity.Start.0"), true)];
