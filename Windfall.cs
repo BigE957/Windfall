@@ -1,7 +1,4 @@
-using CalamityMod.UI;
-using System.Reflection;
 using Terraria.GameContent.UI;
-using Windfall.Content.UI.Events;
 
 namespace Windfall;
 

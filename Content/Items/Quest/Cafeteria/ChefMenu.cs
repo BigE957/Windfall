@@ -4,12 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using static Windfall.Content.UI.WanderersJournals.JournalFullUIState;
-using Windfall.Common.Systems;
-using Windfall.Content.UI.WanderersJournals;
 using Windfall.Content.UI.Activities;
 
 namespace Windfall.Content.Items.Quest.Cafeteria;
-internal class ChefMenu : ModItem
+public class ChefMenu : ModItem
 {
     public override string Texture => "Windfall/Assets/Items/Journals/JournalForest";
     public override void SetDefaults()

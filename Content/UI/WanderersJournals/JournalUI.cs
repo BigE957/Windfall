@@ -6,7 +6,6 @@ namespace Windfall.Content.UI.WanderersJournals;
 
 internal class JournalFullUIState : UIState
 {
-    public int i = 0;
     public DraggableUIPanel UIPanel;
     public JournalText JournalContents;
     public UIImage Page;
@@ -32,9 +31,6 @@ internal class JournalFullUIState : UIState
     {
         DraggableUIPanel UIPanel = new();
         UIPanel.SetPadding(0);
-        // We need to place this UIElement in relation to its Parent. Later we will be calling `base.Append(coinCounterPanel);`. 
-        // This means that this class, ExampleCoinsUI, will be our Parent. Since ExampleCoinsUI is a UIState, the Left and Top are relative to the top left of the screen.
-        // SetRectangle method help us to set the position and size of UIElement
         SetRectangle(UIPanel, left: 200f, top: 100f, width: 400f, height: 518f);
         UIPanel.BackgroundColor = new Color(73, 94, 171);
         Append(UIPanel);
