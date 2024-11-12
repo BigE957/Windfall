@@ -17,7 +17,7 @@ public class LunarBishopHood : ModItem, ILocalizedModType
             AddIngredient<DyedHood>().
             AddIngredient(ItemID.CopperBar, 6).
             AddIngredient(ItemID.FlinxFur, 2).
-            AddTile(TileID.Loom).
+            AddTile(TileID.WorkBenches).
             Register();
     }
 }

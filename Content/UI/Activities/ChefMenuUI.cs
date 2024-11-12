@@ -9,13 +9,6 @@ internal class ChefMenuUIState : UIState
     public DraggableUIPanel UIPanel;
     public override void OnInitialize()
     {
-        if (LunarCultBaseSystem.MenuFoodIDs.Count == 0)
-        {
-            LunarCultBaseSystem.MenuFoodIDs = LunarCultBaseSystem.FoodIDs;
-            while (LunarCultBaseSystem.MenuFoodIDs.Count > 5)
-                LunarCultBaseSystem.MenuFoodIDs.RemoveAt(Main.rand.Next(LunarCultBaseSystem.MenuFoodIDs.Count));
-        }
-
         DraggableUIPanel UIPanel = new();
         UIPanel.SetPadding(0);
         // We need to place this UIElement in relation to its Parent. Later we will be calling `base.Append(coinCounterPanel);`. 
@@ -42,7 +35,8 @@ internal class ChefMenuUIState : UIState
         }
 
         UIText MenuTitle = new("Tonight's Menu", large: true);
-        SetRectangle(MenuTitle, left: 45f, top: 20f, width: MenuTitle.Width.Pixels, height: MenuTitle.Height.Pixels);
+        SetRectangle(MenuTitle, left: 0f, top: 30f, width: MenuTitle.Width.Pixels, height: MenuTitle.Height.Pixels);
+        MenuTitle.HAlign = 0.5f;
         UIPanel.Append(MenuTitle);
     }
     private static void SetRectangle(UIElement uiElement, float left, float top, float width, float height)

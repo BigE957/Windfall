@@ -229,7 +229,7 @@ public class TheChef : ModNPC
         else if (treeKey == "TheChef/CafeteriaActivityStart" && dialogueID == 0 && buttonID == 1)
         {
             Item i = Main.item[Item.NewItem(Entity.GetSource_Loot(), chef.Center, new Vector2(8, 4), ModContent.ItemType<ChefMenu>())];
-            i.velocity = Vector2.UnitX * -4;
+            i.velocity = Vector2.UnitX * 4;
         }
         else if(treeKey == "TheChef/Default")
         {
