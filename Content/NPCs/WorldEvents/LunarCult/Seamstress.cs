@@ -353,7 +353,7 @@ public class Seamstress : ModNPC
         switch (treeKey)
         {
             case "TheSeamstress/Default":
-                int questTracker = Main.LocalPlayer.LunarCult().apostleQuestTracker;
+                int questTracker = 0;// Main.LocalPlayer.LunarCult().apostleQuestTracker;
                 List<Response> response = new(uiSystem.CurrentTree.Dialogues[2].Responses);
                 if (questTracker != 1)
                     response[2] = null;

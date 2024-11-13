@@ -61,12 +61,13 @@ public class OratorNPC : ModNPC
         {
             DialogueUISystem uiSystem = ModContent.GetInstance<DialogueUISystem>();
             uiSystem.CurrentTree.Dialogues[0].Responses[0].SwapToTreeKey = "TheOrator/LunarCoins";
+            uiSystem.CurrentTree.Dialogues[0].Responses[0].Heading = 0;
         }
     }
 
     private void CloseEffect(string treeKey, int dialogueID, int buttonID)
     {
-        switch(treeKey)
+        switch (treeKey)
         {
             case "TheOrator/TutorialChat":
                 NPC orator = Main.npc.First(n => n.active && n.type == ModContent.NPCType<OratorNPC>() && n.ai[0] == (int)States.TutorialChat);
@@ -109,7 +110,7 @@ public class OratorNPC : ModNPC
                 }
                 break;
             case "TheOrator/Default":
-                if(buttonID == 0 && Main.LocalPlayer.LunarCult().awareOfLunarCoins)
+                if (buttonID == 0 && Main.LocalPlayer.LunarCult().awareOfLunarCoins)
                 {
                     orator = Main.npc.First(n => n.active && n.type == ModContent.NPCType<OratorNPC>() && n.ai[0] == 0);
                     Main.playerInventory = true;
