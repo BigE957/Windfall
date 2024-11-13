@@ -16,6 +16,7 @@
     <None Remove="Assets\Items\Essences\HiveEssence.png" />
     <None Remove="Assets\Items\Essences\PerfEssence.png" />
     <None Remove="Assets\Items\Essences\SlimeEssence.png" />
+    <None Remove="Assets\Items\Quest\SelenicTablet.png" />
     <None Remove="Assets\Items\Weapons\Misc\RiftWeaver.png" />
     <None Remove="Assets\Items\Weapons\Misc\RiftWeaverGlow.png" />
     <None Remove="Assets\Items\Weapons\Summon\ShadowHandStaff.png" />
@@ -32,6 +33,8 @@
     <None Remove="Assets\UI\CharacterAssets\Seamstress\Mysterious.png" />
     <None Remove="Assets\UI\CharacterAssets\Seamstress\Worried.png" />
     <None Remove="Assets\UI\CharacterAssets\TheOrator\Default.png" />
+    <None Remove="Assets\UI\DialogueStyles\SelenicResponse.png" />
+    <None Remove="Assets\UI\DialogueStyles\SelenicTextbox.png" />
     <None Remove="Content\Buffs\Cooldowns\ParryWeapon.png" />
     <None Remove="Content\Buffs\Cooldowns\ParryWeaponOutline.png" />
     <None Remove="Content\Buffs\Cooldowns\ParryWeaponOverlay.png" />
@@ -84,7 +87,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Content\Items\Armor\Selenic\" />
-    <Folder Include="Content\UI\Dialogue\DialogueStyles\" />
     <Folder Include="SubModules\" />
     <Folder Include="SubModules\DialogueHelper\" />
   </ItemGroup>

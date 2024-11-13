@@ -1,5 +1,5 @@
 {
-  "Name": "[c/32CD32:The Orator]",
+  "Name": "[c/9cfa5e:The Orator]",
   "Scale": 2.5,
 
   "Expressions": [
@@ -12,7 +12,7 @@
       "AnimateCondition": false
     }
   ],
-  "Style": "DialogueHelper.UI.Dialogue.DialogueStyles.DefaultDialogueStyle",
+  "Style": "Windfall.Content.UI.Dialogue.DialogueStyles.SelenicDialogueStyle",
   "TextDelay": 3,
   "PrimaryColor": "#000000",
   "SecondaryColor": "#32CD32"
