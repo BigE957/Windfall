@@ -12,7 +12,7 @@ namespace Windfall.Content.NPCs.WorldEvents.LunarCult;
 
 public class Seamstress : ModNPC
 {
-    public override string Texture => "Windfall/Assets/NPCs/WorldEvents/LunarBishop";
+    public override string Texture => "Windfall/Assets/NPCs/WorldEvents/Seamstress";
     private static SoundStyle SpawnSound => new("CalamityMod/Sounds/Custom/SCalSounds/BrimstoneHellblastSound");
     private static readonly string seamstressPath = "Dialogue.LunarCult.Seamstress.";
     private float TalkDelay
