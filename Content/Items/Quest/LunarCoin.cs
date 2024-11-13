@@ -2,6 +2,7 @@
 
 public class LunarCoin : ModItem, ILocalizedModType
 {
+    public override string Texture => "Windfall/Assets/Items/Quest/LunarCoin";
     public new string LocalizationCategory => "Items.Quest";
     public override void SetDefaults()
     {
