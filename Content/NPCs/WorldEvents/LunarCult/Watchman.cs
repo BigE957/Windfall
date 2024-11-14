@@ -1,6 +1,6 @@
 ﻿using DialogueHelper.UI.Dialogue;
 using Windfall.Common.Systems.WorldEvents;
-using Windfall.Content.Projectiles.Other;
+using Windfall.Content.UI.Selenic;
 
 namespace Windfall.Content.NPCs.WorldEvents.LunarCult;
 public class Watchman : ModNPC
@@ -8,13 +8,16 @@ public class Watchman : ModNPC
     private enum States
     {
         Greeting,
-        Idle
+        Idle,
+        Talkable
     }
     private States AIState
     {
         get => (States)NPC.ai[2];
         set => NPC.ai[2] = (float)value;
     }
+
+    private bool spokenTo = false;
 
     public override string Texture => "Windfall/Assets/NPCs/WorldEvents/LunarBishop";
     internal static SoundStyle SpawnSound => new("CalamityMod/Sounds/Custom/SCalSounds/BrimstoneHellblastSound");
@@ -48,7 +51,9 @@ public class Watchman : ModNPC
     {
         switch (AIState)
         {
-
+            case States.Greeting:
+                spokenTo = false;
+                break;
         }
     }
     public override bool CanChat() => AIState != States.Greeting;
@@ -56,9 +61,21 @@ public class Watchman : ModNPC
     {
         Main.CloseNPCChatOrSign();
 
-        ModContent.GetInstance<DialogueUISystem>().DisplayDialogueTree(Windfall.Instance, "Watchman/Default");
+        if(AIState == States.Idle)
+        {
+            ModContent.GetInstance<DialogueUISystem>().DisplayDialogueTree(Windfall.Instance, $"Watchman/{LunarCultBaseSystem.PlannedActivity}");
+            return "";
+        }
 
-        return "Rizz"; //Won't actually be seen.
+        if(!spokenTo)
+        {
+            spokenTo = true;
+            Main.LocalPlayer.LunarCult().timesWatchmenTalked++;
+        }
+
+        ModContent.GetInstance<DialogueUISystem>().DisplayDialogueTree(Windfall.Instance, "Watchman/Default", Main.LocalPlayer.LunarCult().timesWatchmenTalked >= 3 ? 2 : 0);
+
+        return "";
     }
     public override bool CheckActive() => false;
 }

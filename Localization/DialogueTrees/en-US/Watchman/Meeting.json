@@ -1,0 +1,36 @@
+{
+  "Dialogues": [
+    {
+      "Text": "Having trouble finding where you need to go?",
+      "Responses": [
+        {
+          "Title": "Yeah...",
+          "Heading": 2
+        },
+        {
+          "Title": "Nope.",
+          "Heading": 1
+        }
+      ]
+    },
+    {
+      "Text": "Oh! My apologies then. Be seeing you!",
+      "Responses": [
+        {
+          "Title": "Bye!"
+        }
+      ]
+    },
+    {
+      "Text": "You can find the Meeting Hall downstairs. Its the room on the left after the second flight of stairs. Hopefully you're able to find it. I know our sanctum can be a bit of a maze.",
+      "Responses": [
+        {
+          "Title": "Thanks!"
+        }
+      ]
+    }
+  ],
+  "Characters": [
+    "TheChef"
+  ]
+}

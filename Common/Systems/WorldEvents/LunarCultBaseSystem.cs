@@ -12,7 +12,6 @@ using Windfall.Content.Projectiles.ProjectileAnimations;
 using Windfall.Content.UI;
 using Terraria.Enums;
 using DialogueHelper.UI.Dialogue;
-using Terraria.ID;
 using Windfall.Content.Items.Quest.Cafeteria;
 
 namespace Windfall.Common.Systems.WorldEvents;
@@ -1362,6 +1361,8 @@ public class LunarCultBaseSystem : ModSystem
                 OnCooldown = true;
                 RecruitmentsSkipped++;
                 State = SystemStates.CheckReqs;
+
+                Main.npc.First(n => n.active && n.type == ModContent.NPCType<Watchman>()).ai[2]++;
 
                 if (!BetrayalActive)
                 {
