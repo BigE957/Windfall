@@ -1,5 +1,4 @@
 ﻿using Humanizer;
-using Terraria.Enums;
 using Windfall.Common.Systems.WorldEvents;
 using Windfall.Content.Items.Quest;
 using Windfall.Content.Items.Quest.Tailor;
