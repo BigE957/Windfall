@@ -434,7 +434,7 @@ public class LunarCultBaseSystem : ModSystem
                 if (!TutorialComplete)
                 {
                     path += "First.";
-                    switch(ActivityTimer)
+                    switch (ActivityTimer)
                     {
                         case 30:
                             DisplayMessage(watchman.Hitbox, Color.LimeGreen, path + 0);
@@ -475,25 +475,60 @@ public class LunarCultBaseSystem : ModSystem
                 else
                 {
                     if (RecruitmentsSkipped >= 3)
+                    {
                         path += "Betrayal";
+                        switch (ActivityTimer)
+                        {
+                            case 30:
+                                DisplayMessage(watchman.Hitbox, Color.LimeGreen, path + 0);
+                                break;
+                            case 120:
+                                DisplayMessage(watchman.Hitbox, Color.LimeGreen, path + 1);
+                                break;
+                            case 240:
+                                DisplayMessage(watchman.Hitbox, Color.LimeGreen, path + 2);
+                                break;
+                            case 360:
+                                DisplayMessage(watchman.Hitbox, Color.LimeGreen, path + 3);
+                                break;
+                            case 420:
+                                watchman.ai[2]++;
+                                State = SystemStates.Ready;
+                                break;
+                        }
+                    }
                     else
+                    {
                         path += PlannedActivity.ToString() + ".";
 
-                    switch (ActivityTimer)
-                    {
-                        case 30:
-                            DisplayMessage(watchman.Hitbox, Color.LimeGreen, path + 0);
-                            break;
-                        case 120:
-                            DisplayMessage(watchman.Hitbox, Color.LimeGreen, path + 1);
-                            break;
-                        case 240:
-                            DisplayMessage(watchman.Hitbox, Color.LimeGreen, path + 2);
-                            break;
-                        case 360:
-                            watchman.ai[2]++;
-                            State = SystemStates.Ready;
-                            break;
+                        switch (ActivityTimer)
+                        {
+                            case 30:
+                                DisplayMessage(watchman.Hitbox, Color.LimeGreen, path + 0);
+                                break;
+                            case 120:
+                                DisplayMessage(watchman.Hitbox, Color.LimeGreen, path + 1);
+                                break;
+                            case 240:
+                                DisplayMessage(watchman.Hitbox, Color.LimeGreen, path + 2);
+                                break;
+                            case 360:
+                                DisplayMessage(watchman.Hitbox, Color.LimeGreen, path + 3);
+                                break;
+                            case 420:
+                                DisplayMessage(watchman.Hitbox, Color.LimeGreen, path + 4);
+                                break;
+                            case 540:
+                                DisplayMessage(watchman.Hitbox, Color.LimeGreen, path + 5);
+                                break;
+                            case 660:
+                                DisplayMessage(watchman.Hitbox, Color.LimeGreen, path + 6);
+                                break;
+                            case 780:
+                                watchman.ai[2]++;
+                                State = SystemStates.Ready;
+                                break;
+                        }
                     }
                 }
                 #endregion
