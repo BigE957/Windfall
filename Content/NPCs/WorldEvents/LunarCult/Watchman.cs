@@ -51,14 +51,13 @@ public class Watchman : ModNPC
 
         }
     }
-    public override bool CanChat() => LunarCultBaseSystem.State != LunarCultBaseSystem.SystemStates.Yap && LunarCultBaseSystem.State != LunarCultBaseSystem.SystemStates.Waiting;
+    public override bool CanChat() => AIState != States.Greeting;
     public override string GetChat()
     {
         Main.CloseNPCChatOrSign();
 
-        switch (AIState)
-        {
-        }
+        ModContent.GetInstance<DialogueUISystem>().DisplayDialogueTree(Windfall.Instance, "Watchman/Default");
+
         return "Rizz"; //Won't actually be seen.
     }
     public override bool CheckActive() => false;

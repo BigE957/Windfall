@@ -1,0 +1,18 @@
+{
+  "Dialogues": [
+    {
+      "Text": "Who up watching they man?",
+      "Responses": [
+        {
+          "Title": "One moment."
+        },
+        {
+          "Title": "I'm ready!"
+        }
+      ]
+    }
+  ],
+  "Characters": [
+    "TheChef"
+  ]
+}
