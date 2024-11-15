@@ -1,13 +1,108 @@
 {
   "Dialogues": [
     {
-      "Text": "Who up watching they man?",
+      "Text": "Oh? I believe you already finished your task for today. Is... something the matter?",
       "Responses": [
         {
-          "Title": "One moment."
+          "Title": "Nope, just wanted to talk.",
+          "heading": 3
         },
         {
-          "Title": "I'm ready!"
+          "Title": "No, just leaving.",
+          "Heading": 1
+        }
+      ]
+    },
+    {
+      "Text": "Ah! I see. Well then, safe travels, and I hope to see you again!",
+      "Responses": [
+        {
+          "Title": "See ya!"
+        },
+        {
+          "Title": "Goodbye."
+        }
+      ]
+    },
+    {
+      "Text": "Hello again, my friend! Finished another task I assume? That's great to here. Is there anything you'd like to talk about?",
+      "Responses": [
+        {
+          "Title": "What exactly is this place?",
+          "Heading": 6
+        },
+        {
+          "Title": "Do you just... stand here?",
+          "Heading": 8
+        }
+      ]
+    },
+    {
+      "Text": "You... want to just... talk with me? I'll admit I'm not very used to being asked to chat. Not to say I don't want to! I'd be more than happy to!"
+    },
+    {
+      "Text": "What exactly would you like to talk about?",
+      "Responses": [
+        {
+          "Title": "What exactly is this place?",
+          "Heading": 6
+        },
+        {
+          "Title": "Do you just... stand here?",
+          "Heading": 8
+        }
+      ]
+    },
+    {
+      "Text": "Anything else you'd like to talk about?",
+      "Responses": [
+        {
+          "Title": "What exactly is this place?",
+          "Heading": 6
+        },
+        {
+          "Title": "Do you just... stand here?",
+          "Heading": 8
+        }
+      ]
+    },
+    {
+      "Text": "Oh, curious about our sanctum's history? It's actually quite interesting! This place pre-dates our order by quite a lot of time; dating all the way back to the Draconic Era. It was formerly a great library, and the home of a mighty dragon! Pretty cool, huh?",
+      "Responses": [
+        {
+          "Title": "Very interesting!",
+          "Heading": 5
+        },
+        {
+          "Title": "A dragon, huh?",
+          "Heading": 7
+        }
+      ]
+    },
+    {
+      "Text": "Yup! Though we don't know much about the dragon itself, nor what actually happened to it. If there were anything here that'd hae told us, we'd know. The Orator was very thorough in searching through all the books that were first found here.",
+      "Responses": [
+        {
+          "Title": "I see.",
+          "Heading": 5
+        },
+        {
+          "Title": "What a shame.",
+          "Heading": 5
+        }
+      ]
+    },
+
+    {
+      "Text": "Pretty much! Though I'm not just a glorified greeter. It's also my job to keep out any unwanted guests; our Order is quite exclusive after all.",
+      "Responses": [
+        {
+          "Title": "Ah, I see!",
+          "Heading": 5
+        },
+        {
+          "Title": "Gotcha.",
+          "Heading": 5
         }
       ]
     }
