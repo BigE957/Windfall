@@ -1,6 +1,5 @@
 ﻿using DialogueHelper.UI.Dialogue;
 using Windfall.Common.Systems.WorldEvents;
-using Windfall.Content.UI.Selenic;
 
 namespace Windfall.Content.NPCs.WorldEvents.LunarCult;
 public class Watchman : ModNPC

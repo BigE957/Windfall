@@ -101,6 +101,6 @@ public static class LunarCultBase
 
         } while (tries <= 10000);
 
-        LunarCultBaseSystem.LunarCultBaseLocation = placementPoint;
+        LunarCultBaseSystem.LunarCultBaseLocation = placementPoint - new Point((int)schematicSize.X / 2, 0);
     }
 }

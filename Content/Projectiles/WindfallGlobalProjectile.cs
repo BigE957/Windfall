@@ -14,7 +14,7 @@ public class WindfallGlobalProjectile : GlobalProjectile
     public override bool InstancePerEntity => true;
     public override bool PreAI(Projectile projectile)
     {
-        if (LunarCultBaseSystem.CultBaseArea.Intersects(new((int)projectile.Center.X / 16, (int)projectile.Center.Y / 16, 1, 1)) || LunarCultBaseSystem.CultBaseBridgeArea.Intersects(new((int)projectile.Center.X / 16, (int)projectile.Center.Y / 16, 1, 1)))
+        if (LunarCultBaseSystem.CultBaseTileArea.Intersects(new((int)projectile.Center.X / 16, (int)projectile.Center.Y / 16, 1, 1)) || LunarCultBaseSystem.CultBaseBridgeArea.Intersects(new((int)projectile.Center.X / 16, (int)projectile.Center.Y / 16, 1, 1)))
         {
             if (projectile.type == ProjectileID.SandBallFalling || projectile.type == ProjectileID.SiltBall || projectile.type == ProjectileID.SlushBall)
             {

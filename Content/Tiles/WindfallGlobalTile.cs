@@ -71,7 +71,7 @@ public class WindfallGlobalTile : GlobalTile
     }
     public override bool CanExplode(int i, int j, int type)
     {
-        if (CultBaseArea.Intersects(new(i, j, 1, 1)) || CultBaseBridgeArea.Intersects(new(i, j, 1, 1)))
+        if (CultBaseTileArea.Intersects(new(i, j, 1, 1)) || CultBaseBridgeArea.Intersects(new(i, j, 1, 1)))
             return false;
 
         return base.CanExplode(i, j, type);
@@ -79,7 +79,7 @@ public class WindfallGlobalTile : GlobalTile
 
     public override bool CanKillTile(int i, int j, int type, ref bool blockDamaged)
     {
-        if (CultBaseArea.Intersects(new(i, j, 1, 1)) || CultBaseBridgeArea.Intersects(new(i, j, 1, 1)))
+        if (CultBaseTileArea.Intersects(new(i, j, 1, 1)) || CultBaseBridgeArea.Intersects(new(i, j, 1, 1)))
             return false;
 
         return base.CanKillTile(i, j, type, ref blockDamaged);
@@ -87,14 +87,14 @@ public class WindfallGlobalTile : GlobalTile
 
     public override bool CanReplace(int i, int j, int type, int tileTypeBeingPlaced)
     {
-        if (CultBaseArea.Intersects(new(i, j, 1, 1)) || CultBaseBridgeArea.Intersects(new(i, j, 1, 1)))
+        if (CultBaseTileArea.Intersects(new(i, j, 1, 1)) || CultBaseBridgeArea.Intersects(new(i, j, 1, 1)))
             return false;
 
         return base.CanPlace(i, j, type);
     }
     public override void NearbyEffects(int i, int j, int type, bool closer)
     {
-        bool tombstonesShouldSpontaneouslyCombust = CultBaseArea.Intersects(new(i, j, 16, 16)) || CultBaseBridgeArea.Intersects(new(i, j, 16, 16));
+        bool tombstonesShouldSpontaneouslyCombust = CultBaseTileArea.Intersects(new(i, j, 16, 16)) || CultBaseBridgeArea.Intersects(new(i, j, 16, 16));
         if (tombstonesShouldSpontaneouslyCombust && type is TileID.Tombstones)
             WorldGen.KillTile(i, j);
     }

@@ -17,13 +17,13 @@ public class LunarCultGlobalItem : GlobalItem
 
     public override bool CanUseItem(Item item, Player player)
     {            
-        bool inCultBase = CultBaseArea.Contains(player.Center.ToTileCoordinates());
+        bool inCultBase = CultBaseTileArea.Contains(player.Center.ToTileCoordinates());
         bool illegalCultBaseItem = item.type is ItemID.Sandgun or ItemID.DirtBomb or ItemID.DirtStickyBomb or ItemID.DryBomb;
         if (illegalCultBaseItem && inCultBase)
             return false;
 
         //CultBaseArea.Inflate(2, 2);
-        if ((item.createTile != -1 || item.createWall != -1) && (CultBaseArea.Contains(player.Calamity().mouseWorld.ToTileCoordinates())))
+        if ((item.createTile != -1 || item.createWall != -1) && (CultBaseTileArea.Contains(player.Calamity().mouseWorld.ToTileCoordinates())))
             return false;
 
         return base.CanUseItem(item, player);
