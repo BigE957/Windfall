@@ -40,8 +40,8 @@ public class Seamstress : ModNPC
     public override void SetDefaults()
     {
         NPC.friendly = true;
-        NPC.width = 36;
-        NPC.height = 58;
+        NPC.width = 56;
+        NPC.height = 64;
         NPC.damage = 45;
         NPC.defense = 14;
         NPC.lifeMax = 210;
@@ -346,6 +346,18 @@ public class Seamstress : ModNPC
         return "";
     }
     public override bool CheckActive() => !NPC.downedAncientCultist;
+    public override bool PreDraw(SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor)
+    {
+        SpriteEffects direction = SpriteEffects.None;
+        if (NPC.spriteDirection == -1)
+            direction = SpriteEffects.FlipHorizontally;
+        Texture2D texture = TextureAssets.Npc[Type].Value;
+        Vector2 drawPosition = NPC.Center - Main.screenPosition - Vector2.UnitY * 20;
+        Vector2 origin = NPC.frame.Size() * 0.5f;
+
+        Main.spriteBatch.Draw(texture, drawPosition, NPC.frame, drawColor * NPC.Opacity, NPC.rotation, origin, NPC.scale, direction, 0f);
+        return false;
+    }
     private void ModifyTree(string treeKey, int dialogueID, int buttonID)
     {
         DialogueUISystem uiSystem = ModContent.GetInstance<DialogueUISystem>();
@@ -406,7 +418,6 @@ public class Seamstress : ModNPC
         if (treeKey == "TheSeamstress/Default" && dialogueID == 12 && Main.LocalPlayer.LunarCult().apostleQuestTracker == 3)
             Main.LocalPlayer.LunarCult().apostleQuestTracker++;
     }
-
     private static bool HasItem(Player player, int id)
     {
         if (player.inventory.Where(i => i.type == id && i.LunarCult().madeDuringTailorActivity).Any())
