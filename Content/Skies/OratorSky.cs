@@ -71,7 +71,7 @@ public class OratorSky : CustomSky
             #endregion
 
             #region Moon
-            Vector2 position = new(Main.screenWidth / 2f, bgTop + Main.screenHeight / 1.4f);
+            Vector2 position = new(Main.screenWidth / 2f, bgTop + Main.screenHeight / 1.3f);
             
             DrawAura(spriteBatch, position);
 
@@ -103,10 +103,10 @@ public class OratorSky : CustomSky
 
         spriteBatch.End();
         Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.Additive, SamplerState.LinearClamp, DepthStencilState.None, Main.Rasterizer, null, Utilities.GetCustomSkyBackgroundMatrix());
-
-        Texture2D bloomCircle = ModContent.Request<Texture2D>("CalamityMod/Particles/LargeBloom", AssetRequestMode.ImmediateLoad).Value;
-        spriteBatch.Draw(bloomCircle, position, null, Color.AliceBlue * Opacity * ((float)(Math.Sin(counter / 20D) / 4f + 0.75f)), 0f, bloomCircle.Size() / 2f, 2.4f * resolutionScale.X, SpriteEffects.None, 0f);
-
+        
+        //Texture2D bloomCircle = ModContent.Request<Texture2D>("CalamityMod/Particles/LargeBloom", AssetRequestMode.ImmediateLoad).Value;
+        //spriteBatch.Draw(bloomCircle, position, null, Color.AliceBlue * Opacity * 0.75f, 0f, bloomCircle.Size() / 2f, 2.4f * resolutionScale.X, SpriteEffects.None, 0f);
+        
         Texture2D bloomRing = ModContent.Request<Texture2D>("Windfall/Assets/Skies/OratorMoonBloom2", AssetRequestMode.ImmediateLoad).Value;
         Vector2 halfSizeTexture = new(bloomRing.Width / 2, bloomRing.Height / 2);
         spriteBatch.Draw(bloomRing, position, null, Color.DarkOliveGreen * Opacity, counter / 100f, halfSizeTexture, 1.4375f * resolutionScale.X, SpriteEffects.None, 0f);
