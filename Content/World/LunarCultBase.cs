@@ -59,10 +59,10 @@ public static class LunarCultBase
     {
         string mapKey = "Lunar Cult Base";
         int centerPlacementPositionX;
-        if(Main.maxTilesX == 8400)
-            centerPlacementPositionX = Main.dungeonX > Main.maxTilesX / 2 ? Main.spawnTileX + 1200 : Main.spawnTileX - 1200;
+        if(Main.maxTilesX == 8400) //Large World
+            centerPlacementPositionX = Main.dungeonX > Main.maxTilesX / 2 ? Main.spawnTileX + 800 : Main.spawnTileX - 800;
         else
-            centerPlacementPositionX = Main.dungeonX > Main.maxTilesX / 2 ? Main.spawnTileX + 1600 : Main.spawnTileX - 1600;
+            centerPlacementPositionX = Main.dungeonX > Main.maxTilesX / 2 ? Main.spawnTileX + 600 : Main.spawnTileX - 600;
         SchematicMetaTile[,] schematic = WFSchematicManager.TileMaps[mapKey];
         Point placementPoint;
         Vector2 schematicSize = new(WFSchematicManager.TileMaps[mapKey].GetLength(0), WFSchematicManager.TileMaps[mapKey].GetLength(1));
@@ -70,18 +70,18 @@ public static class LunarCultBase
         int tries = 0;
         do
         {
-            int placementPositionX = genRand.Next(centerPlacementPositionX - 400, centerPlacementPositionX + 400);
-            int placementPositionY = genRand.Next(underworldTop - 400, underworldTop - 200);
+            int placementPositionX = centerPlacementPositionX + (genRand.Next(0, 2000) * (Main.dungeonX > Main.maxTilesX / 2 ? 1 : -1));
+            int placementPositionY = genRand.Next(underworldTop - 600, underworldTop - 200);
 
             placementPoint = new Point(placementPositionX, placementPositionY);
 
             bool canGenerateInLocation = true;
 
-            for (int x = placementPoint.X - 20; x < placementPoint.X + schematicSize.X + 20; x++)
+            for (int x = placementPoint.X - 4; x < placementPoint.X + schematicSize.X + 4; x++)
             {
-                for (int y = placementPoint.Y - 20; y < placementPoint.Y + schematicSize.Y + 20; y++)
+                for (int y = placementPoint.Y - 4; y < placementPoint.Y + schematicSize.Y + 4; y++)
                 {
-                    if (ShouldAvoidLocation(new Point(x, y), tries > 5000))
+                    if (ShouldAvoidLocation(new Point(x, y), tries < 80000))
                         canGenerateInLocation = false;
                 }
             }
@@ -90,10 +90,10 @@ public static class LunarCultBase
                 tries++;
             else
             {
-                SchematicAnchor anchorType = SchematicAnchor.Center;
+                SchematicAnchor anchorType = SchematicAnchor.TopLeft;
 
                 bool place = true;
-                PlaceSchematic<Action<Chest>>(mapKey, placementPoint, anchorType, ref place);
+                WFSchematicManager.PlaceFlippableSchematic<Action<Chest>>(mapKey, placementPoint, anchorType, ref place, flipHorizontal: Main.dungeonX > Main.maxTilesX / 2);
                 AddProtectedStructure(new Rectangle(placementPoint.X, placementPoint.Y, (int)schematicSize.X, (int)schematicSize.Y), 20);
                 break;
             }
@@ -101,6 +101,7 @@ public static class LunarCultBase
 
         } while (tries <= 10000);
 
-        LunarCultBaseSystem.LunarCultBaseLocation = placementPoint - new Point((int)schematicSize.X / 2, 0);
+        LunarCultBaseSystem.BaseFacingLeft =  Main.dungeonX > Main.maxTilesX / 2;
+        LunarCultBaseSystem.LunarCultBaseLocation = placementPoint + new Point(LunarCultBaseSystem.BaseFacingLeft ? (int)schematicSize.X : 0, (int)schematicSize.Y / 2 );
     }
 }
