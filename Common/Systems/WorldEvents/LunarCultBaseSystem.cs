@@ -26,6 +26,8 @@ public class LunarCultBaseSystem : ModSystem
 
     public static Rectangle CultBaseBridgeArea;
 
+    public static bool BaseFacingLeft = false;
+
     public static List<int> Recruits = [];
 
     private static List<int> AvailableTopics = [];
@@ -67,11 +69,13 @@ public class LunarCultBaseSystem : ModSystem
     {
         LunarCultBaseLocation = tag.Get<Point>("LunarCultBaseLocation");
 
-        CultBaseTileArea = new(LunarCultBaseLocation.X, LunarCultBaseLocation.Y - 74, 124, 148);
+        BaseFacingLeft = tag.GetBool("BaseFacingLeft");
+
+        CultBaseTileArea = new(LunarCultBaseLocation.X - (BaseFacingLeft ? 124 : 0), LunarCultBaseLocation.Y - 74, 124, 148);
 
         CultBaseWorldArea = new(CultBaseTileArea.X * 16, CultBaseTileArea.Y * 16, CultBaseTileArea.Width * 16, CultBaseTileArea.Height * 16);
 
-        CultBaseBridgeArea = new(CultBaseTileArea.Right, CultBaseTileArea.Center.Y - 16, 20, 25);
+        CultBaseBridgeArea = new(BaseFacingLeft ? CultBaseTileArea.Left - 90 : CultBaseTileArea.Right, CultBaseTileArea.Top + 4, 90, CultBaseTileArea.Height - 54);
 
         Recruits = (List<int>)tag.GetList<int>("Recruits");
 
@@ -88,6 +92,8 @@ public class LunarCultBaseSystem : ModSystem
     public override void SaveWorldData(TagCompound tag)
     {
         tag["LunarCultBaseLocation"] = LunarCultBaseLocation;
+
+        tag["BaseFacingLeft"] = BaseFacingLeft;
 
         tag["Recruits"] = Recruits;
 
@@ -178,24 +184,24 @@ public class LunarCultBaseSystem : ModSystem
     }
     public override void PreUpdateWorld()
     {
-        //Main.NewText(CultBaseWorldArea.Contains((int)Main.LocalPlayer.Center.X, (int)Main.LocalPlayer.Center.Y));
-
         if (NPC.downedAncientCultist || LunarCultBaseLocation == new Point(-1, -1))
             return;
         //Main.NewText("Active");
         if (NPC.downedPlantBoss)
         {
             if (!NPC.AnyNPCs(ModContent.NPCType<Seamstress>()))
-                NPC.NewNPC(Entity.GetSource_None(), CultBaseWorldArea.Right - 578, (LunarCultBaseLocation.Y * 16) + 300, ModContent.NPCType<Seamstress>());
+                NPC.NewNPC(Entity.GetSource_None(), LunarCultBaseLocation.X * 16 + (BaseFacingLeft ? -1408 : 1408), (LunarCultBaseLocation.Y * 16) + 400, ModContent.NPCType<Seamstress>());
             if (!NPC.AnyNPCs(ModContent.NPCType<TheChef>()))
-                NPC.NewNPC(Entity.GetSource_None(), CultBaseWorldArea.Left + 128, (LunarCultBaseLocation.Y * 16) - 110, ModContent.NPCType<TheChef>());
+                NPC.NewNPC(Entity.GetSource_None(), LunarCultBaseLocation.X * 16 + (BaseFacingLeft ? -128 : 128), (LunarCultBaseLocation.Y * 16) - 110, ModContent.NPCType<TheChef>());
             if (!Main.npc.Any(n => n.active && n.type == ModContent.NPCType<Watchman>()))
-                NPC.NewNPC(Entity.GetSource_None(), CultBaseWorldArea.Right + 100, (LunarCultBaseLocation.Y - 6) * 16 - 5, ModContent.NPCType<Watchman>());
+                NPC.NewNPC(Entity.GetSource_None(), LunarCultBaseLocation.X * 16 + (BaseFacingLeft ? -2100 : 2100), (LunarCultBaseLocation.Y - 6) * 16 - 5, ModContent.NPCType<Watchman>());
             if (SealingRitualSystem.RitualSequenceSeen)
                 return;
             if (!NPC.AnyNPCs(ModContent.NPCType<OratorNPC>()))
-                NPC.NewNPC(Entity.GetSource_None(), CultBaseWorldArea.Right - 128, (CultBaseTileArea.Top + 30) * 16, ModContent.NPCType<OratorNPC>());
-
+                NPC.NewNPC(Entity.GetSource_None(), LunarCultBaseLocation.X * 16 + (BaseFacingLeft ? -1858 : 1858), (CultBaseTileArea.Top + 30) * 16, ModContent.NPCType<OratorNPC>());
+            
+            //Main.NewText(LunarCultBaseLocation.ToWorldCoordinates() - Main.LocalPlayer.Center);
+            
             Player closestPlayer = Main.player[Player.FindClosest(CultBaseWorldArea.TopLeft(), CultBaseWorldArea.Width, CultBaseWorldArea.Height)];
             float PlayerDistFromHideout = (closestPlayer.Center - CultBaseWorldArea.Center()).Length();
             if (PlayerDistFromHideout < 1600 && Main.npc.Where(n => n.active && n.type == ModContent.NPCType<Fingerling>()).Count() < 16)
@@ -223,9 +229,12 @@ public class LunarCultBaseSystem : ModSystem
                 SoundEngine.PlaySound(SoundID.Item8, player.Center);
                 for (int i = 0; i <= 20; i++)
                     EmpyreanMetaball.SpawnDefaultParticle(player.Center, Main.rand.NextVector2Circular(5f, 5f), 30 * Main.rand.NextFloat(1.5f, 2.3f));
-                NPC orator = Main.npc[NPC.FindFirstNPC(ModContent.NPCType<OratorNPC>())];
-                string path = "Dialogue.LunarCult.TheOrator.WorldText.Basement." + Main.rand.Next(3);
-                DisplayMessage(orator.Hitbox, Color.LimeGreen, path);
+                if (NPC.AnyNPCs(ModContent.NPCType<OratorNPC>()))
+                {
+                    NPC orator = Main.npc[NPC.FindFirstNPC(ModContent.NPCType<OratorNPC>())];
+                    string path = "Dialogue.LunarCult.TheOrator.WorldText.Basement." + Main.rand.Next(3);
+                    DisplayMessage(orator.Hitbox, Color.LimeGreen, path);
+                }
             }
         }
         //State = SystemState.CheckReqs;
@@ -328,7 +337,7 @@ public class LunarCultBaseSystem : ModSystem
                     switch(PlannedActivity)
                     {
                         case SystemStates.Ritual:
-                            NPC warn = NPC.NewNPCDirect(Entity.GetSource_None(), CultBaseWorldArea.Right - 128, (LunarCultBaseLocation.Y - 24) * 16, ModContent.NPCType<LunarCultistArcher>(), ai2: 4);
+                            NPC warn = NPC.NewNPCDirect(Entity.GetSource_None(), LunarCultBaseLocation.X * 16 + (BaseFacingLeft ? -1790 : 1790), (LunarCultBaseLocation.Y - 24) * 16, ModContent.NPCType<LunarCultistArcher>(), ai2: 4);
                             warn.As<LunarCultistArcher>().myCharacter = LunarCultistArcher.Character.RitualWarn;
                             break;
                         case SystemStates.Meeting:               
@@ -342,11 +351,11 @@ public class LunarCultBaseSystem : ModSystem
                     }
                     if(PlannedActivity != SystemStates.Meeting)
                     {
-                        NPC speaker = NPC.NewNPCDirect(Entity.GetSource_None(), CultBaseWorldArea.Left + 816, (LunarCultBaseLocation.Y + 24) * 16, ModContent.NPCType<LunarBishop>(), ai2: 4);
+                        NPC speaker = NPC.NewNPCDirect(Entity.GetSource_None(), LunarCultBaseLocation.X * 16 + (BaseFacingLeft ? -816 : 816), (LunarCultBaseLocation.Y + 24) * 16, ModContent.NPCType<LunarBishop>(), ai2: 4);
                         speaker.As<LunarBishop>().myCharacter = LunarBishop.Character.Speaker;
                         speaker.spriteDirection *= -1;
 
-                        NPC eeper = NPC.NewNPCDirect(Entity.GetSource_None(), CultBaseWorldArea.Left + 208, (LunarCultBaseLocation.Y + 24) * 16, ModContent.NPCType<LunarCultistDevotee>(), ai2: 4);
+                        NPC eeper = NPC.NewNPCDirect(Entity.GetSource_None(), LunarCultBaseLocation.X * 16 + (BaseFacingLeft ? -208 : 208), (LunarCultBaseLocation.Y + 24) * 16, ModContent.NPCType<LunarCultistDevotee>(), ai2: 4);
                         eeper.As<LunarCultistDevotee>().myCharacter = LunarCultistDevotee.Character.Eeper;
                         eeper.spriteDirection *= -1;
                     }
@@ -365,7 +374,7 @@ public class LunarCultBaseSystem : ModSystem
                     }
                     if (PlannedActivity != SystemStates.OratorVisit)
                     {
-                        NPC broke = NPC.NewNPCDirect(Entity.GetSource_None(), CultBaseWorldArea.Right - 600, (LunarCultBaseLocation.Y - 46) * 16, ModContent.NPCType<LunarCultistArcher>(), ai2: 4);
+                        NPC broke = NPC.NewNPCDirect(Entity.GetSource_None(), LunarCultBaseLocation.X * 16 + (BaseFacingLeft ? -1258 : 1258), (LunarCultBaseLocation.Y - 46) * 16, ModContent.NPCType<LunarCultistArcher>(), ai2: 4);
                         broke.As<LunarCultistArcher>().myCharacter = LunarCultistArcher.Character.Broke;
                     }
                     #endregion
@@ -558,7 +567,7 @@ public class LunarCultBaseSystem : ModSystem
                     {
                         case SystemStates.Ritual:
                             #region Location Selection
-                            ActivityCoords = new Point(LunarCultBaseLocation.X + 36, LunarCultBaseLocation.Y - 24);
+                            ActivityCoords = new Point(LunarCultBaseLocation.X + (BaseFacingLeft ? -36 : 36), LunarCultBaseLocation.Y - 24);
                             ActivityCoords.X *= 16;
                             //ActivityCoords.X += 8;
                             ActivityCoords.Y *= 16;
@@ -605,9 +614,9 @@ public class LunarCultBaseSystem : ModSystem
                             break;
                         case SystemStates.Meeting:
                             #region Location Selection
-                            ActivityCoords = new Point(LunarCultBaseLocation.X + 25, LunarCultBaseLocation.Y + 18);
+                            ActivityCoords = new Point(LunarCultBaseLocation.X + (BaseFacingLeft ? -25 : 25), LunarCultBaseLocation.Y + 18);
                             ActivityCoords.X *= 16;
-                            ActivityCoords.X += 8;
+                            ActivityCoords.X += BaseFacingLeft ? -8 : 8;
                             ActivityCoords.Y *= 16;
                             #endregion
 
@@ -729,10 +738,10 @@ public class LunarCultBaseSystem : ModSystem
                             SatisfiedCustomers = 0;
                             break;
                         case SystemStates.OratorVisit:
-                            ActivityCoords = new Point((CultBaseTileArea.Right - 11) * 16, (CultBaseTileArea.Top + 30) * 16);
+                            ActivityCoords = new Point(LunarCultBaseLocation.X * 16 + (BaseFacingLeft ? -1858 : 1858), (CultBaseTileArea.Top + 30) * 16);
 
                             if (!NPC.AnyNPCs(ModContent.NPCType<OratorNPC>()))
-                                NPC.NewNPC(Entity.GetSource_None(), (CultBaseTileArea.Right - 11) * 16, (CultBaseTileArea.Top + 30) * 16, ModContent.NPCType<OratorNPC>(), ai0: 1);
+                                NPC.NewNPC(Entity.GetSource_None(), ActivityCoords.X, ActivityCoords.Y, ModContent.NPCType<OratorNPC>(), ai0: 1);
                             else
                                 Main.npc[NPC.FindFirstNPC(ModContent.NPCType<OratorNPC>())].ai[0] = 1;
                             State = SystemStates.OratorVisit;
