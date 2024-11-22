@@ -1244,6 +1244,11 @@ Items: {
 			DisplayName: Dungeon Detector
 			Tooltip: Tells you where your dungeon is, and spawns a lil guy there!
 		}
+
+		TheStructureizer: {
+			DisplayName: The Structureizer
+			Tooltip: ""
+		}
 	}
 
 	Utility: {

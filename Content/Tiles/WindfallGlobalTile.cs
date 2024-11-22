@@ -73,7 +73,6 @@ public class WindfallGlobalTile : GlobalTile
     {
         if (CultBaseTileArea.Intersects(new(i, j, 1, 1)) || CultBaseBridgeArea.Intersects(new(i, j, 1, 1)))
             return false;
-
         return base.CanExplode(i, j, type);
     }
 
