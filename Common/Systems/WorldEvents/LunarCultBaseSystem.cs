@@ -1455,16 +1455,16 @@ public class LunarCultBaseSystem : ModSystem
 
         for (int i = 0; i < 16; i++)
         {
-            Rectangle spawnArea = new((LunarCultBaseLocation.X - 70), (LunarCultBaseLocation.Y - 80), 82, 152);
+            Rectangle spawnArea = CultBaseTileArea;
             int checkPositionX = spawnArea.X + Main.rand.Next(spawnArea.Width);
             int checkPositionY = spawnArea.Y + Main.rand.Next(spawnArea.Height);
-            Vector2 checkPosition = new(checkPositionX, checkPositionY);
+            Vector2 checkPosition = new(checkPositionX * 16 + 8, checkPositionY * 16);
 
-            Tile aboveSpawnTile = CalamityUtils.ParanoidTileRetrieval(checkPositionX, checkPositionY - 1);
-            bool nearCultBase = CalamityUtils.ManhattanDistance(checkPosition, new(LunarCultBaseLocation.X, LunarCultBaseLocation.Y)) < 180f;
-            bool isVaildWall = aboveSpawnTile.WallType == WallID.AncientSilverBrickWall || aboveSpawnTile.WallType == WallID.GreenStainedGlass || aboveSpawnTile.WallType == WallID.EmeraldGemspark;
-            isVaildWall |= aboveSpawnTile.WallType == WallID.PlatinumBrick || aboveSpawnTile.WallType == WallID.PearlstoneBrick;
-            if (!isVaildWall || !nearCultBase || Collision.SolidCollision((checkPosition - new Vector2(2f, 4f)).ToWorldCoordinates(), 4, 8) || aboveSpawnTile.IsTileSolid() || Lighting.Brightness(checkPositionX, checkPositionY - 1) <= 0.4f)
+            Tile SpawnTile = ParanoidTileRetrieval(checkPositionX, checkPositionY);
+            bool nearPlayer = CalamityUtils.ManhattanDistance(checkPosition, Main.player[Player.FindClosest(checkPosition, 16, 16)].Center) < 800f;
+            bool isVaildWall = SpawnTile.WallType == WallID.AncientSilverBrickWall || SpawnTile.WallType == WallID.GreenStainedGlass || SpawnTile.WallType == WallID.EmeraldGemspark;
+            isVaildWall |= SpawnTile.WallType == WallID.PlatinumBrick || SpawnTile.WallType == WallID.PearlstoneBrick;
+            if (!isVaildWall || nearPlayer || SpawnTile.IsTileSolid() || Lighting.Brightness(checkPositionX, checkPositionY) <= 0.4f)
                 continue;
 
             int spawnedNPC = NPC.NewNPC(NPC.GetSource_NaturalSpawn(), checkPositionX * 16 + 8, checkPositionY * 16, ModContent.NPCType<Fingerling>());
@@ -1473,9 +1473,9 @@ public class LunarCultBaseSystem : ModSystem
             {
                 Main.npc[spawnedNPC].position.Y -= 8f;
 
-                NetMessage.SendData(MessageID.SyncNPC, -1, -1, null, spawnedNPC);
-                return;
+                NetMessage.SendData(MessageID.SyncNPC, -1, -1, null, spawnedNPC);                
             }
+            return;
         }
     }
 }
