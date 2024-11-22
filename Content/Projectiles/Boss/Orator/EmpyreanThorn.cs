@@ -1,4 +1,5 @@
-﻿using Windfall.Common.Graphics.Metaballs;
+﻿using Terraria;
+using Windfall.Common.Graphics.Metaballs;
 
 namespace Windfall.Content.Projectiles.Boss.Orator;
 
@@ -18,8 +19,8 @@ public class EmpyreanThorn : ModProjectile
     public override void SetDefaults()
     {
         Main.projFrames[Projectile.type] = 6;
-        Projectile.width = 2;
-        Projectile.height = 2;
+        Projectile.width = 200;
+        Projectile.height = 32;
         Projectile.hostile = true;
         Projectile.tileCollide = false;
         Projectile.ignoreWater = true;
@@ -42,6 +43,8 @@ public class EmpyreanThorn : ModProjectile
             Projectile.rotation = Projectile.velocity.ToRotation();
             Projectile.velocity = Vector2.Zero;
             Projectile.scale = InitialScale + Main.rand.NextFloat(-0.5f, 0.5f);
+            Projectile.width = (int)(Projectile.width * Projectile.scale);
+            Projectile.height = (int)(Projectile.height * Projectile.scale);
             initialPoint = Projectile.Center + (Projectile.rotation.ToRotationVector2() * 64f * Projectile.scale);
         }
     }
@@ -99,10 +102,11 @@ public class EmpyreanThorn : ModProjectile
 
     public override bool? Colliding(Rectangle projHitbox, Rectangle targetHitbox)
     {
-        float _ = 0f;
-        Vector2 start = Projectile.Center - Projectile.velocity.SafeNormalize(Vector2.UnitY) * Projectile.scale * 30f;
-        Vector2 end = Projectile.Center + Projectile.velocity.SafeNormalize(-Vector2.UnitY) * MathF.Max(65f, Projectile.scale * 110f);
-        return Collision.CheckAABBvLineCollision(targetHitbox.TopLeft(), targetHitbox.Size(), start, end, Projectile.scale * 35f, ref _);
+        Vector2 v = Projectile.rotation.ToRotationVector2();
+        Vector2 lineStart = Projectile.Center - (v * Projectile.width * 0.5f);
+        Vector2 lineEnd = Projectile.Center + (v * Projectile.width * 0.5f);
+        float collisionPoint = 0f;
+        return Collision.CheckAABBvLineCollision(targetHitbox.TopLeft(), targetHitbox.Size(), lineStart, lineEnd, Projectile.height, ref collisionPoint);
     }
 
     public override void DrawBehind(int index, List<int> drawCacheProjsBehindNPCsAndTiles, List<int> drawCacheProjsBehindNPCs, List<int> drawCacheProjsBehindProjectiles, List<int> drawCacheProjsOverWiresUI, List<int> overWiresUI)
