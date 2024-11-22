@@ -1389,38 +1389,33 @@ public class LunarCultBaseSystem : ModSystem
                             4,//"Skylar",
                             5//"Jamie",
                         ];
+
+                        List<Vector2> AvailablePositions =
+                        [
+                            new((CultBaseTileArea.Center.X - 4) * 16, (CultBaseTileArea.Center.Y - 8) * 16),
+                            new((CultBaseTileArea.Center.X - 4) * 16, (CultBaseTileArea.Center.Y - 8) * 16),
+                            new((CultBaseTileArea.Center.X - 4) * 16, CultBaseTileArea.Center.Y * 16),
+                            new((CultBaseTileArea.Center.X - 4) * 16, CultBaseTileArea.Center.Y * 16),
+                            Main.npc[NPC.FindFirstNPC(ModContent.NPCType<TheChef>())].Center + (Vector2.UnitX * 256),
+                            Main.npc[NPC.FindFirstNPC(ModContent.NPCType<TheChef>())].Center + (Vector2.UnitX * 256)
+                        ];
+
                         for (int i = 0; i < 4 - currentRecruitCount; i++)
                         {
                             NPC recruit = null;
-                            int index = Main.rand.Next(IDs.Count);
-                            switch(IDs[index])
-                            {
-                                case 0:
-                                    recruit = NPC.NewNPCDirect(NPC.GetSource_NaturalSpawn(), (CultBaseTileArea.Center.X - 4) * 16, CultBaseTileArea.Center.Y * 16, ModContent.NPCType<RecruitableLunarCultist>());
-                                    break;
-                                case 1:
-                                    recruit = NPC.NewNPCDirect(NPC.GetSource_NaturalSpawn(), (CultBaseTileArea.Center.X - 8) * 16, CultBaseTileArea.Center.Y * 16, ModContent.NPCType<RecruitableLunarCultist>());
-                                    break;
-                                case 2:
-                                    recruit = NPC.NewNPCDirect(NPC.GetSource_NaturalSpawn(), (CultBaseTileArea.Center.X - 16) * 16, CultBaseTileArea.Center.Y * 16, ModContent.NPCType<RecruitableLunarCultist>());
-                                    break;
-                                case 3:
-                                    recruit = NPC.NewNPCDirect(NPC.GetSource_NaturalSpawn(), (CultBaseTileArea.Center.X + 4) * 16, CultBaseTileArea.Center.Y * 16, ModContent.NPCType<RecruitableLunarCultist>());
-                                    break;
-                                case 4:
-                                    recruit = NPC.NewNPCDirect(NPC.GetSource_NaturalSpawn(), (CultBaseTileArea.Center.X + 8) * 16, CultBaseTileArea.Center.Y * 16, ModContent.NPCType<RecruitableLunarCultist>());
-                                    break;
-                                case 5:
-                                    recruit = NPC.NewNPCDirect(NPC.GetSource_NaturalSpawn(), (CultBaseTileArea.Center.X + 16) * 16, CultBaseTileArea.Center.Y * 16, ModContent.NPCType<RecruitableLunarCultist>());
-                                    break;
-                            }
+                            int nameIndex = Main.rand.Next(IDs.Count);
+                            int posIndex = Main.rand.Next(AvailablePositions.Count);
+                            
+                            recruit = NPC.NewNPCDirect(NPC.GetSource_NaturalSpawn(), AvailablePositions[posIndex], ModContent.NPCType<RecruitableLunarCultist>());
+
                             RecruitableLunarCultist Recruit = recruit.As<RecruitableLunarCultist>();
-                            Recruit.MyName = (RecruitableLunarCultist.RecruitNames)IDs[index];
+                            Recruit.MyName = (RecruitableLunarCultist.RecruitNames)IDs[nameIndex];
                             Recruit.Chattable = true;
                             Recruit.canRecruit = true;
                             Recruit.OnSpawn(NPC.GetSource_NaturalSpawn());
 
-                            IDs.RemoveAt(index);
+                            IDs.RemoveAt(nameIndex);
+                            AvailablePositions.RemoveAt(posIndex);
                         }
                     }
                 }                    
