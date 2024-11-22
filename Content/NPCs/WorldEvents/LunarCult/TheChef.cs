@@ -209,8 +209,7 @@ public class TheChef : ModNPC
                 List<Response> response = new(uiSystem.CurrentTree.Dialogues[0].Responses);
                 if (Main.LocalPlayer.LunarCult().hasRecievedChefMeal)
                 {
-                    response[1] = null;
-                    uiSystem.CurrentTree.Dialogues[0].Responses = response.Where(r => r != null).ToArray();
+                    response[1].Requirement = false;
                     return;
                 }
                 uiSystem.CurrentTree.Dialogues[1].Responses = GetMenuResponses();

@@ -367,37 +367,19 @@ public class Seamstress : ModNPC
                 int questTracker = 0;// Main.LocalPlayer.LunarCult().apostleQuestTracker;
                 List<Response> response = new(uiSystem.CurrentTree.Dialogues[2].Responses);
                 if (questTracker != 1)
-                    response[2] = null;
-                if (questTracker == 3)
-                    response[2] = response[3];
-                response[3] = null;
-                uiSystem.CurrentTree.Dialogues[2].Responses = response.Where(r => r != null).ToArray();
+                    response[2].Requirement = false;
+                if (questTracker != 3)
+                    response[3].Requirement = false;
 
                 if (questTracker < 4)
                 {
-                    response = new(uiSystem.CurrentTree.Dialogues[13].Responses)
-                    {
-                        [3] = null
-                    };
-                    uiSystem.CurrentTree.Dialogues[13].Responses = response.Where(r => r != null).ToArray();
-
-                    response = new(uiSystem.CurrentTree.Dialogues[14].Responses)
-                    {
-                        [4] = null
-                    };
-                    uiSystem.CurrentTree.Dialogues[14].Responses = response.Where(r => r != null).ToArray();
-
+                    uiSystem.CurrentTree.Dialogues[13].Responses[3].Requirement = false;
+                    uiSystem.CurrentTree.Dialogues[14].Responses[4].Requirement = false;
                 }
                 break;
             case "TheSeamstress/Abandoned":
                 if(!Main.LocalPlayer.LunarCult().spokeToAbandonedChef)
-                {
-                    response = new(uiSystem.CurrentTree.Dialogues[0].Responses)
-                    {
-                        [2] = null
-                    };
-                    uiSystem.CurrentTree.Dialogues[0].Responses = response.Where(r => r != null).ToArray();
-                }
+                    uiSystem.CurrentTree.Dialogues[0].Responses[2].Requirement = false;
                 break;
         }
     }
