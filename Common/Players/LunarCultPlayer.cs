@@ -10,6 +10,7 @@ public class LunarCultPlayer : ModPlayer
     public int apostleQuestTracker = 0;
     public bool spokeToAbandonedChef = false;
     public int timesWatchmenTalked = 0;
+    public bool askedWatchmanAboutOrator = false;
     public override void LoadData(TagCompound tag)
     {
         SeamstressTalked = tag.GetBool("SeamstressTalked");
@@ -18,6 +19,7 @@ public class LunarCultPlayer : ModPlayer
         apostleQuestTracker = tag.GetInt("talkQuestTracker");
         spokeToAbandonedChef = tag.GetBool("spokeToAbandonedChef");
         timesWatchmenTalked = tag.GetInt("timesWatchmenTalked");
+        askedWatchmanAboutOrator = tag.GetBool("askedWatchmanAboutOrator");
     }
     public override void SaveData(TagCompound tag)
     {
@@ -33,5 +35,7 @@ public class LunarCultPlayer : ModPlayer
             tag["spokeToAbandonedChef"] = spokeToAbandonedChef;
         if (timesWatchmenTalked != 0)
             tag["timesWatchmenTalked"] = timesWatchmenTalked;
+        if (askedWatchmanAboutOrator)
+            tag["askedWatchmanAboutOrator"] = askedWatchmanAboutOrator;
     }
 }
