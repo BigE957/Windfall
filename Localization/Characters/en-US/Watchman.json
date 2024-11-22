@@ -1,0 +1,19 @@
+{
+  "Name": "[c/9cfa5e: The Watchman]",
+  "Scale": 1,
+
+  "Expressions": [
+    {
+      "Title": "Default",
+      "Path": "Windfall/Assets/UI/CharacterAssets/Watchman/Default",
+      "FrameCount": 1,
+      "FrameRate": 0,
+      "Loop": false,
+      "AnimateCondition": false
+    }
+  ],
+  "Style": "Windfall.Content.UI.Dialogue.DialogueStyles.SelenicDialogueStyle",
+  "TextDelay": 3,
+  "PrimaryColor": "#1434A4",
+  "SecondaryColor": "#FFFF00"
+}

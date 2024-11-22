@@ -35,6 +35,7 @@
     <None Remove="Assets\UI\CharacterAssets\Seamstress\Worried.png" />
     <None Remove="Assets\UI\CharacterAssets\TheChef\Remy.png" />
     <None Remove="Assets\UI\CharacterAssets\TheOrator\Default.png" />
+    <None Remove="Assets\UI\CharacterAssets\Watchman\Default.png" />
     <None Remove="Assets\UI\DialogueStyles\SelenicResponse.png" />
     <None Remove="Assets\UI\DialogueStyles\SelenicTextbox.png" />
     <None Remove="Content\Buffs\Cooldowns\ParryWeapon.png" />
