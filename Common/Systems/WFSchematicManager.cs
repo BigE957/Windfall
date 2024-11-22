@@ -30,7 +30,6 @@ public class WFSchematicManager : ModSystem
         TileMaps[WanderersCabinKey] = LoadWindfallSchematic(WanderersCabinKeyFilename);
         //TileMaps[SummoningGroundsKey] = LoadWindfallSchematic(SummoningGroundsKeyFilename);
         TileMaps[LunarCultKey] = LoadWindfallSchematic(LunarCultFileName);
-        TileMaps[TileEntityTestKey] = LoadWindfallSchematic(TileEntityTestFileName);
     }
 
     public static SchematicMetaTile[,] LoadWindfallSchematic(string filename)
