@@ -90,7 +90,7 @@ public class UnstableDarkness: ModProjectile
         NPC Orator = null;
         if (NPC.FindFirstNPC(ModContent.NPCType<TheOrator>()) != -1)
             Orator = Main.npc[NPC.FindFirstNPC(ModContent.NPCType<TheOrator>())];
-        if (Main.netMode != NetmodeID.MultiplayerClient)// && Orator != null && Orator.ai[0] == 2 && (float)Orator.life / (float)Orator.lifeMax > 0.1f)
+        if (Main.netMode != NetmodeID.MultiplayerClient && Orator != null && Orator.ai[0] == 2 && (float)Orator.life / (float)Orator.lifeMax > 0.1f)
         {
             for (int i = 0; i < 24; i++)
                 Projectile.NewProjectile(Terraria.Entity.GetSource_NaturalSpawn(), Projectile.Center + Main.rand.NextVector2Circular(64f, 64f), Main.rand.NextVector2Circular(4f, 4f), ModContent.ProjectileType<DarkGlob>(), TheOrator.GlobDamage, 0f, -1, 0, Main.rand.NextFloat(0.5f, 0.75f));

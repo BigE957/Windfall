@@ -16,9 +16,6 @@ public class WFSchematicManager : ModSystem
     internal const string LunarCultKey = "Lunar Cult Base";
     internal const string LunarCultFileName = StructureFilePath + "LunarCultBase.csch";
 
-    internal const string TileEntityTestKey = "Tile Entity Test";
-    internal const string TileEntityTestFileName = StructureFilePath + "TileEntityTest.csch";
-
     internal static Dictionary<string, SchematicMetaTile[,]> TileMaps =>
         typeof(SchematicManager).GetField("TileMaps", Utilities.UniversalBindingFlags).GetValue(null) as Dictionary<string, SchematicMetaTile[,]>;
 
