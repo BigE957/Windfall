@@ -19,6 +19,7 @@
     <None Remove="Assets\Items\Quest\SelenicTablet.png" />
     <None Remove="Assets\Items\Weapons\Misc\RiftWeaver.png" />
     <None Remove="Assets\Items\Weapons\Misc\RiftWeaverGlow.png" />
+    <None Remove="Assets\Items\Weapons\Rogue\OratorSpear.png" />
     <None Remove="Assets\Items\Weapons\Summon\ShadowHandStaff.png" />
     <None Remove="Assets\NPCs\WorldEvents\Seamstress.png" />
     <None Remove="Assets\Projectiles\Boss\HandRings.png" />

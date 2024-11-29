@@ -1191,6 +1191,13 @@ Items: {
 				Tooltip: Calls forth the darkest of shadows.
 			}
 		}
+
+		Rogue: {
+			OratorSpear: {
+				DisplayName: Orator Spear
+				Tooltip: ""
+			}
+		}
 	}
 
 	Debug: {
@@ -1472,6 +1479,21 @@ Items: {
 			DisplayName: Lunar Coin
 			Tooltip: Currency for trading within the Selenic Order
 		}
+
+		DeathIcon: {
+			DisplayName: Death Icon
+			Tooltip: ""
+		}
+
+		FlameIcon: {
+			DisplayName: Flame Icon
+			Tooltip: ""
+		}
+
+		LightIcon: {
+			DisplayName: Light Icon
+			Tooltip: ""
+		}
 	}
 
 	Essence: {
@@ -1647,6 +1669,7 @@ Projectiles: {
 	RiftWeaverProj.DisplayName: Rift Weaver Proj
 	RiftWeaverThrow.DisplayName: Rift Weaver Throw
 	UnstableDarkness.DisplayName: Unstable Darkness
+	Rogue.OratorSpearProj.DisplayName: Orator Spear Proj
 }
 
 Buffs: {
