@@ -222,6 +222,8 @@ public class TheChef : ModNPC
     }
     private void ClickEffect(string treeKey, int dialogueID, int buttonID)
     {
+        if (!treeKey.Contains("TheChef"))
+            return;
         NPC chef = Main.npc[NPC.FindFirstNPC(ModContent.NPCType<TheChef>())];
         if (treeKey == "TheChef/FoodSelection" && dialogueID == 0)
             chef.ai[3] = MenuFoodIDs[buttonID];
