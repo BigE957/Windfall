@@ -16,7 +16,7 @@ public class DarkGlob : ModProjectile
         Projectile.hostile = true;
         Projectile.ignoreWater = true;
         Projectile.tileCollide = false;
-        Projectile.penetrate = 5;
+        Projectile.penetrate = 3;
         Projectile.timeLeft = 390;
         Projectile.scale = 0f;
         CooldownSlot = ImmunityCooldownID.Bosses;
