@@ -1,14 +1,11 @@
-﻿using CalamityMod.NPCs.AstrumDeus;
+﻿using CalamityMod.Buffs.DamageOverTime;
+using CalamityMod.NPCs.AstrumDeus;
 using Luminance.Core.Graphics;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Terraria;
 using Windfall.Common.Graphics.Metaballs;
 using Windfall.Content.NPCs.Bosses.Orator;
 using Windfall.Content.Projectiles.Boss.Orator;
+using static Windfall.Content.NPCs.GlobalNPCs.DebuffGlobalNPC;
 
 namespace Windfall.Content.Projectiles.Weapons.Rogue;
 public class OratorSpearProj : ModProjectile, ILocalizedModType
@@ -68,7 +65,19 @@ public class OratorSpearProj : ModProjectile, ILocalizedModType
                 EmpyreanMetaball.SpawnDefaultParticle(spawnPos, Main.rand.NextVector2Circular(2f, 2f), Main.rand.NextFloat(10f, 20f));
         }
     }
+    private readonly List<int> DebuffTypes =
+    [
+        BuffID.Daybreak,
+        ModContent.BuffType<Nightwither>(),
+        ModContent.BuffType<BrimstoneFlames>(),
+        ModContent.BuffType<AstralInfectionDebuff>(),
+        ModContent.BuffType<HolyFlames>(),
+        ModContent.BuffType<Plague>(),
+        BuffID.OnFire3,
+        ModContent.BuffType<SagePoison>(),
+        ModContent.BuffType<ElementalMix>(),
 
+    ];
     public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
     {
         if (Projectile.Calamity().stealthStrike)
@@ -76,7 +85,49 @@ public class OratorSpearProj : ModProjectile, ILocalizedModType
             int damage = 370;
             foreach(Projectile spear in Main.projectile.Where(p => p.active && p.ai[0] == 1f && (p.type == ModContent.ProjectileType<OratorSpearProj>())))
             {
-                damage += (int)(spear.localAI[0] / 60 * 25);
+                NPC impaledNPC = Main.npc[(int)spear.ai[1]];
+                if (CalamityUtils.IsAnEnemy(impaledNPC, false))
+                {
+                    for (int i = 0; i < impaledNPC.buffType.Length; i++)
+                    {
+                        if (DebuffTypes.Contains(impaledNPC.buffType[i]))
+                        {
+                            int index = DebuffTypes.IndexOf(impaledNPC.buffType[i]);
+                            switch (index)
+                            {
+                                case 0: //Daybreak
+                                    damage += (int)(100 * (impaledNPC.buffTime[i] / 60D) * VanillaHeatDamageMult(target));
+                                    break;
+                                case 1: //Nightwither
+                                    damage += (int)(100 * (impaledNPC.buffTime[i] / 60D) * ColdDamageMult(target));
+                                    break;
+                                case 2: //Brimstone Flames
+                                    damage += (int)(30 * (impaledNPC.buffTime[i] / 60D) * HeatDamageMult(target));
+                                    break;
+                                case 3: //Astral Infection
+                                    damage += (int)(37.5 * (impaledNPC.buffTime[i] / 60D) * SicknessDamageMult(target));
+                                    break;
+                                case 4: //Holy Flames
+                                    damage += (int)(100 * (impaledNPC.buffTime[i] / 60D) * HeatDamageMult(target));
+                                    break;
+                                case 5: //Plague
+                                    damage += (int)(50 * (impaledNPC.buffTime[i] / 60D) * SicknessDamageMult(target));
+                                    break;
+                                case 6: //Hellfire
+                                    damage += (int)(15 * (impaledNPC.buffTime[i] / 60D) * VanillaHeatDamageMult(target));
+                                    break;
+                                case 7: //Sage Poison
+                                    damage += (int)(impaledNPC.Calamity().sagePoisonDamage * (impaledNPC.buffTime[i] / 60D) * SicknessDamageMult(target));
+                                    break;
+                                case 8: //Elemental Mix
+                                    damage += (int)(200 * (impaledNPC.buffTime[i] / 60D));
+                                    break;
+                            }
+                            target.DelBuff(target.buffType.First(i => i == DebuffTypes[index]));
+                        }
+                    }
+                    damage += (int)(spear.localAI[0] / 60 * 25);
+                }
                 spear.Kill();
                 spear.active = false;
             }
