@@ -1,4 +1,5 @@
-﻿using Terraria.ModLoader.IO;
+﻿using CalamityMod.NPCs.NormalNPCs;
+using Terraria.ModLoader.IO;
 
 namespace Windfall.Common.Players;
 
@@ -37,5 +38,11 @@ public class LunarCultPlayer : ModPlayer
             tag["timesWatchmenTalked"] = timesWatchmenTalked;
         if (askedWatchmanAboutOrator)
             tag["askedWatchmanAboutOrator"] = askedWatchmanAboutOrator;
+    }
+
+    public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
+    {
+        if (apostleQuestTracker == 8 && target.type == ModContent.NPCType<Eidolist>() && target.life <= 0)
+            Main.LocalPlayer.LunarCult().apostleQuestTracker++;
     }
 }

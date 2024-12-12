@@ -3,6 +3,7 @@ using Windfall.Common.Systems;
 using Windfall.Content.Items.Essences;
 using Windfall.Content.Items.Journals;
 using Windfall.Content.Items.Lore;
+using Windfall.Content.Items.Quest.Casters;
 using Windfall.Content.Items.Quest.SealingRitual;
 using Windfall.Content.NPCs.TravellingNPCs;
 
@@ -15,13 +16,16 @@ public class WindfallDropHelper : GlobalNPC
     {
         #region Vanilla Enemy Drops
         if (npc.type == NPCID.DarkCaster)
-        {
             npcLoot.Add(ItemDropRule.Common(ItemID.WaterBolt, 10));
-        }
         if (npc.type == NPCID.AngryBones || npc.type == NPCID.AngryBonesBig || npc.type == NPCID.AngryBonesBigHelmet || npc.type == NPCID.AngryBonesBigMuscle)
-        {
             npcLoot.AddIf(() => TravellingCultist.QuestArtifact.Type == ModContent.ItemType<DeificInsignia>() && NPC.AnyNPCs(ModContent.NPCType<TravellingCultist>()), ModContent.ItemType<DeificInsignia>(), 5);
-        }
+        
+        if (npc.type == NPCID.DiabolistRed || npc.type == NPCID.DiabolistWhite)
+            npcLoot.AddIf(() => Main.LocalPlayer.LunarCult().apostleQuestTracker == 5, ModContent.ItemType<FlameIcon>(), 5);
+        if (npc.type == NPCID.RaggedCaster || npc.type == NPCID.RaggedCasterOpenCoat)
+            npcLoot.AddIf(() => Main.LocalPlayer.LunarCult().apostleQuestTracker == 5, ModContent.ItemType<LightIcon>(), 5);
+        if (npc.type == NPCID.Necromancer || npc.type == NPCID.NecromancerArmored)
+            npcLoot.AddIf(() => Main.LocalPlayer.LunarCult().apostleQuestTracker == 5, ModContent.ItemType<DeathIcon>(), 5);
         #endregion
         #region Vanilla Boss Drops
         if (npc.type == NPCID.EaterofWorldsHead)

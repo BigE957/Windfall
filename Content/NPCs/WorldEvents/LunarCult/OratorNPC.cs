@@ -2,6 +2,8 @@
 using Windfall.Content.Items.Utility;
 using Windfall.Content.Items.Weapons.Misc;
 using DialogueHelper.UI.Dialogue;
+using Windfall.Content.Items.Quest.Casters;
+using Terraria.ID;
 
 namespace Windfall.Content.NPCs.WorldEvents.LunarCult;
 
@@ -27,6 +29,7 @@ public class OratorNPC : ModNPC
         Main.npcFrameCount[Type] = 1;
         NPCID.Sets.NoTownNPCHappiness[Type] = true;
         ModContent.GetInstance<DialogueUISystem>().DialogueOpen += OpenEffect;
+        ModContent.GetInstance<DialogueUISystem>().ButtonClick += ClickEffect;
         ModContent.GetInstance<DialogueUISystem>().DialogueClose += CloseEffect;
     }
     public override void SetDefaults()
@@ -48,20 +51,101 @@ public class OratorNPC : ModNPC
     {
         Main.CloseNPCChatOrSign();
 
+        switch(Main.LocalPlayer.LunarCult().apostleQuestTracker)
+        {
+            case 4:
+                ModContent.GetInstance<DialogueUISystem>().DisplayDialogueTree(Windfall.Instance, "TheOrator/ApostleQuest1");
+                return "";
+            case 7:
+                ModContent.GetInstance<DialogueUISystem>().DisplayDialogueTree(Windfall.Instance, "TheOrator/ApostleQuest2");
+                return "";
+            case 9:
+                ModContent.GetInstance<DialogueUISystem>().DisplayDialogueTree(Windfall.Instance, "TheOrator/ApostleQuest2", 6);
+                return "";
+        }
+
         if (NPC.ai[0] == 0)
             ModContent.GetInstance<DialogueUISystem>().DisplayDialogueTree(Windfall.Instance, "TheOrator/Default");
         else
             ModContent.GetInstance<DialogueUISystem>().DisplayDialogueTree(Windfall.Instance, "TheOrator/" + AIState.ToString());           
 
-        return "In the Cult Base, straight Orating it. And by it i mean, lets just say, my Tablet";
+        return "";
     }
     private void OpenEffect(string treeKey, int dialogueID, int buttonID)
     {
-        if(treeKey == "TheOrator/Default" && !Main.LocalPlayer.LunarCult().awareOfLunarCoins)
+        DialogueUISystem uiSystem = ModContent.GetInstance<DialogueUISystem>();
+
+        if (treeKey == "TheOrator/Default")
         {
-            DialogueUISystem uiSystem = ModContent.GetInstance<DialogueUISystem>();
-            uiSystem.CurrentTree.Dialogues[0].Responses[0].SwapToTreeKey = "TheOrator/LunarCoins";
-            uiSystem.CurrentTree.Dialogues[0].Responses[0].Heading = 0;
+            if (!Main.LocalPlayer.LunarCult().awareOfLunarCoins)
+            {
+                uiSystem.CurrentTree.Dialogues[0].Responses[0].SwapToTreeKey = "TheOrator/LunarCoins";
+                uiSystem.CurrentTree.Dialogues[0].Responses[0].Heading = 0;
+            }
+            switch(Main.LocalPlayer.LunarCult().apostleQuestTracker)
+            {
+                case 5:
+                    uiSystem.CurrentTree.Dialogues[0].Responses[1].Requirement = true;
+                    uiSystem.CurrentTree.Dialogues[0].Responses[1].SwapToTreeKey = "TheOrator/ApostleQuest1";
+                    uiSystem.CurrentTree.Dialogues[0].Responses[1].Heading = 6;
+                    break;
+            }
+        }
+        if(treeKey == "TheOrator/ApostleQuest1")
+        {
+            ItemStack flame = new()
+            {
+                ItemID = ModContent.ItemType<FlameIcon>(),
+                SourceMod = "Windfall",
+                ItemName = "FlameIcon",
+                Stack = 1
+            };
+            ItemStack death = new()
+            {
+                ItemID = ModContent.ItemType<DeathIcon>(),
+                SourceMod = "Windfall",
+                ItemName = "FlameIcon",
+                Stack = 1
+            };
+            ItemStack light = new()
+            {
+                ItemID = ModContent.ItemType<LightIcon>(),
+                SourceMod = "Windfall",
+                ItemName = "FlameIcon",
+                Stack = 1
+            };
+            uiSystem.CurrentTree.Dialogues[6].Responses[0].Requirement = CanAffordCost(Main.LocalPlayer, flame) && CanAffordCost(Main.LocalPlayer, death) && CanAffordCost(Main.LocalPlayer, light);
+        }
+    }
+
+    private void ClickEffect(string treeKey, int dialogueID, int buttonID)
+    {
+        if (treeKey == "TheOrator/ApostleQuest1" && dialogueID == 6 && buttonID == 0)
+        {
+            ItemStack flame = new()
+            {
+                ItemID = ModContent.ItemType<FlameIcon>(),
+                SourceMod = "Windfall",
+                ItemName = "FlameIcon",
+                Stack = 1
+            };
+            ItemStack death = new()
+            {
+                ItemID = ModContent.ItemType<DeathIcon>(),
+                SourceMod = "Windfall",
+                ItemName = "FlameIcon",
+                Stack = 1
+            };
+            ItemStack light = new()
+            {
+                ItemID = ModContent.ItemType<LightIcon>(),
+                SourceMod = "Windfall",
+                ItemName = "FlameIcon",
+                Stack = 1
+            };
+            PayAffordCost(Main.LocalPlayer, flame);
+            PayAffordCost(Main.LocalPlayer, death);
+            PayAffordCost(Main.LocalPlayer, light);
         }
     }
 
@@ -122,11 +206,17 @@ public class OratorNPC : ModNPC
                     SoundEngine.PlaySound(SoundID.MenuTick);
                 }
                 break;
+            case "THeOrator/ApostleQuest1":
+                if (dialogueID == 1)
+                    Main.LocalPlayer.LunarCult().apostleQuestTracker = -1;
+                else if(dialogueID == 5 || dialogueID == 12)
+                    Main.LocalPlayer.LunarCult().apostleQuestTracker++; //5:5 12:6
+                break;
+            case "THeOrator/ApostleQuest2":
+                if (dialogueID == 5 || dialogueID == 8)
+                    Main.LocalPlayer.LunarCult().apostleQuestTracker++; //5:8 //8:10
+                break;
         }
-    }
-    public override void OnChatButtonClicked(bool firstButton, ref string shopName)
-    {
-        shopName = "Shop";
     }
     public override void AddShops()
     {
@@ -183,5 +273,44 @@ public class OratorNPC : ModNPC
             shopSpecialCurrency = Windfall.LunarCoinCurrencyID
         });
         shop.Register();
+    }
+
+    private static bool CanAffordCost(Player player, ItemStack price)
+    {
+        int amount = price.Stack;
+        int itemID = price.ItemID;
+        if (itemID == -1)
+            itemID = price.FetchItemID();
+        if (itemID == -1) //If the ItemType is unable to be found, then returns false; as the player can't pay with something that doesn't exist :P
+            return false;
+        foreach (Item item in player.inventory.Where(i => i.type == itemID))
+        {
+            if (item.stack >= amount)
+            {
+                amount = 0;
+                break;
+            }
+            else
+                amount -= item.stack;
+        }
+        return amount == 0;
+    }
+    private static void PayAffordCost(Player player, ItemStack price)
+    {
+        foreach (Item item in player.inventory.Where(i => i.type == price.ItemID))
+        {
+            int amount = price.Stack;
+            if (item.stack >= amount)
+            {
+                item.stack -= amount;
+                amount = 0;
+                break;
+            }
+            else
+            {
+                amount -= item.stack;
+                item.stack = 0;
+            }
+        }
     }
 }

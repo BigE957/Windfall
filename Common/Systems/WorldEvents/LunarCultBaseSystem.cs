@@ -189,6 +189,7 @@ public class LunarCultBaseSystem : ModSystem
         //Main.NewText("Active");
         if (NPC.downedPlantBoss)
         {
+            #region Main Character Spawning
             if (!NPC.AnyNPCs(ModContent.NPCType<Seamstress>()))
                 NPC.NewNPC(Entity.GetSource_None(), LunarCultBaseLocation.X * 16 + (BaseFacingLeft ? -1408 : 1408), (LunarCultBaseLocation.Y * 16) + 400, ModContent.NPCType<Seamstress>());
             if (!NPC.AnyNPCs(ModContent.NPCType<TheChef>()))
@@ -199,14 +200,16 @@ public class LunarCultBaseSystem : ModSystem
                 return;
             if (!NPC.AnyNPCs(ModContent.NPCType<OratorNPC>()))
                 NPC.NewNPC(Entity.GetSource_None(), LunarCultBaseLocation.X * 16 + (BaseFacingLeft ? -1858 : 1858), (CultBaseTileArea.Top + 30) * 16, ModContent.NPCType<OratorNPC>());
-            
+            #endregion
+
             //Main.NewText(LunarCultBaseLocation.ToWorldCoordinates() - Main.LocalPlayer.Center);
-            
+
             Player closestPlayer = Main.player[Player.FindClosest(CultBaseWorldArea.TopLeft(), CultBaseWorldArea.Width, CultBaseWorldArea.Height)];
             float PlayerDistFromHideout = (closestPlayer.Center - CultBaseWorldArea.Center()).Length();
             if (PlayerDistFromHideout < 1600 && Main.npc.Where(n => n.active && n.type == ModContent.NPCType<Fingerling>()).Count() < 16)
                 SpawnFingerling();
 
+            #region Nearby Enemy Murdering
             foreach (NPC npc in Main.npc.Where(n => n.active))
             {
                 if (!npc.dontTakeDamage && npc.lifeMax != 1 && !npc.friendly && !npc.boss && npc.type != ModContent.NPCType<PortalMole>())
@@ -216,11 +219,13 @@ public class LunarCultBaseSystem : ModSystem
                         npc.AddBuff(ModContent.BuffType<Entropy>(), 2);
                 }                    
             }
+            #endregion
         }
         if (Main.player.Any(p => p.active && !p.dead && CultBaseTileArea.Contains(p.Center.ToTileCoordinates())))
             CalamityWorld.ArmoredDiggerSpawnCooldown = 36000;
         foreach (Player player in Main.player.Where(p => p.active && !p.dead))
-        {                    
+        {
+            #region Basement Teleport
             if (CultBaseTileArea.Contains(player.Center.ToTileCoordinates()) && player.Center.Y > (LunarCultBaseLocation.Y + 30) * 16)
             {
                 for (int i = 0; i <= 20; i++)
@@ -236,6 +241,7 @@ public class LunarCultBaseSystem : ModSystem
                     DisplayMessage(orator.Hitbox, Color.LimeGreen, path);
                 }
             }
+            #endregion
         }
         //State = SystemState.CheckReqs;
         //ActivityTimer = -1;
@@ -754,8 +760,8 @@ public class LunarCultBaseSystem : ModSystem
                     foreach (Player player in Main.player.Where(p => p.active))
                     {
                         player.LunarCult().hasRecievedChefMeal = false;
-                        if (Main.LocalPlayer.LunarCult().apostleQuestTracker == 2)
-                            Main.LocalPlayer.LunarCult().apostleQuestTracker = 3;
+                        if (player.LunarCult().apostleQuestTracker == 2 || player.LunarCult().apostleQuestTracker == 6 || player.LunarCult().apostleQuestTracker == 10)
+                            player.LunarCult().apostleQuestTracker++;
                     }
                 }
 
