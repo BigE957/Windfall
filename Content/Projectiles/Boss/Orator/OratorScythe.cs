@@ -1,13 +1,4 @@
-﻿using CalamityMod.Projectiles.Summon;
-using CalamityMod.World;
-using Luminance.Common.Utilities;
-using System;
-using System.Collections.Generic;
-using System.Diagnostics.Metrics;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Windfall.Common.Graphics.Metaballs;
+﻿using CalamityMod.World;
 using Windfall.Content.NPCs.Bosses.Orator;
 
 namespace Windfall.Content.Projectiles.Boss.Orator;
@@ -15,7 +6,7 @@ namespace Windfall.Content.Projectiles.Boss.Orator;
 public class OratorScythe : ModProjectile
 {
     public new static string LocalizationCategory => "Projectiles.Boss";
-    public override string Texture => "CalamityMod/Projectiles/Rogue/CelestusMiniScythe";
+    public override string Texture => "Windfall/Assets/Items/Weapons/Melee/NewMoon";
     public override void SetStaticDefaults()
     {
         Main.projFrames[Projectile.type] = 1;
@@ -25,9 +16,8 @@ public class OratorScythe : ModProjectile
 
     public override void SetDefaults()
     {
-        Projectile.width = 24;
-        Projectile.height = 24;
-        Projectile.scale = 2f;
+        Projectile.width = Projectile.height = 90;
+        Projectile.scale = 1f;
         Projectile.hostile = true;
         Projectile.tileCollide = false;
         Projectile.ignoreWater = true;
@@ -112,8 +102,8 @@ public class OratorScythe : ModProjectile
     {
         Texture2D tex = ModContent.Request<Texture2D>(Texture).Value;
         Vector2 drawPosition = Projectile.Center - Main.screenPosition;
-        DrawAfterimagesCentered(Projectile, ProjectileID.Sets.TrailingMode[Projectile.type], Color.White * Projectile.Opacity, 2);
-        Main.EntitySpriteDraw(tex, drawPosition, null, Color.White * Projectile.Opacity, Projectile.rotation, Projectile.Size * 0.5f, Projectile.scale, SpriteEffects.None);
+        DrawAfterimagesCentered(Projectile, ProjectileID.Sets.TrailingMode[Projectile.type], Color.White * Projectile.Opacity, 1);
+        Main.EntitySpriteDraw(tex, drawPosition, null, Color.White * Projectile.Opacity, Projectile.rotation, tex.Size() * 0.5f, Projectile.scale, SpriteEffects.None);
         return false;
     }
 

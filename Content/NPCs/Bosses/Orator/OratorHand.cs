@@ -9,7 +9,7 @@ namespace Windfall.Content.NPCs.Bosses.Orator;
 
 public class OratorHand : ModNPC
 {
-    public override string Texture => "Windfall/Assets/NPCs/Enemies/OratorHand";
+    public override string Texture => "Windfall/Assets/NPCs/Enemies/Orator_Hand";
     public override string BossHeadTexture => "Windfall/Assets/NPCs/Bosses/TheOrator_Boss_Head";
     private int OratorIndex
     {
@@ -24,7 +24,7 @@ public class OratorHand : ModNPC
 
     public override void SetStaticDefaults()
     {
-        Main.npcFrameCount[Type] = 6;
+        Main.npcFrameCount[Type] = 9;
 
         NPCID.Sets.NPCBestiaryDrawModifiers drawModifiers = new()
         {
@@ -917,7 +917,7 @@ public class OratorHand : ModNPC
     }
     public override void FindFrame(int frameHeight)
     {            
-        NPC.frame.Width = ModContent.Request<Texture2D>(this.Texture).Width() / 3;
+        NPC.frame.Width = ModContent.Request<Texture2D>(this.Texture).Width() / 4;
         switch (CurrentPose)
         {
             case Pose.Fist:
@@ -938,11 +938,11 @@ public class OratorHand : ModNPC
         NPC.frameCounter++;
         if (deadCounter > 0 && deadCounter < 300)
             NPC.frameCounter += ((deadCounter / 300f) * 4f);
-        if (NPC.frameCounter >= 8)
+        if (NPC.frameCounter >= 6)
         {
             NPC.frameCounter = 0;
             NPC.frame.Y += frameHeight;
-            if (NPC.frame.Y >= frameHeight * 6)
+            if (NPC.frame.Y >= frameHeight * 9)
                 NPC.frame.Y = 0;            
         }            
     }
@@ -952,6 +952,7 @@ public class OratorHand : ModNPC
         Texture2D texture = TextureAssets.Npc[NPC.type].Value;
         Vector2 drawPosition = NPC.Center - screenPos + (Vector2.UnitY * NPC.gfxOffY);
         Vector2 origin = NPC.frame.Size() * 0.5f;
+        origin.X *= 0.75f;
         SpriteEffects spriteEffects = SpriteEffects.None;
         if (NPC.direction == -1)
             spriteEffects = SpriteEffects.FlipVertically;
@@ -962,9 +963,9 @@ public class OratorHand : ModNPC
     int cuffCounter = 0;
     public override void PostDraw(SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor)
     {            
-        Texture2D texture = ModContent.Request<Texture2D>("Windfall/Assets/NPCs/Enemies/OratorHandCuffs").Value;
+        Texture2D texture = ModContent.Request<Texture2D>("Windfall/Assets/NPCs/Enemies/Orator_Hand_Cuffs").Value;
         cuffFrame.Width = texture.Width;
-        cuffFrame.Height = texture.Height / 6;
+        cuffFrame.Height = texture.Height / 9;
         cuffCounter++;
 
         if (cuffCounter >= 16)
@@ -974,12 +975,17 @@ public class OratorHand : ModNPC
             if (cuffFrame.Y >= cuffFrame.Height * 6)
                 cuffFrame.Y = 0;
         }
-        
+
         Vector2 drawPosition = NPC.Center - screenPos + (Vector2.UnitY * NPC.gfxOffY);
         Vector2 origin = cuffFrame.Size() * 0.5f;
+        origin.X *= 0.8f;
+        origin.Y -= 1;
         SpriteEffects spriteEffects = SpriteEffects.None;
         if (NPC.direction == -1)
+        {
             spriteEffects = SpriteEffects.FlipVertically;
-        spriteBatch.Draw(texture, drawPosition, cuffFrame, NPC.GetAlpha(drawColor), NPC.rotation - (CurrentPose == Pose.Palm ? PiOver2 * NPC.direction : 0), origin, NPC.scale, spriteEffects, 0f);
+            origin.Y += 2;
+        }
+        spriteBatch.Draw(texture, drawPosition, cuffFrame, NPC.GetAlpha(drawColor), NPC.rotation, origin, NPC.scale, spriteEffects, 0f);
     }
 }
