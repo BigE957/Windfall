@@ -1623,7 +1623,7 @@ public class TheOrator : ModNPC
         if (scytheSlice || scytheSpin)
         {
             NPC.frame.Y = frameHeight;
-            NPC.frame.X = frameHeight;
+            NPC.frame.X = 144;
         }
         else if (AIState == States.DarkStorm || AIState == States.DarkEmbrace || AIState == States.DarkMonster || AIState == States.DarkCollision || Main.projectile.Any(p => p.active && p.type == ModContent.ProjectileType<OratorScythe>()))
         {
@@ -1632,7 +1632,7 @@ public class TheOrator : ModNPC
         }
         else if (AIState == States.DarkFlight || AIState == States.DarkSpawn || AIState == States.DarkBarrage || AIState == States.DarkTides || AIState == States.Defeat || AIState == States.PhaseChange)
         {
-            NPC.frame.X = frameHeight;
+            NPC.frame.X = 144;
             NPC.frame.Y = 0;
         }
         else
