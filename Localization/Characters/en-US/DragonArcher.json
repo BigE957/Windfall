@@ -9,7 +9,14 @@
       "FrameCount": 1,
       "FrameRate": 0,
       "Loop": false,
-      "AnimateCondition": false
+      "AnimateCondition": false,
+      "HeadArea":
+        {
+          "X": 69,
+          "Y": 42,
+          "Width": 100,
+          "Height": 80
+        } 
     }
   ],
   "Style": "DialogueHelper.UI.Dialogue.DialogueStyles.DefaultDialogueStyle",

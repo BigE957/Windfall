@@ -21,6 +21,7 @@
     <None Remove="Assets\Items\Weapons\Misc\RiftWeaverGlow.png" />
     <None Remove="Assets\Items\Weapons\Rogue\OratorSpear.png" />
     <None Remove="Assets\Items\Weapons\Summon\ShadowHandStaff.png" />
+    <None Remove="Assets\NPCs\Bosses\TheOrator_Boss.png" />
     <None Remove="Assets\NPCs\WorldEvents\Seamstress.png" />
     <None Remove="Assets\Projectiles\Boss\HandRings.png" />
     <None Remove="Assets\Projectiles\Boss\HandRingsWhiteOut0.png" />
@@ -73,6 +74,12 @@
     <None Remove="Content\Projectiles\Weapons\Misc\RiftWeaverProj.png" />
     <None Remove="Content\Tiles\Furnature\OratorMonolithTile.png" />
     <None Remove="Content\Tiles\Special\DatabaseTerminal.png" />
+    <None Remove="Content\UI\Dialogue\Emoticons\Angry_Emote_Bottom.png" />
+    <None Remove="Content\UI\Dialogue\Emoticons\Angry_Emote_Top.png" />
+    <None Remove="Content\UI\Dialogue\Emoticons\Confused_Emote.png" />
+    <None Remove="Content\UI\Dialogue\Emoticons\Happy_Emote.png" />
+    <None Remove="Content\UI\Dialogue\Emoticons\Heart_Emote.png" />
+    <None Remove="Content\UI\Dialogue\Emoticons\Sad_Emote.png" />
     <None Remove="Content\UI\DraedonsDatabase\DraedonUIArrowLeft.png" />
     <None Remove="Content\UI\DraedonsDatabase\DraedonUIArrowRight.png" />
     <None Remove="Content\UI\DraedonsDatabase\DraedonUIBG.png" />
@@ -91,8 +98,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Content\Items\Armor\Selenic\" />
-    <Folder Include="SubModules\" />
-    <Folder Include="SubModules\DialogueHelper\" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="CalamityMod">
