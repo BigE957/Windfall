@@ -141,7 +141,7 @@ public class SelenicDialogueStyle : DialogueStyle
             #region Button Updates
             DialogueUIState state = ModContent.GetInstance<DialogueUISystem>().DialogueUIState;
             DialogueText dialogue = (DialogueText)textbox.Children.Where(c => c.GetType() == typeof(DialogueText)).First();
-            if (dialogue.crawling || state.Children.Count() == 1)
+            if (dialogue.Crawling || state.Children.Count() == 1)
                 return;
             UIElement[] responseButtons = state.Children.Where(c => c != state.Children.First() && c.GetType() == typeof(UIPanel)).ToArray();
 
