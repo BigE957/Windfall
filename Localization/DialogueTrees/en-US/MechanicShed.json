@@ -18,15 +18,9 @@
       "DialogueText": [
         {
           "Text": "Just a small group keeping an eye on things. ",
-          "Color": "#e026da",
-          "TextEffect": "DialogueHelper.UI.Dialogue.TextEffects.ShakyText",
-          "EndPause": 120
         },
         {
           "Text": "Not sure if its any of your business though.",
-          "Rainbow": true,
-          "TextEffect": "DialogueHelper.UI.Dialogue.TextEffects.WavyText",
-          "TextDelay": 8
         }
       ],
       "Responses":
