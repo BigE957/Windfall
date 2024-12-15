@@ -1,7 +1,7 @@
 {
   "Dialogues": [
     {
-      "Text": "Oh? I believe you already finished your task for today. Is... something the matter?",
+      "DialogueText": [ { "Text": "Oh? I believe you already finished your task for today. Is... something the matter?" } ],
       "Responses": [
         {
           "Title": "Nope, just wanted to talk.",
@@ -14,7 +14,7 @@
       ]
     },
     {
-      "Text": "Ah! I see. Well then, safe travels, and I hope to see you again!",
+      "DialogueText": [ { "Text": "Ah! I see. Well then, safe travels, and I hope to see you again!" } ],
       "Responses": [
         {
           "Title": "See ya!"
@@ -25,7 +25,7 @@
       ]
     },
     {
-      "Text": "Hello again, my friend. Finished another task I assume...? That's great to hear! Is there anything you'd like to talk about?",
+      "DialogueText": [ { "Text": "Hello again, my friend. Finished another task I assume...? That's great to hear! Is there anything you'd like to talk about?" } ],
       "Responses": [
         {
           "Title": "What exactly is this place?",
@@ -42,10 +42,10 @@
       ]
     },
     {
-      "Text": "You... want to just... talk with me? I'll admit I'm not very used to being asked to chat. Not to say I don't want to! I'd be more than happy to!"
+      "DialogueText": [ { "Text": "You... want to just... talk with me? I'll admit I'm not very used to being asked to chat. Not to say I don't want to! I'd be more than happy to!" } ]
     },
     {
-      "Text": "What exactly would you like to talk about?",
+      "DialogueText": [ { "Text": "What exactly would you like to talk about?" } ],
       "Responses": [
         {
           "Title": "What exactly is this place?",
@@ -62,7 +62,7 @@
       ]
     },
     {
-      "Text": "Anything else you'd like to talk about?",
+      "DialogueText": [ { "Text": "Anything else you'd like to talk about?" } ],
       "Responses": [
         {
           "Title": "That's all!"
@@ -82,7 +82,7 @@
       ]
     },
     {
-      "Text": "Oh, curious about our sanctum's history? It's actually quite interesting! This place pre-dates our order by quite a lot of time; dating all the way back to the Draconic Era. It was formerly a great library, and the home of a mighty dragon! Pretty cool, huh?",
+      "DialogueText": [ { "Text": "Oh, curious about our sanctum's history? It's actually quite interesting! This place pre-dates our order by quite a lot of time; dating all the way back to the Draconic Era. It was formerly a great library, and the home of a mighty dragon! Pretty cool, huh?" } ],
       "Responses": [
         {
           "Title": "Very interesting!",
@@ -95,7 +95,7 @@
       ]
     },
     {
-      "Text": "Yup! Though we don't know much about the dragon itself, nor what actually happened to it. If there were anything here that'd hae told us, we'd know. The Orator was very thorough in searching through all the books that were first found here.",
+      "DialogueText": [ { "Text": "Yup! Though we don't know much about the dragon itself, nor what actually happened to it. If there were anything here that'd hae told us, we'd know. The Orator was very thorough in searching through all the books that were first found here." } ],
       "Responses": [
         {
           "Title": "I see.",
@@ -108,7 +108,7 @@
       ]
     },
     {
-      "Text": "It is quite a beautiful thing; isn't it? Well this is something I actually do know the story of! Some of the texts here told of the Dragon's journey down here, and in it we learned that this tree actually came from the Dragon's old home! It must hold some sort of magic; how else could it still be thriving in such a different environment?",
+      "DialogueText": [ { "Text": "It is quite a beautiful thing; isn't it? Well this is something I actually do know the story of! Some of the texts here told of the Dragon's journey down here, and in it we learned that this tree actually came from the Dragon's old home! It must hold some sort of magic; how else could it still be thriving in such a different environment?" } ],
       "Responses": [
         {
           "Title": "Wow!",
@@ -121,7 +121,7 @@
       ]
     },
     {
-      "Text": "Pretty much! Though I'm not just a glorified greeter. It's also my job to keep out any unwanted guests; our Order is quite exclusive after all.",
+      "DialogueText": [ { "Text": "Pretty much! Though I'm not just a glorified greeter. It's also my job to keep out any unwanted guests; our Order is quite exclusive after all." } ],
       "Responses": [
         {
           "Title": "Ah, I see!",
@@ -134,7 +134,7 @@
       ]
     },
     {
-      "Text": "A handful of time, actually! While our master is able to protect this place from the sorts of dangerous creatures you tend to find at these depths, I escort anyone out who isn't invited. The Dragon Cult would be a prime example. Their spies have tried to slip into our home a number of times; all of which were unsuccessful of course. They really aren't the best at blending in...",
+      "DialogueText": [ { "Text": "A handful of time, actually! While our master is able to protect this place from the sorts of dangerous creatures you tend to find at these depths, I escort anyone out who isn't invited. The Dragon Cult would be a prime example. Their spies have tried to slip into our home a number of times; all of which were unsuccessful of course. They really aren't the best at blending in..." } ],
       "Responses": [
         {
           "Title": "Um, yeah...",
@@ -147,7 +147,7 @@
       ]
     },
     {
-      "Text": "Apologies, but It'd be quite rude to speak about my master behind his back. I'm afraid I can't answer that.",
+      "DialogueText": [ { "Text": "Apologies, but It'd be quite rude to speak about my master behind his back. I'm afraid I can't answer that." } ],
       "Responses": [
         {
           "Title": "Oh, alright.",

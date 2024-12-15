@@ -1,7 +1,7 @@
 {
   "Dialogues": [
     {
-      "Text": "I'm needed elsewhere. Be seeing you.",
+      "DialogueText": [ { "Text": "I'm needed elsewhere. Be seeing you." } ],
       "Responses": [
         {
           "Title": "See you later!"

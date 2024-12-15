@@ -1,7 +1,7 @@
 {
   "Dialogues": [
     {
-      "Text": "I can't wait to see the Orator again! He's so cool right? Wait, you're new around here... You know the Orator, right?",
+      "DialogueText": [ { "Text": "I can't wait to see the Orator again! He's so cool right? Wait, you're new around here... You know the Orator, right?" } ],
       "Responses": [
         {
           "Title": "Yeah, I met them.",
@@ -14,7 +14,7 @@
       ]
     },
     {
-      "Text": "You met him personally?! No way! You and Vivian are so lucky... I've only seen him during his speeches. I can't believe he spoke to you directly! Oh, what I'd give to be able to ask him about this place and its history!",
+      "DialogueText": [ { "Text": "You met him personally?! No way! You and Vivian are so lucky... I've only seen him during his speeches. I can't believe he spoke to you directly! Oh, what I'd give to be able to ask him about this place and its history!" } ],
       "Responses": [
         {
           "Title": "Vivian?",
@@ -27,7 +27,7 @@
       ]
     },
     {
-      "Text": "Yeah. They're the one with the flower in their hair. They're kinda spooky if you ask me, all dark and brooding. I'm not exactly sure why the Orator is so interested in them... Maybe their magic caught his interest? Or perhaps he wishes to knwo more about Azafure? I can't say for certain. I just know I wish I were in her position!",
+      "DialogueText": [ { "Text": "Yeah. They're the one with the flower in their hair. They're kinda spooky if you ask me, all dark and brooding. I'm not exactly sure why the Orator is so interested in them... Maybe their magic caught his interest? Or perhaps he wishes to knwo more about Azafure? I can't say for certain. I just know I wish I were in her position!" } ],
       "Responses": [
         {
           "Title": "Interesting.",
@@ -36,7 +36,7 @@
       ]
     },
     {
-      "Text": "Of couse! Its kinda in the name, isn't it? Once in a blue moon he'll deliver a speech like that bishop did himself. Those are always my favorite speeches. Not only is the Orator a talented speaker, but they have a truly extensive knowledge about this world! I just wish I could learn more from them!",
+      "DialogueText": [ { "Text": "Of couse! Its kinda in the name, isn't it? Once in a blue moon he'll deliver a speech like that bishop did himself. Those are always my favorite speeches. Not only is the Orator a talented speaker, but they have a truly extensive knowledge about this world! I just wish I could learn more from them!" } ],
       "Responses": [
         {
           "Title": "Yeah.",
@@ -49,7 +49,7 @@
       ]
     },
     {
-      "Text": "What?! You don't know who the Orator is? They're this order's leader! Not only that, they may be the most fascinating person I've ever come across! Did you know that the building we're currently in dates back to the Draconic Era?! The history that could be contained within this building... Its astounding!!",
+      "DialogueText": [ { "Text": "What?! You don't know who the Orator is? They're this order's leader! Not only that, they may be the most fascinating person I've ever come across! Did you know that the building we're currently in dates back to the Draconic Era?! The history that could be contained within this building... Its astounding!!" } ],
       "Responses": [
         {
           "Title": "Order...?",
@@ -62,7 +62,7 @@
       ]
     },
     {
-      "Text": "Yes, the Selenic Order to be exact. The Orator formed the order with the hopes of making the world a better place, and they know just how to do it! We've been working on bringing that plan into fruition, though to be honest I'm mainly here to learn. But I trust someone as wise az the Orator, so I certainly don't mind helping with their work.'",
+      "DialogueText": [ { "Text": "Yes, the Selenic Order to be exact. The Orator formed the order with the hopes of making the world a better place, and they know just how to do it! We've been working on bringing that plan into fruition, though to be honest I'm mainly here to learn. But I trust someone as wise az the Orator, so I certainly don't mind helping with their work.'" } ],
       "Responses": [
         {
           "Title": "Quite interesting.",
@@ -71,7 +71,7 @@
       ]
     },
     {
-      "Text": "Oh, you mean't like that... Uh... No one really knows. Their identity is a total mystery; one I'm quite eager to solve... All I know is that they must be quite ancient if they were able to establish their order in a place such as this... Easilly having been around before the Crusade.",
+      "DialogueText": [ { "Text": "Oh, you mean't like that... Uh... No one really knows. Their identity is a total mystery; one I'm quite eager to solve... All I know is that they must be quite ancient if they were able to establish their order in a place such as this... Easilly having been around before the Crusade." } ],
       "Responses": [
         {
           "Title": "I see...",
@@ -80,7 +80,7 @@
       ]
     },
     {
-      "Text": "Well, hope I was able to help you out, new guy! I gotta get going. Hope to see you again!",
+      "DialogueText": [ { "Text": "Well, hope I was able to help you out, new guy! I gotta get going. Hope to see you again!" } ],
       "Responses": [
         {
           "Title": "Thanks!"

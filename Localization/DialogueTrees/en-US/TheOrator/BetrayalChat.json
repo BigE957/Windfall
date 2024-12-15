@@ -1,13 +1,13 @@
 {
   "Dialogues": [
     {
-      "Text": "Yo wanna betray the Dragon Cult?",
+      "DialogueText": [ { "Text": "Yo wanna betray the Dragon Cult?" } ],
       "Responses": [
         {
-          "Title": "No, I'm not a meanie.",
+          "Title": "No, I'm not a meanie."
         },
         {
-          "Title": "Ah hell yeah.",
+          "Title": "Ah hell yeah."
         }
       ]
     }

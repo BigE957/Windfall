@@ -1,7 +1,7 @@
 {
   "Dialogues": [
     {
-      "Text": "That was... Quite the meeting today, huh.",
+      "DialogueText": [ { "Text": "That was... Quite the meeting today, huh." } ],
       "Responses": [
         {
           "Title": "Quite exciting!",
@@ -14,7 +14,7 @@
       ]
     },
     {
-      "Text": "I know right?! Its scary how quickly things can change, and I was just beginning to settle into this whole thing too. I really don't know how to keep up...",
+      "DialogueText": [ { "Text": "I know right?! Its scary how quickly things can change, and I was just beginning to settle into this whole thing too. I really don't know how to keep up..." } ],
       "Responses": [
         {
           "Title": "Why bother then?",
@@ -27,7 +27,7 @@
       ]
     },
     {
-      "Text": "I guess...? I don't know... I'm not really sure how to feel right now to be honest. This is... quite big news to just drop out of nowhere, right?",
+      "DialogueText": [ { "Text": "I guess...? I don't know... I'm not really sure how to feel right now to be honest. This is... quite big news to just drop out of nowhere, right?" } ],
       "Responses": [
         {
           "Title": "That's true.",
@@ -40,7 +40,7 @@
       ]
     },
     {
-      "Text": "You think so? Perhaps I'm worrying over nothing. This is good news after all, right? Once we succeed, everything will be better.",
+      "DialogueText": [ { "Text": "You think so? Perhaps I'm worrying over nothing. This is good news after all, right? Once we succeed, everything will be better." } ],
       "Responses": [
         {
           "Title": "Of course!",
@@ -53,7 +53,7 @@
       ]
     },
     {
-      "Text": "You make a fair point... If I'm unhappy with this life, I can always just leave. I'm back on my feet now. I don't need to keep up with this stuff if I don't want to.",
+      "DialogueText": [ { "Text": "You make a fair point... If I'm unhappy with this life, I can always just leave. I'm back on my feet now. I don't need to keep up with this stuff if I don't want to." } ],
       "Responses": [
         {
           "Title": "Yeah!",
@@ -66,7 +66,7 @@
       ]
     },
     {
-      "Text": "I mean like, couldn't they have given us more of a warning? They're always so vague with these things... It can get hard to hold onto my faith when it keeps being tested like this...",
+      "DialogueText": [ { "Text": "I mean like, couldn't they have given us more of a warning? They're always so vague with these things... It can get hard to hold onto my faith when it keeps being tested like this..." } ],
       "Responses": [
         {
           "Title": "Be strong.",
@@ -79,7 +79,7 @@
       ]
     },
     {
-      "Text": "I don't... No, you're right. This is good news. Once we succeed, everything will be better. That's what the Orator promised us, and I shouldn't doubt that he'll deliver.",
+      "DialogueText": [ { "Text": "I don't... No, you're right. This is good news. Once we succeed, everything will be better. That's what the Orator promised us, and I shouldn't doubt that he'll deliver." } ],
       "Responses": [
         {
           "Title": "That's the spirit!",
@@ -92,7 +92,7 @@
       ]
     },
     {
-      "Text": "Thank you for telling me that. I'm not sure I'd have figured this out on my own. I don't need this... between you and me, cult, any more. I'm done here!",
+      "DialogueText": [ { "Text": "Thank you for telling me that. I'm not sure I'd have figured this out on my own. I don't need this... between you and me, cult, any more. I'm done here!" } ],
       "Responses": [
         {
           "Title": "Hell yeah!"
@@ -105,7 +105,7 @@
       ]
     },
     {
-      "Text": "Yes, I just need to remain faithful. Our reward for these trials shall soon be upon us. Thank you. I really needed to be reminded of that.",
+      "DialogueText": [ { "Text": "Yes, I just need to remain faithful. Our reward for these trials shall soon be upon us. Thank you. I really needed to be reminded of that." } ],
       "Responses": [
         {
           "Title": "Your Welcome."

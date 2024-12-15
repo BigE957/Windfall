@@ -1,7 +1,7 @@
 {
   "Dialogues": [
     {
-      "Text": "There you are! I've been expecting you. So, you're interested in joining the ranks of the Apostles, hm? I must warn you, the trials that'll be required of you aren't for the faint of heart, and the secrets you may come to learn could shatter the minds of the weak. Do you still wish to proceed?",
+      "DialogueText": [ { "Text": "There you are! I've been expecting you. So, you're interested in joining the ranks of the Apostles, hm? I must warn you, the trials that'll be required of you aren't for the faint of heart, and the secrets you may come to learn could shatter the minds of the weak. Do you still wish to proceed?" } ],
       "Responses": [
         {
           "Title": "I do.",
@@ -14,7 +14,7 @@
       ]
     },
     {
-      "Text": "A fair choice. In that case, I do ask you to not tell anyone of this. There's good reason few know of my Apostles' existance...",
+      "DialogueText": [ { "Text": "A fair choice. In that case, I do ask you to not tell anyone of this. There's good reason few know of my Apostles' existance..." } ],
       "Responses": [
         {
           "Title": "Understood."
@@ -25,7 +25,7 @@
       ]
     },
     {
-      "Text": "Hmm, very well then. In that case we should begin right away, wouldn't you agree? To become an Apostle, you must first prove yourself capable. I'll be giving you a series of missions that otherwise would have been handled by my Apostles. Success shall prove you have what it takes to work alongside them.",
+      "DialogueText": [ { "Text": "Hmm, very well then. In that case we should begin right away, wouldn't you agree? To become an Apostle, you must first prove yourself capable. I'll be giving you a series of missions that otherwise would have been handled by my Apostles. Success shall prove you have what it takes to work alongside them." } ],
       "Responses": [
         {
           "Title": "What's my mission?",
@@ -34,10 +34,10 @@
       ]
     },
     {
-      "Text": "Straight to business, hm? I like it. Recently, as a result of your own hand, the souls within the Dragon Cult's dungeon have been stirred into a frenzy. Worry not, I'm not blaming you for that. In fact, this provides us with a valuable opportunity."
+      "DialogueText": [ { "Text": "Straight to business, hm? I like it. Recently, as a result of your own hand, the souls within the Dragon Cult's dungeon have been stirred into a frenzy. Worry not, I'm not blaming you for that. In fact, this provides us with a valuable opportunity." } ]
     },
     {
-      "Text": "A great many, powerful magic casters met their end trying to keep that crypt under control. I'd like to take this chance to gather any artifacts such mages may have had in their possession. Such artifacts may prove ever useful in things to come... Think you can do that for me?",
+      "DialogueText": [ { "Text": "A great many, powerful magic casters met their end trying to keep that crypt under control. I'd like to take this chance to gather any artifacts such mages may have had in their possession. Such artifacts may prove ever useful in things to come... Think you can do that for me?" } ],
       "Responses": [
         {
           "Title": "Of course!",
@@ -46,7 +46,7 @@
       ]
     },
     {
-      "Text": "Wonderful! Then you best be off. I look forward to hearing back from you.",
+      "DialogueText": [ { "Text": "Wonderful! Then you best be off. I look forward to hearing back from you." } ],
       "Responses": [
         {
           "Title": "Bye."
@@ -54,7 +54,7 @@
       ]
     },
     {
-      "Text": "Ah, yes. Have you gathered the relics I was looking for?",
+      "DialogueText": [ { "Text": "Ah, yes. Have you gathered the relics I was looking for?" } ],
       "Responses": [
         {
           "Title": "Here you are!",
@@ -67,7 +67,7 @@
       ]
     },
     {
-      "Text": "I see... I've heard the casters within the Dungeon can be quite elusive. Double your efforts, and bring me the relics they hold.",
+      "DialogueText": [ { "Text": "I see... I've heard the casters within the Dungeon can be quite elusive. Double your efforts, and bring me the relics they hold." } ],
       "Responses": [
         {
           "Title": "Understood."
@@ -75,16 +75,16 @@
       ]
     },
     {
-      "Text": "Aha! How wonderful."
+      "DialogueText": [ { "Text": "Aha! How wonderful." } ]
     },
     {
-      "Text": "Yes, these are indeed the relics I was after. Isn't it curious? Each of these relics channels a magic within the domain of a God. Perhaps the Godseeker found some sort of irony in this; the magic of Gods being used to imprison their followers?"
+      "DialogueText": [ { "Text": "Yes, these are indeed the relics I was after. Isn't it curious? Each of these relics channels a magic within the domain of a God. Perhaps the Godseeker found some sort of irony in this; the magic of Gods being used to imprison their followers?" } ]
     },
     {
-      "Text": "Regardless, these shall prove useful. You may indeed rise to the rank of Apostle; should you continue to impress."
+      "DialogueText": [ { "Text": "Regardless, these shall prove useful. You may indeed rise to the rank of Apostle; should you continue to impress." } ]
     },
     {
-      "Text": "However, you are free to go for now. Next time you're here, I should have your next mission ready for you.",
+      "DialogueText": [ { "Text": "However, you are free to go for now. Next time you're here, I should have your next mission ready for you." } ],
       "Responses": [
         {
           "Title": "Awesome!"

@@ -1,7 +1,7 @@
 {
   "Dialogues": [
     {
-      "Text": "Why hello! I have some very good news. I've found our way to put a stop to the Selenic Order's plans once and for all! Remember the friends I mentioned earlier? One of them just so happens to know of a ritual to seal away the very horrors they are trying to summon!",
+      "DialogueText": [ { "Text": "Why hello! I have some very good news. I've found our way to put a stop to the Selenic Order's plans once and for all! Remember the friends I mentioned earlier? One of them just so happens to know of a ritual to seal away the very horrors they are trying to summon!" } ],
       "Responses": [
         {
           "Title": "Sealing Ritual?",
@@ -10,7 +10,7 @@
       ]
     },
     {
-      "Text": "Yes, its a ritual that dates back to the Draconic Era. Legend has that those devoted to the Dragons were given this ritual to maintain the seal placed upon their ancient foe. I believe this being is the 'Paradise' that the Selenic Order seeks to bring upon world, and if they succeed... the world as we know it may cease to be.",
+      "DialogueText": [ { "Text": "Yes, its a ritual that dates back to the Draconic Era. Legend has that those devoted to the Dragons were given this ritual to maintain the seal placed upon their ancient foe. I believe this being is the 'Paradise' that the Selenic Order seeks to bring upon world, and if they succeed... the world as we know it may cease to be." } ],
       "Responses": [
         {
           "Title": "Uh oh...",
@@ -23,7 +23,7 @@
       ]
     },
     {
-      "Text": "Indeed! It says here that the ritual was meant to be performed once every hundred years to maintain the seal, however I think the demise of the Dragons led to this never being carried out. By performing it now, we may be able to cut off the Selenic Order's connection to this ancient foe, and stop them from being able to unseal it!",
+      "DialogueText": [ { "Text": "Indeed! It says here that the ritual was meant to be performed once every hundred years to maintain the seal, however I think the demise of the Dragons led to this never being carried out. By performing it now, we may be able to cut off the Selenic Order's connection to this ancient foe, and stop them from being able to unseal it!" } ],
       "Responses": [
         {
           "Title": "Why are they doing this?",
@@ -36,7 +36,7 @@
       ]
     },
     {
-      "Text": "That's something I was never able to find out... The Orator's motives are a mystery to all it seems. However, all that matters now is the dire situation we find ourselves in, and the solution we now hold.",
+      "DialogueText": [ { "Text": "That's something I was never able to find out... The Orator's motives are a mystery to all it seems. However, all that matters now is the dire situation we find ourselves in, and the solution we now hold." } ],
       "Responses": [
         {
           "Title": "What's next?",
@@ -45,7 +45,7 @@
       ]
     },
     {
-      "Text": "The ritual requires a few things... In the coming days I'll task you with collecting the required materials for the ritual. For now, sit tight. I'll need to look over these texts further to be sure of everything required.",
+      "DialogueText": [ { "Text": "The ritual requires a few things... In the coming days I'll task you with collecting the required materials for the ritual. For now, sit tight. I'll need to look over these texts further to be sure of everything required." } ],
       "Responses": [
         {
           "Title": "Understood."

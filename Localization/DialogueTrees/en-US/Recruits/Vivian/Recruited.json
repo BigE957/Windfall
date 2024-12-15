@@ -1,7 +1,7 @@
 {
 	"Dialogues": [
 		{
-			"Text": "We can meet up later to figure out our sweet, sweet revenge. I'd rather be literally anywhere but here right now.",
+			"DialogueText": [ { "Text": "We can meet up later to figure out our sweet, sweet revenge. I'd rather be literally anywhere but here right now." } ],
 			"Responses": [
 				{
 					"Title": "Sounds like a plan!"

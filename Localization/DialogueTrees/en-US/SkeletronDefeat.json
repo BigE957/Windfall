@@ -1,7 +1,7 @@
 {
   "Dialogues": [
     {
-      "Text": "Your success against our guardian was... Unexpected. It was meant to keep out intruders forevermore... However... issues have crept up since it was raised. Perhaps by opening our home to others, they might at last be laid to rest.",
+      "DialogueText": [ { "Text": "Your success against our guardian was... Unexpected. It was meant to keep out intruders forevermore... However... issues have crept up since it was raised. Perhaps by opening our home to others, they might at last be laid to rest." } ],
       "Responses": [
         {
           "Title": "Your guardian?",
@@ -14,7 +14,7 @@
       ]
     },
     {
-      "Text": "Yes, that skeletal construct was made to serve as this dungeon's guardian. That old man became its vessel after trespassing upon our sanctum. Worry not, with the guardian now dead, the man should return to his former self; despite what things might've seemed.",
+      "DialogueText": [ { "Text": "Yes, that skeletal construct was made to serve as this dungeon's guardian. That old man became its vessel after trespassing upon our sanctum. Worry not, with the guardian now dead, the man should return to his former self; despite what things might've seemed." } ],
       "Responses": [
         {
           "Title": "That's a relief.",
@@ -27,7 +27,7 @@
       ]
     },
     {
-      "Text": "Yes... Our sanctum become something of a dungeon in recent years. However those it once held have now long since passed, and this site's had an adverse effect upon their souls. Now, its crawling with their reanimated remains. If you'd do us a favor and clean it out a bit, we'd be ever in your debt.",
+      "DialogueText": [ { "Text": "Yes... Our sanctum become something of a dungeon in recent years. However those it once held have now long since passed, and this site's had an adverse effect upon their souls. Now, its crawling with their reanimated remains. If you'd do us a favor and clean it out a bit, we'd be ever in your debt." } ],
       "Responses": [
         {
           "Title": "I'll see what I can do.",
@@ -40,7 +40,7 @@
       ]
     },
     {
-      "Text": "Now then, enough talk. Till we meet again, wayward traveller. Perhaps our paths might cross again.",
+      "DialogueText": [ { "Text": "Now then, enough talk. Till we meet again, wayward traveller. Perhaps our paths might cross again." } ],
       "Responses": [
         {
           "Title": "Goodbye!"

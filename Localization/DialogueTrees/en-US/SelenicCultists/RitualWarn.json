@@ -1,7 +1,7 @@
 {
   "Dialogues": [
     {
-      "Text": "Fuck wagies",
+      "DialogueText": [ { "Text": "Ritual Spooky" } ],
       "Responses": [
         {
           "Title": "Not right now."

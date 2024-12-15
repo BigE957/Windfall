@@ -1,7 +1,7 @@
 {
   "Dialogues": [
     {
-      "Text": "Can I help you?",
+      "DialogueText": [ { "Text": "Can I help you?" } ],
       "Responses": [
         {
           "Title": "Lunar Coins?"
@@ -16,7 +16,7 @@
       ]
     },
     {
-      "Text": "Sploingus.",
+      "DialogueText": [ { "Text": "Sploingus." } ],
       "Responses": [
         {
           "Title": "???"

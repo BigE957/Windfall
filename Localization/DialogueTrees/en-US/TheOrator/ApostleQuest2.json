@@ -1,19 +1,19 @@
 {
   "Dialogues": [
     {
-      "Text": "Why, hello again? Eager to get started on your next mission, I assume?"
+      "DialogueText": [ { "Text": "Why, hello again? Eager to get started on your next mission, I assume?" } ]
     },
     {
-      "Text": "Well, I'll admit, this one is a bit more... treacherous. To be honest, I'm unsure this is something most of the other Apostles could handle. You'll be venturing into one of the most hostile locations I know of: The Abyss."
+      "DialogueText": [ { "Text": "Well, I'll admit, this one is a bit more... treacherous. To be honest, I'm unsure this is something most of the other Apostles could handle. You'll be venturing into one of the most hostile locations I know of: The Abyss." } ]
     },
     {
-      "Text": "Its just past the Dungeon, where I sent you last time; deep below the Sulphurous Sea. The trench is home to a multitude of ravanous creatures, but the reason I'm sending you is due to some particularly notible rumors."
+      "DialogueText": [ { "Text": "Its just past the Dungeon, where I sent you last time; deep below the Sulphurous Sea. The trench is home to a multitude of ravanous creatures, but the reason I'm sending you is due to some particularly notible rumors." } ]
     },
     {
-      "Text": "I've heard whispers that small convoys of Dragon Cultists have been observed delving into the Abyss, and not coming back out. Peculiar, is it not? I believe they seek the Draconic Offshoots who have made their home within the Abyss: the Eidolon Wyrms."
+      "DialogueText": [ { "Text": "I've heard whispers that small convoys of Dragon Cultists have been observed delving into the Abyss, and not coming back out. Peculiar, is it not? I believe they seek the Draconic Offshoots who have made their home within the Abyss: the Eidolon Wyrms." } ]
     },
     {
-      "Text": "I'd like you to explore the depths yourself, and see if you can find any signs of those cultists. If you are able to succeed, then you're undoubtably on par with my other Apostles in terms of your ability. Are you up for the challenge?",
+      "DialogueText": [ { "Text": "I'd like you to explore the depths yourself, and see if you can find any signs of those cultists. If you are able to succeed, then you're undoubtably on par with my other Apostles in terms of your ability. Are you up for the challenge?" } ],
       "Responses": [
         {
           "Title": "Of course!",
@@ -26,7 +26,7 @@
       ]
     },
     {
-      "Text": "I'm glad to hear! Best of luck on your voyage.",
+      "DialogueText": [ { "Text": "I'm glad to hear! Best of luck on your voyage." } ],
       "Responses": [
         {
           "Title": "Thanks!"
@@ -34,7 +34,7 @@
       ]
     },
     {
-      "Text": "Ah, welcome! Congradulations on making it back in one piece! I take it you found the whereabouts of those cultists?",
+      "DialogueText": [ { "Text": "Ah, welcome! Congradulations on making it back in one piece! I take it you found the whereabouts of those cultists?" } ],
       "Responses": [
         {
           "Title": "About that...",
@@ -43,10 +43,10 @@
       ]
     },
     {
-      "Text": "...?! Oh my... So that's what became of them? Such blind and foolish faith they hold in those beasts. I wonder if anything of who they once were is left inside those monsters? Or maybe their devotion carries on even through their metamorphosis..."
+      "DialogueText": [ { "Text": "...?! Oh my... So that's what became of them? Such blind and foolish faith they hold in those beasts. I wonder if anything of who they once were is left inside those monsters? Or maybe their devotion carries on even through their metamorphosis..." } ]
     },
     {
-      "Text": "Questions for another day, I suppose. You've done very well, but I have one final mission in mind for you. This one though won't be a test of your ability; that you've more than proven. I'll inform you of the details when next we meet.",
+      "DialogueText": [ { "Text": "Questions for another day, I suppose. You've done very well, but I have one final mission in mind for you. This one though won't be a test of your ability; that you've more than proven. I'll inform you of the details when next we meet." } ],
       "Responses": [
         {
           "Title": "Awesome!"

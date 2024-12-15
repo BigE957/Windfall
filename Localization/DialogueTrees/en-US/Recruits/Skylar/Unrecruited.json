@@ -1,7 +1,7 @@
 {
   "Dialogues": [
     {
-      "Text": "Hope to see you again!",
+      "DialogueText": [ { "Text": "Hope to see you again!" } ],
       "Responses": [
         {
           "Title": "See you later!"

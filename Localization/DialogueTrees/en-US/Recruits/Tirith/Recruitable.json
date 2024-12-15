@@ -1,7 +1,7 @@
 {
 	"Dialogues": [
 		{
-			"Text": "Thanks again for that talk. My eyes feel... opened now? Haha, maybe that's weird.",
+			"DialogueText": [ { "Text": "Thanks again for that talk. My eyes feel... opened now? Haha, maybe that's weird." } ],
 			"Responses": [
 				{
 					"Title": "I need to tell you something...",
@@ -13,7 +13,7 @@
 			]
 		},
 		{
-			"Text": "Oh my... The Lunar Cult... They're really planning something like that? I'll help if I can. I'll be in touch!",
+			"DialogueText": [ { "Text": "Oh my... The Lunar Cult... They're really planning something like that? I'll help if I can. I'll be in touch!" } ],
 			"Responses": [
 				{
 					"Title": "Thank you!"

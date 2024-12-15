@@ -1,7 +1,7 @@
 {
   "Dialogues": [
     {
-      "Text": "I'm not so sure how I feel about the Selenic Order... Should I stay?",
+      "DialogueText": [ { "Text": "I'm not so sure how I feel about the Selenic Order... Should I stay?" } ],
       "Responses": [
         {
           "Title": "Fuck no!",
@@ -14,7 +14,7 @@
       ]
     },
     {
-      "Text": "Alright! Goodbye Selenic Order!",
+      "DialogueText": [ { "Text": "Alright! Goodbye Selenic Order!" } ],
       "Responses": [
         {
           "Title": "Bye!"
@@ -27,7 +27,7 @@
       ]
     },
     {
-      "Text": "Yeah, you're probably right.",
+      "DialogueText": [ { "Text": "Yeah, you're probably right." } ],
       "Responses": [
         {
           "Title": "Your Welcome."

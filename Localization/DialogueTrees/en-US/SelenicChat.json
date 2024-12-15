@@ -1,33 +1,21 @@
 {
   "Dialogues": [
     {
-      "Text": "An invitation into our order from our Master himself is a rare thing. You must indeed be something special. I am here to answer any inqueries you might have... I imagine this is a lot to take in.",
-      "Responses": [
-        {
-          "Title": "Knowledge?",
-          "Heading": 1
-        },
-        {
-          "Title": "Balance?",
-          "Heading": 2
-        }
-      ]
+      "DialogueText": [{ "Text": "An invitation into our order from our Master himself is a rare thing. You must indeed be something special. I am here to answer any inqueries you might have... I imagine this is a lot to take in." }],
+      "Responses":
+        [
+          {
+            "Title": "Knowledge?",
+            "Heading": 1
+          },
+          {
+            "Title": "Balance?",
+            "Heading": 2
+          }
+        ]
     },
     {
-      "Text": "You have been invited into our order, and as such, you will be allowed to partake in our ceremonies. It is in such places you will come to learn the wisdom we have gained, and see the path we now walk.",
-      "Responses": [
-        {
-          "Title": "Why me?",
-          "Heading": 3
-        },
-        {
-          "Title": "Your goal?",
-          "Heading": 4
-        }
-      ]
-    },
-    {
-      "Text": "Our order has, for a long time now, worked in the shadows; preparing for what is soon to transpire... While this balance we've held in place is begining to come undone, that matters little. Soon the world shall be born anew in a more perfect image.",
+      "DialogueText": [ { "Text": "You have been invited into our order, and as such, you will be allowed to partake in our ceremonies. It is in such places you will come to learn the wisdom we have gained, and see the path we now walk." } ],
       "Responses": [
         {
           "Title": "Why me?",
@@ -40,7 +28,20 @@
       ]
     },
     {
-      "Text": "Your actions have peaked the interest of our Master; he sees great promise in you. I just hope you don't disappoint...",
+      "DialogueText": [ { "Text": "Our order has, for a long time now, worked in the shadows; preparing for what is soon to transpire... While this balance we've held in place is begining to come undone, that matters little. Soon the world shall be born anew in a more perfect image." } ],
+      "Responses": [
+        {
+          "Title": "Why me?",
+          "Heading": 3
+        },
+        {
+          "Title": "Your goal?",
+          "Heading": 4
+        }
+      ]
+    },
+    {
+      "DialogueText": [ { "Text": "Your actions have peaked the interest of our Master; he sees great promise in you. I just hope you don't disappoint..." } ],
       "Responses": [
         {
           "Title": "What's this?",
@@ -49,7 +50,7 @@
       ]
     },
     {
-      "Text": "You may come to learn our goals... if you are indeed truly devoted. If you are not, well... Our master will certainly not take kindly to it.",
+      "DialogueText": [ { "Text": "You may come to learn our goals... if you are indeed truly devoted. If you are not, well... Our master will certainly not take kindly to it." } ],
       "Responses": [
         {
           "Title": "What's this?",
@@ -58,7 +59,7 @@
       ]
     },
     {
-      "Text": "Ah! Yes, that is a [c/FFFF00:Selenic Tablet]. It will serve as a means of communication. Should you hear its hum, you will know you have been called upon, and it shall guide you to where you are needed. ...Do be sure to keep it on you, lest you miss the call.",
+      "DialogueText": [ { "Text": "Ah! Yes, that is a [c/FFFF00:Selenic Tablet]. It will serve as a means of communication. Should you hear its hum, you will know you have been called upon, and it shall guide you to where you are needed. ...Do be sure to keep it on you, lest you miss the call." } ],
       "Responses": [
         {
           "Title": "I see...",
@@ -71,7 +72,7 @@
       ]
     },
     {
-      "Text": "That is all you need know for the time being. More shall be revealed soon, so long as you heed the Tablet's call. Farewell. If you are wise, we shall meet again.",
+      "DialogueText": [ { "Text": "That is all you need know for the time being. More shall be revealed soon, so long as you heed the Tablet's call. Farewell. If you are wise, we shall meet again." } ],
       "Responses": [
         {
           "Title": "Bye!"

@@ -1,7 +1,7 @@
 {
   "Dialogues": [
     {
-      "Text": "Having trouble finding where you need to go?",
+      "DialogueText": [ { "Text": "Having trouble finding where you need to go?" } ],
       "Responses": [
         {
           "Title": "Yeah...",
@@ -14,7 +14,7 @@
       ]
     },
     {
-      "Text": "Oh! My apologies then. Be seeing you!",
+      "DialogueText": [ { "Text": "Oh! My apologies then. Be seeing you!" } ],
       "Responses": [
         {
           "Title": "Bye!"
@@ -22,7 +22,7 @@
       ]
     },
     {
-      "Text": "You can find the Cafeteria straight across the hall. As long as you just keep heading straight when you enter, you should find it. Apologies, I know our sanctum can be a bit of a maze.",
+      "DialogueText": [ { "Text": "You can find the Cafeteria straight across the hall. As long as you just keep heading straight when you enter, you should find it. Apologies, I know our sanctum can be a bit of a maze." } ],
       "Responses": [
         {
           "Title": "Thanks!"

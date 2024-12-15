@@ -1,10 +1,28 @@
 {
   "Dialogues": [
     {
-      "Text": "Welcome! I'm so glad you could join us. I hope you didn't have too much trouble finding our humble abode. It is a tad out of the way, isn't it. I'm hoping that you may soon come to see this place as I do: a home away from home, if you will."
+      "DialogueText": [ { "Text": "Welcome! I'm so glad you could join us. I hope you didn't have too much trouble finding our humble abode. It is a tad out of the way, isn't it. I'm hoping that you may soon come to see this place as I do: a home away from home, if you will." } ]
     },
     {
-      "Text": "As this is your first time here, I only ask that you become aclimated to this new environment, as in the future, you'll be working alongside us in the up keep of our community and in furthering our goals. There's a few people you especially should meet, such as our [c/FFFF00:Chef] and the [c/FFFF00:Seamstress], as you'll be working with them both.",
+      "DialogueText": [
+        {
+          "Text": "As this is your first time here, I only ask that you become aclimated to this new environment, as in the future, you'll be working alongside us in the up keep of our community and in furthering our goals. There's a few people you especially should meet, such as our "
+        },
+        {
+          "Text": "Chef",
+          "Color": "#FFFF00"
+        },
+        {
+          "Text": " and the "
+        },
+        {
+          "Text": "Seamstress",
+          "Color": "#FFFF00"
+        },
+        {
+          "Text": ", as you'll be working with them both."
+        }
+      ],
       "Responses": [
         {
           "Title": "The Chef?",
@@ -17,7 +35,7 @@
       ]
     },
     {
-      "Text": "The Chef is in charge of our very own cafeteria, and provides a wide array of meals for our members. You may be called upon to help him in serving food.",
+      "DialogueText": [ { "Text": "The Chef is in charge of our very own cafeteria, and provides a wide array of meals for our members. You may be called upon to help him in serving food." } ],
       "Responses": [
         {
           "Title": "I see.",
@@ -26,7 +44,7 @@
       ]
     },
     {
-      "Text": "The Seamstress is responsible for the creation of all our members' garments. From robes to masks, she handles it all. You may be called upon to help her in making these clothes.",
+      "DialogueText": [ { "Text": "The Seamstress is responsible for the creation of all our members' garments. From robes to masks, she handles it all. You may be called upon to help her in making these clothes." } ],
       "Responses": [
         {
           "Title": "I see.",
@@ -35,7 +53,7 @@
       ]
     },
     {
-      "Text": "Is there anyone else you'd like to know about? Getting to know those around you will be vital in becoming a part of the team!",
+      "DialogueText": [ { "Text": "Is there anyone else you'd like to know about? Getting to know those around you will be vital in becoming a part of the team!" } ],
       "Responses": [
         {
           "Title": "The Chef?",
@@ -56,7 +74,7 @@
       ]
     },
     {
-      "Text": "Me? Haha, I should have expected that I suppose. I'm simply here to ensure all goes smoothly around here.",
+      "DialogueText": [ { "Text": "Me? Haha, I should have expected that I suppose. I'm simply here to ensure all goes smoothly around here." } ],
       "Responses": [
         {
           "Title": "I see.",
@@ -65,19 +83,19 @@
       ]
     },
     {
-      "Text": "I believe that is all then! I do hope this will be a fruitful arrangement for the both of us."
+      "DialogueText": [ { "Text": "I believe that is all then! I do hope this will be a fruitful arrangement for the both of us." } ]
     },
     {
-      "Text": "..."
+      "DialogueText": [ { "Text": "..." } ]
     },
     {
-      "Text": "Oh... one other thing."
+      "DialogueText": [ { "Text": "Oh... one other thing." } ]
     },
     {
-      "Text": "Do not go in the basement."
+      "DialogueText": [ { "Text": "Do not go in the basement." } ]
     },
     {
-      "Text": "That is all."
+      "DialogueText": [ { "Text": "That is all." } ]
     }
   ],
   "Characters": [

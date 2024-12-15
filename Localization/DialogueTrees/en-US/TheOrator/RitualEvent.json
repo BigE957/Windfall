@@ -1,7 +1,7 @@
 {
   "Dialogues": [
     {
-      "Text": "Shall we begin?",
+      "DialogueText": [ { "Text": "Shall we begin?" } ],
       "Responses": [
         {
           "Title": "Uh, one second."
@@ -13,7 +13,7 @@
       ]
     },
     {
-      "Text": "What tool do you wish to use?",
+      "DialogueText": [ { "Text": "What tool do you wish to use?" } ],
       "Responses": [
         {
           "Title": "Rift Weaver"

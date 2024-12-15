@@ -1,7 +1,7 @@
 {
   "Dialogues": [
     {
-      "Text": "So, are you ready to get started?",
+      "DialogueText": [ { "Text": "So, are you ready to get started?" } ],
       "Responses": [
         {
           "Title": "One moment."

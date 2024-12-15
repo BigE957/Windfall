@@ -1,7 +1,7 @@
 {
   "Dialogues": [
     {
-      "Text": "Another... 'enlightening' experience as always... Even now they don't give us any details on what we're really working towards... Worst of all, we've been given little to do as the end approaches... Hopefully that change soon.",
+      "DialogueText": [ { "Text": "Another... 'enlightening' experience as always... Even now they don't give us any details on what we're really working towards... Worst of all, we've been given little to do as the end approaches... Hopefully that change soon." } ],
       "Responses": [
         {
           "Title": "Kinda confusing...",
@@ -14,7 +14,7 @@
       ]
     },
     {
-      "Text": "I still know so little about we're doing... It can be a little frustrating... Though these people showed me kindness when I was at my lowest; it would be wrong to be untrusting. If they promise things will turn out well, I'll believe them.",
+      "DialogueText": [ { "Text": "I still know so little about we're doing... It can be a little frustrating... Though these people showed me kindness when I was at my lowest; it would be wrong to be untrusting. If they promise things will turn out well, I'll believe them." } ],
       "Responses": [
         {
           "Title": "How kind!",
@@ -27,7 +27,7 @@
       ]
     },
     {
-      "Text": "Indeed! I was a trader at the time; bringing goods from Ilmeris. After the Incineration I was left with... nothing. I was lucky to be away when it began, but with no home and no goods there was little I could do to get back on my feet. Thankfully, that's when the our friends here found me. The took me in and provided for my needs. I'm not sure I'll ever be able to repay their kindness.",
+      "DialogueText": [ { "Text": "Indeed! I was a trader at the time; bringing goods from Ilmeris. After the Incineration I was left with... nothing. I was lucky to be away when it began, but with no home and no goods there was little I could do to get back on my feet. Thankfully, that's when the our friends here found me. The took me in and provided for my needs. I'm not sure I'll ever be able to repay their kindness." } ],
       "Responses": [
         {
           "Title": "Glad they helped.",
@@ -36,7 +36,7 @@
       ]
     },
     {
-      "Text": "Wrong you say? What makes you think that?",
+      "DialogueText": [ { "Text": "Wrong you say? What makes you think that?" } ],
       "Responses": [
         {
           "Title": "It sounds... Manipulative.",
@@ -45,7 +45,7 @@
       ]
     },
     {
-      "Text": "Hmm... That's... a worrying thought... Worrying and yet, eye opening... The only reason I'm so trusting of them is because they helped me when I was desperate... I was, in retrospect, an easy target. That's... frightening.",
+      "DialogueText": [ { "Text": "Hmm... That's... a worrying thought... Worrying and yet, eye opening... The only reason I'm so trusting of them is because they helped me when I was desperate... I was, in retrospect, an easy target. That's... frightening." } ],
       "Responses": [
         {
           "Title": "Yeah...",
@@ -54,7 +54,7 @@
       ]
     },
     {
-      "Text": "I really just want something to do, y'know? If I can be honest, the worst thing over time that hit me after the Incineration was feeling... purposeless. Being here at least gives me that, as well as, y'know, food and shelter.",
+      "DialogueText": [ { "Text": "I really just want something to do, y'know? If I can be honest, the worst thing over time that hit me after the Incineration was feeling... purposeless. Being here at least gives me that, as well as, y'know, food and shelter." } ],
       "Responses": [
         {
           "Title": "That's good.",
@@ -67,7 +67,7 @@
       ]
     },
     {
-      "Text": "Our friends here are quite generous! I almost wonder where all their resources come from... We are quite the large operation! Maybe one day I'll be able to find someone in need and bring them into our fold. We'll see!",
+      "DialogueText": [ { "Text": "Our friends here are quite generous! I almost wonder where all their resources come from... We are quite the large operation! Maybe one day I'll be able to find someone in need and bring them into our fold. We'll see!" } ],
       "Responses": [
         {
           "Title": "Hopefully!",
@@ -76,7 +76,7 @@
       ]
     },
     {
-      "Text": "Huh... That's a uh... Fair point now that you mention it. Relying on them for... well, practically everything isn't exactly the best. It might be time I try to... distance myself a little, huh.",
+      "DialogueText": [ { "Text": "Huh... That's a uh... Fair point now that you mention it. Relying on them for... well, practically everything isn't exactly the best. It might be time I try to... distance myself a little, huh." } ],
       "Responses": [
         {
           "Title": "Agreed!",
@@ -89,7 +89,7 @@
       ]
     },
     {
-      "Text": "Thanks for the talk... You've given me a lot to think about. I'll be seeing you around hopefully, and if you need anything, all you gotta do is ask.",
+      "DialogueText": [ { "Text": "Thanks for the talk... You've given me a lot to think about. I'll be seeing you around hopefully, and if you need anything, all you gotta do is ask." } ],
       "Responses": [
         {
           "Title": "Will do!"
@@ -102,7 +102,7 @@
       ]
     },
     {
-      "Text": "Well, nice talking to you! Glad to find another friend around here. We do have quite the strong community, huh. Be seeing you!",
+      "DialogueText": [ { "Text": "Well, nice talking to you! Glad to find another friend around here. We do have quite the strong community, huh. Be seeing you!" } ],
       "Responses": [
         {
           "Title": "Later!"

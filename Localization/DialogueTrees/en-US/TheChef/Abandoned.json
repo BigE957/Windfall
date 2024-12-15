@@ -1,7 +1,7 @@
 {
   "Dialogues": [
     {
-      "Text": "Well hey! Was wonderin when I'd see another face around here. Seems like everybody's off doing... something or another. Kinda strange, huh? Here's usually quite the busy place. I did manage get a bit of extra shut-eye though.",
+      "DialogueText": [ { "Text": "Well hey! Was wonderin when I'd see another face around here. Seems like everybody's off doing... something or another. Kinda strange, huh? Here's usually quite the busy place. I did manage get a bit of extra shut-eye though." } ],
       "Responses": [
         {
           "Title": "Where is everyone?",
@@ -10,13 +10,13 @@
       ]
     },
     {
-      "Text": "I can't say I'm too sure. The Orator called some sorta meeting upstairs, but that stuffs none of my business. Sounded like quite the big deal though."
+      "DialogueText": [ { "Text": "I can't say I'm too sure. The Orator called some sorta meeting upstairs, but that stuffs none of my business. Sounded like quite the big deal though." } ]
     },
     {
-      "Text": "I could hear a lotta voices up above me, and then all of a sudden there was this loud sort of roar... After that, everything went quiet. Haven't heard a peep since!"
+      "DialogueText": [ { "Text": "I could hear a lotta voices up above me, and then all of a sudden there was this loud sort of roar... After that, everything went quiet. Haven't heard a peep since!" } ]
     },
     {
-      "Text": "Haven't seen a soul since... Well, besides Seamstress; she stopped by to check in. Haven't even seen the Orator! Between you and me, I think something big happened; something to do with that 'Paradise' those Bishops are always on about.",
+      "DialogueText": [ { "Text": "Haven't seen a soul since... Well, besides Seamstress; she stopped by to check in. Haven't even seen the Orator! Between you and me, I think something big happened; something to do with that 'Paradise' those Bishops are always on about." } ],
       "Responses": [
         {
           "Title": "Really?"

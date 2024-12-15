@@ -1,7 +1,7 @@
 {
   "Dialogues": [
     {
-      "Text": "Splendid news! We're ready to begin the Sealing Ritual! I've gotten in contact with those you saved from the Selenic Order, and they'll be the ones to help us carry out the ritual.",
+      "DialogueText": [ { "Text": "Splendid news! We're ready to begin the Sealing Ritual! I've gotten in contact with those you saved from the Selenic Order, and they'll be the ones to help us carry out the ritual." } ],
       "Responses": [
         {
           "Title": "When is it?",
@@ -14,7 +14,7 @@
       ]
     },
     {
-      "Text": "It'll be held at the entrance to the Dungeon; that place's occult energies will prove useful in bringing out the full power of this ritual.",
+      "DialogueText": [ { "Text": "It'll be held at the entrance to the Dungeon; that place's occult energies will prove useful in bringing out the full power of this ritual." } ],
       "Responses": [
         {
           "Title": "What do I do?",
@@ -23,7 +23,7 @@
       ]
     },
     {
-      "Text": "Our friends are already there, and waiting! Whenever you're ready, make your way over to the Dungeon, and we can begin.",
+      "DialogueText": [ { "Text": "Our friends are already there, and waiting! Whenever you're ready, make your way over to the Dungeon, and we can begin." } ],
       "Responses": [
         {
           "Title": "What do I do?",
@@ -32,7 +32,7 @@
       ]
     },
     {
-      "Text": "To be honest, you won't be playing a major role in the ritual itself; we've got that taken care of. I really want you around to watch our backs. A ritual of this scale may attract the undead of the Dungeon, or some other frightful monsters. Better to be on the safe side, and have someone of your prowess around.",
+      "DialogueText": [ { "Text": "To be honest, you won't be playing a major role in the ritual itself; we've got that taken care of. I really want you around to watch our backs. A ritual of this scale may attract the undead of the Dungeon, or some other frightful monsters. Better to be on the safe side, and have someone of your prowess around." } ],
       "Responses": [
         {
           "Title": "Gotcha.",
@@ -41,7 +41,7 @@
       ]
     },
     {
-      "Text": "Perfect! I'll head over to the Dungeon myself shortly, and then the ritual can commence! It'll be a relief to have this all finally taken care of.",
+      "DialogueText": [ { "Text": "Perfect! I'll head over to the Dungeon myself shortly, and then the ritual can commence! It'll be a relief to have this all finally taken care of." } ],
       "Responses": [
         {
           "Title": "See you there!"

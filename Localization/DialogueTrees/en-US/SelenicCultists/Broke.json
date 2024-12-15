@@ -1,7 +1,7 @@
 {
   "Dialogues": [
     {
-      "Text": "Ugh... Still need a few more coins before I can get that new bow it seems. What to do; what to do?",
+      "DialogueText": [ { "Text": "Ugh... Still need a few more coins before I can get that new bow it seems. What to do; what to do?" } ],
       "Responses": [
         {
           "Title": "Cafeteria?",
@@ -18,7 +18,7 @@
       ]
     },
     {
-      "Text": "I wonder what job I should do...?",
+      "DialogueText": [ { "Text": "I wonder what job I should do...?" } ],
       "Responses": [
         {
           "Title": "Cafeteria?",
@@ -35,7 +35,7 @@
       ]
     },
     {
-      "Text": "I guess, but god, those Bishops can just be the worst. It seems like I can never make their damn food quick enough...",
+      "DialogueText": [ { "Text": "I guess, but god, those Bishops can just be the worst. It seems like I can never make their damn food quick enough..." } ],
       "Responses": [
         {
           "Title": "That's fair."
@@ -46,7 +46,7 @@
       ]
     },
     {
-      "Text": "Oh no, anything but that! Last time I was in there it felt like my fingers were gonna fall off! I can't make another robe... I can't!!",
+      "DialogueText": [ { "Text": "Oh no, anything but that! Last time I was in there it felt like my fingers were gonna fall off! I can't make another robe... I can't!!" } ],
       "Responses": [
         {
           "Title": "Fair enough."
@@ -57,7 +57,7 @@
       ]
     },
     {
-      "Text": "I guess I can wait around for another one of those, but they're such a bore. I don't know if I can stay awake through another one.",
+      "DialogueText": [ { "Text": "I guess I can wait around for another one of those, but they're such a bore. I don't know if I can stay awake through another one." } ],
       "Responses": [
         {
           "Title": "Good luck."

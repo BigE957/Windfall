@@ -1,7 +1,7 @@
 {
 	"Dialogues": [
 		{
-			"Text": "We can talk more somewhere that... isn't here.",
+			"DialogueText": [ { "Text": "We can talk more somewhere that... isn't here." } ],
 			"Responses": [
 				{
 					"Title": "Right... Good idea."

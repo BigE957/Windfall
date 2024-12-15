@@ -1,7 +1,7 @@
 {
   "Dialogues": [
     {
-      "Text": "Hope to see you around! Mainly somewhere that isn't here, haha.",
+      "DialogueText": [ { "Text": "Hope to see you around! Mainly somewhere that isn't here, haha." } ],
       "Responses": [
         {
           "Title": "I need to tell you something...",
@@ -13,7 +13,7 @@
       ]
     },
     {
-      "Text": "You're serious? Oh my... Yes, I'd be happy to help. I'll be in touch!",
+      "DialogueText": [ { "Text": "You're serious? Oh my... Yes, I'd be happy to help. I'll be in touch!" } ],
       "Responses": [
         {
           "Title": "Thank you!"

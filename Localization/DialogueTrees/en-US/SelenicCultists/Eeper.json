@@ -1,0 +1,15 @@
+{
+  "Dialogues": [
+    {
+      "DialogueText": [
+        {
+          "Text": "Zzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzz...",
+          "TextEffect": "DialogueHelper.UI.Dialogue.TextEffects.WavyText"
+        }
+      ]
+    }
+  ],
+  "Characters": [
+    "TheCalamity"
+  ]
+}

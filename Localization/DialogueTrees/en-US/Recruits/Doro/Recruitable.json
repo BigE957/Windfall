@@ -1,7 +1,7 @@
 {
 	"Dialogues": [
 		{
-			"Text": "I feel like big things are coming my way now. This is great!",
+			"DialogueText": [ { "Text": "I feel like big things are coming my way now. This is great!" } ],
 			"Responses": [
 				{
 					"Title": "I need to tell you something...",
@@ -13,7 +13,7 @@
 			]
 		},
 		{
-			"Text": "Oh my... That's no good. This things a cult? I'll help you out if I can.",
+			"DialogueText": [ { "Text": "Oh my... That's no good. This things a cult? I'll help you out if I can." } ],
 			"Responses": [
 				{
 					"Title": "Thank you!"

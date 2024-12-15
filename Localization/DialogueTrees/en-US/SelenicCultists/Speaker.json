@@ -1,7 +1,7 @@
 {
   "Dialogues": [
     {
-      "Text": "New clothes!",
+      "DialogueText": [ { "Text": "Speaker" } ],
       "Responses": [
         {
           "Title": "Not right now."

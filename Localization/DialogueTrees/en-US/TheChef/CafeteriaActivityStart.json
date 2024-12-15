@@ -1,7 +1,7 @@
 {
   "Dialogues": [
     {
-      "Text": "You ready to get started?",
+      "DialogueText": [ { "Text": "You ready to get started?" } ],
       "Responses": [
         {
           "Title": "Not right now."
@@ -13,7 +13,7 @@
       ]
     },
     {
-      "Text": "Alright! Here's tonight's menu. You just gotta tell me everybody's order.",
+      "DialogueText": [ { "Text": "Alright! Here's tonight's menu. You just gotta tell me everybody's order." } ],
       "Responses": [
         {
           "Title": "Can do!"

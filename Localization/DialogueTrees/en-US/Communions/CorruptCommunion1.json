@@ -1,44 +1,19 @@
 {
   "Dialogues": [
     {
-      "Text": "Aha! What righteous communion! It has been so long since on chose to drink of our might. You seek power, and we can offer it in droves. Our essence spreads throughout your feeble body, and now you may wield a mere fraction of our power.",
-      "CharacterIndex": 0,
-      "ExpressionIndex": 0,
-      "TextScale": 1.5,
-      "TextDelay": 3,
-      "MusicID": -1
+      "DialogueText": [ { "Text": "Aha! What righteous communion! It has been so long since on chose to drink of our might. You seek power, and we can offer it in droves. Our essence spreads throughout your feeble body, and now you may wield a mere fraction of our power." } ]
     },
     {
-      "Text": "With this essence, no foe is safe while within your reach. You may lunge forth and crush them with our fervor! In your wake, thorns shall strike at any who dare stand before you! Those who dare to survive shall be forced back.",
-      "CharacterIndex": 0,
-      "ExpressionIndex": 0,
-      "TextScale": 1.5,
-      "TextDelay": 3,
-      "MusicID": -1
+      "DialogueText": [ { "Text": "With this essence, no foe is safe while within your reach. You may lunge forth and crush them with our fervor! In your wake, thorns shall strike at any who dare stand before you! Those who dare to survive shall be forced back." } ]
     },
     {
-      "Text": "However, our power comes with a cost; a fuel required. To wield such abilities you must drink of Ambrosia. For now you lack the means to gather Ambrosia, outside of a pitiful trickle. However, should you continue to feast upon our Essence, new avenues shall be opened to you.",
-      "CharacterIndex": 0,
-      "ExpressionIndex": 0,
-      "TextScale": 1.5,
-      "TextDelay": 3,
-      "MusicID": -1
+      "DialogueText": [ { "Text": "However, our power comes with a cost; a fuel required. To wield such abilities you must drink of Ambrosia. For now you lack the means to gather Ambrosia, outside of a pitiful trickle. However, should you continue to feast upon our Essence, new avenues shall be opened to you." } ]
     },
     {
-      "Text": "When using our powers, vile creatures shall burst forth from thee to devour your foes. As your Ambrosia grows, so too is your power heightened.",
-      "CharacterIndex": 0,
-      "ExpressionIndex": 0,
-      "TextScale": 1.5,
-      "TextDelay": 3,
-      "MusicID": -1
+      "DialogueText": [ { "Text": "When using our powers, vile creatures shall burst forth from thee to devour your foes. As your Ambrosia grows, so too is your power heightened." } ]
     },
     {
-      "Text": "Now go forth! Conquer thy foes in our name! Breed righteous slaughter that we might be avenged!",
-      "CharacterIndex": 0,
-      "ExpressionIndex": 0,
-      "TextScale": 1.5,
-      "TextDelay": 3,
-      "MusicID": -1
+      "DialogueText": [ { "Text": "Now go forth! Conquer thy foes in our name! Breed righteous slaughter that we might be avenged!" } ]
     }
   ],
   "Characters": [

@@ -1,10 +1,10 @@
 {
   "Dialogues": [
     {
-      "Text": "Wadaya need?"
+      "DialogueText": [ { "Text": "Wadaya need?" } ]
     },
     {
-      "Text": "On it!"
+      "DialogueText": [ { "Text": "On it!" } ]
     }
   ],
   "Characters": [

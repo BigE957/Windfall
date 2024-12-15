@@ -1,7 +1,7 @@
 {
 	"Dialogues": [
 		{
-			"Text": "Thanks for the help with all that. Can't wait to never have to come to these stupid things ever again.",
+			"DialogueText": [ { "Text": "Thanks for the help with all that. Can't wait to never have to come to these stupid things ever again." } ],
 			"Responses": [
 				{
 					"Title": "I need to tell you something...",
@@ -13,7 +13,7 @@
 			]
 		},
 		{
-			"Text": "Stick it to the Orator? That's all you needed to say! I'm already eager for revenge...",
+			"DialogueText": [ { "Text": "Stick it to the Orator? That's all you needed to say! I'm already eager for revenge..." } ],
 			"Responses": [
 				{
 					"Title": "Awesome!"

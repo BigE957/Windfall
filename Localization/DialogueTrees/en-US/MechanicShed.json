@@ -1,7 +1,7 @@
 {
   "Dialogues": [
     {
-      "Text": "Mind explaining what exactly you're doing here?",
+      "DialogueText": [ { "Text": "Mind explaining what exactly you're doing here?" } ],
       "Responses": [
         {
           "Title": "I'm just exploring.",
@@ -15,8 +15,22 @@
       "Emoticon": "Windfall.Content.UI.Dialogue.Emoticons.Angry"
     },
     {
-      "Text": "Just a small group keeping an eye on things. Not sure if its any of your business though.",
-      "Responses": [
+      "DialogueText": [
+        {
+          "Text": "Just a small group keeping an eye on things. ",
+          "Color": "#e026da",
+          "TextEffect": "DialogueHelper.UI.Dialogue.TextEffects.ShakyText",
+          "EndPause": 120
+        },
+        {
+          "Text": "Not sure if its any of your business though.",
+          "Rainbow": true,
+          "TextEffect": "DialogueHelper.UI.Dialogue.TextEffects.WavyText",
+          "TextDelay": 8
+        }
+      ],
+      "Responses":
+      [
         {
           "Title": "Sounds interesting.",
           "Heading": 2
@@ -28,7 +42,7 @@
       ]
     },
     {
-      "Text": "Don't get any ideas. Not just anyone is allowed into our order... Especially not those who snoop around where they shouldnt't.",
+      "DialogueText": [ { "Text": "Don't get any ideas. Not just anyone is allowed into our order... Especially not those who snoop around where they shouldnt't." } ],
       "Responses": [
         {
           "Title": "Understood.",
@@ -41,7 +55,7 @@
       ]
     },
     {
-      "Text": "What?! No, nothing of the sort. Don't know what would give you that idea...",
+      "DialogueText":[{"Text": "What?! No, nothing of the sort. Don't know what would give you that idea..."}],
       "Responses": [
         {
           "Title": "My bad.",
@@ -54,7 +68,7 @@
       ]
     },
     {
-      "Text": "Just exploring, huh? Why's exploring involve snooping around abandoned buildings?",
+      "DialogueText":[{"Text": "Just exploring, huh? Why's exploring involve snooping around abandoned buildings?"}],
       "Responses": [
         {
           "Title": "Just looking for supplies.",
@@ -67,20 +81,18 @@
       ]
     },
     {
-      "Text": "Hmm, okay. That seems fair enough. Just don't go snooping around where you don't belong, alright?",
+      "DialogueText":[{"Text": "Hmm, okay. That seems fair enough. Just don't go snooping around where you don't belong, alright?"}],
       "Responses": [
         {
-          "Title": "Can do.",
-          "Heading": 7
+          "Title": "Can do."
         },
         {
-          "Title": "Fine.",
-          "Heading": 7
+          "Title": "Fine."
         }
       ]
     },
     {
-      "Text": "Well, we wouldn't want anything bad happening to you now would we? You never know who roams these parts. Being all alone in a dilapitaed cabin? Sounds like a recipe for disaster if you ask me.",
+      "DialogueText":[{"Text": "Well, we wouldn't want anything bad happening to you now would we? You never know who roams these parts. Being all alone in a dilapitaed cabin? Sounds like a recipe for disaster if you ask me."}],
       "Responses": [
         {
           "Title": "You might be right.",
@@ -93,7 +105,7 @@
       ]
     },
     {
-      "Text": "Well, you seem to be just fine. You're free to go.",
+      "DialogueText": [ { "Text": "Well, you seem to be just fine. You're free to go." } ],
       "Responses": [
         {
           "Title": "Thank you."
