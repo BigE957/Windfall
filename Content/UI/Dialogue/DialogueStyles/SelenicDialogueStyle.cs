@@ -7,7 +7,7 @@ using Terraria.ModLoader.UI;
 using Terraria.UI;
 
 namespace Windfall.Content.UI.Dialogue.DialogueStyles;
-public class SelenicDialogueStyle : BaseDialogueStyle
+public class SelenicDialogueStyle : DialogueStyle
 {
     public override Vector2 ButtonSize => new(150, 50);
     public override void OnTextboxCreate(UIPanel textbox, FlippableUIImage speaker, FlippableUIImage subSpeaker)

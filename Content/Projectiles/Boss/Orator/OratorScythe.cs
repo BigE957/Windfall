@@ -52,15 +52,12 @@ public class OratorScythe : ModProjectile
             if (orator.As<TheOrator>().AIState == TheOrator.States.DarkTides || orator.As<TheOrator>().AIState == TheOrator.States.Defeat)
                 behavior = (BehaviorType)4;
         }
-        /*
         else
         {
             if(CalamityUtils.ManhattanDistance(Projectile.Center, target.Center) > 800f)
                 Projectile.active = false;
             return;
         }
-        */
-        bool attackBool = false;
         
         switch(behavior)
         {
@@ -69,7 +66,7 @@ public class OratorScythe : ModProjectile
                 {
                     float reelBackSpeedExponent = 2.6f;
                     float reelBackCompletion = Utils.GetLerpValue(0f, 30, Time, true);
-                    float reelBackSpeed = MathHelper.Lerp(2.5f, 16f, MathF.Pow(reelBackCompletion, reelBackSpeedExponent));
+                    float reelBackSpeed = Lerp(2.5f, 16f, MathF.Pow(reelBackCompletion, reelBackSpeedExponent));
                     Vector2 reelBackVelocity = (target.Center - Projectile.Center).SafeNormalize(Vector2.UnitY) * -reelBackSpeed;
                     Projectile.velocity = Vector2.Lerp(Projectile.velocity, reelBackVelocity, 0.25f);
                 }

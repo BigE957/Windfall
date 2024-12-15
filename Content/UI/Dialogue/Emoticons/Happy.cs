@@ -2,7 +2,7 @@
 using Terraria.UI;
 
 namespace Windfall.Content.UI.Dialogue.Emoticons;
-public class Happy : BaseEmoticon
+public class Happy : Emoticon
 {
     public override void Update(GameTime gameTime)
     {

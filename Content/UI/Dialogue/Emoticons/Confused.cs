@@ -3,7 +3,7 @@ using Terraria.UI;
 
 namespace Windfall.Content.UI.Dialogue.Emoticons;
 
-public class Confused : BaseEmoticon
+public class Confused : Emoticon
 {
     public override void Update(GameTime gameTime)
     {
