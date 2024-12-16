@@ -31,7 +31,7 @@ public class StonePlaqueEntity : ModTileEntity
         int FrameX = tile.TileFrameX / sheetSquare % data.Width;
         int FrameY = tile.TileFrameY / sheetSquare % data.Height;
 
-        return tile.HasTile && tile.TileType == ModContent.TileType<DarkStonePlaqueTile>() && FrameX == 0 && FrameY == 0;
+        return tile.HasTile && (tile.TileType == ModContent.TileType<DarkStonePlaqueTile>() || tile.TileType == ModContent.TileType<WhiteStonePlaqueTile>()) && FrameX == 0 && FrameY == 0;
     }
 
     public override int Hook_AfterPlacement(int i, int j, int type, int style, int direction, int alternate)
