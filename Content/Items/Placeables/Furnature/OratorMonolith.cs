@@ -11,7 +11,7 @@ using Windfall.Content.Tiles.Furnature;
 
 namespace Windfall.Content.Items.Placeables.Furnature;
 
-internal class OratorMonolith : ModItem, ILocalizedModType, IModType
+public class OratorMonolith : ModItem, ILocalizedModType, IModType
 {
     public new string LocalizationCategory => "Items.Placeables";
 

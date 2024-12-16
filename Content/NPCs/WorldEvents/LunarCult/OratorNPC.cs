@@ -4,6 +4,8 @@ using Windfall.Content.Items.Weapons.Misc;
 using DialogueHelper.UI.Dialogue;
 using Windfall.Content.Items.Quest.Casters;
 using Terraria.ID;
+using Windfall.Content.Items.Tools;
+using Windfall.Content.Items.Placeables.Furnature;
 
 namespace Windfall.Content.NPCs.WorldEvents.LunarCult;
 
@@ -255,10 +257,20 @@ public class OratorNPC : ModNPC
             shopCustomPrice = 2,
             shopSpecialCurrency = Windfall.LunarCoinCurrencyID
         });
-        //Vanity
-        shop.Add(new Item(ItemID.MoonMask)
+        //Furnature/Decor
+        shop.Add(new Item(ModContent.ItemType<HammerChisel>())
         {
             shopCustomPrice = 2,
+            shopSpecialCurrency = Windfall.LunarCoinCurrencyID
+        });
+        shop.Add(new Item(ModContent.ItemType<DarkStonePlaque>())
+        {
+            shopCustomPrice = 3,
+            shopSpecialCurrency = Windfall.LunarCoinCurrencyID
+        });
+        shop.Add(new Item(ModContent.ItemType<WhiteStonePlaque>())
+        {
+            shopCustomPrice = 3,
             shopSpecialCurrency = Windfall.LunarCoinCurrencyID
         });
         //Paintings
@@ -273,6 +285,13 @@ public class OratorNPC : ModNPC
             shopSpecialCurrency = Windfall.LunarCoinCurrencyID
         });
         shop.Register();
+
+        //Vanity
+        shop.Add(new Item(ItemID.MoonMask)
+        {
+            shopCustomPrice = 2,
+            shopSpecialCurrency = Windfall.LunarCoinCurrencyID
+        });
     }
 
     private static bool CanAffordCost(Player player, ItemStack price)

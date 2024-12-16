@@ -1309,6 +1309,16 @@ Items: {
 			DisplayName: Selenic Monolith
 			Tooltip: Calls about the beginning of the end.
 		}
+
+		DarkStonePlaque: {
+			DisplayName: Dark Stone Plaque
+			Tooltip: "Can be engraved upon using a Hammer and Chisel"
+		}
+
+		WhiteStonePlaque: {
+			DisplayName: White Stone Plaque
+			Tooltip: "Can be engraved upon using a Hammer and Chisel"
+		}
 	}
 
 	Fishing: {
@@ -1586,6 +1596,15 @@ Items: {
 	TailorInstructions: {
 		DisplayName: Tailor Instructions
 		Tooltip: ""
+	}
+
+	HammerChisel: {
+		DisplayName: Hammer and Chisel
+		Tooltip:
+			'''
+			A tool for sloping blocks that won't break walls
+			Favored by advanced builders
+			'''
 	}
 }
 

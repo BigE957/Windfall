@@ -61,7 +61,9 @@
     <None Remove="Content\Items\Journals\JournalOcean.png" />
     <None Remove="Content\Items\Journals\JournalSulphur.png" />
     <None Remove="Content\Items\Journals\JournalTundra.png" />
+    <None Remove="Content\Items\Placeables\Furnature\DarkStonePlaque.png" />
     <None Remove="Content\Items\Placeables\Furnature\OratorMonolith.png" />
+    <None Remove="Content\Items\Placeables\Furnature\WhiteStonePlaque.png" />
     <None Remove="Content\Items\Placeables\Special\DatabaseTerminalItem.png" />
     <None Remove="Content\Items\Quest\LunarCoin.png" />
     <None Remove="Content\Items\Utility\DraedonCharger.png" />
@@ -76,7 +78,9 @@
     <None Remove="Content\Projectiles\Other\RitualFurnature\BurningAltar.png" />
     <None Remove="Content\Projectiles\Other\RitualFurnature\RitualFurnatureAtlas.png" />
     <None Remove="Content\Projectiles\Weapons\Misc\RiftWeaverProj.png" />
+    <None Remove="Content\Tiles\Furnature\DarkStonePlaqueTile.png" />
     <None Remove="Content\Tiles\Furnature\OratorMonolithTile.png" />
+    <None Remove="Content\Tiles\Furnature\WhiteStonePlaqueTile.png" />
     <None Remove="Content\Tiles\Special\DatabaseTerminal.png" />
     <None Remove="Content\UI\Dialogue\Emoticons\Angry_Emote_Bottom.png" />
     <None Remove="Content\UI\Dialogue\Emoticons\Angry_Emote_Top.png" />

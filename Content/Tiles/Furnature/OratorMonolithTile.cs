@@ -92,16 +92,6 @@ public class OratorMonolithTile : ModTile
         NetMessage.SendTileSquare(-1, x, y + 1, 3);
     }
 
-    public override void KillMultiTile(int i, int j, int frameX, int frameY)
-    {
-        base.KillMultiTile(i, j, frameX, frameY);
-
-        Player player = Main.LocalPlayer;
-
-        if (player is null)
-            return;
-    }
-
     public override bool PreDraw(int i, int j, SpriteBatch spriteBatch)
     {
         Tile tile = Main.tile[i, j];
