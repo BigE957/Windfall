@@ -13,12 +13,13 @@ public class UITextPrompt : UIElement
     public string Text = "";
     public bool Active = false;
     public string HintText = "...";
+    public int LineCount = 1;
 
     private Color TextColor = Color.White;
     private Color TextShadow = Color.Black;
     private SoundStyle? TypeSound = null;
 
-    public UITextPrompt(int width, int height, SoundStyle? typeSound = null, Color? textColor = null, Color? shadowColor = null )
+    public UITextPrompt(int width, SoundStyle? typeSound = null, Color? textColor = null, Color? shadowColor = null )
     {
         if(textColor.HasValue)
             TextColor = textColor.Value;
@@ -26,7 +27,6 @@ public class UITextPrompt : UIElement
             TextShadow = shadowColor.Value;
         TypeSound = typeSound;
         Width.Set(width, 0);
-        Height.Set(height, 0);
     }
 
     public override void OnActivate()
@@ -46,22 +46,10 @@ public class UITextPrompt : UIElement
     {
         base.Update(gameTime);
 
-        if (Main.keyState.IsKeyDown(Microsoft.Xna.Framework.Input.Keys.Enter))
-        {
-            Main.ClosePlayerChat();
-            OnTypingComplete.Invoke(Text);
-            Active = false;
-            return;
-        }
-
-        if (Main.mouseLeft && !IsMouseHovering)
-            Active = false;
-    }
-
-    public override void LeftMouseDown(UIMouseEvent evt)
-    {
-        if(evt.Target == this)
-            Active = true;
+        if(LineCount == 0)
+            Height.Set(32, 0);
+        else
+            Height.Set(32 * LineCount, 0);
     }
 
     protected override void DrawSelf(SpriteBatch spriteBatch)
@@ -97,7 +85,7 @@ public class UITextPrompt : UIElement
         }
         
         string displayText = Text;
-        if (Active && (int)Main.GlobalTimeWrappedHourly % 2 == 0)
+        if (Active && (int)(Main.GlobalTimeWrappedHourly * 2) % 2 == 0)
             displayText += "|";
 
         List<string> textLines = [.. Utils.WordwrapString(displayText, FontAssets.MouseText.Value, (int)(Parent.Width.Pixels - Parent.PaddingRight - 10), 250, out _)];
@@ -153,11 +141,11 @@ public class UITextPrompt : UIElement
 
         List<List<TextSnippet>> dialogLines = [];
         for (int i = 0; i < textLines.Count; i++)
-        {
             dialogLines.Add(ChatManager.ParseMessage(textLines[i], Color.White));
-        }
 
-        for (int i = 0; i < dialogLines.Count; i++)
+        LineCount = dialogLines.Count;
+
+        for (int i = 0; i < LineCount; i++)
             if (dialogLines[i] != null)
             {
                 int positionY = (int)(position.Y + (32 * i));

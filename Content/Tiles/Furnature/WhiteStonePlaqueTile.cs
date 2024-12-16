@@ -73,10 +73,12 @@ public class WhiteStonePlaqueTile : ModTile
 
     public override bool RightClick(int i, int j)
     {
-        if (string.IsNullOrEmpty(FindTileEntity<StonePlaqueEntity>(i, j, Width, Height, SheetSquare).PlaqueText) && Main.LocalPlayer.HeldItem.type != ModContent.ItemType<HammerChisel>())
+        StonePlaqueEntity te = FindTileEntity<StonePlaqueEntity>(i, j, Width, Height, SheetSquare);
+        if (string.IsNullOrEmpty(te.PlaqueText) && Main.LocalPlayer.HeldItem.type != ModContent.ItemType<HammerChisel>())
             return false;
 
-        DialogueTileEntity = FindTileEntity<StonePlaqueEntity>(i, j, Width, Height, SheetSquare);
+        DialogueTileEntity = te;
+
         if (Main.LocalPlayer.HeldItem.type == ModContent.ItemType<HammerChisel>())
             ModContent.GetInstance<StonePlaqueUISystem>().OpenWhiteStonePlaqueUI(DialogueTileEntity);
         else
@@ -85,14 +87,14 @@ public class WhiteStonePlaqueTile : ModTile
             if (uiSystem.isDialogueOpen)
                 uiSystem.isDialogueOpen = false;
             else
-                uiSystem.DisplayDialogueTree(Windfall.Instance, "StonePlaqueText");
+                uiSystem.DisplayDialogueTree(Windfall.Instance, "WhiteStonePlaqueText");
         }
         return true;
     }
 
     private static void ModifyTree(string treeKey, int dialogueID, int buttonID)
     {
-        if (treeKey == "StonePlaqueText")
+        if (treeKey == "WhiteStonePlaqueText")
             ModContent.GetInstance<DialogueUISystem>().CurrentTree.Dialogues[0].DialogueText[0].Text = DialogueTileEntity.PlaqueText;
     }
 }

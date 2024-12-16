@@ -1312,12 +1312,12 @@ Items: {
 
 		DarkStonePlaque: {
 			DisplayName: Dark Stone Plaque
-			Tooltip: "Can be engraved upon using a Hammer and Chisel"
+			Tooltip: Can be engraved upon using a Hammer and Chisel
 		}
 
 		WhiteStonePlaque: {
 			DisplayName: White Stone Plaque
-			Tooltip: "Can be engraved upon using a Hammer and Chisel"
+			Tooltip: Can be engraved upon using a Hammer and Chisel
 		}
 	}
 

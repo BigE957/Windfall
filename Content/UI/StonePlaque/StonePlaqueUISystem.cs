@@ -15,6 +15,7 @@ public class StonePlaqueUISystem : ModSystem
         uiOpen = true;
         myTE = TileEntity;
         StonePlaqueUIState.IsDark = false;
+        StonePlaqueUIState.Prompt.Text = TileEntity.PlaqueText;
         userInterface?.SetState(StonePlaqueUIState);
     }
 
@@ -29,9 +30,7 @@ public class StonePlaqueUISystem : ModSystem
 
     public void CloseStonePlaqueUI(string EnteredText = null)
     {
-        if(EnteredText == null)
-            myTE.PlaqueText = StonePlaqueUIState.Prompt.Text;
-        else
+        if(EnteredText != null)
             myTE.PlaqueText = EnteredText;
         myTE = null;
         uiOpen = false;

@@ -77,6 +77,7 @@ public class DarkStonePlaqueTile : ModTile
             return false;
 
         DialogueTileEntity = FindTileEntity<StonePlaqueEntity>(i, j, Width, Height, SheetSquare);
+
         if (Main.LocalPlayer.HeldItem.type == ModContent.ItemType<HammerChisel>())
             ModContent.GetInstance<StonePlaqueUISystem>().OpenDarkStonePlaqueUI(DialogueTileEntity);
         else
@@ -85,14 +86,14 @@ public class DarkStonePlaqueTile : ModTile
             if (uiSystem.isDialogueOpen)
                 uiSystem.isDialogueOpen = false;
             else
-                uiSystem.DisplayDialogueTree(Windfall.Instance, "StonePlaqueText");
+                uiSystem.DisplayDialogueTree(Windfall.Instance, "DarkStonePlaqueText");
         }
         return true;
     }
 
     private static void ModifyTree(string treeKey, int dialogueID, int buttonID)
     {
-        if (treeKey == "StonePlaqueText")
+        if (treeKey == "DarkStonePlaqueText")
             ModContent.GetInstance<DialogueUISystem>().CurrentTree.Dialogues[0].DialogueText[0].Text = DialogueTileEntity.PlaqueText;
     }
 }
