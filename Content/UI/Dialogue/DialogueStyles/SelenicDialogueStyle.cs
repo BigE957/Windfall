@@ -5,6 +5,7 @@ using static DialogueHelper.UI.Dialogue.DialogueUIState;
 using Terraria.GameContent.UI.Elements;
 using Terraria.ModLoader.UI;
 using Terraria.UI;
+using ReLogic.Content;
 
 namespace Windfall.Content.UI.Dialogue.DialogueStyles;
 public class SelenicDialogueStyle : DialogueStyle
@@ -37,6 +38,7 @@ public class SelenicDialogueStyle : DialogueStyle
     }
     public override void OnResponseButtonCreate(UIPanel button, DialogueHelper.UI.MouseBlockingUIPanel textbox, int responseCount, int buttonCounter)
     {
+        ButtonCounters = null;
         button.Width.Set(150, 0);
         button.Height.Set(50, 0);
         button.Left.Pixels = (textbox.Width.Pixels + 200) * (buttonCounter / responseCount);
@@ -89,6 +91,8 @@ public class SelenicDialogueStyle : DialogueStyle
         NameText.VAlign = 0.75f;
         NameBox.Append(NameText);
     }
+
+    private static int[] ButtonCounters = null;
     public override void PostUpdateActive(DialogueHelper.UI.MouseBlockingUIPanel textbox, FlippableUIImage speaker, FlippableUIImage subSpeaker)
     {
         if (ModContent.GetInstance<DialogueUISystem>().swappingStyle)
@@ -113,6 +117,7 @@ public class SelenicDialogueStyle : DialogueStyle
         }
         else
         {
+            #region Textbox Updates
             float goalHeight = Main.screenHeight / 1.75f;
 
             if (textbox.Top.Pixels > goalHeight)
@@ -137,12 +142,26 @@ public class SelenicDialogueStyle : DialogueStyle
                 if (goalright - textbox.Left.Pixels < 1)
                     textbox.Left.Pixels = goalright;
             }
+            #endregion
 
             #region Button Updates
             DialogueUIState state = ModContent.GetInstance<DialogueUISystem>().DialogueUIState;
             DialogueText dialogue = (DialogueText)textbox.Children.Where(c => c.GetType() == typeof(DialogueText)).First();
-            if (dialogue.Crawling || state.Children.Count() == 1)
+            if (dialogue.Crawling)
                 return;
+            DialogueUISystem uiSystem = ModContent.GetInstance<DialogueUISystem>();
+            if (textbox.Children.Count() == 3 && uiSystem.CurrentTree.Dialogues[uiSystem.CurrentDialogueIndex].Responses.Length == 0)
+            {
+                SelenicArrow Arrow = new(ModContent.Request<Texture2D>($"{nameof(Windfall)}/Assets/UI/DialogueStyles/SelenicArrow"))
+                {
+                    ImageScale = 0f,
+                    NormalizedOrigin = Vector2.One / 2f,
+                    HAlign = 0.9f,
+                    VAlign = 0.75f
+                };
+                textbox.Append(Arrow);
+                return;
+            }
             UIElement[] responseButtons = state.Children.Where(c => c != state.Children.First() && c.GetType() == typeof(UIPanel)).ToArray();
 
             bool allInPosition = true;
@@ -157,19 +176,92 @@ public class SelenicDialogueStyle : DialogueStyle
                     button.Left.Pixels += 123.5f;
                 }               
             }
-            if(allInPosition)
-                for(int i = 0; i < responseButtons.Length; i++)
+            if (allInPosition)
+            {
+                if (responseButtons.Length > 0)
                 {
-                    UIElement button = responseButtons[i];
-
-                    if (!textbox.HasChild(button))
+                    for (int i = 0; i < responseButtons.Length; i++)
                     {
-                        textbox.AddOrRemoveChild(button, true);
-                        button.Left.Pixels = textbox.Width.Pixels / (2 * responseButtons.Length) + (textbox.Width.Pixels * (float)(i / (float)responseButtons.Length) - button.Width.Pixels / 2);
-                        button.Left.Pixels -= 3;
-                        button.Top.Set(260, 0);
+                        UIElement button = responseButtons[i];
+                        if (!textbox.HasChild(button))
+                        {
+                            button.Left.Pixels = textbox.Width.Pixels / (2 * responseButtons.Length) + (textbox.Width.Pixels * (float)(i / (float)responseButtons.Length) - button.Width.Pixels / 2);
+                            button.Left.Pixels -= 3;
+                            button.Top.Set(260, 0);
+                            textbox.AddOrRemoveChild(button, true);
+                        }
                     }
                 }
+                else
+                {
+                    responseButtons = textbox.Children.Where(c => c.GetType() == typeof(UIPanel)).ToArray();
+                    for (int i = 0; i < responseButtons.Length; i++)
+                    {
+                        ButtonCounters ??= new int[responseButtons.Length];
+
+                        UIElement button = responseButtons[i];
+                        
+                        UIImage image = (UIImage)button.Children.First(c => c.GetType() == typeof(UIImage));
+                        image.AllowResizingDimensions = false;
+                        if (button.IsMouseHovering)
+                        {
+                            image.SetImage(ModContent.Request<Texture2D>($"{nameof(Windfall)}/Assets/UI/DialogueStyles/SelenicResponseSelected"));
+
+                            if (ButtonCounters[i] < 18)
+                            {
+                                float value = Lerp(ButtonSize.Y, ButtonSize.Y * 1.25f, SineInEasing(ButtonCounters[i] / 18f, 1));
+                                button.Width.Pixels = value * 3;
+                                button.Height.Pixels = value;
+                                ButtonCounters[i]++;
+                            }
+                            else
+                            {
+                                ButtonCounters[i] = 18;
+                                button.Width.Pixels = ButtonSize.X * 1.25f;
+                                button.Height.Pixels = ButtonSize.Y * 1.25f;
+                            }
+                        }
+                        else
+                        {
+                            image.SetImage(ModContent.Request<Texture2D>($"{nameof(Windfall)}/Assets/UI/DialogueStyles/SelenicResponse"));
+
+                            if (ButtonCounters[i] > 0)
+                            {
+                                float value = Lerp(ButtonSize.Y * 1.25f, ButtonSize.Y, SineOutEasing(1 - (ButtonCounters[i] / 18f), 1));
+                                button.Width.Pixels = value * 3;
+                                button.Height.Pixels = value;
+                                ButtonCounters[i]--;
+                            }
+                            else
+                            {
+                                ButtonCounters[i] = 0;
+                                button.Width.Pixels = ButtonSize.X;
+                                button.Height.Pixels = ButtonSize.Y;
+                            }
+                        }
+                        
+                        UIText text = (UIText)button.Children.First(c => c.GetType() == typeof(UIText));
+                        text.SetText(text.Text, 0.875f * button.Width.Pixels / ButtonSize.X, false);
+                        text.Top.Pixels = 3;
+                        text.Left.Pixels = 2;
+                        image.ImageScale = button.Width.Pixels / ButtonSize.X;
+
+                        button.Left.Pixels = textbox.Width.Pixels / (2 * responseButtons.Length) + (textbox.Width.Pixels * (float)(i / (float)responseButtons.Length) - button.Width.Pixels / 2);
+                        button.Left.Pixels -= 5;
+                        button.Top.Pixels = 257 - ((button.Height.Pixels - ButtonSize.Y) / 2f);
+
+                        image.Top.Pixels = button.Height.Pixels / -2f;
+                        image.Top.Pixels += 18 * (((button.Width.Pixels / ButtonSize.X) -1) * 4);
+                        image.Left.Pixels = button.Width.Pixels / -4f;
+                        image.Left.Pixels += 22 * (((button.Width.Pixels / ButtonSize.X) - 1) * 4);
+                        if(button.IsMouseHovering)
+                        {
+                            image.Top.Pixels -= 2;
+                            image.Left.Pixels -= 2;
+                        }
+                    }
+                }
+            }
             #endregion
         }
     }
@@ -206,4 +298,31 @@ public class SelenicDialogueStyle : DialogueStyle
     {
         return textbox.Top.Pixels >= Main.screenHeight * 1.15f;
     }
+
+    internal class SelenicArrow(Asset<Texture2D> texture) : FlippableUIImage(texture)
+    {
+        int Counter = 0;
+        public override void OnActivate()
+        {
+            ImageScale = 0f;
+            NormalizedOrigin = Vector2.One / 2f;
+        }
+        public override void Update(GameTime gameTime)
+        {
+            if (Counter < 24)
+            {
+                ImageScale = ExpOutEasing(Counter / 24f, 1) / 2f;
+                Counter++;
+            }
+            else
+            {
+                ImageScale = 0.5f;
+                Counter = 24;
+            }
+            float sineWave = (float)Math.Sin(Main.GlobalTimeWrappedHourly * 2);
+            Rotation = sineWave * (Pi / 16f);
+            Top.Pixels = sineWave * 6;
+        }
+    }
+
 }

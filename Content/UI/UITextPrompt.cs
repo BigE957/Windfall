@@ -12,7 +12,6 @@ public class UITextPrompt : UIElement
     public UIPanel BackPanel = null;
     public string Text = "";
     public bool Active = false;
-    public string HintText = "...";
     public int LineCount = 1;
 
     private Color TextColor = Color.White;
@@ -80,7 +79,7 @@ public class UITextPrompt : UIElement
 
         if (string.IsNullOrEmpty(Text) && !Active)
         {
-            Utils.DrawBorderString(spriteBatch, HintText, position, Color.DarkGray);
+            Utils.DrawBorderString(spriteBatch, "...", position, Color.DarkGray);
             return;
         }
         
