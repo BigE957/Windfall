@@ -11,6 +11,20 @@ namespace Windfall.Content.UI.Dialogue.DialogueStyles;
 public class SelenicDialogueStyle : DialogueStyle
 {
     public override Vector2 ButtonSize => new(150, 50);
+    public override List<Vector2> LineBreakOffsets => 
+    [
+        new(0,0),
+        new(0,32),
+        new(8,40),
+        new(16,48),
+        new(24,56),
+        new(32,64),
+        new(40,72),
+        new(48,80),
+        new(56,88),
+        new(64,96)
+    ];
+
     public override void OnTextboxCreate(UIPanel textbox, FlippableUIImage speaker, FlippableUIImage subSpeaker)
     {
         bool speakerRight = ModContent.GetInstance<DialogueUISystem>().speakerRight;
@@ -152,7 +166,7 @@ public class SelenicDialogueStyle : DialogueStyle
             DialogueUISystem uiSystem = ModContent.GetInstance<DialogueUISystem>();
             if (textbox.Children.Count() == 3 && uiSystem.CurrentTree.Dialogues[uiSystem.CurrentDialogueIndex].Responses.Length == 0)
             {
-                SelenicArrow Arrow = new(ModContent.Request<Texture2D>($"{nameof(Windfall)}/Assets/UI/DialogueStyles/SelenicArrow"))
+                SelenicArrow Arrow = new(ModContent.Request<Texture2D>($"{nameof(Windfall)}/Assets/UI/DialogueStyles/SelenicArrow", AssetRequestMode.ImmediateLoad))
                 {
                     ImageScale = 0f,
                     NormalizedOrigin = Vector2.One / 2f,
