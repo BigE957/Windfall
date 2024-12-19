@@ -385,22 +385,25 @@ public class Seamstress : ModNPC
     }
     private static void CloseEffect(string treeKey, int dialogueID, int buttonID)
     {
-        NPC me = Main.npc[(int)ModContent.GetInstance<DialogueUISystem>().CurrentDialogueContext.Arguments[0]];
-
-        if (buttonID == 1)
+        if(treeKey.Contains("TheSeamstress/"))
         {
-            if ((treeKey == "TheSeamstress/TailorTutorial" && dialogueID == 2) || treeKey == "TheSeamstress/ActivityStart" || treeKey == "TheSeamstress/ReActivityStart")
+            NPC me = Main.npc[(int)ModContent.GetInstance<DialogueUISystem>().CurrentDialogueContext.Arguments[0]];
+
+            if (buttonID == 1)
             {
-                CompletedClothesCount = 0;
-                State = SystemStates.Tailor;
-                Active = true;
-                me.As<Seamstress>().BeginActivity = true;
+                if ((treeKey == "TheSeamstress/TailorTutorial" && dialogueID == 2) || treeKey == "TheSeamstress/ActivityStart" || treeKey == "TheSeamstress/ReActivityStart")
+                {
+                    CompletedClothesCount = 0;
+                    State = SystemStates.Tailor;
+                    Active = true;
+                    me.As<Seamstress>().BeginActivity = true;
+                }
             }
+            if (treeKey == "TheSeamstress/Default" && dialogueID == 6 && Main.LocalPlayer.LunarCult().apostleQuestTracker == 1)
+                Main.LocalPlayer.LunarCult().apostleQuestTracker++;
+            if (treeKey == "TheSeamstress/Default" && dialogueID == 12 && Main.LocalPlayer.LunarCult().apostleQuestTracker == 3)
+                Main.LocalPlayer.LunarCult().apostleQuestTracker++;
         }
-        if (treeKey == "TheSeamstress/Default" && dialogueID == 6 && Main.LocalPlayer.LunarCult().apostleQuestTracker == 1)
-            Main.LocalPlayer.LunarCult().apostleQuestTracker++;
-        if (treeKey == "TheSeamstress/Default" && dialogueID == 12 && Main.LocalPlayer.LunarCult().apostleQuestTracker == 3)
-            Main.LocalPlayer.LunarCult().apostleQuestTracker++;
     }
     private static bool HasItem(Player player, int id)
     {

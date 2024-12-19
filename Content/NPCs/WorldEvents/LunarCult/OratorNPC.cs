@@ -153,68 +153,71 @@ public class OratorNPC : ModNPC
 
     private static void CloseEffect(string treeKey, int dialogueID, int buttonID)
     {
-        NPC orator = Main.npc[(int)ModContent.GetInstance<DialogueUISystem>().CurrentDialogueContext.Arguments[0]];
-
-        switch (treeKey)
+        if(treeKey.Contains("TheOrator/"))
         {
-            case "TheOrator/TutorialChat":
-                LunarCultBaseSystem.TutorialComplete = true;
-                orator.ai[0] = 0;
-                break;
-            case "TheOrator/RitualEvent":
-                if (dialogueID == 1)
-                {
-                    LunarCultBaseSystem.State = LunarCultBaseSystem.SystemStates.Ritual;
-                    LunarCultBaseSystem.Active = true;
+            NPC orator = Main.npc[(int)ModContent.GetInstance<DialogueUISystem>().CurrentDialogueContext.Arguments[0]];
+
+            switch (treeKey)
+            {
+                case "TheOrator/TutorialChat":
+                    LunarCultBaseSystem.TutorialComplete = true;
                     orator.ai[0] = 0;
-                    int itemID = -1;
-                    switch(buttonID)
+                    break;
+                case "TheOrator/RitualEvent":
+                    if (dialogueID == 1)
                     {
-                        case 0: itemID = ModContent.ItemType<RiftWeaver>(); break;
+                        LunarCultBaseSystem.State = LunarCultBaseSystem.SystemStates.Ritual;
+                        LunarCultBaseSystem.Active = true;
+                        orator.ai[0] = 0;
+                        int itemID = -1;
+                        switch (buttonID)
+                        {
+                            case 0: itemID = ModContent.ItemType<RiftWeaver>(); break;
+                        }
+                        Item i = Main.item[Item.NewItem(orator.GetSource_Loot(), orator.Center, new Vector2(8, 4), itemID)];
+                        i.velocity = new Vector2(orator.direction, 0) * -4;
                     }
-                    Item i = Main.item[Item.NewItem(orator.GetSource_Loot(), orator.Center, new Vector2(8, 4), itemID)];
-                    i.velocity = new Vector2(orator.direction, 0) * -4;
-                }
-                break;
-            case "TheOrator/BetrayalChat":
-                LunarCultBaseSystem.BetrayalActive = true;
-                orator.ai[0] = 0;
-                break;
-            case "TheOrator/LunarCoins":
-                Main.LocalPlayer.LunarCult().awareOfLunarCoins = true;
-                if (buttonID == 0)
-                {
-                    Main.playerInventory = true;
-                    Main.stackSplit = 9999;
-                    Main.npcChatText = "";
-                    Main.LocalPlayer.SetTalkNPC(orator.whoAmI);
-                    Main.SetNPCShopIndex(1);
-                    Main.instance.shop[Main.npcShop].SetupShop(NPCShopDatabase.GetShopName(orator.type, "Shop"), orator);
-                    SoundEngine.PlaySound(SoundID.MenuTick);
-                }
-                break;
-            case "TheOrator/Default":
-                if (buttonID == 0 && Main.LocalPlayer.LunarCult().awareOfLunarCoins)
-                {
-                    Main.playerInventory = true;
-                    Main.stackSplit = 9999;
-                    Main.npcChatText = "";
-                    Main.LocalPlayer.SetTalkNPC(orator.whoAmI);
-                    Main.SetNPCShopIndex(1);
-                    Main.instance.shop[Main.npcShop].SetupShop(NPCShopDatabase.GetShopName(orator.type, "Shop"), orator);
-                    SoundEngine.PlaySound(SoundID.MenuTick);
-                }
-                break;
-            case "THeOrator/ApostleQuest1":
-                if (dialogueID == 1)
-                    Main.LocalPlayer.LunarCult().apostleQuestTracker = -1;
-                else if(dialogueID == 5 || dialogueID == 12)
-                    Main.LocalPlayer.LunarCult().apostleQuestTracker++; //5:5 12:6
-                break;
-            case "THeOrator/ApostleQuest2":
-                if (dialogueID == 5 || dialogueID == 8)
-                    Main.LocalPlayer.LunarCult().apostleQuestTracker++; //5:8 //8:10
-                break;
+                    break;
+                case "TheOrator/BetrayalChat":
+                    LunarCultBaseSystem.BetrayalActive = true;
+                    orator.ai[0] = 0;
+                    break;
+                case "TheOrator/LunarCoins":
+                    Main.LocalPlayer.LunarCult().awareOfLunarCoins = true;
+                    if (buttonID == 0)
+                    {
+                        Main.playerInventory = true;
+                        Main.stackSplit = 9999;
+                        Main.npcChatText = "";
+                        Main.LocalPlayer.SetTalkNPC(orator.whoAmI);
+                        Main.SetNPCShopIndex(1);
+                        Main.instance.shop[Main.npcShop].SetupShop(NPCShopDatabase.GetShopName(orator.type, "Shop"), orator);
+                        SoundEngine.PlaySound(SoundID.MenuTick);
+                    }
+                    break;
+                case "TheOrator/Default":
+                    if (buttonID == 0 && Main.LocalPlayer.LunarCult().awareOfLunarCoins)
+                    {
+                        Main.playerInventory = true;
+                        Main.stackSplit = 9999;
+                        Main.npcChatText = "";
+                        Main.LocalPlayer.SetTalkNPC(orator.whoAmI);
+                        Main.SetNPCShopIndex(1);
+                        Main.instance.shop[Main.npcShop].SetupShop(NPCShopDatabase.GetShopName(orator.type, "Shop"), orator);
+                        SoundEngine.PlaySound(SoundID.MenuTick);
+                    }
+                    break;
+                case "THeOrator/ApostleQuest1":
+                    if (dialogueID == 1)
+                        Main.LocalPlayer.LunarCult().apostleQuestTracker = -1;
+                    else if (dialogueID == 5 || dialogueID == 12)
+                        Main.LocalPlayer.LunarCult().apostleQuestTracker++; //5:5 12:6
+                    break;
+                case "THeOrator/ApostleQuest2":
+                    if (dialogueID == 5 || dialogueID == 8)
+                        Main.LocalPlayer.LunarCult().apostleQuestTracker++; //5:8 //8:10
+                    break;
+            }
         }
     }
     public override void AddShops()

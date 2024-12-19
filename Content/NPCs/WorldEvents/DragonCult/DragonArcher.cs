@@ -42,17 +42,20 @@ public class DragonArcher : ModNPC
     public override bool CheckActive() => false;
     private static void CloseEffect(string treeKey, int dialogueID, int buttonID)
     {
-        NPC me = Main.npc[(int)ModContent.GetInstance<DialogueUISystem>().CurrentDialogueContext.Arguments[0]];
-
-        foreach (NPC npc in Main.npc.Where(n => n.type == me.type && n.active))
+        if(treeKey == "MechanicShed")
         {
-            for (int i = 0; i < 50; i++)
+            NPC me = Main.npc[(int)ModContent.GetInstance<DialogueUISystem>().CurrentDialogueContext.Arguments[0]];
+
+            foreach (NPC npc in Main.npc.Where(n => n.type == me.type && n.active))
             {
-                Vector2 speed = Main.rand.NextVector2Circular(1.5f, 2f);
-                Dust d = Dust.NewDustPerfect(npc.Center, DustID.GoldFlame, speed * 3, Scale: 1.5f);
-                d.noGravity = true;
+                for (int i = 0; i < 50; i++)
+                {
+                    Vector2 speed = Main.rand.NextVector2Circular(1.5f, 2f);
+                    Dust d = Dust.NewDustPerfect(npc.Center, DustID.GoldFlame, speed * 3, Scale: 1.5f);
+                    d.noGravity = true;
+                }
+                npc.active = false;
             }
-            npc.active = false;
         }
     }
 }
