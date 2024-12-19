@@ -64,7 +64,7 @@ public class Watchman : ModNPC
 
         if(AIState == States.Idle)
         {
-            ModContent.GetInstance<DialogueUISystem>().DisplayDialogueTree(Windfall.Instance, $"Watchman/{LunarCultBaseSystem.PlannedActivity}");
+            ModContent.GetInstance<DialogueUISystem>().DisplayDialogueTree(Windfall.Instance, $"Watchman/{LunarCultBaseSystem.PlannedActivity}", new(Name, [NPC.whoAmI]));
             return "";
         }
 
@@ -74,12 +74,12 @@ public class Watchman : ModNPC
             Main.LocalPlayer.LunarCult().timesWatchmenTalked++;
         }
 
-        ModContent.GetInstance<DialogueUISystem>().DisplayDialogueTree(Windfall.Instance, "Watchman/Default", Main.LocalPlayer.LunarCult().timesWatchmenTalked >= 3 ? 2 : 0);
+        ModContent.GetInstance<DialogueUISystem>().DisplayDialogueTree(Windfall.Instance, "Watchman/Default", new(Name, [NPC.whoAmI]), Main.LocalPlayer.LunarCult().timesWatchmenTalked >= 3 ? 2 : 0);
 
         return "";
     }
     public override bool CheckActive() => false;
-    private void ModifyTree(string treeKey, int dialogueID, int buttonID)
+    private static void ModifyTree(string treeKey, int dialogueID, int buttonID)
     {
         DialogueUISystem uiSystem = ModContent.GetInstance<DialogueUISystem>();
         switch (treeKey)
@@ -94,7 +94,7 @@ public class Watchman : ModNPC
                 break;
         }
     }
-    private void ClickEffect(string treeKey, int dialogueID, int buttonID)
+    private static void ClickEffect(string treeKey, int dialogueID, int buttonID)
     {
         if(treeKey == "Watchman/Default" && dialogueID == 11)
             Main.LocalPlayer.LunarCult().askedWatchmanAboutOrator = true;

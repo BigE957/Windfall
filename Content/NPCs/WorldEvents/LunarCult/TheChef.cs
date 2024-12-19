@@ -166,14 +166,14 @@ public class TheChef : ModNPC
                 CombatText.NewText(NPC.Hitbox, Color.LimeGreen, GetWindfallTextValue(chefPath + "Activity.Interuptted." + Main.rand.Next(3)), true);
                 return "";
             }
-            ModContent.GetInstance<DialogueUISystem>().DisplayDialogueTree(Windfall.Instance, "TheChef/FoodSelection");
+            ModContent.GetInstance<DialogueUISystem>().DisplayDialogueTree(Windfall.Instance, "TheChef/FoodSelection", new(Name, [NPC.whoAmI]));
         }
         else if (PlannedActivity == SystemStates.Cafeteria && State == SystemStates.Ready)
-            ModContent.GetInstance<DialogueUISystem>().DisplayDialogueTree(Windfall.Instance, "TheChef/CafeteriaActivityStart");
+            ModContent.GetInstance<DialogueUISystem>().DisplayDialogueTree(Windfall.Instance, "TheChef/CafeteriaActivityStart", new(Name, [NPC.whoAmI]));
         else if (SealingRitualSystem.RitualSequenceSeen)
-            ModContent.GetInstance<DialogueUISystem>().DisplayDialogueTree(Windfall.Instance, "TheChef/Abandoned");
+            ModContent.GetInstance<DialogueUISystem>().DisplayDialogueTree(Windfall.Instance, "TheChef/Abandoned", new(Name, [NPC.whoAmI]));
         else
-            ModContent.GetInstance<DialogueUISystem>().DisplayDialogueTree(Windfall.Instance, "TheChef/Default");                
+            ModContent.GetInstance<DialogueUISystem>().DisplayDialogueTree(Windfall.Instance, "TheChef/Default", new(Name, [NPC.whoAmI]));                
         return "Hey chat!";
     }
     public override bool CheckActive() => !NPC.downedAncientCultist;
@@ -197,7 +197,7 @@ public class TheChef : ModNPC
         spriteBatch.Draw(barBG, drawPos, null, bgColor, 0f, barOrigin, barScale, 0f, 0f);
         spriteBatch.Draw(barFG, drawPos, frameCrop, Color.Lerp(Color.Yellow, Color.LimeGreen, TimeCooking / CookTime), 0f, barOrigin, barScale, 0f, 0f);
     }
-    private void ModifyTree(string treeKey, int dialogueID, int buttonID)
+    private static void ModifyTree(string treeKey, int dialogueID, int buttonID)
     {
         DialogueUISystem uiSystem = ModContent.GetInstance<DialogueUISystem>();
         switch (treeKey)
@@ -220,16 +220,16 @@ public class TheChef : ModNPC
                 break;
         }
     }
-    private void ClickEffect(string treeKey, int dialogueID, int buttonID)
+    private static void ClickEffect(string treeKey, int dialogueID, int buttonID)
     {
         if (!treeKey.Contains("TheChef"))
             return;
-        NPC chef = Main.npc[NPC.FindFirstNPC(ModContent.NPCType<TheChef>())];
+        NPC chef = Main.npc[(int)ModContent.GetInstance<DialogueUISystem>().CurrentDialogueContext.Arguments[0]];
         if (treeKey == "TheChef/FoodSelection" && dialogueID == 0)
             chef.ai[3] = MenuFoodIDs[buttonID];
         else if (treeKey == "TheChef/CafeteriaActivityStart" && dialogueID == 0 && buttonID == 1)
         {
-            Item i = Main.item[Item.NewItem(Entity.GetSource_Loot(), chef.Center, new Vector2(8, 4), ModContent.ItemType<ChefMenu>())];
+            Item i = Main.item[Item.NewItem(chef.GetSource_Loot(), chef.Center, new Vector2(8, 4), ModContent.ItemType<ChefMenu>())];
             i.velocity = Vector2.UnitX * 4;
         }
         else if(treeKey == "TheChef/Default")
@@ -237,7 +237,7 @@ public class TheChef : ModNPC
             if (dialogueID == 1)
             {
                 Main.LocalPlayer.LunarCult().hasRecievedChefMeal = true;
-                Item item = Main.item[Item.NewItem(Item.GetSource_NaturalSpawn(), NPC.Center, Vector2.Zero, MenuFoodIDs[buttonID])];
+                Item item = Main.item[Item.NewItem(Item.GetSource_NaturalSpawn(), chef.Center, Vector2.Zero, MenuFoodIDs[buttonID])];
                 item.velocity = new Vector2(1.75f, Main.rand.NextFloat(-3, 0));
             }
             else if (Main.LocalPlayer.LunarCult().apostleQuestTracker == 0 && dialogueID == 7)
@@ -245,7 +245,7 @@ public class TheChef : ModNPC
         }
     }
 
-    private void CloseEffect(string treeKey, int dialogueID, int buttonID)
+    private static void CloseEffect(string treeKey, int dialogueID, int buttonID)
     {
         if (treeKey == "TheChef/Abandoned")
             Main.LocalPlayer.LunarCult().spokeToAbandonedChef = true;

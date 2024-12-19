@@ -35,14 +35,16 @@ public class DragonArcher : ModNPC
     {
         Main.CloseNPCChatOrSign();
 
-        ModContent.GetInstance<DialogueUISystem>().DisplayDialogueTree(Windfall.Instance, "MechanicShed");
+        ModContent.GetInstance<DialogueUISystem>().DisplayDialogueTree(Windfall.Instance, "MechanicShed", new(Name, [NPC.whoAmI]));
 
         return base.GetChat();
     }
     public override bool CheckActive() => false;
-    private void CloseEffect(string treeKey, int dialogueID, int buttonID)
+    private static void CloseEffect(string treeKey, int dialogueID, int buttonID)
     {
-        foreach (NPC npc in Main.npc.Where(n => n.type == NPC.type && n.active))
+        NPC me = Main.npc[(int)ModContent.GetInstance<DialogueUISystem>().CurrentDialogueContext.Arguments[0]];
+
+        foreach (NPC npc in Main.npc.Where(n => n.type == me.type && n.active))
         {
             for (int i = 0; i < 50; i++)
             {

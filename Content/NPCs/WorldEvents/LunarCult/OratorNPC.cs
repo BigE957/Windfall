@@ -56,24 +56,24 @@ public class OratorNPC : ModNPC
         switch(Main.LocalPlayer.LunarCult().apostleQuestTracker)
         {
             case 4:
-                ModContent.GetInstance<DialogueUISystem>().DisplayDialogueTree(Windfall.Instance, "TheOrator/ApostleQuest1");
+                ModContent.GetInstance<DialogueUISystem>().DisplayDialogueTree(Windfall.Instance, "TheOrator/ApostleQuest1", new(Name, [NPC.whoAmI]));
                 return "";
             case 7:
-                ModContent.GetInstance<DialogueUISystem>().DisplayDialogueTree(Windfall.Instance, "TheOrator/ApostleQuest2");
+                ModContent.GetInstance<DialogueUISystem>().DisplayDialogueTree(Windfall.Instance, "TheOrator/ApostleQuest2", new(Name, [NPC.whoAmI]));
                 return "";
             case 9:
-                ModContent.GetInstance<DialogueUISystem>().DisplayDialogueTree(Windfall.Instance, "TheOrator/ApostleQuest2", 6);
+                ModContent.GetInstance<DialogueUISystem>().DisplayDialogueTree(Windfall.Instance, "TheOrator/ApostleQuest2", new(Name, [NPC.whoAmI]), 6);
                 return "";
         }
 
         if (NPC.ai[0] == 0)
-            ModContent.GetInstance<DialogueUISystem>().DisplayDialogueTree(Windfall.Instance, "TheOrator/Default");
+            ModContent.GetInstance<DialogueUISystem>().DisplayDialogueTree(Windfall.Instance, "TheOrator/Default", new(Name, [NPC.whoAmI]));
         else
-            ModContent.GetInstance<DialogueUISystem>().DisplayDialogueTree(Windfall.Instance, "TheOrator/" + AIState.ToString());           
+            ModContent.GetInstance<DialogueUISystem>().DisplayDialogueTree(Windfall.Instance, "TheOrator/" + AIState.ToString(), new(Name, [NPC.whoAmI]));           
 
         return "";
     }
-    private void OpenEffect(string treeKey, int dialogueID, int buttonID)
+    private static void OpenEffect(string treeKey, int dialogueID, int buttonID)
     {
         DialogueUISystem uiSystem = ModContent.GetInstance<DialogueUISystem>();
 
@@ -120,7 +120,7 @@ public class OratorNPC : ModNPC
         }
     }
 
-    private void ClickEffect(string treeKey, int dialogueID, int buttonID)
+    private static void ClickEffect(string treeKey, int dialogueID, int buttonID)
     {
         if (treeKey == "TheOrator/ApostleQuest1" && dialogueID == 6 && buttonID == 0)
         {
@@ -151,19 +151,19 @@ public class OratorNPC : ModNPC
         }
     }
 
-    private void CloseEffect(string treeKey, int dialogueID, int buttonID)
+    private static void CloseEffect(string treeKey, int dialogueID, int buttonID)
     {
+        NPC orator = Main.npc[(int)ModContent.GetInstance<DialogueUISystem>().CurrentDialogueContext.Arguments[0]];
+
         switch (treeKey)
         {
             case "TheOrator/TutorialChat":
-                NPC orator = Main.npc.First(n => n.active && n.type == ModContent.NPCType<OratorNPC>() && n.ai[0] == (int)States.TutorialChat);
                 LunarCultBaseSystem.TutorialComplete = true;
                 orator.ai[0] = 0;
                 break;
             case "TheOrator/RitualEvent":
                 if (dialogueID == 1)
                 {
-                    orator = Main.npc.First(n => n.active && n.type == ModContent.NPCType<OratorNPC>() && n.ai[0] == (int)States.RitualEvent);
                     LunarCultBaseSystem.State = LunarCultBaseSystem.SystemStates.Ritual;
                     LunarCultBaseSystem.Active = true;
                     orator.ai[0] = 0;
@@ -172,12 +172,11 @@ public class OratorNPC : ModNPC
                     {
                         case 0: itemID = ModContent.ItemType<RiftWeaver>(); break;
                     }
-                    Item i = Main.item[Item.NewItem(Entity.GetSource_Loot(), orator.Center, new Vector2(8, 4), itemID)];
+                    Item i = Main.item[Item.NewItem(orator.GetSource_Loot(), orator.Center, new Vector2(8, 4), itemID)];
                     i.velocity = new Vector2(orator.direction, 0) * -4;
                 }
                 break;
             case "TheOrator/BetrayalChat":
-                orator = Main.npc.First(n => n.active && n.type == ModContent.NPCType<OratorNPC>() && n.ai[0] == (int)States.TutorialChat);
                 LunarCultBaseSystem.BetrayalActive = true;
                 orator.ai[0] = 0;
                 break;
@@ -185,7 +184,6 @@ public class OratorNPC : ModNPC
                 Main.LocalPlayer.LunarCult().awareOfLunarCoins = true;
                 if (buttonID == 0)
                 {
-                    orator = Main.npc.First(n => n.active && n.type == ModContent.NPCType<OratorNPC>() && n.ai[0] == 0);
                     Main.playerInventory = true;
                     Main.stackSplit = 9999;
                     Main.npcChatText = "";
@@ -198,7 +196,6 @@ public class OratorNPC : ModNPC
             case "TheOrator/Default":
                 if (buttonID == 0 && Main.LocalPlayer.LunarCult().awareOfLunarCoins)
                 {
-                    orator = Main.npc.First(n => n.active && n.type == ModContent.NPCType<OratorNPC>() && n.ai[0] == 0);
                     Main.playerInventory = true;
                     Main.stackSplit = 9999;
                     Main.npcChatText = "";

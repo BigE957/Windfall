@@ -86,7 +86,7 @@ public class DarkStonePlaqueTile : ModTile
             if (uiSystem.isDialogueOpen)
                 uiSystem.isDialogueOpen = false;
             else
-                uiSystem.DisplayDialogueTree(Windfall.Instance, "DarkStonePlaqueText");
+                uiSystem.DisplayDialogueTree(Windfall.Instance, "DarkStonePlaqueText", new(Name, []));
         }
         return true;
     }

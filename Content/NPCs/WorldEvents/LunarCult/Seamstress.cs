@@ -329,19 +329,19 @@ public class Seamstress : ModNPC
         else if (PlannedActivity == SystemStates.Tailor && State == SystemStates.Ready)
         {
             if (DeclinedStartActivity)
-                ModContent.GetInstance<DialogueUISystem>().DisplayDialogueTree(Windfall.Instance, "TheSeamstress/ReActivityStart");
+                ModContent.GetInstance<DialogueUISystem>().DisplayDialogueTree(Windfall.Instance, "TheSeamstress/ReActivityStart", new(Name, [NPC.whoAmI]));
             else
             {
                 if (MyPlayer.LunarCult().SeamstressTalked)
-                    ModContent.GetInstance<DialogueUISystem>().DisplayDialogueTree(Windfall.Instance, "TheSeamstress/ActivityStart");
+                    ModContent.GetInstance<DialogueUISystem>().DisplayDialogueTree(Windfall.Instance, "TheSeamstress/ActivityStart", new(Name, [NPC.whoAmI]));
                 else
-                    ModContent.GetInstance<DialogueUISystem>().DisplayDialogueTree(Windfall.Instance, "TheSeamstress/TailorTutorial");
+                    ModContent.GetInstance<DialogueUISystem>().DisplayDialogueTree(Windfall.Instance, "TheSeamstress/TailorTutorial", new(Name, [NPC.whoAmI]));
             }
         }
         else if (SealingRitualSystem.RitualSequenceSeen)
-            ModContent.GetInstance<DialogueUISystem>().DisplayDialogueTree(Windfall.Instance, "TheSeamstress/Abandoned");
+            ModContent.GetInstance<DialogueUISystem>().DisplayDialogueTree(Windfall.Instance, "TheSeamstress/Abandoned", new(Name, [NPC.whoAmI]));
         else
-            ModContent.GetInstance<DialogueUISystem>().DisplayDialogueTree(Windfall.Instance, "TheSeamstress/Default", MyPlayer.LunarCult().SeamstressTalked ? 1 : 0);
+            ModContent.GetInstance<DialogueUISystem>().DisplayDialogueTree(Windfall.Instance, "TheSeamstress/Default", new(Name, [NPC.whoAmI]), MyPlayer.LunarCult().SeamstressTalked ? 1 : 0);
             
         return "";
     }
@@ -358,7 +358,7 @@ public class Seamstress : ModNPC
         Main.spriteBatch.Draw(texture, drawPosition, NPC.frame, drawColor * NPC.Opacity, NPC.rotation, origin, NPC.scale, direction, 0f);
         return false;
     }
-    private void ModifyTree(string treeKey, int dialogueID, int buttonID)
+    private static void ModifyTree(string treeKey, int dialogueID, int buttonID)
     {
         DialogueUISystem uiSystem = ModContent.GetInstance<DialogueUISystem>();
         switch (treeKey)
@@ -383,8 +383,10 @@ public class Seamstress : ModNPC
                 break;
         }
     }
-    private void CloseEffect(string treeKey, int dialogueID, int buttonID)
+    private static void CloseEffect(string treeKey, int dialogueID, int buttonID)
     {
+        NPC me = Main.npc[(int)ModContent.GetInstance<DialogueUISystem>().CurrentDialogueContext.Arguments[0]];
+
         if (buttonID == 1)
         {
             if ((treeKey == "TheSeamstress/TailorTutorial" && dialogueID == 2) || treeKey == "TheSeamstress/ActivityStart" || treeKey == "TheSeamstress/ReActivityStart")
@@ -392,7 +394,7 @@ public class Seamstress : ModNPC
                 CompletedClothesCount = 0;
                 State = SystemStates.Tailor;
                 Active = true;
-                BeginActivity = true;
+                me.As<Seamstress>().BeginActivity = true;
             }
         }
         if (treeKey == "TheSeamstress/Default" && dialogueID == 6 && Main.LocalPlayer.LunarCult().apostleQuestTracker == 1)

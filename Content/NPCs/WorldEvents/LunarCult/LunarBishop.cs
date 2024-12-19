@@ -193,10 +193,10 @@ public class LunarBishop : ModNPC
         switch (AIState)
         {
             case States.SelenicChat:
-                ModContent.GetInstance<DialogueUISystem>().DisplayDialogueTree(Windfall.Instance, AIState.ToString());
+                ModContent.GetInstance<DialogueUISystem>().DisplayDialogueTree(Windfall.Instance, AIState.ToString(), new(Name, [NPC.whoAmI]));
                 break;
             case States.StaticCharacter:
-                ModContent.GetInstance<DialogueUISystem>().DisplayDialogueTree(Windfall.Instance, $"SelenicCultists/{myCharacter}", characterSpokenTo ? 1 : 0);
+                ModContent.GetInstance<DialogueUISystem>().DisplayDialogueTree(Windfall.Instance, $"SelenicCultists/{myCharacter}", new(Name, [NPC.whoAmI]), characterSpokenTo ? 1 : 0);
                 characterSpokenTo = true;
                 break;
             case States.CafeteriaEvent:
@@ -228,12 +228,12 @@ public class LunarBishop : ModNPC
         return "Rizz"; //Won't actually be seen.
     }
     public override bool CheckActive() => false;
-    private void CloseEffect(string treeKey, int dialogueID, int buttonID)
+    private static void CloseEffect(string treeKey, int dialogueID, int buttonID)
     {
         if (treeKey == States.SelenicChat.ToString())
         {
-            NPC bishop = Main.npc.First(n => n.active && n.type == ModContent.NPCType<LunarBishop>() && n.ai[2] == (int)States.SelenicChat);
-            bishop.As<LunarBishop>().Despawn();
+            NPC me = Main.npc[(int)ModContent.GetInstance<DialogueUISystem>().CurrentDialogueContext.Arguments[0]];
+            me.As<LunarBishop>().Despawn();
         }
     }
     public void Despawn()

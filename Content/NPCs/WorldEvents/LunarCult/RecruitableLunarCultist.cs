@@ -125,21 +125,22 @@ public class RecruitableLunarCultist : ModNPC
         if (State == DialogueState.Talkable)
         {
             if(LunarCultBaseSystem.CurrentMeetingTopic == 0)
-                ModContent.GetInstance<DialogueUISystem>().DisplayDialogueTree(Windfall.Instance, "Recruits/" + MyName + "/Default");
+                ModContent.GetInstance<DialogueUISystem>().DisplayDialogueTree(Windfall.Instance, "Recruits/" + MyName + "/Default", new(Name, [NPC.whoAmI]));
             else
-                ModContent.GetInstance<DialogueUISystem>().DisplayDialogueTree(Windfall.Instance, "Recruits/" + MyName + "/" + LunarCultBaseSystem.CurrentMeetingTopic);
+                ModContent.GetInstance<DialogueUISystem>().DisplayDialogueTree(Windfall.Instance, "Recruits/" + MyName + "/" + LunarCultBaseSystem.CurrentMeetingTopic, new(Name, [NPC.whoAmI]));
         }
         else
-            ModContent.GetInstance<DialogueUISystem>().DisplayDialogueTree(Windfall.Instance, "Recruits/" + MyName + "/" + State);
+            ModContent.GetInstance<DialogueUISystem>().DisplayDialogueTree(Windfall.Instance, "Recruits/" + MyName + "/" + State, new(Name, [NPC.whoAmI]));
         return base.GetChat();
     }
-    private void CloseEffect(string treeKey, int dialogueID, int buttonID)
+    private static void CloseEffect(string treeKey, int dialogueID, int buttonID)
     {
         if (!treeKey.Contains("Recruits") || !treeKey.Contains(((RecruitNames)TalkingTo).ToString()))
             return;
         if (treeKey.Contains("Recruited") || treeKey.Contains("Unrecruited"))
             return;
-        NPC me = Main.npc.First(n => n.active && n.type == ModContent.NPCType<RecruitableLunarCultist>() && (int)n.As<RecruitableLunarCultist>().MyName == TalkingTo);
+        DialogueUISystem uiSystem = ModContent.GetInstance<DialogueUISystem>();
+        NPC me = Main.npc[(int)uiSystem.CurrentDialogueContext.Arguments[0]];
         if (treeKey.Contains("Recruitable") && dialogueID == 1)
         {
             if (!LunarCultBaseSystem.Recruits.Contains(TalkingTo))
@@ -157,7 +158,7 @@ public class RecruitableLunarCultist : ModNPC
         }
         else
         {
-            if(ModContent.GetInstance<DialogueUISystem>().CurrentTree.Dialogues.Length == dialogueID)
+            if(uiSystem.CurrentTree.Dialogues.Length == dialogueID)
                 me.As<RecruitableLunarCultist>().State = DialogueState.Unrecruited;
             else
                 me.As<RecruitableLunarCultist>().State = DialogueState.Recruitable;

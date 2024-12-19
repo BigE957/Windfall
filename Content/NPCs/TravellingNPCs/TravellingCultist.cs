@@ -196,7 +196,7 @@ public class TravellingCultist : ModNPC, ILocalizedModType
         {
             Main.CloseNPCChatOrSign();
 
-            ModContent.GetInstance<DialogueUISystem>().DisplayDialogueTree(Windfall.Instance, "TravellingCultist/" + CurrentDialogue.ToString());
+            ModContent.GetInstance<DialogueUISystem>().DisplayDialogueTree(Windfall.Instance, "TravellingCultist/" + CurrentDialogue.ToString(), new(Name, [NPC.whoAmI]));
 
             return base.GetChat();
         }
@@ -288,7 +288,7 @@ public class TravellingCultist : ModNPC, ILocalizedModType
         attackDelay = 1;
     }
     private static bool MilestoneMet(DialogueState CurrentDialogue) => (CurrentDialogue == DialogueState.Quests1 && NPC.downedPlantBoss) || (CurrentDialogue == DialogueState.Quests2 && LunarCultBaseSystem.Recruits.Count == 4) || (CurrentDialogue == DialogueState.Quests3 && RitualQuestProgress >= 3) || (CurrentDialogue == DialogueState.QuestsEnd && RitualQuestProgress < 4);
-    private void CloseEffect(string treeKey, int dialogueID, int buttonID)
+    private static void CloseEffect(string treeKey, int dialogueID, int buttonID)
     {
         switch(treeKey)
         {
