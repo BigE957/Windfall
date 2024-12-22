@@ -9,7 +9,6 @@
       ]
     }
   ],
-  "Characters": [
-    "DragonArcher"
-  ]
+  "Characters": [],
+  "Style": "Windfall.Content.UI.Dialogue.DialogueStyles.WhiteStonePlaqueStyle"
 }
