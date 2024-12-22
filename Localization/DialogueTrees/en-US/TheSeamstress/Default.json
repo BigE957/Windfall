@@ -1,7 +1,19 @@
 {
   "Dialogues": [
     {
-      "DialogueText": [ { "Text": "Who the hell are you? Sorry, but I don't talk to unproven newcomers such as yourself. Get lost!" } ],
+      "DialogueText": [
+        {
+          "Text": "Who the hell are you? ",
+          "TextEffect": "DialogueHelper.UI.Dialogue.TextEffects.WavyText"
+        },
+        {
+          "Text": "Sorry, but I don't talk to unproven newcomers such as yourself. "
+        },
+        {
+          "Text": "Get lost!",
+          "TextEffect": "DialogueHelper.UI.Dialogue.TextEffects.WavyText"
+        }
+      ],
       "Responses": [
         {
           "Title": "Oh.. Sorry..."
@@ -9,14 +21,47 @@
         {
           "Title": "Okay, geez."
         }
-      ]
+      ],
+      "Emoticon": "Windfall.Content.UI.Dialogue.Emoticons.Angry"
     },
     {
-      "DialogueText": [ { "Text": "Ah, well, well! To think, my favorite underling's come to see me when we don't even have work to do! I guess nobody can keep away from my magnetic personality." } ],
+      "DialogueText": [
+        {
+          "Text": "Ah, well, well! To think, my "
+        },
+        {
+          "Text": "favorite",
+          "Color": "#FFD700",
+          "TextEffect": "DialogueHelper.UI.Dialogue.TextEffects.WavyText"
+        },
+        {
+          "Text": " underling's come to see me when we don't even have work to do! I guess nobody can keep away from my "
+        },
+        {
+          "Text": "magne",
+          "Color": "#ff0000"
+        },
+        {
+          "Text": "n",
+          "Color": "#808080"
+        },
+        {
+          "Text": "etic",
+          "Color": "#0000ff"
+        },
+        {
+          "Text": " personality."
+        }
+      ],
+      "Emoticon": "Windfall.Content.UI.Dialogue.Emoticons.Happy",
       "ExpressionIndex": 1
     },
     {
-      "DialogueText": [ { "Text": "I'm just kidding, of course. I assume you've got a reason you're here. How can I help?" } ],
+      "DialogueText": [
+        {
+          "Text": "I'm just kidding, of course. I assume you've got a reason you're here. How can I help?"
+        }
+      ],
       "Responses": [
         {
           "Title": "Could I ask you something?",
@@ -37,7 +82,11 @@
       ]
     },
     {
-      "DialogueText": [ { "Text": "Uh, I'll figure smth out later. Bye bozo." } ],
+      "DialogueText": [
+        {
+          "Text": "Uh, I'll figure smth out later. Bye bozo."
+        }
+      ],
       "Responses": [
         {
           "Title": "Oh.. Sorry..."
@@ -48,13 +97,26 @@
       ]
     },
     {
-      "DialogueText": [ { "Text": "Oh? Hah, that old fart... Happy to hear from him." } ]
+      "DialogueText": [
+        {
+          "Text": "Oh? Hah, that old fart... Happy to hear from him."
+        }
+      ]
     },
     {
-      "DialogueText": [ { "Text": "Though I don't know what's stopping him from coming down here and saying so himself!" } ]
+      "DialogueText": [
+        {
+          "Text": "Though I don't know what's stopping him from coming down here and saying so himself!"
+        }
+      ],
+      "Emoticon": "Windfall.Content.UI.Dialogue.Emoticons.Angry"
     },
     {
-      "DialogueText": [ { "Text": "You've been a pretty big help ever since you first showed up here! Certainly more than most. It almost makes me wonder... Lemme look into a little something. I'll get back to you on it." } ],
+      "DialogueText": [
+        {
+          "Text": "Say... You've been a pretty big help ever since you first showed up here! Certainly more than most. It almost makes me wonder... Lemme look into a little something. I'll get back to you on it."
+        }
+      ],
       "Responses": [
         {
           "Title": "Oh? Alright."
@@ -65,25 +127,57 @@
       ]
     },
     {
-      "DialogueText": [ { "Text": "Right! Yes! I have some good news!" } ],
-      "ExpressionIndex": 1
+      "DialogueText": [
+        {
+          "Text": "Right! ",
+          "TextEffect": "DialogueHelper.UI.Dialogue.TextEffects.ShakyText"
+        },
+        {
+          "Text": "Yes! I have some good news!"
+        }
+      ],
+      "ExpressionIndex": 1,
+      "Emoticon": "Windfall.Content.UI.Dialogue.Emoticons.Happy"
     },
     {
-      "DialogueText": [ { "Text": "As I'm sure you're aware, the Selenic Order is divided into Ranks: Devotees and Bishops. Then, there's those such as myself who lie outside ranking. However, there is a rank above Bishop, and with how you've proven yourself, I inquired with the Orator if you could be promoted directly to such a rank..." } ]
+      "DialogueText": [
+        {
+          "Text": "As I'm sure you're aware, the Selenic Order is divided into Ranks: Devotees and Bishops. Then, there's those such as myself who lie outside ranking. However, there is a rank above Bishop, and with how you've proven yourself, I inquired with the Orator if you could be promoted directly to such a rank..."
+        }
+      ]
     },
     {
-      "DialogueText": [ { "Text": "...and he agreed!" } ],
-      "ExpressionIndex": 1
+      "DialogueText": [
+        {
+          "Text": "...and he agreed!",
+          "TextEffect": "DialogueHelper.UI.Dialogue.TextEffects.ShakyText"
+        }
+      ],
+      "ExpressionIndex": 1,
+      "Emoticon": "Windfall.Content.UI.Dialogue.Emoticons.Happy"
     },
     {
-      "DialogueText": [ { "Text": "The rank above bishop is Apostle, and starting today, you'll be on the path to become one! You can thank me for putting in a good word later." } ],
-      "ExpressionIndex": 1
+      "DialogueText": [
+        {
+          "Text": "The rank above bishop is Apostle, and starting today, you'll be on the path to become one! You can thank me for putting in a good word later."
+        }
+      ],
+      "ExpressionIndex": 1,
+      "Emoticon": "Windfall.Content.UI.Dialogue.Emoticons.Happy"
     },
     {
-      "DialogueText": [ { "Text": "You likely haven't actually met any Apostles here. You see, they act in direct service of the Orator, and are often sent out on quite lengthy missions. Come to think of it, I don't actually know if their work effects us at all... All I know is they carry out the Orator's wishes. To become one, you'll need to prove yourself capable!" } ]
+      "DialogueText": [
+        {
+          "Text": "You likely haven't actually met any Apostles here. You see, they act in direct service of the Orator, and are often sent out on quite lengthy missions. Come to think of it, I don't actually know if their work affects us at all... All I know is they carry out the Orator's wishes. To become one, you'll need to prove yourself capable!"
+        }
+      ]
     },
     {
-      "DialogueText": [ { "Text": "So uh, you gotta go talk to him! He'll tell you how you actually do that..." } ],
+      "DialogueText": [
+        {
+          "Text": "So uh, you gotta go talk to them! The Orator will tell you how you actually go about it..."
+        }
+      ],
       "Responses": [
         {
           "Title": "Will do. Thanks!"
@@ -94,7 +188,18 @@
       ]
     },
     {
-      "DialogueText": [ { "Text": "Ah, so you wish to gleam some knowledge from the wisest person you know? Well, I suppose I could enlighten you. What's up?" } ],
+      "DialogueText": [
+        {
+          "Text": "Ah, so you wish to gleam some knowledge from the wisest person you know? Well, "
+        },
+        {
+          "Text": "I suppose",
+          "TextEffect": "DialogueHelper.UI.Dialogue.TextEffects.WavyText"
+        },
+        {
+          "Text": " I could enlighten you. What's up?"
+        }
+      ],
       "Responses": [
         {
           "Title": "Where'd you learn your skills?",
@@ -106,16 +211,20 @@
         },
         {
           "Title": "Why don't you trust newcomers?",
-          "Heading": 17
+          "Heading": 18
         },
         {
           "Title": "Becoming an Apostle...?",
-          "Heading": 18
+          "Heading": 19
         }
       ]
     },
     {
-      "DialogueText": [ { "Text": "Is there any other topics which you wish to be enlightened on?" } ],
+      "DialogueText": [
+        {
+          "Text": "Is there any other topics which you wish to be enlightened on?"
+        }
+      ],
       "Responses": [
         {
           "Title": "That's all."
@@ -130,16 +239,31 @@
         },
         {
           "Title": "Why don't you trust newcomers?",
-          "Heading": 17
+          "Heading": 18
         },
         {
           "Title": "Becoming an Apostle...?",
-          "Heading": 18
+          "Heading": 19
         }
       ]
     },
     {
-      "DialogueText": [ { "Text": "Ha! Wouldn't you like to know. That's a trade secret I'm afraid! I will say, I certainly didn't learn from being cooped up in here, though. Necessity and strife are some of the best teachers you can ask for. Can't say I miss em though, haha!" } ],
+      "DialogueText": [
+        {
+          "Text": "Ha! ",
+          "TextEffect": "DialogueHelper.UI.Dialogue.TextEffects.ShakyText"
+        },
+        {
+          "Text": "Wouldn't you like to know. "
+        },
+        {
+          "Text": "That's a trade secret",
+          "TextEffect": "DialogueHelper.UI.Dialogue.TextEffects.WavyText"
+        },
+        {
+          "Text": " I'm afraid! I will say, I certainly didn't learn from being cooped up in here, though. Necessity and strife are some of the best teachers you can ask for. Can't say I miss em though, haha!"
+        }
+      ],
       "Responses": [
         {
           "Title": "Gotcha..",
@@ -152,7 +276,34 @@
       ]
     },
     {
-      "DialogueText": [ { "Text": "Geez, for a second I was thinking you'd be above asking about the guy. Guess everyone here's curious about him. I get why though. The Orator's a real mysterious fellow. Well, to correct your question, he's the one who sought me out! Yeah, means I'm pretty great; I know. Word had spread of the enduring quality of clothes I offered to my- uh, those in need, and he wanted my help in providing for our little Order here. That's it! Not as exciting as you were hoping, I imagine." } ],
+      "DialogueText": [
+        {
+          "Text": "Geez, for a second I was thinking you'd be above asking about the guy. Guess everyone here's curious about them. I get why though. The Orator's a real "
+        },
+        {
+          "Text": "mysterious",
+          "Color": "#4d0db5",
+          "TextEffect": "DialogueHelper.UI.Dialogue.TextEffects.WavyText"
+        },
+        {
+          "Text": " fellow."
+        }
+      ]
+    },
+    {
+      "DialogueText": [
+        {
+          "Text": "Well, to correct your question, HE'S the one who sought ME out! Yeah, means I'm pretty great; "
+        },
+        {
+          "Text": "I know. ",
+          "Color": "#e4ff7a",
+          "TextEffect": "DialogueHelper.UI.Dialogue.TextEffects.WavyText"
+        },
+        {
+          "Text": "Word had spread of the enduring quality of clothes I offered to my- uh, those in need, and they wanted my help in providing for our little Order here. That's it! Not as exciting as you were hoping, I imagine."
+        }
+      ],
       "Responses": [
         {
           "Title": "Actually, it was pretty interesting!",
@@ -165,7 +316,15 @@
       ]
     },
     {
-      "DialogueText": [ { "Text": "Well, I guess I'll be honest with you. Most don't actually last all that long around here... Either they leave, or... something happens. I tend to find its best not to open myself up until I know that person'll be around for a while. All that to say... You better not disappear all of a sudden! You hear!?" } ],
+      "DialogueText": [
+        {
+          "Text": "Well, I guess I'll be honest with you. Most don't actually last all that long around here... Either they leave, or... something happens. I tend to find its best not to open myself up until I know that person'll be around for a while. All that to say... You better not disappear all of a sudden! "
+        },
+        {
+          "Text": "You hear!?",
+          "TextEffect": "DialogueHelper.UI.Dialogue.TextEffects.ShakyText"
+        }
+      ],
       "Responses": [
         {
           "Title": "Of course!",
@@ -178,18 +337,36 @@
       ]
     },
     {
-      "DialogueText": [ { "Text": "You mean without my generous reccomendation? Well, you see... Uh... Hmm..." } ]
+      "DialogueText": [
+        {
+          "Text": "You mean without my generous reccomendation? Well, you see... Uh... Hmm..."
+        }
+      ]
     },
     {
-      "DialogueText": [ { "Text": "Now that you mention it, I'm not sure there's ever been a new Apostle appointed after I joined. They were all around way before me." } ],
-      "ExpressionIndex": 3
+      "DialogueText": [
+        {
+          "Text": "Now that you mention it, I'm not sure there's ever been a new Apostle appointed after I joined. They were all around way before me."
+        }
+      ],
+      "ExpressionIndex": 3,
+      "Emoticon": "Windfall.Content.UI.Dialogue.Emoticons.Confused"
     },
     {
-      "DialogueText": [ { "Text": "I'm not actually that sure how many of our Order's members even know about them... Their work has never seemed to really effect us in a noticeable way." } ],
-      "ExpressionIndex": 3
+      "DialogueText": [
+        {
+          "Text": "I'm not actually that sure how many of our Order's members even know about them... Their work has never seemed to really effect us in a noticeable way."
+        }
+      ],
+      "ExpressionIndex": 3,
+      "Emoticon": "Windfall.Content.UI.Dialogue.Emoticons.Happy"
     },
     {
-      "DialogueText": [ { "Text": "Maybe they just get to sit around all day! I could certainly use a vacation... You better give me the scoop once you get promoted; you hear?" } ],
+      "DialogueText": [
+        {
+          "Text": "Maybe they just get to sit around all day! I could certainly use a vacation... You better give me the scoop once you get promoted; you hear?"
+        }
+      ],
       "Responses": [
         {
           "Title": "Totally!",

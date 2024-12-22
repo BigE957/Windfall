@@ -9,7 +9,13 @@
       "FrameCount": 1,
       "FrameRate": 0,
       "Loop": false,
-      "AnimateCondition": false
+      "AnimateCondition": false,
+      "HeadArea": {
+        "X": 260,
+        "Y": 230,
+        "Width": 65,
+        "Height": 130
+      }
     },
     {
       "Title": "Happy",
@@ -17,7 +23,13 @@
       "FrameCount": 1,
       "FrameRate": 0,
       "Loop": false,
-      "AnimateCondition": false
+      "AnimateCondition": false,
+      "HeadArea": {
+        "X": 260,
+        "Y": 230,
+        "Width": 65,
+        "Height": 130
+      }
     },
     {
       "Title": "Mysterious",
@@ -25,7 +37,13 @@
       "FrameCount": 1,
       "FrameRate": 0,
       "Loop": false,
-      "AnimateCondition": false
+      "AnimateCondition": false,
+      "HeadArea": {
+        "X": 260,
+        "Y": 230,
+        "Width": 65,
+        "Height": 130
+      }
     },
     {
       "Title": "Worried",
@@ -33,7 +51,13 @@
       "FrameCount": 1,
       "FrameRate": 0,
       "Loop": false,
-      "AnimateCondition": false
+      "AnimateCondition": false,
+      "HeadArea": {
+        "X": 260,
+        "Y": 230,
+        "Width": 65,
+        "Height": 130
+      }
     }
   ],
   "Style": "Windfall.Content.UI.Dialogue.DialogueStyles.SelenicDialogueStyle",

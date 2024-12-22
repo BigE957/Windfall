@@ -49,7 +49,11 @@
       ]
     },
     {
-      "DialogueText":[{"Text": "What?! No, nothing of the sort. Don't know what would give you that idea..."}],
+      "DialogueText": [
+        {
+          "Text": "What?! No, nothing of the sort. Don't know what would give you that idea..."
+        }
+      ],
       "Responses": [
         {
           "Title": "My bad.",
@@ -59,7 +63,8 @@
           "Title": "Surely...",
           "Heading": 7
         }
-      ]
+      ],
+      "Emoticon": "Windfall.Content.UI.Dialogue.Emoticons.Confused"
     },
     {
       "DialogueText":[{"Text": "Just exploring, huh? Why's exploring involve snooping around abandoned buildings?"}],
