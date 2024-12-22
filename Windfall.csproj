@@ -48,6 +48,8 @@
     <None Remove="Assets\UI\DialogueStyles\SelenicResponseSelected.png" />
     <None Remove="Assets\UI\DialogueStyles\SelenicTextbox.png" />
     <None Remove="Assets\UI\DialogueStyles\WhiteStonePlaqueTextbox.png" />
+    <None Remove="Assets\UI\StonePlaqueEditor\DarkStonePlaquePrompt.png" />
+    <None Remove="Assets\UI\StonePlaqueEditor\WhiteStonePlaquePrompt.png" />
     <None Remove="Content\Buffs\Cooldowns\ParryWeapon.png" />
     <None Remove="Content\Buffs\Cooldowns\ParryWeaponOutline.png" />
     <None Remove="Content\Buffs\Cooldowns\ParryWeaponOverlay.png" />

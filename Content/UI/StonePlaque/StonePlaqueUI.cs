@@ -6,21 +6,27 @@ namespace Windfall.Content.UI.StonePlaque;
 public class StonePlaqueUI : UIState
 {
     public MouseBlockingUIPanel Panel;
-    public UITextPrompt Prompt;
+    public UIImage Image;
     public UIText ToggleButton;
     public UIText CloseButton;
+    public UITextPrompt Prompt;
     public bool IsDark = true;
     private string StoredText = "";
 
     public override void OnInitialize()
     {
         Panel = new MouseBlockingUIPanel();
-        Panel.Width.Set(450, 0);
-        Panel.Height.Set(80, 0);
+        Panel.Width.Set(365, 0);
+        Panel.Height.Set(256, 0);
         Panel.BackgroundColor = Color.DarkGray;
         Panel.HAlign = 0.5f;
         Panel.VAlign = 0.1f;
         Append(Panel);
+
+        Image = new UIImage(ModContent.Request<Texture2D>("Windfall/Assets/UI/StonePlaqueEditor/DarkStonePlaquePrompt"));
+        Image.Top.Pixels = -32;
+        Image.Left.Pixels = -24;
+        Panel.Append(Image);
 
         ToggleButton = new("Edit")
         {
@@ -57,15 +63,16 @@ public class StonePlaqueUI : UIState
         Main.playerInventory = false;
         Main.LocalPlayer.sign = -1;
 
-        if (Prompt.LineCount == 0)
-            Panel.Height.Set(90, 0);
-        else
-            Panel.Height.Set(Prompt.LineCount * 32 + 58, 0);
-
         if (IsDark)
+        {
+            Image.SetImage(ModContent.Request<Texture2D>("Windfall/Assets/UI/StonePlaqueEditor/DarkStonePlaquePrompt"));
             Panel.BackgroundColor = Color.DarkGray;
-        else 
+        }
+        else
+        {
+            Image.SetImage(ModContent.Request<Texture2D>("Windfall/Assets/UI/StonePlaqueEditor/WhiteStonePlaquePrompt"));
             Panel.BackgroundColor = Color.LightGray;
+        }
     }
 
     public override void Update(GameTime gameTime)
@@ -80,11 +87,6 @@ public class StonePlaqueUI : UIState
         Main.npcChatText = string.Empty;
 
         base.Update(gameTime);
-
-        if (Prompt.LineCount == 0)
-            Panel.Height.Set(90, 0);
-        else
-            Panel.Height.Set(Prompt.LineCount * 32 + 58, 0);
 
         if (ToggleButton.IsMouseHovering)
             ToggleButton.TextColor = Color.Yellow;

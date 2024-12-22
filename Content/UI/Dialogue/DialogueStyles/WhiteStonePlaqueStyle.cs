@@ -30,7 +30,7 @@ public class WhiteStonePlaqueStyle : DialogueStyle
         }
 
         UIImage boxTexture = new(ModContent.Request<Texture2D>($"{nameof(Windfall)}/Assets/UI/DialogueStyles/WhiteStonePlaqueTextbox"));
-        SetRectangle(boxTexture, left: -70, top: -50, width: boxTexture.Width.Pixels, height: boxTexture.Height.Pixels);
+        SetRectangle(boxTexture, left: -60, top: -30, width: boxTexture.Width.Pixels, height: boxTexture.Height.Pixels);
         textbox.Append(boxTexture);
     }
     public override void OnDialogueTextCreate(DialogueText text)

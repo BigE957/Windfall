@@ -83,9 +83,7 @@ public class UITextPrompt : UIElement
             return;
         }
         
-        string displayText = Text;
-        if (Active && (int)(Main.GlobalTimeWrappedHourly * 2) % 2 == 0)
-            displayText += "|";
+        string displayText = Text;        
 
         List<string> textLines = [.. Utils.WordwrapString(displayText, FontAssets.MouseText.Value, (int)(Parent.Width.Pixels - Parent.PaddingRight - 10), 250, out _)];
         textLines.RemoveAll(text => string.IsNullOrEmpty(text));
@@ -148,6 +146,8 @@ public class UITextPrompt : UIElement
             if (dialogLines[i] != null)
             {
                 int positionY = (int)(position.Y + (32 * i));
+                if (i == LineCount - 1 && Active && (int)(Main.GlobalTimeWrappedHourly * 2) % 2 == 0)
+                    dialogLines[i].Last().Text += "|";
                 ChatManager.DrawColorCodedStringShadow(spriteBatch, FontAssets.MouseText.Value, [.. dialogLines[i]], new Vector2(position.X, positionY), TextColor, 0f, Vector2.Zero, Vector2.One, -1, 2f);
                 ChatManager.DrawColorCodedString(spriteBatch, FontAssets.MouseText.Value, [.. dialogLines[i]], new Vector2(position.X, positionY), TextShadow, 0f, Vector2.Zero, Vector2.One, out int hoveredSnippet, -1, true);
             }
