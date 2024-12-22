@@ -1,12 +1,14 @@
 ﻿using System;
 using Terraria.GameContent.UI.Elements;
 using Terraria.UI;
+using Windfall.Content.Items.Tools;
 
 namespace Windfall.Content.UI.StonePlaque;
 public class StonePlaqueUI : UIState
 {
     public MouseBlockingUIPanel Panel;
-    public UIImage Image;
+    public UIImage Background;
+    public UIImage ChiselImage;
     public UIText ToggleButton;
     public UIText CloseButton;
     public UITextPrompt Prompt;
@@ -23,14 +25,23 @@ public class StonePlaqueUI : UIState
         Panel.VAlign = 0.1f;
         Append(Panel);
 
-        Image = new UIImage(ModContent.Request<Texture2D>("Windfall/Assets/UI/StonePlaqueEditor/DarkStonePlaquePrompt"));
-        Image.Top.Pixels = -32;
-        Image.Left.Pixels = -24;
-        Panel.Append(Image);
+        Background = new UIImage(ModContent.Request<Texture2D>("Windfall/Assets/UI/StonePlaqueEditor/DarkStonePlaquePrompt"));
+        Background.Top.Pixels = -32;
+        Background.Left.Pixels = -24;
+        Panel.Append(Background);
+
+        ChiselImage = new UIImage(ModContent.Request<Texture2D>("Windfall/Assets/UI/StonePlaqueEditor/HammerAndChiselBig"))
+        {
+            HAlign = -0.05f,
+            VAlign = 0.85f,
+            ImageScale = 1.5f,
+            NormalizedOrigin = Vector2.One * 0.5f
+        };
+        Panel.Append(ChiselImage);
 
         ToggleButton = new("Edit")
         {
-            HAlign = 0.035f,
+            HAlign = 0.15f,
             VAlign = 1f,
             TextColor = Color.White,
             ShadowColor = Color.Black
@@ -41,7 +52,7 @@ public class StonePlaqueUI : UIState
 
         CloseButton = new("Close")
         {
-            HAlign = 0.2f,
+            HAlign = 0.35f,
             VAlign = 1f,
             TextColor = Color.White,
             ShadowColor = Color.Black
@@ -52,10 +63,15 @@ public class StonePlaqueUI : UIState
 
         Prompt = new((int)(Panel.Width.Pixels - Panel.PaddingRight), new SoundStyle("Windfall/Assets/Sounds/UI/StoneCut"), Color.DarkGray, Color.Black);
         Panel.Append(Prompt);
+
+        Prompt.OnTyping += OnType;
+        Prompt.OnDelete += OnDelete;
     }
 
     public override void OnActivate()
     {
+        ChiselImage.Rotation = (float)Math.Sin(Main.GlobalTimeWrappedHourly) * PiOver4 / 2f;
+
         ToggleButton.SetText("Edit");
         Prompt.Active = false;
 
@@ -65,13 +81,15 @@ public class StonePlaqueUI : UIState
 
         if (IsDark)
         {
-            Image.SetImage(ModContent.Request<Texture2D>("Windfall/Assets/UI/StonePlaqueEditor/DarkStonePlaquePrompt"));
+            Background.SetImage(ModContent.Request<Texture2D>("Windfall/Assets/UI/StonePlaqueEditor/DarkStonePlaquePrompt"));
             Panel.BackgroundColor = Color.DarkGray;
+            Prompt.SetColor(new(130, 168, 162));
         }
         else
         {
-            Image.SetImage(ModContent.Request<Texture2D>("Windfall/Assets/UI/StonePlaqueEditor/WhiteStonePlaquePrompt"));
+            Background.SetImage(ModContent.Request<Texture2D>("Windfall/Assets/UI/StonePlaqueEditor/WhiteStonePlaquePrompt"));
             Panel.BackgroundColor = Color.LightGray;
+            Prompt.SetColor(new(219, 198, 138));
         }
     }
 
@@ -97,6 +115,14 @@ public class StonePlaqueUI : UIState
             CloseButton.TextColor = Color.Yellow;
         else
             CloseButton.TextColor = Color.White;
+
+        ChiselImage.Rotation = (float)Math.Sin(Main.GlobalTimeWrappedHourly) * PiOver4 / 2f;
+        if (ChiselImage.ImageScale > 1.51f)
+            ChiselImage.ImageScale *= 0.98f;
+        else if (ChiselImage.ImageScale < 1.49f)
+            ChiselImage.ImageScale *= 1.02f;
+        else
+            ChiselImage.ImageScale = 1.5f;
     }
 
     private void ToggleState(UIMouseEvent evt, UIElement listener)
@@ -119,4 +145,7 @@ public class StonePlaqueUI : UIState
         else
             ModContent.GetInstance<StonePlaqueUISystem>().CloseStonePlaqueUI(StoredText);
     }
+
+    private void OnType() => ChiselImage.ImageScale = 2f;
+    private void OnDelete() => ChiselImage.ImageScale = 1f;
 }

@@ -17,6 +17,9 @@
     <None Remove="Assets\Items\Essences\PerfEssence.png" />
     <None Remove="Assets\Items\Essences\SlimeEssence.png" />
     <None Remove="Assets\Items\Quest\SelenicTablet.png" />
+    <None Remove="Assets\Items\Tools\Chisel.png" />
+    <None Remove="Assets\Items\Tools\Hammer.png" />
+    <None Remove="Assets\Items\Tools\HammerAndChiselSmall.png" />
     <None Remove="Assets\Items\Weapons\Melee\NewMoon.png" />
     <None Remove="Assets\Items\Weapons\Misc\RiftWeaver.png" />
     <None Remove="Assets\Items\Weapons\Misc\RiftWeaverGlow.png" />
@@ -49,6 +52,7 @@
     <None Remove="Assets\UI\DialogueStyles\SelenicTextbox.png" />
     <None Remove="Assets\UI\DialogueStyles\WhiteStonePlaqueTextbox.png" />
     <None Remove="Assets\UI\StonePlaqueEditor\DarkStonePlaquePrompt.png" />
+    <None Remove="Assets\UI\StonePlaqueEditor\HammerAndChiselBig.png" />
     <None Remove="Assets\UI\StonePlaqueEditor\WhiteStonePlaquePrompt.png" />
     <None Remove="Content\Buffs\Cooldowns\ParryWeapon.png" />
     <None Remove="Content\Buffs\Cooldowns\ParryWeaponOutline.png" />

@@ -9,6 +9,10 @@ public class UITextPrompt : UIElement
     public delegate void TypingComplete(string Text);
     public event TypingComplete OnTypingComplete;
 
+    public delegate void OnType();
+    public event OnType OnTyping;
+    public event OnType OnDelete;
+
     public UIPanel BackPanel = null;
     public string Text = "";
     public bool Active = false;
@@ -67,9 +71,15 @@ public class UITextPrompt : UIElement
                 if (TypeSound.HasValue) 
                 {
                     if (newInput.Length > Text.Length)
-                        SoundEngine.PlaySound(TypeSound.Value with {Pitch = 0, PitchVariance = 0.5f});
+                    {
+                        SoundEngine.PlaySound(TypeSound.Value with { Pitch = 0, PitchVariance = 0.5f });
+                        OnTyping.Invoke();
+                    }
                     else
-                        SoundEngine.PlaySound(TypeSound.Value with { Pitch = -0.5f, PitchVariance = 0.5f});
+                    {
+                        SoundEngine.PlaySound(TypeSound.Value with { Pitch = -0.5f, PitchVariance = 0.5f });
+                        OnDelete.Invoke();
+                    }
                 }
                 Text = newInput;
             }
@@ -148,8 +158,15 @@ public class UITextPrompt : UIElement
                 int positionY = (int)(position.Y + (32 * i));
                 if (i == LineCount - 1 && Active && (int)(Main.GlobalTimeWrappedHourly * 2) % 2 == 0)
                     dialogLines[i].Last().Text += "|";
-                ChatManager.DrawColorCodedStringShadow(spriteBatch, FontAssets.MouseText.Value, [.. dialogLines[i]], new Vector2(position.X, positionY), TextColor, 0f, Vector2.Zero, Vector2.One, -1, 2f);
-                ChatManager.DrawColorCodedString(spriteBatch, FontAssets.MouseText.Value, [.. dialogLines[i]], new Vector2(position.X, positionY), TextShadow, 0f, Vector2.Zero, Vector2.One, out int hoveredSnippet, -1, true);
+                ChatManager.DrawColorCodedStringShadow(spriteBatch, FontAssets.MouseText.Value, [.. dialogLines[i]], new Vector2(position.X, positionY), TextShadow, 0f, Vector2.Zero, Vector2.One, -1, 2f);
+                ChatManager.DrawColorCodedString(spriteBatch, FontAssets.MouseText.Value, [.. dialogLines[i]], new Vector2(position.X, positionY), TextColor, 0f, Vector2.Zero, Vector2.One, out int hoveredSnippet, -1, true);
             }
+    }
+
+    public void SetColor(Color Text, Color? Shadow = null)
+    {
+        TextColor = Text;
+        if(Shadow.HasValue)
+            TextShadow = Shadow.Value;
     }
 }
