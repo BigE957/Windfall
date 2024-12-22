@@ -42,10 +42,12 @@
     <None Remove="Assets\UI\CharacterAssets\TheChef\Remy.png" />
     <None Remove="Assets\UI\CharacterAssets\TheOrator\Default.png" />
     <None Remove="Assets\UI\CharacterAssets\Watchman\Default.png" />
+    <None Remove="Assets\UI\DialogueStyles\DarkStonePlaqueTextbox.png" />
     <None Remove="Assets\UI\DialogueStyles\SelenicArrow.png" />
     <None Remove="Assets\UI\DialogueStyles\SelenicResponse.png" />
     <None Remove="Assets\UI\DialogueStyles\SelenicResponseSelected.png" />
     <None Remove="Assets\UI\DialogueStyles\SelenicTextbox.png" />
+    <None Remove="Assets\UI\DialogueStyles\WhiteStonePlaqueTextbox.png" />
     <None Remove="Content\Buffs\Cooldowns\ParryWeapon.png" />
     <None Remove="Content\Buffs\Cooldowns\ParryWeaponOutline.png" />
     <None Remove="Content\Buffs\Cooldowns\ParryWeaponOverlay.png" />
