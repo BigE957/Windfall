@@ -7,7 +7,6 @@ using Luminance.Core.Graphics;
 using Windfall.Common.Systems;
 using Windfall.Common.Systems.WorldEvents;
 using Windfall.Content.NPCs.WanderingNPCs;
-using Windfall.Content.Projectiles.Fishing;
 using Windfall.Content.Projectiles.NPCAnimations;
 
 namespace Windfall.Content.Items.Fishing;

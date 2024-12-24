@@ -1,4 +1,4 @@
-﻿namespace Windfall.Content.Projectiles.Fishing;
+﻿namespace Windfall.Content.Items.Fishing;
 
 public class AncientIlmeranBobber : ModProjectile
 {
