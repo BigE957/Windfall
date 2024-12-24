@@ -1,5 +1,4 @@
 ﻿using CalamityMod.Items;
-using Luminance.Common.Utilities;
 
 namespace Windfall.Content.Items.Tools;
 public class HammerChisel : ModItem
@@ -20,7 +19,5 @@ public class HammerChisel : ModItem
         Item.useTurn = true;
         Item.noUseGraphic = true;
         Item.shoot = ModContent.ProjectileType<HammerChiselProjectile>();
-
-        Item.hammer = 99;
     }
 }
