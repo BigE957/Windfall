@@ -19,6 +19,7 @@
     <None Remove="Assets\Items\Quest\SelenicTablet.png" />
     <None Remove="Assets\Items\Tools\Chisel.png" />
     <None Remove="Assets\Items\Tools\Hammer.png" />
+    <None Remove="Assets\Items\Tools\HammerAndChiselProj.png" />
     <None Remove="Assets\Items\Tools\HammerAndChiselSmall.png" />
     <None Remove="Assets\Items\Weapons\Melee\NewMoon.png" />
     <None Remove="Assets\Items\Weapons\Misc\RiftWeaver.png" />
