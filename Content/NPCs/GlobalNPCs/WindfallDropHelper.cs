@@ -21,11 +21,11 @@ public class WindfallDropHelper : GlobalNPC
             npcLoot.AddIf(() => TravellingCultist.QuestArtifact.Type == ModContent.ItemType<DeificInsignia>() && NPC.AnyNPCs(ModContent.NPCType<TravellingCultist>()), ModContent.ItemType<DeificInsignia>(), 5);
         
         if (npc.type == NPCID.DiabolistRed || npc.type == NPCID.DiabolistWhite)
-            npcLoot.AddIf(() => Main.LocalPlayer.LunarCult().apostleQuestTracker == 5, ModContent.ItemType<FlameIcon>(), 5);
+            npcLoot.AddIf(() => Main.LocalPlayer.LunarCult().apostleQuestTracker == 5, ModContent.ItemType<DiabolicalInsense>(), 5);
         if (npc.type == NPCID.RaggedCaster || npc.type == NPCID.RaggedCasterOpenCoat)
-            npcLoot.AddIf(() => Main.LocalPlayer.LunarCult().apostleQuestTracker == 5, ModContent.ItemType<LightIcon>(), 5);
+            npcLoot.AddIf(() => Main.LocalPlayer.LunarCult().apostleQuestTracker == 5, ModContent.ItemType<RaggedSack>(), 5);
         if (npc.type == NPCID.Necromancer || npc.type == NPCID.NecromancerArmored)
-            npcLoot.AddIf(() => Main.LocalPlayer.LunarCult().apostleQuestTracker == 5, ModContent.ItemType<DeathIcon>(), 5);
+            npcLoot.AddIf(() => Main.LocalPlayer.LunarCult().apostleQuestTracker == 5, ModContent.ItemType<NecromaticRing>(), 5);
         #endregion
         #region Vanilla Boss Drops
         if (npc.type == NPCID.EaterofWorldsHead)

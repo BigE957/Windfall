@@ -1369,7 +1369,7 @@ Items: {
 	Quest: {
 		DeificInsignia: {
 			DisplayName: Deific Insignia
-			Tooltip: A worn sigil of the gods
+			Tooltip: A worn sigil of gods united; worn by those who'd fight in their name.
 		}
 
 		SelenicTablet: {
@@ -1482,7 +1482,7 @@ Items: {
 
 		Mask: {
 			DisplayName: Mask
-			Tooltip: ""
+			Tooltip: Unpainted and uncarved, a faceless mask holds limitless possibilities.
 		}
 
 		LunarCoin: {
@@ -1491,18 +1491,30 @@ Items: {
 		}
 
 		DeathIcon: {
-			DisplayName: Death Icon
-			Tooltip: ""
+			DisplayName: Nectromatic Ring
+			Tooltip: 
+				'''
+				A ring glimmering with the dark powers of Necromancy.
+				It shines with violet tones reminiscent of Azafure's fauna.
+				'''
 		}
 
 		FlameIcon: {
-			DisplayName: Flame Icon
-			Tooltip: ""
+			DisplayName: Diabolical Insense
+			Tooltip:
+				'''
+				Filled with rare spices and herbs greatly valued in Azafure,
+				such insense would often be used in ritual worship of the First City's silent matron.
+				'''
 		}
 
 		LightIcon: {
-			DisplayName: Light Icon
-			Tooltip: ""
+			DisplayName: Ragged Sack
+			Tooltip:
+				'''
+				A repugnant display of cruelty, and Dragon Cult's first attempts at tampering with souls.
+				Such meddling was doomed from the start to end in disaster.
+				'''
 		}
 	}
 
@@ -1636,6 +1648,8 @@ NPCs: {
 	OratorHand.DisplayName: Malfeasant Grasp
 	Fingerling.DisplayName: Fingerling
 	Watchman.DisplayName: Watchman
+	AstralGuardian.DisplayName: Astral Guardian
+	AstralBolt.DisplayName: ""
 }
 
 Projectiles: {
@@ -1689,6 +1703,8 @@ Projectiles: {
 	RiftWeaverThrow.DisplayName: Rift Weaver Throw
 	UnstableDarkness.DisplayName: Unstable Darkness
 	Rogue.OratorSpearProj.DisplayName: Orator Spear Proj
+	AstralBolt.DisplayName: Astral Bolt
+	HammerChiselProjectile.DisplayName: Hammer Chisel Projectile
 }
 
 Buffs: {

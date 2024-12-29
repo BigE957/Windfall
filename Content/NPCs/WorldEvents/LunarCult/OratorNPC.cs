@@ -97,21 +97,21 @@ public class OratorNPC : ModNPC
         {
             ItemStack flame = new()
             {
-                ItemID = ModContent.ItemType<FlameIcon>(),
+                ItemID = ModContent.ItemType<DiabolicalInsense>(),
                 SourceMod = "Windfall",
                 ItemName = "FlameIcon",
                 Stack = 1
             };
             ItemStack death = new()
             {
-                ItemID = ModContent.ItemType<DeathIcon>(),
+                ItemID = ModContent.ItemType<NecromaticRing>(),
                 SourceMod = "Windfall",
                 ItemName = "FlameIcon",
                 Stack = 1
             };
             ItemStack light = new()
             {
-                ItemID = ModContent.ItemType<LightIcon>(),
+                ItemID = ModContent.ItemType<RaggedSack>(),
                 SourceMod = "Windfall",
                 ItemName = "FlameIcon",
                 Stack = 1
@@ -126,21 +126,21 @@ public class OratorNPC : ModNPC
         {
             ItemStack flame = new()
             {
-                ItemID = ModContent.ItemType<FlameIcon>(),
+                ItemID = ModContent.ItemType<DiabolicalInsense>(),
                 SourceMod = "Windfall",
                 ItemName = "FlameIcon",
                 Stack = 1
             };
             ItemStack death = new()
             {
-                ItemID = ModContent.ItemType<DeathIcon>(),
+                ItemID = ModContent.ItemType<NecromaticRing>(),
                 SourceMod = "Windfall",
                 ItemName = "FlameIcon",
                 Stack = 1
             };
             ItemStack light = new()
             {
-                ItemID = ModContent.ItemType<LightIcon>(),
+                ItemID = ModContent.ItemType<RaggedSack>(),
                 SourceMod = "Windfall",
                 ItemName = "FlameIcon",
                 Stack = 1
