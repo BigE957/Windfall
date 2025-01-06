@@ -1,4 +1,5 @@
 using Terraria.GameContent.UI;
+using Windfall.Common.Netcode;
 
 namespace Windfall;
 
@@ -15,4 +16,6 @@ public class Windfall : Mod
     {
         Instance = null;
     }
+
+    public override void HandlePacket(BinaryReader reader, int whoAmI) => WindfallNetcode.HandlePacket(this, reader, whoAmI);
 }

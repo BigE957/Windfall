@@ -1,7 +1,7 @@
 ﻿using System.Reflection;
 using Terraria.ModLoader.IO;
 using Windfall.Content.Tiles.Furnature;
-using static Windfall.Common.Netcode.WindfallNetcodeMessages;
+using static Windfall.Common.Netcode.WindfallNetcode;
 
 namespace Windfall.Content.Tiles.TileEntities;
 public class StonePlaqueEntity : ModTileEntity
@@ -97,7 +97,7 @@ public class StonePlaqueEntity : ModTileEntity
         packet.Write((byte)WFNetcodeMessages.StonePlaqueSync);
         packet.Write(ID);
         packet.Write(myText);
-        packet.Send(-1, -1);
+        packet.Send();
     }
 
     internal static bool ReadSyncPacket(Mod mod, BinaryReader reader)
@@ -115,7 +115,7 @@ public class StonePlaqueEntity : ModTileEntity
             packet.Write((byte)WFNetcodeMessages.StonePlaqueSync);
             packet.Write(teID);
             packet.Write(text);
-            packet.Send(-1, -1);
+            packet.Send();
         }
 
         if (exists && te is StonePlaqueEntity stonePlaque)
