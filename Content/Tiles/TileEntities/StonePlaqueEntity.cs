@@ -27,6 +27,9 @@ public class StonePlaqueEntity : ModTileEntity
         TileObjectData.GetTileInfo(tile, ref style, ref alt);
         TileObjectData data = TileObjectData.GetTileData(tile.TileType, style, alt);
 
+        if (data == null)
+            return false;
+
         int sheetSquare = 16 + data.CoordinatePadding;
         int FrameX = tile.TileFrameX / sheetSquare % data.Width;
         int FrameY = tile.TileFrameY / sheetSquare % data.Height;

@@ -220,52 +220,7 @@ public class RiftWeaverThrow : ModProjectile
         impaled = true;
         Projectile.velocity = Vector2.Zero;
         Projectile.tileCollide = false;
-        /*
-        Vector2 rotVector = oldVelocity.SafeNormalize(Projectile.rotation.ToRotationVector2()) / 10f;
-        Rectangle box = new((int)Projectile.position.X, (int)Projectile.position.Y, Projectile.width, Projectile.height);
-        ModifyDamageHitbox(ref box);
-        Point hitLocation = (box.Center.ToVector2() + (rotVector * box.Width)).ToTileCoordinates();
-
-        Main.NewText(Main.tile[hitLocation].IsTileSolid());
-        if(!Main.tile[hitLocation].IsTileSolid())
-        {
-            Projectile.Center += rotVector * 32;
-            box = new((int)Projectile.position.X, (int)Projectile.position.Y, Projectile.width, Projectile.height);
-            ModifyDamageHitbox(ref box);
-            hitLocation = (box.Center.ToVector2() + (rotVector * box.Width)).ToTileCoordinates();
-            Main.NewText(Main.tile[hitLocation].IsTileSolid());
-        }
-        
-        for (int i = 0; i < 64; i++)
-        {
-            Rectangle hitbox = new((int)Projectile.position.X, (int)Projectile.position.Y, Projectile.width, Projectile.height);
-            ModifyDamageHitbox(ref hitbox);
-            hitLocation = hitbox.Center.ToVector2().ToTileCoordinates();
-            Projectile.Center -= Projectile.rotation.ToRotationVector2();
-            hitbox = new((int)Projectile.position.X, (int)Projectile.position.Y, Projectile.width, Projectile.height);
-            ModifyDamageHitbox(ref hitbox);
-            if (!Main.tile[hitbox.Center.ToVector2().ToTileCoordinates()].IsTileSolid())
-            {
-                Projectile.Center += Projectile.rotation.ToRotationVector2();
-                hitbox = new((int)Projectile.position.X, (int)Projectile.position.Y, Projectile.width, Projectile.height);
-                ModifyDamageHitbox(ref hitbox);
-
-                Projectile.Center = hitbox.Center() + ((Projectile.Center - hitbox.Center()) / 2f);
-            }
-        }
-        WorldGen.KillTile(hitLocation.X, hitLocation.Y, effectOnly: true);
-        */
         return false;
-    }
-    public override void ModifyDamageHitbox(ref Rectangle hitbox)
-    {
-        /*
-        if (aiCounter < (fullChargeThrow ? 25 : 40))
-        {
-            Vector2 rotation = Projectile.rotation.ToRotationVector2() * (30f * (aiCounter > (fullChargeThrow ? 25 : 40) ? -1 : 1));
-            hitbox.Location = new Point((int)(hitbox.Location.X + rotation.X), (int)(hitbox.Location.Y + rotation.Y));
-        }
-        */
     }
     public override bool? Colliding(Rectangle projHitbox, Rectangle targetHitbox)
     {
