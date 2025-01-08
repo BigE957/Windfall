@@ -67,7 +67,7 @@ public class SelenicJewelery : Decoration, ILocalizedModType
     public override void DrawAlongVerlet(SpriteBatch spriteBatch, int index, Vector2[] segmentPositions)
     {
         Texture2D jewelery = ModContent.Request<Texture2D>(DecorAtlas).Value;
-        if (index % 3 == 0 && index != 0)
+        if (index % 3 == 2 && index != 0)
         {
             Vector2 line = (segmentPositions[index] - segmentPositions[index + 1]);
 
@@ -76,7 +76,7 @@ public class SelenicJewelery : Decoration, ILocalizedModType
             Vector2 drawPos = segmentPositions[index] + (line / 2f) + line.SafeNormalize(Vector2.UnitX).RotatedBy(PiOver2) * ((index / 3) % 2 == 0 ? -3 : 3);
             float rotation = (segmentPositions[index + 1] - segmentPositions[index]).ToRotation();
             
-            spriteBatch.Draw(jewelery, drawPos - Main.screenPosition, frame, Color.White, rotation, origin, 1f, 0, 0);
+            spriteBatch.Draw(jewelery, drawPos - Main.screenPosition, frame, Color.White, rotation - PiOver2, origin, 1f, 0, 0);
         }
     }
 
@@ -89,6 +89,6 @@ public class SelenicJewelery : Decoration, ILocalizedModType
         Vector2 bigDrawPos = segmentPositions[^1];
         float bigRotation = (segmentPositions[^1] - segmentPositions[^2]).ToRotation();
         
-        spriteBatch.Draw(jewelery, bigDrawPos - Main.screenPosition, bigFrame, Color.White, bigRotation + PiOver2, bigOrigin, 1f, 0, 0);
+        spriteBatch.Draw(jewelery, bigDrawPos - Main.screenPosition, bigFrame, Color.White, bigRotation - PiOver2, bigOrigin, 1f, 0, 0);
     }
 }
