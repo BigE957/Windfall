@@ -1319,6 +1319,26 @@ Items: {
 			DisplayName: White Stone Plaque
 			Tooltip: Can be engraved upon using a Hammer and Chisel
 		}
+
+		HangingJewelery: {
+			DisplayName: Hanging Jewelery
+			Tooltip: ""
+		}
+
+		Hanger: {
+			DisplayName: Hanger
+			Tooltip: ""
+		}
+
+		SelenicJewelery: {
+			DisplayName: Selenic Jewelery
+			Tooltip: ""
+		}
+
+		SelenicTwine: {
+			DisplayName: Selenic Twine
+			Tooltip: ""
+		}
 	}
 
 	Fishing: {

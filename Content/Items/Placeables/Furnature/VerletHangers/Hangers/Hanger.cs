@@ -1,14 +1,14 @@
-﻿using Windfall.Content.Tiles.Furnature;
+﻿using Windfall.Content.Tiles.Furnature.VerletHangers.Hangers;
 
-namespace Windfall.Content.Items.Placeables.Furnature;
-public class WhiteStonePlaque : ModItem, ILocalizedModType, IModType
+namespace Windfall.Content.Items.Placeables.Furnature.VerletHangers.Hangers;
+public class Hanger : ModItem, ILocalizedModType, IModType
 {
     public new string LocalizationCategory => "Items.Placeables";
 
     public override void SetDefaults()
     {
-        Item.width = 24;
-        Item.height = 28;
+        Item.width = 32;
+        Item.height = 32;
         Item.maxStack = 9999;
         Item.useTurn = true;
         Item.autoReuse = true;
@@ -16,7 +16,7 @@ public class WhiteStonePlaque : ModItem, ILocalizedModType, IModType
         Item.useTime = 10;
         Item.useStyle = ItemUseStyleID.Swing;
         Item.consumable = true;
-        Item.createTile = ModContent.TileType<WhiteStonePlaqueTile>();
+        Item.createTile = ModContent.TileType<HangerTile>();
         Item.rare = ItemRarityID.Lime;
     }
 }

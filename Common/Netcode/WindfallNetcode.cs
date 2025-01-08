@@ -6,6 +6,7 @@ public class WindfallNetcode
     public enum WFNetcodeMessages : byte
     {
         StonePlaqueSync,
+        HangerSync,
     }
     public static void HandlePacket(Mod mod, BinaryReader reader, int whoAmI)
     {
@@ -17,6 +18,9 @@ public class WindfallNetcode
                 #region Tile Entities
                 case WFNetcodeMessages.StonePlaqueSync:
                     StonePlaqueEntity.ReadSyncPacket(mod, reader);
+                    break;
+                case WFNetcodeMessages.HangerSync:
+                    HangerEntity.ReadSyncPacket(mod, reader);
                     break;
                 #endregion
                 default:

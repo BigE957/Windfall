@@ -5,7 +5,7 @@ using DialogueHelper.UI.Dialogue;
 using Windfall.Content.Items.Quest.Casters;
 using Terraria.ID;
 using Windfall.Content.Items.Tools;
-using Windfall.Content.Items.Placeables.Furnature;
+using Windfall.Content.Items.Placeables.Furnature.Plaques;
 
 namespace Windfall.Content.NPCs.WorldEvents.LunarCult;
 

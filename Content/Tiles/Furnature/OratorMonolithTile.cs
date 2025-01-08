@@ -1,7 +1,7 @@
 ﻿using Terraria.Enums;
 using Terraria.GameContent.ObjectInteractions;
 using Windfall.Common.Graphics.Metaballs;
-using Windfall.Content.Items.Placeables.Furnature;
+using Windfall.Content.Items.Placeables.Furnature.Plaques;
 
 namespace Windfall.Content.Tiles.Furnature;
 

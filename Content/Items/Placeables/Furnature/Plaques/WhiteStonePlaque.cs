@@ -1,7 +1,7 @@
-﻿using Windfall.Content.Tiles.Furnature;
+﻿using Windfall.Content.Tiles.Furnature.Plaques;
 
-namespace Windfall.Content.Items.Placeables.Furnature;
-public class DarkStonePlaque : ModItem, ILocalizedModType, IModType
+namespace Windfall.Content.Items.Placeables.Furnature.Plaques;
+public class WhiteStonePlaque : ModItem, ILocalizedModType, IModType
 {
     public new string LocalizationCategory => "Items.Placeables";
 
@@ -16,7 +16,7 @@ public class DarkStonePlaque : ModItem, ILocalizedModType, IModType
         Item.useTime = 10;
         Item.useStyle = ItemUseStyleID.Swing;
         Item.consumable = true;
-        Item.createTile = ModContent.TileType<DarkStonePlaqueTile>();
+        Item.createTile = ModContent.TileType<WhiteStonePlaqueTile>();
         Item.rare = ItemRarityID.Lime;
     }
 }

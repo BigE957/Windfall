@@ -73,6 +73,7 @@
     <None Remove="Content\Items\Journals\JournalSulphur.png" />
     <None Remove="Content\Items\Journals\JournalTundra.png" />
     <None Remove="Content\Items\Placeables\Furnature\DarkStonePlaque.png" />
+    <None Remove="Content\Items\Placeables\Furnature\Hanger.png" />
     <None Remove="Content\Items\Placeables\Furnature\OratorMonolith.png" />
     <None Remove="Content\Items\Placeables\Furnature\WhiteStonePlaque.png" />
     <None Remove="Content\Items\Placeables\Special\DatabaseTerminalItem.png" />
@@ -90,6 +91,8 @@
     <None Remove="Content\Projectiles\Other\RitualFurnature\RitualFurnatureAtlas.png" />
     <None Remove="Content\Projectiles\Weapons\Misc\RiftWeaverProj.png" />
     <None Remove="Content\Tiles\Furnature\DarkStonePlaqueTile.png" />
+    <None Remove="Content\Tiles\Furnature\HangerJewelery.png" />
+    <None Remove="Content\Tiles\Furnature\HangerTile.png" />
     <None Remove="Content\Tiles\Furnature\OratorMonolithTile.png" />
     <None Remove="Content\Tiles\Furnature\SelenicPots.png" />
     <None Remove="Content\Tiles\Furnature\WhiteStonePlaqueTile.png" />

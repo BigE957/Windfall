@@ -1,6 +1,6 @@
 ﻿using System.Reflection;
 using Terraria.ModLoader.IO;
-using Windfall.Content.Tiles.Furnature;
+using Windfall.Content.Tiles.Furnature.Plaques;
 using static Windfall.Common.Netcode.WindfallNetcode;
 
 namespace Windfall.Content.Tiles.TileEntities;

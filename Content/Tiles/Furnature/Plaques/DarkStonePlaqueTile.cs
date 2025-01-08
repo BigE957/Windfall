@@ -1,12 +1,12 @@
 ﻿using DialogueHelper.UI.Dialogue;
 using Terraria.Enums;
-using Windfall.Content.Items.Placeables.Furnature;
+using Windfall.Content.Items.Placeables.Furnature.Plaques;
 using Windfall.Content.Items.Tools;
 using Windfall.Content.Tiles.TileEntities;
 using Windfall.Content.UI.StonePlaque;
 
-namespace Windfall.Content.Tiles.Furnature;
-public class WhiteStonePlaqueTile : ModTile
+namespace Windfall.Content.Tiles.Furnature.Plaques;
+public class DarkStonePlaqueTile : ModTile
 {
     public const int Width = 5;
     public const int Height = 2;
@@ -24,7 +24,7 @@ public class WhiteStonePlaqueTile : ModTile
         TileID.Sets.TileInteractRead[Type] = true;
         TileID.Sets.InteractibleByNPCs[Type] = true;
 
-        RegisterItemDrop(ModContent.ItemType<WhiteStonePlaque>());
+        RegisterItemDrop(ModContent.ItemType<DarkStonePlaque>());
 
         TileObjectData.newTile.CopyFrom(TileObjectData.Style5x4); // Uses 5x4 style, but reduces height to 2.
         TileObjectData.newTile.LavaDeath = false;
@@ -48,9 +48,9 @@ public class WhiteStonePlaqueTile : ModTile
 
         TileObjectData.addTile(Type);
 
-        AddMapEntry(Color.LightGray);
+        AddMapEntry(Color.DarkGray);
 
-        DustType = DustID.t_Marble;
+        DustType = DustID.t_Granite;
 
         ModContent.GetInstance<DialogueUISystem>().DialogueOpen += ModifyTree;
     }
@@ -67,34 +67,33 @@ public class WhiteStonePlaqueTile : ModTile
         if (player.HeldItem.type == ModContent.ItemType<HammerChisel>())
             player.cursorItemIconID = ModContent.ItemType<HammerChisel>();
         else
-            player.cursorItemIconID = ModContent.ItemType<WhiteStonePlaque>();
+            player.cursorItemIconID = ModContent.ItemType<DarkStonePlaque>();
 
     }
 
     public override bool RightClick(int i, int j)
     {
-        StonePlaqueEntity te = FindTileEntity<StonePlaqueEntity>(i, j, Width, Height, SheetSquare);
-        if (string.IsNullOrEmpty(te.PlaqueText) && Main.LocalPlayer.HeldItem.type != ModContent.ItemType<HammerChisel>())
+        if (string.IsNullOrEmpty(FindTileEntity<StonePlaqueEntity>(i, j, Width, Height, SheetSquare).PlaqueText) && Main.LocalPlayer.HeldItem.type != ModContent.ItemType<HammerChisel>())
             return false;
 
-        DialogueTileEntity = te;
+        DialogueTileEntity = FindTileEntity<StonePlaqueEntity>(i, j, Width, Height, SheetSquare);
 
         if (Main.LocalPlayer.HeldItem.type == ModContent.ItemType<HammerChisel>())
-            ModContent.GetInstance<StonePlaqueUISystem>().OpenWhiteStonePlaqueUI(DialogueTileEntity);
+            ModContent.GetInstance<StonePlaqueUISystem>().OpenDarkStonePlaqueUI(DialogueTileEntity);
         else
         {
             DialogueUISystem uiSystem = ModContent.GetInstance<DialogueUISystem>();
             if (uiSystem.isDialogueOpen)
                 uiSystem.isDialogueOpen = false;
             else
-                uiSystem.DisplayDialogueTree(Windfall.Instance, "WhiteStonePlaqueText", new(Name, []));
+                uiSystem.DisplayDialogueTree(Windfall.Instance, "DarkStonePlaqueText", new(Name, []));
         }
         return true;
     }
 
     private static void ModifyTree(string treeKey, int dialogueID, int buttonID)
     {
-        if (treeKey == "WhiteStonePlaqueText")
+        if (treeKey == "DarkStonePlaqueText")
             ModContent.GetInstance<DialogueUISystem>().CurrentTree.Dialogues[0].DialogueText[0].Text = DialogueTileEntity.PlaqueText;
     }
 }

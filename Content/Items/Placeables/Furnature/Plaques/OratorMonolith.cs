@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 using Terraria.ID;
 using Windfall.Content.Tiles.Furnature;
 
-namespace Windfall.Content.Items.Placeables.Furnature;
+namespace Windfall.Content.Items.Placeables.Furnature.Plaques;
 
 public class OratorMonolith : ModItem, ILocalizedModType, IModType
 {
