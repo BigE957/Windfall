@@ -29,9 +29,12 @@ public abstract class Decoration : ModItem
         {
             List<VerletSegment> newVerlet = [];
             for (int k = 0; k < 20; k++)
+            {
                 newVerlet.Add(new VerletSegment(Vector2.Lerp(StartingEntity.MainVerlet[HangIndex].Position, StartingEntity.MainVerlet[HangIndex].Position + Vector2.UnitY * 150f, k / 10), Vector2.Zero, false));
+                newVerlet[k].OldPosition = newVerlet[k].Position;
+            }
             newVerlet[0].Locked = true;
-            StartingEntity.DecorationVerlets.Add(HangIndex, new(newVerlet, 1));
+            StartingEntity.DecorationVerlets.Add(HangIndex, new(newVerlet, DecorID));
             return;
         }
     }

@@ -3,7 +3,6 @@ using Terraria.ModLoader.IO;
 using Luminance.Common.VerletIntergration;
 using Windfall.Common.Graphics.Verlet;
 using Windfall.Content.Tiles.Furnature.VerletHangers.Hangers;
-using Windfall.Content.Items.Placeables.Furnature.VerletHangers.Twine;
 using Windfall.Content.Items.Placeables.Furnature.VerletHangers.Decorations;
 
 namespace Windfall.Content.Tiles.TileEntities;
@@ -155,6 +154,17 @@ public class HangerEntity : ModTileEntity
                 int index = DecorationVerlets.ElementAt(i).Key;
                 List<VerletSegment> subVerlet = DecorationVerlets.ElementAt(i).Value.Item1;
 
+                if(subVerlet.Count == 0)
+                {
+                    for (int k = 0; k < 20; k++)
+                    {
+                        DecorationVerlets.ElementAt(i).Value.Item1.Add(new VerletSegment(Vector2.Lerp(MainVerlet[index].Position, MainVerlet[index].Position + Vector2.UnitY * 150f, k / 10), Vector2.Zero, false));
+                        DecorationVerlets.ElementAt(i).Value.Item1[k].OldPosition = subVerlet[k].Position;
+                    }
+                    DecorationVerlets.ElementAt(i).Value.Item1[0].Locked = true;
+                    subVerlet = DecorationVerlets.ElementAt(i).Value.Item1;
+                }
+
                 for (int k = 0; k < subVerlet.Count; k++)
                 {
                     if (!subVerlet[k].Locked)
@@ -181,7 +191,7 @@ public class HangerEntity : ModTileEntity
                     }
                 }
 
-                VerletSimulations.RopeVerletSimulation(subVerlet, MainVerlet[index].Position, 50f, new());
+                VerletSimulations.RopeVerletSimulation(subVerlet, MainVerlet[index].Position, 20f, new());
             }
         }
     }
@@ -202,6 +212,17 @@ public class HangerEntity : ModTileEntity
         }
         if (distance != 0)
             tag["Distance"] = distance;
+        if (ropeID != 0)
+            tag["RopeID"] = ropeID;
+        if(DecorationVerlets.Count > 0)
+        {
+            tag["DecorationCount"] = DecorationVerlets.Count;
+            for (int i = 0; i < DecorationVerlets.Count; i++)
+            {
+                tag[$"DecorationIndex{i}"] = DecorationVerlets.Keys.ToArray()[i];
+                tag[$"DecorationType{i}"] = DecorationVerlets.Values.ToArray()[i].Item2;
+            }
+        }
     }
 
     public override void LoadData(TagCompound tag)
@@ -211,6 +232,12 @@ public class HangerEntity : ModTileEntity
         int y = tag.GetShort("PartnerLocationY");
         partnerLocation = new(x, y);
         distance = tag.GetFloat("Distance");
+        ropeID = tag.GetByte("RopeID");
+        int decorationCount = tag.GetInt("DecorationCount");
+        for (int i = 0; i < decorationCount; i++)
+        {
+            DecorationVerlets.Add(tag.GetInt($"DecorationIndex{i}"), new([], tag.GetInt($"DecorationType{i}")));
+        }
 
         VerletHangerDrawing.hangers.Add(Position);
     }
@@ -221,6 +248,7 @@ public class HangerEntity : ModTileEntity
         writer.Write(partnerLocation.X);
         writer.Write(partnerLocation.Y);
         writer.Write(distance);
+        writer.Write(ropeID);
     }
 
     public override void NetReceive(BinaryReader reader)
@@ -230,6 +258,7 @@ public class HangerEntity : ModTileEntity
         int y = reader.ReadInt32();
         partnerLocation = new(x, y);
         distance = reader.ReadSingle();
+        ropeID = reader.ReadByte();
     }
 
     private void SendSyncPacket()
@@ -243,6 +272,7 @@ public class HangerEntity : ModTileEntity
         packet.Write(partnerLocation.X);
         packet.Write(partnerLocation.Y);
         packet.Write(distance);
+        packet.Write(ropeID);
 
         packet.Send();
     }
@@ -258,6 +288,7 @@ public class HangerEntity : ModTileEntity
         int y = reader.ReadInt32();
         Point16 partner = new(x, y);
         float dist = reader.ReadSingle();
+        byte id = reader.ReadByte();
 
 
         // When a server gets this packet, it immediately sends an equivalent packet to all clients.
@@ -269,15 +300,17 @@ public class HangerEntity : ModTileEntity
             packet.Write(partner.X);
             packet.Write(partner.Y);
             packet.Write(dist);
+            packet.Write(id);
 
             packet.Send();
         }
 
-        if (exists && te is HangerEntity jewelery)
+        if (exists && te is HangerEntity HE)
         {
-            jewelery.state = paired;
-            jewelery.partnerLocation = partner;
-            jewelery.distance = dist;
+            HE.state = paired;
+            HE.partnerLocation = partner;
+            HE.distance = dist;
+            HE.ropeID = id;
             return true;
         }
         return false;

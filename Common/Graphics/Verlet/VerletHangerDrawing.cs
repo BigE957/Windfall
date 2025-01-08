@@ -46,7 +46,10 @@ public class VerletHangerDrawing : ModSystem
 
         //Main.NewText(ActiveTEs.Count);
         if (ActiveTEs.Count == 0)
+        {
+            orig(self);
             return;
+        }
 
         Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.PointWrap, DepthStencilState.None, Main.Rasterizer, null, Main.GameViewMatrix.TransformationMatrix);
 
@@ -60,7 +63,7 @@ public class VerletHangerDrawing : ModSystem
             for (int k = 0; k < segmentPositions.Length - 1; k++)
                 twine.DrawRopeSegment(Main.spriteBatch, k, segmentPositions);
 
-            foreach(Tuple<List<VerletSegment>, int> Decoration in te.DecorationVerlets.Values)
+            foreach(Tuple<List<VerletSegment>, int> Decoration in te.DecorationVerlets.Values.Where(v => v.Item1.Count > 0))
             {
                 segmentPositions = Decoration.Item1.Select(x => x.Position).ToArray();
 

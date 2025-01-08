@@ -1,8 +1,4 @@
-﻿using Luminance.Common.VerletIntergration;
-using Windfall.Content.Tiles.Furnature.VerletHangers.Hangers;
-using Windfall.Content.Tiles.TileEntities;
-
-namespace Windfall.Content.Items.Placeables.Furnature.VerletHangers.Decorations;
+﻿namespace Windfall.Content.Items.Placeables.Furnature.VerletHangers.Decorations;
 public class SelenicJewelery : Decoration, ILocalizedModType
 {
     public new string LocalizationCategory => "Items.Placeables";
@@ -19,11 +15,12 @@ public class SelenicJewelery : Decoration, ILocalizedModType
         Item.useStyle = ItemUseStyleID.Swing;
         Item.consumable = true;
         Item.rare = ItemRarityID.Lime;
+        Item.noUseGraphic = true;
     }
 
     public override bool AltFunctionUse(Player player) => true;
 
-    public override int DecorID => 1;
+    public override int DecorID => (int)(1 + colorType);
     public override string DecorAtlas => "Windfall/Content/Items/Placeables/Furnature/VerletHangers/Decorations/SelenicJewelery";
 
     internal enum ColorType
@@ -50,20 +47,20 @@ public class SelenicJewelery : Decoration, ILocalizedModType
     public override bool PreDrawInInventory(SpriteBatch spriteBatch, Vector2 position, Rectangle frame, Color drawColor, Color itemColor, Vector2 origin, float scale)
     {
         Texture2D texture = TextureAssets.Item[Type].Value;
-        Rectangle myFrame = texture.Frame(3, 2, (int)colorType);
+        Rectangle myFrame = texture.Frame(3, 2, (int)colorType, 1);
         Vector2 myOrigin = myFrame.Size() * 0.5f;
 
-        spriteBatch.Draw(texture, position, myFrame, drawColor, 0f, myOrigin, scale, 0, 0);
+        spriteBatch.Draw(texture, position, myFrame, drawColor, 0f, myOrigin, scale * 2, 0, 0);
         return false;
     }
 
     public override bool PreDrawInWorld(SpriteBatch spriteBatch, Color lightColor, Color alphaColor, ref float rotation, ref float scale, int whoAmI)
     {
         Texture2D texture = TextureAssets.Item[Type].Value;
-        Rectangle myFrame = texture.Frame(3, 2, (int)colorType);
+        Rectangle myFrame = texture.Frame(3, 2, (int)colorType, 1);
         Vector2 myOrigin = myFrame.Size() * 0.5f;
 
-        spriteBatch.Draw(texture, Item.Center - Main.screenPosition, myFrame, alphaColor, rotation, myOrigin, scale, 0, 0);
+        spriteBatch.Draw(texture, Item.Center - Main.screenPosition, myFrame, alphaColor, rotation, myOrigin, scale * 2, 0, 0);
         return false;
     }
 
