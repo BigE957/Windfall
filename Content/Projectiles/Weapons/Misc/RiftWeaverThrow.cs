@@ -1,17 +1,13 @@
-﻿using CalamityMod.Particles;
-using Luminance.Common.VerletIntergration;
+﻿using Luminance.Common.VerletIntergration;
 using Luminance.Core.Graphics;
-using Microsoft.Build.Tasks;
-using System.Threading;
 using Windfall.Content.NPCs.WorldEvents.LunarCult;
-using static Windfall.Content.NPCs.Bosses.Orator.TheOrator;
 
 namespace Windfall.Content.Projectiles.Weapons.Misc;
 
 public class RiftWeaverThrow : ModProjectile
 {
     public override string Texture => "Windfall/Assets/Items/Weapons/Misc/RiftWeaverProj";
-    private List<VerletSegment> NeedleString = [];
+    private readonly List<VerletSegment> NeedleString = [];
     private bool SpacialDamage
     {
         get => Projectile.ai[2] != 0;
