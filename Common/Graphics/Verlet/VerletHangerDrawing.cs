@@ -175,15 +175,10 @@ public class VerletHangerDrawing : ModSystem
 
         foreach(HangerEntity te in ActiveTEs)
         {
-            List<VerletSegment> TwineVerlet = te.MainVerlet;
-            Vector2[] segmentPositions = TwineVerlet.Select(x => x.Position).ToArray();
-            
+            Vector2[] segmentPositions;
             Twine twine = TwineID.GetTwine(te.RopeID.Value);
 
-            for (int k = 0; k < segmentPositions.Length - 1; k++)
-                twine.DrawRopeSegment(Main.spriteBatch, k, segmentPositions);
-
-            foreach(Tuple<List<VerletSegment>, int> Decoration in te.DecorationVerlets.Values.Where(v => v.Item1.Count > 0))
+            foreach (Tuple<List<VerletSegment>, int> Decoration in te.DecorationVerlets.Values.Where(v => v.Item1.Count > 0))
             {
                 segmentPositions = Decoration.Item1.Select(x => x.Position).ToArray();
 
@@ -196,6 +191,13 @@ public class VerletHangerDrawing : ModSystem
 
                 DecorationID.GetDecoration(Decoration.Item2).DrawOnVerletEnd(Main.spriteBatch, segmentPositions);
             }
+
+            List<VerletSegment> TwineVerlet = te.MainVerlet;
+            segmentPositions = TwineVerlet.Select(x => x.Position).ToArray();
+            
+
+            for (int k = 0; k < segmentPositions.Length - 1; k++)
+                twine.DrawRopeSegment(Main.spriteBatch, k, segmentPositions);           
         }
 
         Main.spriteBatch.End();
