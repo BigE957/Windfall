@@ -22,7 +22,7 @@ public class HangerTile : ModTile
         TileObjectData.newTile.CopyFrom(TileObjectData.StyleTorch);
         TileObjectData.newTile.LavaDeath = false;
         TileObjectData.newTile.WaterDeath = false;
-        TileObjectData.newTile.CoordinatePadding = 0;
+        TileObjectData.newTile.CoordinatePadding = 2;
         TileObjectData.newTile.CoordinateWidth = 16;
         TileObjectData.newTile.CoordinateHeights = [16];
 
