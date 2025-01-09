@@ -8,7 +8,7 @@ public abstract class Twine : ModItem
 
     public virtual void DrawRopeSegment(SpriteBatch spriteBatch, int index, Vector2[] segmentPositions) { }
 
-    public virtual void DrawDecorationSegment(SpriteBatch spriteBatch, int index, Vector2[] segmentPositions) { }
+    public virtual void DrawDecorationSegment(SpriteBatch spriteBatch, int index, Vector2[] segmentPositions) { DrawRopeSegment(spriteBatch, index, segmentPositions); }
 
 
     public bool PlacingInProgress = false;
@@ -79,11 +79,17 @@ public abstract class Twine : ModItem
             Vector2 StringStart = StartingEntity.Position.ToWorldCoordinates();
             Vector2 StringEnd = Main.MouseWorld;
 
+            Particle particle;
+
             for (int i = 0; i < 8; i++)
             {
-                Particle particle = new GlowOrbParticle(Vector2.Lerp(StringStart, StringEnd, i / 8f), Vector2.Zero, false, 8 * i, 0.5f, Color.White);
+                particle = new GlowOrbParticle(Vector2.Lerp(StringStart, StringEnd, i / 8f), Vector2.Zero, false, 4, 0.5f, Color.White);
                 GeneralParticleHandler.SpawnParticle(particle);
             }
+            particle = new GlowOrbParticle(StringStart, Vector2.Zero, false, 4, 0.5f, Color.White);
+            GeneralParticleHandler.SpawnParticle(particle);
+            particle = new GlowOrbParticle(StringEnd, Vector2.Zero, false, 4, 0.5f, Color.White);
+            GeneralParticleHandler.SpawnParticle(particle);
         }
     }
 }
