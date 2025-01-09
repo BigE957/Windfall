@@ -199,7 +199,7 @@ public class VerletHangerDrawing : ModSystem
             {
                 segmentPositions = Decoration.Item1.Select(x => x.Position).ToArray();
 
-                for (int k = 0; k < segmentPositions.Length - 1; k++)
+                for (int k = 0; k < segmentPositions.Length; k++)
                 {
                     if (twine != null)
                         twine.DrawDecorationSegment(Main.spriteBatch, k, segmentPositions);
@@ -224,7 +224,7 @@ public class VerletHangerDrawing : ModSystem
                     segmentPositions = TwineVerlet.Select(x => x.Position).ToArray();
 
 
-                    for (int k = 0; k < segmentPositions.Length - 1; k++)
+                    for (int k = 0; k < segmentPositions.Length; k++)
                         twine.DrawRopeSegment(Main.spriteBatch, k, segmentPositions);
                 }
             }
