@@ -1339,6 +1339,36 @@ Items: {
 			DisplayName: Selenic Twine
 			Tooltip: ""
 		}
+
+		JadeCrescent: {
+			DisplayName: Jade Crescent
+			Tooltip: ""
+		}
+
+		SelenicLantern: {
+			DisplayName: Selenic Lantern
+			Tooltip: ""
+		}
+
+		HangingConstellation: {
+			DisplayName: Hanging Constellation
+			Tooltip: ""
+		}
+
+		HangingCandle: {
+			DisplayName: Hanging Candle
+			Tooltip: ""
+		}
+
+		HangingLamp: {
+			DisplayName: Hanging Lamp
+			Tooltip: ""
+		}
+
+		HangingLantern: {
+			DisplayName: Hanging Lantern
+			Tooltip: ""
+		}
 	}
 
 	Fishing: {

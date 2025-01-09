@@ -75,6 +75,12 @@
     <None Remove="Content\Items\Placeables\Furnature\DarkStonePlaque.png" />
     <None Remove="Content\Items\Placeables\Furnature\Hanger.png" />
     <None Remove="Content\Items\Placeables\Furnature\OratorMonolith.png" />
+    <None Remove="Content\Items\Placeables\Furnature\VerletHangers\Decorations\HangingCandle.png" />
+    <None Remove="Content\Items\Placeables\Furnature\VerletHangers\Decorations\HangingConstellation.png" />
+    <None Remove="Content\Items\Placeables\Furnature\VerletHangers\Decorations\HangingLamp.png" />
+    <None Remove="Content\Items\Placeables\Furnature\VerletHangers\Decorations\HangingLantern.png" />
+    <None Remove="Content\Items\Placeables\Furnature\VerletHangers\Decorations\JadeCrescent.png" />
+    <None Remove="Content\Items\Placeables\Furnature\VerletHangers\Decorations\SelenicLantern.png" />
     <None Remove="Content\Items\Placeables\Furnature\WhiteStonePlaque.png" />
     <None Remove="Content\Items\Placeables\Special\DatabaseTerminalItem.png" />
     <None Remove="Content\Items\Quest\LunarCoin.png" />

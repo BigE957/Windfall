@@ -63,7 +63,7 @@ public class HangerEntity : ModTileEntity
 
     public List<VerletSegment> MainVerlet = [];
     
-    public Dictionary<int, Tuple<List<VerletSegment>, int>> DecorationVerlets = [];
+    public Dictionary<int, Tuple<List<VerletSegment>, int, int>> DecorationVerlets = [];
 
     public override bool IsTileValidForEntity(int x, int y)
     {
@@ -105,6 +105,24 @@ public class HangerEntity : ModTileEntity
                 State = 0;
             }
         }
+        if (DecorationID.DecorationIDs.Contains(Main.LocalPlayer.HeldItem.type))
+        {
+            Decoration decor = (Decoration)Main.LocalPlayer.HeldItem.ModItem;
+            Vector2 worldPos = Position.ToWorldCoordinates();
+
+            Color color = Color.White;
+            if (DecorationVerlets.ContainsKey(-1))
+                color = Color.Red;
+            else if ((worldPos - Main.MouseWorld).LengthSquared() < 25)
+            {
+                decor.HangIndex = -2;
+                decor.StartingEntity = this;
+                color = Color.Green;
+            }
+
+            Particle particle = new GlowOrbParticle(worldPos, Vector2.Zero, false, 4, 0.5f, color, needed: true);
+            GeneralParticleHandler.SpawnParticle(particle);
+        }
     }
 
     public override void OnKill()
@@ -132,6 +150,7 @@ public class HangerEntity : ModTileEntity
             {
                 tag[$"DecorationIndex{i}"] = DecorationVerlets.Keys.ToArray()[i];
                 tag[$"DecorationType{i}"] = DecorationVerlets.Values.ToArray()[i].Item2;
+                tag[$"DecorationLength{i}"] = DecorationVerlets.Values.ToArray()[i].Item3;
             }
         }
     }
@@ -147,7 +166,7 @@ public class HangerEntity : ModTileEntity
         int decorationCount = tag.GetInt("DecorationCount");
         for (int i = 0; i < decorationCount; i++)
         {
-            DecorationVerlets.Add(tag.GetInt($"DecorationIndex{i}"), new([], tag.GetInt($"DecorationType{i}")));
+            DecorationVerlets.Add(tag.GetInt($"DecorationIndex{i}"), new([], tag.GetInt($"DecorationType{i}"), tag.GetInt($"DecorationLength{i}")));
         }
 
         VerletHangerDrawing.hangers.Add(Position);
@@ -206,7 +225,7 @@ public class HangerEntity : ModTileEntity
         if (Main.netMode == NetmodeID.Server)
         {
             ModPacket packet = mod.GetPacket();
-            packet.Write((byte)WFNetcodeMessages.StonePlaqueSync);
+            packet.Write((byte)WFNetcodeMessages.HangerSync);
             packet.Write(teID);
             packet.Write(partner.X);
             packet.Write(partner.Y);

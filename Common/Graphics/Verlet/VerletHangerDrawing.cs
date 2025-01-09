@@ -1,4 +1,7 @@
 ﻿using Luminance.Common.VerletIntergration;
+using Microsoft.Xna.Framework.Graphics;
+using System;
+using Terraria;
 using Windfall.Content.Items.Placeables.Furnature.VerletHangers.Decorations;
 using Windfall.Content.Items.Placeables.Furnature.VerletHangers.Twine;
 using Windfall.Content.Tiles.TileEntities;
@@ -29,7 +32,7 @@ public class VerletHangerDrawing : ModSystem
             if (h == null)
                 continue;
 
-            if (h.State != 1 || !h.PartnerLocation.HasValue || !h.RopeID.HasValue)
+            if ((h.State != 1 || !h.PartnerLocation.HasValue) && !h.DecorationVerlets.ContainsKey(-1))
                 continue;
 
             bool visable = false;
@@ -49,27 +52,27 @@ public class VerletHangerDrawing : ModSystem
 
         foreach (HangerEntity te in ActiveTEs)
         {
-            Vector2 StringStart = te.Position.ToWorldCoordinates();
-            Vector2 StringEnd = te.PartnerLocation.Value.ToWorldCoordinates();
-
-            if (te.MainVerlet.Count == 0)
+            if (te.State == 1)
             {
-                te.MainVerlet = [];
-                for (int k = 0; k < (int)te.Distance; k++)
-                    te.MainVerlet.Add(new VerletSegment(Vector2.Lerp(StringStart, StringEnd, k / te.Distance), Vector2.Zero, false));
-                te.MainVerlet[0].Locked = te.MainVerlet.Last().Locked = true;
-            }
+                Vector2 StringStart = te.Position.ToWorldCoordinates();
+                Vector2 StringEnd = te.PartnerLocation.Value.ToWorldCoordinates();
 
-            Vector2[] segmentPositions = te.MainVerlet.Select(x => x.Position).ToArray();
-
-            for (int k = 0; k < te.MainVerlet.Count; k++)
-            {
-                if (DecorationID.DecorationIDs.Contains(Main.LocalPlayer.HeldItem.type) && (k % 5 == 2))
+                if (te.MainVerlet.Count == 0)
                 {
-                    Decoration decor = (Decoration)Main.LocalPlayer.HeldItem.ModItem;
+                    te.MainVerlet = [];
+                    for (int k = 0; k < (int)te.Distance / 2f; k++)
+                        te.MainVerlet.Add(new VerletSegment(Vector2.Lerp(StringStart, StringEnd, k / te.Distance), Vector2.Zero, false));
+                    te.MainVerlet[0].Locked = te.MainVerlet.Last().Locked = true;
+                }
 
-                    if (!decor.PlacingInProgress)
+                Vector2[] segmentPositions = te.MainVerlet.Select(x => x.Position).ToArray();
+
+                for (int k = 0; k < te.MainVerlet.Count; k++)
+                {
+                    if (DecorationID.DecorationIDs.Contains(Main.LocalPlayer.HeldItem.type) && (k % 5 == 2))
                     {
+                        Decoration decor = (Decoration)Main.LocalPlayer.HeldItem.ModItem;
+
                         Color color = Color.White;
                         if (te.DecorationVerlets.ContainsKey(k))
                             color = Color.Red;
@@ -83,35 +86,42 @@ public class VerletHangerDrawing : ModSystem
                         Particle particle = new GlowOrbParticle(segmentPositions[k], Vector2.Zero, false, 4, 0.5f, color, needed: true);
                         GeneralParticleHandler.SpawnParticle(particle);
                     }
+
+                    if (!te.MainVerlet[k].Locked)
+                        te.MainVerlet[k].Position += Vector2.UnitX * (((float)Math.Sin(Main.windCounter / 13f) / 4f + 1) * Main.windSpeedCurrent * 16);
                 }
 
-                if (!te.MainVerlet[k].Locked)
-                    te.MainVerlet[k].Position += Vector2.UnitX * (((float)Math.Sin(Main.windCounter / 13f) / 4f + 1) * Main.windSpeedCurrent * 16);
+                VerletSimulations.RopeVerletSimulation(te.MainVerlet, StringStart, 4 * te.MainVerlet.Count, new(Gravity: 0.5f), StringEnd);
             }
-
-            VerletSimulations.RopeVerletSimulation(te.MainVerlet, StringStart, 50f, new(Gravity: 0.5f), StringEnd);
-
             for (int i = 0; i < te.DecorationVerlets.Count; i++)
             {
                 int index = te.DecorationVerlets.ElementAt(i).Key;
-                List<VerletSegment> subVerlet = te.DecorationVerlets.ElementAt(i).Value.Item1;
+                List<VerletSegment> subVerlet = te.DecorationVerlets[index].Item1;
+                Vector2 startPos;
+                if (index == -1)
+                    startPos = te.Position.ToWorldCoordinates();
+                else
+                    startPos = te.MainVerlet[index].Position;
 
                 if (subVerlet.Count == 0)
                 {
-                    for (int k = 0; k < 20; k++)
+                    for (int k = 0; k < te.DecorationVerlets[index].Item3; k++)
                     {
-                        te.DecorationVerlets.ElementAt(i).Value.Item1.Add(new VerletSegment(Vector2.Lerp(te.MainVerlet[index].Position, te.MainVerlet[index].Position + Vector2.UnitY * 150f, k / 10), Vector2.Zero, false));
-                        te.DecorationVerlets.ElementAt(i).Value.Item1[k].OldPosition = subVerlet[k].Position;
+                        te.DecorationVerlets[index].Item1.Add(new VerletSegment(Vector2.Lerp(startPos, startPos + Vector2.UnitY * 150f, k / 10), Vector2.Zero, false));
+                        te.DecorationVerlets[index].Item1[k].OldPosition = subVerlet[k].Position;
+                        te.DecorationVerlets[index].Item1[k].Velocity.Y = 19;
                     }
-                    te.DecorationVerlets.ElementAt(i).Value.Item1[0].Locked = true;
-                    subVerlet = te.DecorationVerlets.ElementAt(i).Value.Item1;
+                    te.DecorationVerlets[index].Item1[0].Locked = true;
+                    subVerlet = te.DecorationVerlets[index].Item1;
                 }
+
+                DecorationID.GetDecoration(te.DecorationVerlets[index].Item2).UpdateDecoration(subVerlet.Select(x => x.Position).ToArray());
 
                 for (int k = 0; k < subVerlet.Count; k++)
                 {
                     if (!subVerlet[k].Locked)
                     {
-                        if (Math.Abs(Main.windSpeedCurrent) < 0.0425f)
+                        if (Math.Abs(Main.windSpeedCurrent) < 0.05f)
                             subVerlet[k].Velocity.X += (subVerlet[k].Position - subVerlet[k].OldPosition).X * 0.3f;
 
                         subVerlet[k].Velocity.X *= 0.925f;
@@ -123,17 +133,18 @@ public class VerletHangerDrawing : ModSystem
                             Rectangle hitbox = p.Hitbox;
                             hitbox.Inflate(4, 10);
                             if (hitbox.Contains((int)subVerlet[k].Position.X, (int)subVerlet[k].Position.Y))
-                            {
                                 subVerlet[k].Velocity.X = Math.Sign(p.velocity.X) * (p.velocity.Length());
-                            }
                         }
-                        float windSpeed = ((float)Math.Sin((Main.windCounter + index) / 13f) / 4f + 1) * Main.windSpeedCurrent * (2 * k);
-                        subVerlet[k].Position.X += windSpeed;
+                        if (Math.Abs(Main.windSpeedCurrent) >= 0.05f)
+                        {
+                            float windSpeed = ((float)Math.Sin((Main.windCounter + index) / 13f) / 4f + 1) * Main.windSpeedCurrent * (2 * k);
+                            subVerlet[k].Position.X += windSpeed;
+                        }
                         //subVerlet[k].OldPosition.X += windSpeed;
                     }
                 }
 
-                VerletSimulations.RopeVerletSimulation(subVerlet, te.MainVerlet[index].Position, 20f, new());
+                VerletSimulations.RopeVerletSimulation(subVerlet, startPos, 4 * subVerlet.Count, new());
             }
         }
     }
@@ -149,7 +160,7 @@ public class VerletHangerDrawing : ModSystem
             if (h == null)
                 continue;
 
-            if (h.State != 1 || !h.PartnerLocation.HasValue || !h.RopeID.HasValue)
+            if ((h.State != 1 || !h.PartnerLocation.HasValue) && !h.DecorationVerlets.ContainsKey(-1))
                 continue;
 
             bool visable = false;
@@ -176,28 +187,47 @@ public class VerletHangerDrawing : ModSystem
         foreach(HangerEntity te in ActiveTEs)
         {
             Vector2[] segmentPositions;
-            Twine twine = TwineID.GetTwine(te.RopeID.Value);
+            Twine twine = te.RopeID.HasValue ? TwineID.GetTwine(te.RopeID.Value) : null;
+            if(twine == null && te.PartnerLocation.HasValue)
+            {
+                HangerEntity partner = FindTileEntity<HangerEntity>(te.PartnerLocation.Value.X, te.PartnerLocation.Value.Y, 1, 1);
+                if (partner != null)
+                    twine = partner.RopeID.HasValue ? TwineID.GetTwine(partner.RopeID.Value) : null;
+            }
 
-            foreach (Tuple<List<VerletSegment>, int> Decoration in te.DecorationVerlets.Values.Where(v => v.Item1.Count > 0))
+            foreach (Tuple<List<VerletSegment>, int, int> Decoration in te.DecorationVerlets.Values.Where(v => v.Item1.Count > 0))
             {
                 segmentPositions = Decoration.Item1.Select(x => x.Position).ToArray();
 
                 for (int k = 0; k < segmentPositions.Length - 1; k++)
                 {
-                    twine.DrawDecorationSegment(Main.spriteBatch, k, segmentPositions);
+                    if (twine != null)
+                        twine.DrawDecorationSegment(Main.spriteBatch, k, segmentPositions);
+                    else
+                    {
+                        Vector2 line = segmentPositions[k] - segmentPositions[k + 1];
+                        Color lighting = Lighting.GetColor((segmentPositions[k + 1] + (line / 2f)).ToTileCoordinates());
 
+                        Main.spriteBatch.DrawLineBetter(segmentPositions[k], segmentPositions[k + 1], Color.White.MultiplyRGB(lighting), 3);
+                    }
+                    
                     DecorationID.GetDecoration(Decoration.Item2).DrawAlongVerlet(Main.spriteBatch, k, segmentPositions);
                 }
-
                 DecorationID.GetDecoration(Decoration.Item2).DrawOnVerletEnd(Main.spriteBatch, segmentPositions);
             }
 
-            List<VerletSegment> TwineVerlet = te.MainVerlet;
-            segmentPositions = TwineVerlet.Select(x => x.Position).ToArray();
-            
+            if (te.State == 1)
+            {
+                if (te.MainVerlet.Count > 0)
+                {
+                    List<VerletSegment> TwineVerlet = te.MainVerlet;
+                    segmentPositions = TwineVerlet.Select(x => x.Position).ToArray();
 
-            for (int k = 0; k < segmentPositions.Length - 1; k++)
-                twine.DrawRopeSegment(Main.spriteBatch, k, segmentPositions);           
+
+                    for (int k = 0; k < segmentPositions.Length - 1; k++)
+                        twine.DrawRopeSegment(Main.spriteBatch, k, segmentPositions);
+                }
+            }
         }
 
         Main.spriteBatch.End();
