@@ -1,5 +1,5 @@
 ﻿namespace Windfall.Content.Items.Placeables.Furnature.VerletHangers.Twine;
-public class CordedTwine : Twine, ILocalizedModType
+public class CordedRope : Cord, ILocalizedModType
 {
     public override string Texture => "CalamityMod/Items/Pets/BrimstoneJewel";
 
@@ -19,11 +19,11 @@ public class CordedTwine : Twine, ILocalizedModType
         Item.rare = ItemRarityID.Lime;
     }
 
-    public override int TwineID => 2;
+    public override int CordID => 2;
 
     public override void DrawRopeSegment(SpriteBatch spriteBatch, int index, Vector2[] segmentPositions)
     {
-        Texture2D tex = ModContent.Request<Texture2D>("Windfall/Content/Items/Placeables/Furnature/VerletHangers/Twine/CordedTwine").Value;
+        Texture2D tex = ModContent.Request<Texture2D>("Windfall/Content/Items/Placeables/Furnature/VerletHangers/Cords/CordedRope").Value;
         //Dust.NewDustPerfect(segmentPositions[index], DustID.LifeDrain).velocity = Vector2.Zero;
         Vector2 line;
         if (index == segmentPositions.Length - 1)

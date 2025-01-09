@@ -2,9 +2,9 @@
 using Windfall.Content.Tiles.TileEntities;
 
 namespace Windfall.Content.Items.Placeables.Furnature.VerletHangers.Twine;
-public abstract class Twine : ModItem
+public abstract class Cord : ModItem
 {
-    public virtual int TwineID => 0;
+    public virtual int CordID => 0;
 
     public virtual void DrawRopeSegment(SpriteBatch spriteBatch, int index, Vector2[] segmentPositions) { }
 
@@ -49,7 +49,7 @@ public abstract class Twine : ModItem
                 Vector2 StringEnd = StartingEntity.PartnerLocation.Value.ToWorldCoordinates();
                 StartingEntity.Distance = (StringEnd - StringStart).Length() / 8;
                 //Main.NewText(TwineID);
-                StartingEntity.RopeID = (byte?)TwineID;
+                StartingEntity.CordID = (byte?)CordID;
             }
             else
             {

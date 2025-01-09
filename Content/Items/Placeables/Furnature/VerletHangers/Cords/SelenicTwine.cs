@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 namespace Windfall.Content.Items.Placeables.Furnature.VerletHangers.Twine;
-public class SelenicTwine : Twine, ILocalizedModType
+public class SelenicTwine : Cord, ILocalizedModType
 {
     public override string Texture => "CalamityMod/Items/Pets/BrimstoneJewel";
 
@@ -21,7 +21,7 @@ public class SelenicTwine : Twine, ILocalizedModType
         Item.rare = ItemRarityID.Lime;
     }
 
-    public override int TwineID => 1;
+    public override int CordID => 1;
 
     public override void DrawRopeSegment(SpriteBatch spriteBatch, int index, Vector2[] segmentPositions)
     {

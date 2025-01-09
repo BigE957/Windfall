@@ -48,7 +48,7 @@ public class JadeCrescent : Decoration, ILocalizedModType
     public override void DrawAlongVerlet(SpriteBatch spriteBatch, int index, Vector2[] segmentPositions)
     {
         Texture2D tex = ModContent.Request<Texture2D>("Windfall/Content/Items/Placeables/Furnature/VerletHangers/Decorations/JadeCrescent").Value;
-        if (index % 3 == 0 && index != 0)
+        if (index % 3 == 0 && index != 0 && index != segmentPositions.Length - 1)
         {
             Vector2 line = (segmentPositions[index] - segmentPositions[index + 1]);
 

@@ -1374,6 +1374,11 @@ Items: {
 			DisplayName: Corded Twine
 			Tooltip: ""
 		}
+
+		CordedRope: {
+			DisplayName: Corded Rope
+			Tooltip: ""
+		}
 	}
 
 	Fishing: {

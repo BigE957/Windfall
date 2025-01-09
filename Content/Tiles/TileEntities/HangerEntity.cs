@@ -39,13 +39,13 @@ public class HangerEntity : ModTileEntity
         }
     }
 
-    private byte ropeID = 0;
-    public byte? RopeID
+    private byte cordID = 0;
+    public byte? CordID
     {
-        get => ropeID == 0 ? null : ropeID;
+        get => cordID == 0 ? null : cordID;
         set
         {
-            ropeID = value.HasValue && value.Value != 0 ? value.Value : byte.MinValue;
+            cordID = value.HasValue && value.Value != 0 ? value.Value : byte.MinValue;
             SendSyncPacket();
         }
     }
@@ -105,7 +105,7 @@ public class HangerEntity : ModTileEntity
                 State = 0;
             }
         }
-        if (DecorationID.DecorationIDs.Contains(Main.LocalPlayer.HeldItem.type))
+        if (DecorationID.DecorationTypes.Contains(Main.LocalPlayer.HeldItem.type))
         {
             Decoration decor = (Decoration)Main.LocalPlayer.HeldItem.ModItem;
             Vector2 worldPos = Position.ToWorldCoordinates();
@@ -141,8 +141,8 @@ public class HangerEntity : ModTileEntity
         }
         if (distance != 0)
             tag["Distance"] = distance;
-        if (ropeID != 0)
-            tag["RopeID"] = ropeID;
+        if (cordID != 0)
+            tag["RopeID"] = cordID;
         if(DecorationVerlets.Count > 0)
         {
             tag["DecorationCount"] = DecorationVerlets.Count;
@@ -162,7 +162,7 @@ public class HangerEntity : ModTileEntity
         int y = tag.GetShort("PartnerLocationY");
         partnerLocation = new(x, y);
         distance = tag.GetFloat("Distance");
-        ropeID = tag.GetByte("RopeID");
+        cordID = tag.GetByte("RopeID");
         int decorationCount = tag.GetInt("DecorationCount");
         for (int i = 0; i < decorationCount; i++)
         {
@@ -178,7 +178,7 @@ public class HangerEntity : ModTileEntity
         writer.Write(partnerLocation.X);
         writer.Write(partnerLocation.Y);
         writer.Write(distance);
-        writer.Write(ropeID);
+        writer.Write(cordID);
     }
 
     public override void NetReceive(BinaryReader reader)
@@ -188,7 +188,7 @@ public class HangerEntity : ModTileEntity
         int y = reader.ReadInt32();
         partnerLocation = new(x, y);
         distance = reader.ReadSingle();
-        ropeID = reader.ReadByte();
+        cordID = reader.ReadByte();
     }
 
     private void SendSyncPacket()
@@ -202,7 +202,7 @@ public class HangerEntity : ModTileEntity
         packet.Write(partnerLocation.X);
         packet.Write(partnerLocation.Y);
         packet.Write(distance);
-        packet.Write(ropeID);
+        packet.Write(cordID);
 
         packet.Send();
     }
@@ -240,7 +240,7 @@ public class HangerEntity : ModTileEntity
             HE.state = paired;
             HE.partnerLocation = partner;
             HE.distance = dist;
-            HE.ropeID = id;
+            HE.cordID = id;
             return true;
         }
         return false;

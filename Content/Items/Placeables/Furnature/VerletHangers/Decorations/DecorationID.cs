@@ -1,21 +1,21 @@
 ﻿namespace Windfall.Content.Items.Placeables.Furnature.VerletHangers.Decorations;
 public class DecorationID : ModSystem
 {
-    public static readonly List<int> DecorationIDs = [];
+    public static readonly List<int> DecorationTypes = [];
 
     public override void OnModLoad()
     {
-        DecorationIDs.Clear();
-        DecorationIDs.Add(-1);
-        DecorationIDs.Add(ModContent.ItemType<SelenicJewelery>());
-        DecorationIDs.Add(ModContent.ItemType<SelenicJewelery>());
-        DecorationIDs.Add(ModContent.ItemType<SelenicJewelery>());
-        DecorationIDs.Add(ModContent.ItemType<JadeCrescent>());
-        DecorationIDs.Add(ModContent.ItemType<SelenicLantern>());
-        DecorationIDs.Add(ModContent.ItemType<HangingConstellation>());
-        DecorationIDs.Add(ModContent.ItemType<HangingCandle>());
-        DecorationIDs.Add(ModContent.ItemType<HangingLamp>());
-        DecorationIDs.Add(ModContent.ItemType<HangingLantern>());
+        DecorationTypes.Clear();
+        DecorationTypes.Add(-1);
+        DecorationTypes.Add(ModContent.ItemType<SelenicJewelery>());
+        DecorationTypes.Add(ModContent.ItemType<SelenicJewelery>());
+        DecorationTypes.Add(ModContent.ItemType<SelenicJewelery>());
+        DecorationTypes.Add(ModContent.ItemType<JadeCrescent>());
+        DecorationTypes.Add(ModContent.ItemType<SelenicLantern>());
+        DecorationTypes.Add(ModContent.ItemType<HangingConstellation>());
+        DecorationTypes.Add(ModContent.ItemType<HangingCandle>());
+        DecorationTypes.Add(ModContent.ItemType<HangingLamp>());
+        DecorationTypes.Add(ModContent.ItemType<HangingLantern>());
     }
 
     public const byte None = 0;

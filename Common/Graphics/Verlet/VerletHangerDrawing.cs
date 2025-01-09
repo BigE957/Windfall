@@ -69,7 +69,7 @@ public class VerletHangerDrawing : ModSystem
 
                 for (int k = 0; k < te.MainVerlet.Count; k++)
                 {
-                    if (DecorationID.DecorationIDs.Contains(Main.LocalPlayer.HeldItem.type) && (k % 5 == 2))
+                    if (DecorationID.DecorationTypes.Contains(Main.LocalPlayer.HeldItem.type) && (k % 5 == 2))
                     {
                         Decoration decor = (Decoration)Main.LocalPlayer.HeldItem.ModItem;
 
@@ -187,12 +187,12 @@ public class VerletHangerDrawing : ModSystem
         foreach(HangerEntity te in ActiveTEs)
         {
             Vector2[] segmentPositions;
-            Twine twine = te.RopeID.HasValue ? TwineID.GetTwine(te.RopeID.Value) : null;
+            Cord twine = te.CordID.HasValue ? CordID.GetTwine(te.CordID.Value) : null;
             if(twine == null && te.PartnerLocation.HasValue)
             {
                 HangerEntity partner = FindTileEntity<HangerEntity>(te.PartnerLocation.Value.X, te.PartnerLocation.Value.Y, 1, 1);
                 if (partner != null)
-                    twine = partner.RopeID.HasValue ? TwineID.GetTwine(partner.RopeID.Value) : null;
+                    twine = partner.CordID.HasValue ? CordID.GetTwine(partner.CordID.Value) : null;
             }
 
             foreach (Tuple<List<VerletSegment>, int, int> Decoration in te.DecorationVerlets.Values.Where(v => v.Item1.Count > 0))
