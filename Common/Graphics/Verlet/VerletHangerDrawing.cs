@@ -209,10 +209,12 @@ public class VerletHangerDrawing : ModSystem
                         Color lighting = Lighting.GetColor((segmentPositions[k + 1] + (line / 2f)).ToTileCoordinates());
 
                         Main.spriteBatch.DrawLineBetter(segmentPositions[k], segmentPositions[k + 1], Color.White.MultiplyRGB(lighting), 3);
-                    }
-                    
-                    DecorationID.GetDecoration(Decoration.Item2).DrawAlongVerlet(Main.spriteBatch, k, segmentPositions);
+                    }                  
                 }
+
+                for(int k = 0; k < segmentPositions.Length; k++)
+                    DecorationID.GetDecoration(Decoration.Item2).DrawAlongVerlet(Main.spriteBatch, k, segmentPositions);
+
                 DecorationID.GetDecoration(Decoration.Item2).DrawOnVerletEnd(Main.spriteBatch, segmentPositions);
             }
 

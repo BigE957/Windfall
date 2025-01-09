@@ -35,6 +35,7 @@ public class HangingCandle : Decoration, ILocalizedModType
         Color lighting = Lighting.GetColor((segmentPositions[^2] + (line / 2f)).ToTileCoordinates());
 
         Vector2 origin = texture.Size() * 0.5f;
+        origin.Y = 8;
         Vector2 drawPos = segmentPositions[^1];
         drawPos += line.SafeNormalize(Vector2.UnitY) * 4f;
         float rotation = line.ToRotation();
