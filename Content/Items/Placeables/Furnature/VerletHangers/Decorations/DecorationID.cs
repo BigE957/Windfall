@@ -18,7 +18,7 @@ public class DecorationID : ModSystem
         DecorationIDs.Add(ModContent.ItemType<HangingLantern>());
     }
 
-    public const byte Twine = 0;
+    public const byte None = 0;
     public const byte SelenicJeweleryRed = 1;
     public const byte SelenicJeweleryGreen = 2;
     public const byte SelenicJewelerySilver = 3;

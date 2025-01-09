@@ -81,6 +81,7 @@
     <None Remove="Content\Items\Placeables\Furnature\VerletHangers\Decorations\HangingLantern.png" />
     <None Remove="Content\Items\Placeables\Furnature\VerletHangers\Decorations\JadeCrescent.png" />
     <None Remove="Content\Items\Placeables\Furnature\VerletHangers\Decorations\SelenicLantern.png" />
+    <None Remove="Content\Items\Placeables\Furnature\VerletHangers\Twine\CordedTwine.png" />
     <None Remove="Content\Items\Placeables\Furnature\WhiteStonePlaque.png" />
     <None Remove="Content\Items\Placeables\Special\DatabaseTerminalItem.png" />
     <None Remove="Content\Items\Quest\LunarCoin.png" />
