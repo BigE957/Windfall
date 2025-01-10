@@ -3,7 +3,7 @@ using Microsoft.Xna.Framework.Graphics;
 using System;
 using Terraria;
 using Windfall.Content.Items.Placeables.Furnature.VerletHangers.Decorations;
-using Windfall.Content.Items.Placeables.Furnature.VerletHangers.Twine;
+using Windfall.Content.Items.Placeables.Furnature.VerletHangers.Cords;
 using Windfall.Content.Tiles.TileEntities;
 
 namespace Windfall.Common.Graphics.Verlet;
@@ -60,7 +60,7 @@ public class VerletHangerDrawing : ModSystem
                 if (te.MainVerlet.Count == 0)
                 {
                     te.MainVerlet = [];
-                    for (int k = 0; k < (int)te.Distance / 2f; k++)
+                    for (int k = 0; k < (((int)Math.Ceiling(te.Distance)) / 1.5f); k++)
                         te.MainVerlet.Add(new VerletSegment(Vector2.Lerp(StringStart, StringEnd, k / te.Distance), Vector2.Zero, false));
                     te.MainVerlet[0].Locked = te.MainVerlet.Last().Locked = true;
                 }
@@ -225,11 +225,23 @@ public class VerletHangerDrawing : ModSystem
                     List<VerletSegment> TwineVerlet = te.MainVerlet;
                     segmentPositions = TwineVerlet.Select(x => x.Position).ToArray();
 
+                    if (twine != null)
+                    {
+                        twine.DrawOnRopeEnds(Main.spriteBatch, segmentPositions[0], (segmentPositions[1] - segmentPositions[0]).ToRotation());
+                        twine.DrawOnRopeEnds(Main.spriteBatch, segmentPositions[^1], (segmentPositions[^2] - segmentPositions[^1]).ToRotation());
+                    }
 
                     for (int k = 0; k < segmentPositions.Length; k++)
                         twine.DrawRopeSegment(Main.spriteBatch, k, segmentPositions);
                 }
             }
+
+            if (twine != null)
+                foreach (Tuple<List<VerletSegment>, int, int> Decoration in te.DecorationVerlets.Values.Where(v => v.Item1.Count > 0))
+                {
+                    segmentPositions = Decoration.Item1.Select(x => x.Position).ToArray();
+                    twine.DrawOnRopeEnds(Main.spriteBatch, segmentPositions[0], (segmentPositions[1] - segmentPositions[0]).ToRotation());
+                }
         }
 
         Main.spriteBatch.End();

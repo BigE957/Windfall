@@ -1379,6 +1379,21 @@ Items: {
 			DisplayName: Corded Rope
 			Tooltip: ""
 		}
+
+		CordedSilk: {
+			DisplayName: Corded Silk
+			Tooltip: ""
+		}
+
+		CordedVines: {
+			DisplayName: Corded Vines
+			Tooltip: ""
+		}
+
+		CordedWebs: {
+			DisplayName: Corded Webs
+			Tooltip: ""
+		}
 	}
 
 	Fishing: {

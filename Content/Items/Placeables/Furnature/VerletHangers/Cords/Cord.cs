@@ -1,15 +1,16 @@
 ﻿using Windfall.Content.Tiles.Furnature.VerletHangers.Hangers;
 using Windfall.Content.Tiles.TileEntities;
 
-namespace Windfall.Content.Items.Placeables.Furnature.VerletHangers.Twine;
+namespace Windfall.Content.Items.Placeables.Furnature.VerletHangers.Cords;
 public abstract class Cord : ModItem
 {
-    public virtual int CordID => 0;
+    public virtual int cordID => 0;
 
     public virtual void DrawRopeSegment(SpriteBatch spriteBatch, int index, Vector2[] segmentPositions) { }
 
     public virtual void DrawDecorationSegment(SpriteBatch spriteBatch, int index, Vector2[] segmentPositions) { DrawRopeSegment(spriteBatch, index, segmentPositions); }
 
+    public virtual void DrawOnRopeEnds(SpriteBatch spriteBatch, Vector2 position, float rotation) { }
 
     public bool PlacingInProgress = false;
     public HangerEntity StartingEntity = null;
@@ -49,7 +50,7 @@ public abstract class Cord : ModItem
                 Vector2 StringEnd = StartingEntity.PartnerLocation.Value.ToWorldCoordinates();
                 StartingEntity.Distance = (StringEnd - StringStart).Length() / 8;
                 //Main.NewText(TwineID);
-                StartingEntity.CordID = (byte?)CordID;
+                StartingEntity.CordID = (byte?)cordID;
             }
             else
             {

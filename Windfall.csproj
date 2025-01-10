@@ -76,6 +76,15 @@
     <None Remove="Content\Items\Placeables\Furnature\Hanger.png" />
     <None Remove="Content\Items\Placeables\Furnature\OratorMonolith.png" />
     <None Remove="Content\Items\Placeables\Furnature\VerletHangers\Cords\CordedRope.png" />
+    <None Remove="Content\Items\Placeables\Furnature\VerletHangers\Cords\CordedRopeAtlas.png" />
+    <None Remove="Content\Items\Placeables\Furnature\VerletHangers\Cords\CordedSilk.png" />
+    <None Remove="Content\Items\Placeables\Furnature\VerletHangers\Cords\CordedSilkAtlas.png" />
+    <None Remove="Content\Items\Placeables\Furnature\VerletHangers\Cords\CordedVines.png" />
+    <None Remove="Content\Items\Placeables\Furnature\VerletHangers\Cords\CordedVinesAtlas.png" />
+    <None Remove="Content\Items\Placeables\Furnature\VerletHangers\Cords\CordedWebs.png" />
+    <None Remove="Content\Items\Placeables\Furnature\VerletHangers\Cords\CordedWebsAtlas.png" />
+    <None Remove="Content\Items\Placeables\Furnature\VerletHangers\Cords\SelenicTwine.png" />
+    <None Remove="Content\Items\Placeables\Furnature\VerletHangers\Cords\SelenicTwineAtlas.png" />
     <None Remove="Content\Items\Placeables\Furnature\VerletHangers\Decorations\HangingCandle.png" />
     <None Remove="Content\Items\Placeables\Furnature\VerletHangers\Decorations\HangingConstellation.png" />
     <None Remove="Content\Items\Placeables\Furnature\VerletHangers\Decorations\HangingLamp.png" />

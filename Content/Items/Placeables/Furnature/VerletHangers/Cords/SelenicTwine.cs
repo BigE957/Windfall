@@ -1,10 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-namespace Windfall.Content.Items.Placeables.Furnature.VerletHangers.Twine;
+﻿namespace Windfall.Content.Items.Placeables.Furnature.VerletHangers.Cords;
 public class SelenicTwine : Cord, ILocalizedModType
 {
-    public override string Texture => "CalamityMod/Items/Pets/BrimstoneJewel";
-
     public new string LocalizationCategory => "Items.Placeables";
 
     public override void SetDefaults()
@@ -21,33 +17,28 @@ public class SelenicTwine : Cord, ILocalizedModType
         Item.rare = ItemRarityID.Lime;
     }
 
-    public override int CordID => 1;
+    public override int cordID => CordID.SelenicTwine;
 
     public override void DrawRopeSegment(SpriteBatch spriteBatch, int index, Vector2[] segmentPositions)
     {
-        if (index != segmentPositions.Length - 1)
-        {
-            Vector2 line = (segmentPositions[index] - segmentPositions[index + 1]);
-            Vector2 norLine = line.SafeNormalize(Vector2.Zero);
-            Color lighting = Lighting.GetColor((segmentPositions[index + 1] + (line / 2f)).ToTileCoordinates());
+        Texture2D tex = ModContent.Request<Texture2D>("Windfall/Content/Items/Placeables/Furnature/VerletHangers/Cords/SelenicTwineAtlas").Value;
 
-            spriteBatch.DrawLineBetter(segmentPositions[index] + norLine.RotatedBy(PiOver2), segmentPositions[index + 1] + norLine.RotatedBy(PiOver2), new Color(42, 42, 42).MultiplyRGB(lighting), 6);
+        Vector2 line;
+        if (index == segmentPositions.Length - 1)
+            line = segmentPositions[index - 1] - segmentPositions[index];
+        else if (index == 0)
+            line = segmentPositions[index + 1] - segmentPositions[index];
+        else
+            line = segmentPositions[index] - segmentPositions[index + 1];
 
-            spriteBatch.DrawLineBetter(segmentPositions[index] + norLine.RotatedBy(-PiOver2), segmentPositions[index + 1] + norLine.RotatedBy(-PiOver2), new Color(97, 75, 19).MultiplyRGB(lighting), 6);
+        Color lighting = Lighting.GetColor(segmentPositions[index].ToTileCoordinates());
+        Vector2 origin = new(0, tex.Size().Y * 0.5f);
 
-            spriteBatch.DrawLineBetter(segmentPositions[index], segmentPositions[index + 1], new Color(199, 175, 84).MultiplyRGB(lighting), 3);
-        }
+        spriteBatch.Draw(tex, segmentPositions[index] - Main.screenPosition, null, lighting, line.ToRotation(), origin, 1f, 0, 0);
     }
 
     public override void DrawDecorationSegment(SpriteBatch spriteBatch, int index, Vector2[] segmentPositions)
     {
-        if (index != segmentPositions.Length - 1)
-        {
-            Vector2 line = (segmentPositions[index] - segmentPositions[index + 1]);
-            Color lighting = Lighting.GetColor((segmentPositions[index + 1] + (line / 2f)).ToTileCoordinates());
-            spriteBatch.DrawLineBetter(segmentPositions[index], segmentPositions[index + 1], new Color(97, 75, 19).MultiplyRGB(lighting), 6);
-
-            spriteBatch.DrawLineBetter(segmentPositions[index], segmentPositions[index + 1], new Color(199, 175, 84).MultiplyRGB(lighting), 3);
-        }
+        base.DrawDecorationSegment(spriteBatch, index, segmentPositions);
     }
 }
