@@ -76,7 +76,6 @@ public class HangerEntity : ModTileEntity
 
     public override int Hook_AfterPlacement(int i, int j, int type, int style, int direction, int alternate)
     {
-        Main.NewText("Placement Hook");
         if (Main.netMode == NetmodeID.MultiplayerClient)
         {
             NetMessage.SendTileSquare(Main.myPlayer, i, j, 1, 1);
@@ -97,8 +96,6 @@ public class HangerEntity : ModTileEntity
             Kill(Position.X, Position.Y);
         if (partnerLocation != Point16.NegativeOne)
         {
-            if (!Main.tile[partnerLocation].HasTile || Main.tile[partnerLocation].TileType != ModContent.TileType<HangerTile>())
-                Kill(partnerLocation.X, partnerLocation.Y);
             if (FindTileEntity<HangerEntity>(partnerLocation.X, partnerLocation.Y, 1, 1) == null)
             {
                 PartnerLocation = null;
@@ -127,6 +124,15 @@ public class HangerEntity : ModTileEntity
 
     public override void OnKill()
     {
+        if (partnerLocation != Point16.NegativeOne)
+        {
+            HangerEntity partner = FindTileEntity<HangerEntity>(partnerLocation.X, partnerLocation.Y, 1, 1);
+            if (partner != null)
+            {
+                partner.state = 0;
+                partner.PartnerLocation = null;
+            }
+        }
         VerletHangerDrawing.hangers.Remove(Position);
     }
 
