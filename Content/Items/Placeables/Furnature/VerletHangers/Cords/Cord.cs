@@ -17,27 +17,27 @@ public abstract class Cord : ModItem
 
     public override bool AltFunctionUse(Player player) => true;
 
-    public override void UseAnimation(Player player)
+    public override bool? UseItem(Player player)
     {
         if (PlacingInProgress && player.altFunctionUse == 2)
         {
             PlacingInProgress = false;
             StartingEntity.State = 0;
             StartingEntity = null;
-            return;
+            return true;
         }
 
         Point16 PlacementPoint = Main.MouseWorld.ToTileCoordinates16();
         Tile placementTile = Main.tile[PlacementPoint];
         if (!placementTile.HasTile || Main.tile[PlacementPoint].TileType != ModContent.TileType<HangerTile>())
-            return;
+            return true;
 
         if (PlacingInProgress)
         {
             if (StartingEntity == null || PlacementPoint == StartingEntity.Position)
             {
                 PlacingInProgress = false;
-                return;
+                return true;
             }
             //TileEntity.PlaceEntityNet(PlacementPoint.X, PlacementPoint.Y, ModContent.TileEntityType<HangerEntity>());
             HangerEntity end = FindTileEntity<HangerEntity>(PlacementPoint.X, PlacementPoint.Y, 1, 1);
@@ -48,8 +48,7 @@ public abstract class Cord : ModItem
                 StartingEntity.PartnerLocation = PlacementPoint;
                 Vector2 StringStart = StartingEntity.Position.ToWorldCoordinates();
                 Vector2 StringEnd = StartingEntity.PartnerLocation.Value.ToWorldCoordinates();
-                StartingEntity.Distance = (StringEnd - StringStart).Length() / 8;
-                //Main.NewText(TwineID);
+                StartingEntity.SegmentCount = (int)Math.Ceiling((StringEnd - StringStart).Length() / 12f);
                 StartingEntity.CordID = (byte?)cordID;
             }
             else
@@ -71,6 +70,7 @@ public abstract class Cord : ModItem
             else
                 Main.NewText("WOMPITY WOMP WOMP");
         }
+        return true;
     }
 
     public override void HoldItem(Player player)
@@ -84,12 +84,12 @@ public abstract class Cord : ModItem
 
             for (int i = 0; i < 8; i++)
             {
-                particle = new GlowOrbParticle(Vector2.Lerp(StringStart, StringEnd, i / 8f), Vector2.Zero, false, 4, 0.5f, Color.White);
+                particle = new GlowOrbParticle(Vector2.Lerp(StringStart, StringEnd, i / 8f), Vector2.Zero, false, 2, 0.5f, Color.White);
                 GeneralParticleHandler.SpawnParticle(particle);
             }
-            particle = new GlowOrbParticle(StringStart, Vector2.Zero, false, 4, 0.5f, Color.White);
+            particle = new GlowOrbParticle(StringStart, Vector2.Zero, false, 2, 0.5f, Color.White);
             GeneralParticleHandler.SpawnParticle(particle);
-            particle = new GlowOrbParticle(StringEnd, Vector2.Zero, false, 4, 0.5f, Color.White);
+            particle = new GlowOrbParticle(StringEnd, Vector2.Zero, false, 2, 0.5f, Color.White);
             GeneralParticleHandler.SpawnParticle(particle);
         }
     }

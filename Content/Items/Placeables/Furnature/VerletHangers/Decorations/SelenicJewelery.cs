@@ -10,8 +10,7 @@ public class SelenicJewelery : Decoration, ILocalizedModType
         Item.maxStack = 9999;
         Item.useTurn = true;
         Item.autoReuse = true;
-        Item.useAnimation = 15;
-        Item.useTime = 10;
+        Item.useTime = Item.useAnimation = 15;
         Item.useStyle = ItemUseStyleID.Swing;
         Item.consumable = true;
         Item.rare = ItemRarityID.Lime;
@@ -29,17 +28,18 @@ public class SelenicJewelery : Decoration, ILocalizedModType
 
     public override bool AltFunctionUse(Player player) => true;
 
-    public override void UseAnimation(Player player)
+    public override bool? UseItem(Player player)
     {
-        if(player.altFunctionUse == 2)
+        if (player.altFunctionUse == 2)
         {
             if (colorType == ColorType.Silver)
                 colorType = ColorType.Red;
             else
                 colorType++;
+            return true;
         }
         else
-            base.UseAnimation(player);
+            return base.UseItem(player);
     }
 
     public override bool PreDrawInInventory(SpriteBatch spriteBatch, Vector2 position, Rectangle frame, Color drawColor, Color itemColor, Vector2 origin, float scale)

@@ -14,33 +14,51 @@ public abstract class Decoration : ModItem
 
     public virtual void DrawOnVerletEnd(SpriteBatch spriteBatch, Vector2[] segmentPositions) { }
 
-    public HangerEntity StartingEntity = null;
+    public HangerEntity HE = null;
     public int HangIndex = -1;
 
-    public override void UseAnimation(Player player)
+    public override bool? UseItem(Player player)
     {
-        if (StartingEntity != null && StartingEntity.DecorationVerlets.ContainsKey(HangIndex))
+        if (HangIndex == -2 && ((Main.MouseWorld - HE.Position.ToWorldCoordinates()).LengthSquared() > 625))
+        {
+            HE = null;
             HangIndex = -1;
+            return true;
+        }
+
         if (HangIndex != -1)
         {
+            if (HE != null && HE.DecorationVerlets.ContainsKey(HangIndex))
+            {
+                HangIndex = -1;
+                return true;
+            }
+
+            if (HangIndex != -2 && (Main.MouseWorld - HE.MainVerlet[HangIndex].Position).LengthSquared() > 625)
+            {
+                HE = null;
+                HangIndex = -1;
+                return true;
+            }
+
             List<VerletSegment> newVerlet = [];
             for (int k = 0; k < 16; k++)
             {
                 if(HangIndex == -2)
-                    newVerlet.Add(new VerletSegment(Vector2.Lerp(StartingEntity.Position.ToWorldCoordinates(), StartingEntity.Position.ToWorldCoordinates() + Vector2.UnitY * 150f, k / 10), Vector2.Zero, false));
+                    newVerlet.Add(new VerletSegment(Vector2.Lerp(HE.Position.ToWorldCoordinates(), HE.Position.ToWorldCoordinates() + Vector2.UnitY * 150f, k / 10), Vector2.Zero, false));
                 else
-                    newVerlet.Add(new VerletSegment(Vector2.Lerp(StartingEntity.MainVerlet[HangIndex].Position, StartingEntity.MainVerlet[HangIndex].Position + Vector2.UnitY * 150f, k / 10), Vector2.Zero, false));
+                    newVerlet.Add(new VerletSegment(Vector2.Lerp(HE.MainVerlet[HangIndex].Position, HE.MainVerlet[HangIndex].Position + Vector2.UnitY * 150f, k / 10), Vector2.Zero, false));
                 newVerlet[k].OldPosition = newVerlet[k].Position;
                 newVerlet[k].Velocity.Y = 19;
             }
             newVerlet[0].Locked = true;
             if (HangIndex == -2)
             {
-                StartingEntity.DecorationVerlets.Add(-1, new(newVerlet, DecorID, 16));
+                HE.DecorationVerlets.Add(-1, new(newVerlet, DecorID, 16));
             }
             else
-                StartingEntity.DecorationVerlets.Add(HangIndex, new(newVerlet, DecorID, 16));
-            return;
+                HE.DecorationVerlets.Add(HangIndex, new(newVerlet, DecorID, 16));
         }
+        return true;
     }
 }

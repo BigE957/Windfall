@@ -16,8 +16,7 @@ public class HangingConstellation : Decoration, ILocalizedModType
         Item.maxStack = 9999;
         Item.useTurn = true;
         Item.autoReuse = true;
-        Item.useAnimation = 15;
-        Item.useTime = 10;
+        Item.useTime = Item.useAnimation = 15;
         Item.useStyle = ItemUseStyleID.Swing;
         Item.consumable = true;
         Item.rare = ItemRarityID.Lime;
