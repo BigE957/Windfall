@@ -138,7 +138,7 @@ public class VerletHangerDrawing : ModSystem
                         te.MainVerlet[k].Position += Vector2.UnitX * (((float)Math.Sin(Main.windCounter / 13f) / 4f + 1) * Main.windSpeedCurrent * 16);
                 }
 
-                VerletSimulations.RopeVerletSimulation(te.MainVerlet, StringStart, 4 * te.MainVerlet.Count, new(Gravity: 0.5f), StringEnd);
+                VerletSimulations.RopeVerletSimulation(te.MainVerlet, StringStart, te.MainVerlet.Count, new(Gravity: 0.5f), StringEnd);
             }
             for (int i = 0; i < te.DecorationVerlets.Count; i++)
             {

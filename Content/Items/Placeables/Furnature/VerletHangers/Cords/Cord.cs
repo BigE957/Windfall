@@ -48,7 +48,7 @@ public abstract class Cord : ModItem
                 StartingEntity.PartnerLocation = PlacementPoint;
                 Vector2 StringStart = StartingEntity.Position.ToWorldCoordinates();
                 Vector2 StringEnd = StartingEntity.PartnerLocation.Value.ToWorldCoordinates();
-                StartingEntity.SegmentCount = (int)Math.Ceiling((StringEnd - StringStart).Length() / 12f);
+                StartingEntity.SegmentCount = (int)Math.Ceiling((StringEnd - StringStart).Length() / 10f);
                 StartingEntity.CordID = (byte?)cordID;
             }
             else
