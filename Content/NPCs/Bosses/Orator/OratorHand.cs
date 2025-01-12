@@ -1,5 +1,6 @@
 ﻿using CalamityMod.World;
 using Luminance.Core.Graphics;
+using Terraria.Chat;
 using Terraria.GameContent.Bestiary;
 using Windfall.Common.Graphics.Metaballs;
 using Windfall.Common.Systems;
@@ -16,10 +17,19 @@ public class OratorHand : ModNPC
         get => (int)NPC.ai[0];
         set => NPC.ai[0] = value;
     }
-    private int WhatHand
+    private int MainHandIndex
     {
         get => (int)NPC.ai[1];
         set => NPC.ai[1] = value;
+    }
+    private int SubHandIndex
+    {
+        get => (int)NPC.ai[2];
+        set => NPC.ai[2] = value;
+    }
+    private int WhatHand
+    {
+        get => NPC.whoAmI == MainHandIndex ? 1 : NPC.whoAmI == SubHandIndex ? -1 : 0;
     }
 
     public override void SetStaticDefaults()
@@ -63,18 +73,82 @@ public class OratorHand : ModNPC
     {
         zoom = 0f;
         deadCounter = 0;
-        if (WhatHand == 0)
+        OratorIndex = NPC.FindFirstNPC(ModContent.NPCType<TheOrator>());
+        if (Main.npc.Where(n => n != null && n.active && n.type == ModContent.NPCType<OratorHand>()).Count() == 1)
         {
-            if (Main.npc.Where(n => n != null && n.active && n.type == NPC.type).Count() > 1)
-                WhatHand = -1;
-            else
-                WhatHand = 1;
+            MainHandIndex = NPC.whoAmI;
+            SubHandIndex = -1;
+        }
+        else
+        {
+            OratorHand mainHand = Main.npc.First(n => n != null && n.active && n.type == ModContent.NPCType<OratorHand>() && n.whoAmI != NPC.whoAmI).As<OratorHand>();
+            MainHandIndex = mainHand.NPC.whoAmI;
+            SubHandIndex = NPC.whoAmI;
+            Main.npc[MainHandIndex].As<OratorHand>().SubHandIndex = NPC.whoAmI;
+            
+        }
+        if (Main.netMode == NetmodeID.Server || Main.netMode == NetmodeID.MultiplayerClient)
+        {
+            ChatHelper.BroadcastChatMessage(NetworkText.FromLiteral("~~~~~~~~~~~~~~~~~~~~"), Color.White);
+            ChatHelper.BroadcastChatMessage(NetworkText.FromLiteral($"Hand Index: {NPC.whoAmI}"), Color.White);
+            ChatHelper.BroadcastChatMessage(NetworkText.FromLiteral($"Orator Index: {OratorIndex}"), Color.White);
+            ChatHelper.BroadcastChatMessage(NetworkText.FromLiteral($"Main Hand Index: {MainHandIndex}"), Color.White);
+            ChatHelper.BroadcastChatMessage(NetworkText.FromLiteral($"Sub Hand Index: {SubHandIndex}"), Color.White);
+            ChatHelper.BroadcastChatMessage(NetworkText.FromLiteral($"What Hand: {WhatHand}"), Color.White);
+            ChatHelper.BroadcastChatMessage(NetworkText.FromLiteral("~~~~~~~~~~~~~~~~~~~~"), Color.White);
+        }
+        else
+        {
+            Main.NewText("~~~~~~~~~~~~~~~~~~~~");
+            Main.NewText($"Hand Index: {NPC.whoAmI}");
+            Main.NewText($"Orator Index: {OratorIndex}");
+            Main.NewText($"Main Hand Index: {MainHandIndex}");
+            Main.NewText($"Sub Hand Index: {SubHandIndex}");
+            Main.NewText($"What Hand: {WhatHand}");
+            Main.NewText("~~~~~~~~~~~~~~~~~~~~");
         }
     }
     public override bool PreAI()
-    {            
-        if (Main.npc[OratorIndex] == null)
+    {
+        /*
+        if (Main.netMode == NetmodeID.Server || Main.netMode == NetmodeID.MultiplayerClient)
+        {
+            ChatHelper.BroadcastChatMessage(NetworkText.FromLiteral("~~~~~~~~~~~~~~~~~~~~"), Color.White);
+            ChatHelper.BroadcastChatMessage(NetworkText.FromLiteral($"Hand Index: {NPC.whoAmI}"), Color.White);
+            ChatHelper.BroadcastChatMessage(NetworkText.FromLiteral($"Orator Index: {OratorIndex}"), Color.White);
+            ChatHelper.BroadcastChatMessage(NetworkText.FromLiteral($"Main Hand Index: {MainHandIndex}"), Color.White);
+            ChatHelper.BroadcastChatMessage(NetworkText.FromLiteral($"Sub Hand Index: {SubHandIndex}"), Color.White);
+            ChatHelper.BroadcastChatMessage(NetworkText.FromLiteral($"What Hand: {WhatHand}"), Color.White);
+            ChatHelper.BroadcastChatMessage(NetworkText.FromLiteral("~~~~~~~~~~~~~~~~~~~~"), Color.White);
+        }
+        else
+        {
+            Main.NewText("~~~~~~~~~~~~~~~~~~~~");
+            Main.NewText($"Hand Index: {NPC.whoAmI}");
+            Main.NewText($"Orator Index: {OratorIndex}");
+            Main.NewText($"Main Hand Index: {MainHandIndex}");
+            Main.NewText($"Sub Hand Index: {SubHandIndex}");
+            Main.NewText($"What Hand: {WhatHand}");
+            Main.NewText("~~~~~~~~~~~~~~~~~~~~");
+        }
+        */
+        if (Main.npc[OratorIndex] == null || !Main.npc[OratorIndex].active || Main.npc[OratorIndex].type != ModContent.NPCType<TheOrator>())
+        {
+            if (Main.npc[OratorIndex] != null && Main.npc[OratorIndex].active)
+            {
+                if (Main.netMode == NetmodeID.Server || Main.netMode == NetmodeID.MultiplayerClient)
+                {
+                    ChatHelper.BroadcastChatMessage(NetworkText.FromLiteral($"Orator Index NPC not of type Orator!! {OratorIndex}"), Color.White);
+                    ChatHelper.BroadcastChatMessage(NetworkText.FromLiteral($"Orator Type {ModContent.NPCType<TheOrator>()}, Found Type {Main.npc[OratorIndex].type}"), Color.White);
+                }
+                else
+                {
+                    Main.NewText($"Orator Index NPC not of type Orator!! {OratorIndex}");
+                    Main.NewText($"Orator Type {ModContent.NPCType<TheOrator>()}, Found Type {Main.npc[OratorIndex].type}");
+                }
+            }
             return true;
+        }
         NPC orator = Main.npc[OratorIndex];
         TheOrator modOrator = orator.As<TheOrator>();
         if (modOrator.AIState == TheOrator.States.Spawning)
@@ -83,10 +157,10 @@ public class OratorHand : ModNPC
         {
             NPC.life = 1;
         }
-        if (!Main.npc.Any(n => n != null && n.active && n.type == NPC.type && n.As<OratorHand>().WhatHand == 1))
+        if (((OratorHand)Main.npc[MainHandIndex].ModNPC).WhatHand != 1)
             return true;
-        NPC mainHand = Main.npc.First(n => n != null && n.active && n.type == NPC.type && n.As<OratorHand>().WhatHand == 1);
-        if (Main.npc.Where(n => n != null && n.active && n.type == NPC.type).Count() == 1)
+        NPC mainHand = Main.npc[MainHandIndex];
+        if (Main.npc.Where(n => n != null && n.active && n.type == ModContent.NPCType<OratorHand>()).Count() == 1)
         {
             NPC.realLife = -1;
             NPC.life = 0;
@@ -119,6 +193,10 @@ public class OratorHand : ModNPC
     {
         if (Main.npc[OratorIndex] == null || !Main.npc[OratorIndex].active || Main.npc[OratorIndex].type != ModContent.NPCType<TheOrator>())
         {
+            if (Main.netMode == NetmodeID.Server || Main.netMode == NetmodeID.MultiplayerClient)
+                ChatHelper.BroadcastChatMessage(NetworkText.FromLiteral("Orator Changed!!!!!"), Color.White);
+            else
+                Main.NewText("Orator Changed!!!!!");
             if (NPC.AnyNPCs(ModContent.NPCType<TheOrator>()))
                 OratorIndex = NPC.FindFirstNPC(ModContent.NPCType<TheOrator>());
             else
@@ -147,18 +225,18 @@ public class OratorHand : ModNPC
                 NPC.velocity = (orator.Center - NPC.Center).SafeNormalize(Vector2.Zero) * 8f * (modOrator.AIState == TheOrator.States.DarkCollision ? 2.5f : (orator.Center - NPC.Center).Length() > 300f ? 1.5f : -1);
             }
 
-            NPC otherHand = Main.npc.First(n => n != null && n.active && n.type == NPC.type && n.As<OratorHand>().WhatHand == -1);
+            NPC subHand = Main.npc[SubHandIndex];
 
             NPC.Center -= shakeOffset;
 
-            if (WhatHand == 1 && Main.npc.Where(n => n != null && n.active && n.type == NPC.type).Count() > 1)
+            if (WhatHand == 1 && Main.npc.Where(n => n != null && n.active && n.type == ModContent.NPCType<OratorHand>()).Count() > 1)
             {
                 if (deadCounter < 60)
                     zoom = Lerp(0f, 0.4f, deadCounter / 60f);
                 else
                     zoom = 0.4f;
                 CameraPanSystem.Zoom = zoom;
-                CameraPanSystem.PanTowards(NPC.Center + ((otherHand.Center - NPC.Center) / 2f), Clamp(deadCounter / 60f, 0f, 1f));
+                CameraPanSystem.PanTowards(NPC.Center + ((subHand.Center - NPC.Center) / 2f), Clamp(deadCounter / 60f, 0f, 1f));
             }
 
             if (deadCounter < 300)
@@ -301,7 +379,7 @@ public class OratorHand : ModNPC
                                     }
                                     float reelBackSpeedExponent = 2.6f;
                                     float reelBackCompletion = Utils.GetLerpValue(0f, 20, aiCounter - 90, true);
-                                    float reelBackSpeed = MathHelper.Lerp(2.5f, 16f, MathF.Pow(reelBackCompletion, reelBackSpeedExponent));
+                                    float reelBackSpeed = Lerp(2.5f, 16f, MathF.Pow(reelBackCompletion, reelBackSpeedExponent));
                                     Vector2 reelBackVelocity = direction * -reelBackSpeed;
                                     NPC.velocity = Vector2.Lerp(NPC.velocity, reelBackVelocity, 0.25f);
                                 }
@@ -310,7 +388,7 @@ public class OratorHand : ModNPC
                                     if (aiCounter == 110)
                                         NPC.velocity = direction * 75;
                                     NPC.velocity *= 0.93f;
-                                    NPC subHand = Main.npc.First(n => n != null && n.active && n.type == NPC.type && n.As<OratorHand>().WhatHand == -1);
+                                    NPC subHand = Main.npc[SubHandIndex];
                                     if (NPC.Hitbox.Intersects(subHand.Hitbox) && !attackBool)
                                     {
                                         Vector2 midPoint = NPC.Center + ((subHand.Center - NPC.Center) / 2);
@@ -352,8 +430,8 @@ public class OratorHand : ModNPC
                         {
                             if (aiCounter >= 0)
                             {
-                                NPC mainHand = Main.npc.First(n => n != null && n.active && n.type == NPC.type && n.As<OratorHand>().WhatHand == 1);
-                                direction = mainHand.As<OratorHand>().direction;
+                                NPC mainHand = Main.npc[MainHandIndex];
+                                direction = ((OratorHand)mainHand.ModNPC).direction;
                                 if (aiCounter < 90)
                                 {
                                     //direction *= WhatHand;
@@ -375,7 +453,7 @@ public class OratorHand : ModNPC
                                         Vector2 reelBackVelocity = direction * reelBackSpeed;
                                         NPC.velocity = Vector2.Lerp(NPC.velocity, reelBackVelocity, 0.25f);
                                     }
-                                    else if (!mainHand.As<OratorHand>().attackBool)
+                                    else if (!((OratorHand)mainHand.ModNPC).attackBool)
                                     {
                                         if (aiCounter == 110)
                                             NPC.velocity = direction * -75;
@@ -401,6 +479,7 @@ public class OratorHand : ModNPC
                     #region Movement
                     NPC.velocity = (goal - NPC.Center).SafeNormalize(Vector2.Zero) * ((goal - NPC.Center).Length() / 10f);
                     NPC.rotation = 3 * PiOver2;
+                    NPC.rotation += PiOver2 * WhatHand;
                     NPC.direction = -WhatHand;
                     #endregion
 
@@ -424,6 +503,7 @@ public class OratorHand : ModNPC
                                 NPC.rotation = 3 * Pi / 2;
                                 goal = proj.Center + new Vector2(0, proj.height / 1.75f);
                             }
+                            NPC.rotation -= PiOver2 * WhatHand;
                         }
                         else
                         {
@@ -438,6 +518,7 @@ public class OratorHand : ModNPC
                                 NPC.rotation = Pi / 2;
                                 goal = proj.Center - new Vector2(0, proj.height / 1.75f);
                             }
+                            NPC.rotation -= PiOver2 * WhatHand;
                         }
                         NPC.velocity = (goal - NPC.Center).SafeNormalize(Vector2.Zero) * ((goal - NPC.Center).Length() / 8f);
                     }
@@ -478,6 +559,7 @@ public class OratorHand : ModNPC
                             NPC.rotation = rotation.ToRotation();
                         }
                         NPC.velocity = (goalPos - NPC.Center).SafeNormalize(Vector2.Zero) * ((goalPos - NPC.Center).Length() / 10f);
+                        NPC.rotation += PiOver2 * WhatHand;
                     }
                     else //Actual Attack
                     {
@@ -494,8 +576,9 @@ public class OratorHand : ModNPC
                                 NPC.velocity = (goalPos - NPC.Center).SafeNormalize(Vector2.Zero) * ((goalPos - NPC.Center).Length() / 10f);
                                 NPC.direction = -WhatHand;
                                 NPC.rotation = Pi;
+                                NPC.rotation += PiOver2 * WhatHand;
 
-                                if((aiCounter + 45) % 90 == 0 && aiCounter != 0)
+                                if ((aiCounter + 45) % 90 == 0 && aiCounter != 0)
                                 {
                                     Vector2 ToTarget = (modOrator.target.Center - NPC.Center).SafeNormalize(Vector2.Zero);
                                     SoundEngine.PlaySound(SoundID.DD2_OgreSpit, NPC.Center);
@@ -552,6 +635,7 @@ public class OratorHand : ModNPC
                                 NPC.velocity = (goalPos - NPC.Center).SafeNormalize(Vector2.Zero) * ((goalPos - NPC.Center).Length() / 10f);
                                 NPC.direction = WhatHand;
                                 NPC.rotation = 0;
+                                NPC.rotation -= PiOver2 * WhatHand;
 
                                 if (aiCounter % 90 == 0)
                                 {
@@ -691,6 +775,7 @@ public class OratorHand : ModNPC
                                 NPC.velocity = (goalPos - NPC.Center).SafeNormalize(Vector2.Zero) * ((goalPos - NPC.Center).Length() / 10f);
                                 NPC.direction = -WhatHand;
                                 NPC.rotation = 0;
+                                NPC.rotation += PiOver2 * WhatHand;
 
                                 if ((aiCounter+90) % 90 == 0)
                                 {
@@ -749,6 +834,7 @@ public class OratorHand : ModNPC
                                 NPC.velocity = (goalPos - NPC.Center).SafeNormalize(Vector2.Zero) * ((goalPos - NPC.Center).Length() / 10f);
                                 NPC.direction = WhatHand;
                                 NPC.rotation = Pi;
+                                NPC.rotation -= PiOver2 * WhatHand;
 
                                 if ((aiCounter + 45) % 90 == 0)
                                 {
@@ -896,7 +982,7 @@ public class OratorHand : ModNPC
                     #endregion
                     break;
             }
-            EmpyreanMetaball.SpawnDefaultParticle(NPC.Center - (NPC.rotation.ToRotationVector2().RotatedBy(CurrentPose == Pose.Palm ? -PiOver2 * NPC.direction : 0) * (NPC.width / 1.5f)) + (NPC.rotation.ToRotationVector2().RotatedBy(PiOver2 - (CurrentPose == Pose.Palm ? PiOver2 * NPC.direction : 0)) * Main.rand.NextFloat(-16f, 16f)), (NPC.rotation.ToRotationVector2().RotatedBy(Pi + Main.rand.NextFloat(-PiOver4, PiOver4) - (CurrentPose == Pose.Palm ? PiOver2 * NPC.direction : 0)) * Main.rand.NextFloat(2f, 6f)), Main.rand.NextFloat(20f, 40f));
+            EmpyreanMetaball.SpawnDefaultParticle(NPC.Center - (NPC.rotation.ToRotationVector2() * (NPC.width / 1.5f)) + (NPC.rotation.ToRotationVector2().RotatedBy(PiOver2) * Main.rand.NextFloat(-16f, 16f)), (NPC.rotation.ToRotationVector2().RotatedBy(Pi + Main.rand.NextFloat(-PiOver4, PiOver4)) * Main.rand.NextFloat(2f, 6f)), Main.rand.NextFloat(20f, 40f));
         }
         effectCounter++;
     }

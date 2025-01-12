@@ -11,6 +11,7 @@ using Terraria.GameContent.Bestiary;
 using Terraria.Graphics.Effects;
 using CalamityMod.Items.LoreItems;
 using Windfall.Content.UI.BossBars;
+using Terraria.Chat;
 
 namespace Windfall.Content.NPCs.Bosses.Orator;
 
@@ -68,9 +69,7 @@ public class TheOrator : ModNPC
         BoltDamage = StatCorrections.ScaleProjectileDamage(Main.masterMode ? 205 : CalamityWorld.death ? 172 : CalamityWorld.revenge ? 160 : Main.expertMode ? 138 : 90);
         DashDelay = CalamityWorld.death ? 20 : CalamityWorld.revenge ? 25 : 30;
     }
-    private int hitTimer = 0;
-    private bool scytheSpin = false;
-    private bool scytheSlice = false;
+    
 
     public static bool noSpawnsEscape = true;
     public override void OnSpawn(IEntitySource source)
@@ -111,11 +110,20 @@ public class TheOrator : ModNPC
         get => (int)NPC.ai[1];
         set => NPC.ai[1] = value;
     }
-    float attackCounter = 0;
+    float attackCounter
+    {
+        get => (int)NPC.ai[2];
+        set => NPC.ai[2] = value;
+    }
+    private int attackCycles
+    {
+        get => (int)NPC.ai[3];
+        set => NPC.ai[3] = value;
+    }
+
     bool dashing = false;
-    private int attackCycles = 0;
     Vector2 VectorToTarget = Vector2.Zero;
-    public Player target = null;
+    public Player target = null;   
     public override bool PreAI()
     {
         foreach (Player p in Main.player.Where(p => p != null && p.active && !p.dead))
@@ -123,7 +131,7 @@ public class TheOrator : ModNPC
             p.AddBuff(ModContent.BuffType<BossEffects>(), 2);
         }
         return true;
-    }
+    }    
     public override void AI()
     {
         if (target == null || !target.active || target.dead)
@@ -1207,9 +1215,10 @@ public class TheOrator : ModNPC
                 {
                     SoundEngine.PlaySound(SoundID.DD2_EtherianPortalDryadTouch, NPC.Center);
                     Vector2 spawnPos = new(NPC.Center.X + 128, NPC.Center.Y);
-                    NPC hand = NPC.NewNPCDirect(NPC.GetSource_FromAI(), (int)spawnPos.X, (int)spawnPos.Y, ModContent.NPCType<OratorHand>());
+                    int index = NPC.NewNPC(NPC.GetSource_FromAI(), (int)spawnPos.X, (int)spawnPos.Y, ModContent.NPCType<OratorHand>());
+                    Main.npc[index].ai[0] = NPC.whoAmI;
                     for (int i = 0; i < 24; i++)
-                        EmpyreanMetaball.SpawnDefaultParticle(hand.Center + new Vector2(Main.rand.NextFloat(-64, 64), -32).RotatedBy(-PiOver4), Vector2.UnitY.RotatedBy(-PiOver4) * Main.rand.NextFloat(2f, 18f), Main.rand.NextFloat(110f, 130f));
+                        EmpyreanMetaball.SpawnDefaultParticle(Main.npc[index].Center + new Vector2(Main.rand.NextFloat(-64, 64), -32).RotatedBy(-PiOver4), Vector2.UnitY.RotatedBy(-PiOver4) * Main.rand.NextFloat(2f, 18f), Main.rand.NextFloat(110f, 130f));
                 }
                 if (aiCounter > 180 && aiCounter <= 240)
                 {
@@ -1224,17 +1233,20 @@ public class TheOrator : ModNPC
                 {
                     SoundEngine.PlaySound(SoundID.DD2_EtherianPortalDryadTouch, NPC.Center);
                     Vector2 spawnPos = new(NPC.Center.X - 128, NPC.Center.Y);
-                    NPC hand = NPC.NewNPCDirect(NPC.GetSource_FromAI(), (int)spawnPos.X, (int)spawnPos.Y, ModContent.NPCType<OratorHand>());
+                    int index = NPC.NewNPC(NPC.GetSource_FromAI(), (int)spawnPos.X, (int)spawnPos.Y, ModContent.NPCType<OratorHand>());
+                    Main.npc[index].ai[0] = NPC.whoAmI;
                     for (int i = 0; i < 24; i++)
-                        EmpyreanMetaball.SpawnDefaultParticle(hand.Center + new Vector2(Main.rand.NextFloat(-64, 64), -32).RotatedBy(PiOver4), Vector2.UnitY.RotatedBy(PiOver4) * Main.rand.NextFloat(2f, 18f), Main.rand.NextFloat(110f, 130f));
+                        EmpyreanMetaball.SpawnDefaultParticle(Main.npc[index].Center + new Vector2(Main.rand.NextFloat(-64, 64), -32).RotatedBy(PiOver4), Vector2.UnitY.RotatedBy(PiOver4) * Main.rand.NextFloat(2f, 18f), Main.rand.NextFloat(110f, 130f));
                 }
 
                 if (aiCounter == 360)
                 {
                     if(!NPC.AnyNPCs(ModContent.NPCType<OratorHand>()))
                     {
-                        NPC.NewNPCDirect(NPC.GetSource_FromAI(), (int)NPC.Center.X, (int)NPC.Center.Y, ModContent.NPCType<OratorHand>());
-                        NPC.NewNPCDirect(NPC.GetSource_FromAI(), (int)NPC.Center.X, (int)NPC.Center.Y, ModContent.NPCType<OratorHand>());
+                        int index = NPC.NewNPC(NPC.GetSource_FromAI(), (int)NPC.Center.X, (int)NPC.Center.Y, ModContent.NPCType<OratorHand>());
+                        Main.npc[index].ai[0] = NPC.whoAmI;
+                        index = NPC.NewNPC(NPC.GetSource_FromAI(), (int)NPC.Center.X, (int)NPC.Center.Y, ModContent.NPCType<OratorHand>());
+                        Main.npc[index].ai[0] = NPC.whoAmI;
                     }
                     DashDelay = CalamityWorld.death ? 20 : CalamityWorld.revenge ? 25 : 30;
                     aiCounter = -30;
@@ -1373,11 +1385,10 @@ public class TheOrator : ModNPC
             DoScytheSpin();
         if (scytheSlice)
             DoScytheSlice();
-
         aiCounter++;
-        if (hitTimer > 0)
-            hitTimer--;
     }
+    
+    private bool scytheSpin = false;
     Particle spinSmear = null;
     Particle spinHandle = null;
     Vector2 spinDirection = Vector2.Zero;
@@ -1410,10 +1421,12 @@ public class TheOrator : ModNPC
                 }
                 else
                 {
-                    spinSmear.Kill();
+                    //if (spinSmear != null)
+                    //    GeneralParticleHandler.RemoveParticle(spinSmear);
                     spinSmear = null;
 
-                    spinHandle.Kill();
+                    //if (spinHandle != null)
+                    //    GeneralParticleHandler.RemoveParticle(spinHandle);
                     spinHandle = null;
 
                     scytheSpin = false;
@@ -1465,6 +1478,8 @@ public class TheOrator : ModNPC
         }
         spinCounter++;
     }
+    
+    private bool scytheSlice = false;
     Particle sliceSmear = null;
     Particle sliceHandle = null;
     Vector2 sliceDirection = Vector2.Zero;
@@ -1499,10 +1514,13 @@ public class TheOrator : ModNPC
                 }
                 else
                 {
-                    sliceSmear.Kill();
+                    //if (sliceSmear != null)
+                    //    GeneralParticleHandler.RemoveParticle(sliceSmear);
                     sliceSmear = null;
 
-                    sliceHandle.Kill();
+
+                    //if (sliceHandle != null)
+                    //    GeneralParticleHandler.RemoveParticle(sliceHandle);
                     sliceHandle = null;
 
                     scytheSlice = false;
@@ -1556,60 +1574,7 @@ public class TheOrator : ModNPC
         }
         sliceCounter++;
     }
-    
-    public override void HitEffect(NPC.HitInfo hit)
-    {
-        if (Main.netMode != NetmodeID.MultiplayerClient)
-        {
-            hitTimer = 35;
-            NPC.netUpdate = true;
-        }
-    }
-    public override void OnKill()
-    {
-        for (int i = 0; i <= 50; i++)
-        {
-            int dustStyle = Main.rand.NextBool() ? 66 : 263;
-            Dust dust = Dust.NewDustPerfect(NPC.Center, Main.rand.NextBool(3) ? 191 : dustStyle);
-            dust.scale = Main.rand.NextFloat(1.5f, 2.3f);
-            dust.velocity = Main.rand.NextVector2Circular(10f, 10f);
-            dust.noGravity = true;
-            dust.color = dust.type == dustStyle ? Color.LightGreen : default;
-        }
-        NPC.downedAncientCultist = true;
-        DownedNPCSystem.downedOrator = true;
-    }
-    public override void BossLoot(ref string name, ref int potionType)
-    {
-        potionType = ItemID.GreaterHealingPotion;
-    }
-    public override void ModifyNPCLoot(NPCLoot npcLoot)
-    {
-        npcLoot.Add(ItemID.LunarCraftingStation);
 
-        //Boss Bag
-        npcLoot.Add(ItemDropRule.BossBag(ItemID.CultistBossBag));
-
-        //Normal Only
-        var normalOnly = npcLoot.DefineNormalOnlyDropSet();
-        {
-            normalOnly.Add(ItemID.BossMaskCultist, 7);
-        }
-
-        // Test Drop for not letting Orator heal
-        npcLoot.DefineConditionalDropSet(WindfallConditions.OratorNeverHeal).Add(ModContent.ItemType<ShadowHandStaff>());
-
-        // Trophy
-        npcLoot.Add(ItemID.AncientCultistTrophy, 10);
-
-        // Relic
-        npcLoot.DefineConditionalDropSet(DropHelper.RevAndMaster).Add(ItemID.LunaticCultistMasterTrophy);
-
-        //Lore
-        npcLoot.AddConditionalPerPlayer(() => !DownedNPCSystem.downedOrator, ModContent.ItemType<OraLore>(), desc: DropHelper.FirstKillText);
-        npcLoot.AddConditionalPerPlayer(() => !DownedNPCSystem.downedOrator, ModContent.ItemType<LorePrelude>(), desc: DropHelper.FirstKillText);
-    }
-    public override bool CheckActive() => false;
     internal static void DisplayMessage(string key, NPC NPC)
     {
         Rectangle location = new((int)NPC.Center.X, (int)NPC.Center.Y, NPC.width / 2, NPC.width / 2);
@@ -1653,5 +1618,84 @@ public class TheOrator : ModNPC
         spriteBatch.Draw(texture, drawPosition, NPC.frame, NPC.GetAlpha(drawColor), NPC.rotation, halfSizeTexture, NPC.scale, spriteEffects, 0f);
 
         return false;
+    }
+
+    public override bool CheckActive() => false;
+    public override void OnKill()
+    {
+        for (int i = 0; i <= 50; i++)
+        {
+            int dustStyle = Main.rand.NextBool() ? 66 : 263;
+            Dust dust = Dust.NewDustPerfect(NPC.Center, Main.rand.NextBool(3) ? 191 : dustStyle);
+            dust.scale = Main.rand.NextFloat(1.5f, 2.3f);
+            dust.velocity = Main.rand.NextVector2Circular(10f, 10f);
+            dust.noGravity = true;
+            dust.color = dust.type == dustStyle ? Color.LightGreen : default;
+        }
+        NPC.downedAncientCultist = true;
+        DownedNPCSystem.downedOrator = true;
+    }
+    
+    public override void BossLoot(ref string name, ref int potionType)
+    {
+        potionType = ItemID.GreaterHealingPotion;
+    }
+    public override void ModifyNPCLoot(NPCLoot npcLoot)
+    {
+        npcLoot.Add(ItemID.LunarCraftingStation);
+
+        //Boss Bag
+        npcLoot.Add(ItemDropRule.BossBag(ItemID.CultistBossBag));
+
+        //Normal Only
+        var normalOnly = npcLoot.DefineNormalOnlyDropSet();
+        {
+            normalOnly.Add(ItemID.BossMaskCultist, 7);
+        }
+
+        // Test Drop for not letting Orator heal
+        npcLoot.DefineConditionalDropSet(WindfallConditions.OratorNeverHeal).Add(ModContent.ItemType<ShadowHandStaff>());
+
+        // Trophy
+        npcLoot.Add(ItemID.AncientCultistTrophy, 10);
+
+        // Relic
+        npcLoot.DefineConditionalDropSet(DropHelper.RevAndMaster).Add(ItemID.LunaticCultistMasterTrophy);
+
+        //Lore
+        npcLoot.AddConditionalPerPlayer(() => !DownedNPCSystem.downedOrator, ModContent.ItemType<OraLore>(), desc: DropHelper.FirstKillText);
+        npcLoot.AddConditionalPerPlayer(() => !DownedNPCSystem.downedOrator, ModContent.ItemType<LorePrelude>(), desc: DropHelper.FirstKillText);
+    }       
+
+    public override void SendExtraAI(BinaryWriter writer)
+    {
+        writer.Write(dashing);
+        writer.Write(VectorToTarget.X);
+        writer.Write(VectorToTarget.Y);
+        writer.Write(target.whoAmI);
+
+        writer.Write(scytheSpin);
+        writer.Write(spinDirection.X);
+        writer.Write(spinDirection.Y);
+        writer.Write(spinCounter);
+
+        writer.Write(scytheSlice);
+        writer.Write(sliceDirection.X);
+        writer.Write(sliceDirection.Y);
+        writer.Write(sliceCounter);
+    }
+    public override void ReceiveExtraAI(BinaryReader reader)
+    {
+        dashing = reader.ReadBoolean();
+        VectorToTarget = new(reader.ReadSingle(), reader.ReadSingle());
+        target = Main.player[reader.ReadInt32()];
+
+        scytheSpin = reader.ReadBoolean();
+        spinDirection = new(reader.ReadSingle(), reader.ReadSingle());
+        spinCounter = reader.ReadInt32();
+
+        scytheSlice = reader.ReadBoolean();
+        sliceDirection = new(reader.ReadSingle(), reader.ReadSingle());
+        sliceCounter = reader.ReadInt32();
     }
 }
