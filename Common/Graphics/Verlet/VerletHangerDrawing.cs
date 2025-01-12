@@ -115,7 +115,19 @@ public class VerletHangerDrawing : ModSystem
                         }
                         else if (Main.LocalPlayer.HeldItem.type == ModContent.ItemType<CordageMeter>())
                         {
-                            //TBA
+                            CordageMeter meter = (CordageMeter)Main.LocalPlayer.HeldItem.ModItem;
+
+                            Color color = Color.White;
+                            if (!te.DecorationVerlets.ContainsKey(k))
+                                color = Color.Red;
+                            else if ((segmentPositions[k] - Main.MouseWorld).LengthSquared() < 25)
+                            {
+                                meter.HangIndex = k;
+                                meter.HE = te;
+                                color = Color.Green;
+                            }
+
+                            particle = new GlowOrbParticle(segmentPositions[k], Vector2.Zero, false, 2, 0.5f, color, needed: true);
                         }
 
                         if(particle != null)
@@ -138,11 +150,12 @@ public class VerletHangerDrawing : ModSystem
                 else
                     startPos = te.MainVerlet[index].Position;
 
-                if (subVerlet.Count == 0)
+                if (subVerlet.Count != te.DecorationVerlets[index].Item3)
                 {
+                    te.DecorationVerlets[index].Item1.Clear();
                     for (int k = 0; k < te.DecorationVerlets[index].Item3; k++)
                     {
-                        te.DecorationVerlets[index].Item1.Add(new VerletSegment(Vector2.Lerp(startPos, startPos + Vector2.UnitY * 150f, k / 10), Vector2.Zero, false));
+                        te.DecorationVerlets[index].Item1.Add(new VerletSegment(Vector2.Lerp(startPos, startPos + Vector2.UnitY * (12 * te.DecorationVerlets[index].Item3), k / (float)te.DecorationVerlets[index].Item3), Vector2.Zero, false));
                         te.DecorationVerlets[index].Item1[k].OldPosition = subVerlet[k].Position;
                         te.DecorationVerlets[index].Item1[k].Velocity.Y = 19;
                     }
@@ -179,7 +192,7 @@ public class VerletHangerDrawing : ModSystem
                     }
                 }
 
-                VerletSimulations.RopeVerletSimulation(subVerlet, startPos, 4 * subVerlet.Count, new());
+                VerletSimulations.RopeVerletSimulation(subVerlet, startPos, 12 * subVerlet.Count, new());
             }
         }
     }

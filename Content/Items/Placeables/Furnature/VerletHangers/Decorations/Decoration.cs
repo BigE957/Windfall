@@ -42,22 +42,22 @@ public abstract class Decoration : ModItem
             }
 
             List<VerletSegment> newVerlet = [];
-            for (int k = 0; k < 16; k++)
+            for (int k = 0; k < 8; k++)
             {
                 if(HangIndex == -2)
-                    newVerlet.Add(new VerletSegment(Vector2.Lerp(HE.Position.ToWorldCoordinates(), HE.Position.ToWorldCoordinates() + Vector2.UnitY * 150f, k / 10), Vector2.Zero, false));
+                    newVerlet.Add(new VerletSegment(Vector2.Lerp(HE.Position.ToWorldCoordinates(), HE.Position.ToWorldCoordinates() + Vector2.UnitY * 96f, k / 8f), Vector2.Zero, false));
                 else
-                    newVerlet.Add(new VerletSegment(Vector2.Lerp(HE.MainVerlet[HangIndex].Position, HE.MainVerlet[HangIndex].Position + Vector2.UnitY * 150f, k / 10), Vector2.Zero, false));
+                    newVerlet.Add(new VerletSegment(Vector2.Lerp(HE.MainVerlet[HangIndex].Position, HE.MainVerlet[HangIndex].Position + Vector2.UnitY * 96f, k / 8f), Vector2.Zero, false));
                 newVerlet[k].OldPosition = newVerlet[k].Position;
                 newVerlet[k].Velocity.Y = 19;
             }
             newVerlet[0].Locked = true;
             if (HangIndex == -2)
             {
-                HE.DecorationVerlets.Add(-1, new(newVerlet, DecorID, 16));
+                HE.DecorationVerlets.Add(-1, new(newVerlet, DecorID, 8));
             }
             else
-                HE.DecorationVerlets.Add(HangIndex, new(newVerlet, DecorID, 16));
+                HE.DecorationVerlets.Add(HangIndex, new(newVerlet, DecorID, 8));
         }
         return true;
     }

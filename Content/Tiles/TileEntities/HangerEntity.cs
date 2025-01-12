@@ -103,6 +103,9 @@ public class HangerEntity : ModTileEntity
                 State = 0;
             }
         }
+
+        Particle particle = null;
+
         if (DecorationID.DecorationTypes.Contains(Main.LocalPlayer.HeldItem.type))
         {
             Decoration decor = (Decoration)Main.LocalPlayer.HeldItem.ModItem;
@@ -118,8 +121,7 @@ public class HangerEntity : ModTileEntity
                 color = Color.Green;
             }
 
-            Particle particle = new GlowOrbParticle(worldPos, Vector2.Zero, false, 2, 0.5f, color, needed: true);
-            GeneralParticleHandler.SpawnParticle(particle);
+            particle = new GlowOrbParticle(worldPos, Vector2.Zero, false, 2, 0.5f, color, needed: true);
         } 
         else if(Main.LocalPlayer.HeldItem.type == ModContent.ItemType<CordShears>())
         {
@@ -138,13 +140,30 @@ public class HangerEntity : ModTileEntity
                 color = Color.Green;
             }
 
-            Particle particle = new GlowOrbParticle(worldPos, Vector2.Zero, false, 2, 0.5f, color, needed: true);
-            GeneralParticleHandler.SpawnParticle(particle);
+            particle = new GlowOrbParticle(worldPos, Vector2.Zero, false, 2, 0.5f, color, needed: true);
         } 
         else if (Main.LocalPlayer.HeldItem.type == ModContent.ItemType<CordageMeter>())
         {
-            //TBA
+            CordageMeter meter = (CordageMeter)Main.LocalPlayer.HeldItem.ModItem;
+            Vector2 worldPos = Position.ToWorldCoordinates();
+
+            Color color = Color.White;
+            if (!(DecorationVerlets.ContainsKey(-1) || state != PairedState.Unpaired))
+            {
+                color = Color.Red;
+            }
+            else if ((worldPos - Main.MouseWorld).LengthSquared() < 25)
+            {
+                meter.HangIndex = -2;
+                meter.HE = this;
+                color = Color.Green;
+            }
+
+            particle = new GlowOrbParticle(worldPos, Vector2.Zero, false, 2, 0.5f, color, needed: true);
         }
+        if(particle != null)
+            GeneralParticleHandler.SpawnParticle(particle);
+
     }
 
     public override void OnKill()
