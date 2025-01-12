@@ -16,7 +16,6 @@ public class GodlyBlob : ModProjectile
         Projectile.usesLocalNPCImmunity = true;
         Projectile.localNPCHitCooldown = 45;
         Projectile.aiStyle = ProjAIStyleID.Raven;
-        Projectile.netImportant = true;
         Projectile.minion = true;
         Projectile.tileCollide = false;
     }
