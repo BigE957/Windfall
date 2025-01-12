@@ -4,10 +4,7 @@ using SteelSeries.GameSense;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Terraria.GameContent.Bestiary;
-using Windfall.Common.Systems;
 using Windfall.Common.Systems.WorldEvents;
 using Windfall.Content.Projectiles.Weapons.Misc;
 
@@ -175,7 +172,7 @@ public class PortalMole : ModNPC
         spriteBatch.Draw(texture, drawPosition, null, NPC.GetAlpha(Color.Black), 0f, origin, NPC.scale / 1.8f, SpriteEffects.None, 0f);
 
         spriteBatch.UseBlendState(BlendState.AlphaBlend);
-        texture = ModContent.Request<Texture2D>("Windfall/Assets/NPCs/Ancient_Storm").Value;
+        texture = ModContent.Request<Texture2D>("Terraria/Images/Projectile_656").Value;
         origin = texture.Size() * 0.5f;
         spriteBatch.Draw(texture, drawPosition, null, NPC.GetAlpha(new(117, 255, 159)), -NPC.rotation / 2.25f, origin, NPC.scale * (2.25f + (0.5f * ((float)Math.Sin(aiCounter / -20f) / 2f + 0.5f))), SpriteEffects.None, 0f);
         spriteBatch.Draw(texture, drawPosition, null, NPC.GetAlpha(new(117, 255, 159)), NPC.rotation / 1.75f, origin, NPC.scale * (2.25f + (0.5f * ((float)Math.Sin(aiCounter / 20f) / 2f + 0.5f))), SpriteEffects.None, 0f);
