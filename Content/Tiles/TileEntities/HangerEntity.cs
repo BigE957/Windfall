@@ -234,8 +234,8 @@ public class HangerEntity : ModTileEntity
     public override void NetReceive(BinaryReader reader)
     {
         state = (PairedState)reader.ReadByte();
-        int x = reader.ReadInt32();
-        int y = reader.ReadInt32();
+        int x = reader.ReadInt16();
+        int y = reader.ReadInt16();
         partnerLocation = new(x, y);
         sgementCount = reader.ReadInt32();
         cordID = reader.ReadByte();
