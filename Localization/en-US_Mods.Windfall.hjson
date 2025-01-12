@@ -1708,6 +1708,16 @@ Items: {
 			Favored by advanced builders
 			'''
 	}
+
+	CordageMeter: {
+		DisplayName: Cordage Meter
+		Tooltip: ""
+	}
+
+	CordShears: {
+		DisplayName: Cord Shears
+		Tooltip: ""
+	}
 }
 
 NPCs: {

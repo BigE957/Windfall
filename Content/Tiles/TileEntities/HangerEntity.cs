@@ -4,6 +4,7 @@ using Luminance.Common.VerletIntergration;
 using Windfall.Common.Graphics.Verlet;
 using Windfall.Content.Tiles.Furnature.VerletHangers.Hangers;
 using Windfall.Content.Items.Placeables.Furnature.VerletHangers.Decorations;
+using Windfall.Content.Items.Tools;
 
 namespace Windfall.Content.Tiles.TileEntities;
 public class HangerEntity : ModTileEntity
@@ -50,13 +51,13 @@ public class HangerEntity : ModTileEntity
         }
     }
 
-    private float distance = 0;
-    public float Distance
+    private int sgementCount = 0;
+    public int SegmentCount
     {
-        get => distance;
+        get => sgementCount;
         set
         {
-            distance = value;
+            sgementCount = value;
             SendSyncPacket();
         }
     }
@@ -113,12 +114,36 @@ public class HangerEntity : ModTileEntity
             else if ((worldPos - Main.MouseWorld).LengthSquared() < 25)
             {
                 decor.HangIndex = -2;
-                decor.StartingEntity = this;
+                decor.HE = this;
                 color = Color.Green;
             }
 
-            Particle particle = new GlowOrbParticle(worldPos, Vector2.Zero, false, 4, 0.5f, color, needed: true);
+            Particle particle = new GlowOrbParticle(worldPos, Vector2.Zero, false, 2, 0.5f, color, needed: true);
             GeneralParticleHandler.SpawnParticle(particle);
+        } 
+        else if(Main.LocalPlayer.HeldItem.type == ModContent.ItemType<CordShears>())
+        {
+            CordShears shears = (CordShears)Main.LocalPlayer.HeldItem.ModItem;
+            Vector2 worldPos = Position.ToWorldCoordinates();
+
+            Color color = Color.White;
+            if(!(DecorationVerlets.ContainsKey(-1) || state != PairedState.Unpaired))
+            {
+                color = Color.Red;
+            }
+            else if ((worldPos - Main.MouseWorld).LengthSquared() < 25)
+            {
+                shears.HangIndex = -2;
+                shears.HE = this;
+                color = Color.Green;
+            }
+
+            Particle particle = new GlowOrbParticle(worldPos, Vector2.Zero, false, 2, 0.5f, color, needed: true);
+            GeneralParticleHandler.SpawnParticle(particle);
+        } 
+        else if (Main.LocalPlayer.HeldItem.type == ModContent.ItemType<CordageMeter>())
+        {
+            //TBA
         }
     }
 
@@ -145,8 +170,8 @@ public class HangerEntity : ModTileEntity
             tag["PartnerLocationX"] = partnerLocation.X;
             tag["PartnerLocationY"] = partnerLocation.Y;
         }
-        if (distance != 0)
-            tag["Distance"] = distance;
+        if (sgementCount != 0)
+            tag["Distance"] = sgementCount;
         if (cordID != 0)
             tag["RopeID"] = cordID;
         if(DecorationVerlets.Count > 0)
@@ -167,7 +192,7 @@ public class HangerEntity : ModTileEntity
         int x = tag.GetShort("PartnerLocationX");
         int y = tag.GetShort("PartnerLocationY");
         partnerLocation = new(x, y);
-        distance = tag.GetFloat("Distance");
+        sgementCount = tag.GetInt("Distance");
         cordID = tag.GetByte("RopeID");
         int decorationCount = tag.GetInt("DecorationCount");
         for (int i = 0; i < decorationCount; i++)
@@ -183,7 +208,7 @@ public class HangerEntity : ModTileEntity
         writer.Write(State);
         writer.Write(partnerLocation.X);
         writer.Write(partnerLocation.Y);
-        writer.Write(distance);
+        writer.Write(sgementCount);
         writer.Write(cordID);
     }
 
@@ -193,7 +218,7 @@ public class HangerEntity : ModTileEntity
         int x = reader.ReadInt32();
         int y = reader.ReadInt32();
         partnerLocation = new(x, y);
-        distance = reader.ReadSingle();
+        sgementCount = reader.ReadInt32();
         cordID = reader.ReadByte();
     }
 
@@ -207,7 +232,7 @@ public class HangerEntity : ModTileEntity
         packet.Write(State);
         packet.Write(partnerLocation.X);
         packet.Write(partnerLocation.Y);
-        packet.Write(distance);
+        packet.Write(sgementCount);
         packet.Write(cordID);
 
         packet.Send();
@@ -223,7 +248,7 @@ public class HangerEntity : ModTileEntity
         int x = reader.ReadInt32();
         int y = reader.ReadInt32();
         Point16 partner = new(x, y);
-        float dist = reader.ReadSingle();
+        int dist = reader.ReadInt32();
         byte id = reader.ReadByte();
 
 
@@ -245,7 +270,7 @@ public class HangerEntity : ModTileEntity
         {
             HE.state = paired;
             HE.partnerLocation = partner;
-            HE.distance = dist;
+            HE.sgementCount = dist;
             HE.cordID = id;
             return true;
         }

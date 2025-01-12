@@ -5,6 +5,7 @@ using Terraria;
 using Windfall.Content.Items.Placeables.Furnature.VerletHangers.Decorations;
 using Windfall.Content.Items.Placeables.Furnature.VerletHangers.Cords;
 using Windfall.Content.Tiles.TileEntities;
+using Windfall.Content.Items.Tools;
 
 namespace Windfall.Common.Graphics.Verlet;
 public class VerletHangerDrawing : ModSystem
@@ -26,11 +27,15 @@ public class VerletHangerDrawing : ModSystem
         const float loadedDist = 1000f;
 
         List<HangerEntity> ActiveTEs = [];
+        List<Point16> PointsForRemoval = [];
         foreach (var p16 in hangers)
         {
             HangerEntity h = FindTileEntity<HangerEntity>(p16.X, p16.Y, 1, 1);
             if (h == null)
+            {
+                PointsForRemoval.Add(p16);
                 continue;
+            }
 
             if ((h.State != 1 || !h.PartnerLocation.HasValue) && !h.DecorationVerlets.ContainsKey(-1))
                 continue;
@@ -38,7 +43,7 @@ public class VerletHangerDrawing : ModSystem
             bool visable = false;
             foreach (Player p in Main.ActivePlayers)
             {
-                if ((h.Position.ToWorldCoordinates() - p.Center).Length() < loadedDist || (h.PartnerLocation.Value.ToWorldCoordinates() - p.Center).Length() < loadedDist)
+                if ((h.Position.ToWorldCoordinates() - p.Center).Length() < loadedDist || h.PartnerLocation.HasValue && (h.PartnerLocation.Value.ToWorldCoordinates() - p.Center).Length() < loadedDist)
                     visable = true;
             }
             if (!visable)
@@ -47,21 +52,25 @@ public class VerletHangerDrawing : ModSystem
             ActiveTEs.Add(h);
         }
 
+        foreach (Point16 p16 in PointsForRemoval)
+            hangers.Remove(p16);
+        PointsForRemoval.Clear();
+
         if (ActiveTEs.Count == 0)
             return;
 
         foreach (HangerEntity te in ActiveTEs)
         {
-            if (te.State == 1)
+            if (te.State == 1 && te.PartnerLocation.HasValue)
             {
                 Vector2 StringStart = te.Position.ToWorldCoordinates();
                 Vector2 StringEnd = te.PartnerLocation.Value.ToWorldCoordinates();
 
-                if (te.MainVerlet.Count == 0)
+                if (te.MainVerlet.Count != te.SegmentCount)
                 {
                     te.MainVerlet = [];
-                    for (int k = 0; k < (((int)Math.Ceiling(te.Distance)) / 1.5f); k++)
-                        te.MainVerlet.Add(new VerletSegment(Vector2.Lerp(StringStart, StringEnd, k / te.Distance), Vector2.Zero, false));
+                    for (int k = 0; k < te.SegmentCount; k++)
+                        te.MainVerlet.Add(new VerletSegment(Vector2.Lerp(StringStart, StringEnd, k / (float)te.SegmentCount), Vector2.Zero, false));
                     te.MainVerlet[0].Locked = te.MainVerlet.Last().Locked = true;
                 }
 
@@ -69,22 +78,48 @@ public class VerletHangerDrawing : ModSystem
 
                 for (int k = 0; k < te.MainVerlet.Count; k++)
                 {
-                    if (DecorationID.DecorationTypes.Contains(Main.LocalPlayer.HeldItem.type) && (k % 5 == 2))
+                    if (k % 5 == 2)
                     {
-                        Decoration decor = (Decoration)Main.LocalPlayer.HeldItem.ModItem;
-
-                        Color color = Color.White;
-                        if (te.DecorationVerlets.ContainsKey(k))
-                            color = Color.Red;
-                        else if ((segmentPositions[k] - Main.MouseWorld).LengthSquared() < 25)
+                        Particle particle = null;
+                        if (DecorationID.DecorationTypes.Contains(Main.LocalPlayer.HeldItem.type))
                         {
-                            decor.HangIndex = k;
-                            decor.StartingEntity = te;
-                            color = Color.Green;
+                            Decoration decor = (Decoration)Main.LocalPlayer.HeldItem.ModItem;
+
+                            Color color = Color.White;
+                            if (te.DecorationVerlets.ContainsKey(k))
+                                color = Color.Red;
+                            else if ((segmentPositions[k] - Main.MouseWorld).LengthSquared() < 25)
+                            {
+                                decor.HangIndex = k;
+                                decor.HE = te;
+                                color = Color.Green;
+                            }
+
+                            particle = new GlowOrbParticle(segmentPositions[k], Vector2.Zero, false, 2, 0.5f, color, needed: true);
+                        }
+                        else if (Main.LocalPlayer.HeldItem.type == ModContent.ItemType<CordShears>())
+                        {
+                            CordShears shears = (CordShears)Main.LocalPlayer.HeldItem.ModItem;
+
+                            Color color = Color.White;
+                            if(!te.DecorationVerlets.ContainsKey(k))
+                                color = Color.Red;
+                            else if ((segmentPositions[k] - Main.MouseWorld).LengthSquared() < 25)
+                            {
+                                shears.HangIndex = k;
+                                shears.HE = te;
+                                color = Color.Green;
+                            }
+
+                            particle = new GlowOrbParticle(segmentPositions[k], Vector2.Zero, false, 2, 0.5f, color, needed: true);
+                        }
+                        else if (Main.LocalPlayer.HeldItem.type == ModContent.ItemType<CordageMeter>())
+                        {
+                            //TBA
                         }
 
-                        Particle particle = new GlowOrbParticle(segmentPositions[k], Vector2.Zero, false, 4, 0.5f, color, needed: true);
-                        GeneralParticleHandler.SpawnParticle(particle);
+                        if(particle != null)
+                            GeneralParticleHandler.SpawnParticle(particle);
                     }
 
                     if (!te.MainVerlet[k].Locked)
@@ -166,7 +201,7 @@ public class VerletHangerDrawing : ModSystem
             bool visable = false;
             foreach (Player p in Main.ActivePlayers)
             {
-                if ((h.Position.ToWorldCoordinates() - p.Center).Length() < loadedDist || (h.PartnerLocation.Value.ToWorldCoordinates() - p.Center).Length() < loadedDist)
+                if ((h.Position.ToWorldCoordinates() - p.Center).Length() < loadedDist || (h.PartnerLocation.HasValue && (h.PartnerLocation.Value.ToWorldCoordinates() - p.Center).Length() < loadedDist))
                     visable = true;
             }
             if (!visable)
@@ -203,8 +238,8 @@ public class VerletHangerDrawing : ModSystem
                 {
                     if (twine != null)
                         twine.DrawDecorationSegment(Main.spriteBatch, k, segmentPositions);
-                    else
-                    {
+                    else if (k != segmentPositions.Length - 1)
+                    {                       
                         Vector2 line = segmentPositions[k] - segmentPositions[k + 1];
                         Color lighting = Lighting.GetColor((segmentPositions[k + 1] + (line / 2f)).ToTileCoordinates());
 
