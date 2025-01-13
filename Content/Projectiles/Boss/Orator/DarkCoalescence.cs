@@ -41,7 +41,6 @@ public class DarkCoalescence : ModProjectile
         const int pCount = 20;
         for (int i = 0; i <= pCount; i++)
         {
-
             SpawnBorderParticle(Projectile, Vector2.Zero, 0f, Main.rand.NextFloat(10, 25), Main.rand.NextFloat(75, 100), TwoPi / pCount * i);
             SpawnBorderParticle(Projectile, Vector2.Zero, 0f, Main.rand.NextFloat(10, 25), Main.rand.NextFloat(60, 80), TwoPi / pCount * -i - TwoPi / (pCount/2));
         }

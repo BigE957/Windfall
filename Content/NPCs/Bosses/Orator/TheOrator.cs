@@ -442,10 +442,13 @@ public class TheOrator : ModNPC
                             dust.noGravity = true;
                             dust.color = dust.type == dustStyle ? Color.LightGreen : default;
                         }
-                        if (aiCounter % 10 == 0 && Main.expertMode && Main.netMode != NetmodeID.MultiplayerClient)
-                            Projectile.NewProjectile(Terraria.Entity.GetSource_NaturalSpawn(), NPC.Center, VectorToTarget.RotatedBy(Pi / -2f).SafeNormalize(Vector2.UnitX) * 20, ModContent.ProjectileType<DarkBolt>(), BoltDamage, 0f, -1, 0, -20);
-                        else if (aiCounter % 5 == 0 && Main.expertMode && Main.netMode != NetmodeID.MultiplayerClient)
-                            Projectile.NewProjectile(Terraria.Entity.GetSource_NaturalSpawn(), NPC.Center, VectorToTarget.RotatedBy(Pi / 2f).SafeNormalize(Vector2.UnitX) * 20, ModContent.ProjectileType<DarkBolt>(), BoltDamage, 0f, -1, 0, -20);
+                        if (Main.netMode != NetmodeID.MultiplayerClient && Main.expertMode)
+                        {
+                            if (aiCounter % 10 == 0)
+                                Projectile.NewProjectile(Terraria.Entity.GetSource_NaturalSpawn(), NPC.Center, VectorToTarget.RotatedBy(Pi / -2f).SafeNormalize(Vector2.UnitX) * 20, ModContent.ProjectileType<DarkBolt>(), BoltDamage, 0f, -1, 0, -20);
+                            else if (aiCounter % 5 == 0)
+                                Projectile.NewProjectile(Terraria.Entity.GetSource_NaturalSpawn(), NPC.Center, VectorToTarget.RotatedBy(Pi / 2f).SafeNormalize(Vector2.UnitX) * 20, ModContent.ProjectileType<DarkBolt>(), BoltDamage, 0f, -1, 0, -20);
+                        }
                     }
                     
                     #endregion
@@ -454,14 +457,12 @@ public class TheOrator : ModNPC
                     {
                         scytheSpin = true;
                         int radialCounter = CalamityWorld.death ? 12 : CalamityWorld.revenge ? 10 : 8;
-                        for (int i = 0; i < radialCounter; i++)
-                        {
-                            if (Main.netMode != NetmodeID.MultiplayerClient)
+                        if (Main.netMode != NetmodeID.MultiplayerClient)
+                            for (int i = 0; i < radialCounter; i++)
                             {
                                 Vector2 rotationVector = (target.Center - NPC.Center).SafeNormalize(Vector2.Zero).RotatedBy(TwoPi / radialCounter * i);
                                 Projectile.NewProjectile(Terraria.Entity.GetSource_NaturalSpawn(), NPC.Center + NPC.velocity + rotationVector * 124, rotationVector * 20, ModContent.ProjectileType<DarkBolt>(), BoltDamage, 0f, -1, 0, -10);
-                            }
-                        }
+                            }                        
                         if (++attackCounter == SliceDashCount)
                             aiCounter = -200;
                         else
@@ -1673,29 +1674,11 @@ public class TheOrator : ModNPC
         writer.Write(VectorToTarget.X);
         writer.Write(VectorToTarget.Y);
         writer.Write(target.whoAmI);
-
-        writer.Write(scytheSpin);
-        writer.Write(spinDirection.X);
-        writer.Write(spinDirection.Y);
-        writer.Write(spinCounter);
-
-        writer.Write(scytheSlice);
-        writer.Write(sliceDirection.X);
-        writer.Write(sliceDirection.Y);
-        writer.Write(sliceCounter);
     }
     public override void ReceiveExtraAI(BinaryReader reader)
     {
         dashing = reader.ReadBoolean();
         VectorToTarget = new(reader.ReadSingle(), reader.ReadSingle());
         target = Main.player[reader.ReadInt32()];
-
-        scytheSpin = reader.ReadBoolean();
-        spinDirection = new(reader.ReadSingle(), reader.ReadSingle());
-        spinCounter = reader.ReadInt32();
-
-        scytheSlice = reader.ReadBoolean();
-        sliceDirection = new(reader.ReadSingle(), reader.ReadSingle());
-        sliceCounter = reader.ReadInt32();
     }
 }

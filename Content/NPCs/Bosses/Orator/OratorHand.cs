@@ -342,6 +342,7 @@ public class OratorHand : ModNPC
                     }
                     else
                     {
+                        NPC.netUpdate = true;
                         CurrentPose = Pose.Fist;
 
                         aiCounter += 200;
@@ -487,6 +488,7 @@ public class OratorHand : ModNPC
                 case TheOrator.States.DarkCollision:
                     if(Main.projectile.Any(p => p != null && p.active && p.type == ModContent.ProjectileType<DarkCoalescence>()))
                     {
+                        NPC.netUpdate = true;
                         CurrentPose = Pose.Palm;
 
                         NPC.direction = WhatHand;
