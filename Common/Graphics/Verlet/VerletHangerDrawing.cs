@@ -1,7 +1,4 @@
 ﻿using Luminance.Common.VerletIntergration;
-using Microsoft.Xna.Framework.Graphics;
-using System;
-using Terraria;
 using Windfall.Content.Items.Placeables.Furnature.VerletHangers.Decorations;
 using Windfall.Content.Items.Placeables.Furnature.VerletHangers.Cords;
 using Windfall.Content.Tiles.TileEntities;
@@ -24,6 +21,8 @@ public class VerletHangerDrawing : ModSystem
 
     public override void PreUpdateProjectiles()
     {
+        if (Main.dedServ)
+            return;
         const float loadedDist = 1000f;
 
         List<HangerEntity> ActiveTEs = [];
