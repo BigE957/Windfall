@@ -31,9 +31,7 @@ public class OratorJavelin : ModProjectile
         Projectile.Opacity = 0f;
         Projectile.damage = 50;
     }
-    public ref float Angle => ref Projectile.ai[1];
-    private Color drawColor = Color.Lerp(new Color(117, 255, 159), new Color(255, 180, 80), (float)(Math.Sin(Main.GlobalTimeWrappedHourly * 1.25f) / 0.5f) + 0.5f);
-    private Vector2 centerPosition = Vector2.Zero;
+    
     public override void OnSpawn(IEntitySource source)
     {
         Player target = Main.player[Player.FindClosest(Projectile.Center, Projectile.width, Projectile.height)];
@@ -52,7 +50,13 @@ public class OratorJavelin : ModProjectile
         centerPosition = Projectile.Center;
         Projectile.netUpdate = true;
     }
-    private int Time = 0;
+    private int Time
+    {
+        get => (int)Projectile.ai[0];
+        set => Projectile.ai[0] = value;
+    }
+    public ref float Angle => ref Projectile.ai[1];
+    private Vector2 centerPosition = Vector2.Zero;
     private Player impaleTarget = null;
     private int initialTargetDir = 0;
     private Vector2 impaleOffset = Vector2.Zero;

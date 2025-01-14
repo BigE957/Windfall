@@ -16,8 +16,6 @@ public class DarkMonster : ModProjectile
     SlotId loopingSoundSlot;
 
     internal static int MonsterDamage;
-    private float Acceleration;
-    private int MaxSpeed;
     public override void SetDefaults()
     {
         Projectile.width = 320;
@@ -48,6 +46,12 @@ public class DarkMonster : ModProjectile
     {
         get => (States)Projectile.ai[0];
         set => Projectile.ai[0] = (float)value;
+    }
+    private ref float Acceleration => ref Projectile.ai[2];
+    private int MaxSpeed
+    {
+        get => (int)Projectile.ai[3];
+        set => Projectile.ai[3] = value;
     }
 
     public override void OnSpawn(IEntitySource source)

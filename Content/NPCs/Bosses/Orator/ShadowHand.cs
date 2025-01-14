@@ -43,6 +43,7 @@ public class ShadowHand : ModNPC
         NPC.Calamity().canBreakPlayerDefense = true;
         NPC.Opacity = 0f;
     }
+    
     internal enum AIState
     {
         Spawning,
@@ -58,13 +59,18 @@ public class ShadowHand : ModNPC
         get => (AIState)NPC.ai[0];
         set => NPC.ai[0] = (int)value;
     }
+    
     private int aiCounter
     {
         get => (int)NPC.ai[1];
         set => NPC.ai[1] = value;
     }
-    Vector2 toTarget = Vector2.Zero;
-    bool attackBool = false;
+    internal bool attackBool
+    {
+        get => NPC.ai[2] != 0;
+        set => NPC.ai[2] = value ? 1 : 0;
+    }
+    
     private enum Pose
     {
         Default,
@@ -72,7 +78,14 @@ public class ShadowHand : ModNPC
         Fist,
         Palm
     }
-    private Pose CurrentPose = Pose.Default;
+    private Pose CurrentPose
+    {
+        get => (Pose)NPC.ai[3];
+        set => NPC.ai[3] = (float)value;
+    }
+    
+    Vector2 toTarget = Vector2.Zero;
+    
     public override void OnSpawn(IEntitySource source)
     {
         NPC.Opacity = 0f;
@@ -202,12 +215,12 @@ public class ShadowHand : ModNPC
                 if ((aiCounter > 120 && Main.rand.NextBool(60)) || toTarget.Length() > 800f)
                 {
                     NPC.rotation = toTarget.ToRotation();
+
                     if (Main.rand.NextBool(5) || toTarget.Length() > 600f)
                     {
                         attackBool = true;
                         CurrentAI = AIState.Dashing;
                         aiCounter = 0;
-                        return;
                     }
                     else
                     {
@@ -217,16 +230,17 @@ public class ShadowHand : ModNPC
                             NPC.velocity = Vector2.Zero;
                             CurrentAI = AIState.Globbing;
                             aiCounter = -15;
-                            return;
                         }
                         else
                         {
                             CurrentPose = Pose.FingerGun;
                             CurrentAI = AIState.Aiming;
                             aiCounter = 0;
-                            return;
+                            
                         }
                     }
+                    NPC.netUpdate = true;
+                    return;
                 }
                 #endregion
 
@@ -521,6 +535,18 @@ public class ShadowHand : ModNPC
 
         Main.EntitySpriteDraw(texture, drawPosition, NPC.frame, color, rotation, NPC.frame.Size() * 0.5f, NPC.scale, spriteEffects, 0);
     }
+
+    public override void SendExtraAI(BinaryWriter writer)
+    {
+        writer.Write(toTarget.X);
+        writer.Write(toTarget.Y);
+    }
+
+    public override void ReceiveExtraAI(BinaryReader reader)
+    {
+        toTarget = reader.ReadVector2();
+    }
+
     private void SetNPCDirection()
     {
         if (!(NPC.rotation + Pi > Pi / 2 && NPC.rotation + Pi < 3 * Pi / 2) && CurrentAI != AIState.Globbing && CurrentAI != AIState.OnBoss)

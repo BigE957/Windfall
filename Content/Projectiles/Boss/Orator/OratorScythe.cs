@@ -32,13 +32,22 @@ public class OratorScythe : ModProjectile
     {
         behavior = BehaviorType.Chase;
     }
-    private int Time = 0;
+    private int Time
+    {
+        get => (int)Projectile.ai[0];
+        set => Projectile.ai[0] = value;
+    }
     private enum BehaviorType
     {
         Chase,
         Circle,
     }
-    private BehaviorType behavior = BehaviorType.Chase;
+    private BehaviorType behavior
+    {
+        get => (BehaviorType)Projectile.ai[0];
+        set => Projectile.ai[0] = (float)value;
+    }
+
     public override void AI()
     {
         Projectile.rotation += 0.01f * (5 + Projectile.velocity.Length());
@@ -102,9 +111,5 @@ public class OratorScythe : ModProjectile
         DrawAfterimagesCentered(Projectile, ProjectileID.Sets.TrailingMode[Projectile.type], Color.White * Projectile.Opacity, 1);
         Main.EntitySpriteDraw(tex, drawPosition, null, Color.White * Projectile.Opacity, Projectile.rotation, tex.Size() * 0.5f, Projectile.scale, SpriteEffects.None);
         return false;
-    }
-
-    public override void PostDraw(Color lightColor)
-    {
     }
 }

@@ -60,7 +60,7 @@ public class UnstableDarkness: ModProjectile
         if (aiCounter <= 30)
         {
             Projectile.scale += 1.5f / 30f;
-            EmitGhostGas();
+            ParticleTrail();
         }
         else
         {
@@ -70,7 +70,7 @@ public class UnstableDarkness: ModProjectile
             if (Projectile.velocity.Length() > 0f)
             {
                 Projectile.velocity *= 0.995f;
-                EmitGhostGas();
+                ParticleTrail();
             }
             if (Projectile.velocity.Length() < 1f)
                 Projectile.velocity = Vector2.Zero;
@@ -85,12 +85,12 @@ public class UnstableDarkness: ModProjectile
         ScreenShakeSystem.StartShake(7.5f);
         for (int i = 0; i <= 50; i++)
         {
-            EmpyreanMetaball.SpawnDefaultParticle(Projectile.Center, Main.rand.NextVector2Circular(10f, 10f) * Main.rand.NextFloat(1f, 2f), 40 * Main.rand.NextFloat(3f, 5f));
+            SpawnDefaultParticle(Projectile.Center, Main.rand.NextVector2Circular(10f, 10f) * Main.rand.NextFloat(1f, 2f), 40 * Main.rand.NextFloat(3f, 5f));
         }
         NPC Orator = null;
         if (NPC.FindFirstNPC(ModContent.NPCType<TheOrator>()) != -1)
             Orator = Main.npc[NPC.FindFirstNPC(ModContent.NPCType<TheOrator>())];
-        if (Main.netMode != NetmodeID.MultiplayerClient && Orator != null && Orator.ai[0] == 2 && (float)Orator.life / (float)Orator.lifeMax > 0.1f)
+        if (Main.netMode != NetmodeID.MultiplayerClient && Orator != null && (float)Orator.life / (float)Orator.lifeMax > 0.1f)
         {
             for (int i = 0; i < 24; i++)
                 Projectile.NewProjectile(Terraria.Entity.GetSource_NaturalSpawn(), Projectile.Center + Main.rand.NextVector2Circular(64f, 64f), Main.rand.NextVector2Circular(4f, 4f), ModContent.ProjectileType<DarkGlob>(), TheOrator.GlobDamage, 0f, -1, 0, Main.rand.NextFloat(0.5f, 0.75f));
@@ -102,7 +102,7 @@ public class UnstableDarkness: ModProjectile
         Projectile.active = false;
         EmpyreanStickyParticles.RemoveAll(p => p.Projectile == Projectile);
     }
-    private void EmitGhostGas()
+    private void ParticleTrail()
     {
         //smaller particles
         EmpyreanMetaball.SpawnDefaultParticle(Projectile.Center + (Main.rand.NextVector2Circular(25f, 25f) * Projectile.scale), Projectile.velocity.SafeNormalize(Vector2.Zero) * Main.rand.NextFloat(0f, 5f), 40 * (Main.rand.NextFloat(0.75f, 0.9f) * Projectile.scale));

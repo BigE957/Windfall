@@ -29,9 +29,8 @@ public class OratorBorder : ModProjectile
         Radius = (750 / 3f) * Projectile.scale;
         const int pCount = 250;
         for (int i = 0; i <= pCount; i++)
-        {
             SpawnBorderParticle(Projectile, Vector2.Zero, 0.5f * i, 25, Main.rand.NextFloat(80, 160), TwoPi / pCount * i);
-        }
+        Projectile.netUpdate = true;
     }
     public override void AI()
     {

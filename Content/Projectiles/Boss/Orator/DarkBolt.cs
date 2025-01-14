@@ -1,4 +1,7 @@
 ﻿
+
+using Terraria.ModLoader.IO;
+
 namespace Windfall.Content.Projectiles.Boss.Orator;
 
 public class DarkBolt : ModProjectile
@@ -55,7 +58,10 @@ public class DarkBolt : ModProjectile
             dust.noGravity = true;
             dust.color = drawColor;
         }
+
         Lighting.AddLight(Projectile.Center, new Vector3(0.32f, 0.92f, 0.71f));
+        if (drawColor == Color.White)
+            drawColor = Color.Lerp(new Color(117, 255, 159), new Color(255, 180, 80), (float)(Math.Sin(Main.GlobalTimeWrappedHourly * 1.25f) / 0.5f) + 0.5f);
     }
     public override void ModifyDamageHitbox(ref Rectangle hitbox)
     {
@@ -68,5 +74,14 @@ public class DarkBolt : ModProjectile
     {
         CalamityUtils.DrawAfterimagesCentered(Projectile, ProjectileID.Sets.TrailingMode[Projectile.type], drawColor * 0.75f, 2);
         return false;
+    }
+    public override void SendExtraAI(BinaryWriter writer)
+    {
+        writer.Write(DirectionalVelocity.X);
+        writer.Write(DirectionalVelocity.Y);
+    }
+    public override void ReceiveExtraAI(BinaryReader reader)
+    {
+        DirectionalVelocity = reader.ReadVector2();
     }
 }

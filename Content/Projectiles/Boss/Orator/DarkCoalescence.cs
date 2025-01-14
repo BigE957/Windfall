@@ -30,6 +30,11 @@ public class DarkCoalescence : ModProjectile
         get => (int)Projectile.ai[0];
         set => Projectile.ai[0] = value;
     }
+    private int OratorIndex
+    {
+        get => (int)Projectile.ai[1];
+        set => Projectile.ai[1] = value;
+    }
     public override void OnSpawn(IEntitySource source)
     {
         fireDelay = CalamityWorld.death ? 65 : CalamityWorld.revenge ? 80 : 120;
@@ -48,17 +53,25 @@ public class DarkCoalescence : ModProjectile
     }
     public override void AI()
     {
-        NPC Orator = null;
-        if (NPC.FindFirstNPC(ModContent.NPCType<TheOrator>()) != -1)
-            Orator = Main.npc[NPC.FindFirstNPC(ModContent.NPCType<TheOrator>())];          
+        NPC Orator = Main.npc[OratorIndex];
+        if (Orator == null || !Orator.active || Orator.type != ModContent.NPCType<TheOrator>())
+        {
+            int index = NPC.FindFirstNPC(ModContent.NPCType<TheOrator>());
+            if (index != -1)
+            {
+                Orator = Main.npc[index];
+                OratorIndex = Orator.whoAmI;
+                Projectile.netUpdate = true;
+            }
+            else
+                Orator = null;
+        }
         
         if(Orator == null || Orator.As<TheOrator>().AIState == TheOrator.States.PhaseChange)
         {
             SoundEngine.PlaySound(SoundID.DD2_EtherianPortalDryadTouch, Projectile.Center);
             for (int i = 0; i <= 50; i++)
-            {
-                EmpyreanMetaball.SpawnDefaultParticle(Projectile.Center, Main.rand.NextVector2Circular(10f, 10f), 40 * Main.rand.NextFloat(1.5f, 2.3f));
-            }
+                SpawnDefaultParticle(Projectile.Center, Main.rand.NextVector2Circular(10f, 10f), 40 * Main.rand.NextFloat(1.5f, 2.3f));
             Projectile.active = false;
         }
         
@@ -74,7 +87,7 @@ public class DarkCoalescence : ModProjectile
             for (int i = 0; i <= 50; i++)
             {
                 Vector2 spawnPos = Projectile.Center + Main.rand.NextVector2Circular(10f, 10f) * 10;
-                EmpyreanMetaball.SpawnDefaultParticle(spawnPos,  (Projectile.Center - spawnPos).SafeNormalize(Vector2.Zero) * 4, 40 * Main.rand.NextFloat(3f, 5f));
+                SpawnDefaultParticle(spawnPos, (Projectile.Center - spawnPos).SafeNormalize(Vector2.Zero) * 4, 40 * Main.rand.NextFloat(3f, 5f));
             }
         }           
         if (aiCounter < fireDelay)
@@ -85,7 +98,7 @@ public class DarkCoalescence : ModProjectile
         }
         else
         {
-            EmpyreanMetaball.SpawnDefaultParticle(Projectile.Center + (Main.rand.NextVector2Circular(20f, 25f) * Projectile.scale), Vector2.Zero, 40 * Main.rand.NextFloat(3f, 5f));
+            SpawnDefaultParticle(Projectile.Center + (Main.rand.NextVector2Circular(20f, 25f) * Projectile.scale), Vector2.Zero, 40 * Main.rand.NextFloat(3f, 5f));
             if (aiCounter == fireDelay)
             {
                 SoundEngine.PlaySound(SoundID.DD2_EtherianPortalSpawnEnemy with {Volume = 10f}, Projectile.Center);
@@ -111,7 +124,7 @@ public class DarkCoalescence : ModProjectile
                 SoundEngine.PlaySound(SoundID.DD2_EtherianPortalDryadTouch, Projectile.Center);                   
                 for (int i = 0; i <= 50; i++)
                 {
-                    EmpyreanMetaball.SpawnDefaultParticle(Projectile.Center, Main.rand.NextVector2Circular(10f, 10f) * Main.rand.NextFloat(1f, 2f), 40 * Main.rand.NextFloat(3f, 5f));
+                    SpawnDefaultParticle(Projectile.Center, Main.rand.NextVector2Circular(10f, 10f) * Main.rand.NextFloat(1f, 2f), 40 * Main.rand.NextFloat(3f, 5f));
                 }
                 if (Main.projectile.First(p => p.type == ModContent.ProjectileType<DarkCoalescence>()).whoAmI == Projectile.whoAmI)
                 {
@@ -141,11 +154,11 @@ public class DarkCoalescence : ModProjectile
         }
         aiCounter++;
         Lighting.AddLight(Projectile.Center, new Vector3(0.32f, 0.92f, 0.71f));
-        EmpyreanMetaball.SpawnDefaultParticle(Projectile.Center, Vector2.Zero, Projectile.scale * 80);           
+        SpawnDefaultParticle(Projectile.Center, Vector2.Zero, Projectile.scale * 80);           
         if (Projectile.ai[1] != 0)
-            EmpyreanMetaball.SpawnDefaultParticle(new(Projectile.Center.X, Projectile.Center.Y + (Main.rand.Next(-19, 19) * Projectile.scale)), Vector2.Zero, Projectile.scale * 40);
+            SpawnDefaultParticle(new(Projectile.Center.X, Projectile.Center.Y + (Main.rand.Next(-19, 19) * Projectile.scale)), Vector2.Zero, Projectile.scale * 40);
         else
-            EmpyreanMetaball.SpawnDefaultParticle(new(Projectile.Center.X + (Main.rand.Next(-19, 19) * Projectile.scale), Projectile.Center.Y), Vector2.Zero, Projectile.scale * 40);
+            SpawnDefaultParticle(new(Projectile.Center.X + (Main.rand.Next(-19, 19) * Projectile.scale), Projectile.Center.Y), Vector2.Zero, Projectile.scale * 40);
     }
     public override bool PreDraw(ref Color lightColor)
     {

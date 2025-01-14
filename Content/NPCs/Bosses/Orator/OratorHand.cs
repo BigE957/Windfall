@@ -2,6 +2,7 @@
 using Luminance.Core.Graphics;
 using Terraria.Chat;
 using Terraria.GameContent.Bestiary;
+using Terraria.ModLoader.IO;
 using Windfall.Common.Graphics.Metaballs;
 using Windfall.Common.Systems;
 using Windfall.Content.Projectiles.Boss.Orator;
@@ -12,6 +13,7 @@ public class OratorHand : ModNPC
 {
     public override string Texture => "Windfall/Assets/NPCs/Enemies/Orator_Hand";
     public override string BossHeadTexture => "Windfall/Assets/NPCs/Bosses/TheOrator_Boss_Head";
+
     private int OratorIndex
     {
         get => (int)NPC.ai[0];
@@ -31,6 +33,27 @@ public class OratorHand : ModNPC
     {
         get => NPC.whoAmI == MainHandIndex ? 1 : NPC.whoAmI == SubHandIndex ? -1 : 0;
     }
+    internal bool attackBool
+    {
+        get => NPC.ai[3] != 0;
+        set => NPC.ai[3] = value ? 1 : 0;
+    }
+    internal Vector2 direction = Vector2.UnitX;
+    private int effectCounter = 0;
+    
+    private static int deadCounter = 0;
+    private static float zoom = 0f;
+    private Vector2 shakeOffset = Vector2.Zero;
+
+    private enum Pose
+    {
+        Default,
+        Fist,
+        Palm
+    }
+    private Pose CurrentPose = Pose.Default;
+    private Rectangle cuffFrame = new(0, 0, 150, 114);
+    private int cuffCounter = 0;
 
     public override void SetStaticDefaults()
     {
@@ -43,12 +66,14 @@ public class OratorHand : ModNPC
         };
         NPCID.Sets.NPCBestiaryDrawOffset.Add(Type, drawModifiers);
     }
+    
     public override void SetBestiary(BestiaryDatabase database, BestiaryEntry bestiaryEntry)
     {
         bestiaryEntry.Info.AddRange([
         new FlavorTextBestiaryInfoElement(GetWindfallTextValue($"Bestiary.{nameof(OratorHand)}")),
     ]);
     }
+    
     public override void SetDefaults()
     {
         NPC.width = NPC.height = 75;
@@ -66,9 +91,7 @@ public class OratorHand : ModNPC
         NPC.Calamity().VulnerableToWater = true;
         NPC.Calamity().canBreakPlayerDefense = true;            
     }
-    internal Vector2 direction = Vector2.UnitX;
-    int effectCounter = 0;
-    internal bool attackBool = false;
+
     public override void OnSpawn(IEntitySource source)
     {
         zoom = 0f;
@@ -108,30 +131,9 @@ public class OratorHand : ModNPC
             Main.NewText("~~~~~~~~~~~~~~~~~~~~");
         }
     }
+
     public override bool PreAI()
     {
-        /*
-        if (Main.netMode == NetmodeID.Server || Main.netMode == NetmodeID.MultiplayerClient)
-        {
-            ChatHelper.BroadcastChatMessage(NetworkText.FromLiteral("~~~~~~~~~~~~~~~~~~~~"), Color.White);
-            ChatHelper.BroadcastChatMessage(NetworkText.FromLiteral($"Hand Index: {NPC.whoAmI}"), Color.White);
-            ChatHelper.BroadcastChatMessage(NetworkText.FromLiteral($"Orator Index: {OratorIndex}"), Color.White);
-            ChatHelper.BroadcastChatMessage(NetworkText.FromLiteral($"Main Hand Index: {MainHandIndex}"), Color.White);
-            ChatHelper.BroadcastChatMessage(NetworkText.FromLiteral($"Sub Hand Index: {SubHandIndex}"), Color.White);
-            ChatHelper.BroadcastChatMessage(NetworkText.FromLiteral($"What Hand: {WhatHand}"), Color.White);
-            ChatHelper.BroadcastChatMessage(NetworkText.FromLiteral("~~~~~~~~~~~~~~~~~~~~"), Color.White);
-        }
-        else
-        {
-            Main.NewText("~~~~~~~~~~~~~~~~~~~~");
-            Main.NewText($"Hand Index: {NPC.whoAmI}");
-            Main.NewText($"Orator Index: {OratorIndex}");
-            Main.NewText($"Main Hand Index: {MainHandIndex}");
-            Main.NewText($"Sub Hand Index: {SubHandIndex}");
-            Main.NewText($"What Hand: {WhatHand}");
-            Main.NewText("~~~~~~~~~~~~~~~~~~~~");
-        }
-        */
         if (Main.npc[OratorIndex] == null || !Main.npc[OratorIndex].active || Main.npc[OratorIndex].type != ModContent.NPCType<TheOrator>())
         {
             if (Main.npc[OratorIndex] != null && Main.npc[OratorIndex].active)
@@ -179,16 +181,7 @@ public class OratorHand : ModNPC
         }
         return true;
     }
-    private static int deadCounter = 0;
-    private static float zoom = 0f;
-    private Vector2 shakeOffset = Vector2.Zero;
-    private enum Pose
-    {
-        Default,
-        Fist,
-        Palm
-    }
-    private Pose CurrentPose = Pose.Default;
+    
     public override void AI()
     {
         if (Main.npc[OratorIndex] == null || !Main.npc[OratorIndex].active || Main.npc[OratorIndex].type != ModContent.NPCType<TheOrator>())
@@ -1003,8 +996,10 @@ public class OratorHand : ModNPC
             NPC.life = 1;
         }
     }
+   
     public override void FindFrame(int frameHeight)
-    {            
+    {
+        #region Hand Frame
         NPC.frame.Width = ModContent.Request<Texture2D>(this.Texture).Width() / 4;
         switch (CurrentPose)
         {
@@ -1032,7 +1027,20 @@ public class OratorHand : ModNPC
             NPC.frame.Y += frameHeight;
             if (NPC.frame.Y >= frameHeight * 9)
                 NPC.frame.Y = 0;            
-        }            
+        }
+        #endregion
+
+        #region Cuff Frame
+        cuffCounter++;
+
+        if (cuffCounter >= 16)
+        {
+            cuffCounter = 0;
+            cuffFrame.Y += cuffFrame.Height;
+            if (cuffFrame.Y >= cuffFrame.Height * 6)
+                cuffFrame.Y = 0;
+        }
+        #endregion
     }
     public override bool CheckActive() => false;
     public override bool PreDraw(SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor)
@@ -1047,22 +1055,12 @@ public class OratorHand : ModNPC
         spriteBatch.Draw(texture, drawPosition, NPC.frame, NPC.GetAlpha(drawColor), NPC.rotation, origin, NPC.scale, spriteEffects, 0f);
         return false;
     }
-    Rectangle cuffFrame = new(0, 0, 150, 114);
-    int cuffCounter = 0;
+    
     public override void PostDraw(SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor)
     {            
         Texture2D texture = ModContent.Request<Texture2D>("Windfall/Assets/NPCs/Enemies/Orator_Hand_Cuffs").Value;
         cuffFrame.Width = texture.Width;
-        cuffFrame.Height = texture.Height / 9;
-        cuffCounter++;
-
-        if (cuffCounter >= 16)
-        {
-            cuffCounter = 0;
-            cuffFrame.Y += cuffFrame.Height;
-            if (cuffFrame.Y >= cuffFrame.Height * 6)
-                cuffFrame.Y = 0;
-        }
+        cuffFrame.Height = texture.Height / 9;       
 
         Vector2 drawPosition = NPC.Center - screenPos + (Vector2.UnitY * NPC.gfxOffY);
         Vector2 origin = cuffFrame.Size() * 0.5f;
@@ -1075,5 +1073,27 @@ public class OratorHand : ModNPC
             origin.Y += 2;
         }
         spriteBatch.Draw(texture, drawPosition, cuffFrame, NPC.GetAlpha(drawColor), NPC.rotation, origin, NPC.scale, spriteEffects, 0f);
+    }
+
+    public override void SendExtraAI(BinaryWriter writer)
+    {
+        writer.Write(direction.X);
+        writer.Write(direction.Y);
+
+        writer.Write(effectCounter);
+
+        writer.Write(shakeOffset.X);
+        writer.Write(shakeOffset.Y);
+
+        writer.Write((byte)CurrentPose);
+    }
+
+    public override void ReceiveExtraAI(BinaryReader reader)
+    {
+        direction = reader.ReadVector2();
+        effectCounter = reader.ReadInt32();
+
+        shakeOffset = reader.ReadVector2();
+        CurrentPose = (Pose)reader.ReadByte();
     }
 }

@@ -1,7 +1,4 @@
-﻿using Microsoft.Xna.Framework.Graphics;
-using Mono.Cecil;
-using System.Xml.Linq;
-using Windfall.Common.Graphics.Metaballs;
+﻿using Windfall.Common.Graphics.Metaballs;
 
 namespace Windfall.Content.Projectiles.Boss.Orator;
 
@@ -9,7 +6,6 @@ public class HandRing : ModProjectile
 {
     public new static string LocalizationCategory => "Projectiles.Boss";
     public override string Texture => "Windfall/Assets/Projectiles/Boss/HandRings";
-    public ref float Time => ref Projectile.ai[0];
     public override void SetStaticDefaults()
     {
         ProjectileID.Sets.TrailCacheLength[Projectile.type] = 6;
@@ -29,14 +25,22 @@ public class HandRing : ModProjectile
         Projectile.timeLeft = 420;
         Projectile.penetrate = -1;
     }
-    private bool spinDir = false;
-    private Color drawColor = Color.Lerp(new Color(117, 255, 159), new Color(255, 180, 80), (float)(Math.Sin(Main.GlobalTimeWrappedHourly * 1.25f) / 0.5f) + 0.5f);
+
+    public ref float Time => ref Projectile.ai[0];
+
+    private bool spinDir
+    {
+        get => Projectile.ai[3] != 0;
+        set => Projectile.ai[3] = value ? 1 : 0;
+    }
+    private static Color selenicColor => Color.Lerp(new Color(117, 255, 159), new Color(255, 180, 80), (float)(Math.Sin(Main.GlobalTimeWrappedHourly * 1.25f) / 0.5f) + 0.5f);
     private Vector2 truePosition = Vector2.Zero;
     public override void OnSpawn(IEntitySource source)
     {
         spinDir = Main.rand.NextBool();
         Projectile.ai[1] = Main.rand.Next(3);
         Projectile.ai[2] = Main.rand.Next(4);
+        Projectile.netUpdate = true;
     }
     public override void AI()
     {
@@ -62,7 +66,7 @@ public class HandRing : ModProjectile
             Projectile.Center += Main.rand.NextVector2Circular(4f, 4f);
             Projectile.tileCollide = true;
         }
-        Lighting.AddLight(Projectile.Center, drawColor.ToVector3());
+        Lighting.AddLight(Projectile.Center, selenicColor.ToVector3());
 
     }
     public override bool PreDraw(ref Color lightColor)
@@ -82,7 +86,7 @@ public class HandRing : ModProjectile
                 break;
         }
         if(Projectile.timeLeft <= 90)
-            color = Color.Lerp(color, drawColor, (90 - Projectile.timeLeft) / 60f);
+            color = Color.Lerp(color, selenicColor, (90 - Projectile.timeLeft) / 60f);
         DrawAfterimagesCentered(Projectile, ProjectileID.Sets.TrailingMode[Projectile.type], color, 2, texture: WhiteOutTexture);
         
         Texture2D tex = ModContent.Request<Texture2D>(Texture).Value;
@@ -115,5 +119,16 @@ public class HandRing : ModProjectile
         {
             EmpyreanMetaball.SpawnDefaultParticle(Projectile.Center, Main.rand.NextVector2Circular(4f, 4f), Main.rand.NextFloat(10f, 20f));
         }
+    }
+
+    public override void SendExtraAI(BinaryWriter writer)
+    {
+        writer.Write(truePosition.X);
+        writer.Write(truePosition.Y);
+    }
+
+    public override void ReceiveExtraAI(BinaryReader reader)
+    {
+        truePosition = reader.ReadVector2();
     }
 }
