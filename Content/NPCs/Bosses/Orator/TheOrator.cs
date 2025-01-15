@@ -1579,7 +1579,10 @@ public class TheOrator : ModNPC
     internal static void DisplayMessage(string key, NPC NPC)
     {
         Rectangle location = new((int)NPC.Center.X, (int)NPC.Center.Y, NPC.width / 2, NPC.width / 2);
-        CombatText MyDialogue = Main.combatText[CombatText.NewText(location, Color.LightGreen, GetWindfallTextValue($"Dialogue.{key}"), true)];
+        int index = CombatText.NewText(location, Color.LightGreen, GetWindfallTextValue($"Dialogue.{key}"), true);
+        if (index == 100)
+            return;
+        CombatText MyDialogue = Main.combatText[index];
         if (MyDialogue.text.Length > 50)
             MyDialogue.lifeTime = 60 + MyDialogue.text.Length;
     }

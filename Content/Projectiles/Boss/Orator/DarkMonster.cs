@@ -16,8 +16,15 @@ public class DarkMonster : ModProjectile
     SlotId loopingSoundSlot;
 
     internal static int MonsterDamage;
+    private static float Acceleration;
+    private static int MaxSpeed;
+
     public override void SetDefaults()
     {
+        MonsterDamage = StatCorrections.ScaleProjectileDamage(Main.masterMode ? 360 : CalamityWorld.death ? 280 : CalamityWorld.revenge ? 268 : Main.expertMode ? 240 : 120);
+        Acceleration = CalamityWorld.death ? 0.75f : CalamityWorld.revenge ? 0.5f : Main.expertMode ? 0.45f : 0.4f;
+        MaxSpeed = CalamityWorld.death ? 15 : CalamityWorld.revenge ? 12 : 10;
+
         Projectile.width = 320;
         Projectile.height = 320;
         Projectile.damage = MonsterDamage;
@@ -31,6 +38,7 @@ public class DarkMonster : ModProjectile
         CooldownSlot = ImmunityCooldownID.Bosses;
         Projectile.Calamity().DealsDefenseDamage = true;
     }        
+
     private enum States
     {
         Chasing,
@@ -47,18 +55,9 @@ public class DarkMonster : ModProjectile
         get => (States)Projectile.ai[0];
         set => Projectile.ai[0] = (float)value;
     }
-    private ref float Acceleration => ref Projectile.ai[2];
-    private int MaxSpeed
-    {
-        get => (int)Projectile.ai[3];
-        set => Projectile.ai[3] = value;
-    }
 
     public override void OnSpawn(IEntitySource source)
-    {
-        MonsterDamage = StatCorrections.ScaleProjectileDamage(Main.masterMode ? 360 : CalamityWorld.death ? 280 : CalamityWorld.revenge ? 268 : Main.expertMode ? 240 : 120);
-        Acceleration = CalamityWorld.death ? 0.75f : CalamityWorld.revenge ? 0.5f : Main.expertMode ? 0.45f : 0.4f;
-        MaxSpeed = CalamityWorld.death ? 15 : CalamityWorld.revenge ? 12 : 10;
+    {        
         Projectile.scale = 0;
         SoundEngine.PlaySound(SoundID.DD2_EtherianPortalOpen, Projectile.Center);
         ScreenShakeSystem.StartShake(5f);
@@ -81,7 +80,6 @@ public class DarkMonster : ModProjectile
     }
     public override void AI()
     {
-
         Player target;
         if (NPC.AnyNPCs(ModContent.NPCType<TheOrator>()))
             target = Main.npc[NPC.FindFirstNPC(ModContent.NPCType<TheOrator>())].As<TheOrator>().target;                           
@@ -145,9 +143,7 @@ public class DarkMonster : ModProjectile
                 if (Main.netMode != NetmodeID.MultiplayerClient && Orator != null && Orator.ai[0] == 2 && (float)Orator.life / (float)Orator.lifeMax > 0.1f)
                 {
                     for (int i = 0; i < (CalamityWorld.death ? 10 : CalamityWorld.revenge ? 8 : Main.expertMode ? 7 : 6); i++)
-                    {
                         NPC.NewNPC(Terraria.Entity.GetSource_NaturalSpawn(), (int)Projectile.Center.X, (int)Projectile.Center.Y, ModContent.NPCType<ShadowHand>());
-                    }
 
                     for (int i = 0; i < 24; i++)
                     {

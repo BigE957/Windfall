@@ -94,6 +94,7 @@ public class ShadowHand : ModNPC
         NPC.rotation = NPC.velocity.ToRotation();
         for (int i = 0; i <= 20; i++)
             EmpyreanMetaball.SpawnDefaultParticle(NPC.Center, Main.rand.NextVector2Circular(7f, 7f), 40 * Main.rand.NextFloat(1.5f, 2.3f));
+        NPC.netUpdate = true;
     }
     bool movingBackward = false;
     public override void AI()
@@ -386,6 +387,7 @@ public class ShadowHand : ModNPC
                         {
                             NPC.ai[2] = NPC.rotation;
                             attackBool = Main.rand.NextBool(2);
+                            NPC.netUpdate = true;
                         }
                     }
                     else

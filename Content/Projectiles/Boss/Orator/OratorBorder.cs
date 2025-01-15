@@ -21,6 +21,7 @@ public class OratorBorder : ModProjectile
         Projectile.ignoreWater = true;
         Projectile.scale = 3f;
         CooldownSlot = ImmunityCooldownID.Bosses;
+        Projectile.timeLeft = 30;
     }
     public override void OnSpawn(IEntitySource source)
     {

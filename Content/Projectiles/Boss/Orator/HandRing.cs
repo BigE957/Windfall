@@ -28,11 +28,7 @@ public class HandRing : ModProjectile
 
     public ref float Time => ref Projectile.ai[0];
 
-    private bool spinDir
-    {
-        get => Projectile.ai[3] != 0;
-        set => Projectile.ai[3] = value ? 1 : 0;
-    }
+    private bool spinDir = false;
     private static Color selenicColor => Color.Lerp(new Color(117, 255, 159), new Color(255, 180, 80), (float)(Math.Sin(Main.GlobalTimeWrappedHourly * 1.25f) / 0.5f) + 0.5f);
     private Vector2 truePosition = Vector2.Zero;
     public override void OnSpawn(IEntitySource source)
@@ -123,12 +119,16 @@ public class HandRing : ModProjectile
 
     public override void SendExtraAI(BinaryWriter writer)
     {
+        writer.Write(spinDir);
+
         writer.Write(truePosition.X);
         writer.Write(truePosition.Y);
     }
 
     public override void ReceiveExtraAI(BinaryReader reader)
     {
+        spinDir = reader.ReadBoolean();
+
         truePosition = reader.ReadVector2();
     }
 }

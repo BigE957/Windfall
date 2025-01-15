@@ -24,20 +24,18 @@ public class DarkCoalescence : ModProjectile
         Projectile.scale = 1f;
         CooldownSlot = ImmunityCooldownID.Bosses;
         Projectile.Calamity().DealsDefenseDamage = true;
+
+        fireDelay = CalamityWorld.death ? 65 : CalamityWorld.revenge ? 80 : 120;
     }
-    private int aiCounter
+    private int OratorIndex
     {
         get => (int)Projectile.ai[0];
         set => Projectile.ai[0] = value;
     }
-    private int OratorIndex
-    {
-        get => (int)Projectile.ai[1];
-        set => Projectile.ai[1] = value;
-    }
+    private int aiCounter = 0;
+
     public override void OnSpawn(IEntitySource source)
     {
-        fireDelay = CalamityWorld.death ? 65 : CalamityWorld.revenge ? 80 : 120;
         Projectile.scale = 0f;
         for(int i = 0; i < 30; i++)
         {
@@ -50,6 +48,7 @@ public class DarkCoalescence : ModProjectile
             SpawnBorderParticle(Projectile, Vector2.Zero, 0f, Main.rand.NextFloat(10, 25), Main.rand.NextFloat(60, 80), TwoPi / pCount * -i - TwoPi / (pCount/2));
         }
         ScreenShakeSystem.StartShake(5f);
+        Projectile.netUpdate = true;
     }
     public override void AI()
     {
@@ -75,11 +74,7 @@ public class DarkCoalescence : ModProjectile
             Projectile.active = false;
         }
         
-        Player target;
-        if(Orator != null)    
-            target = Main.npc[NPC.FindFirstNPC(ModContent.NPCType<TheOrator>())].As<TheOrator>().target;
-        else
-            target = Main.player[Player.FindClosest(Projectile.Center, Projectile.width, Projectile.height)];
+        Player target = Orator.As<TheOrator>().target;
 
         if(aiCounter == 1)
         {
@@ -171,5 +166,15 @@ public class DarkCoalescence : ModProjectile
         if (CircularHitboxCollision(Projectile.Center, projHitbox.Width / 2, targetHitbox))
             return true;
         return false;
+    }
+
+    public override void SendExtraAI(BinaryWriter writer)
+    {
+        writer.Write(aiCounter);
+    }
+
+    public override void ReceiveExtraAI(BinaryReader reader)
+    {
+        aiCounter = reader.ReadInt32();
     }
 }

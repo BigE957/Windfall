@@ -35,6 +35,7 @@ public class DarkTide : ModProjectile
             Vector2 spawnOffset = (Projectile.rotation.ToRotationVector2() * (Projectile.width / 2.7f)) + (Projectile.rotation.ToRotationVector2().RotatedBy(PiOver2) * ((Projectile.width / 2) - Projectile.width / particleCounter * i));
             SpawnBorderParticle(Projectile, spawnOffset, 0.5f * i, 30, Main.rand.NextFloat(80, 160), 0f, false);
         }
+        Projectile.netUpdate = true;
     }
     private float moveCount = 0;
     private int holdCounter = 0;
@@ -113,5 +114,17 @@ public class DarkTide : ModProjectile
         DrawAfterimagesCentered(Projectile, ProjectileID.Sets.TrailingMode[Projectile.type], drawColor);
         return false;
     }
-    public bool isLeft(Vector2 a, Vector2 b, Vector2 c) => (b.X - a.X) * (c.Y - a.Y) - (b.Y - a.Y) * (c.X - a.X) > 0;
+    public static bool isLeft(Vector2 a, Vector2 b, Vector2 c) => (b.X - a.X) * (c.Y - a.Y) - (b.Y - a.Y) * (c.X - a.X) > 0;
+
+    public override void SendExtraAI(BinaryWriter writer)
+    {
+        writer.Write(moveCount);
+        writer.Write(holdCounter);
+    }
+
+    public override void ReceiveExtraAI(BinaryReader reader)
+    {
+        moveCount = reader.ReadSingle();
+        holdCounter = reader.ReadInt32();
+    }
 }

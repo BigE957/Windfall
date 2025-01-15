@@ -184,6 +184,7 @@ public class OratorHand : ModNPC
     
     public override void AI()
     {
+        #region Orator Checks
         if (Main.npc[OratorIndex] == null || !Main.npc[OratorIndex].active || Main.npc[OratorIndex].type != ModContent.NPCType<TheOrator>())
         {
             if (Main.netMode == NetmodeID.Server || Main.netMode == NetmodeID.MultiplayerClient)
@@ -198,6 +199,8 @@ public class OratorHand : ModNPC
                 return;
             }
         }
+        #endregion
+
         NPC orator = Main.npc[OratorIndex];
         TheOrator modOrator = orator.As<TheOrator>();
         int aiCounter = modOrator.aiCounter;
@@ -298,7 +301,7 @@ public class OratorHand : ModNPC
                 {
                     CurrentPose = Pose.Fist;
                     NPC.velocity = Vector2.UnitY.RotatedBy(-PiOver4 * WhatHand) * 32f;
-                    NPC.rotation = PiOver2 + (-PiOver4 * WhatHand);
+                    NPC.rotation = NPC.velocity.ToRotation();
                     NPC.direction = WhatHand;
                 }
                 NPC.velocity *= 0.9f;
@@ -429,12 +432,12 @@ public class OratorHand : ModNPC
                                 if (aiCounter < 90)
                                 {
                                     //direction *= WhatHand;
-                                    goalPos = Main.LocalPlayer.Center + (direction * -500);
+                                    goalPos = modOrator.target.Center + (direction * -500);
 
                                     #region Movement
                                     NPC.velocity = (goalPos - NPC.Center).SafeNormalize(Vector2.Zero) * ((goalPos - NPC.Center).Length() / 10f);
                                     NPC.rotation = mainHand.rotation + Pi;
-                                    NPC.direction = mainHand.direction *= -1;
+                                    NPC.direction = mainHand.direction * -1;
                                     #endregion
                                 }
                                 else

@@ -28,10 +28,7 @@ public class OratorScythe : ModProjectile
         Projectile.penetrate = -1;
         Projectile.Opacity = 1f;
     }
-    public override void OnSpawn(IEntitySource source)
-    {
-        behavior = BehaviorType.Chase;
-    }
+
     private int Time
     {
         get => (int)Projectile.ai[0];
@@ -44,8 +41,8 @@ public class OratorScythe : ModProjectile
     }
     private BehaviorType behavior
     {
-        get => (BehaviorType)Projectile.ai[0];
-        set => Projectile.ai[0] = (float)value;
+        get => (BehaviorType)Projectile.ai[1];
+        set => Projectile.ai[1] = (float)value;
     }
 
     public override void AI()
