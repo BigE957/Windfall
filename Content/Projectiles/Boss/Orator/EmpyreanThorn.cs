@@ -1,4 +1,5 @@
 ﻿using Terraria;
+using Terraria.ModLoader.IO;
 using Windfall.Common.Graphics.Metaballs;
 
 namespace Windfall.Content.Projectiles.Boss.Orator;
@@ -42,10 +43,13 @@ public class EmpyreanThorn : ModProjectile
             Projectile.timeLeft = (int)Projectile.ai[0] + 180;
             Projectile.rotation = Projectile.velocity.ToRotation();
             Projectile.velocity = Vector2.Zero;
-            Projectile.scale = InitialScale + Main.rand.NextFloat(-0.5f, 0.5f);
+            Projectile.scale = InitialScale + Main.rand.NextFloat(-0.25f, 0.25f);
+            Projectile.position.X -= Projectile.width / 2f * (Projectile.scale - 1);
             Projectile.width = (int)(Projectile.width * Projectile.scale);
             Projectile.height = (int)(Projectile.height * Projectile.scale);
             initialPoint = Projectile.Center + (Projectile.rotation.ToRotationVector2() * 64f * Projectile.scale);
+
+            Projectile.netUpdate = true;
         }
     }
 
@@ -113,5 +117,19 @@ public class EmpyreanThorn : ModProjectile
     {
         if(Projectile.ai[0] == -1)
             drawCacheProjsBehindNPCsAndTiles.Add(index);
+    }
+
+    public override void SendExtraAI(BinaryWriter writer)
+    {
+        writer.Write(aiCounter);
+
+        writer.Write(initialPoint.X);
+        writer.Write(initialPoint.Y);
+    }
+
+    public override void ReceiveExtraAI(BinaryReader reader)
+    {
+        aiCounter = reader.ReadInt32();
+        initialPoint = reader.ReadVector2();
     }
 }
