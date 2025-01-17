@@ -26,6 +26,10 @@ public class DarkGlob : ModProjectile
         get => Projectile.ai[1];
         set => Projectile.ai[1] = value;
     }
+    public override void OnSpawn(IEntitySource source)
+    {
+        Projectile.netUpdate = true;
+    }
     public override void AI()
     {
         if (Projectile.ai[0] == 0 || Projectile.ai[0] == 2)

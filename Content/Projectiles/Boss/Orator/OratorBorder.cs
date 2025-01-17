@@ -35,6 +35,12 @@ public class OratorBorder : ModProjectile
     }
     public override void AI()
     {
+        if(counter == 0 && Main.netMode == NetmodeID.MultiplayerClient)
+        {
+            const int pCount = 250;
+            for (int i = 0; i <= pCount; i++)
+                SpawnBorderParticle(Projectile, Vector2.Zero, 0.5f * i, 25, Main.rand.NextFloat(80, 160), TwoPi / pCount * i);
+        }
         for (int i = 0; i < 5; i++)
         {
             Vector2 spawnPosition = Projectile.Center + Main.rand.NextVector2CircularEdge(Projectile.width * Projectile.scale / 9.65f, Projectile.width * Projectile.scale / 9.65f);

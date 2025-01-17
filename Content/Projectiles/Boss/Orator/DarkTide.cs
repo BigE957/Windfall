@@ -34,7 +34,7 @@ public class DarkTide : ModProjectile
         Projectile.Center += newPosition;
         Projectile.velocity = trueRotation.ToRotationVector2() * moveSpeed;
 
-        int particleCounter = 50;
+        const int particleCounter = 50;
         for(int i = 0; i < particleCounter; i++)
         {
             Vector2 spawnOffset = (trueRotation.ToRotationVector2() * (Projectile.width / 2.7f)) + (trueRotation.ToRotationVector2().RotatedBy(PiOver2) * ((Projectile.width / 2) - Projectile.width / particleCounter * i));
@@ -44,6 +44,16 @@ public class DarkTide : ModProjectile
 
     public override void AI()
     {
+        if(Main.netMode == NetmodeID.MultiplayerClient && moveCount == 0 && holdCounter == 0)
+        {
+            const int particleCounter = 50;
+            for (int i = 0; i < particleCounter; i++)
+            {
+                Vector2 spawnOffset = (trueRotation.ToRotationVector2() * (Projectile.width / 2.7f)) + (trueRotation.ToRotationVector2().RotatedBy(PiOver2) * ((Projectile.width / 2) - Projectile.width / particleCounter * i));
+                SpawnBorderParticle(Projectile, spawnOffset, 0.5f * i, 30, Main.rand.NextFloat(80, 160), 0f, false);
+            }
+        }
+
         int holdDuration = (int)holdtime;
         float particleVelocity = Main.rand.NextFloat(6f, 8f);
         if (!NPC.AnyNPCs(ModContent.NPCType<TheOrator>()))

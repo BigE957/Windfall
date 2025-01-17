@@ -80,7 +80,18 @@ public class DarkMonster : ModProjectile
     public override void AI()
     {
         if (aiCounter == 0 && Main.netMode == NetmodeID.MultiplayerClient)
-            OnSpawn(null);
+        {
+            for (int i = 0; i < 30; i++)
+            {
+                SpawnBorderParticle(Projectile, Vector2.Zero, 0f, 5, 50, TwoPi / 30 * i, false);
+            }
+            const int pCount = 20;
+            for (int i = 0; i <= 20; i++)
+            {
+                SpawnBorderParticle(Projectile, Vector2.Zero, 1f * i, 20, Main.rand.NextFloat(80, 110), TwoPi / pCount * i);
+                //SpawnBorderParticle(Projectile, Vector2.Zero, 0.5f * i, 15, Main.rand.NextFloat(60, 80), TwoPi / pCount * -i - TwoPi / (pCount / 2));
+            }
+        }
 
         Player target;
         if (NPC.AnyNPCs(ModContent.NPCType<TheOrator>()))
@@ -114,7 +125,7 @@ public class DarkMonster : ModProjectile
                 if (Projectile.velocity.Length() > MaxSpeed)
                     Projectile.velocity = Projectile.velocity.SafeNormalize(Vector2.Zero) * (Projectile.velocity.Length() * 0.95f);
                 
-                EmitGhostGas();
+                ParticleTrail();
                 break;
             case States.Dying:                   
                 Projectile.scale -= (0.005f * (1 + (aiCounter / 8)));                  
@@ -125,7 +136,7 @@ public class DarkMonster : ModProjectile
                     Projectile.velocity += (target.Center - Projectile.Center).SafeNormalize(Vector2.Zero) * Acceleration;
                     if (Projectile.velocity.Length() > (MaxSpeed * (Projectile.scale / 5)))
                         Projectile.velocity = Projectile.velocity.SafeNormalize(Vector2.Zero) * (MaxSpeed * (Projectile.scale / 5));
-                    EmitGhostGas();
+                    ParticleTrail();
                 }
                 if (Projectile.velocity.Length() < 1f)
                     Projectile.velocity = Vector2.Zero;
@@ -136,9 +147,7 @@ public class DarkMonster : ModProjectile
                 SoundEngine.PlaySound(SoundID.DD2_EtherianPortalDryadTouch, Projectile.Center);
                 ScreenShakeSystem.StartShake(7.5f);
                 for (int i = 0; i <= 50; i++)
-                {
-                    EmpyreanMetaball.SpawnDefaultParticle(Projectile.Center, Main.rand.NextVector2Circular(10f, 10f) * Main.rand.NextFloat(1f, 2f), 40 * Main.rand.NextFloat(3f, 5f));
-                }
+                    SpawnDefaultParticle(Projectile.Center, Main.rand.NextVector2Circular(10f, 10f) * Main.rand.NextFloat(1f, 2f), 40 * Main.rand.NextFloat(3f, 5f));
                 NPC Orator = null;
                 if (NPC.FindFirstNPC(ModContent.NPCType<TheOrator>()) != -1)
                     Orator = Main.npc[NPC.FindFirstNPC(ModContent.NPCType<TheOrator>())];
@@ -160,23 +169,24 @@ public class DarkMonster : ModProjectile
                 GeneralParticleHandler.SpawnParticle(explosion);
                 Projectile.active = false;
                 EmpyreanStickyParticles.RemoveAll(p => p.ProjectileIndex == Projectile.whoAmI);
+                Projectile.netUpdate = true;
                 break;
         }
         aiCounter++;
         Projectile.rotation = Projectile.velocity.ToRotation();
     }
-    public void EmitGhostGas()
+    private void ParticleTrail()
     {
         //smaller particles
-        EmpyreanMetaball.SpawnDefaultParticle(Projectile.Center + (Main.rand.NextVector2Circular(25f, 25f) * Projectile.scale), Projectile.velocity.SafeNormalize(Vector2.Zero) * Main.rand.NextFloat(0f, 5f), 40 * (Main.rand.NextFloat(0.75f, 0.9f) * Projectile.scale));
+        SpawnDefaultParticle(Projectile.Center + (Main.rand.NextVector2Circular(25f, 25f) * Projectile.scale), Projectile.velocity.SafeNormalize(Vector2.Zero) * Main.rand.NextFloat(0f, 5f), 40 * (Main.rand.NextFloat(0.75f, 0.9f) * Projectile.scale));
         
         //larger trails
         float gasSize = 60 * Projectile.scale;
-        EmpyreanMetaball.SpawnDefaultParticle(Projectile.Center - Projectile.velocity * (2 * Projectile.scale), Vector2.Zero, gasSize);
+        SpawnDefaultParticle(Projectile.Center - Projectile.velocity * (2 * Projectile.scale), Vector2.Zero, gasSize);
 
         gasSize = 40 * Projectile.scale;
-        EmpyreanMetaball.SpawnDefaultParticle(Projectile.Center - (Projectile.velocity.RotatedBy(Pi / 4) * (2 * Projectile.scale)), Vector2.Zero, gasSize);
-        EmpyreanMetaball.SpawnDefaultParticle(Projectile.Center - (Projectile.velocity.RotatedBy(-Pi / 4) * (2 * Projectile.scale)), Vector2.Zero, gasSize);
+        SpawnDefaultParticle(Projectile.Center - (Projectile.velocity.RotatedBy(Pi / 4) * (2 * Projectile.scale)), Vector2.Zero, gasSize);
+        SpawnDefaultParticle(Projectile.Center - (Projectile.velocity.RotatedBy(-Pi / 4) * (2 * Projectile.scale)), Vector2.Zero, gasSize);
     }
     public override bool? Colliding(Rectangle projHitbox, Rectangle targetHitbox)
     {

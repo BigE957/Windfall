@@ -301,9 +301,9 @@ public class OratorHand : ModNPC
                 {
                     CurrentPose = Pose.Fist;
                     NPC.velocity = Vector2.UnitY.RotatedBy(-PiOver4 * WhatHand) * 32f;
-                    NPC.rotation = NPC.velocity.ToRotation();
                     NPC.direction = WhatHand;
                 }
+                NPC.rotation = PiOver2 + (-PiOver4 * WhatHand);
                 NPC.velocity *= 0.9f;
             }
             EmpyreanMetaball.SpawnDefaultParticle(NPC.Center - (NPC.rotation.ToRotationVector2() * (NPC.width / 1.5f)) + (NPC.rotation.ToRotationVector2().RotatedBy(PiOver2) * Main.rand.NextFloat(-16f, 16f)), (NPC.rotation.ToRotationVector2().RotatedBy(Pi + Main.rand.NextFloat(-PiOver4, PiOver4)) * Main.rand.NextFloat(2f, 6f)), Main.rand.NextFloat(20f, 40f));

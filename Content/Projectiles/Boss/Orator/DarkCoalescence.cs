@@ -49,9 +49,7 @@ public class DarkCoalescence : ModProjectile
         ScreenShakeSystem.StartShake(5f);
     }
     public override void AI()
-    {
-        if (aiCounter == 0 && Main.netMode == NetmodeID.MultiplayerClient)
-            OnSpawn(null);
+    {        
         NPC Orator = Main.npc[OratorIndex];
         if (Orator == null || !Orator.active || Orator.type != ModContent.NPCType<TheOrator>())
         {
@@ -79,6 +77,18 @@ public class DarkCoalescence : ModProjectile
         if(aiCounter == 1)
         {
             SoundEngine.PlaySound(SoundID.DD2_EtherianPortalOpen, Projectile.Center);
+            if (Main.netMode == NetmodeID.MultiplayerClient)
+            {
+                for (int i = 0; i < 30; i++)
+                {
+                    SpawnBorderParticle(Projectile, Vector2.Zero, 0f, 5, 50, TwoPi / 30 * i, false);
+                }
+                const int pCount = 20;
+                for (int i = 0; i <= pCount; i++)
+                {
+                    SpawnBorderParticle(Projectile, Vector2.Zero, 1f * i, 20, Main.rand.NextFloat(80, 110), TwoPi / pCount * i);
+                }
+            }
             for (int i = 0; i <= 50; i++)
             {
                 Vector2 spawnPos = Projectile.Center + Main.rand.NextVector2Circular(10f, 10f) * 10;

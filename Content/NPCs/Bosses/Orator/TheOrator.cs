@@ -1270,7 +1270,8 @@ public class TheOrator : ModNPC
                             DisplayMessage(baseKey + 2, NPC);
                             break;
                         case 300:
-                            Projectile.NewProjectile(Terraria.Entity.GetSource_NaturalSpawn(), target.Center, Vector2.Zero, ModContent.ProjectileType<OratorBorder>(), 0, 0f);
+                            if(Main.netMode == NetmodeID.MultiplayerClient)
+                                Projectile.NewProjectile(Terraria.Entity.GetSource_NaturalSpawn(), target.Center, Vector2.Zero, ModContent.ProjectileType<OratorBorder>(), 0, 0f);
                             break;
                         case 360:
                             DisplayMessage(baseKey + 3, NPC);
