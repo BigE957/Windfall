@@ -71,15 +71,17 @@ public class DarkMonster : ModProjectile
             SpawnBorderParticle(Projectile, Vector2.Zero, 0f, 5, 50, TwoPi / 30 * i, false);
         }
         const int pCount = 20;
-        for (int i = 0; i <= pCount; i++)
+        for (int i = 0; i <= 20; i++)
         {
-
-            SpawnBorderParticle(Projectile, Vector2.Zero, 0f, Main.rand.NextFloat(10, 25), Main.rand.NextFloat(75, 100), TwoPi / pCount * i);
-            SpawnBorderParticle(Projectile, Vector2.Zero, 0f, Main.rand.NextFloat(10, 25), Main.rand.NextFloat(60, 80), TwoPi / pCount * -i - TwoPi / (pCount / 2));
+            SpawnBorderParticle(Projectile, Vector2.Zero, 1f * i, 20, Main.rand.NextFloat(80, 110), TwoPi / pCount * i);
+            //SpawnBorderParticle(Projectile, Vector2.Zero, 0.5f * i, 15, Main.rand.NextFloat(60, 80), TwoPi / pCount * -i - TwoPi / (pCount / 2));
         }
     }
     public override void AI()
     {
+        if (aiCounter == 0 && Main.netMode == NetmodeID.MultiplayerClient)
+            OnSpawn(null);
+
         Player target;
         if (NPC.AnyNPCs(ModContent.NPCType<TheOrator>()))
             target = Main.npc[NPC.FindFirstNPC(ModContent.NPCType<TheOrator>())].As<TheOrator>().target;                           
@@ -157,7 +159,7 @@ public class DarkMonster : ModProjectile
                 CalamityMod.Particles.Particle explosion = new DetailedExplosion(Projectile.Center, Vector2.Zero, new(117, 255, 159), new Vector2(1f, 1f), 0f, 0f, 1f, 16);
                 GeneralParticleHandler.SpawnParticle(explosion);
                 Projectile.active = false;
-                EmpyreanStickyParticles.RemoveAll(p => p.Projectile == Projectile);
+                EmpyreanStickyParticles.RemoveAll(p => p.ProjectileIndex == Projectile.whoAmI);
                 break;
         }
         aiCounter++;

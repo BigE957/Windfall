@@ -11,6 +11,11 @@ public class DarkTide : ModProjectile
     public ref float holdtime => ref Projectile.ai[0];
     public ref float moveDistance => ref Projectile.ai[1];
     public ref float moveSpeed => ref Projectile.ai[2];
+
+    private float moveCount = 0;
+    private int holdCounter = 0;
+    private float trueRotation = 0;
+
     public override void SetDefaults()
     {
         Projectile.height = Projectile.width = 1440;
@@ -24,21 +29,19 @@ public class DarkTide : ModProjectile
     }
     public override void OnSpawn(IEntitySource source)
     {
-        Projectile.rotation = Projectile.velocity.ToRotation();
-        Vector2 newPosition = Projectile.rotation.ToRotationVector2().RotatedBy(Pi) * (1800 * Projectile.scale);
+        trueRotation = Projectile.velocity.ToRotation();
+        Vector2 newPosition = trueRotation.ToRotationVector2().RotatedBy(Pi) * (1800 * Projectile.scale);
         Projectile.Center += newPosition;
-        Projectile.velocity = Projectile.rotation.ToRotationVector2() * moveSpeed;
+        Projectile.velocity = trueRotation.ToRotationVector2() * moveSpeed;
 
         int particleCounter = 50;
         for(int i = 0; i < particleCounter; i++)
         {
-            Vector2 spawnOffset = (Projectile.rotation.ToRotationVector2() * (Projectile.width / 2.7f)) + (Projectile.rotation.ToRotationVector2().RotatedBy(PiOver2) * ((Projectile.width / 2) - Projectile.width / particleCounter * i));
+            Vector2 spawnOffset = (trueRotation.ToRotationVector2() * (Projectile.width / 2.7f)) + (trueRotation.ToRotationVector2().RotatedBy(PiOver2) * ((Projectile.width / 2) - Projectile.width / particleCounter * i));
             SpawnBorderParticle(Projectile, spawnOffset, 0.5f * i, 30, Main.rand.NextFloat(80, 160), 0f, false);
         }
-        Projectile.netUpdate = true;
     }
-    private float moveCount = 0;
-    private int holdCounter = 0;
+
     public override void AI()
     {
         int holdDuration = (int)holdtime;
@@ -56,13 +59,13 @@ public class DarkTide : ModProjectile
         {
             if (holdCounter > holdDuration)
             {
-                if (Projectile.velocity != Projectile.rotation.ToRotationVector2() * -moveSpeed)
+                if (Projectile.velocity != trueRotation.ToRotationVector2() * -moveSpeed)
                 {
                     if (Projectile.velocity == Vector2.Zero)
-                        Projectile.velocity = Projectile.rotation.ToRotationVector2() * -0.05f;
+                        Projectile.velocity = trueRotation.ToRotationVector2() * -0.05f;
                     Projectile.velocity *= 1.05f;
                     if (Projectile.velocity.LengthSquared() >= 16)
-                        Projectile.velocity = Projectile.rotation.ToRotationVector2() * -moveSpeed;
+                        Projectile.velocity = trueRotation.ToRotationVector2() * -moveSpeed;
                 }
                 if(Projectile.velocity.LengthSquared() >= 1)
                     particleVelocity /= (Projectile.velocity.Length()/2);
@@ -80,12 +83,12 @@ public class DarkTide : ModProjectile
                 if (holdCounter == holdDuration / 3 && NPC.AnyNPCs(ModContent.NPCType<TheOrator>()))
                 {
                     TheOrator Orator = Main.npc[NPC.FindFirstNPC(ModContent.NPCType<TheOrator>())].As<TheOrator>();
-                    if (Orator.AIState == TheOrator.States.DarkTides)
+                    if (Orator.AIState == TheOrator.States.DarkTides && Main.netMode != NetmodeID.MultiplayerClient)
                     {
                         for (int i = 0; i < 16; i++)
                         {
-                            Vector2 position = Projectile.Center + (Projectile.rotation.ToRotationVector2() * (Projectile.width / 2.75f)) + (Projectile.rotation.ToRotationVector2().RotatedBy(PiOver2) * Main.rand.NextFloat(-Projectile.width / 2, Projectile.width / 2));
-                            Projectile.NewProjectile(Terraria.Entity.GetSource_NaturalSpawn(), position, Projectile.rotation.ToRotationVector2().RotatedBy(Main.rand.NextFloat(-0.5f, 0.5f)), ModContent.ProjectileType<EmpyreanThorn>(), TheOrator.BoltDamage, 0f, ai0: 90, ai1: 36f, ai2: 3f);
+                            Vector2 position = Projectile.Center + (trueRotation.ToRotationVector2() * (Projectile.width / 2.75f)) + (trueRotation.ToRotationVector2().RotatedBy(PiOver2) * Main.rand.NextFloat(-Projectile.width / 2, Projectile.width / 2));
+                            Projectile.NewProjectile(Terraria.Entity.GetSource_NaturalSpawn(), position, trueRotation.ToRotationVector2().RotatedBy(Main.rand.NextFloat(-0.5f, 0.5f)), ModContent.ProjectileType<EmpyreanThorn>(), TheOrator.BoltDamage, 0f, ai0: 90, ai1: 36f, ai2: 3f);
                         }
                     }
                 }
@@ -100,11 +103,12 @@ public class DarkTide : ModProjectile
         }
         foreach (Player player in Main.player.Where(p => p != null && p.active && !p.dead))
         {
-             if(!isLeft(Projectile.Center + new Vector2(Projectile.width / 2, Projectile.height / 2).RotatedBy(Projectile.rotation), Projectile.Center + new Vector2(Projectile.width / 2, -Projectile.height / 2).RotatedBy(Projectile.rotation), player.Center))
+             if(!isLeft(Projectile.Center + new Vector2(Projectile.width / 2, Projectile.height / 2).RotatedBy(trueRotation), Projectile.Center + new Vector2(Projectile.width / 2, -Projectile.height / 2).RotatedBy(trueRotation), player.Center))
                 player.AddBuff(ModContent.BuffType<Entropy>(), 5);
         }
-        Vector2 spawnPosition = Projectile.Center + (Projectile.rotation.ToRotationVector2() * (Projectile.width / 2.05f)) + (Projectile.rotation.ToRotationVector2().RotatedBy(PiOver2) * Main.rand.NextFloat(-Projectile.width / 2, Projectile.width / 2));
-        SpawnDefaultParticle(spawnPosition, Projectile.rotation.ToRotationVector2().RotatedBy(Main.rand.NextFloat(-Pi/2, Pi/2)) * particleVelocity, Main.rand.NextFloat(80f, 120f));
+        Vector2 spawnPosition = Projectile.Center + (trueRotation.ToRotationVector2() * (Projectile.width / 2.05f)) + (trueRotation.ToRotationVector2().RotatedBy(PiOver2) * Main.rand.NextFloat(-Projectile.width / 2, Projectile.width / 2));
+        Projectile.rotation = trueRotation;
+        SpawnDefaultParticle(spawnPosition, trueRotation.ToRotationVector2().RotatedBy(Main.rand.NextFloat(-Pi/2, Pi/2)) * particleVelocity, Main.rand.NextFloat(80f, 120f));
     }
     public override Color? GetAlpha(Color lightColor) => Color.White * Projectile.Opacity;
 
@@ -120,11 +124,14 @@ public class DarkTide : ModProjectile
     {
         writer.Write(moveCount);
         writer.Write(holdCounter);
+        writer.Write(trueRotation);
+
     }
 
     public override void ReceiveExtraAI(BinaryReader reader)
     {
         moveCount = reader.ReadSingle();
         holdCounter = reader.ReadInt32();
+        trueRotation = reader.ReadSingle();
     }
 }

@@ -1,5 +1,4 @@
-﻿using Terraria;
-using Terraria.ModLoader.IO;
+﻿using Terraria.Chat;
 using Windfall.Common.Graphics.Metaballs;
 
 namespace Windfall.Content.Projectiles.Boss.Orator;
@@ -22,6 +21,7 @@ public class EmpyreanThorn : ModProjectile
         Main.projFrames[Projectile.type] = 6;
         Projectile.width = 200;
         Projectile.height = 32;
+        Projectile.scale = InitialScale;
         Projectile.hostile = true;
         Projectile.tileCollide = false;
         Projectile.ignoreWater = true;
@@ -36,20 +36,19 @@ public class EmpyreanThorn : ModProjectile
     }
     int aiCounter = 0;
     Vector2 initialPoint = Vector2.Zero;
+    float trueRotation = 0f;
     public override void OnSpawn(IEntitySource source)
     {
         if (Projectile.ai[0] != -1)
-        {
+        {           
+            trueRotation = Projectile.velocity.ToRotation();
             Projectile.timeLeft = (int)Projectile.ai[0] + 180;
-            Projectile.rotation = Projectile.velocity.ToRotation();
+            if(!Main.dedServ)
+                Projectile.position.X -= Projectile.width / 2f * (InitialScale - 1);
+            initialPoint = Projectile.Center + (trueRotation.ToRotationVector2() * 64f * InitialScale);
             Projectile.velocity = Vector2.Zero;
-            Projectile.scale = InitialScale + Main.rand.NextFloat(-0.25f, 0.25f);
-            Projectile.position.X -= Projectile.width / 2f * (Projectile.scale - 1);
-            Projectile.width = (int)(Projectile.width * Projectile.scale);
-            Projectile.height = (int)(Projectile.height * Projectile.scale);
-            initialPoint = Projectile.Center + (Projectile.rotation.ToRotationVector2() * 64f * Projectile.scale);
-
-            Projectile.netUpdate = true;
+            
+            //Projectile.netUpdate = true;
         }
     }
 
@@ -74,7 +73,9 @@ public class EmpyreanThorn : ModProjectile
         else
         {
             int delay = (int)Projectile.ai[0];
-            
+            Projectile.rotation = trueRotation;
+            Projectile.scale = InitialScale;
+
             if (aiCounter < delay + 30)
                 EmpyreanMetaball.SpawnDefaultParticle(initialPoint, Projectile.rotation.ToRotationVector2().RotatedBy(Main.rand.NextFloat(-0.15f, 0.15f)) * Main.rand.NextFloat(16f, 18f), 40f);
             if(aiCounter >= delay)
@@ -125,11 +126,14 @@ public class EmpyreanThorn : ModProjectile
 
         writer.Write(initialPoint.X);
         writer.Write(initialPoint.Y);
+
+        writer.Write(trueRotation);
     }
 
     public override void ReceiveExtraAI(BinaryReader reader)
     {
         aiCounter = reader.ReadInt32();
         initialPoint = reader.ReadVector2();
+        trueRotation = reader.ReadSingle();
     }
 }

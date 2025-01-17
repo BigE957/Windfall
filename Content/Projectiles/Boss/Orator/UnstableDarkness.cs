@@ -100,7 +100,7 @@ public class UnstableDarkness: ModProjectile
         CalamityMod.Particles.Particle explosion = new DetailedExplosion(Projectile.Center, Vector2.Zero, new(117, 255, 159), new Vector2(1f, 1f), 0f, 0f, 1f, 16);
         GeneralParticleHandler.SpawnParticle(explosion);
         Projectile.active = false;
-        EmpyreanStickyParticles.RemoveAll(p => p.Projectile == Projectile);
+        EmpyreanStickyParticles.RemoveAll(p => p.ProjectileIndex == Projectile.whoAmI);
     }
     private void ParticleTrail()
     {

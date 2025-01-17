@@ -44,14 +44,14 @@ public class DarkCoalescence : ModProjectile
         const int pCount = 20;
         for (int i = 0; i <= pCount; i++)
         {
-            SpawnBorderParticle(Projectile, Vector2.Zero, 0f, Main.rand.NextFloat(10, 25), Main.rand.NextFloat(75, 100), TwoPi / pCount * i);
-            SpawnBorderParticle(Projectile, Vector2.Zero, 0f, Main.rand.NextFloat(10, 25), Main.rand.NextFloat(60, 80), TwoPi / pCount * -i - TwoPi / (pCount/2));
+            SpawnBorderParticle(Projectile, Vector2.Zero, 1f * i, 20, Main.rand.NextFloat(80, 110), TwoPi / pCount * i);
         }
         ScreenShakeSystem.StartShake(5f);
-        Projectile.netUpdate = true;
     }
     public override void AI()
     {
+        if (aiCounter == 0 && Main.netMode == NetmodeID.MultiplayerClient)
+            OnSpawn(null);
         NPC Orator = Main.npc[OratorIndex];
         if (Orator == null || !Orator.active || Orator.type != ModContent.NPCType<TheOrator>())
         {
@@ -144,7 +144,7 @@ public class DarkCoalescence : ModProjectile
                     GeneralParticleHandler.SpawnParticle(explosion);
                 }                    
                 Projectile.active = false;
-                EmpyreanStickyParticles.RemoveAll(p => p.Projectile == Projectile);
+                EmpyreanStickyParticles.RemoveAll(p => p.ProjectileIndex == Projectile.whoAmI);
             }
         }
         aiCounter++;

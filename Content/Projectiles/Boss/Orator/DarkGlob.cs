@@ -56,6 +56,7 @@ public class DarkGlob : ModProjectile
                 if (Projectile.timeLeft < 30)
                 {
                     Projectile.scale -= MaxSize / 30;
+                    Projectile.netUpdate = true;
                     if(Projectile.timeLeft == 5)
                         for (int i = 0; i <= 10; i++)
                         {

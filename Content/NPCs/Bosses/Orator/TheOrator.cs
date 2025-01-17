@@ -74,7 +74,6 @@ public class TheOrator : ModNPC
     public static bool noSpawnsEscape = true;
     public override void OnSpawn(IEntitySource source)
     {
-        SkyManager.Instance.Activate("Windfall:Orator", args: []);
         target = Main.player[Player.FindClosest(NPC.Center, NPC.width, NPC.height)];
 
         //AIState = States.Testing;
@@ -712,7 +711,7 @@ public class TheOrator : ModNPC
                                 Projectile.NewProjectile(Terraria.Entity.GetSource_NaturalSpawn(), NPC.Center, dir.RotatedBy(TwoPi / projCount * i) * 20, ModContent.ProjectileType<DarkBolt>(), BoltDamage, 0f, -1, 0, -20);
                         }
                     }
-                    else
+                    else if (Main.netMode != NetmodeID.MultiplayerClient)
                     {
                         switch(aiCounter - 1400)
                         {
@@ -904,52 +903,42 @@ public class TheOrator : ModNPC
                     NPC.velocity = NPC.velocity.SafeNormalize(-Vector2.UnitY) * velo / 2f;
                 #endregion
                 
-                if (Main.netMode != NetmodeID.MultiplayerClient && aiCounter % attackDuration == 0)
+                if (aiCounter % attackDuration == 0)
                 {
                     SoundEngine.PlaySound(SoundID.DD2_EtherianPortalSpawnEnemy);
-                    int tightness = CalamityWorld.death ? 1050 : CalamityWorld.revenge ? 1025 : 1000;
-                    if (aiCounter == 0)
+                    if (Main.netMode != NetmodeID.MultiplayerClient)
                     {
-                        Projectile.NewProjectile(Terraria.Entity.GetSource_NaturalSpawn(), border.Center, Vector2.UnitX, ModContent.ProjectileType<DarkTide>(), 0, 0f, ai0: tideOut, ai1: tightness, ai2: 8);
-                        Projectile.NewProjectile(Terraria.Entity.GetSource_NaturalSpawn(), border.Center, Vector2.UnitX * -1, ModContent.ProjectileType<DarkTide>(), 0, 0f, ai0: tideOut, ai1: tightness, ai2: 8);
-                    }
-                    else
-                    {
-                        Projectile.NewProjectile(Terraria.Entity.GetSource_NaturalSpawn(), border.Center, Vector2.UnitY, ModContent.ProjectileType<DarkTide>(), 0, 0f, ai0: tideOut, ai1: tightness, ai2: 8);
-                        Projectile.NewProjectile(Terraria.Entity.GetSource_NaturalSpawn(), border.Center, Vector2.UnitY * -1, ModContent.ProjectileType<DarkTide>(), 0, 0f, ai0: tideOut, ai1: tightness, ai2: 8);
+                        int tightness = CalamityWorld.death ? 1050 : CalamityWorld.revenge ? 1025 : 1000;
+
+                        if (aiCounter == 0)
+                        {
+                            Projectile.NewProjectile(Terraria.Entity.GetSource_NaturalSpawn(), border.Center, Vector2.UnitX, ModContent.ProjectileType<DarkTide>(), 0, 0f, ai0: tideOut, ai1: tightness, ai2: 8);
+                            Projectile.NewProjectile(Terraria.Entity.GetSource_NaturalSpawn(), border.Center, Vector2.UnitX * -1, ModContent.ProjectileType<DarkTide>(), 0, 0f, ai0: tideOut, ai1: tightness, ai2: 8);
+                        }
+                        else
+                        {
+                            Projectile.NewProjectile(Terraria.Entity.GetSource_NaturalSpawn(), border.Center, Vector2.UnitY, ModContent.ProjectileType<DarkTide>(), 0, 0f, ai0: tideOut, ai1: tightness, ai2: 8);
+                            Projectile.NewProjectile(Terraria.Entity.GetSource_NaturalSpawn(), border.Center, Vector2.UnitY * -1, ModContent.ProjectileType<DarkTide>(), 0, 0f, ai0: tideOut, ai1: tightness, ai2: 8);
+                        }
                     }
                     VectorToTarget = new(-1,-1);
                 }
                 else if ((aiCounter > 150 && aiCounter < tideOut))
                 {
-                    if (Main.netMode != NetmodeID.MultiplayerClient && aiCounter % 18 == 0)
+                    if (aiCounter % 18 == 0 && Main.netMode != NetmodeID.MultiplayerClient)
                     {
-                        bool left = Main.rand.NextBool();
+                        bool left = aiCounter % 36 == 0;
                         Vector2 spawnPosition = border.Center + new Vector2(left ? -275 : 275, Main.rand.NextFloat(-700f, 700f));
-                        if(VectorToTarget != new Vector2(-1,-1))
-                        {
-                            while(Math.Abs(VectorToTarget.Y - spawnPosition.Y) < 50)
-                            {
-                                spawnPosition = border.Center + new Vector2(left ? -275 : 275, Main.rand.NextFloat(-700f, 700f));
-                            }
-                        }
-                        Projectile.NewProjectile(Terraria.Entity.GetSource_NaturalSpawn(), spawnPosition, (Vector2.UnitX * (left ? 1 : -1)).RotatedBy(Main.rand.NextFloat(-0.5f, 0.5f)), ModContent.ProjectileType<EmpyreanThorn>(), GlobDamage, 0f, ai0: 120, ai1: 24f, ai2: 2f);
+                        Projectile.NewProjectile(null, spawnPosition, (Vector2.UnitX * (left ? 1 : -1)), ModContent.ProjectileType<EmpyreanThorn>(), GlobDamage, 0f, ai0: 120, ai1: 24f, ai2: 2f);
                     }
                 }
                 else if ((aiCounter > attackDuration + 120 && aiCounter < attackDuration + tideOut))
                 {
-                    if (Main.netMode != NetmodeID.MultiplayerClient && aiCounter % 18 == 0)
+                    if (aiCounter % 18 == 0 && Main.netMode != NetmodeID.MultiplayerClient)
                     {
-                        bool left = Main.rand.NextBool();
-                        Vector2 spawnPosition = border.Center + new Vector2(Main.rand.NextFloat(-700f, 700f), left ? -275 : 275);
-                        if (VectorToTarget != new Vector2(-1, -1))
-                        {
-                            while (Math.Abs(VectorToTarget.Y - spawnPosition.Y) < 50)
-                            {
-                                spawnPosition = border.Center + new Vector2(Main.rand.NextFloat(-700f, 700f), left ? -275 : 275);
-                            }
-                        }
-                        Projectile.NewProjectile(Terraria.Entity.GetSource_NaturalSpawn(), spawnPosition, (Vector2.UnitY * (left ? 1 : -1)).RotatedBy(Main.rand.NextFloat(-0.5f, 0.5f)), ModContent.ProjectileType<EmpyreanThorn>(), GlobDamage, 0f, ai0: 120, ai1: 24f, ai2: 2f);
+                        bool down = aiCounter % 36 == 0;
+                        Vector2 spawnPosition = border.Center + new Vector2(Main.rand.NextFloat(-700f, 700f), down ? -275 : 275);
+                        Projectile.NewProjectile(null, spawnPosition, (Vector2.UnitY * (down ? 1 : -1)).RotatedBy(Main.rand.NextFloat(-0.5f, 0.5f)), ModContent.ProjectileType<EmpyreanThorn>(), GlobDamage, 0f, ai0: 120, ai1: 24f, ai2: 2f);
                     }
                 }
                 else if (aiCounter == attackDuration + tideOut + 120)

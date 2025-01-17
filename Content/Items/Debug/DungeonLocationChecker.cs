@@ -1,4 +1,5 @@
-﻿using Windfall.Content.Projectiles.NPCAnimations;
+﻿using Windfall.Content.Projectiles.Boss.Orator;
+using Windfall.Content.Projectiles.NPCAnimations;
 
 namespace Windfall.Content.Items.Debug;
 
@@ -17,9 +18,8 @@ public class DungeonLocationChecker : ModItem, ILocalizedModType
     public override bool? UseItem(Player player)
     {
         //NPC.NewNPCDirect(Entity.GetSource_FromAI(), new Vector2(Main.dungeonX, Main.dungeonY).ToWorldCoordinates(), NPCID.Zombie);
-        Projectile.NewProjectile(Entity.GetSource_FromAI(), new Vector2(Main.dungeonX, Main.dungeonY).ToWorldCoordinates(), Vector2.Zero, ModContent.ProjectileType<LunaticCultistProj>(), 0, 0);
-        Main.NewText($"Your dungeon is located at X: {Main.dungeonX * 16}, Y: {Main.dungeonY * 16}", Color.Yellow);
-        Main.NewText($"Your position is at X: {player.position.X}, Y: {player.position.Y}", Color.Yellow);
+        if(Main.netMode != NetmodeID.MultiplayerClient)
+            Projectile.NewProjectile(null, Main.player[0].Center - Vector2.UnitY * 72, Vector2.UnitX.RotatedBy(Main.rand.NextFloat(-0.5f, 0.5f)) * (float)Math.Sin(Main.GlobalTimeWrappedHourly), ModContent.ProjectileType<EmpyreanThorn>(), 0, 0, ai0: 60, ai1: 16, ai2: 1);
         return true;
     }
 }

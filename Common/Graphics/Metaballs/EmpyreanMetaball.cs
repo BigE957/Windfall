@@ -27,7 +27,7 @@ public class EmpyreanMetaball : Metaball
     {
         public float Size = size;
 
-        public Projectile Projectile = projectile;
+        public int ProjectileIndex = projectile.whoAmI;
 
         public Vector2 Offset = offset;
 
@@ -122,7 +122,7 @@ public class EmpyreanMetaball : Metaball
         
         foreach (EmpyreanBorderParticle particle in EmpyreanStickyParticles)
         {
-            Projectile myProj = particle.Projectile;
+            Projectile myProj = Main.projectile[particle.ProjectileIndex];
             
             if(particle.spin)
                 if (particle.Rotation > 0)
@@ -136,7 +136,7 @@ public class EmpyreanMetaball : Metaball
                 particle.Center -= myProj.velocity / 2;  
         }
         if(EmpyreanStickyParticles.Count != 0)
-            EmpyreanStickyParticles.RemoveAll(p => p.Projectile == null || !p.Projectile.active);
+            EmpyreanStickyParticles.RemoveAll(p => !Main.projectile.IndexInRange(p.ProjectileIndex) || !Main.projectile[p.ProjectileIndex].active);
     }
     public override void PrepareSpriteBatch(SpriteBatch spriteBatch)
     {
