@@ -1,10 +1,12 @@
-﻿using static Windfall.Common.Netcode.WindfallNetcode;
-using Terraria.ModLoader.IO;
-using Luminance.Common.VerletIntergration;
-using Windfall.Common.Graphics.Verlet;
+﻿using Terraria.ModLoader.IO;
 using Windfall.Content.Tiles.Furnature.VerletHangers.Hangers;
 using Windfall.Content.Items.Placeables.Furnature.VerletHangers.Decorations;
 using Windfall.Content.Items.Tools;
+using Terraria.Chat;
+using Luminance.Common.VerletIntergration;
+using CalamityMod.TileEntities;
+using static Windfall.Common.Netcode.WindfallNetcode;
+using CalamityMod.Tiles.DraedonStructures;
 
 namespace Windfall.Content.Tiles.TileEntities;
 public class HangerEntity : ModTileEntity
@@ -51,19 +53,19 @@ public class HangerEntity : ModTileEntity
         }
     }
 
-    private int sgementCount = 0;
+    private int segmentCount = 0;
     public int SegmentCount
     {
-        get => sgementCount;
+        get => segmentCount;
         set
         {
-            sgementCount = value;
+            segmentCount = value;
             SendSyncPacket();
         }
     }
 
     public List<VerletSegment> MainVerlet = [];
-    
+
     public Dictionary<int, Tuple<List<VerletSegment>, int, int>> DecorationVerlets = [];
 
     public override bool IsTileValidForEntity(int x, int y)
@@ -74,27 +76,27 @@ public class HangerEntity : ModTileEntity
 
         return true;
     }
-
     public override int Hook_AfterPlacement(int i, int j, int type, int style, int direction, int alternate)
     {
         if (Main.netMode == NetmodeID.MultiplayerClient)
         {
-            NetMessage.SendTileSquare(Main.myPlayer, i, j, 1, 1);
-            NetMessage.SendData(MessageID.TileEntityPlacement, -1, -1, null, i, j, Type);
+            NetMessage.SendTileSquare(Main.myPlayer, i, j, 1);
+            NetMessage.SendData(MessageID.TileEntityPlacement, -1, -1, null, i, j, Type, 0f, 0, 0, 0);
             return -1;
         }
-
-        int id = Place(i, j);
-        return id;
+        return Place(i, j);
     }
 
-    public override void OnNetPlace() => NetMessage.SendData(MessageID.TileEntitySharing, -1, -1, null, ID, Position.X, Position.Y);
-
+    public override void OnNetPlace()
+    {
+        if (Main.netMode == NetmodeID.Server)
+        {
+            NetMessage.SendData(MessageID.TileEntitySharing, number: ID, number2: Position.X, number3: Position.Y);
+        }
+    }
 
     public override void Update()
     {
-        if (!Main.tile[Position].HasTile || Main.tile[Position].TileType != ModContent.TileType<HangerTile>())
-            Kill(Position.X, Position.Y);
         if (partnerLocation != Point16.NegativeOne)
         {
             if (FindTileEntity<HangerEntity>(partnerLocation.X, partnerLocation.Y, 1, 1) == null)
@@ -103,67 +105,6 @@ public class HangerEntity : ModTileEntity
                 State = 0;
             }
         }
-
-        Particle particle = null;
-
-        if (DecorationID.DecorationTypes.Contains(Main.LocalPlayer.HeldItem.type))
-        {
-            Decoration decor = (Decoration)Main.LocalPlayer.HeldItem.ModItem;
-            Vector2 worldPos = Position.ToWorldCoordinates();
-
-            Color color = Color.White;
-            if (DecorationVerlets.ContainsKey(-1))
-                color = Color.Red;
-            else if ((worldPos - Main.MouseWorld).LengthSquared() < 25)
-            {
-                decor.HangIndex = -2;
-                decor.HE = this;
-                color = Color.Green;
-            }
-
-            particle = new GlowOrbParticle(worldPos, Vector2.Zero, false, 2, 0.5f, color, needed: true);
-        } 
-        else if(Main.LocalPlayer.HeldItem.type == ModContent.ItemType<CordShears>())
-        {
-            CordShears shears = (CordShears)Main.LocalPlayer.HeldItem.ModItem;
-            Vector2 worldPos = Position.ToWorldCoordinates();
-
-            Color color = Color.White;
-            if(!(DecorationVerlets.ContainsKey(-1) || state != PairedState.Unpaired))
-            {
-                color = Color.Red;
-            }
-            else if ((worldPos - Main.MouseWorld).LengthSquared() < 25)
-            {
-                shears.HangIndex = -2;
-                shears.HE = this;
-                color = Color.Green;
-            }
-
-            particle = new GlowOrbParticle(worldPos, Vector2.Zero, false, 2, 0.5f, color, needed: true);
-        } 
-        else if (Main.LocalPlayer.HeldItem.type == ModContent.ItemType<CordageMeter>())
-        {
-            CordageMeter meter = (CordageMeter)Main.LocalPlayer.HeldItem.ModItem;
-            Vector2 worldPos = Position.ToWorldCoordinates();
-
-            Color color = Color.White;
-            if (!(DecorationVerlets.ContainsKey(-1) || state != PairedState.Unpaired))
-            {
-                color = Color.Red;
-            }
-            else if ((worldPos - Main.MouseWorld).LengthSquared() < 25)
-            {
-                meter.HangIndex = -2;
-                meter.HE = this;
-                color = Color.Green;
-            }
-
-            particle = new GlowOrbParticle(worldPos, Vector2.Zero, false, 2, 0.5f, color, needed: true);
-        }
-        if(particle != null)
-            GeneralParticleHandler.SpawnParticle(particle);
-
     }
 
     public override void OnKill()
@@ -177,7 +118,6 @@ public class HangerEntity : ModTileEntity
                 partner.PartnerLocation = null;
             }
         }
-        VerletHangerDrawing.hangers.Remove(Position);
     }
 
     public override void SaveData(TagCompound tag)
@@ -189,10 +129,11 @@ public class HangerEntity : ModTileEntity
             tag["PartnerLocationX"] = partnerLocation.X;
             tag["PartnerLocationY"] = partnerLocation.Y;
         }
-        if (sgementCount != 0)
-            tag["Distance"] = sgementCount;
+        if (segmentCount != 0)
+            tag["Distance"] = segmentCount;
         if (cordID != 0)
             tag["RopeID"] = cordID;
+        
         if(DecorationVerlets.Count > 0)
         {
             tag["DecorationCount"] = DecorationVerlets.Count;
@@ -211,15 +152,14 @@ public class HangerEntity : ModTileEntity
         int x = tag.GetShort("PartnerLocationX");
         int y = tag.GetShort("PartnerLocationY");
         partnerLocation = new(x, y);
-        sgementCount = tag.GetInt("Distance");
+        segmentCount = tag.GetInt("Distance");
         cordID = tag.GetByte("RopeID");
+        
         int decorationCount = tag.GetInt("DecorationCount");
         for (int i = 0; i < decorationCount; i++)
         {
             DecorationVerlets.Add(tag.GetInt($"DecorationIndex{i}"), new([], tag.GetInt($"DecorationType{i}"), tag.GetInt($"DecorationLength{i}")));
         }
-
-        VerletHangerDrawing.hangers.Add(Position);
     }
 
     public override void NetSend(BinaryWriter writer)
@@ -227,8 +167,16 @@ public class HangerEntity : ModTileEntity
         writer.Write(State);
         writer.Write(partnerLocation.X);
         writer.Write(partnerLocation.Y);
-        writer.Write(sgementCount);
+        writer.Write(segmentCount);
         writer.Write(cordID);
+
+        writer.Write(DecorationVerlets.Count);
+        for (int i = 0; i < DecorationVerlets.Count; i++)
+        {
+            writer.Write(DecorationVerlets.Keys.ToArray()[i]);
+            writer.Write(DecorationVerlets.Values.ToArray()[i].Item2);
+            writer.Write(DecorationVerlets.Values.ToArray()[i].Item3);
+        }
     }
 
     public override void NetReceive(BinaryReader reader)
@@ -237,24 +185,39 @@ public class HangerEntity : ModTileEntity
         int x = reader.ReadInt16();
         int y = reader.ReadInt16();
         partnerLocation = new(x, y);
-        sgementCount = reader.ReadInt32();
+        segmentCount = reader.ReadInt32();
         cordID = reader.ReadByte();
+
+        DecorationVerlets.Clear();
+        int decorationCount = reader.ReadInt32();
+        for (int i = 0; i < decorationCount; i++)
+        {
+            DecorationVerlets.Add(reader.ReadInt32(), new([], reader.ReadInt32(), reader.ReadInt32()));
+        }
     }
 
-    private void SendSyncPacket()
+    public void SendSyncPacket()
     {
         if (Main.netMode == NetmodeID.SinglePlayer)
             return;
         ModPacket packet = Mod.GetPacket();
-        packet.Write((byte)WFNetcodeMessages.StonePlaqueSync);
+        packet.Write((byte)WFNetcodeMessages.HangerSync);
         packet.Write(ID);
+
         packet.Write(State);
         packet.Write(partnerLocation.X);
         packet.Write(partnerLocation.Y);
-        packet.Write(sgementCount);
+        packet.Write(segmentCount);
         packet.Write(cordID);
 
-        packet.Send();
+        packet.Write(DecorationVerlets.Count);
+        for (int i = 0; i < DecorationVerlets.Count; i++)
+        {
+            packet.Write(DecorationVerlets.Keys.ToArray()[i]);
+            packet.Write(DecorationVerlets.Values.ToArray()[i].Item2);
+            packet.Write(DecorationVerlets.Values.ToArray()[i].Item3);
+        }
+        packet.Send(-1, -1);
     }
 
     internal static bool ReadSyncPacket(Mod mod, BinaryReader reader)
@@ -262,37 +225,31 @@ public class HangerEntity : ModTileEntity
         int teID = reader.ReadInt32();
         bool exists = ByID.TryGetValue(teID, out TileEntity te);
 
-        // The rest of the packet must be read even if it turns out the factory doesn't exist for whatever reason.
-        PairedState paired = (PairedState)reader.ReadByte();
-        int x = reader.ReadInt32();
-        int y = reader.ReadInt32();
-        Point16 partner = new(x, y);
-        int dist = reader.ReadInt32();
-        byte id = reader.ReadByte();
+        PairedState state = (PairedState)reader.ReadByte();
+        int x = reader.ReadInt16();
+        int y = reader.ReadInt16();
+        Point16 partnerLocation = new(x, y);
+        int segmentCount = reader.ReadInt32();
+        byte cordID = reader.ReadByte();
 
-
-        // When a server gets this packet, it immediately sends an equivalent packet to all clients.
-        if (Main.netMode == NetmodeID.Server)
+        Dictionary<int, Tuple<List<VerletSegment>, int, int>> DecorationVerlets = [];
+        int decorationCount = reader.ReadInt32();
+        for (int i = 0; i < decorationCount; i++)
         {
-            ModPacket packet = mod.GetPacket();
-            packet.Write((byte)WFNetcodeMessages.HangerSync);
-            packet.Write(teID);
-            packet.Write(partner.X);
-            packet.Write(partner.Y);
-            packet.Write(dist);
-            packet.Write(id);
-
-            packet.Send();
+            DecorationVerlets.Add(reader.ReadInt32(), new([], reader.ReadInt32(), reader.ReadInt32()));
         }
 
-        if (exists && te is HangerEntity HE)
+        if (exists && te is HangerEntity hanger)
         {
-            HE.state = paired;
-            HE.partnerLocation = partner;
-            HE.sgementCount = dist;
-            HE.cordID = id;
+            hanger.state = state;
+            hanger.partnerLocation = partnerLocation;
+            hanger.segmentCount = segmentCount;
+            hanger.cordID = cordID;
+            hanger.DecorationVerlets = DecorationVerlets;
+
             return true;
         }
+
         return false;
     }
 }

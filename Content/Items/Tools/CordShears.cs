@@ -37,7 +37,12 @@ public class CordShears : ModItem
                 HangIndex = -1;
                 return true;
             }
-            if (!HE.DecorationVerlets.Remove(-1))
+
+            if(HE.DecorationVerlets.TryGetValue(-1, out Tuple<List<Luminance.Common.VerletIntergration.VerletSegment>, int, int> value))
+                Item.NewItem(Item.GetSource_DropAsItem(), HE.Position.ToWorldCoordinates(), DecorationID.DecorationTypes[value.Item2]);
+            bool removalFail = !HE.DecorationVerlets.Remove(-1);
+
+            if (removalFail)
             {
                 #region State Dependent Clearing
                 switch (HE.State)
@@ -74,6 +79,7 @@ public class CordShears : ModItem
                 }
                 HE.PartnerLocation = null;
             }
+            HE.SendSyncPacket();
         }
         else if(HangIndex != -1)
         {
@@ -83,8 +89,9 @@ public class CordShears : ModItem
                 HangIndex = -1;
                 return true;
             }
-            Item.NewItem(null, HE.MainVerlet[HangIndex].Position, DecorationID.DecorationTypes[HE.DecorationVerlets[HangIndex].Item2]);
+            Item.NewItem(Item.GetSource_DropAsItem(), HE.MainVerlet[HangIndex].Position, DecorationID.DecorationTypes[HE.DecorationVerlets[HangIndex].Item2]);
             HE.DecorationVerlets.Remove(HangIndex);
+            HE.SendSyncPacket();
         }
         return true;
     }

@@ -108,16 +108,6 @@ public class StonePlaqueEntity : ModTileEntity
         // The rest of the packet must be read even if it turns out the factory doesn't exist for whatever reason.
         string text = reader.ReadString();
 
-        // When a server gets this packet, it immediately sends an equivalent packet to all clients.
-        if (Main.netMode == NetmodeID.Server)
-        {
-            ModPacket packet = mod.GetPacket();
-            packet.Write((byte)WFNetcodeMessages.StonePlaqueSync);
-            packet.Write(teID);
-            packet.Write(text);
-            packet.Send();
-        }
-
         if (exists && te is StonePlaqueEntity stonePlaque)
         {
             stonePlaque.myText = text;

@@ -68,11 +68,10 @@ public class CordageMeter : ModItem
             }
             if (HE.DecorationVerlets[HangIndex].Item3 == 2 && sizeChange == -1)
                 return true;
-            Main.NewText(HE.DecorationVerlets[HangIndex].Item3);
             Tuple<List<VerletSegment>, int, int> newDV = new(HE.DecorationVerlets[HangIndex].Item1, HE.DecorationVerlets[HangIndex].Item2, HE.DecorationVerlets[HangIndex].Item3 + sizeChange);
             HE.DecorationVerlets.Remove(HangIndex);
             HE.DecorationVerlets[HangIndex] = newDV;
-            Main.NewText(newDV.Item3);
+            HE.SendSyncPacket();
         }
         return true;
     }

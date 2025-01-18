@@ -1,4 +1,5 @@
-﻿using Windfall.Content.Tiles.TileEntities;
+﻿using Terraria.Chat;
+using Windfall.Content.Tiles.TileEntities;
 
 namespace Windfall.Common.Netcode;
 public class WindfallNetcode
@@ -13,6 +14,7 @@ public class WindfallNetcode
         try
         {
             WFNetcodeMessages msgType = (WFNetcodeMessages)reader.ReadByte();
+
             switch (msgType)
             {
                 #region Tile Entities

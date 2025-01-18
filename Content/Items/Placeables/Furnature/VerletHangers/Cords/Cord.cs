@@ -48,7 +48,7 @@ public abstract class Cord : ModItem
                 StartingEntity.PartnerLocation = PlacementPoint;
                 Vector2 StringStart = StartingEntity.Position.ToWorldCoordinates();
                 Vector2 StringEnd = StartingEntity.PartnerLocation.Value.ToWorldCoordinates();
-                StartingEntity.SegmentCount = (int)Math.Ceiling((StringEnd - StringStart).Length() / 10f);
+                StartingEntity.SegmentCount = (int)Math.Ceiling((StringEnd - StringStart).Length() / 15f);
                 StartingEntity.CordID = (byte?)cordID;
             }
             else
@@ -75,7 +75,7 @@ public abstract class Cord : ModItem
 
     public override void HoldItem(Player player)
     {
-        if (PlacingInProgress)
+        if (PlacingInProgress && StartingEntity != null)
         {
             Vector2 StringStart = StartingEntity.Position.ToWorldCoordinates();
             Vector2 StringEnd = Main.MouseWorld;

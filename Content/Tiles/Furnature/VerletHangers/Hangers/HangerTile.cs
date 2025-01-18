@@ -1,15 +1,11 @@
-﻿using Luminance.Common.VerletIntergration;
-using Luminance.Core.Graphics;
+﻿using CalamityMod.TileEntities;
 using Terraria.Enums;
-using Windfall.Common.Graphics.Verlet;
 using Windfall.Content.Items.Placeables.Furnature.VerletHangers.Hangers;
-using Windfall.Content.Items.Placeables.Special;
 using Windfall.Content.Tiles.TileEntities;
 
 namespace Windfall.Content.Tiles.Furnature.VerletHangers.Hangers;
 public class HangerTile : ModTile
 {
-
     public override void SetStaticDefaults()
     {
         Main.tileFrameImportant[Type] = true;
@@ -26,8 +22,8 @@ public class HangerTile : ModTile
         TileObjectData.newTile.CoordinateWidth = 16;
         TileObjectData.newTile.CoordinateHeights = [16];
 
-        ModTileEntity te = ModContent.GetInstance<HangerEntity>();
-        TileObjectData.newTile.HookPostPlaceMyPlayer = new PlacementHook(te.Hook_AfterPlacement, -1, 0, false);
+        TileObjectData.newTile.HookPostPlaceMyPlayer = new PlacementHook(ModContent.GetInstance<HangerEntity>().Hook_AfterPlacement, -1, 0, true);
+        TileObjectData.newTile.UsesCustomCanPlace = true;
 
         TileObjectData.newTile.StyleHorizontal = false;
         TileObjectData.newTile.StyleWrapLimit = 4;
@@ -72,11 +68,9 @@ public class HangerTile : ModTile
         DustType = DustID.Silver;
     }
 
-    public override void PlaceInWorld(int i, int j, Item item)
+    public override void KillTile(int i, int j, ref bool fail, ref bool effectOnly, ref bool noItem)
     {
-        ModTileEntity te = ModContent.GetInstance<HangerEntity>();
-        te.ID = te.Place(i, j);
-
-        VerletHangerDrawing.hangers.Add(new(i, j));
+        if (!fail)
+            FindTileEntity<HangerEntity>(i, j, 1, 1)?.Kill(i, j);
     }
 }

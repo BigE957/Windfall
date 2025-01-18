@@ -58,6 +58,7 @@ public abstract class Decoration : ModItem
             }
             else
                 HE.DecorationVerlets.Add(HangIndex, new(newVerlet, DecorID, 8));
+            HE.SendSyncPacket();
         }
         return true;
     }
