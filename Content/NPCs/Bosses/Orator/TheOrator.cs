@@ -247,7 +247,7 @@ public class TheOrator : ModNPC
                 const int EndTime = 1500;
 
                 if (aiCounter > 150 && aiCounter < EndTime - 100 && aiCounter % 90 == 0 && Main.netMode != NetmodeID.MultiplayerClient)
-                    Projectile.NewProjectile(Terraria.Entity.GetSource_NaturalSpawn(), NPC.Center, Vector2.Zero, ModContent.ProjectileType<OratorJavelin>(), BoltDamage, 0f);
+                    Projectile.NewProjectile(Terraria.Entity.GetSource_NaturalSpawn(), NPC.Center, Vector2.Zero, ModContent.ProjectileType<OratorJavelin>(), BoltDamage, 0f, -1, 120, 1);
 
                 NPC.damage = 0;
                 int SpawnCount = CalamityWorld.death ? 3 : CalamityWorld.revenge || Main.expertMode ? 2 : 1;
@@ -322,8 +322,21 @@ public class TheOrator : ModNPC
                     #endregion
 
                     #region Projectiles
-                    if (CalamityWorld.revenge && aiCounter > 0 && aiCounter < 1000 && aiCounter % (CalamityWorld.death ? 90 : 120) == 0 && Main.netMode != NetmodeID.MultiplayerClient)
-                        Projectile.NewProjectile(Terraria.Entity.GetSource_NaturalSpawn(), NPC.Center, Vector2.Zero, ModContent.ProjectileType<OratorJavelin>(), BoltDamage, 0f);
+                    if (Main.expertMode && aiCounter > 0 && aiCounter < 900 && aiCounter % (CalamityWorld.death ? 100 : 120) == 0 && Main.netMode != NetmodeID.MultiplayerClient)
+                    {
+                        Vector2 spawnPos = NPC.Center + NPC.velocity;
+                        Projectile.NewProjectileDirect(Terraria.Entity.GetSource_NaturalSpawn(), spawnPos, Vector2.UnitY * -7.5f, ModContent.ProjectileType<DarkGlob>(), GlobDamage, 0f, -1, 1, 0.75f);
+                        if(CalamityWorld.revenge)
+                        {
+                            Projectile.NewProjectileDirect(Terraria.Entity.GetSource_NaturalSpawn(), spawnPos, new(4, -7.5f), ModContent.ProjectileType<DarkGlob>(), GlobDamage, 0f, -1, 1, 0.75f);
+                            Projectile.NewProjectileDirect(Terraria.Entity.GetSource_NaturalSpawn(), spawnPos, new(-4, -7.5f), ModContent.ProjectileType<DarkGlob>(), GlobDamage, 0f, -1, 1, 0.75f);
+                        }
+                        if (CalamityWorld.death)
+                        {
+                            Projectile.NewProjectileDirect(Terraria.Entity.GetSource_NaturalSpawn(), spawnPos, new(8, -7.5f), ModContent.ProjectileType<DarkGlob>(), GlobDamage, 0f, -1, 1, 0.75f);
+                            Projectile.NewProjectileDirect(Terraria.Entity.GetSource_NaturalSpawn(), spawnPos, new(-8, -7.5f), ModContent.ProjectileType<DarkGlob>(), GlobDamage, 0f, -1, 1, 0.75f);
+                        }
+                    }
                     #endregion
                 }
                 if (aiCounter > 1100 || !NPC.AnyNPCs(ModContent.NPCType<OratorHand>()))
@@ -410,7 +423,7 @@ public class TheOrator : ModNPC
                         VectorToTarget = target.Center - NPC.Center;                                                        
                     float reelBackSpeedExponent = 2.6f;
                     float reelBackCompletion = Utils.GetLerpValue(0f, DashDelay, aiCounter + DashDelay, true);
-                    float reelBackSpeed = MathHelper.Lerp(2.5f, 16f, MathF.Pow(reelBackCompletion, reelBackSpeedExponent));
+                    float reelBackSpeed = Lerp(2.5f, 16f, MathF.Pow(reelBackCompletion, reelBackSpeedExponent));
                     Vector2 reelBackVelocity = NPC.DirectionTo(target.Center) * -reelBackSpeed;
                     NPC.velocity = Vector2.Lerp(NPC.velocity, reelBackVelocity, 0.25f);
                 }
@@ -444,9 +457,9 @@ public class TheOrator : ModNPC
                         if (Main.netMode != NetmodeID.MultiplayerClient && Main.expertMode)
                         {
                             if (aiCounter % 10 == 0)
-                                Projectile.NewProjectile(Terraria.Entity.GetSource_NaturalSpawn(), NPC.Center, VectorToTarget.RotatedBy(Pi / -2f).SafeNormalize(Vector2.UnitX) * 20, ModContent.ProjectileType<DarkBolt>(), BoltDamage, 0f, -1, 0, -20);
+                                Projectile.NewProjectile(Terraria.Entity.GetSource_NaturalSpawn(), NPC.Center, VectorToTarget.RotatedBy(Pi / -2f).SafeNormalize(Vector2.UnitX) * 20, ModContent.ProjectileType<DarkBolt>(), BoltDamage, 0f, -1, 0, -20, 1);
                             else if (aiCounter % 5 == 0)
-                                Projectile.NewProjectile(Terraria.Entity.GetSource_NaturalSpawn(), NPC.Center, VectorToTarget.RotatedBy(Pi / 2f).SafeNormalize(Vector2.UnitX) * 20, ModContent.ProjectileType<DarkBolt>(), BoltDamage, 0f, -1, 0, -20);
+                                Projectile.NewProjectile(Terraria.Entity.GetSource_NaturalSpawn(), NPC.Center, VectorToTarget.RotatedBy(Pi / 2f).SafeNormalize(Vector2.UnitX) * 20, ModContent.ProjectileType<DarkBolt>(), BoltDamage, 0f, -1, 0, -20, 0);
                         }
                     }
                     
@@ -460,7 +473,7 @@ public class TheOrator : ModNPC
                             for (int i = 0; i < radialCounter; i++)
                             {
                                 Vector2 rotationVector = (target.Center - NPC.Center).SafeNormalize(Vector2.Zero).RotatedBy(TwoPi / radialCounter * i);
-                                Projectile.NewProjectile(Terraria.Entity.GetSource_NaturalSpawn(), NPC.Center + NPC.velocity + rotationVector * 124, rotationVector * 20, ModContent.ProjectileType<DarkBolt>(), BoltDamage, 0f, -1, 0, -10);
+                                Projectile.NewProjectile(Terraria.Entity.GetSource_NaturalSpawn(), NPC.Center + NPC.velocity + rotationVector * 124, rotationVector * 20, ModContent.ProjectileType<DarkBolt>(), BoltDamage, 0f, -1, 0, -10, i % 2 == 0 ? 1 : 0);
                             }                        
                         if (++attackCounter == SliceDashCount)
                             aiCounter = -200;
@@ -477,18 +490,18 @@ public class TheOrator : ModNPC
                 NPC.velocity = (goalPosition - NPC.Center).SafeNormalize(Vector2.Zero) * ((goalPosition - NPC.Center).Length() / 10f);
                 #endregion
                 #region Projectiles
-                if (aiCounter > 60 && NPC.Center.Y < target.Center.Y - 50)
+                if (aiCounter > 90 && NPC.Center.Y < target.Center.Y - 50)
                 {
                     Projectile proj;
                     if (Main.netMode != NetmodeID.MultiplayerClient && NPC.AnyNPCs(ModContent.NPCType<OratorHand>()) && aiCounter > 120 && aiCounter % 10 == 0)
                     {
                         //Anti-Cheesers
                         NPC hand = Main.npc[NPC.FindFirstNPC(ModContent.NPCType<OratorHand>())]; ;
-                        proj = Projectile.NewProjectileDirect(Terraria.Entity.GetSource_NaturalSpawn(), hand.Center + new Vector2(0, -32), new Vector2(Main.rand.NextFloat(0f, 2f), -12), ModContent.ProjectileType<DarkGlob>(), GlobDamage * 3, 0f, -1, 1, 1.5f);
+                        proj = Projectile.NewProjectileDirect(Terraria.Entity.GetSource_NaturalSpawn(), hand.Center + new Vector2(0, -32), new Vector2(Main.rand.NextFloat(0f, 2f), -12), ModContent.ProjectileType<DarkGlob>(), GlobDamage * 3, 0f, -1, 1, 1.5f, -1);
                         proj.Calamity().DealsDefenseDamage = true;
 
                         hand = Main.npc.Last(n => n != null && n.active && n.type == ModContent.NPCType<OratorHand>());
-                        proj = Projectile.NewProjectileDirect(Terraria.Entity.GetSource_NaturalSpawn(), hand.Center + new Vector2(-64, -32), new Vector2(Main.rand.NextFloat(-2f, 0f), -12), ModContent.ProjectileType<DarkGlob>(), GlobDamage * 3, 0f, -1, 1, 1.5f);
+                        proj = Projectile.NewProjectileDirect(Terraria.Entity.GetSource_NaturalSpawn(), hand.Center + new Vector2(-64, -32), new Vector2(Main.rand.NextFloat(-2f, 0f), -12), ModContent.ProjectileType<DarkGlob>(), GlobDamage * 3, 0f, -1, 1, 1.5f, -1);
                         proj.Calamity().DealsDefenseDamage = true;
                     }
                     if (aiCounter % AttackFrequency == 0)
@@ -500,13 +513,15 @@ public class TheOrator : ModNPC
                         }
                         if (Main.netMode != NetmodeID.MultiplayerClient)
                         {
-                            proj = Projectile.NewProjectileDirect(Terraria.Entity.GetSource_NaturalSpawn(), NPC.Center, new Vector2((float)(10 * Math.Sin(aiCounter)), -5), ModContent.ProjectileType<DarkGlob>(), GlobDamage, 0f, -1, 1, 0.5f);
+                            Vector2 spawnPos = NPC.Center + NPC.velocity;
+
+                            proj = Projectile.NewProjectileDirect(Terraria.Entity.GetSource_NaturalSpawn(), spawnPos, new Vector2((float)(10 * Math.Sin(aiCounter)), -5), ModContent.ProjectileType<DarkGlob>(), GlobDamage, 0f, -1, 1, 0.5f);
                             proj.Calamity().DealsDefenseDamage = true;
-                            proj = Projectile.NewProjectileDirect(Terraria.Entity.GetSource_NaturalSpawn(), NPC.Center, new Vector2((float)(-10 * Math.Sin(aiCounter)), -5), ModContent.ProjectileType<DarkGlob>(), GlobDamage, 0f, -1, 1, 0.5f);
+                            proj = Projectile.NewProjectileDirect(Terraria.Entity.GetSource_NaturalSpawn(), spawnPos, new Vector2((float)(-10 * Math.Sin(aiCounter)), -5), ModContent.ProjectileType<DarkGlob>(), GlobDamage, 0f, -1, 1, 0.5f);
                             proj.Calamity().DealsDefenseDamage = true;
                             if (CalamityWorld.revenge && aiCounter % 20 == 0)
                             {
-                                proj = Projectile.NewProjectileDirect(Terraria.Entity.GetSource_NaturalSpawn(), NPC.Center, new Vector2(0, -5), ModContent.ProjectileType<DarkGlob>(), GlobDamage, 0f, -1, 1, 0.5f);
+                                proj = Projectile.NewProjectileDirect(Terraria.Entity.GetSource_NaturalSpawn(), spawnPos, new Vector2(0, -5), ModContent.ProjectileType<DarkGlob>(), GlobDamage, 0f, -1, 1, 0.5f);
                                 proj.Calamity().DealsDefenseDamage = true;
                             }
                         }
@@ -607,7 +622,7 @@ public class TheOrator : ModNPC
                         NPC.Center = border.Center + (VectorToTarget = VectorToTarget.RotatedBy(OrbitRate));
                         #endregion
                         if (aiCounter % 10 == 0 && aiCounter > 30 && Main.netMode != NetmodeID.MultiplayerClient)
-                            Projectile.NewProjectile(Terraria.Entity.GetSource_NaturalSpawn(), NPC.Center, (border.Center - NPC.Center).SafeNormalize(Vector2.UnitX) * 20f, ModContent.ProjectileType<DarkBolt>(), BoltDamage, 0f);
+                            Projectile.NewProjectile(Terraria.Entity.GetSource_NaturalSpawn(), NPC.Center, (border.Center - NPC.Center).SafeNormalize(Vector2.UnitX) * 20f, ModContent.ProjectileType<DarkBolt>(), BoltDamage, 0f, ai2: aiCounter % 20 == 0 ? 1 : 0);
                         if (Main.expertMode && aiCounter % (CalamityWorld.revenge ? 90 : 120) == 0 && aiCounter > 30)
                         {
                             target = Main.player[Player.FindClosest(NPC.Center, NPC.width, NPC.height)];
@@ -629,7 +644,7 @@ public class TheOrator : ModNPC
                             }
                         }
                     }
-                    else if(aiCounter < NPC.ai[3])
+                    else if (aiCounter < NPC.ai[3])
                     {
                         #region Movement
                         float approachRatio = Clamp((aiCounter - (NPC.ai[3] * 0.66f)) / 120f, 0f, 1f);
@@ -637,8 +652,12 @@ public class TheOrator : ModNPC
                         NPC.Center = border.Center + (VectorToTarget = VectorToTarget.RotatedBy(OrbitRate));
                         #endregion
 
-                        if (aiCounter % 30 == 0 && aiCounter < (NPC.ai[3] - 60) && Main.netMode != NetmodeID.MultiplayerClient)
-                            Projectile.NewProjectile(Terraria.Entity.GetSource_NaturalSpawn(), NPC.Center, Vector2.Zero, ModContent.ProjectileType<OratorJavelin>(), BoltDamage, 0f);
+                        float lerp = (aiCounter - (NPC.ai[3] * 0.66f)) / (NPC.ai[3] * 0.33f);
+                        if ((aiCounter % ((int)Lerp(40, 20, lerp))) == 0 && aiCounter < (NPC.ai[3] - 60) && Main.netMode != NetmodeID.MultiplayerClient)
+                        {
+                            float angle = PiOver2 * Main.rand.Next(4) + (aiCounter / 12f);
+                            Projectile.NewProjectile(Terraria.Entity.GetSource_NaturalSpawn(), target.Center + Vector2.UnitX.RotatedBy(angle) * 250, Vector2.Zero, ModContent.ProjectileType<OratorJavelin>(), BoltDamage, 0f, -1, 45, 5, angle);
+                        }
                     }
                     else
                     {
@@ -687,16 +706,16 @@ public class TheOrator : ModNPC
                             int projectileCount = CalamityWorld.revenge ? 8 : 6;
                             for (int i = 0; i < projectileCount; i++)
                                 if (Main.netMode != NetmodeID.MultiplayerClient)
-                                    Projectile.NewProjectile(Terraria.Entity.GetSource_NaturalSpawn(), NPC.Center, (target.Center - NPC.Center).SafeNormalize(Vector2.Zero).RotatedBy(TwoPi / projectileCount * i) * 3f, ModContent.ProjectileType<DarkGlob>(), GlobDamage, 0f, -1, 2, 0.75f);
+                                    Projectile.NewProjectile(Terraria.Entity.GetSource_NaturalSpawn(), NPC.Center, (target.Center - NPC.Center).SafeNormalize(Vector2.Zero).RotatedBy(TwoPi / projectileCount * i) * 3f, ModContent.ProjectileType<FadingStar>(), BoltDamage, 0.5f);
                         }
                         if (Main.netMode != NetmodeID.MultiplayerClient)
                         {
                             int projectileCount = CalamityWorld.revenge ? 3 : 2;
                             for (int i = 0; i < projectileCount; i++)
                             {
-                                Vector2 spawnPos = border.Center + Vector2.UnitY.RotatedBy((TwoPi / projectileCount * i) + (0.015f * aiCounter)) * -700;
-                                Projectile glob = Projectile.NewProjectileDirect(Terraria.Entity.GetSource_NaturalSpawn(), spawnPos, (border.Center - spawnPos).SafeNormalize(Vector2.UnitX) * 8f, ModContent.ProjectileType<DarkGlob>(), GlobDamage, 0f, -1, 2, 0.5f);
-                                glob.timeLeft = 90;
+                                Vector2 spawnPos = border.Center + Vector2.UnitY.RotatedBy((TwoPi / projectileCount * i) + (0.015f * aiCounter)) * -750;
+                                Projectile glob = Projectile.NewProjectileDirect(Terraria.Entity.GetSource_NaturalSpawn(), spawnPos, (border.Center - spawnPos).SafeNormalize(Vector2.UnitX) * 8f, ModContent.ProjectileType<DarkGlob>(), GlobDamage, 0f, -1, 2, 0.75f);
+                                glob.timeLeft = 95;
                             }
                         }
                     }
@@ -708,7 +727,7 @@ public class TheOrator : ModNPC
                         for (int i = 0; i < projCount; i++)
                         {
                             if (Main.netMode != NetmodeID.MultiplayerClient)
-                                Projectile.NewProjectile(Terraria.Entity.GetSource_NaturalSpawn(), NPC.Center, dir.RotatedBy(TwoPi / projCount * i) * 20, ModContent.ProjectileType<DarkBolt>(), BoltDamage, 0f, -1, 0, -20);
+                                Projectile.NewProjectile(Terraria.Entity.GetSource_NaturalSpawn(), NPC.Center, dir.RotatedBy(TwoPi / projCount * i) * 20, ModContent.ProjectileType<DarkBolt>(), BoltDamage, 0f, -1, 0, -20, i % 2 == 0 ? 1 : 0);
                         }
                     }
                     else if (Main.netMode != NetmodeID.MultiplayerClient)
@@ -801,7 +820,7 @@ public class TheOrator : ModNPC
                 if (Main.netMode != NetmodeID.MultiplayerClient && aiCounter > 0 && aiCounter % 120 == 0)
                 {
                     Vector2 spawnPosition = border.Center + (Vector2.UnitX * (oratorBorder.Radius + 200)).RotatedBy(Main.rand.NextFloat(TwoPi));
-                    Projectile.NewProjectile(Terraria.Entity.GetSource_NaturalSpawn(), spawnPosition, (border.Center - spawnPosition).SafeNormalize(Vector2.Zero).RotatedBy(Main.rand.NextFloat(-0.75f, 0.75f)) * Main.rand.NextFloat(4f, 6f), ModContent.ProjectileType<DarkGlob>(), GlobDamage, 0f, -1, 2, 0.5f);
+                    Projectile.NewProjectile(Terraria.Entity.GetSource_NaturalSpawn(), spawnPosition, (border.Center - spawnPosition).SafeNormalize(Vector2.Zero).RotatedBy(Main.rand.NextFloat(-0.75f, 0.75f)) * Main.rand.NextFloat(4f, 6f), ModContent.ProjectileType<FadingStar>(), GlobDamage, 0.25f);
                 }
                 #endregion
 
@@ -831,10 +850,10 @@ public class TheOrator : ModNPC
                     border = Main.projectile.First(p => p.active && p.type == ModContent.ProjectileType<OratorBorder>());
                     if (aiCounter % attackFrequency == 0)
                     {
-                        attackCounter = Main.rand.NextFloatDirection();
+                        attackCounter = Main.rand.NextFloat(-PiOver2, PiOver2);
                         if (Main.netMode != NetmodeID.MultiplayerClient)
                         {
-                            Projectile p = Projectile.NewProjectileDirect(Terraria.Entity.GetSource_NaturalSpawn(), border.Center, attackCounter.ToRotationVector2(), ModContent.ProjectileType<DarkTide>(), 0, 0f, ai0: 180, ai1: 1500, ai2: CalamityWorld.death ? 6f : CalamityWorld.revenge ? 5.5f : 5f);
+                            Projectile p = Projectile.NewProjectileDirect(Terraria.Entity.GetSource_NaturalSpawn(), border.Center, Vector2.UnitX.RotatedBy(attackCounter), ModContent.ProjectileType<DarkTide>(), 0, 0f, ai0: 180, ai1: 1500, ai2: CalamityWorld.death ? 6f : CalamityWorld.revenge ? 5.5f : 5f);
                             SoundEngine.PlaySound(SoundID.DD2_EtherianPortalSpawnEnemy with { Volume = 10f }, p.Center);
                         }
                     }
@@ -847,7 +866,7 @@ public class TheOrator : ModNPC
                             {
                                 if (Main.netMode != NetmodeID.MultiplayerClient)
                                 {
-                                    Vector2 myPos = initialPos + attackCounter.ToRotationVector2() * Main.rand.NextFloat(-500, 0) + (attackCounter + PiOver2).ToRotationVector2() * Main.rand.NextFloat(-800, 800);
+                                    Vector2 myPos = initialPos + Vector2.UnitX.RotatedBy(attackCounter) * Main.rand.NextFloat(-500, 0) + Vector2.UnitX.RotatedBy(attackCounter + PiOver2) * Main.rand.NextFloat(-800, 800);
                                     Projectile proj = Projectile.NewProjectileDirect(Terraria.Entity.GetSource_NaturalSpawn(), myPos, Vector2.Zero, ModContent.ProjectileType<DarkGlob>(), GlobDamage, 0f, -1, 0, Main.rand.NextFloat(0.5f, 1f));
                                     proj.timeLeft = attackGap * 2;
                                 }
@@ -855,7 +874,7 @@ public class TheOrator : ModNPC
                         }
                         if (Main.netMode != NetmodeID.MultiplayerClient)
                         {
-                            Projectile p = Projectile.NewProjectileDirect(Terraria.Entity.GetSource_NaturalSpawn(), border.Center, -attackCounter.ToRotationVector2(), ModContent.ProjectileType<DarkTide>(), 0, 0f, ai0: 180, ai1: 1500, ai2: CalamityWorld.death ? 6f : CalamityWorld.revenge ? 5.5f : 5f);
+                            Projectile p = Projectile.NewProjectileDirect(Terraria.Entity.GetSource_NaturalSpawn(), border.Center, Vector2.UnitX.RotatedBy(attackCounter + Pi), ModContent.ProjectileType<DarkTide>(), 0, 0f, ai0: 180, ai1: 1500, ai2: CalamityWorld.death ? 6f : CalamityWorld.revenge ? 5.5f : 5f);
                             SoundEngine.PlaySound(SoundID.DD2_EtherianPortalSpawnEnemy with { Volume = 10f }, p.Center);
                         }
                     }
@@ -1097,7 +1116,7 @@ public class TheOrator : ModNPC
                                     int radialCounter = CalamityWorld.death ? 9 : CalamityWorld.revenge ? 7 : 5;
                                     for (int i = 0; i < radialCounter; i++)
                                         if (Main.netMode != NetmodeID.MultiplayerClient)
-                                            Projectile.NewProjectile(Terraria.Entity.GetSource_NaturalSpawn(), NPC.Center, (target.Center - NPC.Center).SafeNormalize(Vector2.Zero).RotatedBy(PiOver2 - (Pi / radialCounter * i)) * 5, ModContent.ProjectileType<DarkGlob>(), GlobDamage, 0f, -1, 2, 0.5f);
+                                            Projectile.NewProjectile(Terraria.Entity.GetSource_NaturalSpawn(), NPC.Center, (target.Center - NPC.Center).SafeNormalize(Vector2.Zero).RotatedBy(PiOver2 - (Pi / radialCounter * i)) * 5, ModContent.ProjectileType<FadingStar>(), GlobDamage, 0f, -1);
                                 }
                             }
                             else if (aiCounter >= NPC.ai[3] + 450)
@@ -1165,7 +1184,7 @@ public class TheOrator : ModNPC
                     }
                 }
                 break;
-            //Animations
+            //Transitions
             case States.Spawning:
                 target = Main.player[Player.FindClosest(NPC.Center, NPC.width, NPC.height)];
                 #region Movement
@@ -1270,7 +1289,7 @@ public class TheOrator : ModNPC
                             DisplayMessage(baseKey + 2, NPC);
                             break;
                         case 300:
-                            if(Main.netMode == NetmodeID.MultiplayerClient)
+                            if(Main.netMode != NetmodeID.MultiplayerClient)
                                 Projectile.NewProjectile(Terraria.Entity.GetSource_NaturalSpawn(), target.Center, Vector2.Zero, ModContent.ProjectileType<OratorBorder>(), 0, 0f);
                             break;
                         case 360:
@@ -1584,12 +1603,12 @@ public class TheOrator : ModNPC
             NPC.frame.Y = frameHeight;
             NPC.frame.X = 144;
         }
-        else if (AIState == States.DarkStorm || AIState == States.DarkEmbrace || AIState == States.DarkMonster || AIState == States.DarkCollision || Main.projectile.Any(p => p.active && p.type == ModContent.ProjectileType<OratorScythe>()))
+        else if (AIState == States.DarkStorm || AIState == States.DarkEmbrace || AIState == States.DarkMonster || AIState == States.DarkCollision || AIState == States.DarkBarrage || Main.projectile.Any(p => p.active && p.type == ModContent.ProjectileType<OratorScythe>()))
         {
             NPC.frame.Y = frameHeight;
             NPC.frame.X = 0;
         }
-        else if (AIState == States.DarkFlight || AIState == States.DarkSpawn || AIState == States.DarkBarrage || AIState == States.DarkTides || AIState == States.Defeat || AIState == States.PhaseChange)
+        else if (AIState == States.DarkFlight || AIState == States.DarkSpawn || AIState == States.DarkTides || AIState == States.Defeat || AIState == States.PhaseChange)
         {
             NPC.frame.X = 144;
             NPC.frame.Y = 0;

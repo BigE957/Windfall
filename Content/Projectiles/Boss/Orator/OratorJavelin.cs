@@ -2,6 +2,7 @@
 using CalamityMod.World;
 using Terraria;
 using Windfall.Common.Graphics.Metaballs;
+using Windfall.Content.Items.Lore;
 using Windfall.Content.NPCs.Bosses.Orator;
 
 namespace Windfall.Content.Projectiles.Boss.Orator;
@@ -31,7 +32,38 @@ public class OratorJavelin : ModProjectile
         Projectile.Opacity = 0f;
         Projectile.damage = 50;
     }
-    
+
+    private int Delay
+    {
+        get => (int)Projectile.ai[0];
+        set => Projectile.ai[0] = value;
+    }
+
+    private enum PositioningType
+    {
+        None,
+        NoneNoRotate,
+        StickToOrator,
+        StickToOratorNoRotate,
+        StickToPlayer,
+        StickToPlayerNoRotate,
+    }
+    private PositioningType positioning
+    {
+        get => (PositioningType)Projectile.ai[1];
+        set => Projectile.ai[1] = (float)value;
+    }
+
+    public ref float Angle => ref Projectile.ai[2];
+
+    private int Time = 0;
+    private Vector2 centerPosition = Vector2.Zero;
+    private Player impaleTarget = null;
+    private int initialTargetDir = 0;
+    private Vector2 impaleOffset = Vector2.Zero;
+    private float impaleRotation = 0f;
+    private bool haveImpaled = false;
+
     public override void OnSpawn(IEntitySource source)
     {
         Player target = Main.player[Player.FindClosest(Projectile.Center, Projectile.width, Projectile.height)];
@@ -41,27 +73,25 @@ public class OratorJavelin : ModProjectile
             target = orator.As<TheOrator>().target;
 
         }
-        Angle = (target.Center - Projectile.Center).ToRotation();
-        Angle -= PiOver2;
-        if (Main.rand.NextBool())
-            Angle += Pi;
-        Angle += Main.rand.NextFloat(-Pi / 4, Pi / 4);
-        Projectile.ai[2] = Main.rand.Next(3);
+
+        if ((int)positioning <= 3)
+        {
+            Angle = (target.Center - Projectile.Center).ToRotation();
+            if (Delay > 30)
+            {
+                Angle -= PiOver2;
+                if (Main.rand.NextBool())
+                    Angle += Pi;
+                Angle += Main.rand.NextFloat(-Pi / 4, Pi / 4);
+            }
+            else
+                Angle += Pi;
+        }
+        Projectile.localAI[0] = Main.rand.Next(3);
         centerPosition = Projectile.Center;
         Projectile.netUpdate = true;
     }
-    private int Time
-    {
-        get => (int)Projectile.ai[0];
-        set => Projectile.ai[0] = value;
-    }
-    public ref float Angle => ref Projectile.ai[1];
-    private Vector2 centerPosition = Vector2.Zero;
-    private Player impaleTarget = null;
-    private int initialTargetDir = 0;
-    private Vector2 impaleOffset = Vector2.Zero;
-    private float impaleRotation = 0f;
-    private bool haveImpaled = false;
+
     public override void AI()
     {
         if (Projectile.Opacity < 1f)
@@ -92,31 +122,35 @@ public class OratorJavelin : ModProjectile
         else
         {
             Player target = Main.player[Player.FindClosest(Projectile.Center, Projectile.width, Projectile.height)];
-            if (NPC.AnyNPCs(ModContent.NPCType<TheOrator>()))
+            if ((positioning == PositioningType.StickToOrator || positioning == PositioningType.StickToOratorNoRotate) && NPC.AnyNPCs(ModContent.NPCType<TheOrator>()))
             {
                 NPC orator = Main.npc[NPC.FindFirstNPC(ModContent.NPCType<TheOrator>())];
                 centerPosition = orator.Center;
                 target = orator.As<TheOrator>().target;
             }
+            else if (positioning == PositioningType.StickToPlayer || positioning == PositioningType.StickToPlayerNoRotate)
+                centerPosition = target.Center;
 
-            if (Time < 120)
+            if (Time < Delay)
             {
-                Projectile.Center = centerPosition + Angle.ToRotationVector2() * 150f;
+                Projectile.Center = centerPosition + Angle.ToRotationVector2() * 150f * ((positioning == PositioningType.StickToPlayerNoRotate) ? 1.66f : 1);
                 Projectile.rotation = (target.Center - Projectile.Center).ToRotation();
-                Angle += 0.105f * ((120 - Time) / 120f);
+
+                if((int)positioning % 2 == 0)
+                    Angle += 0.105f * ((Delay - Time) / (float)Delay);
             }
             else
             {
-                if (Time - 120 < 30)
+                if (Time - Delay < 30)
                 {
                     float reelBackSpeedExponent = 2.6f;
-                    float reelBackCompletion = Utils.GetLerpValue(0f, 30, Time - 120, true);
+                    float reelBackCompletion = Utils.GetLerpValue(0f, 30, Time - Delay, true);
                     float reelBackSpeed = MathHelper.Lerp(2.5f, 16f, MathF.Pow(reelBackCompletion, reelBackSpeedExponent));
                     Vector2 reelBackVelocity = (target.Center - Projectile.Center).SafeNormalize(Vector2.UnitY) * -reelBackSpeed;
                     Projectile.velocity = Vector2.Lerp(Projectile.velocity, reelBackVelocity, 0.25f);
                     Projectile.rotation = (target.Center - Projectile.Center).ToRotation();
                 }
-                else if (Time - 120 == 30)
+                else if (Time - Delay == 30)
                 {
                     Projectile.hostile = true;
                     Projectile.tileCollide = true;
@@ -128,9 +162,6 @@ public class OratorJavelin : ModProjectile
         }
         if (Projectile.timeLeft <= 90)
         {
-            float ratio = 0f;
-            ratio = (90 - Projectile.timeLeft) / 60f;
-            ratio = Clamp(ratio, 0f, 1f);
             Vector2 spawnPos = Projectile.Center - (Projectile.rotation.ToRotationVector2() * Main.rand.NextFloat(-64f, 64f));
             if (!Main.tile[spawnPos.ToTileCoordinates()].IsTileSolid())
                 EmpyreanMetaball.SpawnDefaultParticle(spawnPos, Main.rand.NextVector2Circular(2f, 2f), Main.rand.NextFloat(10f, 20f));
@@ -220,11 +251,11 @@ public class OratorJavelin : ModProjectile
     }
     public override bool PreDraw(ref Color lightColor)
     {
-        if ((Time < 150 || Projectile.velocity.LengthSquared() > 0f) && impaleTarget == null)
+        if ((Time < Delay + 30 || Projectile.velocity.LengthSquared() > 0f) && impaleTarget == null)
         {
             Texture2D WhiteOutTexture = ModContent.Request<Texture2D>(Texture + "WhiteOut").Value;
             Color color = Color.Black;
-            switch (Projectile.ai[2])
+            switch (Projectile.localAI[0])
             {
                 case 0:
                     color = new(253, 189, 53);
@@ -241,7 +272,7 @@ public class OratorJavelin : ModProjectile
         }
         Texture2D tex = ModContent.Request<Texture2D>(Texture).Value;
         Vector2 drawPosition = Projectile.Center - Main.screenPosition;
-        Rectangle frame = tex.Frame(1, 3, 0, (int)Projectile.ai[2]);
+        Rectangle frame = tex.Frame(1, 3, 0, (int)Projectile.localAI[0]);
 
         Main.EntitySpriteDraw(tex, drawPosition, frame, Color.White * Projectile.Opacity, Projectile.rotation, frame.Size() * 0.5f, Projectile.scale, SpriteEffects.None);
 
@@ -250,7 +281,7 @@ public class OratorJavelin : ModProjectile
 
     public override void DrawBehind(int index, List<int> drawCacheProjsBehindNPCsAndTiles, List<int> drawCacheProjsBehindNPCs, List<int> drawCacheProjsBehindProjectiles, List<int> drawCacheProjsOverWiresUI, List<int> overWiresUI)
     {
-        if (Time >= 150)
+        if (Time >= Delay + 30)
         {
             Projectile.hide = true;
             drawCacheProjsBehindNPCsAndTiles.Add(index);

@@ -1,6 +1,7 @@
 ﻿
 
-using Terraria.ModLoader.IO;
+using CalamityMod.Graphics.Primitives;
+using Terraria.Graphics.Shaders;
 
 namespace Windfall.Content.Projectiles.Boss.Orator;
 
@@ -9,7 +10,7 @@ public class DarkBolt : ModProjectile
     public override string Texture => "Windfall/Assets/Projectiles/Boss/NailShot";
     public override void SetStaticDefaults()
     {
-        ProjectileID.Sets.TrailCacheLength[Projectile.type] = 6;
+        ProjectileID.Sets.TrailCacheLength[Projectile.type] = 20;
         ProjectileID.Sets.TrailingMode[Projectile.type] = 2;
     }
     public override void SetDefaults()
@@ -33,13 +34,20 @@ public class DarkBolt : ModProjectile
         get => Projectile.ai[1];
         set => Projectile.ai[1] = value;
     }
-    public Color drawColor = Color.White;
+    private enum myColor
+    {
+        Green,
+        Orange
+    }
+    private myColor MyColor
+    {
+        get => Projectile.ai[2] == 0 ? myColor.Green : myColor.Orange;
+        set => Projectile.ai[2] = (int)value;
+    }
     Vector2 DirectionalVelocity = Vector2.Zero;
     public override void OnSpawn(IEntitySource source)
     {
         DirectionalVelocity = Projectile.velocity.SafeNormalize(Vector2.UnitX);
-        if(drawColor == Color.White)
-            drawColor = Color.Lerp(new Color(117, 255, 159), new Color(255, 180, 80), (float)(Math.Sin(Main.GlobalTimeWrappedHourly * 1.25f) / 0.5f) + 0.5f);
     }
     public override void AI()
     {
@@ -47,21 +55,14 @@ public class DarkBolt : ModProjectile
         Projectile.velocity = DirectionalVelocity.SafeNormalize(Vector2.UnitX) * (Velocity / 2);
         Velocity += 1f;
         aiCounter++;
-
-        if (Velocity > 5 && Main.rand.NextBool(3))
+        if (Velocity > 5 && Main.rand.NextBool(4))
         {
-            Vector2 position = new(Projectile.position.X + 39, Projectile.Center.Y);
-            Vector2 rotation = Projectile.rotation.ToRotationVector2();
-            rotation *= -8;
-            Dust dust = Dust.NewDustPerfect(position + rotation, DustID.RainbowTorch);
-            dust.scale = Main.rand.NextFloat(1f, 2f);
-            dust.noGravity = true;
-            dust.color = drawColor;
-        }
+            Vector2 position = new Vector2(Projectile.position.X, Projectile.Center.Y) + (Vector2.UnitY.RotatedBy(Projectile.rotation) * Main.rand.NextFloat(-16f, 16f));
 
-        Lighting.AddLight(Projectile.Center, new Vector3(0.32f, 0.92f, 0.71f));
-        if (drawColor == Color.White)
-            drawColor = Color.Lerp(new Color(117, 255, 159), new Color(255, 180, 80), (float)(Math.Sin(Main.GlobalTimeWrappedHourly * 1.25f) / 0.5f) + 0.5f);
+            Particle spark = new SparkParticle(position, Projectile.velocity.RotatedByRandom(PiOver4) * -0.5f, false, 12, Main.rand.NextFloat(0.25f, 1f), ColorFunction(0));
+            GeneralParticleHandler.SpawnParticle(spark);
+        }
+        Lighting.AddLight(Projectile.Center, ColorFunction(0).ToVector3());
     }
     public override void ModifyDamageHitbox(ref Rectangle hitbox)
     {
@@ -70,9 +71,50 @@ public class DarkBolt : ModProjectile
         rotation *= 39;           
         hitbox.Location = new Point((int)(hitbox.Location.X + rotation.X), (int)(hitbox.Location.Y + rotation.Y));
     }
+
+    internal Color ColorFunction(float completionRatio)
+    {
+        Color colorA = MyColor == myColor.Green ? Color.LimeGreen : Color.Orange;
+        Color colorB = MyColor == myColor.Green ? Color.GreenYellow : Color.Goldenrod;
+
+        float fadeToEnd = Lerp(0.65f, 1f, (float)Math.Cos(-Main.GlobalTimeWrappedHourly * 3f) * 0.5f + 0.5f);
+        float fadeOpacity = Utils.GetLerpValue(1f, 0f, completionRatio + 0.1f, true) * Projectile.Opacity;
+
+        Color endColor = Color.Lerp(colorA, colorB, (float)Math.Sin(completionRatio * Pi * 1.6f - Main.GlobalTimeWrappedHourly * 5f) * 0.5f + 0.5f);
+        return Color.Lerp(Color.White, endColor, fadeToEnd) * fadeOpacity;
+    }
+
+    internal float WidthFunction(float completionRatio)
+    {
+        float expansionCompletion = 1f - (float)Math.Pow(1f - Utils.GetLerpValue(0f, 0.3f, completionRatio, true), 2D);
+        float maxWidth = Projectile.Opacity * Projectile.width * 2f;
+
+        return Lerp(0f, maxWidth, expansionCompletion);
+    }
+
     public override bool PreDraw(ref Color lightColor)
     {
-        CalamityUtils.DrawAfterimagesCentered(Projectile, ProjectileID.Sets.TrailingMode[Projectile.type], drawColor * 0.75f, 2);
+        if (Velocity > 2)
+        {
+            GameShaders.Misc["CalamityMod:ImpFlameTrail"].SetShaderTexture(ModContent.Request<Texture2D>("CalamityMod/ExtraTextures/Trails/" + (MyColor == myColor.Green ? "ScarletDevilStreak" : "FabstaffStreak")));
+            PrimitiveRenderer.RenderTrail(Projectile.oldPos, new(WidthFunction, ColorFunction, (_) => Projectile.Size * 0.5f, shader: GameShaders.Misc["CalamityMod:ImpFlameTrail"]), 30);
+        }
+
+        Vector2 drawPos = Projectile.Center - Main.screenPosition;
+        Texture2D texture = ModContent.Request<Texture2D>("CalamityMod/Particles/BloomCircle").Value;
+        Vector2 origin = texture.Size() * 0.5f;
+
+        Main.spriteBatch.UseBlendState(BlendState.Additive);
+
+        Main.EntitySpriteDraw(texture, drawPos - Vector2.UnitX.RotatedBy(Projectile.rotation) * (MyColor == myColor.Green ? 48 : 28) + Vector2.UnitY * (MyColor == myColor.Green ? 2 : 0), texture.Frame(), ColorFunction(0) * 0.6f, Projectile.rotation, origin, new Vector2(MyColor == myColor.Green ? 3 : 2f, 1) * Projectile.scale * 0.33f, SpriteEffects.None, 0);
+
+        Main.spriteBatch.UseBlendState(BlendState.AlphaBlend);
+
+        texture = (MyColor == myColor.Green ? TextureAssets.Projectile[Type] : ModContent.Request<Texture2D>("Windfall/Assets/Projectiles/Boss/MagicShot")).Value;
+        origin = texture.Size();
+        origin.Y *= 0.5f;
+        Main.EntitySpriteDraw(texture, drawPos, texture.Frame(), Color.White, Projectile.rotation, origin, Projectile.scale, SpriteEffects.None, 0);
+        
         return false;
     }
     public override void SendExtraAI(BinaryWriter writer)

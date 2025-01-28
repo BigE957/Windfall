@@ -110,6 +110,7 @@ public class OratorHand : ModNPC
             Main.npc[MainHandIndex].As<OratorHand>().SubHandIndex = NPC.whoAmI;
             
         }
+        /*
         if (Main.netMode == NetmodeID.Server || Main.netMode == NetmodeID.MultiplayerClient)
         {
             ChatHelper.BroadcastChatMessage(NetworkText.FromLiteral("~~~~~~~~~~~~~~~~~~~~"), Color.White);
@@ -130,12 +131,14 @@ public class OratorHand : ModNPC
             Main.NewText($"What Hand: {WhatHand}");
             Main.NewText("~~~~~~~~~~~~~~~~~~~~");
         }
+        */
     }
 
     public override bool PreAI()
     {
         if (Main.npc[OratorIndex] == null || !Main.npc[OratorIndex].active || Main.npc[OratorIndex].type != ModContent.NPCType<TheOrator>())
         {
+            /*
             if (Main.npc[OratorIndex] != null && Main.npc[OratorIndex].active)
             {
                 if (Main.netMode == NetmodeID.Server || Main.netMode == NetmodeID.MultiplayerClient)
@@ -149,6 +152,7 @@ public class OratorHand : ModNPC
                     Main.NewText($"Orator Type {ModContent.NPCType<TheOrator>()}, Found Type {Main.npc[OratorIndex].type}");
                 }
             }
+            */
             return true;
         }
         NPC orator = Main.npc[OratorIndex];
@@ -187,10 +191,12 @@ public class OratorHand : ModNPC
         #region Orator Checks
         if (Main.npc[OratorIndex] == null || !Main.npc[OratorIndex].active || Main.npc[OratorIndex].type != ModContent.NPCType<TheOrator>())
         {
+            /*
             if (Main.netMode == NetmodeID.Server || Main.netMode == NetmodeID.MultiplayerClient)
                 ChatHelper.BroadcastChatMessage(NetworkText.FromLiteral("Orator Changed!!!!!"), Color.White);
             else
                 Main.NewText("Orator Changed!!!!!");
+            */
             if (NPC.AnyNPCs(ModContent.NPCType<TheOrator>()))
                 OratorIndex = NPC.FindFirstNPC(ModContent.NPCType<TheOrator>());
             else
@@ -394,15 +400,16 @@ public class OratorHand : ModNPC
                                         subHand.Center = midPoint - (subHand.rotation.ToRotationVector2() * (subHand.width / 3f));
 
 
-                                        ScreenShakeSystem.StartShake(12.5f);
+                                        ScreenShakeSystem.StartShake(9f);
                                         SoundEngine.PlaySound(SoundID.DD2_MonkStaffGroundImpact, midPoint);
                                         if (Main.netMode != NetmodeID.MultiplayerClient)
                                         {
                                             int projCount = 16;
                                             for (int i = 0; i < projCount; i++)
                                             {
-                                                for(int j = 1; j < 6; j++)
-                                                    Projectile.NewProjectile(Terraria.Entity.GetSource_NaturalSpawn(), midPoint, (TwoPi / projCount * i).ToRotationVector2() * (i % 2 == 0 ? j * 3.25f : j * 3.75f), ModContent.ProjectileType<HandRing>(), TheOrator.BoltDamage, 0f);
+                                                Vector2 velocity = (Vector2.UnitY * -1).RotatedBy(Main.rand.NextFloat(-PiOver2, PiOver2)) * Main.rand.NextFloat(4f, 8f);
+                                                velocity.Y *= 2;
+                                                Projectile.NewProjectile(Terraria.Entity.GetSource_NaturalSpawn(), midPoint, velocity, ModContent.ProjectileType<HandRing>(), TheOrator.BoltDamage, 0f);
                                             }
                                         }
                                         CalamityMod.Particles.Particle pulse = new PulseRing(midPoint, Vector2.Zero, new(253, 189, 53), 0f, 3f, 16);
@@ -561,8 +568,6 @@ public class OratorHand : ModNPC
                     }
                     else //Actual Attack
                     {
-                        float startSpeed = CalamityWorld.death ? 1f : CalamityWorld.revenge ? 0f : Main.expertMode ? -1f : -2f;
-
                         if (WhatHand == 1)
                         {
                             if(aiCounter < 270)
@@ -576,18 +581,26 @@ public class OratorHand : ModNPC
                                 NPC.rotation = Pi;
                                 NPC.rotation += PiOver2 * WhatHand;
 
-                                if ((aiCounter + 45) % 90 == 0 && aiCounter != 0)
+                                int projectileCounter = (aiCounter + 45) % 90;
+                                Vector2 ToTarget = (modOrator.target.Center - NPC.Center).SafeNormalize(Vector2.Zero);
+
+                                if (projectileCounter == 0)
                                 {
-                                    Vector2 ToTarget = (modOrator.target.Center - NPC.Center).SafeNormalize(Vector2.Zero);
-                                    SoundEngine.PlaySound(SoundID.DD2_OgreSpit, NPC.Center);
-                                    if (Main.netMode != NetmodeID.MultiplayerClient)
+                                    bool everyOther = (aiCounter + 45) % 180 == 0;
+
+                                    FireBarrageSpread(ToTarget, everyOther);
+                                }
+                                else
+                                {
+                                    Vector2 spawn = NPC.Center + NPC.velocity + Vector2.UnitX * 64 * (ToTarget.X < 0 ? -1 : 1);
+                                    float lerpValue = projectileCounter / 90f;
+                                    if (projectileCounter % 5 == 0 && Main.rand.NextBool(lerpValue))
                                     {
-                                        Projectile.NewProjectile(Terraria.Entity.GetSource_NaturalSpawn(), NPC.Center, (ToTarget), ModContent.ProjectileType<DarkBolt>(), TheOrator.BoltDamage, 0f, -1, 0, startSpeed);
-                                        Projectile.NewProjectile(Terraria.Entity.GetSource_NaturalSpawn(), NPC.Center, (ToTarget).RotatedBy(Pi / 6), ModContent.ProjectileType<DarkBolt>(), TheOrator.BoltDamage, 0f, -1, 0, startSpeed);
-                                        Projectile.NewProjectile(Terraria.Entity.GetSource_NaturalSpawn(), NPC.Center, (ToTarget).RotatedBy(-Pi / 6), ModContent.ProjectileType<DarkBolt>(), TheOrator.BoltDamage, 0f, -1, 0, startSpeed);
+                                        Vector2 spawnPos = spawn + Main.rand.NextVector2CircularEdge(4f, 4f);
+                                        CalamityMod.Particles.Particle particle = new AltSparkParticle(spawnPos, ToTarget.RotatedBy(Main.rand.NextFloat(-PiOver4, PiOver4)) * Main.rand.NextFloat(4, 2), false, 200, Main.rand.NextFloat(0.5f, 1f), Main.rand.NextBool() ? Color.LimeGreen : Color.Orange);
+                                        GeneralParticleHandler.SpawnParticle(particle);
                                     }
-                                    //Projectile.NewProjectile(Terraria.Entity.GetSource_NaturalSpawn(), NPC.Center, (ToTarget).RotatedBy(PiOver4), ModContent.ProjectileType<DarkBolt>(), TheOrator.BoltDamage, 0f, -1, 0, startSpeed);
-                                    //Projectile.NewProjectile(Terraria.Entity.GetSource_NaturalSpawn(), NPC.Center, (ToTarget).RotatedBy(-PiOver4), ModContent.ProjectileType<DarkBolt>(), TheOrator.BoltDamage, 0f, -1, 0, startSpeed);
+
                                 }
                             }
                             else if(aiCounter < 300)
@@ -638,18 +651,25 @@ public class OratorHand : ModNPC
                                 NPC.rotation = 0;
                                 NPC.rotation -= PiOver2 * WhatHand;
 
-                                if (aiCounter % 90 == 0)
+                                int projectileCounter = aiCounter % 90;
+                                Vector2 ToTarget = (modOrator.target.Center - NPC.Center).SafeNormalize(Vector2.Zero);
+
+                                if (projectileCounter == 0)
                                 {
-                                    Vector2 ToTarget = (modOrator.target.Center - NPC.Center).SafeNormalize(Vector2.Zero);
-                                    SoundEngine.PlaySound(SoundID.DD2_OgreSpit, NPC.Center);
-                                    if (Main.netMode != NetmodeID.MultiplayerClient)
+                                    bool everyOther = aiCounter % 180 == 0;
+
+                                    FireBarrageSpread(ToTarget, everyOther);
+                                }
+                                else
+                                {
+                                    Vector2 spawn = NPC.Center + NPC.velocity + Vector2.UnitX * 64 * (ToTarget.X < 0 ? -1 : 1);
+                                    float lerpValue = projectileCounter / 90f;
+                                    if (projectileCounter % 5 == 0 && Main.rand.NextBool(lerpValue))
                                     {
-                                        Projectile.NewProjectile(Terraria.Entity.GetSource_NaturalSpawn(), NPC.Center, (ToTarget), ModContent.ProjectileType<DarkBolt>(), TheOrator.BoltDamage, 0f, -1, 0, startSpeed);
-                                        Projectile.NewProjectile(Terraria.Entity.GetSource_NaturalSpawn(), NPC.Center, (ToTarget).RotatedBy(Pi / 6), ModContent.ProjectileType<DarkBolt>(), TheOrator.BoltDamage, 0f, -1, 0, startSpeed);
-                                        Projectile.NewProjectile(Terraria.Entity.GetSource_NaturalSpawn(), NPC.Center, (ToTarget).RotatedBy(-Pi / 6), ModContent.ProjectileType<DarkBolt>(), TheOrator.BoltDamage, 0f, -1, 0, startSpeed);
+                                        Vector2 spawnPos = spawn + Main.rand.NextVector2CircularEdge(4f, 4f);
+                                        CalamityMod.Particles.Particle particle = new AltSparkParticle(spawnPos, ToTarget.RotatedBy(Main.rand.NextFloat(-PiOver4, PiOver4)) * Main.rand.NextFloat(4, 2), false, 200, Main.rand.NextFloat(0.5f, 1f), Main.rand.NextBool() ? Color.LimeGreen : Color.Orange);
+                                        GeneralParticleHandler.SpawnParticle(particle);
                                     }
-                                    //Projectile.NewProjectile(Terraria.Entity.GetSource_NaturalSpawn(), NPC.Center, (ToTarget).RotatedBy(PiOver4), ModContent.ProjectileType<DarkBolt>(), TheOrator.BoltDamage, 0f, -1, 0, startSpeed);
-                                    //Projectile.NewProjectile(Terraria.Entity.GetSource_NaturalSpawn(), NPC.Center, (ToTarget).RotatedBy(-PiOver4), ModContent.ProjectileType<DarkBolt>(), TheOrator.BoltDamage, 0f, -1, 0, startSpeed);
                                 }
                             }
                             else if (aiCounter < 700)
@@ -739,13 +759,15 @@ public class OratorHand : ModNPC
                                 Tile tile = Main.tile[midPoint.ToTileCoordinates()];
                                 if (aiCounter >= 1000 && (NPC.velocity.LengthSquared() < 784 || (tile.HasTile && (tile.IsTileSolid() || TileID.Sets.Platforms[tile.TileType]) && midPoint.Y > modOrator.target.Center.Y)))
                                 {
-                                    ScreenShakeSystem.StartShake(12.5f);
+                                    ScreenShakeSystem.StartShake(9f);
                                     SoundEngine.PlaySound(SoundID.DD2_MonkStaffGroundImpact, midPoint);
                                     int projCount = 16;
                                     for (int i = 0; i < projCount; i++)
                                     {
-                                        for (int j = 1; j < 8; j++)
-                                            Projectile.NewProjectile(Terraria.Entity.GetSource_NaturalSpawn(), midPoint, (TwoPi / projCount * i).ToRotationVector2() * (i % 2 == 0 ? j * 2 : j * 3), ModContent.ProjectileType<HandRing>(), TheOrator.BoltDamage, 0f);
+                                        Vector2 velocity = (Vector2.UnitY * -1).RotatedBy(Main.rand.NextFloat(-PiOver2, PiOver2)) * Main.rand.NextFloat(8f, 12f);
+                                        velocity.Y *= 2;
+                                        velocity.X *= 0.5f;
+                                        Projectile.NewProjectile(Terraria.Entity.GetSource_NaturalSpawn(), midPoint, velocity, ModContent.ProjectileType<HandRing>(), TheOrator.BoltDamage, 0f);
                                     }
                                     CalamityMod.Particles.Particle pulse = new PulseRing(midPoint, Vector2.Zero, new(253, 189, 53), 0f, 3f, 16);
                                     GeneralParticleHandler.SpawnParticle(pulse);
@@ -781,19 +803,27 @@ public class OratorHand : ModNPC
                                 NPC.rotation = 0;
                                 NPC.rotation += PiOver2 * WhatHand;
 
-                                if ((aiCounter+90) % 90 == 0)
+                                int projectileCounter = (aiCounter + 90) % 90;
+                                Vector2 ToTarget = (modOrator.target.Center - NPC.Center).SafeNormalize(Vector2.Zero);
+
+                                if (projectileCounter == 0)
                                 {
-                                    Vector2 ToTarget = (modOrator.target.Center - NPC.Center).SafeNormalize(Vector2.Zero);
-                                    SoundEngine.PlaySound(SoundID.DD2_OgreSpit, NPC.Center);
-                                    if (Main.netMode != NetmodeID.MultiplayerClient)
-                                    {
-                                        Projectile.NewProjectile(Terraria.Entity.GetSource_NaturalSpawn(), NPC.Center, (ToTarget), ModContent.ProjectileType<DarkBolt>(), TheOrator.BoltDamage, 0f, -1, 0, startSpeed);
-                                        Projectile.NewProjectile(Terraria.Entity.GetSource_NaturalSpawn(), NPC.Center, (ToTarget).RotatedBy(Pi / 6), ModContent.ProjectileType<DarkBolt>(), TheOrator.BoltDamage, 0f, -1, 0, startSpeed);
-                                        Projectile.NewProjectile(Terraria.Entity.GetSource_NaturalSpawn(), NPC.Center, (ToTarget).RotatedBy(-Pi / 6), ModContent.ProjectileType<DarkBolt>(), TheOrator.BoltDamage, 0f, -1, 0, startSpeed);
-                                    }
-                                    //Projectile.NewProjectile(Terraria.Entity.GetSource_NaturalSpawn(), NPC.Center, (ToTarget).RotatedBy(PiOver4), ModContent.ProjectileType<DarkBolt>(), TheOrator.BoltDamage, 0f, -1, 0, startSpeed);
-                                    //Projectile.NewProjectile(Terraria.Entity.GetSource_NaturalSpawn(), NPC.Center, (ToTarget).RotatedBy(-PiOver4), ModContent.ProjectileType<DarkBolt>(), TheOrator.BoltDamage, 0f, -1, 0, startSpeed);
+                                    bool everyOther = (aiCounter + 90) % 180 == 0;
+
+                                    FireBarrageSpread(ToTarget, everyOther);
                                 }
+                                else
+                                {
+                                    Vector2 spawn = NPC.Center + NPC.velocity + Vector2.UnitX * 64 * (ToTarget.X < 0 ? -1 : 1);
+                                    float lerpValue = projectileCounter / 90f;
+                                    if (projectileCounter % 5 == 0 && Main.rand.NextBool(lerpValue))
+                                    {
+                                        Vector2 spawnPos = spawn + Main.rand.NextVector2CircularEdge(4f, 4f);
+                                        CalamityMod.Particles.Particle particle = new AltSparkParticle(spawnPos, ToTarget.RotatedBy(Main.rand.NextFloat(-PiOver4, PiOver4)) * Main.rand.NextFloat(4, 2), false, 200, Main.rand.NextFloat(0.5f, 1f), Main.rand.NextBool() ? Color.LimeGreen : Color.Orange);
+                                        GeneralParticleHandler.SpawnParticle(particle);
+                                    }
+                                }
+
                             }
                             else if (aiCounter < 420)
                             {
@@ -843,18 +873,25 @@ public class OratorHand : ModNPC
                                 NPC.rotation = Pi;
                                 NPC.rotation -= PiOver2 * WhatHand;
 
-                                if ((aiCounter + 45) % 90 == 0)
+                                int projectileCounter = (aiCounter + 45) % 90;
+                                Vector2 ToTarget = (modOrator.target.Center - NPC.Center).SafeNormalize(Vector2.Zero);
+
+                                if (projectileCounter == 0)
                                 {
-                                    Vector2 ToTarget = (modOrator.target.Center - NPC.Center).SafeNormalize(Vector2.Zero);
-                                    SoundEngine.PlaySound(SoundID.DD2_OgreSpit, NPC.Center);
-                                    if (Main.netMode != NetmodeID.MultiplayerClient)
+                                    bool everyOther = (aiCounter + 45) % 180 == 0;
+
+                                    FireBarrageSpread(ToTarget, everyOther);
+                                }
+                                else
+                                {
+                                    Vector2 spawn = NPC.Center + NPC.velocity + Vector2.UnitX * 64 * (ToTarget.X < 0 ? -1 : 1);
+                                    float lerpValue = projectileCounter / 90f;
+                                    if (projectileCounter % 5 == 0 && Main.rand.NextBool(lerpValue))
                                     {
-                                        Projectile.NewProjectile(Terraria.Entity.GetSource_NaturalSpawn(), NPC.Center, (ToTarget), ModContent.ProjectileType<DarkBolt>(), TheOrator.BoltDamage, 0f, -1, 0, startSpeed);
-                                        Projectile.NewProjectile(Terraria.Entity.GetSource_NaturalSpawn(), NPC.Center, (ToTarget).RotatedBy(Pi / 6), ModContent.ProjectileType<DarkBolt>(), TheOrator.BoltDamage, 0f, -1, 0, startSpeed);
-                                        Projectile.NewProjectile(Terraria.Entity.GetSource_NaturalSpawn(), NPC.Center, (ToTarget).RotatedBy(-Pi / 6), ModContent.ProjectileType<DarkBolt>(), TheOrator.BoltDamage, 0f, -1, 0, startSpeed);
+                                        Vector2 spawnPos = spawn + Main.rand.NextVector2CircularEdge(4f, 4f);
+                                        CalamityMod.Particles.Particle particle = new AltSparkParticle(spawnPos, ToTarget.RotatedBy(Main.rand.NextFloat(-PiOver4, PiOver4)) * Main.rand.NextFloat(4, 2), false, 200, Main.rand.NextFloat(0.5f, 1f), Main.rand.NextBool() ? Color.LimeGreen : Color.Orange);
+                                        GeneralParticleHandler.SpawnParticle(particle);
                                     }
-                                    //Projectile.NewProjectile(Terraria.Entity.GetSource_NaturalSpawn(), NPC.Center, (ToTarget).RotatedBy(PiOver4), ModContent.ProjectileType<DarkBolt>(), TheOrator.BoltDamage, 0f, -1, 0, startSpeed);
-                                    //Projectile.NewProjectile(Terraria.Entity.GetSource_NaturalSpawn(), NPC.Center, (ToTarget).RotatedBy(-PiOver4), ModContent.ProjectileType<DarkBolt>(), TheOrator.BoltDamage, 0f, -1, 0, startSpeed);
                                 }
                             }
                             else if (aiCounter < 820)
@@ -996,10 +1033,9 @@ public class OratorHand : ModNPC
         }
         effectCounter++;
     }
+    
     public override void HitEffect(NPC.HitInfo hit)
     {
-        base.HitEffect(hit);
-
         if (NPC.life <= 0)
         {
             NPC.dontTakeDamage = true;               
@@ -1057,7 +1093,9 @@ public class OratorHand : ModNPC
         }
         #endregion
     }
+    
     public override bool CheckActive() => false;
+    
     public override bool PreDraw(SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor)
     {
         Texture2D texture = TextureAssets.Npc[NPC.type].Value;
@@ -1110,5 +1148,31 @@ public class OratorHand : ModNPC
 
         shakeOffset = reader.ReadVector2();
         CurrentPose = (Pose)reader.ReadByte();
+    }
+
+    private void FireBarrageSpread(Vector2 toTarget, bool everyOther)
+    {
+        float startSpeed = CalamityWorld.death ? 1f : CalamityWorld.revenge ? 0f : Main.expertMode ? -1f : -2f;
+
+        SoundEngine.PlaySound(SoundID.DD2_OgreSpit, NPC.Center);
+        Vector2 spawnPos = NPC.Center + NPC.velocity + Vector2.UnitX * 64 * (toTarget.X < 0 ? -1 : 1);
+
+        for(int i = 0; i < 5; i++)
+        {
+            Vector2 spawn = spawnPos + Main.rand.NextVector2CircularEdge(4f, 4f);
+            CalamityMod.Particles.Particle p = new AltSparkParticle(spawn, toTarget.RotatedBy(Main.rand.NextFloat(-PiOver4, PiOver4)) * Main.rand.NextFloat(4, 2), false, 200, Main.rand.NextFloat(0.5f, 1f), Main.rand.NextBool() ? Color.LimeGreen : Color.Orange);
+            GeneralParticleHandler.SpawnParticle(p);
+        }
+        CalamityMod.Particles.Particle particle = new DirectionalPulseRing(spawnPos, toTarget * 3f, Main.rand.NextBool() ? Color.LimeGreen : Color.Orange, new(0.5f, 1), toTarget.ToRotation(), 0f, 0.75f, 30);
+        GeneralParticleHandler.SpawnParticle(particle);
+
+        if (Main.netMode != NetmodeID.MultiplayerClient)
+        {
+            Projectile.NewProjectile(Terraria.Entity.GetSource_NaturalSpawn(), spawnPos, toTarget, ModContent.ProjectileType<DarkBolt>(), TheOrator.BoltDamage, 0f, -1, 0, startSpeed, everyOther ? 0 : 1);
+            Projectile.NewProjectile(Terraria.Entity.GetSource_NaturalSpawn(), spawnPos, toTarget.RotatedBy(Pi / 6), ModContent.ProjectileType<DarkBolt>(), TheOrator.BoltDamage, 0f, -1, 0, startSpeed, everyOther ? 1 : 0);
+            Projectile.NewProjectile(Terraria.Entity.GetSource_NaturalSpawn(), spawnPos, toTarget.RotatedBy(-Pi / 6), ModContent.ProjectileType<DarkBolt>(), TheOrator.BoltDamage, 0f, -1, 0, startSpeed, everyOther ? 1 : 0);
+        }
+        //Projectile.NewProjectile(Terraria.Entity.GetSource_NaturalSpawn(), spawnPos, toTarget.RotatedBy(PiOver4), ModContent.ProjectileType<DarkBolt>(), TheOrator.BoltDamage, 0f, -1, 0, startSpeed);
+        //Projectile.NewProjectile(Terraria.Entity.GetSource_NaturalSpawn(), spawnPos, toTarget.RotatedBy(-PiOver4), ModContent.ProjectileType<DarkBolt>(), TheOrator.BoltDamage, 0f, -1, 0, startSpeed);
     }
 }

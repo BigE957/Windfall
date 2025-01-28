@@ -53,7 +53,6 @@ public class OratorScythe : ModProjectile
         if (NPC.AnyNPCs(ModContent.NPCType<TheOrator>()))
         {
             orator = Main.npc[NPC.FindFirstNPC(ModContent.NPCType<TheOrator>())];
-            target = orator.As<TheOrator>().target;
 
             if (orator.As<TheOrator>().AIState == TheOrator.States.DarkTides || orator.As<TheOrator>().AIState == TheOrator.States.Defeat)
                 behavior = (BehaviorType)4;

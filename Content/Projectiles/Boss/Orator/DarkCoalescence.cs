@@ -135,12 +135,12 @@ public class DarkCoalescence : ModProjectile
                 {
                     if (Orator.ai[0] < 7)
                         SoundEngine.PlaySound(new("CalamityMod/Sounds/Custom/Ravager/RavagerMissileExplosion"), Projectile.Center);
-                    ScreenShakeSystem.StartShake(12.5f);
+                    ScreenShakeSystem.StartShake(11f);
                     SoundEngine.PlaySound(SoundID.DD2_MonkStaffGroundImpact, Projectile.Center);
                     for (int i = 0; i < 24; i++)
                     {
                         if (Main.netMode != NetmodeID.MultiplayerClient && Orator.ai[0] == 6 || i % 2 == 0)
-                            Projectile.NewProjectile(Terraria.Entity.GetSource_NaturalSpawn(), Projectile.Center, (TwoPi / 24 * i).ToRotationVector2(), ModContent.ProjectileType<DarkBolt>(), TheOrator.BoltDamage, 0f, -1, 0, i % 2 == 0 ? -10 : 0);
+                            Projectile.NewProjectile(Terraria.Entity.GetSource_NaturalSpawn(), Projectile.Center, (TwoPi / 24 * i).ToRotationVector2(), ModContent.ProjectileType<DarkBolt>(), TheOrator.BoltDamage, 0f, -1, 0, i % 2 == 0 ? -10 : 0, i % 2 == 0 ? 1 : 0);
                         if (Main.netMode != NetmodeID.MultiplayerClient && Orator.ai[0] < 7)
                             for (int j = 0; j < 3; j++)
                             {

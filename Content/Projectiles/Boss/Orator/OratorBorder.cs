@@ -1,4 +1,6 @@
-﻿using Windfall.Content.Buffs.DoT;
+﻿using Microsoft.Xna.Framework.Graphics;
+using Windfall.Common.Graphics.Metaballs;
+using Windfall.Content.Buffs.DoT;
 using Windfall.Content.NPCs.Bosses.Orator;
 using static Windfall.Common.Graphics.Metaballs.EmpyreanMetaball;
 
@@ -50,7 +52,7 @@ public class OratorBorder : ModProjectile
         if (!NPC.AnyNPCs(ModContent.NPCType<TheOrator>()))
             trueScale += 0.05f;
         else
-        {            
+        {       
             Projectile.timeLeft = 30;
             if (trueScale > 3f)
             {
@@ -70,10 +72,41 @@ public class OratorBorder : ModProjectile
 
     public override Color? GetAlpha(Color lightColor) => Color.White * Projectile.Opacity;
 
+    private static Color ColorFunction(float completionRatio)
+    {
+        Color colorA = Color.Lerp(Color.LimeGreen, Color.Orange, BorderLerpValue);
+        Color colorB = Color.Lerp(Color.GreenYellow, Color.Goldenrod, BorderLerpValue);
+
+        float fadeToEnd = Lerp(0.65f, 1f, (float)Math.Cos(-Main.GlobalTimeWrappedHourly * 3f) * 0.5f + 0.5f);
+
+        Color endColor = Color.Lerp(colorA, colorB, (float)Math.Sin(completionRatio * Pi * 1.6f - Main.GlobalTimeWrappedHourly * 5f) * 0.5f + 0.5f);
+        return Color.Lerp(Color.White, endColor, fadeToEnd);
+    }
+
     public override bool PreDraw(ref Color lightColor)
     {
-        Color drawColor = Color.White;
-        DrawAfterimagesCentered(Projectile, ProjectileID.Sets.TrailingMode[Projectile.type], drawColor);
+        Main.spriteBatch.UseBlendState(BlendState.Additive);
+
+        Vector2 drawPos = Projectile.Center - Main.screenPosition;
+        Color drawColor = ColorFunction(0.5f);
+        Texture2D tex = ModContent.Request<Texture2D>("CalamityMod/Particles/HighResHollowCircleHardEdge").Value;
+        Main.EntitySpriteDraw(tex, drawPos, null, drawColor * 0.5f, Main.GlobalTimeWrappedHourly / 2f, tex.Size() * 0.5f, Projectile.scale * Lerp(0.275f, 0.2f, 1 - trueScale / 3f), SpriteEffects.None, 0);
+
+        tex = ModContent.Request<Texture2D>("Windfall/Assets/Projectiles/Boss/BorderAura1").Value;
+        drawColor = ColorFunction(1f);
+        Main.EntitySpriteDraw(tex, drawPos, null, drawColor * 0.5f, Main.GlobalTimeWrappedHourly / -2f, tex.Size() * 0.5f, Projectile.scale * Lerp(0.7f, 0.5f, 1 - trueScale / 3f) + ((float)Math.Sin(Main.GlobalTimeWrappedHourly) * 0.05f), SpriteEffects.None, 0);
+
+        tex = ModContent.Request<Texture2D>("Windfall/Assets/Projectiles/Boss/BorderAura2").Value;
+        drawColor = ColorFunction(0f);
+        Main.EntitySpriteDraw(tex, drawPos, null, drawColor * 0.5f, Main.GlobalTimeWrappedHourly / 2f, tex.Size() * 0.5f, Projectile.scale * Lerp(0.73f, 0.4f, 1 - trueScale / 3f) + ((float)Math.Sin(Main.GlobalTimeWrappedHourly) * -0.05f), SpriteEffects.None, 0);
+
+        Main.spriteBatch.UseBlendState(BlendState.AlphaBlend);
+
         return false;
+    }
+
+    public override void PostDraw(Color lightColor)
+    {
+        DrawAfterimagesCentered(Projectile, ProjectileID.Sets.TrailingMode[Projectile.type], Color.White);
     }
 }

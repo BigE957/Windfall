@@ -1806,6 +1806,8 @@ Projectiles: {
 	AstralBolt.DisplayName: Astral Bolt
 	HammerChiselProjectile.DisplayName: Hammer Chisel Projectile
 	HandStatue.DisplayName: Hand Statue
+	TestProjectile.DisplayName: Test Projectile
+	FadingStar.DisplayName: Fading Star
 }
 
 Buffs: {

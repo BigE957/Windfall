@@ -85,7 +85,9 @@ public class EmpyreanMetaball : Metaball
 
     public override MetaballDrawLayer DrawContext => MetaballDrawLayer.AfterProjectiles;
 
-    public override Color EdgeColor => Color.Lerp(new Color(117, 255, 159), new Color(255, 180, 80), (float)(Math.Sin(Main.GlobalTimeWrappedHourly * 1.25f) / 0.5f) + 0.5f);
+    public static float BorderLerpValue => (float)(Math.Sin(Main.GlobalTimeWrappedHourly * 1f) / 0.5f) + 0.5f;
+
+    public override Color EdgeColor => Color.Lerp(new Color(117, 255, 159), new Color(255, 180, 80), BorderLerpValue);
 
     public override void Load()
     {
@@ -206,7 +208,7 @@ public class EmpyreanMetaball : Metaball
                 Vector2 drawPosition = p.Center - Main.screenPosition;
                 p.As<ShadowHand_Minion>().DrawSelf(drawPosition, p.GetAlpha(Color.White), p.rotation);
             }
-            else if(p.type == ModContent.ProjectileType<HandRing>())
+            else if(p.type == ModContent.ProjectileType<HandRing>() || p.type == ModContent.ProjectileType<DarkGlob>() || p.type == ModContent.ProjectileType<OratorBorder>() || p.type == ModContent.ProjectileType<DarkTide>())
             {
                 Color c = Color.White;
                 c.A = 0;

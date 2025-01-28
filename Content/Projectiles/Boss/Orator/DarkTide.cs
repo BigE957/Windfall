@@ -122,12 +122,55 @@ public class DarkTide : ModProjectile
     }
     public override Color? GetAlpha(Color lightColor) => Color.White * Projectile.Opacity;
 
+    private static Color ColorFunction(float completionRatio)
+    {
+        Color colorA = Color.Lerp(Color.LimeGreen, Color.Orange, BorderLerpValue);
+        Color colorB = Color.Lerp(Color.GreenYellow, Color.Goldenrod, BorderLerpValue);
+
+        float fadeToEnd = Lerp(0.65f, 1f, (float)Math.Cos(-Main.GlobalTimeWrappedHourly * 3f) * 0.5f + 0.5f);
+
+        Color endColor = Color.Lerp(colorA, colorB, (float)Math.Sin(completionRatio * Pi * 1.6f - Main.GlobalTimeWrappedHourly * 5f) * 0.5f + 0.5f);
+        return Color.Lerp(Color.White, endColor, fadeToEnd);
+    }
+
     public override bool PreDraw(ref Color lightColor)
     {
-        Color drawColor = Color.White;
-        DrawAfterimagesCentered(Projectile, ProjectileID.Sets.TrailingMode[Projectile.type], drawColor);
+        Main.spriteBatch.UseBlendState(BlendState.Additive);
+
+        Vector2 drawPos = Projectile.Center - Main.screenPosition;
+        Color drawColor = ColorFunction(0.5f);
+        float scale = Projectile.scale * 1f;
+        Vector2 displacement = Vector2.UnitX.RotatedBy(Projectile.rotation - PiOver2) * (512 * scale);
+        Texture2D tex; //= ModContent.Request<Texture2D>("CalamityMod/Particles/HighResHollowCircleHardEdge").Value;
+        //Main.EntitySpriteDraw(tex, drawPos, null, drawColor * 0.5f, Main.GlobalTimeWrappedHourly / 2f, tex.Size() * 0.5f, scale, SpriteEffects.None, 0);
+
+        tex = ModContent.Request<Texture2D>("Windfall/Assets/Projectiles/Boss/TideNoise1").Value;
+        drawColor = ColorFunction(1f);
+        Vector2 shiftOffset = Vector2.UnitX.RotatedBy(Projectile.rotation) * ((float)Math.Sin(Main.GlobalTimeWrappedHourly * 2f) * 32f + 770);
+        for (int i = -1; i < 3; i++)
+        {
+            Vector2 scroll = Vector2.UnitY.RotatedBy(Projectile.rotation) * ((Main.GlobalTimeWrappedHourly * 48) % (512 * scale));
+            Main.EntitySpriteDraw(tex, drawPos + shiftOffset + (displacement * i) + scroll, null, drawColor * 0.75f, Projectile.rotation + PiOver2, tex.Size() * 0.5f, scale, SpriteEffects.None, 0);
+        }
+        
+        tex = ModContent.Request<Texture2D>("Windfall/Assets/Projectiles/Boss/TideNoise2").Value;
+        drawColor = ColorFunction(0f);
+        shiftOffset = Vector2.UnitX.RotatedBy(Projectile.rotation) * ((float)Math.Sin(Main.GlobalTimeWrappedHourly) * -32f + 770);
+        for (int i = -2; i < 2; i++)
+        {
+            Vector2 scroll = Vector2.UnitY.RotatedBy(Projectile.rotation) * ((Main.GlobalTimeWrappedHourly * -84) % (512 * scale));
+            Main.EntitySpriteDraw(tex, drawPos + shiftOffset + (displacement * i) + scroll, null, drawColor * 0.85f, Projectile.rotation + PiOver2, tex.Size() * 0.5f, scale, SpriteEffects.None, 0);
+        }
+        
+        Main.spriteBatch.UseBlendState(BlendState.AlphaBlend);
         return false;
     }
+
+    public override void PostDraw(Color lightColor)
+    {
+        DrawAfterimagesCentered(Projectile, ProjectileID.Sets.TrailingMode[Projectile.type], Color.White);
+    }
+
     public static bool isLeft(Vector2 a, Vector2 b, Vector2 c) => (b.X - a.X) * (c.Y - a.Y) - (b.Y - a.Y) * (c.X - a.X) > 0;
 
     public override void SendExtraAI(BinaryWriter writer)
