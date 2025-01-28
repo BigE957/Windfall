@@ -1,20 +1,27 @@
-﻿
-namespace Windfall.Content.Projectiles.Other.RitualFurnature;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using Windfall.Common.Systems.WorldEvents;
 
-public class BurningAltar : ModProjectile
+namespace Windfall.Content.Projectiles.Props.RitualFurnature;
+
+public class BookPile : ModProjectile
 {
+    public override string Texture => "Windfall/Content/Projectiles/Props/RitualFurnature/RitualFurnatureAtlas";
     public new string LocalizationCategory => "Projectiles.Other";
 
     public override void SetStaticDefaults()
     {
-        Main.projFrames[Projectile.type] = 9;
+        Main.projFrames[Projectile.type] = 1;
         ProjectileID.Sets.DontAttachHideToAlpha[Projectile.type] = true;
     }
 
     public override void SetDefaults()
     {
-        Projectile.width = 64;
-        Projectile.height = 32;
+        Projectile.width = 42;
+        Projectile.height = 28;
         Projectile.friendly = true;
         Projectile.ignoreWater = true;
         Projectile.timeLeft = int.MaxValue;
@@ -25,28 +32,23 @@ public class BurningAltar : ModProjectile
 
     public override void AI()
     {
-        if (Projectile.ai[0] == 0)
+        if (SealingRitualSystem.RitualSequenceSeen)
         {
-            if (++Projectile.frameCounter > 5)
-            {
-                Projectile.frameCounter = 0;
-                Projectile.frame = ++Projectile.frame % (Main.projFrames[Projectile.type] - 1);
-            }
-            Lighting.AddLight(Projectile.Center, TorchID.Torch);
+            Player closestPlayer = Main.player[Player.FindClosest(Projectile.Center, Projectile.width, Projectile.height)];
+            if (Projectile.Center.ManhattanDistance(closestPlayer.Center) > 800f)
+                Projectile.active = false;
         }
-        else
-            Projectile.frame = Main.projFrames[Projectile.type] - 1;
     }
 
     public override void DrawBehind(int index, List<int> behindNPCsAndTiles, List<int> behindNPCs, List<int> behindProjectiles, List<int> overPlayers, List<int> overWiresUI)
     {
-       behindNPCs.Add(index);
+        behindNPCs.Add(index);
     }
 
     public override bool PreDraw(ref Color lightColor)
     {
         Texture2D texture = ModContent.Request<Texture2D>(Texture).Value;
-        Rectangle frame = texture.Frame(1, Main.projFrames[Type], 0, Projectile.frame);
+        Rectangle frame = Projectile.ai[0] == 0 ? new(38, 36, 48, 19) : new(92, 40, 40, 15);
         Vector2 drawPosition = Projectile.Center - Main.screenPosition;
         Vector2 origin = frame.Size() * 0.5f;
         Main.EntitySpriteDraw(texture, drawPosition, frame, Projectile.GetAlpha(lightColor), Projectile.rotation, origin, 1f, 0, 0);

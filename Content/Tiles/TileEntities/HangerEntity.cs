@@ -1,12 +1,7 @@
 ﻿using Terraria.ModLoader.IO;
 using Windfall.Content.Tiles.Furnature.VerletHangers.Hangers;
-using Windfall.Content.Items.Placeables.Furnature.VerletHangers.Decorations;
-using Windfall.Content.Items.Tools;
-using Terraria.Chat;
 using Luminance.Common.VerletIntergration;
-using CalamityMod.TileEntities;
 using static Windfall.Common.Netcode.WindfallNetcode;
-using CalamityMod.Tiles.DraedonStructures;
 
 namespace Windfall.Content.Tiles.TileEntities;
 public class HangerEntity : ModTileEntity

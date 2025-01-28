@@ -5,7 +5,7 @@ using Windfall.Content.NPCs.Bosses.Orator;
 using Windfall.Content.NPCs.TravellingNPCs;
 using Windfall.Content.NPCs.WorldEvents.LunarCult;
 using Windfall.Content.Projectiles.Boss.Orator;
-using Windfall.Content.Projectiles.Other.RitualFurnature;
+using Windfall.Content.Projectiles.Props.RitualFurnature;
 using static Windfall.Common.Systems.WorldEvents.LunarCultBaseSystem;
 
 namespace Windfall.Common.Systems.WorldEvents;

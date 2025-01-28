@@ -1,11 +1,11 @@
 ﻿using Windfall.Common.Systems.WorldEvents;
 
-namespace Windfall.Content.Projectiles.Other.RitualFurnature;
+namespace Windfall.Content.Projectiles.Props.RitualFurnature;
 
 public class RitualTorch : ModProjectile
 {
-    public override string Texture => "Windfall/Content/Projectiles/Other/RitualFurnature/RitualFurnatureAtlas";
-    public new string LocalizationCategory => "Projectiles.Other";
+    public override string Texture => "Windfall/Content/Projectiles/Props/RitualFurnature/RitualFurnatureAtlas";
+    public new string LocalizationCategory => "Projectiles.Props";
 
     public override void SetStaticDefaults()
     {
@@ -31,7 +31,7 @@ public class RitualTorch : ModProjectile
         if (SealingRitualSystem.RitualSequenceSeen)
         {
             Player closestPlayer = Main.player[Player.FindClosest(Projectile.Center, Projectile.width, Projectile.height)];
-            if (CalamityUtils.ManhattanDistance(Projectile.Center, closestPlayer.Center) > 800f)
+            if (Projectile.Center.ManhattanDistance(closestPlayer.Center) > 800f)
                 Projectile.active = false;
         }
     }
