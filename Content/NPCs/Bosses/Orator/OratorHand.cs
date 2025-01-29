@@ -49,7 +49,8 @@ public class OratorHand : ModNPC
     {
         Default,
         Fist,
-        Palm
+        Palm,
+        Gun
     }
     private Pose CurrentPose = Pose.Default;
     private Rectangle cuffFrame = new(0, 0, 150, 114);
@@ -572,17 +573,17 @@ public class OratorHand : ModNPC
                         {
                             if(aiCounter < 270)
                             {
-                                CurrentPose = Pose.Palm;
+                                CurrentPose = Pose.Gun;
 
                                 goalPos = modOrator.target.Center + new Vector2(600f, (float)Math.Sin(aiCounter / 20D) * 320);
 
                                 NPC.velocity = (goalPos - NPC.Center).SafeNormalize(Vector2.Zero) * ((goalPos - NPC.Center).Length() / 10f);
-                                NPC.direction = -WhatHand;
-                                NPC.rotation = Pi;
-                                NPC.rotation += PiOver2 * WhatHand;
+                                NPC.direction = -WhatHand;                                
 
                                 int projectileCounter = (aiCounter + 45) % 90;
                                 Vector2 ToTarget = (modOrator.target.Center - NPC.Center).SafeNormalize(Vector2.Zero);
+
+                                NPC.rotation = ToTarget.ToRotation();
 
                                 if (projectileCounter == 0)
                                 {
@@ -592,7 +593,7 @@ public class OratorHand : ModNPC
                                 }
                                 else
                                 {
-                                    Vector2 spawn = NPC.Center + NPC.velocity + Vector2.UnitX * 64 * (ToTarget.X < 0 ? -1 : 1);
+                                    Vector2 spawn = NPC.Center + (NPC.velocity * 2) + Vector2.UnitX * 72 * (ToTarget.X < 0 ? -1 : 1) + (Vector2.UnitY * -36);
                                     float lerpValue = projectileCounter / 90f;
                                     if (projectileCounter % 5 == 0 && Main.rand.NextBool(lerpValue))
                                     {
@@ -641,18 +642,18 @@ public class OratorHand : ModNPC
                             }
                             else if(aiCounter <= 640)
                             {
-                                CurrentPose = Pose.Palm;
+                                CurrentPose = Pose.Gun;
 
                                 NPC.damage = 0;
                                 goalPos = modOrator.target.Center + new Vector2(-600f, (float)Math.Sin(aiCounter / 20D) * 320);
 
                                 NPC.velocity = (goalPos - NPC.Center).SafeNormalize(Vector2.Zero) * ((goalPos - NPC.Center).Length() / 10f);
                                 NPC.direction = WhatHand;
-                                NPC.rotation = 0;
-                                NPC.rotation -= PiOver2 * WhatHand;
 
                                 int projectileCounter = aiCounter % 90;
                                 Vector2 ToTarget = (modOrator.target.Center - NPC.Center).SafeNormalize(Vector2.Zero);
+
+                                NPC.rotation = ToTarget.ToRotation();
 
                                 if (projectileCounter == 0)
                                 {
@@ -662,7 +663,7 @@ public class OratorHand : ModNPC
                                 }
                                 else
                                 {
-                                    Vector2 spawn = NPC.Center + NPC.velocity + Vector2.UnitX * 64 * (ToTarget.X < 0 ? -1 : 1);
+                                    Vector2 spawn = NPC.Center + (NPC.velocity * 2) + Vector2.UnitX * 72 * (ToTarget.X < 0 ? -1 : 1) + (Vector2.UnitY * -36);
                                     float lerpValue = projectileCounter / 90f;
                                     if (projectileCounter % 5 == 0 && Main.rand.NextBool(lerpValue))
                                     {
@@ -794,17 +795,17 @@ public class OratorHand : ModNPC
                         {
                             if (aiCounter < 390)
                             {
-                                CurrentPose = Pose.Palm;
+                                CurrentPose = Pose.Gun;
 
                                 goalPos = modOrator.target.Center + new Vector2(-600f, (float)Math.Sin(aiCounter / 20D) * -320);
 
                                 NPC.velocity = (goalPos - NPC.Center).SafeNormalize(Vector2.Zero) * ((goalPos - NPC.Center).Length() / 10f);
                                 NPC.direction = -WhatHand;
-                                NPC.rotation = 0;
-                                NPC.rotation += PiOver2 * WhatHand;
 
                                 int projectileCounter = (aiCounter + 90) % 90;
                                 Vector2 ToTarget = (modOrator.target.Center - NPC.Center).SafeNormalize(Vector2.Zero);
+
+                                NPC.rotation = ToTarget.ToRotation();
 
                                 if (projectileCounter == 0)
                                 {
@@ -814,7 +815,7 @@ public class OratorHand : ModNPC
                                 }
                                 else
                                 {
-                                    Vector2 spawn = NPC.Center + NPC.velocity + Vector2.UnitX * 64 * (ToTarget.X < 0 ? -1 : 1);
+                                    Vector2 spawn = NPC.Center + (NPC.velocity * 2) + Vector2.UnitX * 72 * (ToTarget.X < 0 ? -1 : 1) + (Vector2.UnitY * -36);
                                     float lerpValue = projectileCounter / 90f;
                                     if (projectileCounter % 5 == 0 && Main.rand.NextBool(lerpValue))
                                     {
@@ -863,18 +864,18 @@ public class OratorHand : ModNPC
                             }
                             else if (aiCounter <= 760)
                             {
-                                CurrentPose = Pose.Palm;
+                                CurrentPose = Pose.Gun;
 
                                 NPC.damage = 0;
                                 goalPos = modOrator.target.Center + new Vector2(600f, (float)Math.Sin(aiCounter / 20D) * -320);
 
                                 NPC.velocity = (goalPos - NPC.Center).SafeNormalize(Vector2.Zero) * ((goalPos - NPC.Center).Length() / 10f);
                                 NPC.direction = WhatHand;
-                                NPC.rotation = Pi;
-                                NPC.rotation -= PiOver2 * WhatHand;
 
                                 int projectileCounter = (aiCounter + 45) % 90;
                                 Vector2 ToTarget = (modOrator.target.Center - NPC.Center).SafeNormalize(Vector2.Zero);
+
+                                NPC.rotation = ToTarget.ToRotation();
 
                                 if (projectileCounter == 0)
                                 {
@@ -884,7 +885,7 @@ public class OratorHand : ModNPC
                                 }
                                 else
                                 {
-                                    Vector2 spawn = NPC.Center + NPC.velocity + Vector2.UnitX * 64 * (ToTarget.X < 0 ? -1 : 1);
+                                    Vector2 spawn = NPC.Center + (NPC.velocity * 2) + Vector2.UnitX * 72 * (ToTarget.X < 0 ? -1 : 1) + (Vector2.UnitY * -36);
                                     float lerpValue = projectileCounter / 90f;
                                     if (projectileCounter % 5 == 0 && Main.rand.NextBool(lerpValue))
                                     {
@@ -1050,21 +1051,26 @@ public class OratorHand : ModNPC
    
     public override void FindFrame(int frameHeight)
     {
-        #region Hand Frame
-        NPC.frame.Width = ModContent.Request<Texture2D>(this.Texture).Width() / 4;
-        switch (CurrentPose)
+        #region Cuff Frame
+        cuffCounter++;
+
+        if (cuffCounter >= 16)
         {
-            case Pose.Fist:
-                NPC.frame.X = NPC.frame.Width;
-                NPC.frame.Y = 0;
-                return;
-            case Pose.Palm:
-                NPC.frame.X = NPC.frame.Width * 2;
-                NPC.frame.Y = 0;
-                return;
-            default:
-                NPC.frame.X = 0; 
-                break;
+            cuffCounter = 0;
+            cuffFrame.Y += cuffFrame.Height;
+            if (cuffFrame.Y >= cuffFrame.Height * 6)
+                cuffFrame.Y = 0;
+        }
+        #endregion
+
+        #region Hand Frame
+        NPC.frame.Width = ModContent.Request<Texture2D>(Texture).Width() / 4;
+
+        NPC.frame.X = NPC.frame.Width * (int)CurrentPose;
+        if (CurrentPose != Pose.Default)
+        {
+            NPC.frame.Y = 0;
+            return;
         }
         
         if (deadCounter > 300)
@@ -1078,18 +1084,6 @@ public class OratorHand : ModNPC
             NPC.frame.Y += frameHeight;
             if (NPC.frame.Y >= frameHeight * 9)
                 NPC.frame.Y = 0;            
-        }
-        #endregion
-
-        #region Cuff Frame
-        cuffCounter++;
-
-        if (cuffCounter >= 16)
-        {
-            cuffCounter = 0;
-            cuffFrame.Y += cuffFrame.Height;
-            if (cuffFrame.Y >= cuffFrame.Height * 6)
-                cuffFrame.Y = 0;
         }
         #endregion
     }
@@ -1155,7 +1149,7 @@ public class OratorHand : ModNPC
         float startSpeed = CalamityWorld.death ? 1f : CalamityWorld.revenge ? 0f : Main.expertMode ? -1f : -2f;
 
         SoundEngine.PlaySound(SoundID.DD2_OgreSpit, NPC.Center);
-        Vector2 spawnPos = NPC.Center + NPC.velocity + Vector2.UnitX * 64 * (toTarget.X < 0 ? -1 : 1);
+        Vector2 spawnPos = NPC.Center + (NPC.velocity * 2) + Vector2.UnitX * 72 * (toTarget.X < 0 ? -1 : 1) + (Vector2.UnitY * -36);
 
         for(int i = 0; i < 5; i++)
         {
