@@ -1,5 +1,6 @@
 ﻿using Terraria.Chat;
 using Windfall.Common.Graphics.Metaballs;
+using Windfall.Content.NPCs.Bosses.Orator;
 
 namespace Windfall.Content.Projectiles.Boss.Orator;
 
@@ -78,7 +79,11 @@ public class EmpyreanThorn : ModProjectile
 
             if (aiCounter < delay + 30)
                 EmpyreanMetaball.SpawnDefaultParticle(initialPoint, Projectile.rotation.ToRotationVector2().RotatedBy(Main.rand.NextFloat(-0.15f, 0.15f)) * Main.rand.NextFloat(16f, 18f), 40f);
-            if(aiCounter >= delay)
+            
+            if (!NPC.AnyNPCs(ModContent.NPCType<TheOrator>()) && aiCounter < delay + 60)
+                aiCounter = delay + 60;
+
+            if (aiCounter >= delay)
             {
                 if(aiCounter == delay)
                     Projectile.velocity = Projectile.rotation.ToRotationVector2() * StabVelocity;
