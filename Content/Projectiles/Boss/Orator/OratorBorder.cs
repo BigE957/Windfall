@@ -1,6 +1,4 @@
-﻿using Microsoft.Xna.Framework.Graphics;
-using Windfall.Common.Graphics.Metaballs;
-using Windfall.Content.Buffs.DoT;
+﻿using Windfall.Content.Buffs.DoT;
 using Windfall.Content.NPCs.Bosses.Orator;
 using static Windfall.Common.Graphics.Metaballs.EmpyreanMetaball;
 
@@ -9,9 +7,11 @@ namespace Windfall.Content.Projectiles.Boss.Orator;
 public class OratorBorder : ModProjectile
 {
     public ref float counter => ref Projectile.ai[0];
+    public ref float sineCounter => ref Projectile.localAI[0];
     public ref float trueScale => ref Projectile.ai[1];
 
-    public float Radius = 750f;
+    private const float BaseRadius = 250f;
+    public float Radius = 1250f;
 
     public override void SetDefaults()
     {
@@ -23,13 +23,13 @@ public class OratorBorder : ModProjectile
         Projectile.ignoreWater = true;
         Projectile.scale = 3f;
         CooldownSlot = ImmunityCooldownID.Bosses;
-        Projectile.timeLeft = 30;
+        Projectile.timeLeft = 200;
     }
     public override void OnSpawn(IEntitySource source)
     {
         Projectile.scale = 5f;
         Projectile.ai[1] = 5f;
-        Radius = (750 / 3f) * Projectile.scale;
+        Radius = BaseRadius * Projectile.scale;
         const int pCount = 250;
         for (int i = 0; i <= pCount; i++)
             SpawnBorderParticle(Projectile, Vector2.Zero, 0.5f * i, 25, Main.rand.NextFloat(80, 160), TwoPi / pCount * i);
@@ -37,7 +37,8 @@ public class OratorBorder : ModProjectile
     }
     public override void AI()
     {
-        if(counter == 0 && Main.netMode == NetmodeID.MultiplayerClient)
+        #region Particles
+        if (counter == 0 && Main.netMode == NetmodeID.MultiplayerClient)
         {
             const int pCount = 250;
             for (int i = 0; i <= pCount; i++)
@@ -48,25 +49,40 @@ public class OratorBorder : ModProjectile
             Vector2 spawnPosition = Projectile.Center + Main.rand.NextVector2CircularEdge(Projectile.width * Projectile.scale / 9.65f, Projectile.width * Projectile.scale / 9.65f);
             SpawnDefaultParticle(spawnPosition, ((Projectile.Center - spawnPosition).SafeNormalize(Vector2.Zero).RotatedBy(Main.rand.NextFloat(-1f, 1f)) * Main.rand.NextFloat(2f, 5f)), Main.rand.NextFloat(60f, 100f));
         }
-        
+        #endregion
+
         if (!NPC.AnyNPCs(ModContent.NPCType<TheOrator>()))
             trueScale += 0.05f;
-        else
+        else if(counter > 180)
         {       
             Projectile.timeLeft = 30;
             if (trueScale > 3f)
             {
                 trueScale -= 0.05f;
-                counter = (3 * Pi / 2) * 20;
+                sineCounter = (3 * Pi / 2) * 20;
             }
         }
-        Projectile.scale = (float)(trueScale - (Math.Sin(counter / 20f) + 1f) / 8);
-        Radius = (750 / 3f) * Projectile.scale;                    
+        else //Spawn in
+        {
+            if (counter < 90)
+                trueScale = Lerp(5f, 2f, SineOutEasing(counter / 90f, 1));
+            else if (counter > 90)
+                trueScale = Lerp(2f, 3f, SineInOutEasing((counter - 90) / 90f, 1));
+            else
+                trueScale = 2f;
+            sineCounter = (3 * Pi / 2) * 20;
+        }
+        Projectile.scale = (float)(trueScale - (Math.Sin(sineCounter / 20f) + 1f) / 8);
+        Radius = BaseRadius * Projectile.scale;
 
-        if(NPC.AnyNPCs(ModContent.NPCType<TheOrator>()))
+        #region Outside Border Debuff
+        if (NPC.AnyNPCs(ModContent.NPCType<TheOrator>()))
             foreach(Player target in Main.ActivePlayers)
-                if (!target.dead && !target.WithinRange(Projectile.Center, Radius + 12f))
+                if (!target.dead && !target.WithinRange(Projectile.Center, Radius + 16f))
                     target.AddBuff(ModContent.BuffType<Entropy>(), 5);
+        #endregion
+
+        sineCounter++;
         counter++;
     }
 
