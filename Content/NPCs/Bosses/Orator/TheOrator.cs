@@ -246,7 +246,7 @@ public class TheOrator : ModNPC
                 const int EndTime = 1500;
 
                 if (aiCounter > 150 && aiCounter < EndTime - 100 && aiCounter % 90 == 0 && Main.netMode != NetmodeID.MultiplayerClient)
-                    Projectile.NewProjectile(Terraria.Entity.GetSource_NaturalSpawn(), NPC.Center, Vector2.Zero, ModContent.ProjectileType<OratorJavelin>(), BoltDamage, 0f, -1, 120, 1);
+                    Projectile.NewProjectile(Terraria.Entity.GetSource_NaturalSpawn(), NPC.Center, Vector2.Zero, ModContent.ProjectileType<OratorJavelin>(), BoltDamage, 0f, -1, 120, 2);
 
                 NPC.damage = 0;
                 int SpawnCount = CalamityWorld.death ? 3 : CalamityWorld.revenge || Main.expertMode ? 2 : 1;
