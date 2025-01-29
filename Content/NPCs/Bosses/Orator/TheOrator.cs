@@ -68,8 +68,7 @@ public class TheOrator : ModNPC
         GlobDamage = StatCorrections.ScaleProjectileDamage(Main.masterMode ? 240 : CalamityWorld.death ? 200 : CalamityWorld.revenge ? 170 : Main.expertMode ? 125 : 100);
         BoltDamage = StatCorrections.ScaleProjectileDamage(Main.masterMode ? 205 : CalamityWorld.death ? 172 : CalamityWorld.revenge ? 160 : Main.expertMode ? 138 : 90);
         DashDelay = CalamityWorld.death ? 20 : CalamityWorld.revenge ? 25 : 30;
-    }
-    
+    }  
 
     public static bool noSpawnsEscape = true;
     public override void OnSpawn(IEntitySource source)
@@ -119,10 +118,11 @@ public class TheOrator : ModNPC
         get => (int)NPC.ai[3];
         set => NPC.ai[3] = value;
     }
-
+    short attackCounter2 = 0;
     bool dashing = false;
     Vector2 VectorToTarget = Vector2.Zero;
-    public Player target = null;   
+    public Player target = null;
+    
     public override bool PreAI()
     {
         foreach (Player p in Main.player.Where(p => p != null && p.active && !p.dead))
@@ -608,6 +608,7 @@ public class TheOrator : ModNPC
                 {
                     if (aiCounter == 0)
                     {
+                        attackCounter = 0;
                         NPC.position.X = border.position.X;
                         NPC.position.Y = border.position.Y - 700;
                         VectorToTarget = new Vector2(0, -700);
@@ -652,18 +653,23 @@ public class TheOrator : ModNPC
                         NPC.Center = border.Center + (VectorToTarget = VectorToTarget.RotatedBy(OrbitRate));
                         #endregion
 
-                        float lerp = (aiCounter - (NPC.ai[3] * 0.66f)) / (NPC.ai[3] * 0.33f);
-                        if ((aiCounter % ((int)Lerp(40, 20, lerp))) == 0 && aiCounter < (NPC.ai[3] - 60) && Main.netMode != NetmodeID.MultiplayerClient)
+                        if (attackCounter == 0 && aiCounter < (NPC.ai[3] - 60) && Main.netMode != NetmodeID.MultiplayerClient)
                         {
                             float angle = PiOver2 * Main.rand.Next(4) + (aiCounter / 12f);
                             Projectile.NewProjectile(Terraria.Entity.GetSource_NaturalSpawn(), target.Center + Vector2.UnitX.RotatedBy(angle) * 250, Vector2.Zero, ModContent.ProjectileType<OratorJavelin>(), BoltDamage, 0f, -1, 45, 5, angle);
+                            attackCounter2 += 3;
+                            attackCounter = 60 - attackCounter2;
                         }
+                        else if (attackCounter > 0)
+                            attackCounter--;
                     }
                     else
                     {
                         target = Main.player[Player.FindClosest(NPC.Center, NPC.width, NPC.height)];
                         dashing = false;
                         aiCounter = 0;
+                        attackCounter = 0;
+                        attackCounter2 = 0;
                         if (NPC.life / (float)NPC.lifeMax <= 0.1f)
                         {
                             AIState = States.Defeat;
