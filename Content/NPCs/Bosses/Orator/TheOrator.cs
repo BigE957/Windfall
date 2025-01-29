@@ -657,7 +657,10 @@ public class TheOrator : ModNPC
                         {
                             float angle = PiOver2 * Main.rand.Next(4) + (aiCounter / 12f);
                             Projectile.NewProjectile(Terraria.Entity.GetSource_NaturalSpawn(), target.Center + Vector2.UnitX.RotatedBy(angle) * 250, Vector2.Zero, ModContent.ProjectileType<OratorJavelin>(), BoltDamage, 0f, -1, 45, 5, angle);
-                            attackCounter2 += 3;
+                            if (attackCounter2 >= 50)
+                                attackCounter2 = 50;
+                            else
+                                attackCounter2 += 3;
                             attackCounter = 60 - attackCounter2;
                         }
                         else if (attackCounter > 0)
