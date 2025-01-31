@@ -24,10 +24,10 @@
     <None Remove="Assets\Items\Tools\Hammer.png" />
     <None Remove="Assets\Items\Tools\HammerAndChiselProj.png" />
     <None Remove="Assets\Items\Tools\HammerAndChiselSmall.png" />
-    <None Remove="Assets\Items\Weapons\Melee\NewMoon.png" />
+    <None Remove="Assets\Items\Weapons\Melee\Apotelesma.png" />
     <None Remove="Assets\Items\Weapons\Misc\RiftWeaver.png" />
     <None Remove="Assets\Items\Weapons\Misc\RiftWeaverGlow.png" />
-    <None Remove="Assets\Items\Weapons\Rogue\OratorSpear.png" />
+    <None Remove="Assets\Items\Weapons\Rogue\ExodiumSpear.png" />
     <None Remove="Assets\Items\Weapons\Summon\ShadowHandStaff.png" />
     <None Remove="Assets\NPCs\Bosses\TheOrator_Boss.png" />
     <None Remove="Assets\NPCs\Enemies\Orator_Hand.png" />
@@ -122,6 +122,7 @@
     <None Remove="Content\Tiles\Furnature\SelenicPots.png" />
     <None Remove="Content\Tiles\Furnature\WhiteStonePlaqueTile.png" />
     <None Remove="Content\Tiles\Special\DatabaseTerminal.png" />
+    <None Remove="Content\Tiles\Special\ExodiumSpearTile.png" />
     <None Remove="Content\UI\Dialogue\Emoticons\Angry_Emote_Bottom.png" />
     <None Remove="Content\UI\Dialogue\Emoticons\Angry_Emote_Top.png" />
     <None Remove="Content\UI\Dialogue\Emoticons\Confused_Emote.png" />

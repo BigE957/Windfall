@@ -1,12 +1,12 @@
-﻿using CalamityMod.CalPlayer;
-using CalamityMod.Items;
+﻿using CalamityMod.Items;
 using CalamityMod.Items.Weapons.Rogue;
 using Windfall.Content.Projectiles.Weapons.Rogue;
 
 namespace Windfall.Content.Items.Weapons.Rogue;
-public class OratorSpear : RogueWeapon, ILocalizedModType
+public class ExodiumSpear : RogueWeapon, ILocalizedModType
 {
-    public override string Texture => "Windfall/Assets/Items/Weapons/Rogue/OratorSpear";
+    public new string LocalizationCategory => "Items.Weapons.Rogue";
+    public override string Texture => "Windfall/Assets/Items/Weapons/Rogue/ExodiumSpear";
 
     public override void SetDefaults()
     {
@@ -19,7 +19,7 @@ public class OratorSpear : RogueWeapon, ILocalizedModType
         Item.UseSound = SoundID.Item1;
         Item.autoReuse = true;
         Item.maxStack = 1;
-        Item.shoot = ModContent.ProjectileType<OratorSpearProj>();
+        Item.shoot = ModContent.ProjectileType<ExodiumSpearProj>();
         Item.shootSpeed = 22f;
         Item.DamageType = ModContent.GetInstance<RogueDamageClass>();
         Item.value = CalamityGlobalItem.RarityRedBuyPrice;

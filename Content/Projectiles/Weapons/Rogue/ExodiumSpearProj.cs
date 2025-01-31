@@ -1,22 +1,18 @@
 ﻿using CalamityMod.Buffs.DamageOverTime;
-using CalamityMod.NPCs.AstrumDeus;
 using Luminance.Core.Graphics;
-using Terraria;
 using Windfall.Common.Graphics.Metaballs;
-using Windfall.Content.NPCs.Bosses.Orator;
-using Windfall.Content.Projectiles.Boss.Orator;
 using static Windfall.Content.NPCs.GlobalNPCs.DebuffGlobalNPC;
 
 namespace Windfall.Content.Projectiles.Weapons.Rogue;
-public class OratorSpearProj : ModProjectile, ILocalizedModType
+public class ExodiumSpearProj : ModProjectile, ILocalizedModType
 {
     public new string LocalizationCategory => "Projectiles.Rogue";
-    public override string Texture => "Windfall/Assets/Items/Weapons/Rogue/OratorSpear";
+    public override string Texture => "Windfall/Assets/Items/Weapons/Rogue/ExodiumSpear";
 
     public override void SetDefaults()
     {
-        Projectile.width = 30;
-        Projectile.height = 30;
+        Projectile.width = 130;
+        Projectile.height = 140;
         Projectile.friendly = true;
         Projectile.ignoreWater = true;
         Projectile.penetrate = -1;
@@ -43,7 +39,7 @@ public class OratorSpearProj : ModProjectile, ILocalizedModType
         Vector2 lineStart = Projectile.Center - (v * Projectile.width * 0.5f);
         Vector2 lineEnd = Projectile.Center + (v * Projectile.width * 0.5f);
         float collisionPoint = 0f;
-        return Collision.CheckAABBvLineCollision(targetHitbox.TopLeft(), targetHitbox.Size(), lineStart, lineEnd, Projectile.height, ref collisionPoint);
+        return Collision.CheckAABBvLineCollision(targetHitbox.TopLeft(), targetHitbox.Size(), lineStart, lineEnd, 24, ref collisionPoint);
     }
 
     public override bool PreDraw(ref Color lightColor)
@@ -83,7 +79,7 @@ public class OratorSpearProj : ModProjectile, ILocalizedModType
         if (Projectile.Calamity().stealthStrike)
         {
             int damage = 370;
-            foreach(Projectile spear in Main.projectile.Where(p => p.active && p.ai[0] == 1f && (p.type == ModContent.ProjectileType<OratorSpearProj>())))
+            foreach(Projectile spear in Main.projectile.Where(p => p.active && p.ai[0] == 1f && (p.type == ModContent.ProjectileType<ExodiumSpearProj>())))
             {
                 NPC impaledNPC = Main.npc[(int)spear.ai[1]];
                 if (CalamityUtils.IsAnEnemy(impaledNPC, false))

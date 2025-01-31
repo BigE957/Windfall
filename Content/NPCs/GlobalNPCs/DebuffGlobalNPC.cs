@@ -14,7 +14,7 @@ public class DebuffGlobalNPC : GlobalNPC
                 npc.lifeRegen = 0;
 
             int projectileCount = Main.projectile.Where(p => p.active && p.ai[0] == 1f && p.ai[1] == npc.whoAmI && (
-                    p.type == ModContent.ProjectileType<OratorSpearProj>()
+                    p.type == ModContent.ProjectileType<ExodiumSpearProj>()
                 )).Count();
 
             if (projectileCount > 0)

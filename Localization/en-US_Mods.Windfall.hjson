@@ -1193,8 +1193,8 @@ Items: {
 		}
 
 		Rogue: {
-			OratorSpear: {
-				DisplayName: Orator Spear
+			ExodiumSpear: {
+				DisplayName: Penetrator of the Outer Realm
 				Tooltip: ""
 			}
 		}
@@ -1802,12 +1802,12 @@ Projectiles: {
 	RiftWeaverProj.DisplayName: Rift Weaver Proj
 	RiftWeaverThrow.DisplayName: Rift Weaver Throw
 	UnstableDarkness.DisplayName: Unstable Darkness
-	Rogue.OratorSpearProj.DisplayName: Orator Spear Proj
 	AstralBolt.DisplayName: Astral Bolt
 	HammerChiselProjectile.DisplayName: Hammer Chisel Projectile
 	HandStatue.DisplayName: Hand Statue
 	TestProjectile.DisplayName: Test Projectile
 	FadingStar.DisplayName: Fading Star
+	Rogue.ExodiumSpearProj.DisplayName: Exodium Spear Proj
 }
 
 Buffs: {
