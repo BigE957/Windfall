@@ -403,7 +403,7 @@ public class TheOrator : ModNPC
                     NPC.damage = 0;
                     Vector2 vector = target.Center - NPC.Center;
                     float dist = vector.Length();
-                    vector.SafeNormalize(Vector2.Zero);
+                    vector.Normalize();
                     if (dist > 500)
                         NPC.velocity = (NPC.velocity * 40f + vector * 16f) / 41f;
                     else
@@ -552,7 +552,7 @@ public class TheOrator : ModNPC
                 #region Movement
                 Vector2 homeInVec = target.Center - NPC.Center;
                 float distance = homeInVec.Length();
-                homeInVec.SafeNormalize(Vector2.Zero);
+                homeInVec.Normalize();
                 if (distance > 350)
                     NPC.velocity = (NPC.velocity * 40f + homeInVec * 18f) / 41f;
                 else
