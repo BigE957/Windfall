@@ -154,7 +154,7 @@ public class OratorJavelin : ModProjectile
                 {
                     Projectile.hostile = true;
                     Projectile.tileCollide = true;
-                    Projectile.velocity = Projectile.velocity.SafeNormalize(Vector2.UnitX) * -(CalamityWorld.death ? 60 : CalamityWorld.revenge ? 50 : 40);
+                    Projectile.velocity = Projectile.velocity.SafeNormalize(Vector2.UnitX) * -(CalamityWorld.death ? 50 : CalamityWorld.revenge ? 45 : 40);
                 }
                 else
                     Projectile.velocity *= 0.985f;
