@@ -69,12 +69,6 @@ public class TheOrator : ModNPC
     }  
 
     public static bool noSpawnsEscape = true;
-    public override void OnSpawn(IEntitySource source)
-    {
-        target = Main.player[Player.FindClosest(NPC.Center, NPC.width, NPC.height)];
-
-        //AIState = States.Testing;
-    }
     internal enum States
     {
         Spawning,
@@ -120,7 +114,15 @@ public class TheOrator : ModNPC
     bool dashing = false;
     Vector2 VectorToTarget = Vector2.Zero;
     public Player target = null;
-    
+
+    public override void OnSpawn(IEntitySource source)
+    {
+        target = Main.player[Player.FindClosest(NPC.Center, NPC.width, NPC.height)];
+
+        //AIState = States.Testing;
+    }
+
+
     public override bool PreAI()
     {
         foreach (Player p in Main.ActivePlayers)
@@ -146,7 +148,7 @@ public class TheOrator : ModNPC
                 NPC.direction = -1;
         }
         NPC.spriteDirection = NPC.direction;
-        //Lighting.AddLight(NPC.Center, new Vector3(0.32f, 0.92f, 0.71f));
+
         if (NPC.AnyNPCs(ModContent.NPCType<OratorHand>()) ||  AIState == States.Spawning)
             NPC.dontTakeDamage = true;
         else
@@ -161,7 +163,7 @@ public class TheOrator : ModNPC
             target.Calamity().infiniteFlight = true;
         switch (AIState)
         {
-            //Phase 1               
+            // Phase 1               
             case States.DarkMonster:
                 if (aiCounter == 1 && Main.netMode != NetmodeID.MultiplayerClient)
                     Projectile.NewProjectile(Terraria.Entity.GetSource_NaturalSpawn(), NPC.Center, (target.Center - NPC.Center).SafeNormalize(Vector2.Zero) * 40, ModContent.ProjectileType<DarkMonster>(), MonsterDamage, 0f);
@@ -239,8 +241,7 @@ public class TheOrator : ModNPC
                 break;
             case States.DarkSpawn:
                 #region Movement
-                Vector2 homeInV = target.Center + Vector2.UnitY * -300;
-                
+                Vector2 homeInV = target.Center + Vector2.UnitY * -300;               
                 NPC.velocity = (homeInV - NPC.Center).SafeNormalize(Vector2.Zero) * ((homeInV - NPC.Center).Length() / 10f);
                 #endregion
                 const int EndTime = 1500;
@@ -402,7 +403,7 @@ public class TheOrator : ModNPC
                     NPC.damage = 0;
                     Vector2 vector = target.Center - NPC.Center;
                     float dist = vector.Length();
-                    vector.Normalize();
+                    vector.SafeNormalize(Vector2.Zero);
                     if (dist > 500)
                         NPC.velocity = (NPC.velocity * 40f + vector * 16f) / 41f;
                     else
@@ -489,7 +490,7 @@ public class TheOrator : ModNPC
                 NPC.velocity = (goalPosition - NPC.Center).SafeNormalize(Vector2.Zero) * ((goalPosition - NPC.Center).Length() / 10f);
                 #endregion
                 #region Projectiles
-                if (aiCounter > 90 && NPC.Center.Y < target.Center.Y - 50)
+                if (aiCounter > 120 && NPC.Center.Y < target.Center.Y - 50)
                 {
                     Projectile proj;
                     if (Main.netMode != NetmodeID.MultiplayerClient && NPC.AnyNPCs(ModContent.NPCType<OratorHand>()) && aiCounter > 120 && aiCounter % 10 == 0)
@@ -503,7 +504,7 @@ public class TheOrator : ModNPC
                         proj = Projectile.NewProjectileDirect(Terraria.Entity.GetSource_NaturalSpawn(), hand.Center + new Vector2(-64, -32), new Vector2(Main.rand.NextFloat(-2f, 0f), -12), ModContent.ProjectileType<DarkGlob>(), GlobDamage * 3, 0f, -1, 1, 1.5f, -1);
                         proj.Calamity().DealsDefenseDamage = true;
                     }
-                    if (aiCounter % AttackFrequency == 0)
+                    if (aiCounter % AttackFrequency == 0 && aiCounter < 690)
                     {
                         SoundEngine.PlaySound(SoundID.DD2_OgreSpit, NPC.Center);
                         for (int i = 0; i < 10; i++)
@@ -551,7 +552,7 @@ public class TheOrator : ModNPC
                 #region Movement
                 Vector2 homeInVec = target.Center - NPC.Center;
                 float distance = homeInVec.Length();
-                homeInVec.Normalize();
+                homeInVec.SafeNormalize(Vector2.Zero);
                 if (distance > 350)
                     NPC.velocity = (NPC.velocity * 40f + homeInVec * 18f) / 41f;
                 else
@@ -597,7 +598,8 @@ public class TheOrator : ModNPC
                     }
                 }
                 break;
-            //Phase 2
+            
+            // Phase 2
             case States.DarkOrbit:
                 float velo = 0f;
                 int OrbitDashCount = CalamityWorld.death ? 5 : CalamityWorld.revenge ? 3 : 2;
@@ -656,8 +658,8 @@ public class TheOrator : ModNPC
                         {
                             float angle = PiOver2 * Main.rand.Next(4) + (aiCounter / 12f);
                             Projectile.NewProjectile(Terraria.Entity.GetSource_NaturalSpawn(), target.Center + Vector2.UnitX.RotatedBy(angle) * 250, Vector2.Zero, ModContent.ProjectileType<OratorJavelin>(), BoltDamage, 0f, -1, 30, 5, angle);
-                            if (attackCounter2 >= 48)
-                                attackCounter2 = 48;
+                            if (attackCounter2 >= 45)
+                                attackCounter2 = 45;
                             else
                                 attackCounter2 += 3;
                             attackCounter = 58 - attackCounter2;
@@ -696,16 +698,15 @@ public class TheOrator : ModNPC
                 border = Main.projectile.First(p => p.active && p.type == ModContent.ProjectileType<OratorBorder>());
                 OratorBorder oratorBorder = border.ModProjectile as OratorBorder;
                 #region Movement
-                homeInV = border.Center - NPC.Center;
-                velo = 60;
-                homeInV.Normalize();
-                NPC.velocity = (NPC.velocity * velo + homeInV * 18f) / (velo + 1f);
-                if (NPC.velocity.Length() > velo / 2f)
-                    NPC.velocity = NPC.velocity.SafeNormalize(-Vector2.UnitY) * velo / 2f;
+                Vector2 goalPos = border.Center;
+                if (aiCounter <= 30)
+                    NPC.velocity = (goalPos - NPC.Center).SafeNormalize(Vector2.Zero) * ((goalPos - NPC.Center).Length() / 30f);
+                else
+                    NPC.Center = goalPos + Vector2.UnitY * (float)Math.Sin(aiCounter / 30f) * 24f;
                 #endregion
                 if (aiCounter < 1500 && oratorBorder.trueScale > 1.5f)
                     oratorBorder.trueScale -= 0.001f;                   
-                if (aiCounter % 5 == 0 && aiCounter > 120)
+                if (aiCounter > 120)
                 {
                     if (aiCounter < 1400)
                     {
@@ -714,9 +715,9 @@ public class TheOrator : ModNPC
                             int projectileCount = CalamityWorld.revenge ? 8 : 6;
                             for (int i = 0; i < projectileCount; i++)
                                 if (Main.netMode != NetmodeID.MultiplayerClient)
-                                    Projectile.NewProjectile(Terraria.Entity.GetSource_NaturalSpawn(), NPC.Center, (target.Center - NPC.Center).SafeNormalize(Vector2.Zero).RotatedBy(TwoPi / projectileCount * i) * 3f, ModContent.ProjectileType<FadingStar>(), BoltDamage, 0.5f);
+                                    Projectile.NewProjectile(Terraria.Entity.GetSource_NaturalSpawn(), NPC.Center, (target.Center - NPC.Center).SafeNormalize(Vector2.Zero).RotatedBy(TwoPi / projectileCount * i) * 3f, ModContent.ProjectileType<FadingStar>(), BoltDamage, 0.5f, -1, 1.025f);
                         }
-                        if (Main.netMode != NetmodeID.MultiplayerClient)
+                        if (aiCounter % 5 == 0 && Main.netMode != NetmodeID.MultiplayerClient)
                         {
                             int projectileCount = CalamityWorld.revenge ? 3 : 2;
                             for (int i = 0; i < projectileCount; i++)
@@ -726,19 +727,8 @@ public class TheOrator : ModNPC
                                 glob.timeLeft = 95;
                             }
                         }
-                    }
-                    else if (aiCounter >= 2140 && aiCounter % 45 == 0)
-                    {
-                        scytheSpin = true;
-                        Vector2 dir = Main.rand.NextVector2CircularEdge(1f, 1f);
-                        int projCount = 8;
-                        for (int i = 0; i < projCount; i++)
-                        {
-                            if (Main.netMode != NetmodeID.MultiplayerClient)
-                                Projectile.NewProjectile(Terraria.Entity.GetSource_NaturalSpawn(), NPC.Center, dir.RotatedBy(TwoPi / projCount * i) * 20, ModContent.ProjectileType<DarkBolt>(), BoltDamage, 0f, -1, 0, -20, i % 2 == 0 ? 1 : 0);
-                        }
-                    }
-                    else if (Main.netMode != NetmodeID.MultiplayerClient)
+                    }                   
+                    else if (aiCounter < 2140 && Main.netMode != NetmodeID.MultiplayerClient)
                     {
                         switch(aiCounter - 1400)
                         {
@@ -771,8 +761,12 @@ public class TheOrator : ModNPC
                                 break;
                         }
                     }
+                    else if (aiCounter == 2140 && Main.netMode != NetmodeID.MultiplayerClient)
+                    {
+                        Projectile.NewProjectile(Projectile.GetSource_NaturalSpawn(), NPC.Center, (target.Center - NPC.Center).SafeNormalize(Vector2.Zero) * 30f, ModContent.ProjectileType<OratorScythe>(), MonsterDamage, 0.5f, ai1: 1);
+                    }
                 }
-                if (aiCounter >= 2420)
+                if(aiCounter >= 2420)
                 {
                     oratorBorder.trueScale += 0.003f;
                     if (oratorBorder.trueScale >= 3f)
@@ -920,16 +914,12 @@ public class TheOrator : ModNPC
                 int tideOut = 600;
                 #region Movement
                 if (aiCounter < (attackDuration + tideOut + 120) / 2f)
-                    homeInV = border.Center + Vector2.UnitY * -600 - NPC.Center;
+                    goalPos = border.Center + Vector2.UnitY * -600;
                 else
-                    homeInV = border.Center - NPC.Center;
-                velo = 60;
-                homeInV.Normalize();
-                NPC.velocity = (NPC.velocity * velo + homeInV * 18f) / (velo + 1f);
-                if (NPC.velocity.Length() > velo / 2f)
-                    NPC.velocity = NPC.velocity.SafeNormalize(-Vector2.UnitY) * velo / 2f;
+                    goalPos = border.Center;
+                NPC.velocity = (goalPos - NPC.Center).SafeNormalize(Vector2.Zero) * ((goalPos - NPC.Center).Length() / 30f);
                 #endregion
-                
+
                 if (aiCounter % attackDuration == 0)
                 {
                     SoundEngine.PlaySound(SoundID.DD2_EtherianPortalSpawnEnemy);
@@ -984,10 +974,11 @@ public class TheOrator : ModNPC
                 if (aiCounter < 750)
                 {
                     #region Movement
-                    homeInV = border.Center + Vector2.UnitY * -600 - NPC.Center;
-                    velo = 60;
-                    homeInV.Normalize();
-                    NPC.velocity = (NPC.velocity * velo + homeInV * 18f) / (velo + 1f);
+                    goalPos = border.Center + Vector2.UnitY * -600;
+                    if (aiCounter <= 30)
+                        NPC.velocity = (goalPos - NPC.Center).SafeNormalize(Vector2.Zero) * ((goalPos - NPC.Center).Length() / 30f);
+                    else
+                        NPC.Center = goalPos + Vector2.UnitY * (float)Math.Sin(aiCounter / 30f) * 24f;
                     #endregion
                     if (aiCounter >= 0)
                     {
@@ -1122,7 +1113,7 @@ public class TheOrator : ModNPC
 
                                 if (Main.expertMode && aiCounter % 60 == 0)
                                 {
-                                    int radialCounter = CalamityWorld.death ? 9 : CalamityWorld.revenge ? 7 : 5;
+                                    int radialCounter = CalamityWorld.death ? 8 : CalamityWorld.revenge ? 6 : 4;
                                     for (int i = 0; i < radialCounter; i++)
                                         if (Main.netMode != NetmodeID.MultiplayerClient)
                                             Projectile.NewProjectile(Terraria.Entity.GetSource_NaturalSpawn(), NPC.Center, (target.Center - NPC.Center).SafeNormalize(Vector2.Zero).RotatedBy(PiOver2 - (Pi / radialCounter * i)) * 5, ModContent.ProjectileType<FadingStar>(), GlobDamage, 0f, -1);
@@ -1193,7 +1184,8 @@ public class TheOrator : ModNPC
                     }
                 }
                 break;
-            //Transitions
+            
+            // Transitions + Animations
             case States.Spawning:
                 target = Main.player[Player.FindClosest(NPC.Center, NPC.width, NPC.height)];
                 #region Movement
@@ -1229,14 +1221,18 @@ public class TheOrator : ModNPC
                     for (int i = 0; i < 12; i++)
                         EmpyreanMetaball.SpawnDefaultParticle(NPC.Center + new Vector2(128 + Main.rand.NextFloat(-width, width), Main.rand.NextFloat(-24, 0)).RotatedBy(-PiOver4), new Vector2(Main.rand.Next(-2, 2), Main.rand.Next(1, 5) * SineInEasing(ratio, 1)).RotatedBy(-PiOver4), Main.rand.NextFloat(15f, 25f) * (ratio * 2f));
                 }
-                if (Main.netMode != NetmodeID.MultiplayerClient && aiCounter == 150)
+                if (aiCounter == 150)
                 {
                     SoundEngine.PlaySound(SoundID.DD2_EtherianPortalDryadTouch, NPC.Center);
                     Vector2 spawnPos = new(NPC.Center.X + 128, NPC.Center.Y);
-                    int index = NPC.NewNPC(NPC.GetSource_FromAI(), (int)spawnPos.X, (int)spawnPos.Y, ModContent.NPCType<OratorHand>());
-                    Main.npc[index].ai[0] = NPC.whoAmI;
+
+                    if (Main.netMode != NetmodeID.MultiplayerClient)
+                    {
+                        int index = NPC.NewNPC(NPC.GetSource_FromAI(), (int)spawnPos.X, (int)spawnPos.Y, ModContent.NPCType<OratorHand>());
+                        Main.npc[index].ai[0] = NPC.whoAmI;
+                    }
                     for (int i = 0; i < 24; i++)
-                        EmpyreanMetaball.SpawnDefaultParticle(Main.npc[index].Center + new Vector2(Main.rand.NextFloat(-64, 64), -32).RotatedBy(-PiOver4), Vector2.UnitY.RotatedBy(-PiOver4) * Main.rand.NextFloat(2f, 18f), Main.rand.NextFloat(110f, 130f));
+                        EmpyreanMetaball.SpawnDefaultParticle(spawnPos + new Vector2(Main.rand.NextFloat(-64, 64), -32).RotatedBy(-PiOver4), Vector2.UnitY.RotatedBy(-PiOver4) * Main.rand.NextFloat(2f, 18f), Main.rand.NextFloat(110f, 130f));
                 }
                 if (aiCounter > 180 && aiCounter <= 240)
                 {
@@ -1251,15 +1247,18 @@ public class TheOrator : ModNPC
                 {
                     SoundEngine.PlaySound(SoundID.DD2_EtherianPortalDryadTouch, NPC.Center);
                     Vector2 spawnPos = new(NPC.Center.X - 128, NPC.Center.Y);
-                    int index = NPC.NewNPC(NPC.GetSource_FromAI(), (int)spawnPos.X, (int)spawnPos.Y, ModContent.NPCType<OratorHand>());
-                    Main.npc[index].ai[0] = NPC.whoAmI;
+                    if (Main.netMode != NetmodeID.MultiplayerClient)
+                    {
+                        int index = NPC.NewNPC(NPC.GetSource_FromAI(), (int)spawnPos.X, (int)spawnPos.Y, ModContent.NPCType<OratorHand>());
+                        Main.npc[index].ai[0] = NPC.whoAmI;
+                    }
                     for (int i = 0; i < 24; i++)
-                        EmpyreanMetaball.SpawnDefaultParticle(Main.npc[index].Center + new Vector2(Main.rand.NextFloat(-64, 64), -32).RotatedBy(PiOver4), Vector2.UnitY.RotatedBy(PiOver4) * Main.rand.NextFloat(2f, 18f), Main.rand.NextFloat(110f, 130f));
+                        EmpyreanMetaball.SpawnDefaultParticle(spawnPos + new Vector2(Main.rand.NextFloat(-64, 64), -32).RotatedBy(PiOver4), Vector2.UnitY.RotatedBy(PiOver4) * Main.rand.NextFloat(2f, 18f), Main.rand.NextFloat(110f, 130f));
                 }
 
                 if (aiCounter == 360)
                 {
-                    if(!NPC.AnyNPCs(ModContent.NPCType<OratorHand>()))
+                    if(!NPC.AnyNPCs(ModContent.NPCType<OratorHand>()) && Main.netMode != NetmodeID.MultiplayerClient)
                     {
                         int index = NPC.NewNPC(NPC.GetSource_FromAI(), (int)NPC.Center.X, (int)NPC.Center.Y, ModContent.NPCType<OratorHand>());
                         Main.npc[index].ai[0] = NPC.whoAmI;
@@ -1305,7 +1304,7 @@ public class TheOrator : ModNPC
                             DisplayMessage(baseKey + 3, NPC);
                             break;
                         case 420:
-                            AIState = States.DarkOrbit; //DarkOrbit
+                            AIState = States.DarkOrbit;
                             aiCounter = -60;
                             attackCounter = 0;
                             attackCounter2 = 0;
@@ -1383,21 +1382,34 @@ public class TheOrator : ModNPC
 
                 break;
             case States.Testing:
-                #region Movement
-                homeInVector = target.Center - NPC.Center;
-                targetDist = homeInVector.Length();
-                homeInVector.Normalize();
-                if (targetDist > 1000f)
-                    NPC.velocity = (NPC.velocity * 40f + homeInVector * 12f) / 41f;
-                else
+                #region Orator Teleporting
+                /*
+                int wrappedCounter = aiCounter % 181;
+                if(wrappedCounter > 90)
                 {
-                    if (targetDist < 950f)
-                        NPC.velocity = (NPC.velocity * 40f + homeInVector * -12f) / 41f;
-                    else
-                        NPC.velocity *= 0.975f;
+                    float ratio = (wrappedCounter - 90) / 90f;
+                    float EasedRatio = ExpInEasing(ratio, 1);
+                    float width = Clamp(96f * EasedRatio, 0f, 64f);
+
+                    for (int i = 0; i < 12; i++)
+                    {
+                        EmpyreanMetaball.SpawnDefaultParticle(NPC.Center + Vector2.UnitY * 48 + (Vector2.UnitX * Main.rand.NextFloat(-width, width)), new Vector2(Main.rand.Next(-4, 4), Main.rand.Next(-10, -5) * SineInEasing(ratio, 1)), Main.rand.NextFloat(15f, 25f) * (ratio * 2f));
+                        EmpyreanMetaball.SpawnDefaultParticle((target.Center - Vector2.UnitY * 100) + (Vector2.UnitX * Main.rand.NextFloat(-width, width)), new Vector2(Main.rand.Next(-4, 4), Main.rand.Next(-10, -5) * SineInEasing(ratio, 1)), Main.rand.NextFloat(15f, 25f) * (ratio * 2f));
+                    }
                 }
+                if (wrappedCounter == 180)
+                {
+                    for (int i = 0; i < 36; i++)
+                    {
+                        EmpyreanMetaball.SpawnDefaultParticle(NPC.Center + new Vector2(Main.rand.NextFloat(-90, 90), 32), Vector2.UnitY * Main.rand.NextFloat(-18f, -4f), Main.rand.NextFloat(110f, 130f));
+                        EmpyreanMetaball.SpawnDefaultParticle(target.Center - (Vector2.UnitY * 110) + new Vector2(Main.rand.NextFloat(-90, 90), 0), Vector2.UnitY * Main.rand.NextFloat(-18f, -4f), Main.rand.NextFloat(130f, 160f));
+                    }
+                }
+                if(wrappedCounter == 5)
+                    NPC.Center = target.Center - (Vector2.UnitY * 160);
+                */
                 #endregion
-                aiCounter = -1;
+
                 break;
         }
         if (scytheSpin)

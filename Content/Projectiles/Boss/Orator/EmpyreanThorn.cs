@@ -22,7 +22,7 @@ public class EmpyreanThorn : ModProjectile
         Main.projFrames[Projectile.type] = 6;
         Projectile.width = 200;
         Projectile.height = 32;
-        Projectile.scale = InitialScale;
+        Projectile.scale = 1f;
         Projectile.hostile = true;
         Projectile.tileCollide = false;
         Projectile.ignoreWater = true;
@@ -41,11 +41,15 @@ public class EmpyreanThorn : ModProjectile
     public override void OnSpawn(IEntitySource source)
     {
         if (Projectile.ai[0] != -1)
-        {           
+        {
             trueRotation = Projectile.velocity.ToRotation();
             Projectile.timeLeft = (int)Projectile.ai[0] + 180;
             if(!Main.dedServ)
                 Projectile.position.X -= Projectile.width / 2f * (InitialScale - 1);
+
+            Projectile.height = (int)(Projectile.height * InitialScale);
+            Projectile.width = (int)(Projectile.width * InitialScale);
+
             initialPoint = Projectile.Center + (trueRotation.ToRotationVector2() * 64f * InitialScale);
             Projectile.velocity = Vector2.Zero;
             
@@ -80,8 +84,8 @@ public class EmpyreanThorn : ModProjectile
             if (aiCounter < delay + 30)
                 EmpyreanMetaball.SpawnDefaultParticle(initialPoint, Projectile.rotation.ToRotationVector2().RotatedBy(Main.rand.NextFloat(-0.15f, 0.15f)) * Main.rand.NextFloat(16f, 18f), 40f);
             
-            if (!NPC.AnyNPCs(ModContent.NPCType<TheOrator>()) && aiCounter < delay + 60)
-                aiCounter = delay + 60;
+            //if (!NPC.AnyNPCs(ModContent.NPCType<TheOrator>()) && aiCounter < delay + 60)
+            //    aiCounter = delay + 60;
 
             if (aiCounter >= delay)
             {
@@ -112,9 +116,13 @@ public class EmpyreanThorn : ModProjectile
 
     public override bool? Colliding(Rectangle projHitbox, Rectangle targetHitbox)
     {
-        Vector2 v = Projectile.rotation.ToRotationVector2();
+        Vector2 v = trueRotation.ToRotationVector2();
         Vector2 lineStart = Projectile.Center - (v * Projectile.width * 0.5f);
+        //Dust.NewDustPerfect(lineStart, DustID.Terra).velocity = Vector2.Zero;
+
         Vector2 lineEnd = Projectile.Center + (v * Projectile.width * 0.5f);
+        //Dust.NewDustPerfect(lineStart, DustID.Terra).velocity = Vector2.Zero;
+
         float collisionPoint = 0f;
         return Collision.CheckAABBvLineCollision(targetHitbox.TopLeft(), targetHitbox.Size(), lineStart, lineEnd, Projectile.height, ref collisionPoint);
     }

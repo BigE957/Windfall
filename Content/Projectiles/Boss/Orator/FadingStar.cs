@@ -24,6 +24,9 @@ public class FadingStar : ModProjectile, ILocalizedModType
 
     public override void AI()
     {
+        if (Projectile.ai[0] != 0)
+            Projectile.velocity *= Projectile.ai[0];
+
         if (Projectile.timeLeft % 5 == 0)
         {
             Vector2 position = new Vector2(Projectile.position.X, Projectile.Center.Y) + (Vector2.UnitY.RotatedBy(Projectile.rotation) * Main.rand.NextFloat(-16f, 16f) - (Vector2.UnitX.RotatedBy(Projectile.rotation) * Main.rand.NextFloat(-16f, 24f)));
@@ -76,7 +79,7 @@ public class FadingStar : ModProjectile, ILocalizedModType
         texture = TextureAssets.Projectile[Type].Value;
         origin = texture.Size() * 0.5f;
 
-        Main.EntitySpriteDraw(texture, drawPos, texture.Frame(), Color.White, Projectile.rotation + ((Main.GlobalTimeWrappedHourly * Projectile.velocity.Length() / 1.5f * (Projectile.whoAmI % 2 == 0 ? -1 : 1)) + (Projectile.whoAmI * 4)), origin, Projectile.scale, SpriteEffects.None, 0);
+        Main.EntitySpriteDraw(texture, drawPos, texture.Frame(), Color.White, Projectile.rotation + ((Main.GlobalTimeWrappedHourly * (Projectile.whoAmI % 2 == 0 ? -7 : 7)) + (Projectile.whoAmI * 4)), origin, Projectile.scale, SpriteEffects.None, 0);
 
         return false;
     }
