@@ -36,6 +36,7 @@ public class Loading : ModSystem
         guis.Add(Activator.CreateInstance(typeof(TailorEventBar)) as InvasionProgressUI);
         guis.Add(Activator.CreateInstance(typeof(CafeteriaEventBar)) as InvasionProgressUI);
         guis.Add(Activator.CreateInstance(typeof(RitualEventBar)) as InvasionProgressUI);
+        guis.Add(Activator.CreateInstance(typeof(AstralSiphonEventBar)) as InvasionProgressUI);
         #endregion
     }
 }

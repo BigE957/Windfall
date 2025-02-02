@@ -1750,6 +1750,9 @@ NPCs: {
 	Watchman.DisplayName: Watchman
 	AstralGuardian.DisplayName: Astral Guardian
 	AstralBolt.DisplayName: ""
+	SelenicSiphon.DisplayName: Selenic Siphon
+	SiphonCollider.DisplayName: Siphon Collider
+	SiphonSpitter.DisplayName: Siphon Spitter
 }
 
 Projectiles: {
@@ -1808,6 +1811,8 @@ Projectiles: {
 	TestProjectile.DisplayName: Test Projectile
 	FadingStar.DisplayName: Fading Star
 	Rogue.ExodiumSpearProj.DisplayName: Exodium Spear Proj
+	SelenicSiphon.DisplayName: Selenic Siphon
+	AstralEnergy.DisplayName: Astral Energy
 }
 
 Buffs: {
@@ -2002,6 +2007,7 @@ Events: {
 	Tailor: Fashion Frenzy
 	Cafeteria: Lunch-Time Lunacy
 	Ritual: Lunar Communion
+	AstralSiphon: Astral Siphoning
 }
 
 Currencies: {

@@ -3,8 +3,11 @@ using CalamityMod.NPCs.Polterghast;
 using Windfall.Common.Systems;
 using Windfall.Common.Systems.WorldEvents;
 using Windfall.Content.NPCs.Enemies;
+using Windfall.Content.Projectiles.Enemies;
 using Windfall.Content.Projectiles.NPCAnimations;
 using Windfall.Content.Projectiles.Other;
+using Windfall.Content.Projectiles.Props;
+using Windfall.Content.UI.Events;
 
 namespace Windfall.Content.NPCs.GlobalNPCs;
 
@@ -36,6 +39,12 @@ public class WindfallGlobalNPC : GlobalNPC
         if (npc.type == NPCID.SkeletronHead && !NPC.downedBoss3)
             Projectile.NewProjectile(Entity.GetSource_NaturalSpawn(), new Vector2(Main.dungeonX, Main.dungeonY).ToWorldCoordinates(), Vector2.Zero, ModContent.ProjectileType<LunaticCultistProj>(), 0, 0, -1, 1);
 
+        if (Main.npc.Any(n => n.active && n.type == ModContent.NPCType<SelenicSiphon>() && n.As<SelenicSiphon>().EventActive) && npc.type == calamity.Find<ModNPC>("Nova").Type)
+        {
+            NPC siphon = Main.npc[NPC.FindFirstNPC(ModContent.NPCType<SelenicSiphon>())];
+            Projectile.NewProjectile(Entity.GetSource_NaturalSpawn(), npc.Center, (npc.Center - siphon.Center).SafeNormalize(Vector2.UnitX * npc.direction) * 12f, ModContent.ProjectileType<AstralEnergy>(), 0, 0f);
+        }
+
         if (npc.type == NPCID.Plantera && !NPC.downedPlantBoss)
         {
             Projectile.NewProjectile(Entity.GetSource_NaturalSpawn(), npc.Center, Vector2.Zero, ModContent.ProjectileType<OratorEntourageSpawner>(), 0, 0);
@@ -54,8 +63,8 @@ public class WindfallGlobalNPC : GlobalNPC
 
     private void PhantomCheck(NPC npc)
     {
-        if ((npc.type == ModContent.NPCType<PhantomSpirit>() || npc.type == ModContent.NPCType<PhantomSpiritS>() || npc.type == ModContent.NPCType<PhantomSpiritM>() ||
-            npc.type == ModContent.NPCType<PhantomSpiritL>()) && !NPC.AnyNPCs(ModContent.NPCType<Polterghast>()) && !DownedBossSystem.downedPolterghast)
+        if (!DownedBossSystem.downedPolterghast && !NPC.AnyNPCs(ModContent.NPCType<Polterghast>()) && (npc.type == ModContent.NPCType<PhantomSpirit>() || npc.type == ModContent.NPCType<PhantomSpiritS>() || npc.type == ModContent.NPCType<PhantomSpiritM>() ||
+            npc.type == ModContent.NPCType<PhantomSpiritL>()))
         {
             if (CalamityMod.CalamityMod.ghostKillCount == 10)
             {

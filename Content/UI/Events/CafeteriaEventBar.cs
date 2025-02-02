@@ -1,6 +1,5 @@
 ﻿using CalamityMod.UI;
 using Windfall.Common.Systems.WorldEvents;
-using Windfall.Content.NPCs.WorldEvents.LunarCult;
 
 namespace Windfall.Content.UI.Events;
 
