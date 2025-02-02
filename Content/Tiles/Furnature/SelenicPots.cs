@@ -1,5 +1,4 @@
-﻿using CalamityMod.Items.TreasureBags.MiscGrabBags;
-using Windfall.Content.Items.Quest;
+﻿using Windfall.Content.Items.Quest;
 
 namespace Windfall.Content.Tiles.Furnature;
 public class SelenicPots : ModTile

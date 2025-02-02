@@ -82,6 +82,7 @@
     <None Remove="Content\Items\Journals\JournalSulphur.png" />
     <None Remove="Content\Items\Journals\JournalTundra.png" />
     <None Remove="Content\Items\Placeables\Furnature\DarkStonePlaque.png" />
+    <None Remove="Content\Items\Placeables\Furnature\HandStatue.png" />
     <None Remove="Content\Items\Placeables\Furnature\Hanger.png" />
     <None Remove="Content\Items\Placeables\Furnature\OratorMonolith.png" />
     <None Remove="Content\Items\Placeables\Furnature\VerletHangers\Cords\CordedRope.png" />
@@ -122,6 +123,7 @@
     <None Remove="Content\Tiles\Furnature\OratorMonolithTile.png" />
     <None Remove="Content\Tiles\Furnature\SelenicPots.png" />
     <None Remove="Content\Tiles\Furnature\WhiteStonePlaqueTile.png" />
+    <None Remove="Content\Tiles\HandStatueTile.png" />
     <None Remove="Content\Tiles\Special\DatabaseTerminal.png" />
     <None Remove="Content\Tiles\Special\ExodiumSpearTile.png" />
     <None Remove="Content\UI\Dialogue\Emoticons\Angry_Emote_Bottom.png" />
