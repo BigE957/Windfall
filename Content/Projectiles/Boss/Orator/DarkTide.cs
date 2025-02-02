@@ -25,6 +25,7 @@ public class DarkTide : ModProjectile
         Projectile.tileCollide = false;
         Projectile.ignoreWater = true;
         Projectile.scale = 1.25f;
+        Projectile.netImportant = true;
         CooldownSlot = ImmunityCooldownID.Bosses;
     }
     public override void OnSpawn(IEntitySource source)

@@ -22,6 +22,7 @@ public class DarkCoalescence : ModProjectile
         Projectile.penetrate = -1;
         Projectile.timeLeft = 390;
         Projectile.scale = 1f;
+        Projectile.netImportant = true;
         CooldownSlot = ImmunityCooldownID.Bosses;
         Projectile.Calamity().DealsDefenseDamage = true;
 

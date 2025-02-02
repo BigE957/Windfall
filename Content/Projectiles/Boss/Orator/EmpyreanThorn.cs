@@ -34,6 +34,7 @@ public class EmpyreanThorn : ModProjectile
         Projectile.timeLeft = 420;
         Projectile.penetrate = -1;
         Projectile.damage = 100;
+        Projectile.netImportant = true;
     }
     int aiCounter = 0;
     Vector2 initialPoint = Vector2.Zero;

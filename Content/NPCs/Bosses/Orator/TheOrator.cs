@@ -704,8 +704,8 @@ public class TheOrator : ModNPC
                 else
                     NPC.Center = goalPos + Vector2.UnitY * (float)Math.Sin(aiCounter / 30f) * 24f;
                 #endregion
-                if (aiCounter < 1500 && oratorBorder.trueScale > 1.5f)
-                    oratorBorder.trueScale -= 0.001f;                   
+                if (aiCounter < 1500 && oratorBorder.TrueScale > 1.5f)
+                    oratorBorder.TrueScale -= 0.001f;                   
                 if (aiCounter > 120)
                 {
                     if (aiCounter < 1400)
@@ -768,10 +768,10 @@ public class TheOrator : ModNPC
                 }
                 if(aiCounter >= 2420)
                 {
-                    oratorBorder.trueScale += 0.003f;
-                    if (oratorBorder.trueScale >= 3f)
+                    oratorBorder.TrueScale += 0.003f;
+                    if (oratorBorder.TrueScale >= 3f)
                     {
-                        oratorBorder.trueScale = 3f;
+                        oratorBorder.TrueScale = 3f;
                         aiCounter = 0;
                         target = Main.player[Player.FindClosest(NPC.Center, NPC.width, NPC.height)];
                         if (NPC.life / (float)NPC.lifeMax <= 0.1f)

@@ -1,8 +1,6 @@
 ﻿using CalamityMod.Buffs.StatDebuffs;
 using CalamityMod.World;
-using Terraria;
 using Windfall.Common.Graphics.Metaballs;
-using Windfall.Content.Items.Lore;
 using Windfall.Content.NPCs.Bosses.Orator;
 
 namespace Windfall.Content.Projectiles.Boss.Orator;
@@ -10,7 +8,9 @@ namespace Windfall.Content.Projectiles.Boss.Orator;
 public class OratorJavelin : ModProjectile
 {
     public new static string LocalizationCategory => "Projectiles.Boss";
+    
     public override string Texture => "Windfall/Assets/Projectiles/Boss/OratorJavelin";
+    
     public override void SetStaticDefaults()
     {
         ProjectileID.Sets.TrailCacheLength[Projectile.type] = 6;
@@ -145,7 +145,7 @@ public class OratorJavelin : ModProjectile
                 {
                     float reelBackSpeedExponent = 2.6f;
                     float reelBackCompletion = Utils.GetLerpValue(0f, 30, Time - Delay, true);
-                    float reelBackSpeed = MathHelper.Lerp(2.5f, 16f, MathF.Pow(reelBackCompletion, reelBackSpeedExponent));
+                    float reelBackSpeed = Lerp(2.5f, 16f, MathF.Pow(reelBackCompletion, reelBackSpeedExponent));
                     Vector2 reelBackVelocity = (target.Center - Projectile.Center).SafeNormalize(Vector2.UnitY) * -reelBackSpeed;
                     Projectile.velocity = Vector2.Lerp(Projectile.velocity, reelBackVelocity, 0.25f);
                     Projectile.rotation = (target.Center - Projectile.Center).ToRotation();
@@ -170,6 +170,7 @@ public class OratorJavelin : ModProjectile
         //Lighting.AddLight(Projectile.Center, Color.White.ToVector3() / 3f);
         Time++;           
     }
+    
     public override bool OnTileCollide(Vector2 oldVelocity)
     {
         Player target = Main.player[Player.FindClosest(Projectile.Center, Projectile.width, Projectile.height)];
@@ -222,6 +223,7 @@ public class OratorJavelin : ModProjectile
 
         return !(has_neg && has_pos);
     }
+    
     public override void OnHitPlayer(Player target, Player.HurtInfo info)
     {
         Projectile.Center += (Projectile.velocity);
@@ -244,11 +246,13 @@ public class OratorJavelin : ModProjectile
                 EmpyreanMetaball.SpawnDefaultParticle(spawnPos, Main.rand.NextVector2Circular(2f, 2f), Main.rand.NextFloat(10f, 20f));
         }
     }
+    
     public override void ModifyDamageHitbox(ref Rectangle hitbox)
     {
         Vector2 rotation = Projectile.rotation.ToRotationVector2() * 38f;
         hitbox.Location = new Point((int)(hitbox.Location.X + rotation.X), (int)(hitbox.Location.Y + rotation.Y));
     }
+    
     public override bool PreDraw(ref Color lightColor)
     {
         if ((Time < Delay + 30 || Projectile.velocity.LengthSquared() > 0f) && impaleTarget == null)

@@ -29,6 +29,7 @@ public class OratorScythe : ModProjectile
         Projectile.timeLeft = int.MaxValue;
         Projectile.penetrate = -1;
         Projectile.Opacity = 1f;
+        Projectile.netImportant = true;
     }
 
     private int Time

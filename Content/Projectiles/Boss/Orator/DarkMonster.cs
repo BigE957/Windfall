@@ -36,6 +36,7 @@ public class DarkMonster : ModProjectile
         Projectile.alpha = 0;
         CooldownSlot = ImmunityCooldownID.Bosses;
         Projectile.Calamity().DealsDefenseDamage = true;
+        Projectile.netImportant = true;
     }        
 
     private enum States
