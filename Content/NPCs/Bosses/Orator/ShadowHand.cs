@@ -42,6 +42,7 @@ public class ShadowHand : ModNPC
         NPC.Calamity().VulnerableToWater = true;
         NPC.Calamity().canBreakPlayerDefense = true;
         NPC.Opacity = 0f;
+        NPC.netAlways = true;
     }
     
     internal enum AIState

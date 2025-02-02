@@ -90,7 +90,8 @@ public class OratorHand : ModNPC
         NPC.DeathSound = SoundID.DD2_LightningBugDeath;
         NPC.Calamity().VulnerableToElectricity = true;
         NPC.Calamity().VulnerableToWater = true;
-        NPC.Calamity().canBreakPlayerDefense = true;            
+        NPC.Calamity().canBreakPlayerDefense = true;
+        NPC.netAlways = true;
     }
 
     public override void OnSpawn(IEntitySource source)
