@@ -197,8 +197,7 @@ public class VerletHangerDrawing : ModSystem
                     if (!subVerlet[k].Locked)
                     {
 
-                        if (Math.Abs(Main.windSpeedCurrent) < 0.05f)
-                            subVerlet[k].Velocity.X += (subVerlet[k].Position - subVerlet[k].OldPosition).X * 0.4f;
+                        subVerlet[k].Velocity.X += (subVerlet[k].Position - subVerlet[k].OldPosition).X * 0.4f / (1 + Math.Abs(Main.windSpeedCurrent));
 
                         subVerlet[k].Velocity.X *= 0.925f;
                         if (Math.Abs(subVerlet[k].Velocity.X) < 0.1f)
@@ -209,7 +208,7 @@ public class VerletHangerDrawing : ModSystem
                             Rectangle hitbox = p.Hitbox;
                             hitbox.Inflate(4, 10);
                             if (hitbox.Contains((int)subVerlet[k].Position.X, (int)subVerlet[k].Position.Y))
-                                subVerlet[k].Velocity.X = Math.Sign(p.velocity.X) * (p.velocity.Length());
+                                subVerlet[k].Velocity.X += Math.Sign(p.velocity.X) * p.velocity.Length() / (2 + Math.Abs(Main.windSpeedCurrent));
                         }
 
                         foreach (Projectile p in Main.ActiveProjectiles)
@@ -217,13 +216,13 @@ public class VerletHangerDrawing : ModSystem
                             Rectangle hitbox = p.Hitbox;
                             hitbox.Inflate(4, 10);
                             if (hitbox.Contains((int)subVerlet[k].Position.X, (int)subVerlet[k].Position.Y))
-                                subVerlet[k].Velocity.X = Math.Sign(p.velocity.X) * (p.velocity.Length());
+                                subVerlet[k].Velocity.X += Math.Sign(p.velocity.X) * p.velocity.Length() / (2 + Math.Abs(Main.windSpeedCurrent));
                         }
 
-                        if (Math.Abs(Main.windSpeedCurrent) >= 0.05f)
+                        if (Math.Abs(Main.windSpeedCurrent) > 0.025f)
                         {
                             float windSpeed = ((float)Math.Sin((Main.windCounter + index) / 13f) / 2f + 1f) * Main.windSpeedCurrent * (4 * k);
-                            subVerlet[k].Position.X += windSpeed;
+                            subVerlet[k].Position.X -= windSpeed;
                         }
                     }
                 }
@@ -356,7 +355,8 @@ public class VerletHangerDrawing : ModSystem
                     }
 
                     for (int k = 0; k < segmentPositions.Length; k++)
-                        twine.DrawRopeSegment(Main.spriteBatch, k, segmentPositions);
+                        if(k != 1)
+                            twine.DrawRopeSegment(Main.spriteBatch, k, segmentPositions);
                 }
             }
 
