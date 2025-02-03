@@ -208,7 +208,7 @@ public class VerletHangerDrawing : ModSystem
                             Rectangle hitbox = p.Hitbox;
                             hitbox.Inflate(4, 10);
                             if (hitbox.Contains((int)subVerlet[k].Position.X, (int)subVerlet[k].Position.Y))
-                                subVerlet[k].Velocity.X += Math.Sign(p.velocity.X) * p.velocity.Length() / (2 + Math.Abs(Main.windSpeedCurrent));
+                                subVerlet[k].Velocity.X += Math.Sign(p.velocity.X) * p.velocity.Length() / (2.5f + Math.Abs(Main.windSpeedCurrent));
                         }
 
                         foreach (Projectile p in Main.ActiveProjectiles)
@@ -216,7 +216,7 @@ public class VerletHangerDrawing : ModSystem
                             Rectangle hitbox = p.Hitbox;
                             hitbox.Inflate(4, 10);
                             if (hitbox.Contains((int)subVerlet[k].Position.X, (int)subVerlet[k].Position.Y))
-                                subVerlet[k].Velocity.X += Math.Sign(p.velocity.X) * p.velocity.Length() / (2 + Math.Abs(Main.windSpeedCurrent));
+                                subVerlet[k].Velocity.X += Math.Sign(p.velocity.X) * p.velocity.Length() / (2.5f + Math.Abs(Main.windSpeedCurrent));
                         }
 
                         if (Math.Abs(Main.windSpeedCurrent) > 0.025f)
