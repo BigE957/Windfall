@@ -97,7 +97,7 @@ public class EmpyreanMetaball : Metaball
         // Load layer assets.
         layerAssets = [];
 
-        for(int i = 0; i < 5; i++)
+        for(int i = 0; i < 4; i++)
             layerAssets.Add(ModContent.Request<Texture2D>($"Windfall/Assets/Graphics/Metaballs/Empyrean_Metaball/EmpyreanLayer{i+1}"));
     }
 
@@ -153,11 +153,9 @@ public class EmpyreanMetaball : Metaball
                 return Vector2.UnitX * Main.GlobalTimeWrappedHourly * 0.03f;
 
             case 1:
-                Vector2 offset = Vector2.One * (float)Math.Cos(Main.GlobalTimeWrappedHourly * 0.041f) * 1f;
-                offset = offset.RotatedBy((float)Math.Cos(Main.GlobalTimeWrappedHourly * 0.08f) * 0.97f);
-                return offset;
+                return Vector2.UnitX * Main.GlobalTimeWrappedHourly * 0.06f + Vector2.UnitY * (float)Math.Sin(Main.GlobalTimeWrappedHourly) * 0.03f;
             case 2:
-                offset = Vector2.One * (float)Math.Cos(Main.GlobalTimeWrappedHourly * 0.04f) * 1f;
+                Vector2 offset = Vector2.One * (float)Math.Cos(Main.GlobalTimeWrappedHourly * 0.04f) * 1f;
                 offset = -offset.RotatedBy(Main.GlobalTimeWrappedHourly * 0.08f) * 0.76f;
                 return offset;
             case 3:

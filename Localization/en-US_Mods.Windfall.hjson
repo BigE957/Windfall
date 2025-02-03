@@ -1397,7 +1397,7 @@ Items: {
 
 		HandStatue: {
 			DisplayName: Hand Statue
-			Tooltip: "Fits in the palm of your hand... Somehow..."
+			Tooltip: Fits in the palm of your hand... Somehow...
 		}
 	}
 
