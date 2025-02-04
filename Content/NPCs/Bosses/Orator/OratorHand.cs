@@ -997,7 +997,7 @@ public class OratorHand : ModNPC
                         }
                     }
                     break;
-                case TheOrator.States.DarkMonster:
+                case TheOrator.States.IdolEnactment:
                     CurrentPose = Pose.Default;
 
                     Vector2 goalDir = (modOrator.target.Center - NPC.Center).SafeNormalize(Vector2.Zero);

@@ -1853,25 +1853,26 @@ Status: {
 
 		Entropy: {
 			1: "{0} was shattered across time and space."
-			2: {0} was lost to entropy.
+			2: "{0} was lost to entropy."
 			3: "{0} drowned in the endless dark."
 		}
 
 		BigDark: {
 			1: Fathomless darkness tore {0} to shreds.
-			2: "The shadows caught up to {0}."
+			2: The shadows caught up to {0}.
 			3: "{0} as been hollowed from the inside out."
 		}
 
 		Idol: {
-			1: {0} knows what's soon to arrive.
+			1: "{0} knows what's soon to arrive."
 			2: "{0} couldn't stop what's been set in motion."
-			3: "Fate is something {0} couldn't hope to avert."
+			3: Fate is something {0} couldn't hope to avert.
+		}
 
 		Hand: {
-			1: {0} was crushed by the Orator's finest creations.
-			2: "Nothing, not even {0}, can escape the Orator's grasp."
-			3: "The Orator finished messing around with {0}."
+			1: "{0} was crushed by the Orator's finest creations."
+			2: Nothing, not even {0}, can escape the Orator's grasp.
+			3: The Orator finished messing around with {0}.
 		}
 	}
 }

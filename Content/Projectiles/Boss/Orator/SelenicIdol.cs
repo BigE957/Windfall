@@ -120,6 +120,12 @@ public class SelenicIdol : ModProjectile
                     GoopScale = 1 - SineInEasing(lerp, 1);
                     SpawnDefaultParticle(Projectile.Center + (Main.rand.NextVector2Circular(48f, 48f) * Projectile.scale), Main.rand.NextVector2Circular(18, 18) + Projectile.velocity, 200 * Main.rand.NextFloat(0.75f, 0.9f) * (1 - lerp));
                 }
+                
+                Projectile.velocity += (target.Center - Projectile.Center).SafeNormalize(Vector2.Zero) * Acceleration;
+                if (Projectile.velocity.Length() > MaxSpeed)
+                    Projectile.velocity = Projectile.velocity.SafeNormalize(Vector2.Zero) * (Projectile.velocity.Length() * 0.95f);
+
+                #region Looping Sound
                 if (!SoundEngine.TryGetActiveSound(loopingSoundSlot, out var activeSound))
                 {
                     // if it isn't, play the sound and remember the SlotId
@@ -130,9 +136,7 @@ public class SelenicIdol : ModProjectile
                         return tracker.IsActiveAndInGame();
                     });
                 }
-                Projectile.velocity += (target.Center - Projectile.Center).SafeNormalize(Vector2.Zero) * Acceleration;
-                if (Projectile.velocity.Length() > MaxSpeed)
-                    Projectile.velocity = Projectile.velocity.SafeNormalize(Vector2.Zero) * (Projectile.velocity.Length() * 0.95f);           
+                #endregion
                 break;
             case States.Dying:
                 float lerpValue = deathCounter / 90f;
@@ -195,20 +199,7 @@ public class SelenicIdol : ModProjectile
         }
         aiCounter++;
         Projectile.rotation = Projectile.velocity.ToRotation();
-        rotationCounter += 0.05f;
-    }
-    
-    private void ParticleTrail()
-    {
-        //smaller particles
-        
-        //larger trails
-        float gasSize = 60 * Projectile.scale;
-        SpawnDefaultParticle(Projectile.Center - Projectile.velocity * (2 * Projectile.scale), Vector2.Zero, gasSize);
-
-        gasSize = 40 * Projectile.scale;
-        SpawnDefaultParticle(Projectile.Center - (Projectile.velocity.RotatedBy(Pi / 4) * (2 * Projectile.scale)), Vector2.Zero, gasSize);
-        SpawnDefaultParticle(Projectile.Center - (Projectile.velocity.RotatedBy(-Pi / 4) * (2 * Projectile.scale)), Vector2.Zero, gasSize);
+        rotationCounter += Projectile.velocity.X / 200f;
     }
     
     public override bool? Colliding(Rectangle projHitbox, Rectangle targetHitbox)
@@ -235,7 +226,7 @@ public class SelenicIdol : ModProjectile
 
         Main.spriteBatch.UseBlendState(BlendState.Additive);
 
-        Main.EntitySpriteDraw(tex, Projectile.Center - Main.screenPosition, null, MulticolorLerp(Main.GlobalTimeWrappedHourly * 0.25f, colors), rotationCounter * -0.15f, tex.Size() * 0.5f, ((Projectile.scale * 0.375f) + (float)(Math.Sin(Main.GlobalTimeWrappedHourly * 4) * 0.015f)) * (1 - GoopScale), 0);
+        Main.EntitySpriteDraw(tex, Projectile.Center - Main.screenPosition, null, MulticolorLerp(Main.GlobalTimeWrappedHourly * 0.25f, colors), Main.GlobalTimeWrappedHourly * 0.25f, tex.Size() * 0.5f, ((Projectile.scale * 0.375f) + (float)(Math.Sin(Main.GlobalTimeWrappedHourly * 4) * 0.015f)) * (1 - GoopScale), 0);
 
         Main.spriteBatch.UseBlendState(BlendState.AlphaBlend);
 

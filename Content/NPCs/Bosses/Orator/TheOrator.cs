@@ -73,7 +73,7 @@ public class TheOrator : ModNPC
     internal enum States
     {
         Spawning,
-        DarkMonster,
+        IdolEnactment,
         DarkSpawn,
         DarkBarrage,
         DarkSlice,
@@ -165,7 +165,7 @@ public class TheOrator : ModNPC
         switch (AIState)
         {
             // Phase 1               
-            case States.DarkMonster:
+            case States.IdolEnactment:
                 if (aiCounter == 1 && Main.netMode != NetmodeID.MultiplayerClient)
                     Projectile.NewProjectile(Terraria.Entity.GetSource_NaturalSpawn(), NPC.Center, (target.Center - NPC.Center).SafeNormalize(Vector2.Zero) * 40, ModContent.ProjectileType<SelenicIdol>(), MonsterDamage, 0f);
                 if (aiCounter < 1200)
@@ -234,8 +234,9 @@ public class TheOrator : ModNPC
                         AIState = States.DarkSpawn;
                     if (FindFirstProjectile(ModContent.ProjectileType<SelenicIdol>()) != -1)
                     {
-                        Main.projectile[FindFirstProjectile(ModContent.ProjectileType<SelenicIdol>())].ai[0] = 1;
-                        Main.projectile[FindFirstProjectile(ModContent.ProjectileType<SelenicIdol>())].ai[1] = 0;
+                        Projectile idol = Main.projectile[FindFirstProjectile(ModContent.ProjectileType<SelenicIdol>())];
+                        idol.ai[0] = 1;
+                        idol.ai[1] = 0;
                     }
                     return;
                 }
@@ -369,7 +370,7 @@ public class TheOrator : ModNPC
                         }
                         else
                         {
-                            AIState = States.DarkMonster;
+                            AIState = States.IdolEnactment;
                             Particle pulse = new DirectionalPulseRing(NPC.Center, (target.Center - NPC.Center).SafeNormalize(Vector2.Zero) * 8f, new(117, 255, 159), new Vector2(0.5f, 1f), (target.Center - NPC.Center).ToRotation(), 0f, 3f, 32);
                             GeneralParticleHandler.SpawnParticle(pulse);
                         }
@@ -1625,7 +1626,7 @@ public class TheOrator : ModNPC
             NPC.frame.Y = frameHeight;
             NPC.frame.X = 144;
         }
-        else if (AIState == States.DarkStorm || AIState == States.DarkEmbrace || AIState == States.DarkMonster || AIState == States.DarkCollision || AIState == States.DarkBarrage || Main.projectile.Any(p => p.active && p.type == ModContent.ProjectileType<OratorScythe>()))
+        else if (AIState == States.DarkStorm || AIState == States.DarkEmbrace || AIState == States.IdolEnactment || AIState == States.DarkCollision || AIState == States.DarkBarrage || Main.projectile.Any(p => p.active && p.type == ModContent.ProjectileType<OratorScythe>()))
         {
             NPC.frame.Y = frameHeight;
             NPC.frame.X = 0;
