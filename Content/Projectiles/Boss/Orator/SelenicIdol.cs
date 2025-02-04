@@ -103,12 +103,12 @@ public class SelenicIdol : ModProjectile
         else
         {
             target = Main.player[Player.FindClosest(Projectile.Center, Projectile.width, Projectile.height)];
-            if (AIState == States.Chasing && Projectile.scale > 0.9f)
-                AIState = States.Dying;
+            //if (AIState == States.Chasing && Projectile.scale > 0.9f)
+            //    AIState = States.Dying;
         }
-        if(!NPC.AnyNPCs(ModContent.NPCType<OratorHand>()) || NPC.FindFirstNPC(ModContent.NPCType<TheOrator>()) == -1 || Main.npc[NPC.FindFirstNPC(ModContent.NPCType<TheOrator>())].ai[0] == (int)TheOrator.States.PhaseChange)
-            if (AIState == States.Chasing && Projectile.scale > 0.9f)
-                AIState = States.Dying;
+        //if(!NPC.AnyNPCs(ModContent.NPCType<OratorHand>()) || NPC.FindFirstNPC(ModContent.NPCType<TheOrator>()) == -1 || Main.npc[NPC.FindFirstNPC(ModContent.NPCType<TheOrator>())].ai[0] == (int)TheOrator.States.PhaseChange)
+        //    if (AIState == States.Chasing && Projectile.scale > 0.9f)
+        //       AIState = States.Dying;
         
         switch (AIState)
         {
@@ -239,17 +239,13 @@ public class SelenicIdol : ModProjectile
 
     internal Color ColorFunction(float completionRatio)
     {
-        float averageRotation = Projectile.oldRot.Take(20).Average(angle => MathHelper.WrapAngle(angle) + MathHelper.Pi);
         float opacity = Projectile.Opacity;
         opacity *= (float)Math.Pow(Utils.GetLerpValue(1f, 0.45f, completionRatio, true), 4D);
 
         if (deathCounter > 0)
             opacity = Clamp(Lerp(opacity, -0.5f, deathCounter / 90f), 0f, 1f);
 
-        float rotationAdjusted = MathHelper.WrapAngle(Projectile.rotation) + MathHelper.Pi;
-        float oldRotationAdjusted = MathHelper.WrapAngle(Projectile.oldRot[1]) + MathHelper.Pi;
-
-        return Color.Lerp(Color.Goldenrod, Color.DarkGoldenrod * completionRatio, MathHelper.Clamp(completionRatio * 0.8f, 0f, 1f)) * opacity;
+        return Color.Lerp(Color.Gold, new(170, 100, 30), (completionRatio ) * 3f) * opacity;
     }
 
     internal float WidthFunction(float completionRatio) => 200f * (1f - completionRatio) * 0.8f * Projectile.scale;
