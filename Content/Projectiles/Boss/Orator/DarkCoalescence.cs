@@ -15,7 +15,7 @@ public class DarkCoalescence : ModProjectile
     {
         Projectile.width = 320;
         Projectile.height = 320;
-        Projectile.damage = DarkMonster.MonsterDamage;
+        Projectile.damage = SelenicIdol.MonsterDamage;
         Projectile.hostile = true;
         Projectile.ignoreWater = true;
         Projectile.tileCollide = false;

@@ -76,11 +76,11 @@ public class DarkGlob : ModProjectile, ILocalizedModType
     {
         if (Projectile.ai[0] == 0 || Projectile.ai[0] == 2)
         {
-            if (Projectile.timeLeft > 30)
-                if (Projectile.scale < MaxSize)
-                    Projectile.scale += MaxSize/30;
-                else
-                    Projectile.scale = MaxSize;                
+            if (Projectile.timeLeft > 30 && Projectile.scale < MaxSize)
+                Projectile.scale += MaxSize/30;
+            else
+                Projectile.scale = MaxSize;            
+            
             if (Projectile.scale < MaxSize || Projectile.friendly)
                 Projectile.hostile = false;
             else
@@ -118,8 +118,12 @@ public class DarkGlob : ModProjectile, ILocalizedModType
                 Projectile.timeLeft = 500;
                 Projectile.hostile = false;
             }
-            else if(!Projectile.friendly)
-                Projectile.hostile = true;
+            else
+            {
+                Projectile.scale = MaxSize;
+                if (!Projectile.friendly)
+                    Projectile.hostile = true;
+            }
             Projectile.velocity.Y += CalamityWorld.death ? 0.3f : CalamityWorld.revenge ? 0.25f : Main.expertMode ? 0.2f : 0.15f;
             Projectile.rotation = Projectile.velocity.ToRotation();
 

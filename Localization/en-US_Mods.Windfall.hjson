@@ -1818,6 +1818,7 @@ Projectiles: {
 	Rogue.ExodiumSpearProj.DisplayName: Exodium Spear Proj
 	SelenicSiphon.DisplayName: Selenic Siphon
 	AstralEnergy.DisplayName: Astral Energy
+	SelenicIdol.DisplayName: Selenic Idol
 }
 
 Buffs: {
@@ -1845,22 +1846,32 @@ Buffs: {
 Status: {
 	Death: {
 		Orator: {
-			1: "{0} was no match for the master of the Selenic Order."
-			2: "{0} should have joined the Selenic Order."
+			1: "{0} was no match for the Selenic Order's master."
+			2: "{0} should have stayed in the Selenic Order."
 			3: The Orator was right to doubt {0}.
 		}
 
 		Entropy: {
 			1: "{0} was shattered across time and space."
-			2: The abyss stares back at {0}.
-			3: "{0} succumbed to entropy."
-			4: "{0} fell beneath the dark tides of chaos."
+			2: {0} was lost to entropy.
+			3: "{0} drowned in the endless dark."
 		}
 
-		BigBalls: {
+		BigDark: {
 			1: Fathomless darkness tore {0} to shreds.
-			2: "{0} didn't run fast enough."
-			3: "{0} is one with entropy."
+			2: "The shadows caught up to {0}."
+			3: "{0} as been hollowed from the inside out."
+		}
+
+		Idol: {
+			1: {0} knows what's soon to arrive.
+			2: "{0} couldn't stop what's been set in motion."
+			3: "Fate is something {0} couldn't hope to avert."
+
+		Hand: {
+			1: {0} was crushed by the Orator's finest creations.
+			2: "Nothing, not even {0}, can escape the Orator's grasp."
+			3: "The Orator finished messing around with {0}."
 		}
 	}
 }

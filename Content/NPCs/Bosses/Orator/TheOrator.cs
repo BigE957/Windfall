@@ -167,7 +167,7 @@ public class TheOrator : ModNPC
             // Phase 1               
             case States.DarkMonster:
                 if (aiCounter == 1 && Main.netMode != NetmodeID.MultiplayerClient)
-                    Projectile.NewProjectile(Terraria.Entity.GetSource_NaturalSpawn(), NPC.Center, (target.Center - NPC.Center).SafeNormalize(Vector2.Zero) * 40, ModContent.ProjectileType<DarkMonster>(), MonsterDamage, 0f);
+                    Projectile.NewProjectile(Terraria.Entity.GetSource_NaturalSpawn(), NPC.Center, (target.Center - NPC.Center).SafeNormalize(Vector2.Zero) * 40, ModContent.ProjectileType<SelenicIdol>(), MonsterDamage, 0f);
                 if (aiCounter < 1200)
                 {
                     #region Movement 
@@ -232,10 +232,10 @@ public class TheOrator : ModNPC
                     }
                     else
                         AIState = States.DarkSpawn;
-                    if (FindFirstProjectile(ModContent.ProjectileType<DarkMonster>()) != -1)
+                    if (FindFirstProjectile(ModContent.ProjectileType<SelenicIdol>()) != -1)
                     {
-                        Main.projectile[FindFirstProjectile(ModContent.ProjectileType<DarkMonster>())].ai[0] = 1;
-                        Main.projectile[FindFirstProjectile(ModContent.ProjectileType<DarkMonster>())].ai[1] = 0;
+                        Main.projectile[FindFirstProjectile(ModContent.ProjectileType<SelenicIdol>())].ai[0] = 1;
+                        Main.projectile[FindFirstProjectile(ModContent.ProjectileType<SelenicIdol>())].ai[1] = 0;
                     }
                     return;
                 }

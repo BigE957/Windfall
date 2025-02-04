@@ -23,6 +23,7 @@ public class EmpyreanMetaball : Metaball
             Velocity *= 0.96f;
         }
     }
+    
     public class EmpyreanBorderParticle(Projectile projectile, Vector2 offset, float sineOffset, float interpolant, float size, float rotation, bool spin)
     {
         public float Size = size;
@@ -56,12 +57,11 @@ public class EmpyreanMetaball : Metaball
         private set;
     } = [];
 
-    // Check if there are any extraneous particles or if the Gruesome Eminence projectile is present when deciding if this particle should be drawn.
     public override bool AnythingToDraw =>
         EmpyreanParticles.Count != 0 ||
         EmpyreanStickyParticles.Count != 0 ||
         AnyProjectiles(ModContent.ProjectileType<DarkGlob>()) ||
-        AnyProjectiles(ModContent.ProjectileType<DarkMonster>()) ||
+        AnyProjectiles(ModContent.ProjectileType<SelenicIdol>()) ||
         AnyProjectiles(ModContent.ProjectileType<EmpyreanThorn>()) ||
         AnyProjectiles(ModContent.ProjectileType<DarkCoalescence>()) ||
         AnyProjectiles(ModContent.ProjectileType<OratorBorder>()) ||
@@ -106,10 +106,13 @@ public class EmpyreanMetaball : Metaball
         EmpyreanParticles.Clear();
         EmpyreanStickyParticles.Clear();
     }
+    
     public static void SpawnDefaultParticle(Vector2 position, Vector2 velocity, float size) =>
         EmpyreanParticles.Add(new(position, velocity, size));
+    
     public static void SpawnBorderParticle(Projectile projectile, Vector2 offset, float sineOffset, float interpolant, float size, float rotation, bool spin = true) =>
        EmpyreanStickyParticles.Add(new(projectile, offset, sineOffset, interpolant, size, rotation, spin));
+   
     public override void Update()
     {
         // Update all particle instances.
@@ -140,11 +143,13 @@ public class EmpyreanMetaball : Metaball
         if(EmpyreanStickyParticles.Count != 0)
             EmpyreanStickyParticles.RemoveAll(p => !Main.projectile.IndexInRange(p.ProjectileIndex) || !Main.projectile[p.ProjectileIndex].active);
     }
+
     public override void PrepareSpriteBatch(SpriteBatch spriteBatch)
     {
         spriteBatch.End();
         spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.NonPremultiplied, SamplerState.PointClamp, DepthStencilState.Default, Main.Rasterizer, null, Matrix.Identity);
     }
+    
     public override Vector2 CalculateManualOffsetForLayer(int layerIndex)
     {
         switch (layerIndex)
@@ -191,7 +196,7 @@ public class EmpyreanMetaball : Metaball
         }
         foreach (Projectile p in Main.projectile.Where(p => p.active && (
             p.type == ModContent.ProjectileType<DarkGlob>() || 
-            p.type == ModContent.ProjectileType<DarkMonster>() || 
+            p.type == ModContent.ProjectileType<SelenicIdol>() || 
             p.type == ModContent.ProjectileType<EmpyreanThorn>() || 
             p.type == ModContent.ProjectileType<DarkCoalescence>() || 
             p.type == ModContent.ProjectileType<OratorBorder>() || 
@@ -206,7 +211,7 @@ public class EmpyreanMetaball : Metaball
                 Vector2 drawPosition = p.Center - Main.screenPosition;
                 p.As<ShadowHand_Minion>().DrawSelf(drawPosition, p.GetAlpha(Color.White), p.rotation);
             }
-            else if(p.type == ModContent.ProjectileType<HandRing>() || p.type == ModContent.ProjectileType<DarkGlob>() || p.type == ModContent.ProjectileType<OratorBorder>() || p.type == ModContent.ProjectileType<DarkTide>())
+            else if(p.type == ModContent.ProjectileType<HandRing>() || p.type == ModContent.ProjectileType<DarkGlob>() || p.type == ModContent.ProjectileType<OratorBorder>() || p.type == ModContent.ProjectileType<DarkTide>() || p.type == ModContent.ProjectileType<SelenicIdol>())
             {
                 Color c = Color.White;
                 c.A = 0;
@@ -234,6 +239,7 @@ public class EmpyreanMetaball : Metaball
                 n.As<SealingTablet>().PostDraw(Main.spriteBatch, Main.screenPosition, n.GetAlpha(Color.White));
         }
     }
+
     private static float SumofSines(EmpyreanBorderParticle particle, float wavelength, float speed)
     {
         float time = Main.GlobalTimeWrappedHourly;

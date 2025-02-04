@@ -1,22 +1,29 @@
-﻿using CalamityMod.World;
-using Luminance.Core.Graphics;
+﻿using CalamityMod.Graphics.Primitives;
+using CalamityMod.World;
 using ReLogic.Utilities;
+using Terraria.Graphics.Shaders;
 using Windfall.Common.Systems;
 using Windfall.Content.NPCs.Bosses.Orator;
 using static Windfall.Common.Graphics.Metaballs.EmpyreanMetaball;
 
 namespace Windfall.Content.Projectiles.Boss.Orator;
 
-public class DarkMonster : ModProjectile
+public class SelenicIdol : ModProjectile
 {
     public new static string LocalizationCategory => "Projectiles.Boss";
-    public override string Texture => "Windfall/Assets/Graphics/Metaballs/BasicCircle";
+    public override string Texture => "Windfall/Assets/Projectiles/Boss/GoldenMoon";
 
     SlotId loopingSoundSlot;
 
     internal static int MonsterDamage;
     private static float Acceleration;
     private static int MaxSpeed;
+
+    public override void SetStaticDefaults()
+    {
+        ProjectileID.Sets.TrailCacheLength[Projectile.type] = 60;
+        ProjectileID.Sets.TrailingMode[Projectile.type] = 2;
+    }
 
     public override void SetDefaults()
     {
@@ -39,16 +46,17 @@ public class DarkMonster : ModProjectile
         Projectile.netImportant = true;
     }        
 
+    private int aiCounter
+    {
+        get => (int)Projectile.ai[1];
+        set => Projectile.ai[1] = value;
+    }
+
     private enum States
     {
         Chasing,
         Dying,
         Exploding,
-    }
-    private int aiCounter
-    {
-        get => (int)Projectile.ai[1];
-        set => Projectile.ai[1] = value;
     }
     private States AIState
     {
@@ -56,27 +64,23 @@ public class DarkMonster : ModProjectile
         set => Projectile.ai[0] = (float)value;
     }
 
+    private ref float GoopScale => ref Projectile.ai[2];
+
+    int deathCounter = 0;
+    float rotationCounter = 0;
+
     public override void OnSpawn(IEntitySource source)
     {        
         Projectile.scale = 0;
         SoundEngine.PlaySound(SoundID.DD2_EtherianPortalOpen, Projectile.Center);
-        ScreenShakeSystem.StartShake(5f);
+        Luminance.Core.Graphics.ScreenShakeSystem.StartShake(5f);
         for (int i = 0; i <= 50; i++)
         {
             Vector2 spawnPos = Projectile.Center + Main.rand.NextVector2Circular(10f, 10f) * 10;
             SpawnDefaultParticle(spawnPos, (Projectile.Center - spawnPos).SafeNormalize(Vector2.Zero) * 4, 40 * Main.rand.NextFloat(3f, 5f));
         }
-        for (int i = 0; i < 30; i++)
-        {
-            SpawnBorderParticle(Projectile, Vector2.Zero, 0f, 5, 50, TwoPi / 30 * i, false);
-        }
-        const int pCount = 20;
-        for (int i = 0; i <= 20; i++)
-        {
-            SpawnBorderParticle(Projectile, Vector2.Zero, 1f * i, 20, Main.rand.NextFloat(80, 110), TwoPi / pCount * i);
-            //SpawnBorderParticle(Projectile, Vector2.Zero, 0.5f * i, 15, Main.rand.NextFloat(60, 80), TwoPi / pCount * -i - TwoPi / (pCount / 2));
-        }
     }
+    
     public override void AI()
     {
         if (aiCounter == 0 && Main.netMode == NetmodeID.MultiplayerClient)
@@ -99,18 +103,23 @@ public class DarkMonster : ModProjectile
         else
         {
             target = Main.player[Player.FindClosest(Projectile.Center, Projectile.width, Projectile.height)];
-            if (AIState == States.Chasing && Projectile.scale > 4f)
+            if (AIState == States.Chasing && Projectile.scale > 0.9f)
                 AIState = States.Dying;
         }
         if(!NPC.AnyNPCs(ModContent.NPCType<OratorHand>()) || NPC.FindFirstNPC(ModContent.NPCType<TheOrator>()) == -1 || Main.npc[NPC.FindFirstNPC(ModContent.NPCType<TheOrator>())].ai[0] == (int)TheOrator.States.PhaseChange)
-            if (AIState == States.Chasing && Projectile.scale > 4f)
+            if (AIState == States.Chasing && Projectile.scale > 0.9f)
                 AIState = States.Dying;
-
+        
         switch (AIState)
         {
             case States.Chasing:
                 if (aiCounter <= 60)
-                    Projectile.scale += 5 / 60f;
+                {
+                    float lerp = aiCounter / 60f;
+                    Projectile.scale = CircOutEasing(lerp, 1);
+                    GoopScale = 1 - SineInEasing(lerp, 1);
+                    SpawnDefaultParticle(Projectile.Center + (Main.rand.NextVector2Circular(48f, 48f) * Projectile.scale), Main.rand.NextVector2Circular(18, 18) + Projectile.velocity, 200 * Main.rand.NextFloat(0.75f, 0.9f) * (1 - lerp));
+                }
                 if (!SoundEngine.TryGetActiveSound(loopingSoundSlot, out var activeSound))
                 {
                     // if it isn't, play the sound and remember the SlotId
@@ -123,29 +132,41 @@ public class DarkMonster : ModProjectile
                 }
                 Projectile.velocity += (target.Center - Projectile.Center).SafeNormalize(Vector2.Zero) * Acceleration;
                 if (Projectile.velocity.Length() > MaxSpeed)
-                    Projectile.velocity = Projectile.velocity.SafeNormalize(Vector2.Zero) * (Projectile.velocity.Length() * 0.95f);
-                
-                ParticleTrail();
+                    Projectile.velocity = Projectile.velocity.SafeNormalize(Vector2.Zero) * (Projectile.velocity.Length() * 0.95f);           
                 break;
-            case States.Dying:                   
-                Projectile.scale -= (0.005f * (1 + (aiCounter / 8)));                  
-                if (Projectile.scale <= 1.5f)
+            case States.Dying:
+                float lerpValue = deathCounter / 90f;
+
+                Projectile.scale = Lerp(1f, 0.5f, lerpValue);
+                GoopScale = lerpValue;
+
+                if (lerpValue >= 1f)
                     Projectile.ai[0] = 2;                   
                 if (Projectile.velocity.Length() > 0f)
                 {
                     Projectile.velocity += (target.Center - Projectile.Center).SafeNormalize(Vector2.Zero) * Acceleration;
-                    if (Projectile.velocity.Length() > (MaxSpeed * (Projectile.scale / 5)))
-                        Projectile.velocity = Projectile.velocity.SafeNormalize(Vector2.Zero) * (MaxSpeed * (Projectile.scale / 5));
-                    ParticleTrail();
+                    if (Projectile.velocity.Length() > (MaxSpeed * Projectile.scale))
+                        Projectile.velocity = Projectile.velocity.SafeNormalize(Vector2.Zero) * (MaxSpeed * Projectile.scale);
                 }
                 if (Projectile.velocity.Length() < 1f)
                     Projectile.velocity = Vector2.Zero;
-                const float ShakeBy = 25f;
-                Projectile.position += new Vector2(Main.rand.NextFloat(-ShakeBy, ShakeBy) / (Projectile.scale * 2), Main.rand.NextFloat(-ShakeBy, ShakeBy) / (Projectile.scale * 2));
+
+                #region Death Shake
+                float ShakeBy = Lerp(0f, 18f, lerpValue);
+                Vector2 shakeOffset = new(Main.rand.NextFloat(-ShakeBy, ShakeBy) / (Projectile.scale * 2), Main.rand.NextFloat(-ShakeBy, ShakeBy) / (Projectile.scale * 2));
+                Projectile.position += shakeOffset;
+                for (int i = 0; i < Projectile.oldPos.Length; i++)
+                    Projectile.oldPos[i] += shakeOffset;
+                #endregion
+
+                SpawnDefaultParticle(Projectile.Center + (Main.rand.NextVector2Circular(25f, 25f) * Projectile.scale), Main.rand.NextVector2Circular(12, 12) * (lerpValue + 0.5f), 180 * (Main.rand.NextFloat(0.75f, 0.9f)));
+                SpawnDefaultParticle(Projectile.Center + (Main.rand.NextVector2Circular(25f, 25f) * Projectile.scale), Main.rand.NextVector2Circular(18, 18) * (lerpValue + 0.5f), 90 * (Main.rand.NextFloat(0.75f, 0.9f)));
+
+                deathCounter++;
                 break;
             case States.Exploding:
                 SoundEngine.PlaySound(SoundID.DD2_EtherianPortalDryadTouch, Projectile.Center);
-                ScreenShakeSystem.StartShake(7.5f);
+                Luminance.Core.Graphics.ScreenShakeSystem.StartShake(7.5f);
                 for (int i = 0; i <= 50; i++)
                     SpawnDefaultParticle(Projectile.Center, Main.rand.NextVector2Circular(10f, 10f) * Main.rand.NextFloat(1f, 2f), 40 * Main.rand.NextFloat(3f, 5f));
                 NPC Orator = null;
@@ -163,9 +184,9 @@ public class DarkMonster : ModProjectile
                             Projectile.NewProjectile(Terraria.Entity.GetSource_NaturalSpawn(), Projectile.Center, Main.rand.NextVector2Circular(12f, 12f), ModContent.ProjectileType<DarkGlob>(), TheOrator.GlobDamage, 0f, -1, 0, Main.rand.NextFloat(0.75f, 1.5f));
                     }
                 }
-                CalamityMod.Particles.Particle pulse = new PulseRing(Projectile.Center, Vector2.Zero, Color.Teal, 0f, 2.5f, 16);
+                Particle pulse = new PulseRing(Projectile.Center, Vector2.Zero, Color.Teal, 0f, 2.5f, 16);
                 GeneralParticleHandler.SpawnParticle(pulse);
-                CalamityMod.Particles.Particle explosion = new DetailedExplosion(Projectile.Center, Vector2.Zero, new(117, 255, 159), new Vector2(1f, 1f), 0f, 0f, 1f, 16);
+                Particle explosion = new DetailedExplosion(Projectile.Center, Vector2.Zero, new(117, 255, 159), new Vector2(1f, 1f), 0f, 0f, 1f, 16);
                 GeneralParticleHandler.SpawnParticle(explosion);
                 Projectile.active = false;
                 EmpyreanStickyParticles.RemoveAll(p => p.ProjectileIndex == Projectile.whoAmI);
@@ -174,11 +195,12 @@ public class DarkMonster : ModProjectile
         }
         aiCounter++;
         Projectile.rotation = Projectile.velocity.ToRotation();
+        rotationCounter += 0.05f;
     }
+    
     private void ParticleTrail()
     {
         //smaller particles
-        SpawnDefaultParticle(Projectile.Center + (Main.rand.NextVector2Circular(25f, 25f) * Projectile.scale), Projectile.velocity.SafeNormalize(Vector2.Zero) * Main.rand.NextFloat(0f, 5f), 40 * (Main.rand.NextFloat(0.75f, 0.9f) * Projectile.scale));
         
         //larger trails
         float gasSize = 60 * Projectile.scale;
@@ -188,16 +210,69 @@ public class DarkMonster : ModProjectile
         SpawnDefaultParticle(Projectile.Center - (Projectile.velocity.RotatedBy(Pi / 4) * (2 * Projectile.scale)), Vector2.Zero, gasSize);
         SpawnDefaultParticle(Projectile.Center - (Projectile.velocity.RotatedBy(-Pi / 4) * (2 * Projectile.scale)), Vector2.Zero, gasSize);
     }
+    
     public override bool? Colliding(Rectangle projHitbox, Rectangle targetHitbox)
     {
         if (CircularHitboxCollision(Projectile.Center, projHitbox.Width / 2, targetHitbox))
             return true;
         return false;
     }
+    
     public override bool PreDraw(ref Color lightColor)
     {
-        Color drawColor = Color.White;
-        DrawAfterimagesCentered(Projectile, ProjectileID.Sets.TrailingMode[Projectile.type], drawColor);
+        GameShaders.Misc["CalamityMod:PhaseslayerRipEffect"].SetShaderTexture(ModContent.Request<Texture2D>("CalamityMod/ExtraTextures/Trails/SwordSlashTexture"));
+
+        PrimitiveRenderer.RenderTrail(Projectile.oldPos, new(WidthFunction, ColorFunction, (_) => Projectile.Size * 0.5f, shader: GameShaders.Misc["CalamityMod:PhaseslayerRipEffect"]), 50);
+
+        Texture2D tex = ModContent.Request<Texture2D>("Windfall/Assets/Projectiles/Boss/BorderAura1").Value;
+
+        Color[] colors = [
+            Color.Gold, 
+            Color.Goldenrod,
+            Color.DarkGoldenrod,
+            Color.Goldenrod,
+        ];
+
+        Main.spriteBatch.UseBlendState(BlendState.Additive);
+
+        Main.EntitySpriteDraw(tex, Projectile.Center - Main.screenPosition, null, MulticolorLerp(Main.GlobalTimeWrappedHourly * 0.25f, colors), rotationCounter * -0.15f, tex.Size() * 0.5f, ((Projectile.scale * 0.375f) + (float)(Math.Sin(Main.GlobalTimeWrappedHourly * 4) * 0.015f)) * (1 - GoopScale), 0);
+
+        Main.spriteBatch.UseBlendState(BlendState.AlphaBlend);
+
+        tex = TextureAssets.Projectile[Type].Value;
+
+        Main.EntitySpriteDraw(tex, Projectile.Center - Main.screenPosition, null, Color.White, rotationCounter, tex.Size() * 0.5f, Projectile.scale, 0);
+
         return false;
+    }
+
+    internal Color ColorFunction(float completionRatio)
+    {
+        float averageRotation = Projectile.oldRot.Take(20).Average(angle => MathHelper.WrapAngle(angle) + MathHelper.Pi);
+        float opacity = Projectile.Opacity;
+        opacity *= (float)Math.Pow(Utils.GetLerpValue(1f, 0.45f, completionRatio, true), 4D);
+
+        if (deathCounter > 0)
+            opacity = Clamp(Lerp(opacity, -0.5f, deathCounter / 90f), 0f, 1f);
+
+        float rotationAdjusted = MathHelper.WrapAngle(Projectile.rotation) + MathHelper.Pi;
+        float oldRotationAdjusted = MathHelper.WrapAngle(Projectile.oldRot[1]) + MathHelper.Pi;
+
+        return Color.Lerp(Color.Goldenrod, Color.DarkGoldenrod * completionRatio, MathHelper.Clamp(completionRatio * 0.8f, 0f, 1f)) * opacity;
+    }
+
+    internal float WidthFunction(float completionRatio) => 200f * (1f - completionRatio) * 0.8f * Projectile.scale;
+
+    public override void PostDraw(Color lightColor)
+    {
+        if (GoopScale != 0)
+        {
+            Texture2D tex = ModContent.Request<Texture2D>("Windfall/Assets/Graphics/Metaballs/BasicCircle").Value;
+
+            Vector2[] offsets = [new(70, -35), new(-78, 48), new(-0, 80), new(78, 0), new(34, 70), new(-44, -70)];
+
+            for (int i = 0; i < offsets.Length; i++)
+                Main.EntitySpriteDraw(tex, Projectile.Center - Main.screenPosition + offsets[i].RotatedBy(rotationCounter) * Projectile.scale, null, Color.White, rotationCounter, tex.Size() * 0.5f, Projectile.scale * 4f * GoopScale, 0);
+        }
     }
 }

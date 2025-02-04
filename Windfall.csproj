@@ -34,6 +34,7 @@
     <None Remove="Assets\Projectiles\Boss\BorderAura1.png" />
     <None Remove="Assets\Projectiles\Boss\BorderAura2.png" />
     <None Remove="Assets\Projectiles\Boss\FadingStar.png" />
+    <None Remove="Assets\Projectiles\Boss\GoldenMoon.png" />
     <None Remove="Assets\Projectiles\Boss\HandRings.png" />
     <None Remove="Assets\Projectiles\Boss\HandRingsWhiteOut0.png" />
     <None Remove="Assets\Projectiles\Boss\HandRingsWhiteOut1.png" />
