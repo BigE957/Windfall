@@ -129,7 +129,7 @@ public class SelenicSiphon : ModNPC
                 HarvestingHitbox = new((int)NPC.position.X, (int)NPC.Top.Y - 8, NPC.width, NPC.width);
                 HarvestingHitbox = Main.ReverseGravitySupport(HarvestingHitbox);
 
-                foreach (NPC n in Main.npc.Where(n => n.active && (n.type == ModContent.NPCType<AstralSlime>() || n.type == ModContent.NPCType<AstralBolt>())))
+                foreach (NPC n in Main.npc.Where(n => n.active && (n.type == ModContent.NPCType<AstralSlime>())))
                 {
                     if (HarvestingHitbox.Intersects(n.Hitbox))
                     {
@@ -149,9 +149,9 @@ public class SelenicSiphon : ModNPC
                     }
                 }
 
-                foreach (Projectile p in Main.projectile.Where(p => p.active && p.type == ModContent.ProjectileType<AstralEnergy>()))
+                foreach (Projectile p in Main.projectile.Where(p => p.active && (p.type == ModContent.ProjectileType<AstralEnergy>() || p.type == ModContent.ProjectileType<AstralBolt>())))
                 {
-                    if (HarvestingHitbox.Intersects(p.Hitbox))
+                    if ((p.type == ModContent.ProjectileType<AstralBolt>() || p.ai[0] > 30) && HarvestingHitbox.Intersects(p.Hitbox))
                     {
                         Vector2 poofPos = Vector2.Lerp(p.Center, HarvestingHitbox.Center(), 0.66f);
                         for (int i = 0; i < 6; i++)
@@ -165,7 +165,10 @@ public class SelenicSiphon : ModNPC
 
                         p.active = false;
 
-                        FillRatio += 0.1f;
+                        if (p.type == ModContent.ProjectileType<AstralEnergy>())
+                            FillRatio += 0.1f;
+                        else
+                            FillRatio += 0.01f;
                     }
                 }
 

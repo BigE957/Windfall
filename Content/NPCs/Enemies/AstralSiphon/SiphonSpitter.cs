@@ -1,7 +1,10 @@
 ﻿using CalamityMod.Dusts;
 using CalamityMod.NPCs;
+using CalamityMod.NPCs.Astral;
 using CalamityMod.Sounds;
+using Terraria;
 using Windfall.Content.Projectiles.Enemies;
+using Windfall.Content.Projectiles.Props;
 
 namespace Windfall.Content.NPCs.Enemies.AstralSiphon;
 public class SiphonSpitter : ModNPC
@@ -19,22 +22,26 @@ public class SiphonSpitter : ModNPC
     public override void SetDefaults()
     {
         NPC.aiStyle = -1;
-        NPC.damage = 20;
         NPC.width = 64;
         NPC.height = 56;
-        NPC.defense = 6;
         NPC.noGravity = true;
         NPC.noTileCollide = true;
         NPC.DeathSound = CommonCalamitySounds.AstralNPCDeathSound;
-        NPC.DR_NERD(0.05f);
-        NPC.lifeMax = 8000;
-        NPC.knockBackResist = 0.05f;
+
+        NPC.damage = 85;
+        NPC.defense = 20;
+        NPC.knockBackResist = 0.7f;
+        NPC.lifeMax = 430;
+        NPC.DR_NERD(0.15f);
+        Banner = ModContent.NPCType<SightseerSpitter>();
+
         NPC.HitSound = SoundID.NPCHit12;
         NPC.DeathSound = SoundID.NPCDeath18;
-        NPC.Calamity().VulnerableToCold = true;
-        NPC.Calamity().VulnerableToSickness = true;
-        NPC.Calamity().VulnerableToWater = true;
-        NPC.immortal = true;
+        NPC.Calamity().VulnerableToHeat = true;
+        NPC.Calamity().VulnerableToSickness = false;
+
+        CalamityGlobalNPC.AdjustExpertModeStatScaling(NPC);
+        CalamityGlobalNPC.AdjustMasterModeStatScaling(NPC);
     }
 
     int aiCounter = 0;
@@ -43,19 +50,25 @@ public class SiphonSpitter : ModNPC
 
     public override void AI()
     {
+        if(!Main.npc.Any(n => n.active && n.type == ModContent.NPCType<SelenicSiphon>() && n.As<SelenicSiphon>().EventActive))
+        {
+            NPC.Transform(ModContent.NPCType<SightseerSpitter>());
+            return;
+        }
+
         Target ??= Main.player[Player.FindClosest(NPC.position, NPC.width, NPC.height)];
 
         Vector2 homeInVector = Target.Center - NPC.Center;
         float targetDist = homeInVector.Length();
         homeInVector.Normalize();
-        if (targetDist > 500f)
+        if (targetDist > 450f)
         {
             float velocity = 10f;
             NPC.velocity = (NPC.velocity * 40f + homeInVector * velocity) / 41f;
         }
         else
         {
-            if (targetDist < 450f)
+            if (targetDist < 400f)
             {
                 float velocity = -10f;
                 NPC.velocity = (NPC.velocity * 40f + homeInVector * velocity) / 41f;
@@ -65,10 +78,12 @@ public class SiphonSpitter : ModNPC
                 NPC.velocity *= 0.9f;
             }
         }
+        if (NPC.Center.Y > Target.Center.Y)
+            NPC.velocity.Y = -4;
         NPC.rotation = (Target.Center - NPC.Center).ToRotation() + Pi;
         NPC.Center += (NPC.rotation + PiOver2).ToRotationVector2() * (float)Math.Cos((aiCounter + attackCounter) / 20f) * (4f / (NPC.velocity.Length() + 1));
 
-        if (attackCounter == -1 && aiCounter % 180 == 0 && Main.rand.NextBool())
+        if (attackCounter == -1 && aiCounter % 180 == 0 && Main.rand.NextBool(3))
         {
             attackCounter = 0;
             aiCounter++;
@@ -96,9 +111,7 @@ public class SiphonSpitter : ModNPC
             {
                 if (attackCounter == 91)
                 {
-                    NPC bolt = NPC.NewNPCDirect(Terraria.Entity.GetSource_NaturalSpawn(), (int)projectilePos.X, (int)projectilePos.Y, ModContent.NPCType<AstralBolt>(), 0, NPC.rotation + Pi, NPC.whoAmI);
-                    bolt.Center = projectilePos;
-                    NPC.velocity = (NPC.rotation + Pi).ToRotationVector2() * -12f;
+                    Projectile.NewProjectileDirect(Projectile.GetSource_NaturalSpawn(), projectilePos, (NPC.rotation + Pi).ToRotationVector2() * 6f, ModContent.ProjectileType<AstralBolt>(), 100, 0f);
                 }
                 if (attackCounter >= 100)
                     attackCounter = -2;
@@ -110,6 +123,10 @@ public class SiphonSpitter : ModNPC
 
     }
 
+    public override void OnKill()
+    {
+        Projectile.NewProjectile(Projectile.GetSource_NaturalSpawn(), NPC.Center, Vector2.Zero, ModContent.ProjectileType<AstralEnergy>(), 0, 0f);
+    }
     public override void HitEffect(NPC.HitInfo hit)
     {
         if (NPC.soundDelay == 0)

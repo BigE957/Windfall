@@ -1756,8 +1756,8 @@ NPCs: {
 	AstralGuardian.DisplayName: Astral Guardian
 	AstralBolt.DisplayName: ""
 	SelenicSiphon.DisplayName: Selenic Siphon
-	SiphonCollider.DisplayName: Siphon Collider
-	SiphonSpitter.DisplayName: Siphon Spitter
+	SiphonCollider.DisplayName: Sightseer Collider
+	SiphonSpitter.DisplayName: Sightseer Spitter
 }
 
 Projectiles: {
@@ -1807,15 +1807,15 @@ Projectiles: {
 	BurningAltar.DisplayName: Burning Altar
 	RitualTorch.DisplayName: Ritual Torch
 	BookPile.DisplayName: Book Pile
-	RiftWeaverProj.DisplayName: Rift Weaver Proj
+	RiftWeaverProj.DisplayName: Rift Weaver Stab
 	RiftWeaverThrow.DisplayName: Rift Weaver Throw
 	UnstableDarkness.DisplayName: Unstable Darkness
 	AstralBolt.DisplayName: Astral Bolt
-	HammerChiselProjectile.DisplayName: Hammer Chisel Projectile
+	HammerChiselProjectile.DisplayName: Hammer and Chisel
 	HandStatue.DisplayName: Hand Statue
 	TestProjectile.DisplayName: Test Projectile
 	FadingStar.DisplayName: Fading Star
-	Rogue.ExodiumSpearProj.DisplayName: Exodium Spear Proj
+	Rogue.ExodiumSpearProj.DisplayName: Exodium Spear
 	SelenicSiphon.DisplayName: Selenic Siphon
 	AstralEnergy.DisplayName: Astral Energy
 	SelenicIdol.DisplayName: Selenic Idol
@@ -1860,7 +1860,7 @@ Status: {
 		BigDark: {
 			1: Fathomless darkness tore {0} to shreds.
 			2: The shadows caught up to {0}.
-			3: "{0} as been hollowed from the inside out."
+			3: "{0}'s body was reduced to nothing."
 		}
 
 		Idol: {

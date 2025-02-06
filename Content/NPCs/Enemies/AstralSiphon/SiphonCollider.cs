@@ -3,6 +3,7 @@ using CalamityMod.Dusts;
 using CalamityMod.Items.Materials;
 using CalamityMod.Items.Placeables.Banners;
 using CalamityMod.NPCs;
+using CalamityMod.NPCs.Astral;
 using CalamityMod.Sounds;
 using CalamityMod.World;
 using Windfall.Content.Projectiles.Props;
@@ -38,8 +39,7 @@ public class SiphonCollider : ModNPC
         NPC.noGravity = true;
         NPC.value = Item.buyPrice(0, 0, 10, 0);
         NPC.aiStyle = -1;
-        Banner = NPC.type;
-        BannerItem = ModContent.ItemType<SightseerColliderBanner>();
+        Banner = ModContent.NPCType<SightseerCollider>();
 
         NPC.Calamity().VulnerableToHeat = true;
         NPC.Calamity().VulnerableToSickness = false;
@@ -55,9 +55,9 @@ public class SiphonCollider : ModNPC
 
     public override void AI()
     {
-        if(!NPC.AnyNPCs(ModContent.NPCType<SelenicSiphon>()))
+        if (!Main.npc.Any(n => n.active && n.type == ModContent.NPCType<SelenicSiphon>() && n.As<SelenicSiphon>().EventActive))
         {
-            CalamityGlobalNPC.DoFlyingAI(NPC, (CalamityWorld.death ? 9.8f : CalamityWorld.revenge ? 7.8f : 5.8f), (CalamityWorld.death ? 0.05f : CalamityWorld.revenge ? 0.04f : 0.03f), 350f);
+            NPC.Transform(ModContent.NPCType<SightseerCollider>());
             return;
         }
 
@@ -69,14 +69,14 @@ public class SiphonCollider : ModNPC
             Vector2 homeInVector = Target.Center - NPC.Center;
             float targetDist = homeInVector.Length();
             homeInVector.Normalize();
-            if (targetDist > 175f)
+            if (targetDist > 225f)
             {
                 float velocity = 10f;
                 NPC.velocity = (NPC.velocity * 40f + homeInVector * velocity) / 41f;
             }
             else
             {
-                if (targetDist < 150f)
+                if (targetDist < 200f)
                 {
                     float velocity = -10f;
                     NPC.velocity = (NPC.velocity * 40f + homeInVector * velocity) / 41f;
@@ -92,7 +92,7 @@ public class SiphonCollider : ModNPC
 
             aiCounter++;
 
-            if (targetDist < 200f)
+            if (targetDist < 250f)
                 attackCounter++;
             else
                 attackCounter = -120;

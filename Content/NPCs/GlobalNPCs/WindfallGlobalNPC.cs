@@ -1,19 +1,62 @@
-﻿using CalamityMod.NPCs.NormalNPCs;
+﻿using CalamityMod.NPCs.Astral;
+using CalamityMod.NPCs.NormalNPCs;
 using CalamityMod.NPCs.Polterghast;
 using Windfall.Common.Systems;
 using Windfall.Common.Systems.WorldEvents;
 using Windfall.Content.NPCs.Enemies;
+using Windfall.Content.NPCs.Enemies.AstralSiphon;
 using Windfall.Content.Projectiles.Enemies;
 using Windfall.Content.Projectiles.NPCAnimations;
 using Windfall.Content.Projectiles.Other;
 using Windfall.Content.Projectiles.Props;
-using Windfall.Content.UI.Events;
 
 namespace Windfall.Content.NPCs.GlobalNPCs;
 
 public class WindfallGlobalNPC : GlobalNPC
 {
     private static SoundStyle PolterAmbiance = new("Windfall/Assets/Sounds/Ambiance/Polterghast/PolterAmbiance_", 3);
+    
+    public override void EditSpawnPool(IDictionary<int, float> pool, NPCSpawnInfo spawnInfo)
+    {
+        bool AstralSiphonSpawns = true;
+
+        if (!spawnInfo.Player.InAstral(1))
+            AstralSiphonSpawns = false;
+
+        if (AstralSiphonSpawns && !Main.npc.Any(n => n.active && n.type == ModContent.NPCType<SelenicSiphon>() && n.As<SelenicSiphon>().EventActive))
+            AstralSiphonSpawns = false;
+
+        if (AstralSiphonSpawns)
+        {
+            pool.Clear();
+
+            pool[ModContent.NPCType<AstralSlime>()] = 0.75f;
+            pool[ModContent.NPCType<Nova>()] = 0.66f;
+            pool[ModContent.NPCType<AstralProbe>()] = 0.5f;
+            if (Main.npc.Where(n => n.active && n.type == ModContent.NPCType<SiphonCollider>()).Count() < 5)
+                pool[ModContent.NPCType<SiphonCollider>()] = 1f;
+            if (Main.npc.Where(n => n.active && n.type == ModContent.NPCType<SiphonSpitter>()).Count() < 3)
+                pool[ModContent.NPCType<SiphonSpitter>()] = 0.5f;
+        }
+    }
+
+    public override void EditSpawnRate(Player player, ref int spawnRate, ref int maxSpawns)
+    {
+        bool AstralSiphonSpawns = true;
+
+        if (!player.InAstral(1))
+            AstralSiphonSpawns = false;
+
+        if (AstralSiphonSpawns && !Main.npc.Any(n => n.active && n.type == ModContent.NPCType<SelenicSiphon>() && n.As<SelenicSiphon>().EventActive))
+            AstralSiphonSpawns = false;
+
+        if (AstralSiphonSpawns)
+        {
+            spawnRate = 50;
+            maxSpawns = 16;
+        }
+    }
+
     public override void OnSpawn(NPC npc, IEntitySource source)
     {
         Mod calamity = ModLoader.GetMod("CalamityMod");
@@ -42,7 +85,7 @@ public class WindfallGlobalNPC : GlobalNPC
         if (Main.npc.Any(n => n.active && n.type == ModContent.NPCType<SelenicSiphon>() && n.As<SelenicSiphon>().EventActive) && npc.type == calamity.Find<ModNPC>("Nova").Type)
         {
             NPC siphon = Main.npc[NPC.FindFirstNPC(ModContent.NPCType<SelenicSiphon>())];
-            Projectile.NewProjectile(Entity.GetSource_NaturalSpawn(), npc.Center, (npc.Center - siphon.Center).SafeNormalize(Vector2.UnitX * npc.direction) * 12f, ModContent.ProjectileType<AstralEnergy>(), 0, 0f);
+            Projectile.NewProjectile(Entity.GetSource_NaturalSpawn(), npc.Center, (npc.Center - siphon.Center).SafeNormalize(Vector2.UnitX * npc.direction) * 6f, ModContent.ProjectileType<AstralEnergy>(), 0, 0f);
         }
 
         if (npc.type == NPCID.Plantera && !NPC.downedPlantBoss)

@@ -1,4 +1,5 @@
 ﻿using Windfall.Content.Projectiles.GodlyAbilities;
+using Windfall.Content.Projectiles.Props;
 
 namespace Windfall.Content.Projectiles.Enemies;
 public class AstralEnergy : ModProjectile, ILocalizedModType
@@ -7,7 +8,7 @@ public class AstralEnergy : ModProjectile, ILocalizedModType
     public new static string LocalizationCategory => "Projectiles.Enemies";
     public override void SetStaticDefaults()
     {
-        ProjectileID.Sets.TrailingMode[Type] = 0;
+        ProjectileID.Sets.TrailingMode[Type] = 2;
         ProjectileID.Sets.TrailCacheLength[Type] = 20;
     }
     public override void SetDefaults()
@@ -17,11 +18,28 @@ public class AstralEnergy : ModProjectile, ILocalizedModType
         Projectile.height = Projectile.width = 48;
         Projectile.ignoreWater = true;
         Projectile.tileCollide = true;
+        Projectile.timeLeft = 720;
     }
+
+    private ref float Time => ref Projectile.ai[0];
 
     public override void AI()
     {
-        if (Projectile.velocity == Vector2.Zero)
+        if (!Main.npc.Any(n => n.active && n.type == ModContent.NPCType<SelenicSiphon>() && n.As<SelenicSiphon>().EventActive))
+        {
+            for (int i = 0; i < 6; i++)
+            {
+                Color color = Main.rand.NextBool() ? Color.Cyan * 1.5f : Color.OrangeRed;
+                Particle particle = new SparkParticle(Projectile.Center, Main.rand.NextVector2Circular(4f, 4f), false, 32, 1f, color);
+                GeneralParticleHandler.SpawnParticle(particle);
+            }
+            Particle pulse = new PulseRing(Projectile.Center, Vector2.Zero, Main.rand.NextBool() ? Color.Cyan * 1.5f : Color.OrangeRed, 0f, 0.35f, 16);
+            GeneralParticleHandler.SpawnParticle(pulse);
+            Projectile.active = false;
+            return;
+        }
+
+        if (Projectile.velocity.LengthSquared() < 25)
         {
             foreach (Player p in Main.ActivePlayers)
             {
@@ -33,27 +51,47 @@ public class AstralEnergy : ModProjectile, ILocalizedModType
                     Projectile.velocity = (Projectile.Center - p.Center).SafeNormalize(Vector2.Zero) * 8;
                 }
             }
-            foreach (Projectile proj in Main.projectile.Where(p => p != null && p.active && p.friendly && p.owner == Projectile.owner && !p.minion && p.whoAmI != Projectile.whoAmI && p.type != ModContent.ProjectileType<GodlyCrimulanMuck>() && p.type != ModContent.ProjectileType<GodlyCrimulanMuck>()))
+            foreach (Projectile proj in Main.projectile.Where(p => p != null && p.active && p.friendly && p.owner == Projectile.owner && !p.minion && p.whoAmI != Projectile.whoAmI))
             {
-                if (Projectile.Hitbox.Intersects(proj.Hitbox) && proj.Windfall().hasHitMuck == false)
+                if (Projectile.Hitbox.Intersects(proj.Hitbox))
                 {
                     SoundEngine.PlaySound(SoundID.NPCHit1, Projectile.Center);
                     Projectile.velocity = proj.velocity.SafeNormalize(Vector2.Zero) * (2 + proj.knockBack);
-                    proj.Windfall().hasHitMuck = true;
                     break;
                 }
             }
         }
-        else
+
+        if(Projectile.velocity != Vector2.Zero)
         {
             if (Projectile.velocity.LengthSquared() < 1)
                 Projectile.velocity = Vector2.Zero;
             else
             {
                 Projectile.rotation = Projectile.velocity.ToRotation() + PiOver2;
-                Projectile.velocity *= 0.95f;
+                Projectile.velocity *= 0.975f;
             }
         }
+
+        if(Projectile.timeLeft <= 120 && Projectile.timeLeft % 30 == 0)
+        {
+            Particle pulse = new PulseRing(Projectile.Center, Vector2.Zero * 0f, Main.rand.NextBool() ? Color.Cyan * 1.5f : Color.OrangeRed, 0.05f, (Projectile.friendly ? 0.9f : 0.5f), 24);
+            GeneralParticleHandler.SpawnParticle(pulse);
+        }
+
+        Time++;
+    }
+
+    public override void OnKill(int timeLeft)
+    {
+        for (int i = 0; i < 12; i++)
+        {
+            Color color = Main.rand.NextBool() ? Color.Cyan * 1.5f : Color.OrangeRed;
+            Particle particle = new SparkParticle(Projectile.Center, Main.rand.NextVector2Circular(4f, 4f) * (Projectile.friendly ? 2 : 1), false, 48, 1f, color);
+            GeneralParticleHandler.SpawnParticle(particle);
+        }
+        Particle pulse = new PulseRing(Projectile.Center, Vector2.Zero * 0f, Main.rand.NextBool() ? Color.Cyan * 1.5f : Color.OrangeRed, 0.05f, (Projectile.friendly ? 0.9f : 0.5f), 24);
+        GeneralParticleHandler.SpawnParticle(pulse);
     }
 
     public override bool OnTileCollide(Vector2 oldVelocity)
@@ -74,13 +112,6 @@ public class AstralEnergy : ModProjectile, ILocalizedModType
         {
             float interpolent = (Projectile.oldPos.Length - i) / (float)Projectile.oldPos.Length;
             Main.EntitySpriteDraw(tex, (Projectile.oldPos[i] + positionToCenterOffset) - Main.screenPosition, null, colorFunc(interpolent), Projectile.oldRot[i], tex.Size() * 0.5f, interpolent, 0, 0);
-            if (false)//i != Projectile.oldPos.Length - 1)
-            {
-                Vector2 midpoint = new((Projectile.oldPos[i].X + Projectile.oldPos[i + 1].X) / 2, (Projectile.oldPos[i].Y + Projectile.oldPos[i + 1].Y) / 2);
-                float midangle = (Projectile.oldRot[i] + Projectile.oldRot[i + 1]) / 2f;
-                float midInterp = (Projectile.oldPos.Length - i - 0.5f) / Projectile.oldPos.Length;
-                Main.EntitySpriteDraw(tex, (midpoint + positionToCenterOffset) - Main.screenPosition, null, colorFunc(midInterp), midangle, tex.Size() * 0.5f, midInterp, 0, 0);
-            }
         }
         Main.EntitySpriteDraw(tex, Projectile.Center - Main.screenPosition, null, colorFunc(1) * 1.5f, Projectile.rotation, tex.Size() * 0.5f, 1.25f, 0, 0);
         return false;

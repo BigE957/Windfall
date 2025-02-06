@@ -9,6 +9,8 @@
 		<NoWarn>MSB3270</NoWarn>
     </PropertyGroup>
   <ItemGroup>
+    <None Remove="Assets\Graphics\Extra\InvertedSwordSmear.png" />
+    <None Remove="Assets\Graphics\Extra\PaintSmear.png" />
     <None Remove="Assets\Graphics\Metaballs\Empyrean_Metaball\EmpyreanLayer1.png" />
     <None Remove="Assets\Graphics\Metaballs\Empyrean_Metaball\EmpyreanLayer2.png" />
     <None Remove="Assets\Items\Essences\BoCEssence.png" />
