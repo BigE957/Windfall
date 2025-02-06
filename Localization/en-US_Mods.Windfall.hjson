@@ -235,13 +235,6 @@ Dialogue: {
 	}
 
 	LunarCult: {
-		OcularDevotee: {
-			Initial: Ah, welcome traveller! You arrive at just the right moment! The bishop said one like you would arrive... Join us and witness something spectacular!
-			SomethingAmazing: Yes, yes. Something truly amazing! Long have we prepared for this moment. A communion with an ancient thing. Knowledge like no other shall soon be at our fingertips!
-			TheBishop: Yes, the Bishop! He has brought together our small group, and he has prepared long for this moment. A kind man, you will like him, I'm sure!
-			End: Speak with the Bishop, there at the altar. He can tell you more than I.
-		}
-
 		LunarBishop: {
 			Cafeteria: {
 				Unfresh: {
@@ -532,6 +525,17 @@ Dialogue: {
 			}
 
 			Skibidi: Toilet
+		}
+
+		Apostle: {
+			AstralSiphon: {
+				Tips: {
+					0: Do the thing!
+				}
+			}
+			Pre-Fight: {
+				0: Fuck you.
+			}
 		}
 
 		TravellingCultist: {

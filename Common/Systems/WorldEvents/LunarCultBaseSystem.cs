@@ -251,8 +251,8 @@ public class LunarCultBaseSystem : ModSystem
                 spawnApostle = true;
         }
 
-        if (spawnApostle && !NPC.AnyNPCs(ModContent.NPCType<DisgracedApostle>()))
-            NPC.NewNPC(Entity.GetSource_None(), LunarCultBaseLocation.X * 16 + (BaseFacingLeft ? -1800 : 1800), (CultBaseTileArea.Top + 30) * 16, ModContent.NPCType<DisgracedApostle>());
+        if (spawnApostle && !NPC.AnyNPCs(ModContent.NPCType<DisgracedApostleNPC>()))
+            NPC.NewNPC(Entity.GetSource_None(), LunarCultBaseLocation.X * 16 + (BaseFacingLeft ? -1800 : 1800), (CultBaseTileArea.Top + 30) * 16, ModContent.NPCType<DisgracedApostleNPC>());
         
         //for testing
         //State = SystemState.CheckReqs;

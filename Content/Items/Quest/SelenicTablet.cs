@@ -33,7 +33,7 @@ public class SelenicTablet : ModItem, ILocalizedModType
         }
         else //Cult Meeting In-Active
         {
-            if (player.LunarCult().apostleQuestTracker == 13)
+            if (player.LunarCult().apostleQuestTracker == 13 && player.InAstral(1))
             {
                 Main.NewText("Start Astral Siphon");
             }

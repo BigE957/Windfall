@@ -1,0 +1,40 @@
+{
+  "Dialogues": [
+    {
+      "DialogueText": [ { "Text": "Hello, hello! Got the signal that you're ready to get things started?" } ],
+      "Responses": [
+        {
+          "Title": "Yup!",
+          "Heading": 3
+        },
+        {
+          "Title": "Actually, not yet.",
+          "Heading": 2
+        }
+      ]
+    },
+    {
+      "DialogueText": [ { "Text": "You serious? Ugh, fine. Lemme know when you're actually ready then." } ],
+      "Responses": [
+        {
+          "Title": "Will do."
+        },
+        {
+          "Title": "Sorry..."
+        }
+      ]
+    },
+    {
+      "DialogueText": [ { "Text": "Awesome! Lemme summon up the Siphon, and we can get this thing started!" } ],
+      "Responses": [
+        {
+          "Title": "Gotcha!"
+        },
+        {
+          "Title": "Summon...?"
+        }
+      ]
+    }
+  ],
+  "Characters": "Apostle"
+}

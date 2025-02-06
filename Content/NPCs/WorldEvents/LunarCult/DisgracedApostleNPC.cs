@@ -1,20 +1,15 @@
 ﻿using DialogueHelper.UI.Dialogue;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Windfall.Common.Systems.WorldEvents;
+using Windfall.Content.Projectiles.Props;
 
 namespace Windfall.Content.NPCs.WorldEvents.LunarCult;
-public class DisgracedApostle : ModNPC
+public class DisgracedApostleNPC : ModNPC
 {
     private enum States
     {
         Idle,
-        TutorialChat,
-        RitualEvent,
-        BetrayalChat,
+        PreSiphon,
+        SiphonStart,
+        SiphonDuring
     }
     private States AIState
     {
@@ -44,12 +39,24 @@ public class DisgracedApostle : ModNPC
         NPC.knockBackResist = 0f;
         NPC.immortal = true;
     }
-    public override bool CanChat() => Main.LocalPlayer.LunarCult().apostleQuestTracker == 12;
+
+    public override void AI()
+    {
+        if(AIState == States.SiphonStart)
+        {
+            NPC.NewNPC(Terraria.Entity.GetSource_TownSpawn(), (int)NPC.Center.X + 56, (int)NPC.Bottom.Y, ModContent.NPCType<SelenicSiphon>());
+            AIState = States.SiphonDuring;
+        }
+    }
+
+    public override bool CanChat() => (Main.LocalPlayer.LunarCult().apostleQuestTracker == 12 || AIState == States.PreSiphon) && !ModContent.GetInstance<DialogueUISystem>().isDialogueOpen;
     public override string GetChat()
     {
         Main.CloseNPCChatOrSign();
-
-        ModContent.GetInstance<DialogueUISystem>().DisplayDialogueTree(Windfall.Instance, "Apostle/AstralSiphonPrep", new(Name, [NPC.whoAmI]));
+        if(AIState == States.PreSiphon)
+            ModContent.GetInstance<DialogueUISystem>().DisplayDialogueTree(Windfall.Instance, "Apostle/AstralSiphonStart", new(Name, [NPC.whoAmI]));
+        else
+            ModContent.GetInstance<DialogueUISystem>().DisplayDialogueTree(Windfall.Instance, "Apostle/AstralSiphonPrep", new(Name, [NPC.whoAmI]));
 
         return "";
     }
@@ -64,6 +71,12 @@ public class DisgracedApostle : ModNPC
             {
                 case "Apostle/AstralSiphonPrep":
                     Main.LocalPlayer.LunarCult().apostleQuestTracker++; //13
+                    break;
+                case "Apostle/AstralSiphonStart":
+                    if (buttonID == 1)
+                        apostle.active = false;
+                    else
+                        apostle.ai[0] = (int)States.SiphonDuring;
                     break;
             }
         }
