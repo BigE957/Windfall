@@ -248,6 +248,9 @@ public class TheOrator : ModNPC
                 #endregion
                 const int EndTime = 1500;
 
+                if (Main.projectile.Any(p => p.active && p.type == ModContent.ProjectileType<SelenicIdol>()))
+                    aiCounter = 0;
+
                 if (aiCounter > 150 && aiCounter < EndTime - 100 && aiCounter % 90 == 0 && Main.netMode != NetmodeID.MultiplayerClient)
                     Projectile.NewProjectile(Terraria.Entity.GetSource_NaturalSpawn(), NPC.Center, Vector2.Zero, ModContent.ProjectileType<OratorJavelin>(), BoltDamage, 0f, -1, 120, 2);
 

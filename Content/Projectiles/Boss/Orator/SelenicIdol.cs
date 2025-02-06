@@ -21,7 +21,7 @@ public class SelenicIdol : ModProjectile
 
     public override void SetStaticDefaults()
     {
-        ProjectileID.Sets.TrailCacheLength[Projectile.type] = 60;
+        ProjectileID.Sets.TrailCacheLength[Projectile.type] = 40;
         ProjectileID.Sets.TrailingMode[Projectile.type] = 2;
     }
 
@@ -139,7 +139,7 @@ public class SelenicIdol : ModProjectile
                 #endregion
                 break;
             case States.Dying:
-                float lerpValue = deathCounter / 90f;
+                float lerpValue = deathCounter / 180f;
 
                 Projectile.scale = Lerp(1f, 0.5f, lerpValue);
                 GoopScale = lerpValue;
@@ -199,7 +199,7 @@ public class SelenicIdol : ModProjectile
         }
         aiCounter++;
         Projectile.rotation = Projectile.velocity.ToRotation();
-        rotationCounter += Projectile.velocity.X / 200f;
+        rotationCounter += 0.01f;
     }
     
     public override bool? Colliding(Rectangle projHitbox, Rectangle targetHitbox)
@@ -213,20 +213,20 @@ public class SelenicIdol : ModProjectile
     {
         GameShaders.Misc["CalamityMod:PhaseslayerRipEffect"].SetShaderTexture(ModContent.Request<Texture2D>("CalamityMod/ExtraTextures/Trails/SwordSlashTexture"));
 
-        PrimitiveRenderer.RenderTrail(Projectile.oldPos, new(WidthFunction, ColorFunction, (_) => Projectile.Size * 0.5f, shader: GameShaders.Misc["CalamityMod:PhaseslayerRipEffect"]), 50);
+        PrimitiveRenderer.RenderTrail(Projectile.oldPos, new(WidthFunction, ColorFunction, (_) => Projectile.Size * 0.5f, shader: GameShaders.Misc["CalamityMod:PhaseslayerRipEffect"]), 40);
 
-        Texture2D tex = ModContent.Request<Texture2D>("Windfall/Assets/Projectiles/Boss/BorderAura1").Value;
+        Main.spriteBatch.UseBlendState(BlendState.Additive);
+
+        Texture2D tex = ModContent.Request<Texture2D>("Windfall/Assets/Skies/OratorMoonBloom2").Value;
 
         Color[] colors = [
-            Color.Gold, 
+            Color.Gold,
             Color.Goldenrod,
             Color.DarkGoldenrod,
             Color.Goldenrod,
         ];
 
-        Main.spriteBatch.UseBlendState(BlendState.Additive);
-
-        Main.EntitySpriteDraw(tex, Projectile.Center - Main.screenPosition, null, MulticolorLerp(Main.GlobalTimeWrappedHourly * 0.25f, colors), Main.GlobalTimeWrappedHourly * 0.25f, tex.Size() * 0.5f, ((Projectile.scale * 0.375f) + (float)(Math.Sin(Main.GlobalTimeWrappedHourly * 4) * 0.015f)) * (1 - GoopScale), 0);
+        Main.EntitySpriteDraw(tex, Projectile.Center - Main.screenPosition, null, MulticolorLerp(Main.GlobalTimeWrappedHourly * 0.25f, colors), Main.GlobalTimeWrappedHourly * 0.25f, tex.Size() * 0.5f, ((Projectile.scale * 0.825f) + (float)(Math.Sin(Main.GlobalTimeWrappedHourly * 4) * 0.025f)) * (1 - GoopScale), 0);
 
         Main.spriteBatch.UseBlendState(BlendState.AlphaBlend);
 
@@ -245,7 +245,7 @@ public class SelenicIdol : ModProjectile
         if (deathCounter > 0)
             opacity = Clamp(Lerp(opacity, -0.5f, deathCounter / 90f), 0f, 1f);
 
-        return Color.Lerp(Color.Gold, new(170, 100, 30), (completionRatio ) * 3f) * opacity;
+        return Color.Lerp(Color.Gold, new(170, 100, 30), (completionRatio ) * 3f) * opacity * (Projectile.velocity.Length() / MaxSpeed);
     }
 
     internal float WidthFunction(float completionRatio) => 200f * (1f - completionRatio) * 0.8f * Projectile.scale;
