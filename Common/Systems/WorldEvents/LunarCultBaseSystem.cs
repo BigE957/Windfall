@@ -200,6 +200,7 @@ public class LunarCultBaseSystem : ModSystem
                 return;
             if (!NPC.AnyNPCs(ModContent.NPCType<OratorNPC>()))
                 NPC.NewNPC(Entity.GetSource_None(), LunarCultBaseLocation.X * 16 + (BaseFacingLeft ? -1858 : 1858), (CultBaseTileArea.Top + 30) * 16, ModContent.NPCType<OratorNPC>());
+
             #endregion
 
             //Main.NewText(LunarCultBaseLocation.ToWorldCoordinates() - Main.LocalPlayer.Center);
@@ -223,10 +224,13 @@ public class LunarCultBaseSystem : ModSystem
         }
         if (Main.player.Any(p => p.active && !p.dead && CultBaseTileArea.Contains(p.Center.ToTileCoordinates())))
             CalamityWorld.ArmoredDiggerSpawnCooldown = 36000;
-        foreach (Player player in Main.player.Where(p => p.active && !p.dead))
+
+        bool spawnApostle = false;
+
+        foreach (Player player in Main.player.Where(p => p.active))
         {
             #region Basement Teleport
-            if (CultBaseTileArea.Contains(player.Center.ToTileCoordinates()) && player.Center.Y > (LunarCultBaseLocation.Y + 30) * 16)
+            if (!player.dead && CultBaseTileArea.Contains(player.Center.ToTileCoordinates()) && player.Center.Y > (LunarCultBaseLocation.Y + 30) * 16)
             {
                 for (int i = 0; i <= 20; i++)
                     EmpyreanMetaball.SpawnDefaultParticle(player.Center, Main.rand.NextVector2Circular(5f, 5f), 30 * Main.rand.NextFloat(1.5f, 2.3f));
@@ -242,10 +246,19 @@ public class LunarCultBaseSystem : ModSystem
                 }
             }
             #endregion
+
+            if (player.LunarCult().apostleQuestTracker == 11)
+                spawnApostle = true;
         }
+
+        if (spawnApostle && !NPC.AnyNPCs(ModContent.NPCType<DisgracedApostle>()))
+            NPC.NewNPC(Entity.GetSource_None(), LunarCultBaseLocation.X * 16 + (BaseFacingLeft ? -1800 : 1800), (CultBaseTileArea.Top + 30) * 16, ModContent.NPCType<DisgracedApostle>());
+        
+        //for testing
         //State = SystemState.CheckReqs;
         //ActivityTimer = -1;
         //TutorialComplete = true;
+
         switch (State)
         {
             case SystemStates.CheckReqs:
@@ -757,12 +770,15 @@ public class LunarCultBaseSystem : ModSystem
                     #endregion                        
                     ActivityTimer = 0;
                     zoom = 0;
+
+
                     foreach (Player player in Main.player.Where(p => p.active))
                     {
                         player.LunarCult().hasRecievedChefMeal = false;
                         if (player.LunarCult().apostleQuestTracker == 2 || player.LunarCult().apostleQuestTracker == 6 || player.LunarCult().apostleQuestTracker == 10)
                             player.LunarCult().apostleQuestTracker++;
                     }
+                    
                 }
 
                 #region Player Proximity

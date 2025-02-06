@@ -1,0 +1,86 @@
+{
+  "Dialogues": [
+    {
+      "DialogueText": [ { "Text": "So, you're the apsiring Apostle I've been hearing about, huh?" } ]
+    },
+    {
+      "DialogueText": [ { "Text": "I'll admit, you're not like what I expected. Thought you'd be... taller." } ]
+    },
+    {
+      "DialogueText": [ { "Text": "But nevermind that, I've gotta give you the rundown of thing, right? You're not familiar with Siphons, are you?" } ],
+      "Responses": [
+        {
+          "Title": "I'm not.",
+          "Heading": 5
+        },
+        {
+          "Title": "Acutally, I am!",
+          "Heading": 4
+        }
+      ]
+    },
+    {
+      "DialogueText": [
+        { "Text": "Really?! Well, that makes things a lot easier. All I need you to do is use your " },
+        { "Text": "Selenic Tablet" },
+        { "Text": " once you've found a good area for us to set up the Siphon. That'll be my signal to head on over! Got it?" }
+      ],
+      "Responses": [
+        {
+          "Title": "Gotcha."
+        },
+        {
+          "Title": "Can do!"
+        }
+      ]
+    },
+    {
+      "DialogueText": [ { "Text": "I see... I'll have to give you the rundown of things then." } ]
+    },
+    {
+      "DialogueText": [ { "Text": "We use Siphons to collect energy samples for our Master to learn from. However, getting energy into the Siphon can be a bit difficult." } ]
+    },
+    {
+      "DialogueText": [ { "Text": "Clusters of energy, energized projectiles, and... slimes, funnily enough, are all able to be harvested by the Siphon. All we gotta do is get them into it." } ]
+    },
+    {
+      "DialogueText": [ { "Text": "At the same time, our Siphons tend to upset nearby creatures. They'll try their best destroy it, and its also our job to protect it." } ]
+    },
+    {
+      "DialogueText": [ { "Text": "So yeah, we gotta protect the Siphon from damage, whilst also getting energy samples into it. Think you can handle that?" } ],
+      "Responses": [
+        {
+          "Title": "I think so...",
+          "Heading": 10
+        },
+        {
+          "Title": "...not really.",
+          "Heading": 11
+        }
+      ]
+    },
+    {
+      "DialogueText": [ { "Text": "Glad to hear, and don't worry. I'm sure you'll get the hang of it once we start thing's up! Head on over to the Astral Infection and use your Selenic Tablet when you're ready." } ],
+      "Responses": [
+        {
+          "Title": "Will do."
+        },
+        {
+          "Title": "On it!"
+        }
+      ]
+    },
+    {
+      "DialogueText": [ { "Text": "Hmm, well that's fair. Don't worry though! Once we actually get things started, I'm sure you'll get the hang of it. Head on over to the Astral Infection and use your Selenic Tablet when you're ready." } ],
+      "Responses": [
+        {
+          "Title": "Will do."
+        },
+        {
+          "Title": "On it!"
+        }
+      ]
+    }
+  ],
+  "Characters": "Apostle",
+}

@@ -1,0 +1,20 @@
+{
+  "Name": "[c/9cfa5e:???]",
+  //"Scale": 2.5,
+  /*
+  "Expressions": [
+    {
+      "Title": "Default",
+      "Path": "Windfall/Assets/UI/CharacterAssets/TheOrator/Default",
+      "FrameCount": 1,
+      "FrameRate": 0,
+      "Loop": false,
+      "AnimateCondition": false
+    }
+  ],
+  */
+  "Style": "Windfall.Content.UI.Dialogue.DialogueStyles.SelenicDialogueStyle",
+  "TextDelay": 3,
+  "PrimaryColor": "#000000",
+  "SecondaryColor": "#32CD32"
+}

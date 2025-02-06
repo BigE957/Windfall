@@ -1,7 +1,7 @@
 {
   "Dialogues": [
     {
-      "DialogueText": [ { "Text": "Why, hello again? Eager to get started on your next mission, I assume?" } ]
+      "DialogueText": [ { "Text": "Why, hello again! Eager to get started on your next mission, I assume?" } ]
     },
     {
       "DialogueText": [ { "Text": "Well, I'll admit, this one is a bit more... treacherous. To be honest, I'm unsure this is something most of the other Apostles could handle. You'll be venturing into one of the most hostile locations I know of: The Abyss." } ]
@@ -34,7 +34,7 @@
       ]
     },
     {
-      "DialogueText": [ { "Text": "Ah, welcome! Congradulations on making it back in one piece! I take it you found the whereabouts of those cultists?" } ],
+      "DialogueText": [ { "Text": "Ah, welcome! Congratulations on making it back in one piece! I take it you found the whereabouts of those cultists?" } ],
       "Responses": [
         {
           "Title": "About that...",

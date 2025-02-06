@@ -1,0 +1,62 @@
+{
+  "Dialogues": [
+    {
+      "DialogueText": [ { "Text": "Welcome back! I have someone I'd like to intoduce you to here." } ]
+    },
+    {
+      "DialogueText": [ { "Text": "This is one of my Apostles. I'd like you two to get acquainted; as you'll need to learn to work alongside the others if you wish to join the ranks of my loyal Apostles." } ]
+    },
+    {
+      "DialogueText": [ { "Text": "As such, the both of you will be taking on this next mission. I hope it'll prove to be a enjoyable teambuilding exercise!" } ]
+    },
+    {
+      "DialogueText": [ { "Text": "What do you wish of us, Master?" } ],
+      "CharacterIndex": 1
+    },
+    {
+      "DialogueText": [ { "Text": "I need the both of you to investigate something for me. A strange infestation has stained the surface known as the Astral Infection. I know little of its origins, and that is something I'd like rectified. I trust you can handle deploying a Siphon in the area, my loyal Apostle?" } ]
+    },
+    {
+      "DialogueText": [ { "Text": "It shall be done." } ],
+      "CharacterIndex": 1
+    },
+    {
+      "DialogueText": [ { "Text": "As for you, my friend, follow your senior's lead, and all should go well! I'll leave it to them to explain the finer details of your mission. Go have a talk with them!" } ],
+      "Responses": [
+        {
+          "Title": "Will do!"
+        },
+        {
+          "Title": "Alright."
+        }
+      ]
+    },
+    {
+      "DialogueText": [ { "Text": "Ah, welcome! Congratulations on making it back in one piece! I take it you found the whereabouts of those cultists?" } ],
+      "Responses": [
+        {
+          "Title": "About that...",
+          "Heading": 7
+        }
+      ]
+    },
+    {
+      "DialogueText": [ { "Text": "...?! Oh my... So that's what became of them? Such blind and foolish faith they hold in those beasts. I wonder if anything of who they once were is left inside those monsters? Or maybe their devotion carries on even through their metamorphosis..." } ]
+    },
+    {
+      "DialogueText": [ { "Text": "Questions for another day, I suppose. You've done very well, but I have one final mission in mind for you. This one though won't be a test of your ability; that you've more than proven. I'll inform you of the details when next we meet." } ],
+      "Responses": [
+        {
+          "Title": "Awesome!"
+        },
+        {
+          "Title": "Gotcha."
+        }
+      ]
+    }
+  ],
+  "Characters": [
+    "TheOrator",
+    "Apostle"
+  ]
+}

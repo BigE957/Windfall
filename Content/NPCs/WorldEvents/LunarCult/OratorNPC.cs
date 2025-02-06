@@ -64,6 +64,9 @@ public class OratorNPC : ModNPC
             case 9:
                 ModContent.GetInstance<DialogueUISystem>().DisplayDialogueTree(Windfall.Instance, "TheOrator/ApostleQuest2", new(Name, [NPC.whoAmI]), 6);
                 return "";
+            case 11:
+                ModContent.GetInstance<DialogueUISystem>().DisplayDialogueTree(Windfall.Instance, "TheOrator/ApostleQuest3", new(Name, [NPC.whoAmI]), 6);
+                return "";
         }
 
         if (NPC.ai[0] == 0)
@@ -207,15 +210,19 @@ public class OratorNPC : ModNPC
                         SoundEngine.PlaySound(SoundID.MenuTick);
                     }
                     break;
-                case "THeOrator/ApostleQuest1":
+                case "TheOrator/ApostleQuest1":
                     if (dialogueID == 1)
                         Main.LocalPlayer.LunarCult().apostleQuestTracker = -1;
                     else if (dialogueID == 5 || dialogueID == 12)
                         Main.LocalPlayer.LunarCult().apostleQuestTracker++; //5:5 12:6
                     break;
-                case "THeOrator/ApostleQuest2":
+                case "TheOrator/ApostleQuest2":
                     if (dialogueID == 5 || dialogueID == 8)
                         Main.LocalPlayer.LunarCult().apostleQuestTracker++; //5:8 //8:10
+                    break;
+                case "TheOrator/ApostleQuest3":
+                    if (dialogueID == 6 || dialogueID == 9)
+                        Main.LocalPlayer.LunarCult().apostleQuestTracker++; //6:12 //9:??
                     break;
             }
         }
