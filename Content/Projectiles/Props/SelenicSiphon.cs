@@ -1,5 +1,6 @@
 ﻿using CalamityMod.NPCs.Astral;
 using Windfall.Content.NPCs.Enemies.AstralSiphon;
+using Windfall.Content.NPCs.WorldEvents.LunarCult;
 using Windfall.Content.Projectiles.Enemies;
 
 namespace Windfall.Content.Projectiles.Props;
@@ -16,7 +17,7 @@ public class SelenicSiphon : ModNPC
     {
         NPC.width = 64;
         NPC.height = 128;
-        NPC.lifeMax = 1000;
+        NPC.lifeMax = 1800;
         NPC.friendly = true;
         NPC.behindTiles = true;
         NPC.scale = 1.5f;
@@ -194,13 +195,33 @@ public class SelenicSiphon : ModNPC
             if(EndTime < 135)
             {
                 //Event End Animation
+                if(EndTime % 15 == 0)
+                {
+                    Particle pulse = new PulseRing(HarvestingHitbox.Center(), Vector2.Zero, Main.rand.NextBool() ? Color.Cyan * 1.5f : Color.OrangeRed, 1f, Lerp(0.75f, 0, EndTime / 135f), 24);
+                    GeneralParticleHandler.SpawnParticle(pulse);
+                }
             }
             if (EndTime == 135)
+            {
+                Particle pulse = new PulseRing(HarvestingHitbox.Center(), Vector2.Zero, Main.rand.NextBool() ? Color.Cyan * 1.5f : Color.OrangeRed, 0f, 1.5f, 24);
+                GeneralParticleHandler.SpawnParticle(pulse);
+
                 EventActive = false;
+                foreach(Player player in Main.ActivePlayers)
+                {
+                    if (player.LunarCult().apostleQuestTracker == 13)
+                        player.LunarCult().apostleQuestTracker++;
+                    int index = NPC.FindFirstNPC(ModContent.NPCType<DisgracedApostleNPC>());
+                    if (index != -1)
+                        Main.npc[index].ai[0] = 4;
+                }
+            }
             else
             {
-                //Despawn Animation
+                NPC.position.Y += 4;
             }
+            if(EndTime == 270)
+                NPC.active = false;
 
             EndTime++;
         }

@@ -9,7 +9,8 @@ public class DisgracedApostleNPC : ModNPC
         Idle,
         PreSiphon,
         SiphonStart,
-        SiphonDuring
+        SiphonDuring,
+        SiphonAfter
     }
     private States AIState
     {
