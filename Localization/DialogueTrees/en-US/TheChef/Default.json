@@ -62,7 +62,7 @@
       ]
     },
     {
-      "DialogueText": [ { "Text": "Hah! I guess its only natural to be interested in the craft behind dishesas good as these. Before settling down here, I actually was quite well travelled! I journeyed across the world, and picked up cooking techniques from a whole lot of different places; some of which barely exist anymore! I'm happy to be able to carry on at least a part of those lost cultures, y'know?" } ],
+      "DialogueText": [ { "Text": "Hah! I guess its only natural to be interested in the craft behind dishes as good as these. Before settling down here, I actually was quite well travelled! I journeyed across the world, and picked up cooking techniques from a whole lot of different places; some of which barely exist anymore!" } ],
       "Responses": [
         {
           "Title": "How interesting!",

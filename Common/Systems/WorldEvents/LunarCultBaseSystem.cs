@@ -191,15 +191,15 @@ public class LunarCultBaseSystem : ModSystem
         {
             #region Main Character Spawning
             if (!NPC.AnyNPCs(ModContent.NPCType<Seamstress>()))
-                NPC.NewNPC(Entity.GetSource_None(), LunarCultBaseLocation.X * 16 + (BaseFacingLeft ? -1408 : 1408), (LunarCultBaseLocation.Y * 16) + 400, ModContent.NPCType<Seamstress>());
+                NPC.NewNPC(Entity.GetSource_None(), LunarCultBaseLocation.X * 16 + (BaseFacingLeft ? -1428 : 1408), (LunarCultBaseLocation.Y * 16) + 480, ModContent.NPCType<Seamstress>());
             if (!NPC.AnyNPCs(ModContent.NPCType<TheChef>()))
-                NPC.NewNPC(Entity.GetSource_None(), LunarCultBaseLocation.X * 16 + (BaseFacingLeft ? -128 : 128), (LunarCultBaseLocation.Y * 16) - 110, ModContent.NPCType<TheChef>());
+                NPC.NewNPC(Entity.GetSource_None(), LunarCultBaseLocation.X * 16 + (BaseFacingLeft ? -196 : 128), (LunarCultBaseLocation.Y * 16), ModContent.NPCType<TheChef>());
             if (!Main.npc.Any(n => n.active && n.type == ModContent.NPCType<Watchman>()))
                 NPC.NewNPC(Entity.GetSource_None(), LunarCultBaseLocation.X * 16 + (BaseFacingLeft ? -2100 : 2100), (LunarCultBaseLocation.Y - 6) * 16 - 5, ModContent.NPCType<Watchman>());
             if (SealingRitualSystem.RitualSequenceSeen)
                 return;
             if (!NPC.AnyNPCs(ModContent.NPCType<OratorNPC>()))
-                NPC.NewNPC(Entity.GetSource_None(), LunarCultBaseLocation.X * 16 + (BaseFacingLeft ? -1858 : 1858), (CultBaseTileArea.Top + 30) * 16, ModContent.NPCType<OratorNPC>());
+                NPC.NewNPC(Entity.GetSource_None(), LunarCultBaseLocation.X * 16 + (BaseFacingLeft ? -1890 : 1858), (CultBaseTileArea.Top + 31) * 16, ModContent.NPCType<OratorNPC>());
 
             #endregion
 
@@ -253,11 +253,12 @@ public class LunarCultBaseSystem : ModSystem
 
         if (spawnApostle && !NPC.AnyNPCs(ModContent.NPCType<DisgracedApostleNPC>()))
             NPC.NewNPC(Entity.GetSource_None(), LunarCultBaseLocation.X * 16 + (BaseFacingLeft ? -1800 : 1800), (CultBaseTileArea.Top + 30) * 16, ModContent.NPCType<DisgracedApostleNPC>());
-        
+
         //for testing
         //State = SystemState.CheckReqs;
         //ActivityTimer = -1;
         //TutorialComplete = true;
+        //Main.NewText(State);
 
         switch (State)
         {
@@ -400,11 +401,12 @@ public class LunarCultBaseSystem : ModSystem
                     
                     ActivityTimer = 0;
                 }
+
                 #region Player Proximity
                 Vector2 entranceArea = Main.npc[NPC.FindFirstNPC(ModContent.NPCType<Watchman>())].Center;
                 Player closestPlayer = Main.player[Player.FindClosest(entranceArea, 1, 1)];
                 float PlayerDistFromHideout = (entranceArea - closestPlayer.Center).Length();
-                if (PlayerDistFromHideout < 160f && closestPlayer.Center.Y < ActivityCoords.Y + 16)
+                if (PlayerDistFromHideout < 160f && closestPlayer.Center.Y < entranceArea.Y + 16)
                     State = SystemStates.Yap;
                 #endregion
 

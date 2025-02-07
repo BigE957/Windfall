@@ -1,4 +1,5 @@
 ﻿using CalamityMod.UI;
+using DialogueHelper.UI.Dialogue;
 using System.Reflection;
 using Terraria.Graphics.Effects;
 using Windfall.Content.Skies;
@@ -13,6 +14,8 @@ public class Loading : ModSystem
 {
     public override void Load()
     {
+        DialogueUISystem.SubmodulePath = "Windfall/SubModules/";
+
         #region Custom Skies
         SkyManager.Instance["Windfall:Orator"] = new OratorSky();
 
@@ -21,7 +24,6 @@ public class Loading : ModSystem
 
         Filters.Scene["Windfall:CrimsonCommunion"] = new Filter(new CrimsonCommunionScreenShaderData("FilterMiniTower").UseColor(0.6f, 0.2f, 0.2f).UseOpacity(0.5f), EffectPriority.VeryHigh);
         SkyManager.Instance["Windfall:CrimsonCommunion"] = new CrimsonCommunionSky();
-
 
         Filters.Scene["Windfall:SlimyCommunion"] = new Filter(new SlimyCommunionScreenShaderData("FilterMiniTower").UseColor(0.4f, 0.4f, 0.6f).UseOpacity(0.5f), EffectPriority.VeryHigh);
         SkyManager.Instance["Windfall:SlimyCommunion"] = new SlimyCommunionSky();

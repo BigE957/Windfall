@@ -4,14 +4,14 @@
       "DialogueText": [
         {
           "Text": "Who the hell are you? ",
-          "TextEffect": "DialogueHelper.UI.Dialogue.TextEffects.WavyText"
+          "TextEffect": "DialogueHelper.UI.Dialogue.TextEffects.ShakyText"
         },
         {
           "Text": "Sorry, but I don't talk to unproven newcomers such as yourself. "
         },
         {
           "Text": "Get lost!",
-          "TextEffect": "DialogueHelper.UI.Dialogue.TextEffects.WavyText"
+          "TextEffect": "DialogueHelper.UI.Dialogue.TextEffects.ShakyText"
         }
       ],
       "Responses": [
