@@ -1,7 +1,5 @@
-﻿using CalamityMod.Buffs.StatDebuffs;
-using CalamityMod.NPCs;
-using Terraria;
-using Windfall.Content.Projectiles.Weapons.Rogue;
+﻿using CalamityMod.NPCs;
+using Windfall.Content.Items.Weapons.Rogue;
 
 namespace Windfall.Content.NPCs.GlobalNPCs;
 public class DebuffGlobalNPC : GlobalNPC

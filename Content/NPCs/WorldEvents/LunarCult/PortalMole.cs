@@ -1,12 +1,7 @@
-﻿using CalamityMod.World;
-using Luminance.Core.Graphics;
-using SteelSeries.GameSense;
-using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using Luminance.Core.Graphics;
 using Terraria.GameContent.Bestiary;
 using Windfall.Common.Systems.WorldEvents;
-using Windfall.Content.Projectiles.Weapons.Misc;
+using Windfall.Content.Items.Weapons.Misc;
 
 namespace Windfall.Content.NPCs.WorldEvents.LunarCult;
 
@@ -26,9 +21,9 @@ public class PortalMole : ModNPC
     }
     public override void SetBestiary(BestiaryDatabase database, BestiaryEntry bestiaryEntry)
     {
-        bestiaryEntry.Info.AddRange(new IBestiaryInfoElement[] {
+        bestiaryEntry.Info.AddRange([
         new FlavorTextBestiaryInfoElement(GetWindfallTextValue($"Bestiary.{nameof(PortalMole)}")),
-    });
+    ]);
     }
     public override void SetDefaults()
     {

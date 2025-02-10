@@ -1,12 +1,5 @@
-﻿using CalamityMod.CalPlayer;
-using CalamityMod.Projectiles.Summon;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Windfall.Common.Players;
-using Windfall.Content.Projectiles.Weapons.Summon;
+﻿using Windfall.Common.Players;
+using Windfall.Content.Items.Weapons.Summon;
 
 namespace Windfall.Content.Buffs.Weapons.Minions;
 

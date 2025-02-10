@@ -256,8 +256,10 @@ public class BoneripperProj : ModProjectile
             Projectile.alpha = 0;
         }
     }
+    
     public static readonly SoundStyle ChargeSound = new("CalamityMod/Sounds/Custom/Yharon/YharonFireball2");
     public static readonly SoundStyle MaxChargeSound = new("CalamityMod/Sounds/Custom/SCalSounds/BrimstoneFireblastImpact");
+    
     public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
     {
         if (Projectile.Colliding(Projectile.Hitbox, target.Hitbox))
@@ -294,6 +296,7 @@ public class BoneripperProj : ModProjectile
             }
         }
     }
+    
     public override void CutTiles()
     {
         float num = 60f;
@@ -301,21 +304,7 @@ public class BoneripperProj : ModProjectile
         DelegateMethods.tilecut_0 = TileCuttingContext.AttackProjectile;
         Utils.PlotTileLine(Projectile.Center + f.ToRotationVector2() * (0f - num), Projectile.Center + f.ToRotationVector2() * num, Projectile.width * Projectile.scale, DelegateMethods.CutTiles);
     }
-    public override bool? Colliding(Rectangle projHitbox, Rectangle targetHitbox)
-    {
-        if (projHitbox.Intersects(targetHitbox))
-            return true;
 
-        //float f = Projectile.rotation - MathF.PI / 4f * (float)Math.Sign(Projectile.velocity.X);
-        //float collisionPoint = 0f;
-        //float num = 110f;
-        //if (Collision.CheckAABBvLineCollision(targetHitbox.TopLeft(), targetHitbox.Size(), Projectile.Center + f.ToRotationVector2() * (0f - num), Projectile.Center + f.ToRotationVector2() * num, 23f * Projectile.scale, ref collisionPoint))
-        //{
-        //    return true;
-        //}
-
-        return false;
-    }
     public override bool PreDraw(ref Color lightColor)
     {
         if (state == AIState.Spinning)

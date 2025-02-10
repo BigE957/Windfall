@@ -1,8 +1,8 @@
 ﻿using CalamityMod.Graphics.Metaballs;
+using Windfall.Content.Items.Weapons.Summon;
 using Windfall.Content.NPCs.Bosses.Orator;
 using Windfall.Content.NPCs.WorldEvents.LunarCult;
 using Windfall.Content.Projectiles.Boss.Orator;
-using Windfall.Content.Projectiles.Weapons.Summon;
 
 namespace Windfall.Common.Graphics.Metaballs;
 

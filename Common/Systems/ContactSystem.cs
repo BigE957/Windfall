@@ -1,7 +1,6 @@
 ﻿using Windfall.Content.Items.Debug;
 using Windfall.Content.Items.Weapons.Misc;
 using Windfall.Content.NPCs.Enemies;
-using Windfall.Content.Projectiles.Weapons.Misc;
 
 namespace Windfall.Common.Systems;
 

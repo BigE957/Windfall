@@ -1,6 +1,7 @@
 ﻿using CalamityMod.Items;
 using CalamityMod.Projectiles.BaseProjectiles;
 using Luminance.Common.VerletIntergration;
+using Luminance.Core.Graphics;
 using Windfall.Content.NPCs.WorldEvents.LunarCult;
 
 namespace Windfall.Content.Items.Weapons.Misc;
@@ -166,7 +167,7 @@ public class RiftWeaverStab : BaseShortswordProjectile
         if (hitCount >= 5)
         {
             bool colorCombo = Main.rand.NextBool();
-            Particle pulse = new PulseRing(target.Center + (Owner.Center - target.Center) / 7f, Vector2.Zero, colorCombo ? Color.Cyan : Color.LimeGreen, 0f, 0.5f, 30);
+            CalamityMod.Particles.Particle pulse = new PulseRing(target.Center + (Owner.Center - target.Center) / 7f, Vector2.Zero, colorCombo ? Color.Cyan : Color.LimeGreen, 0f, 0.5f, 30);
             GeneralParticleHandler.SpawnParticle(pulse);
             pulse = new PulseRing(target.Center + (Owner.Center - target.Center) / 7f, Vector2.Zero, colorCombo ? Color.LimeGreen : Color.Cyan, 0f, 0.3f, 30);
             GeneralParticleHandler.SpawnParticle(pulse);
@@ -181,7 +182,7 @@ public class RiftWeaverStab : BaseShortswordProjectile
         }
         else
         {
-            Particle pulse = new PulseRing(target.Center + (Owner.Center - target.Center) / 7f, Vector2.Zero, Main.rand.NextBool() ? Color.Cyan : Color.LimeGreen, 0f, 0.3f, 30);
+            CalamityMod.Particles.Particle pulse = new PulseRing(target.Center + (Owner.Center - target.Center) / 7f, Vector2.Zero, Main.rand.NextBool() ? Color.Cyan : Color.LimeGreen, 0f, 0.3f, 30);
             GeneralParticleHandler.SpawnParticle(pulse);
             if (Owner.velocity.Y != 0)
             {
