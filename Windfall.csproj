@@ -116,7 +116,6 @@
     <None Remove="Content\Projectiles\Props\RitualFurnature\BurningAltar.png" />
     <None Remove="Content\Projectiles\Props\RitualFurnature\RitualFurnatureAtlas.png" />
     <None Remove="Content\Projectiles\Props\SelenicSiphon.png" />
-    <None Remove="Content\Projectiles\Weapons\Misc\RiftWeaverProj.png" />
     <None Remove="Content\Tiles\Furnature\DarkStonePlaqueTile.png" />
     <None Remove="Content\Tiles\Furnature\HangerJewelery.png" />
     <None Remove="Content\Tiles\Furnature\HangerTile.png" />

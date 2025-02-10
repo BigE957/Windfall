@@ -3,7 +3,6 @@ using Windfall.Content.Items.Utility;
 using Windfall.Content.Items.Weapons.Misc;
 using DialogueHelper.UI.Dialogue;
 using Windfall.Content.Items.Quest.Casters;
-using Terraria.ID;
 using Windfall.Content.Items.Tools;
 using Windfall.Content.Items.Placeables.Furnature.Plaques;
 
