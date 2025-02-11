@@ -528,14 +528,8 @@ Dialogue: {
 		}
 
 		Apostle: {
-			AstralSiphon: {
-				Tips: {
-					0: Do the thing!
-				}
-			}
-			Pre-Fight: {
-				0: Fuck you.
-			}
+			AstralSiphon.Tips.0: Do the thing!
+			Pre-Fight.0: Fuck you.
 		}
 
 		TravellingCultist: {
@@ -1175,6 +1169,11 @@ Items: {
 				DisplayName: Stone
 				Tooltip: ""
 			}
+
+			Apotelesma: {
+				DisplayName: Apotelesma
+				Tooltip: ""
+			}
 		}
 
 		Misc: {
@@ -1762,6 +1761,7 @@ NPCs: {
 	SelenicSiphon.DisplayName: Selenic Siphon
 	SiphonCollider.DisplayName: Sightseer Collider
 	SiphonSpitter.DisplayName: Sightseer Spitter
+	DisgracedApostleNPC.DisplayName: Disgraced Apostle N P C
 }
 
 Projectiles: {
@@ -1823,6 +1823,8 @@ Projectiles: {
 	SelenicSiphon.DisplayName: Selenic Siphon
 	AstralEnergy.DisplayName: Astral Energy
 	SelenicIdol.DisplayName: Selenic Idol
+	ApotelesmaProj.DisplayName: Apotelesma Proj
+	ApostleProj.DisplayName: Apostle Proj
 }
 
 Buffs: {

@@ -256,12 +256,13 @@ public class BoneripperProj : ModProjectile
             Projectile.alpha = 0;
         }
     }
-    
     public static readonly SoundStyle ChargeSound = new("CalamityMod/Sounds/Custom/Yharon/YharonFireball2");
     public static readonly SoundStyle MaxChargeSound = new("CalamityMod/Sounds/Custom/SCalSounds/BrimstoneFireblastImpact");
-    
     public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
     {
+        if (!target.IsAnEnemy())
+            return;
+
         if (Projectile.Colliding(Projectile.Hitbox, target.Hitbox))
         {
             boneripperHits++;
@@ -296,7 +297,6 @@ public class BoneripperProj : ModProjectile
             }
         }
     }
-    
     public override void CutTiles()
     {
         float num = 60f;
