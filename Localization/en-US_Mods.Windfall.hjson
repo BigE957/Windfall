@@ -1825,6 +1825,7 @@ Projectiles: {
 	SelenicIdol.DisplayName: Selenic Idol
 	ApotelesmaProj.DisplayName: Apotelesma Proj
 	ApostleProj.DisplayName: Apostle Proj
+	RushBolt.DisplayName: Rush Bolt
 }
 
 Buffs: {

@@ -25,6 +25,8 @@
     <None Remove="Assets\Items\Tools\HammerAndChiselSmall.png" />
     <None Remove="Assets\Items\Weapons\Melee\Apotelesma.png" />
     <None Remove="Assets\Items\Weapons\Melee\ApotelesmaItem.png" />
+    <None Remove="Assets\Items\Weapons\Melee\ApotelesmaSlash.png" />
+    <None Remove="Assets\Items\Weapons\Melee\ApotelesmaSlashWhiteOut.png" />
     <None Remove="Assets\Items\Weapons\Misc\RiftWeaver.png" />
     <None Remove="Assets\Items\Weapons\Misc\RiftWeaverGlow.png" />
     <None Remove="Assets\Items\Weapons\Rogue\ExodiumSpear.png" />
