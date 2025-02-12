@@ -1417,10 +1417,12 @@ public class TheOrator : ModNPC
 
                 break;
         }
+
         if (scytheSpin)
             DoScytheSpin();
         if (scytheSlice)
             DoScytheSlice();
+
         aiCounter++;
     }
     

@@ -14,7 +14,7 @@ public class ShadowHandStaff : ModItem, ILocalizedModType
     {
         Item.width = 28;
         Item.height = 30;
-        Item.damage = 280;
+        Item.damage = 470;
         Item.mana = 10;
         Item.useTime = Item.useAnimation = 34;
         Item.useStyle = ItemUseStyleID.Swing;
@@ -65,7 +65,6 @@ public class ShadowHand_Minion : ModProjectile
     {
         Projectile.width = 78;
         Projectile.height = 50;
-        Projectile.damage = 150;
         Projectile.netImportant = true;
         Projectile.friendly = true;
         Projectile.ignoreWater = true;

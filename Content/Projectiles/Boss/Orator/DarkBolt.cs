@@ -22,6 +22,10 @@ public class DarkBolt : ModProjectile
         Projectile.penetrate = 2;
         Projectile.timeLeft = 250;
         Projectile.tileCollide = false;
+
+        Projectile.usesIDStaticNPCImmunity = true;
+        Projectile.idStaticNPCHitCooldown = 60;
+
         Projectile.Calamity().DealsDefenseDamage = true;
     }
     private int aiCounter

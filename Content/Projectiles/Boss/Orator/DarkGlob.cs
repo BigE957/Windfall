@@ -28,6 +28,8 @@ public class DarkGlob : ModProjectile, ILocalizedModType
         Projectile.penetrate = 3;
         Projectile.timeLeft = 390;
         Projectile.scale = 0f;
+        Projectile.usesLocalNPCImmunity = true;
+        Projectile.localNPCHitCooldown = 15;
         CooldownSlot = ImmunityCooldownID.Bosses;
     }
 
