@@ -21,7 +21,7 @@ public class Apotelesma : ModItem, ILocalizedModType
     internal AIState State = AIState.UpSlice;
 
     public new string LocalizationCategory => "Items.Weapons.Melee";
-    public override string Texture => "Windfall/Assets/Items/Weapons/Melee/ApotelesmaItem";
+    public override string Texture => "Windfall/Assets/Items/Weapons/Melee/Apotelesma/ApotelesmaThrow";
 
     public override void SetStaticDefaults()
     {
@@ -56,23 +56,11 @@ public class Apotelesma : ModItem, ILocalizedModType
 
         if (player.altFunctionUse == 2)
         {
-            if (ApotelesmaCharge == 5)
-            {
-                State = AIState.Rush;
-                ApotelesmaCharge = 0;
-            }
-            else if(ApotelesmaCharge > 0)
-            {
-                State = AIState.Throw;
-                for (int i = 0; i < ApotelesmaCharge; i++)
-                {
-                    GemData[i] = new(GemData[i].Item2, GemData[i].Item1, 0);
-                }
-                ApotelesmaCharge--;
-                
-            }
-            else
+            if(ApotelesmaCharge <= 0)
                 return false;
+
+            State = AIState.Throw;
+
             return base.CanUseItem(player);
         }
 
@@ -99,15 +87,6 @@ public class Apotelesma : ModItem, ILocalizedModType
 
     public override bool Shoot(Player player, EntitySource_ItemUse_WithAmmo source, Vector2 position, Vector2 velocity, int type, int damage, float knockback)
     {
-        if(State == AIState.Rush)
-        {
-            SoundEngine.PlaySound(SoundID.Item71, player.Center);
-            SoundEngine.PlaySound(TheOrator.Dash);
-
-            Particle pulse = new DirectionalPulseRing(player.Center, velocity.SafeNormalize(Vector2.Zero) * -1.5f, new(117, 255, 159), new Vector2(0.5f, 2f), velocity.ToRotation(), 0f, 1f, 24);
-            GeneralParticleHandler.SpawnParticle(pulse);
-        }
-
         Projectile.NewProjectile(source, position, velocity, type, damage, knockback, player.whoAmI, (float)State, velocity.ToRotation());
         return false;
     }
@@ -168,16 +147,32 @@ public class Apotelesma : ModItem, ILocalizedModType
 
             scale = 1.05f + 0.05f * (float)Math.Sin(Main.GlobalTimeWrappedHourly * 0.5f + (offsetValue * 24));
 
-            Texture2D tex = ModContent.Request<Texture2D>("CalamityMod/Projectiles/Typeless/GemTechGreenGem").Value;
+            Texture2D tex = ModContent.Request<Texture2D>("Windfall/Assets/Items/Weapons/Melee/Apotelesma/JadeOrb").Value;
+            Rectangle gemFrame = tex.Frame(4, 1);
 
             //Main.spriteBatch.Draw(screwOutlineTex, position, null, Color.Lerp(Color.GreenYellow, Color.White, (float)Math.Sin(Main.GlobalTimeWrappedHourly) * 0.5f + 0.5f) * outlineOpacity, rotation, screwOutlineTex.Size() / 2f, scale, 0, 0);
-            Main.spriteBatch.Draw(tex, currentPos - Main.screenPosition, null, Color.White, rotation, tex.Size() / 2f, scale, 0, 0);
+            Main.spriteBatch.Draw(tex, currentPos - Main.screenPosition, gemFrame, Color.White, rotation, gemFrame.Size() / 2f, scale, 0, 0);
         }
 
         spriteBatch.End();
         Main.spriteBatch.Begin(SpriteSortMode.Deferred, null, null, null, null, null, Main.UIScaleMatrix);
 
         base.PostDrawInInventory(spriteBatch, position, frame, drawColor, itemColor, origin, scale);
+    }
+
+    internal static void ShatterGem(Vector2 position)
+    {
+        SoundEngine.PlaySound(SoundID.DD2_WitherBeastDeath with {VariantsWeights = [1f, 0f, 0f] }, position);
+
+        for (int i = 1; i < 4; i++)
+            Projectile.NewProjectile(Projectile.GetSource_NaturalSpawn(), position, new(Main.rand.NextFloat(-6f, 6f), Main.rand.NextFloat(-10f, -8f)), ModContent.ProjectileType<JadeShard>(), 0, 0f, ai0: i);
+
+        for (int i = 0; i < 9; i++)
+        {
+            Color color = Color.Lerp(new Color(117, 255, 159), Color.Black, (i / 8f));
+            Particle p = new HeavySmokeParticle(position, Vector2.UnitY * -2 * (i+1), color, 32, 1f, (1 - (i / 8f)) * 0.5f, Main.rand.NextFloat(-0.05f, 0.05f), true);
+            GeneralParticleHandler.SpawnParticle(p);
+        }
     }
 }
 
@@ -186,7 +181,7 @@ public class ApotelesmaProj : ModProjectile
     internal ref float State => ref Projectile.ai[0];
     private ref float Time => ref Projectile.ai[2];
 
-    public override string Texture => "Windfall/Assets/Items/Weapons/Melee/Apotelesma";
+    public override string Texture => "Windfall/Assets/Items/Weapons/Melee/Apotelesma/ApotelesmaSwing";
 
     public override void SetDefaults()
     {
@@ -207,15 +202,12 @@ public class ApotelesmaProj : ModProjectile
 
     public override void OnSpawn(IEntitySource source)
     {
+        ConsumedCharge = 0;
         Projectile.localNPCHitCooldown = ((Apotelesma.AIState)State == Apotelesma.AIState.Spin || (Apotelesma.AIState)State == Apotelesma.AIState.Throw) ? 12 : 24;
-
-        if ((Apotelesma.AIState)State == Apotelesma.AIState.Throw)
-        {
-            SoundEngine.PlaySound(SoundID.Item71, Projectile.Center);
-            Time = 31;
-            Projectile.velocity = (Main.player[Projectile.owner].Center - Main.MouseWorld).SafeNormalize(Vector2.UnitX);
-        }
     }
+
+    int ConsumedCharge = 0;
+    bool HeldDown = false;
 
     public override void AI()
     {
@@ -229,6 +221,96 @@ public class ApotelesmaProj : ModProjectile
         }
 
         owner.heldProj = Projectile.whoAmI;
+
+        if (owner.altFunctionUse == 2)
+        {
+            if (owner.Calamity().mouseRight) //Holding Right Click, consume Gems and prep for right click attack
+            {
+                if(owner.ActiveItem().type != ModContent.ItemType<Apotelesma>())
+                {
+                    Projectile.Kill();
+                    return;
+                }
+
+                Projectile.timeLeft = 240;
+
+                HeldDown = true;
+
+                owner.reuseDelay = 2;
+
+                float lerpVal = 1f;
+                if (Time <= 30)
+                    lerpVal = Clamp(SineOutEasing(Time / 30f, 1), 0f, 1f);
+                
+                float angle = -PiOver2 - PiOver4;
+                if (Time <= 30)
+                    angle = 0f.AngleLerp(-PiOver2 - PiOver4, lerpVal);
+                angle *= owner.direction;
+
+                Projectile.Center = owner.MountedCenter + (Vector2.UnitX * owner.direction).RotatedBy(angle) * Lerp(0, 24, lerpVal);
+                Projectile.rotation = (PiOver4 * owner.direction + angle);
+                Projectile.scale = Lerp(0.5f, 1f, lerpVal);
+                Projectile.Opacity = Lerp(0.25f, 1f, lerpVal);
+
+                owner.SetCompositeArmFront(true, Player.CompositeArmStretchAmount.ThreeQuarters, (Vector2.UnitX * owner.direction).RotatedBy(angle - Lerp(PiOver4, PiOver2, lerpVal)).ToRotation());
+
+                Apotelesma item = (Apotelesma)owner.ActiveItem().ModItem;
+
+                if (Time != 0 && Time % 30 == 0 && item.ApotelesmaCharge > 0)
+                {
+                    State = (float)Apotelesma.AIState.Throw;
+                    Apotelesma.ShatterGem(item.GemData[item.ApotelesmaCharge - 1].Item2);
+
+                    for (int i = 0; i < item.ApotelesmaCharge; i++)
+                    {
+                        item.GemData[i] = new(item.GemData[i].Item2, item.GemData[i].Item1, 0);
+                    }
+                    item.ApotelesmaCharge--;
+                    ConsumedCharge++;
+
+                    if (ConsumedCharge == 5)
+                    {
+                        SoundEngine.PlaySound(TheOrator.DashWarn, owner.Center);
+                        Particle pulse = new PulseRing(owner.Center, Vector2.Zero, new(117, 255, 159), 0f, 1f, 24);
+                        GeneralParticleHandler.SpawnParticle(pulse);
+                    }
+                }
+
+                Time++;
+                return;
+            }
+            if(HeldDown)
+            {
+                Projectile.timeLeft = 240;
+
+                HeldDown = false;
+                Time = 0;
+
+                if (ConsumedCharge == 5)
+                {
+                    State = (float)Apotelesma.AIState.Rush;
+
+                    SoundEngine.PlaySound(SoundID.Item71, owner.Center);
+                    SoundEngine.PlaySound(TheOrator.Dash);
+
+                    Vector2 velocity = (owner.Calamity().mouseWorld - owner.Center).SafeNormalize(Vector2.UnitX * owner.direction);
+
+                    Particle pulse = new DirectionalPulseRing(owner.Center, velocity.SafeNormalize(Vector2.Zero) * -1.5f, new(117, 255, 159), new Vector2(0.5f, 2f), velocity.ToRotation(), 0f, 1f, 24);
+                    GeneralParticleHandler.SpawnParticle(pulse);
+                }
+                else if (ConsumedCharge > 0)
+                {
+                    State = (float)Apotelesma.AIState.Throw;
+
+                    Time = 31;
+                    Projectile.timeLeft += 80 * (ConsumedCharge - 1);
+                    Projectile.velocity = (owner.Calamity().mouseWorld - owner.Center).SafeNormalize(Vector2.UnitX * owner.direction) * -40;
+                }
+                else
+                    Projectile.Kill();
+                return;
+            }
+        }
 
         if (Time >= 0)
         {
@@ -267,15 +349,39 @@ public class ApotelesmaProj : ModProjectile
                 case Apotelesma.AIState.Throw:
                     Projectile.rotation += 0.01f * (5 + Projectile.velocity.Length());
                     if (Projectile.timeLeft > 60)
-                    {                        
-                        NPC target = Main.npc[(int)Projectile.ai[1]];
+                    {
+                        if (Time == 31 || Projectile.ai[1] == -1)
+                        {
+                            NPC tryTarget = Projectile.Center.ClosestNPCAt(1100f, bossPriority: true);
+                            if (tryTarget != null)
+                                Projectile.ai[1] = tryTarget.whoAmI;
+                            else
+                                Projectile.ai[1] = -1;
+                        }
+
+                        Vector2 targetPosition;
+                        if (Projectile.ai[1] != -1)
+                            targetPosition = Main.npc[(int)Projectile.ai[1]].Center;
+                        else 
+                            targetPosition = owner.Calamity().mouseWorld;
+
                         if (Time <= 30)
                         {
-                            Projectile.ai[1] = Projectile.Center.ClosestNPCAt(1100f, bossPriority: true).whoAmI;
+                            NPC tryTarget = Projectile.Center.ClosestNPCAt(1100f, bossPriority: true);
+                            if (tryTarget != null)
+                                Projectile.ai[1] = tryTarget.whoAmI;
+                            else
+                                Projectile.ai[1] = -1;
+
+                            if (Projectile.ai[1] != -1)
+                                targetPosition = Main.npc[(int)Projectile.ai[1]].Center;
+                            else if (Main.myPlayer == Projectile.owner)
+                                targetPosition = owner.Calamity().mouseWorld;
+
                             float reelBackSpeedExponent = 2.6f;
                             float reelBackCompletion = Utils.GetLerpValue(0f, 30, Time, true);
                             float reelBackSpeed = Lerp(2.5f, 16f, MathF.Pow(reelBackCompletion, reelBackSpeedExponent));
-                            Vector2 reelBackVelocity = (target.Center - Projectile.Center).SafeNormalize(Vector2.UnitY) * -reelBackSpeed;
+                            Vector2 reelBackVelocity = (targetPosition - Projectile.Center).SafeNormalize(Vector2.UnitY) * -reelBackSpeed;
                             Projectile.velocity = Vector2.Lerp(Projectile.velocity, reelBackVelocity, 0.25f);
                         }
                         else
@@ -283,11 +389,11 @@ public class ApotelesmaProj : ModProjectile
                             if (Time == 31)
                             {
                                 SoundEngine.PlaySound(SoundID.Item71, Projectile.Center);
-                                Projectile.velocity = Projectile.velocity.SafeNormalize(Vector2.UnitX) * -40;
+                                Projectile.velocity = Projectile.velocity.SafeNormalize(Vector2.UnitX * owner.direction) * -40;
                             }
                             else
                             {
-                                Projectile.velocity = Projectile.velocity.RotateTowards((target.Center - Projectile.Center).ToRotation(), CalamityWorld.death ? 0.0015f : 0.00125f * (Time - 30));
+                                Projectile.velocity = Projectile.velocity.RotateTowards((targetPosition - Projectile.Center).ToRotation(), CalamityWorld.death ? 0.0015f : 0.00125f * (Time - 30));
                                 Projectile.velocity *= 0.95f;
                                 if (Projectile.velocity.LengthSquared() < 25)
                                     Time = 0;
@@ -297,7 +403,7 @@ public class ApotelesmaProj : ModProjectile
                     else
                     {
                         Projectile.velocity = Projectile.velocity.RotateTowards((owner.Center - Projectile.Center).ToRotation(), 0.09f).SafeNormalize(Vector2.Zero) * Clamp(Projectile.velocity.Length() * 1.05f, 0f, 30f);
-                        if (Projectile.Hitbox.Intersects(owner.Hitbox))
+                        if ((owner.Center - Projectile.Center).Length() < 32)
                             Projectile.active = false;
                     }
 
@@ -314,13 +420,16 @@ public class ApotelesmaProj : ModProjectile
                     if (Time < 40)
                     {
                         owner.velocity = rushDirection * 72;
+                        owner.immuneNoBlink = true;
                         for (int i = 0; i < Time; i++)
                             owner.velocity *= 0.925f;
                     }
+                    else if(Time == 40)
+                        owner.immuneNoBlink = true;
 
                     float rotation = 0.3f;
 
-                    if (Time > 40)
+                    if (Time >= 40)
                         rotation = Lerp(0.3f, 0, (Time - 40) / 16);
 
                     if (Time == 4 || Time == 12 || Time == 20)
@@ -387,6 +496,7 @@ public class ApotelesmaProj : ModProjectile
             int charge = ((Apotelesma)owner.HeldItem.ModItem).ApotelesmaCharge;
             if (charge < 5)
             {
+                SoundEngine.PlaySound(SoundID.DD2_EtherianPortalSpawnEnemy, target.Center);
                 ((Apotelesma)owner.HeldItem.ModItem).GemData[charge] = new(target.Center, Vector2.Zero, 0);
                 for(int i = 0; i < charge; i++)
                 {
@@ -408,7 +518,10 @@ public class ApotelesmaProj : ModProjectile
 
     public override bool? Colliding(Rectangle projHitbox, Rectangle targetHitbox)
     {
-        if (!scytheSpin && !scytheSlice && (Apotelesma.AIState)State != Apotelesma.AIState.Throw)
+        if (HeldDown)
+            return false;
+
+        if (!scytheSpin && !scytheSlice && (Apotelesma.AIState)State != Apotelesma.AIState.Throw && (Apotelesma.AIState)State != Apotelesma.AIState.Rush)
             return false;
 
         if (projHitbox.Intersects(targetHitbox))
@@ -465,7 +578,7 @@ public class ApotelesmaProj : ModProjectile
         if (sliceCounter == 0)
         {
             SoundEngine.PlaySound(SoundID.Item71, player.Center);
-            sliceDirection = (Main.MouseWorld - player.Center).SafeNormalize(Vector2.UnitX * player.direction).ToRotation();
+            sliceDirection = (player.Calamity().mouseWorld - player.Center).SafeNormalize(Vector2.UnitX * player.direction).ToRotation();
             sliceDirection -= PiOver2;
         }
         sliceRotation = Lerp(sliceDirection, sliceDirection + (up ? -(PiOver2 + Pi) : PiOver2 + Pi), SineOutEasing(sliceCounter / ((float)sliceDuration - 4), 1));
@@ -529,8 +642,8 @@ public class ApotelesmaProj : ModProjectile
                 fadeLerp = 1 - fadeLerp;
             }
 
-            Texture2D slash = ModContent.Request<Texture2D>("Windfall/Assets/Items/Weapons/Melee/ApotelesmaSlash").Value;
-            Texture2D slashWhiteout = ModContent.Request<Texture2D>("Windfall/Assets/Items/Weapons/Melee/ApotelesmaSlashWhiteOut").Value;
+            Texture2D slash = ModContent.Request<Texture2D>("Windfall/Assets/Items/Weapons/Melee/Apotelesma/ApotelesmaSlash").Value;
+            Texture2D slashWhiteout = ModContent.Request<Texture2D>("Windfall/Assets/Items/Weapons/Melee/Apotelesma/ApotelesmaSlashWhiteOut").Value;
 
             float slashFade = 1f;
             if (scytheSlice)
@@ -560,9 +673,13 @@ public class ApotelesmaProj : ModProjectile
         }
         else if((Apotelesma.AIState)State == Apotelesma.AIState.Throw)
         {
-            Texture2D tex = ModContent.Request<Texture2D>("Windfall/Assets/Items/Weapons/Melee/ApotelesmaItem").Value;
+            Texture2D tex = ModContent.Request<Texture2D>("Windfall/Assets/Items/Weapons/Melee/Apotelesma/ApotelesmaThrow").Value;
 
-            Main.EntitySpriteDraw(tex, Projectile.Center - Main.screenPosition, null, Color.White, Projectile.rotation, tex.Size() * 0.5f, 1f, 0);
+            SpriteEffects effect = SpriteEffects.None;
+            if (HeldDown && Main.player[Projectile.owner].direction == 1)
+                effect = SpriteEffects.FlipHorizontally;
+
+            Main.EntitySpriteDraw(tex, Projectile.Center - Main.screenPosition, null, Color.White * Projectile.Opacity, Projectile.rotation, tex.Size() * 0.5f, 1.25f * Projectile.scale, effect);
         }
         else if((Apotelesma.AIState)State == Apotelesma.AIState.Rush && Time < 64)
         {
@@ -729,5 +846,58 @@ public class RushBolt : ModProjectile
     public override void ReceiveExtraAI(BinaryReader reader)
     {
         DirectionalVelocity = reader.ReadVector2();
+    }
+}
+
+public class JadeShard : ModProjectile
+{
+    public override string Texture => "Windfall/Assets/Items/Weapons/Melee/Apotelesma/JadeOrb";
+
+    public override void SetDefaults()
+    {
+        Projectile.width = Projectile.height = 8;
+        Projectile.scale = 1f;
+        Projectile.friendly = true;
+        Projectile.penetrate = -1;
+        Projectile.timeLeft = 240;
+    }
+
+    private bool TileColided = false;
+
+    public override void OnSpawn(IEntitySource source)
+    {
+        if (Projectile.ai[0] == 0)
+            Projectile.ai[0] = Main.rand.Next(1, 4);
+    }
+
+    public override void AI()
+    {
+        Projectile.rotation += Projectile.velocity.X / 10f;
+
+        if (!TileColided && Projectile.velocity.Y < 12f)
+            Projectile.velocity.Y += 0.5f;
+        else
+            Projectile.velocity.X *= 0.975f;
+
+        if (Projectile.timeLeft <= 60)
+            Projectile.Opacity = Projectile.timeLeft / 60f;
+    }
+
+    public override bool OnTileCollide(Vector2 oldVelocity)
+    {
+        Projectile.velocity.Y = 0;
+        Projectile.Center = Projectile.Center.ToTileCoordinates().ToWorldCoordinates();
+        TileColided = true;
+        return false;
+    }
+
+    public override bool PreDraw(ref Color lightColor)
+    {
+        Texture2D tex = TextureAssets.Projectile[Type].Value;
+        Rectangle gemFrame = tex.Frame(4, 1, (int)Projectile.ai[0]);
+
+        Main.spriteBatch.Draw(tex, Projectile.Bottom - Main.screenPosition, gemFrame, Color.White * Projectile.Opacity, Projectile.rotation, gemFrame.Size() / 2f, Projectile.scale, 0, 0);
+        
+        return false;
     }
 }

@@ -8,7 +8,7 @@ namespace Windfall.Content.Projectiles.Boss.Orator;
 public class OratorScythe : ModProjectile
 {
     public new static string LocalizationCategory => "Projectiles.Boss";
-    public override string Texture => "Windfall/Assets/Items/Weapons/Melee/Apotelesma";
+    public override string Texture => "Windfall/Assets/Items/Weapons/Melee/Apotelesma/ApotelesmaThrow";
     public override void SetStaticDefaults()
     {
         Main.projFrames[Projectile.type] = 1;

@@ -1160,19 +1160,18 @@ Items: {
 					'''
 			}
 
-			stone: {
-				DisplayName: Stone
-				Tooltip: The first object Vitae ever created
-			}
-
-			Stone: {
-				DisplayName: Stone
-				Tooltip: ""
-			}
-
 			Apotelesma: {
 				DisplayName: Apotelesma
-				Tooltip: ""
+				Tooltip: 
+					'''
+					Swings a duel-bladed scythe in front of the player.
+					Hitting enemies gathers [c/03fc45: Jade Gemstones] which fuel stonger attacks
+					Holding Right-Click will begin consuming gathered [c/03fc45: Jade Gemstones]
+					Releasing Right-Click after consuming at least one [c/03fc45: Jade Gemstone] will launch the scythe at nearby enemies
+					Releasing Right-Click after consuming at five [c/03fc45: Jade Gemstone] will launch you forward, tearing through enemies in your path.
+
+					[c/03fc45:As was foretold in the Stars...]
+					'''
 			}
 		}
 
@@ -1826,6 +1825,7 @@ Projectiles: {
 	ApotelesmaProj.DisplayName: Apotelesma Proj
 	ApostleProj.DisplayName: Apostle Proj
 	RushBolt.DisplayName: Rush Bolt
+	JadeShard.DisplayName: Jade Shard
 }
 
 Buffs: {
