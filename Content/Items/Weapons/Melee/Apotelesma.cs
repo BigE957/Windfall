@@ -10,6 +10,7 @@ public class Apotelesma : ModItem, ILocalizedModType
 {
     internal int ApotelesmaCharge = 0;
     internal int HitCounter = 0;
+
     internal enum AIState
     {
         UpSlice,
@@ -167,7 +168,7 @@ public class Apotelesma : ModItem, ILocalizedModType
         for (int i = 1; i < 4; i++)
             Projectile.NewProjectile(Projectile.GetSource_NaturalSpawn(), position, new(Main.rand.NextFloat(-6f, 6f), Main.rand.NextFloat(-10f, -8f)), ModContent.ProjectileType<JadeShard>(), 0, 0f, ai0: i);
 
-        for (int i = 0; i < 9; i++)
+        for (int i = 0; i < 8; i++)
         {
             Color color = Color.Lerp(new Color(117, 255, 159), Color.Black, (i / 8f));
             Particle p = new HeavySmokeParticle(position, Vector2.UnitY * -2 * (i+1), color, 32, 1f, (1 - (i / 8f)) * 0.5f, Main.rand.NextFloat(-0.05f, 0.05f), true);
@@ -270,6 +271,8 @@ public class ApotelesmaProj : ModProjectile
 
                     if (ConsumedCharge == 5)
                     {
+                        Projectile.ai[1] = (owner.Calamity().mouseWorld - owner.Center).ToRotation();
+
                         SoundEngine.PlaySound(TheOrator.DashWarn, owner.Center);
                         Particle pulse = new PulseRing(owner.Center, Vector2.Zero, new(117, 255, 159), 0f, 1f, 24);
                         GeneralParticleHandler.SpawnParticle(pulse);
@@ -419,13 +422,14 @@ public class ApotelesmaProj : ModProjectile
 
                     if (Time < 40)
                     {
-                        owner.velocity = rushDirection * 72;
-                        owner.immuneNoBlink = true;
+                        owner.velocity = rushDirection * 72;                        
                         for (int i = 0; i < Time; i++)
                             owner.velocity *= 0.925f;
+
+                        owner.GiveIFrames(-1, 2);
                     }
-                    else if(Time == 40)
-                        owner.immuneNoBlink = true;
+                    else if (Time == 40)
+                        owner.GiveIFrames(-1, 2);
 
                     float rotation = 0.3f;
 
@@ -451,8 +455,8 @@ public class ApotelesmaProj : ModProjectile
 
                         if(Time % 8 == 0)
                         {
-                            Projectile.NewProjectile(Terraria.Entity.GetSource_NaturalSpawn(), owner.Center, rushDirection.RotatedBy(Pi / -2f).SafeNormalize(Vector2.UnitX), ModContent.ProjectileType<RushBolt>(), Projectile.damage, 0f, -1, 0, -20, Time % 16 == 0 ? 1 : 0);
-                            Projectile.NewProjectile(Terraria.Entity.GetSource_NaturalSpawn(), owner.Center, rushDirection.RotatedBy(Pi / 2f).SafeNormalize(Vector2.UnitX), ModContent.ProjectileType<RushBolt>(), Projectile.damage, 0f, -1, 0, -20, Time % 16 == 0 ? 0 : 1);
+                            Projectile.NewProjectile(Terraria.Entity.GetSource_NaturalSpawn(), owner.Center, rushDirection.RotatedBy(Pi / -2f).SafeNormalize(Vector2.UnitX), ModContent.ProjectileType<RushBolt>(), (int)(Projectile.damage * 1.5f), 0f, -1, 0, -20, Time % 16 == 0 ? 1 : 0);
+                            Projectile.NewProjectile(Terraria.Entity.GetSource_NaturalSpawn(), owner.Center, rushDirection.RotatedBy(Pi / 2f).SafeNormalize(Vector2.UnitX), ModContent.ProjectileType<RushBolt>(), (int)(Projectile.damage * 1.5f), 0f, -1, 0, -20, Time % 16 == 0 ? 0 : 1);
                         }
                     }
 
@@ -480,6 +484,14 @@ public class ApotelesmaProj : ModProjectile
 
     public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
     {
+
+        Vector2 hitDirection = (Projectile.Center - target.Center).SafeNormalize(Vector2.UnitX * (Main.player[Projectile.owner].Center.X > target.Center.X ? 1 : -1));
+        for(int i = 0; i < 5; i++)
+        {
+            Particle spark = new SparkParticle(target.Center, hitDirection.RotatedBy(Main.rand.NextFloat(-PiOver4, PiOver4)) * Main.rand.NextFloat(8f, 12f), true, 24, Main.rand.NextFloat(0.5f, 1f), new(117, 255, 159));
+            GeneralParticleHandler.SpawnParticle(spark);
+        }
+
         //if (!target.IsAnEnemy())
         //    return;
 
@@ -679,7 +691,11 @@ public class ApotelesmaProj : ModProjectile
             if (HeldDown && Main.player[Projectile.owner].direction == 1)
                 effect = SpriteEffects.FlipHorizontally;
 
-            Main.EntitySpriteDraw(tex, Projectile.Center - Main.screenPosition, null, Color.White * Projectile.Opacity, Projectile.rotation, tex.Size() * 0.5f, 1.25f * Projectile.scale, effect);
+            Vector2 shake = Vector2.Zero;
+            if(HeldDown && ConsumedCharge >= 5)
+                shake = Main.rand.NextVector2Circular(8, 8);
+
+            Main.EntitySpriteDraw(tex, Projectile.Center + shake - Main.screenPosition, null, Color.White * Projectile.Opacity, Projectile.rotation, tex.Size() * 0.5f, 1.25f * Projectile.scale, effect);
         }
         else if((Apotelesma.AIState)State == Apotelesma.AIState.Rush && Time < 64)
         {
