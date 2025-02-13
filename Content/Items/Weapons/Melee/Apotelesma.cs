@@ -103,7 +103,6 @@ public class Apotelesma : ModItem, ILocalizedModType
 
         if (myPlayer.ActiveItem() != Item || !myPlayer.active || myPlayer.dead)
         {
-            ApotelesmaCharge = 0;
             State = AIState.UpSlice;
             return;
         }
