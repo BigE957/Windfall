@@ -43,8 +43,8 @@ public class Apotelesma : ModItem, ILocalizedModType
         Item.width = Item.height = 180;
         Item.noUseGraphic = true;
         Item.useStyle = ItemUseStyleID.Shoot;
-        Item.value = CalamityGlobalItem.RarityLimeBuyPrice;
-        Item.rare = ItemRarityID.Lime;
+        Item.value = CalamityGlobalItem.RarityRedBuyPrice;
+        Item.rare = ItemRarityID.Red;
     }
 
     public override bool AltFunctionUse(Player player) => true;
@@ -487,7 +487,10 @@ public class ApotelesmaProj : ModProjectile
         Vector2 hitDirection = (Projectile.Center - target.Center).SafeNormalize(Vector2.UnitX * (Main.player[Projectile.owner].Center.X > target.Center.X ? 1 : -1));
         for(int i = 0; i < 5; i++)
         {
-            Particle spark = new SparkParticle(target.Center, hitDirection.RotatedBy(Main.rand.NextFloat(-PiOver4, PiOver4)) * Main.rand.NextFloat(8f, 12f), true, 24, Main.rand.NextFloat(0.5f, 1f), new(117, 255, 159));
+            Vector2 velocity = hitDirection.RotatedBy(Main.rand.NextFloat(-PiOver4, PiOver4)) * Main.rand.NextFloat(8f, 12f);
+            velocity.Y -= 4;
+
+            Particle spark = new SparkParticle(target.Center, velocity, true, 18, Main.rand.NextFloat(0.5f, 1f), new(117, 255, 159));
             GeneralParticleHandler.SpawnParticle(spark);
         }
 
@@ -498,23 +501,25 @@ public class ApotelesmaProj : ModProjectile
             return;
 
         Player owner = Main.player[Projectile.owner];
+
         if (owner.HeldItem.type != ModContent.ItemType<Apotelesma>())
             return;
-        int counter = ((Apotelesma)owner.HeldItem.ModItem).HitCounter++;
+        Apotelesma item = owner.HeldItem.ModItem as Apotelesma;
+        int counter = item.HitCounter++;
         if (counter >= 6)
         {
-            ((Apotelesma)owner.HeldItem.ModItem).HitCounter = 0;
-            int charge = ((Apotelesma)owner.HeldItem.ModItem).ApotelesmaCharge;
+            item.HitCounter = 0;
+            int charge = item.ApotelesmaCharge;
             if (charge < 5)
             {
                 SoundEngine.PlaySound(SoundID.DD2_EtherianPortalSpawnEnemy, target.Center);
-                ((Apotelesma)owner.HeldItem.ModItem).GemData[charge] = new(target.Center, Vector2.Zero, 0);
+                item.GemData[charge] = new(target.Center, Vector2.Zero, 0);
                 for(int i = 0; i < charge; i++)
                 {
-                    Tuple<Vector2, Vector2, int> data = ((Apotelesma)owner.HeldItem.ModItem).GemData[i];
-                    ((Apotelesma)owner.HeldItem.ModItem).GemData[i] = new(data.Item2, data.Item2, 0);
+                    Tuple<Vector2, Vector2, int> data = item.GemData[i];
+                    item.GemData[i] = new(data.Item2, data.Item2, 0);
                 }
-                ((Apotelesma)owner.HeldItem.ModItem).ApotelesmaCharge++;
+                item.ApotelesmaCharge++;
             }
         }
     }
@@ -734,7 +739,7 @@ public class RushBolt : ModProjectile
     {
         Projectile.width = 24;
         Projectile.height = 24;
-        Projectile.damage = 100;
+        //Projectile.damage = 100;
         Projectile.friendly = true;
         Projectile.penetrate = 20;
         Projectile.timeLeft = 360;
