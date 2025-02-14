@@ -1,4 +1,5 @@
 ﻿using CalamityMod.Graphics.Metaballs;
+using Windfall.Content.Items.Weapons.Ranged;
 using Windfall.Content.Items.Weapons.Summon;
 using Windfall.Content.NPCs.Bosses.Orator;
 using Windfall.Content.NPCs.WorldEvents.LunarCult;
@@ -69,6 +70,7 @@ public class EmpyreanMetaball : Metaball
         AnyProjectiles(ModContent.ProjectileType<ShadowHand_Minion>()) ||
         AnyProjectiles(ModContent.ProjectileType<HandRing>()) ||
         AnyProjectiles(ModContent.ProjectileType<UnstableDarkness>()) ||
+        AnyProjectiles(ModContent.ProjectileType<FingerlingGun>()) ||
         NPC.AnyNPCs(ModContent.NPCType<ShadowHand>()) ||
         NPC.AnyNPCs(ModContent.NPCType<OratorHand>()) ||
         NPC.AnyNPCs(ModContent.NPCType<SealingTablet>())
@@ -203,7 +205,8 @@ public class EmpyreanMetaball : Metaball
             p.type == ModContent.ProjectileType<DarkTide>() ||
             p.type == ModContent.ProjectileType<ShadowHand_Minion>() ||
             p.type == ModContent.ProjectileType<HandRing>() ||
-            p.type == ModContent.ProjectileType<UnstableDarkness>()
+            p.type == ModContent.ProjectileType<UnstableDarkness>() ||
+            p.type == ModContent.ProjectileType<FingerlingGun>()
         )))
         {
             if(p.type == ModContent.ProjectileType<ShadowHand_Minion>())
@@ -211,7 +214,7 @@ public class EmpyreanMetaball : Metaball
                 Vector2 drawPosition = p.Center - Main.screenPosition;
                 p.As<ShadowHand_Minion>().DrawSelf(drawPosition, p.GetAlpha(Color.White), p.rotation);
             }
-            else if(p.type == ModContent.ProjectileType<HandRing>() || p.type == ModContent.ProjectileType<DarkGlob>() || p.type == ModContent.ProjectileType<OratorBorder>() || p.type == ModContent.ProjectileType<DarkTide>() || p.type == ModContent.ProjectileType<SelenicIdol>())
+            else if(p.type == ModContent.ProjectileType<HandRing>() || p.type == ModContent.ProjectileType<DarkGlob>() || p.type == ModContent.ProjectileType<OratorBorder>() || p.type == ModContent.ProjectileType<DarkTide>() || p.type == ModContent.ProjectileType<SelenicIdol>() || p.type == ModContent.ProjectileType<FingerlingGun>())
             {
                 Color c = Color.White;
                 c.A = 0;

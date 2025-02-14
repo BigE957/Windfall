@@ -31,6 +31,10 @@
     <None Remove="Assets\Items\Weapons\Melee\JadeOrb.png" />
     <None Remove="Assets\Items\Weapons\Misc\RiftWeaver.png" />
     <None Remove="Assets\Items\Weapons\Misc\RiftWeaverGlow.png" />
+    <None Remove="Assets\Items\Weapons\Ranged\FingerGuns\FingerGunsHands.png" />
+    <None Remove="Assets\Items\Weapons\Ranged\FingerGuns\FingerGunsHoldOut.png" />
+    <None Remove="Assets\Items\Weapons\Ranged\FingerGuns\FingerGunsItem.png" />
+    <None Remove="Assets\Items\Weapons\Ranged\FingerGuns\FingerGunsMetaball.png" />
     <None Remove="Assets\Items\Weapons\Rogue\ExodiumSpear.png" />
     <None Remove="Assets\Items\Weapons\Summon\ShadowHandStaff.png" />
     <None Remove="Assets\NPCs\Bosses\TheOrator_Boss.png" />

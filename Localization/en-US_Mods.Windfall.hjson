@@ -1162,7 +1162,7 @@ Items: {
 
 			Apotelesma: {
 				DisplayName: Apotelesma
-				Tooltip: 
+				Tooltip:
 					'''
 					Swings a duel-bladed scythe in front of the player.
 					Hitting enemies gathers [c/03fc45: Jade Gemstones] which fuel stonger attacks
@@ -1187,10 +1187,17 @@ Items: {
 			}
 		}
 
+		Ranged: {
+			FingerGuns: {
+				DisplayName: Parapoiitis
+				Tooltip: Bang.
+			}
+		}
+
 		Summon: {
 			ShadowHandStaff: {
-				DisplayName: Shadow Hand Staff
-				Tooltip: Calls forth the darkest of shadows.
+				DisplayName: Exousiazo
+				Tooltip: Asserts dominion over the darkest of shadows.
 			}
 		}
 
@@ -1826,6 +1833,11 @@ Projectiles: {
 	ApostleProj.DisplayName: Apostle Proj
 	RushBolt.DisplayName: Rush Bolt
 	JadeShard.DisplayName: Jade Shard
+
+	Ranged: {
+		FingerBolt.DisplayName: Finger Bolt
+		FingerlingGun.DisplayName: Fingerling Gun
+	}
 }
 
 Buffs: {
