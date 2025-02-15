@@ -88,7 +88,14 @@
       ]
     },
     {
-      "DialogueText": [ { "Text": "She's a good friend! It might come as a shock, but behind her... abrasive persona, she's actually quite sweet. I mean, where do you think my apron and hat came from? [c/FFFF00:Send her my regards when next you see her!] Oh, though she can be especially, er... distrusting, of newcomers; be warned. I promise she's a lot nicer once you get to know her though!" } ],
+      "DialogueText": [
+        { "Text": "She's a good friend! It might come as a shock, but behind her... abrasive persona, she's actually quite sweet. I mean, where do you think my apron and hat came from? " },
+        {
+          "Text": "Send her my regards when next you see her! ",
+          "Color": "FFFF00"
+        },
+        { "Text": "Oh, though she can be especially, er... distrusting, of newcomers; be warned. I promise she's a lot nicer once you get to know her though! " }
+      ],
       "Responses": [
         {
           "Title": "Will do!",

@@ -635,7 +635,7 @@ public class LunarCultBaseSystem : ModSystem
                             break;
                         case SystemStates.Meeting:
                             #region Location Selection
-                            ActivityCoords = new Point(LunarCultBaseLocation.X + (BaseFacingLeft ? -25 : 25), LunarCultBaseLocation.Y + 18);
+                            ActivityCoords = new Point(LunarCultBaseLocation.X + (BaseFacingLeft ? -25 : 23), LunarCultBaseLocation.Y + 18);
                             ActivityCoords.X *= 16;
                             ActivityCoords.X += BaseFacingLeft ? -8 : 8;
                             ActivityCoords.Y *= 16;
