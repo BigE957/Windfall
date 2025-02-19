@@ -44,9 +44,11 @@ public class Watchman : ModNPC
     }
     public override void OnSpawn(IEntitySource source)
     {
+        /*
         switch (AIState)
         {
         }
+        */
     }
     public override void AI()
     {

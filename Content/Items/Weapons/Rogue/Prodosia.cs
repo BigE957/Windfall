@@ -179,8 +179,6 @@ public class GoldenTrinket : ModProjectile, ILocalizedModType
 
     int SeekingHitCounter = 0;
     float throwStrength = 0f;
-    private bool TileCollided = false;
-    private bool SpearCollided = false;
 
     public override void OnSpawn(IEntitySource source)
     {
@@ -250,8 +248,6 @@ public class GoldenTrinket : ModProjectile, ILocalizedModType
                     if(colliding)
                     {
                         float sign = Math.Sign(Projectile.velocity.X);
-
-                        SpearCollided = true;
 
                         spear.As<GoldenJavelin>().State++;
                         State = States.Die;

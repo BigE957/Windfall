@@ -10,7 +10,7 @@ public class WindfallGlobalItem : GlobalItem
     public override bool PreDrawTooltipLine(Item item, DrawableTooltipLine line, ref int yOffset)
     {
         // only exists to fix an issue with WMITF that was bugging me
-        string? overrideText = null;
+        string overrideText = null;
         if (line.Text == "[Calamity: Windfall]")
             overrideText = "[Windfall]";
 

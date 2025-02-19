@@ -191,7 +191,6 @@ public class ShadowHand_Minion : ModProjectile
         get => (int)Projectile.ai[1];
         set => Projectile.ai[1] = value;
     }
-    Vector2 toTarget = Vector2.Zero;
     private bool attackBool = false;
     public Player Owner => Main.player[Projectile.owner];
     public NPC Target
