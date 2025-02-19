@@ -1082,6 +1082,19 @@ Items: {
 			DisplayName: The Orator
 			Tooltip: ""
 		}
+
+		OratorDrops: {
+			Locked:
+				'''
+				[c/03fc84:Whispers of a memory call out from the weapon...]
+				[c/BEBEBE:However, you can't make them out quite yet.]
+				'''
+			Unlocked:
+				'''
+				[c/03fc84:Whispers of a memory call out from the weapon...]
+				[c/BEBEBE:Press "Left Shift" to listen closer]
+				'''
+		}
 	}
 
 	Journals: {
@@ -1161,16 +1174,26 @@ Items: {
 			}
 
 			Apotelesma: {
-				DisplayName: Apotelesma
+				DisplayName: Apotélesma
 				Tooltip:
 					'''
-					Swings a duel-bladed scythe in front of the player.
-					Hitting enemies gathers [c/03fc45: Jade Gemstones] which fuel stonger attacks
-					Holding Right-Click will begin consuming gathered [c/03fc45: Jade Gemstones]
-					Releasing Right-Click after consuming at least one [c/03fc45: Jade Gemstone] will launch the scythe at nearby enemies
+					Swings a dual-bladed scythe in front of the player
+					Hitting enemies gathers [c/03fc45:Jade Gemstones] which fuel stonger attacks
+					Holding Right-Click will begin consuming gathered [c/03fc45:Jade Gemstones]
+					Releasing Right-Click after consuming at least one [c/03fc45:Jade Gemstone] will launch the scythe at nearby enemies
 					Releasing Right-Click after consuming all five [c/03fc45: Jade Gemstones] will launch you forward, tearing through enemies in your path.
-
-					[c/03fc45:As was foretold in the Stars...]
+					[c/bdac15:'As was foretold in the Stars...']
+					Replace Me.
+					'''
+				Lore:
+					'''
+					[c/03fc84:At long last, I hear it! I call out to the stars and now they sing in return. What a wonderful melody…]
+					[c/03fc84:These riddles and rhymes, what they paint is… familiar. The sky cracks open wide, and death descends upon the land.]
+					[c/03fc84:An entire species brought to the brink of demise, but… What is this?]
+					[c/03fc84:As the Dragons fall, one after another, their domain is turned against the rest?]
+					[c/03fc84:The aberrant takes as it pleases, and wields its stolen powers freely and in purest form…]
+					[c/03fc84:Why? Why is this what they sing of? Could it be…?]
+					[c/03fc84:With the behemoth sundered and sealed, could its power be seized by another?]
 					'''
 			}
 		}
@@ -1189,15 +1212,42 @@ Items: {
 
 		Ranged: {
 			FingerGuns: {
-				DisplayName: Parapoiitis
-				Tooltip: Bang.
+				DisplayName: Parapoiitís
+				Tooltip:
+					'''
+					[c/bdac15:It coils around your arm with a life all its own.]
+					Replace Me.
+					'''
+				Lore:
+					'''
+					[c/03fc84:Oh, how things have changed…]
+					[c/03fc84:An era ended not with disaster or great victory, but silence.]
+					[c/03fc84:The Godseeker has vanished with his Crusade just short of complete, and none could fill the vacuum left in his wake…]
+					[c/ffed4d:None, but I.]
+					[c/03fc84:The people of this world are aimless as lambs. They have no purpose; no hope, but I can become their shepherd.]
+					[c/03fc84:I will gather my flock, and fill them with new purpose. In return, they shall bring me closer to my destiny.]
+					[c/03fc84:The power I seek will not come without cost, and I shall have offerings in spades.]
+					'''
 			}
 		}
 
 		Summon: {
 			ShadowHandStaff: {
-				DisplayName: Exousiazo
-				Tooltip: Asserts dominion over the darkest of shadows.
+				DisplayName: Exousiázo
+				Tooltip:
+					'''
+					[c/bdac15:Asserts dominion over the darkest of shadows.]
+					Replace Me.					   
+					'''
+				Lore:
+					'''
+					[c/03fc84:Such progress… I could not ask for better results!]
+					[c/03fc84:With each passing day my control over this magic grows stronger, and more possibilities become opened unto me.]
+					[c/03fc84:My destiny feels so close, and soon I shall hear the melody of heaven once again…]
+					[c/03fc84:All I need do is ensure that our benefactor not become too privy.]
+					[c/03fc84:At current our goals align, but should it learn too much… It could destroy everything I’ve worked towards.]
+					[c/03fc84:I shall balance along this edge of annihilation for the time, but soon, very soon, my efforts shall at last bear fruit.]
+					'''
 			}
 		}
 
@@ -1205,6 +1255,20 @@ Items: {
 			ExodiumSpear: {
 				DisplayName: Penetrator of the Outer Realm
 				Tooltip: ""
+			}
+
+			Prodosia: {
+				DisplayName: Prodosía
+				Tooltip:
+					'''
+					[c/bdac15:Crush foes with spurious opulence.]
+					Replace Me.	
+					'''
+				Lore:
+					'''
+					[c/03fc84:Crazy insane unheard of Lore.]
+					[c/03fc84:Truly some insane stuff.]
+					'''
 			}
 		}
 	}
@@ -1825,7 +1889,13 @@ Projectiles: {
 	HandStatue.DisplayName: Hand Statue
 	TestProjectile.DisplayName: Test Projectile
 	FadingStar.DisplayName: Fading Star
-	Rogue.ExodiumSpearProj.DisplayName: Exodium Spear
+
+	Rogue: {
+		ExodiumSpearProj.DisplayName: Exodium Spear
+		GoldenTrinket.DisplayName: Golden Trinket
+		GoldenJavelin.DisplayName: Golden Javelin
+	}
+
 	SelenicSiphon.DisplayName: Selenic Siphon
 	AstralEnergy.DisplayName: Astral Energy
 	SelenicIdol.DisplayName: Selenic Idol
