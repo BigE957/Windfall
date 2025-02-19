@@ -216,7 +216,8 @@ public class LunarCultBaseSystem : ModSystem
                 if (!npc.dontTakeDamage && npc.lifeMax != 1 && !npc.friendly && !npc.boss && npc.type != ModContent.NPCType<PortalMole>())
                 {
                     Rectangle inflatedArea = new(CultBaseWorldArea.X - 512, CultBaseWorldArea.Y + 512, CultBaseWorldArea.Width + 1024, CultBaseWorldArea.Height + 1024);
-                    if (inflatedArea.Contains((int)npc.Center.X, (int)npc.Center.Y))
+                    Rectangle inflatedBridge = new(CultBaseBridgeArea.X * 16 - 512, CultBaseBridgeArea.Y * 16 + 512, CultBaseBridgeArea.Width * 16 + 1024, CultBaseBridgeArea.Height * 16 + 1024);
+                    if (inflatedArea.Contains((int)npc.Center.X, (int)npc.Center.Y) || inflatedBridge.Contains((int)npc.Center.X, (int)npc.Center.Y))
                         npc.AddBuff(ModContent.BuffType<Entropy>(), 2);
                 }                    
             }
