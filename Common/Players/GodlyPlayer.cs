@@ -290,9 +290,7 @@ public class GodlyPlayer : ModPlayer
                             Player.velocity = olderVelocity.SafeNormalize(Vector2.Zero) * 16;
                             if (Player.Hitbox.Intersects(target.Hitbox))
                             {
-                                var modifiers = new NPC.HitModifiers();
-                                NPC.HitInfo hit = modifiers.ToHitInfo((int)Player.GetDamage(DamageClass.Generic).ApplyTo(100f), false, 0f, true);
-                                target.StrikeNPC(hit);
+                                target.StrikeNPC(target.CalculateHitInfo(100, 0, true, damageType: DamageClass.Generic));
                                 target.AddBuff(ModContent.BuffType<BurningBlood>(), 120);
                                 target.AddBuff(BuffID.Ichor, 240);
                                 Player.velocity.Y = -10;
@@ -376,9 +374,7 @@ public class GodlyPlayer : ModPlayer
                                 NPC npc = harvestNPCArray[i];
                                 if (harvestCounterArray[i] >= 120)
                                 {
-                                    var modifiers = new NPC.HitModifiers();
-                                    NPC.HitInfo hit = modifiers.ToHitInfo((int)Player.GetDamage(DamageClass.Generic).ApplyTo(100f), false, 0f, true);
-                                    npc.StrikeNPC(hit);
+                                    npc.StrikeNPC(npc.CalculateHitInfo(100, 0, true, damageType: DamageClass.Generic));
                                     npc.AddBuff(BuffID.Ichor, 240);
                                     npc.AddBuff(BuffID.Confused, 240);
                                     SoundEngine.PlaySound(IchorGoopyHit, npc.Center);
@@ -402,10 +398,8 @@ public class GodlyPlayer : ModPlayer
                                 {                                       
                                     if (abilityCounter % 6 == 0)
                                     {
-                                        var modifiers = new NPC.HitModifiers();
-                                        NPC.HitInfo hit = modifiers.ToHitInfo(1, false, 0f);
                                         Ambrosia++;
-                                        npc.StrikeNPC(hit);
+                                        npc.StrikeNPC(target.CalculateHitInfo(1, 0));
                                     }
                                     Vector2 speed = (Player.Center - npc.Center).SafeNormalize(Vector2.Zero);
                                     Dust d = Dust.NewDustPerfect(npc.Center, DustID.Ichor, speed * 12, Scale: 2f);
@@ -557,9 +551,7 @@ public class GodlyPlayer : ModPlayer
 
             foreach (NPC npc in Main.npc.Where(n => n != null && n.active && !n.friendly && !n.dontTakeDamage && Vector2.Distance(tumor.Center, n.Center) < 300))
             {
-                var modifiers = new NPC.HitModifiers();
-                NPC.HitInfo hit = modifiers.ToHitInfo((int)Player.GetDamage(DamageClass.Generic).ApplyTo(100f), false, npc.boss ? 0f : 20f);
-                npc.StrikeNPC(hit);
+                npc.StrikeNPC(npc.CalculateHitInfo(100, 0, true, npc.boss ? 0f : 20f, DamageClass.Generic));
                 if (npc.knockBackResist > 0f && npc.boss == false)
                 {
                     npc.velocity = (npc.Center - tumor.Center).SafeNormalize(Vector2.Zero) * npc.velocity.Length();

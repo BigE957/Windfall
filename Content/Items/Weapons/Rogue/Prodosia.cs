@@ -486,17 +486,9 @@ public class GoldenJavelin : ModProjectile, ILocalizedModType
                     Vector2 hitDirection = Projectile.rotation.ToRotationVector2();
                     Projectile.velocity = hitDirection * 12f;
 
-                    NPC.HitInfo dislodgeHit = new()
-                    {
-                        Damage = Projectile.damage * 2,
-                        HitDirection = Math.Sign(hitDirection.X),
-                        DamageType = Projectile.DamageType,
-                        Crit = true,
-                        Knockback = Projectile.knockBack * 2f
-                    };
-
                     target = Main.npc[TargetIndex];
-                    target.StrikeNPC(dislodgeHit);
+
+                    target.StrikeNPC(target.CalculateHitInfo(Projectile.damage * 2, Math.Sign(hitDirection.X), true, Projectile.knockBack * 2f, Projectile.DamageType));
 
                     for (int i = 0; i < 5; i++)
                     {

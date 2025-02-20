@@ -165,9 +165,8 @@ public class ExodiumSpearProj : ModProjectile, ILocalizedModType
                 spear.Kill();
                 spear.active = false;
             }
-            NPC.HitInfo stealthHit = hit;
-            stealthHit.Damage = damage;
-            target.StrikeNPC(stealthHit);
+
+            target.StrikeNPC(target.CalculateHitInfo(damage, hit.HitDirection, true, hit.Knockback * 2, Projectile.DamageType));
 
             SoundEngine.PlaySound(SoundID.DD2_EtherianPortalDryadTouch, Projectile.Center);
             ScreenShakeSystem.StartShake(5f);
