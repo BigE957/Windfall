@@ -1,7 +1,6 @@
 ﻿using CalamityMod.Graphics.Primitives;
 using CalamityMod.Items;
 using Microsoft.Xna.Framework.Input;
-using SteelSeries.GameSense.DeviceZone;
 using System.Collections.ObjectModel;
 using Terraria.Graphics.Shaders;
 using Windfall.Common.Graphics.Metaballs;
@@ -151,7 +150,6 @@ public class KaimosHoldout : ModProjectile, ILocalizedModType
 
     float Time = 0;
     float rotationOffset = 0f;
-    bool fireSuccess = false;
     int projectilesToBeFired = 0;
 
     public override void AI()
@@ -169,22 +167,27 @@ public class KaimosHoldout : ModProjectile, ILocalizedModType
 
         if (canHold)
         {
-            if (owner.CheckMana(owner.ActiveItem(), 20) && Time % 15 == 0)
+            if (Time % (owner.manaSick ? 30 : 15) == 0 && owner.CheckMana(owner.ActiveItem(), 20))
             {
                 owner.CheckMana(owner.ActiveItem(), 20, true);
-                Main.NewText(++projectilesToBeFired);
+                ++projectilesToBeFired;
+
+                Particle pulse = new DirectionalPulseRing(Projectile.Center + toMouse * 28 + owner.velocity, toMouse * 4f, (Time % (owner.manaSick ? 60 : 30)) == 0 ? Color.MediumSeaGreen : Color.Orange, new(0.5f, 1f), toMouse.ToRotation(), 0f, 0.5f, 16);
+                GeneralParticleHandler.SpawnParticle(pulse);
+                //Item13
+                SoundEngine.PlaySound(SoundID.Item17 with {Pitch = (projectilesToBeFired >= 30f ? 1f : projectilesToBeFired / 30f), PitchVariance = 0 }, Projectile.Center);
             }
         }
         else if (projectilesToBeFired > 0)
         {
-            if (Time % 10 == 0)
+            if (Time % 8 == 0)
             {
-                Vector2 spawnPos = Projectile.Center + toMouse * 32 + owner.velocity;
+                Vector2 spawnPos = Projectile.Center + toMouse * 36 + owner.velocity;
 
                 for (int i = 0; i < 10; i++)
                     EmpyreanMetaball.SpawnDefaultParticle(spawnPos, toMouse.RotatedBy(Main.rand.NextFloat(-PiOver4, PiOver4)) * Main.rand.NextFloat(0.1f, 3f), Main.rand.NextFloat(40, 80));
-
-                Projectile.NewProjectile(Projectile.GetSource_FromThis(), spawnPos, toMouse.RotatedBy(Main.rand.NextFloat(-PiOver4 / 4f, PiOver4 / 4f)) * Main.rand.NextFloat(12f, 20f), ModContent.ProjectileType<PotGlob>(), Projectile.damage, Projectile.knockBack, Projectile.owner, Main.rand.NextFloat(0.5f, 1f), 2);
+                SoundEngine.PlaySound(SoundID.Item60, Projectile.Center);
+                Projectile.NewProjectile(Projectile.GetSource_FromThis(), spawnPos, toMouse.RotatedBy(Main.rand.NextFloat(-PiOver4 / 8f, PiOver4 / 8f)) * Main.rand.NextFloat(12f, 20f), ModContent.ProjectileType<PotGlob>(), Projectile.damage, Projectile.knockBack, Projectile.owner, Main.rand.NextFloat(0.33f, 0.66f), 2, -1);
 
                 projectilesToBeFired--;
             }
@@ -244,7 +247,7 @@ public class PotGlob : ModProjectile, ILocalizedModType
         Projectile.ignoreWater = true;
         Projectile.tileCollide = false;
         Projectile.penetrate = 3;
-        Projectile.timeLeft = 390;
+        Projectile.timeLeft = 600;
         Projectile.usesLocalNPCImmunity = true;
         Projectile.localNPCHitCooldown = 15;
     }
@@ -271,50 +274,67 @@ public class PotGlob : ModProjectile, ILocalizedModType
         Projectile.height = (int)(Projectile.height * Size);
     }
 
+    private ref float TargetIndex => ref Projectile.ai[2];
+    private float TargetInitialAngle = 0f;
+    private float StabAngle = 0f;
+    private Vector2 StabOffset = Vector2.Zero;
+
     public override void AI()
     {
-        Projectile.velocity *= 0.966f;
-
-        if (Trail == TrailType.Particle && Projectile.velocity.LengthSquared() > 5f)
-            EmpyreanMetaball.SpawnDefaultParticle(Projectile.Center, Vector2.Zero, Projectile.scale * 48);
-        /*
-        foreach(Projectile p in Main.projectile.Where(p => p.active && p.type == Type && p.owner == Projectile.owner && p.whoAmI != Projectile.whoAmI))
+        if (TargetIndex == -1)
+            Projectile.velocity *= 0.966f;
+        else
         {
-            if ((p.Center - Projectile.Center).Length() < (12 * Projectile.scale) + (12 * p.scale))
+            NPC target = null;
+            if (TargetIndex != -1)
             {
-                if (p.ai[0] == Size)
+                target = Main.npc[(int)TargetIndex];
+
+                if (target != null && target.active)
                 {
-                    if (p.velocity.LengthSquared() > Projectile.velocity.LengthSquared())
-                    {
-                        p.ai[0] += Size / 2f;
-                        Projectile.active = false;
-                        p.timeLeft = 390;
-                    }
-                    else
-                    {
-                        Size += p.ai[0] / 2f;
-                        p.active = false;
-                        Projectile.timeLeft = 390;
-                    }
+                    Projectile.Center = target.Center + StabOffset.RotatedBy(target.rotation - TargetInitialAngle);
+                    Projectile.rotation = StabAngle + (target.rotation - TargetInitialAngle);
+                    Projectile.velocity = Vector2.Zero;
                 }
                 else
+                    TargetIndex = -1;
+
+                target.Calamity().marked = 2;
+
+                Projectile[] stuckOrbs = Main.projectile.Where(p => p.active && p.type == Type && p.ai[2] != -1 && p.ai[2] == Projectile.ai[2] && p.owner == Projectile.owner).ToArray();
+                if (stuckOrbs.Length >= 10)
                 {
-                    if (p.ai[0] > Size)
+                    int damageMult = stuckOrbs.Length;
+                    foreach (Projectile orb in stuckOrbs)
                     {
-                        p.ai[0] += Size / 2f;
-                        Projectile.active = false;
-                        p.timeLeft = 390;
+                        orb.active = false;
                     }
-                    else
-                    {
-                        Size += p.ai[0] / 2f;
-                        p.active = false;
-                        Projectile.timeLeft = 390;
-                    }
+
+                    SoundEngine.PlaySound(SoundID.DD2_EtherianPortalDryadTouch, Projectile.Center);
+                    Luminance.Core.Graphics.ScreenShakeSystem.StartShake(5f);
+                    for (int i = 0; i <= 50; i++)
+                        EmpyreanMetaball.SpawnDefaultParticle(Projectile.Center, Main.rand.NextVector2Circular(10f, 10f) * Main.rand.NextFloat(1f, 2f), 40 * Main.rand.NextFloat(3f, 5f));
+                    Particle pulse = new PulseRing(Projectile.Center, Vector2.Zero, Color.Teal, 0f, 2.5f, 16);
+                    GeneralParticleHandler.SpawnParticle(pulse);
+                    Particle explosion = new DetailedExplosion(Projectile.Center, Vector2.Zero, new(117, 255, 159), new Vector2(1f, 1f), 0f, 0f, 1f, 16);
+                    GeneralParticleHandler.SpawnParticle(explosion);
+
+                    target.StrikeNPC(target.CalculateHitInfo(Projectile.damage * damageMult, 0, true, Projectile.knockBack * 2f, Projectile.DamageType));
+
+                    Player owner = Main.player[Projectile.owner];
+
+                    owner.statMana += damageMult * 20;
+                    if (owner.statMana > owner.statManaMax2)
+                        owner.statMana = owner.statManaMax2;
+
+                    Projectile.active = false;
                 }
             }
         }
-        */
+
+        if (Trail == TrailType.Particle && Projectile.velocity.LengthSquared() > 5f)
+            EmpyreanMetaball.SpawnDefaultParticle(Projectile.Center, Vector2.Zero, Projectile.scale * 48);
+        
         if (Projectile.timeLeft <= 30)
             Projectile.scale = Lerp(0f, Size, Projectile.timeLeft / 30f);
         if (Projectile.scale < Size)
@@ -328,6 +348,18 @@ public class PotGlob : ModProjectile, ILocalizedModType
         if (CircularHitboxCollision(Projectile.Center, (projHitbox.Width / 2) * Projectile.scale, targetHitbox))
             return true;
         return false;
+    }
+
+    public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
+    {
+        //Projectile.Center += Projectile.velocity * 2.5f;
+        TargetIndex = target.whoAmI;
+        TargetInitialAngle = target.rotation;
+        StabAngle = Projectile.rotation;
+        StabOffset = Projectile.Center - target.Center;
+        Projectile.friendly = false;
+
+        Projectile.timeLeft = 900;
     }
 
     private Color ColorFunction(float completionRatio)
@@ -360,7 +392,7 @@ public class PotGlob : ModProjectile, ILocalizedModType
 
         Main.spriteBatch.UseBlendState(BlendState.Additive);
         Texture2D tex = ModContent.Request<Texture2D>("CalamityMod/Particles/BloomCircle").Value;
-        Vector2 drawPos = Projectile.Center - Main.screenPosition - (Projectile.ai[0] == 0 ? Vector2.Zero : Projectile.velocity.SafeNormalize(Vector2.UnitX) * (16 * Projectile.scale));
+        Vector2 drawPos = Projectile.Center - Main.screenPosition;
         Main.EntitySpriteDraw(tex, drawPos, tex.Frame(), ColorFunction(0) * 0.75f, Projectile.rotation, tex.Size() * 0.5f, Projectile.scale * 0.8f, SpriteEffects.None, 0);
         Main.spriteBatch.UseBlendState(BlendState.AlphaBlend);
 
@@ -371,7 +403,7 @@ public class PotGlob : ModProjectile, ILocalizedModType
     {
         Texture2D tex = TextureAssets.Projectile[Type].Value;
         Vector2 origin = tex.Size() * 0.5f;
-        Vector2 drawPos = Projectile.Center - Main.screenPosition - (Projectile.ai[0] == 0 ? Vector2.Zero : Projectile.velocity.SafeNormalize(Vector2.UnitX) * (16 * Projectile.scale));
+        Vector2 drawPos = Projectile.Center - Main.screenPosition;
         Main.EntitySpriteDraw(tex, drawPos, null, Color.White, Projectile.rotation, origin, Projectile.scale, SpriteEffects.None);
     }
 }
