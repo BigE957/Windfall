@@ -56,19 +56,12 @@ public class DarkGlob : ModProjectile, ILocalizedModType
     public override void OnSpawn(IEntitySource source)
     {
         if (Projectile.ai[2] != -1)
-            switch(Projectile.ai[0])
-            {                
-                case 1:
-                    Trail = TrailType.Shader;
-                    break;
-                case 2:
-                case 0:
-                    Trail = TrailType.Particle;
-                    break;
-                default:
-                    Trail = TrailType.None;
-                    break;
-            }
+            Trail = Projectile.ai[0] switch
+            {
+                1 => TrailType.Shader,
+                2 or 0 => TrailType.Particle,
+                _ => TrailType.None,
+            };
         else
             Trail = TrailType.None;
 
@@ -189,9 +182,7 @@ public class DarkGlob : ModProjectile, ILocalizedModType
         Texture2D tex = TextureAssets.Projectile[Type].Value;
         Vector2 origin = tex.Size() * 0.5f;
         Vector2 drawPos = Projectile.Center - Main.screenPosition - (Projectile.ai[0] == 0 ? Vector2.Zero : Projectile.velocity.SafeNormalize(Vector2.UnitX) * (16 * Projectile.scale));
-        Main.EntitySpriteDraw(tex, drawPos, null, Color.White, Projectile.rotation, origin, Projectile.scale, SpriteEffects.None);
-        
-        //DrawAfterimagesCentered(Projectile, ProjectileID.Sets.TrailingMode[Projectile.type], drawColor);
+        Main.EntitySpriteDraw(tex, drawPos, null, Color.White, Projectile.rotation, origin, Projectile.scale, SpriteEffects.None);        
     }
 
 }

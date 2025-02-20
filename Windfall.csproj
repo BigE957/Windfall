@@ -23,6 +23,8 @@
     <None Remove="Assets\Items\Tools\Hammer.png" />
     <None Remove="Assets\Items\Tools\HammerAndChiselProj.png" />
     <None Remove="Assets\Items\Tools\HammerAndChiselSmall.png" />
+    <None Remove="Assets\Items\Weapons\Magic\Kaimos.png" />
+    <None Remove="Assets\Items\Weapons\Magic\KaimosMetaballs.png" />
     <None Remove="Assets\Items\Weapons\Melee\ApotelesmaItem.png" />
     <None Remove="Assets\Items\Weapons\Melee\ApotelesmaSlash.png" />
     <None Remove="Assets\Items\Weapons\Melee\ApotelesmaSlashWhiteOut.png" />
