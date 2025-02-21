@@ -1277,13 +1277,16 @@ Items: {
 				DisplayName: Kaimós
 				Tooltip:
 					'''
-					Holds a seemingly endless supply of dark liquid.
-					Remove Me.
+					[c/bdac15:Holds a seemingly endless supply of dark liquid.]
+					Replace Me.
 					'''
 				Lore:
 					'''
-					[c/03fc84:Crazy insane unheard of Lore.]
-					[c/03fc84:Truly some insane stuff.]
+					[c/03fc84:One after another, each of my kin prove to be more blind than the last; their fear keeps them from seeing what we could attain.]
+					[c/03fc84:Some dare not disturb the slumbering titan, but others… Others fear what one might do with its power should it be turned against them.]
+					[c/03fc84:That I cannot blame them for. If it could dominate the souls of dragons, I am certain we couldn’t hope to defend against it.]
+					[c/03fc84:But can’t they see? This all the more reason we must lay claim to it! Lest it be claimed by another, who might seek to destroy us.]
+					[c/03fc84:Alas, it seems I will be alone once again in my endeavours.]
 					'''
 			}
 		}

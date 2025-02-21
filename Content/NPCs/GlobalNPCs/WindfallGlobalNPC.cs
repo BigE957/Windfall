@@ -1,4 +1,8 @@
-﻿using CalamityMod.NPCs.Astral;
+﻿using CalamityMod.NPCs.AquaticScourge;
+using CalamityMod.NPCs.Astral;
+using CalamityMod.NPCs.AstrumDeus;
+using CalamityMod.NPCs.DesertScourge;
+using CalamityMod.NPCs.DevourerofGods;
 using CalamityMod.NPCs.NormalNPCs;
 using CalamityMod.NPCs.Polterghast;
 using Windfall.Common.Systems;
@@ -9,6 +13,7 @@ using Windfall.Content.Projectiles.Enemies;
 using Windfall.Content.Projectiles.NPCAnimations;
 using Windfall.Content.Projectiles.Other;
 using Windfall.Content.Projectiles.Props;
+using Terraria.ID;
 
 namespace Windfall.Content.NPCs.GlobalNPCs;
 
@@ -67,6 +72,7 @@ public class WindfallGlobalNPC : GlobalNPC
         if (npc.type == calamity.Find<ModNPC>("Polterghast").Type)
             SoundEngine.PlaySound(PolterAmbiance with { Volume = 1f }, npc.Center);
     }
+    
     public override void OnKill(NPC npc)
     {
         Mod calamity = ModLoader.GetMod("CalamityMod");
@@ -104,7 +110,7 @@ public class WindfallGlobalNPC : GlobalNPC
         Projectile.NewProjectileDirect(Entity.GetSource_NaturalSpawn(), new Vector2(Main.player[0].Center.X + xOffSet, Main.player[0].Center.Y), Vector2.Zero, type, 0, 0);
     }
 
-    private void PhantomCheck(NPC npc)
+    private static void PhantomCheck(NPC npc)
     {
         if (!DownedBossSystem.downedPolterghast && !NPC.AnyNPCs(ModContent.NPCType<Polterghast>()) && (npc.type == ModContent.NPCType<PhantomSpirit>() || npc.type == ModContent.NPCType<PhantomSpiritS>() || npc.type == ModContent.NPCType<PhantomSpiritM>() ||
             npc.type == ModContent.NPCType<PhantomSpiritL>()))
@@ -118,5 +124,25 @@ public class WindfallGlobalNPC : GlobalNPC
                 SoundEngine.PlaySound(PolterAmbiance with { Volume = 1f }, Main.player[0].Center + new Vector2(Main.rand.NextFloat(-1f, 1f), Main.rand.NextFloat(-1f, 1f)).SafeNormalize(Vector2.UnitX) * (Main.rand.Next(800, 1000)));
             }
         }
+    }
+
+    public static int GetWormHead(int whoAmI)
+    {
+        NPC npc = Main.npc[whoAmI];
+        if (npc == null || !npc.active)
+            return -1;
+
+        if (!WindfallLists.WormIDs.Contains(npc.type) || WindfallLists.WormHeadIDs.Contains(npc.type))
+            return whoAmI;
+
+        if (npc.type <= NPCID.BloodEelTail)
+            npc = Main.npc[(int)npc.ai[1]];
+        else
+            npc = Main.npc[(int)npc.ai[2]];
+
+        if (WindfallLists.WormHeadIDs.Contains(npc.type))
+            return npc.whoAmI;
+        else
+            return GetWormHead(npc.whoAmI);
     }
 }
