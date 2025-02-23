@@ -6,7 +6,7 @@ public static partial class WindfallUtils
 {
     public static void SetupFetchQuestTree(ref DialogueUISystem uiSystem, string path, string character, Tuple<int, int> itemStack, string turnInResponse = "Here you go!", string leaveResponse = "Can do!", string completeResponse = "You're welcome!")
     {
-        Item item = new Item(itemStack.Item1, itemStack.Item2);
+        Item item = new(itemStack.Item1, itemStack.Item2);
         ItemStack cost = new()
         {
             ItemName = item.Name,
