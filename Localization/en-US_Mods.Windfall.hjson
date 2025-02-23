@@ -1261,7 +1261,7 @@ Items: {
 				DisplayName: Prodosía
 				Tooltip:
 					'''
-					[c/bdac15:Crush foes with spurious opulence.]
+					[c/bdac15:Tears apart foes with spurious opulence.]
 					Replace Me.	
 					'''
 				Lore:
@@ -1277,14 +1277,14 @@ Items: {
 				DisplayName: Kaimós
 				Tooltip:
 					'''
-					[c/bdac15:Holds a seemingly endless supply of dark liquid.]
+					[c/bdac15:Devours mana in exchange for its shadowy liquid.]
 					Replace Me.
 					'''
 				Lore:
 					'''
 					[c/03fc84:One after another, each of my kin prove to be more blind than the last; their fear keeps them from seeing what we could attain.]
-					[c/03fc84:Some dare not disturb the slumbering titan, but others… Others fear what one might do with its power should it be turned against them.]
-					[c/03fc84:That I cannot blame them for. If it could dominate the souls of dragons, I am certain we couldn’t hope to defend against it.]
+					[c/03fc84:Some dare not disturb the slumbering titan: utter fools, but others… Others fear what one might do with its power should it be turned against them.]
+					[c/03fc84:That I cannot blame them for. If it could dominate the souls of dragons, I am certain we would be helpless against it.]
 					[c/03fc84:But can’t they see? This all the more reason we must lay claim to it! Lest it be claimed by another, who might seek to destroy us.]
 					[c/03fc84:Alas, it seems I will be alone once again in my endeavours.]
 					'''
@@ -1578,21 +1578,21 @@ Items: {
 		}
 
 		DraconicBone: {
-			DisplayName: Fishron Bone
+			DisplayName: Draconic Bone
 			Tooltip:
 				'''
-				The bone of a Draconic Offshoot; often seen as a grand trophy. 
-				While lacking any Auric influence, it still holds the genetic heritage of the Dragons.
+				Once seen as a grand hunting trophy, these are now priceless artifacts due to their rarity.
+				Within it, lies the faded whispers of a Dragon's spirit.
 				'''
 		}
 
 		LunarArcherMask: {
-			DisplayName: Lunar Archer Mask
+			DisplayName: Selenic Archer Mask
 			Tooltip: A freshly made mask to be worn by the Selenic Order's eyes and ears.
 		}
 
 		LunarBishopHood: {
-			DisplayName: Lunar Bishop Hood
+			DisplayName: Selenic Bishop Hood
 			Tooltip:
 				'''
 				Hoods such as these are worn only by the most trusted of the Selenic Order; 
@@ -1601,12 +1601,12 @@ Items: {
 		}
 
 		LunarBishopMask: {
-			DisplayName: Lunar Bishop Mask
+			DisplayName: Selenic Bishop Mask
 			Tooltip: A freshly made mask to be worn by those blessed with the Selenic Order's deepest knowledge.
 		}
 
 		LunarBishopRobes: {
-			DisplayName: Lunar Bishop Robes
+			DisplayName: Selenic Bishop Robes
 			Tooltip:
 				'''
 				Ornate robes decorated with various sigils of the Selenic Order. 
@@ -1633,7 +1633,7 @@ Items: {
 		}
 
 		LunarDevoteeMask: {
-			DisplayName: Lunar Devotee Mask
+			DisplayName: Selenic Devotee Mask
 			Tooltip: A freshly made mask to be worn by initiates of the Selenic Order.
 		}
 
@@ -1954,6 +1954,11 @@ Buffs: {
 	Entropy: {
 		DisplayName: Entropy
 		Description: Cosmic chaos batters and breaks you...
+	}
+
+	Wildfire: {
+		DisplayName: Wildfire
+		Description: Mods.Windfall.Buffs.Wildfire.Description
 	}
 }
 

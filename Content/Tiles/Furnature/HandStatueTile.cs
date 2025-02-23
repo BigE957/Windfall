@@ -1,15 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Terraria.Enums;
+﻿using Terraria.Enums;
+using Windfall.Content.Items.Placeables.Furnature;
 
 namespace Windfall.Content.Tiles.Furnature;
 public class HandStatueTile : ModTile
 {
     public override void SetStaticDefaults()
     {
+        RegisterItemDrop(ModContent.ItemType<HandStatue>());
         Main.tileFrameImportant[Type] = true;
         Main.tileLavaDeath[Type] = false;
         Main.tileWaterDeath[Type] = false;

@@ -38,6 +38,11 @@
     <None Remove="Assets\Items\Weapons\Ranged\FingerGuns\FingerGunsItem.png" />
     <None Remove="Assets\Items\Weapons\Ranged\FingerGuns\FingerGunsMetaball.png" />
     <None Remove="Assets\Items\Weapons\Rogue\ExodiumSpear.png" />
+    <None Remove="Assets\Items\Weapons\Rogue\Prodosia\ProdosiaItem.png" />
+    <None Remove="Assets\Items\Weapons\Rogue\Prodosia\ProdosiaThrow.png" />
+    <None Remove="Assets\Items\Weapons\Rogue\Prodosia\ProdosiaThrowWhiteOut.png" />
+    <None Remove="Assets\Items\Weapons\Rogue\Prodosia\ProdosiaTrinkets.png" />
+    <None Remove="Assets\Items\Weapons\Rogue\Prodosia\ProdosiaTrinketsWhiteOut.png" />
     <None Remove="Assets\Items\Weapons\Summon\ShadowHandStaff.png" />
     <None Remove="Assets\NPCs\Bosses\TheOrator_Boss.png" />
     <None Remove="Assets\NPCs\Enemies\Orator_Hand.png" />
@@ -57,6 +62,7 @@
     <None Remove="Assets\Projectiles\Boss\TideNoise1.png" />
     <None Remove="Assets\Projectiles\Boss\TideNoise2.png" />
     <None Remove="Assets\Skies\OratorMoon.png" />
+    <None Remove="Assets\Tiles\DraconicSkeleton.png" />
     <None Remove="Assets\UI\CharacterAssets\DragonArcher\Default.png" />
     <None Remove="Assets\UI\CharacterAssets\LunaticCultist\Default.png" />
     <None Remove="Assets\UI\CharacterAssets\Seamstress\Default.png" />
