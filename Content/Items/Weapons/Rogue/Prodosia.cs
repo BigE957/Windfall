@@ -1,14 +1,16 @@
-﻿using CalamityMod.Items;
+﻿using CalamityMod.Buffs.DamageOverTime;
+using CalamityMod.Items;
 using CalamityMod.Items.Weapons.Rogue;
 using Microsoft.Xna.Framework.Input;
 using System.Collections.ObjectModel;
 using Windfall.Common.Graphics.Metaballs;
+using Windfall.Content.Buffs.DoT;
 
 namespace Windfall.Content.Items.Weapons.Rogue;
 public class Prodosia : RogueWeapon, ILocalizedModType
 {
     public new string LocalizationCategory => "Items.Weapons.Rogue";
-    public override string Texture => "Windfall/Assets/Items/Weapons/Rogue/ExodiumSpear";
+    public override string Texture => "Windfall/Assets/Items/Weapons/Rogue/Prodosia/ProdosiaItem";
 
     public override void SetDefaults()
     {
@@ -140,11 +142,16 @@ public class Prodosia : RogueWeapon, ILocalizedModType
 public class GoldenTrinket : ModProjectile, ILocalizedModType
 {
     public new string LocalizationCategory => "Projectiles.Rogue";
-    public override string Texture => "Windfall/Assets/Projectiles/Boss/HandRings";
+    public override string Texture => "Windfall/Assets/Items/Weapons/Rogue/Prodosia/ProdosiaTrinkets";
+
+    public static Asset<Texture2D> WhiteOut;
 
     public override void SetStaticDefaults()
     {
-        ProjectileID.Sets.TrailCacheLength[Projectile.type] = 12;
+        if (!Main.dedServ)
+            WhiteOut = ModContent.Request<Texture2D>(Texture + "WhiteOut");
+
+            ProjectileID.Sets.TrailCacheLength[Projectile.type] = 12;
         ProjectileID.Sets.TrailingMode[Projectile.type] = 2;
     }
 
@@ -183,8 +190,9 @@ public class GoldenTrinket : ModProjectile, ILocalizedModType
     public override void OnSpawn(IEntitySource source)
     {
         Projectile.velocity = Vector2.Zero;
-        Projectile.localAI[0] = Main.rand.Next(3);
-        Projectile.localAI[1] = Main.rand.Next(4);
+        Projectile.ai[2] = Main.rand.Next(8);
+
+        Projectile.netUpdate = true;
     }
 
     public override void AI()
@@ -243,7 +251,7 @@ public class GoldenTrinket : ModProjectile, ILocalizedModType
                 foreach (Projectile spear in Main.projectile.Where(p => p.active && p.type == ModContent.ProjectileType<GoldenJavelin>() && p.owner == Projectile.owner && (int)p.As<GoldenJavelin>().State == 1))
                 {
                     float collisionPoint = 0;
-                    colliding = Collision.CheckAABBvLineCollision(new(Projectile.Hitbox.X, Projectile.Hitbox.Y), Projectile.Hitbox.Size(), spear.Center + (spear.rotation.ToRotationVector2() * spear.width / 2f), spear.Center - (spear.rotation.ToRotationVector2() * spear.width / 2f), spear.height, ref collisionPoint);
+                    colliding = spear.As<GoldenJavelin>().Colliding(spear.Hitbox, Projectile.Hitbox).Value;
 
                     if(colliding)
                     {
@@ -357,6 +365,22 @@ public class GoldenTrinket : ModProjectile, ILocalizedModType
             Projectile.velocity = Projectile.velocity.RotatedBy(Main.rand.NextFloat(PiOver4 / 2f, PiOver4 + PiOver4 / 2f) * sign);
             Projectile.netUpdate = true;
         }
+
+        switch(Projectile.ai[2])
+        {
+            case 1:
+                target.AddBuff(ModContent.BuffType<Plague>(), 240);
+                break;
+            case 2:
+                target.AddBuff(ModContent.BuffType<CrushDepth>(), 240);
+                break;
+            case 3:
+                target.AddBuff(ModContent.BuffType<Wildfire>(), 240);
+                break;
+            case 5: 
+                target.AddBuff(ModContent.BuffType<ElementalMix>(), 120);
+                break;
+        }
     }
 
     public override bool OnTileCollide(Vector2 oldVelocity)
@@ -369,23 +393,19 @@ public class GoldenTrinket : ModProjectile, ILocalizedModType
 
     public override bool PreDraw(ref Color lightColor)
     {
-        Texture2D WhiteOutTexture = ModContent.Request<Texture2D>("Windfall/Assets/Projectiles/Boss/HandRingsWhiteOut" + (Projectile.localAI[1] == 0 ? 0 : 1)).Value;
-        Color color = Color.Black;
-        switch (Projectile.localAI[0])
+        Texture2D tex = WhiteOut.Value;
+        Rectangle frame = WhiteOut.Frame(8, 1, (int)Projectile.ai[2]);
+        Color color = Projectile.ai[2] switch
         {
-            case 0:
-                color = new(255, 133, 187);
-                break;
-            case 1:
-                color = new(253, 189, 53);
-                break;
-            case 2:
-                color = new(220, 216, 155);
-                break;
-        }
+            1 => new(57, 255, 109),
+            2 => new(20, 202, 255),
+            3 => new(255, 60, 60),
+            5 => new Color(Main.DiscoR + 50, Main.DiscoG + 50, Main.DiscoB + 50),
+            _ => new(253, 189, 53),
+        };
 
         //DrawAfterimagesCentered
-        if(AfterImageOpacity > 0)
+        if (AfterImageOpacity > 0)
             for (int i = 0; i < Projectile.oldPos.Length; i++)
             {
                 float rotation2 = Projectile.oldRot[i];
@@ -393,15 +413,14 @@ public class GoldenTrinket : ModProjectile, ILocalizedModType
                 Vector2 position = Projectile.oldPos[i] + (Projectile.Size / 2f) - Main.screenPosition + new Vector2(0f, Projectile.gfxOffY);
                 Color afterImageColor = Projectile.GetAlpha(color) * ((float)(Projectile.oldPos.Length - i) / (float)Projectile.oldPos.Length);
                 afterImageColor *= AfterImageOpacity;
-                Main.spriteBatch.Draw(WhiteOutTexture, position, null, afterImageColor, rotation2, WhiteOutTexture.Size() * 0.5f, Projectile.scale, effects2, 0f);
+                Main.EntitySpriteDraw(tex, position, frame, afterImageColor, rotation2, frame.Size() * 0.5f, Projectile.scale, effects2, 0f);
             }
 
         Vector2 drawPosition = Projectile.Center - Main.screenPosition;
 
-        Main.EntitySpriteDraw(WhiteOutTexture, drawPosition, null, color * Projectile.Opacity, Projectile.rotation, WhiteOutTexture.Size() * 0.5f, Projectile.scale * 1.25f * CircOutEasing(AfterImageOpacity, 1), SpriteEffects.None);
+        Main.EntitySpriteDraw(tex, drawPosition, frame, color * Projectile.Opacity, Projectile.rotation, frame.Size() * 0.5f, Projectile.scale * 1.25f * CircOutEasing(AfterImageOpacity, 1), SpriteEffects.None);
 
-        Texture2D tex = ModContent.Request<Texture2D>(Texture).Value;
-        Rectangle frame = tex.Frame(3, 4, (int)Projectile.ai[1], (int)Projectile.localAI[1]);
+        tex = TextureAssets.Projectile[Type].Value;
 
         Main.EntitySpriteDraw(tex, drawPosition, frame, Color.White * Projectile.Opacity, Projectile.rotation, frame.Size() * 0.5f, Projectile.scale, SpriteEffects.None);
 
@@ -412,17 +431,21 @@ public class GoldenTrinket : ModProjectile, ILocalizedModType
 public class GoldenJavelin : ModProjectile, ILocalizedModType
 {
     public new string LocalizationCategory => "Projectiles.Rogue";
-    public override string Texture => "Windfall/Assets/Projectiles/Boss/OratorJavelin";
+    public override string Texture => "Windfall/Assets/Items/Weapons/Rogue/Prodosia/ProdosiaThrow";
+    public static Asset<Texture2D> WhiteOut;
 
     public override void SetStaticDefaults()
     {
+        if (!Main.dedServ)
+            WhiteOut = ModContent.Request<Texture2D>(Texture + "WhiteOut");
+
         ProjectileID.Sets.TrailCacheLength[Projectile.type] = 6;
         ProjectileID.Sets.TrailingMode[Projectile.type] = 2;
     }
 
     public override void SetDefaults()
     {
-        Projectile.width = 32;
+        Projectile.width = 56;
         Projectile.height = 32;
         Projectile.friendly = true;
         Projectile.tileCollide = false;
@@ -585,36 +608,31 @@ public class GoldenJavelin : ModProjectile, ILocalizedModType
         }
     }
 
-    public override void ModifyDamageHitbox(ref Rectangle hitbox)
+    public override bool? Colliding(Rectangle projHitbox, Rectangle targetHitbox)
     {
-        Vector2 rotation = Projectile.rotation.ToRotationVector2() * 38f;
-        hitbox.Location = new Point((int)(hitbox.Location.X + rotation.X), (int)(hitbox.Location.Y + rotation.Y));
+        return CalamityUtils.RotatingHitboxCollision(Projectile, targetHitbox.TopLeft(), targetHitbox.Size(), Projectile.rotation.ToRotationVector2(), Projectile.scale);
     }
 
     public override bool PreDraw(ref Color lightColor)
     {
-        Texture2D WhiteOutTexture = ModContent.Request<Texture2D>(Texture + "WhiteOut").Value;
-        Color color = Color.Black;
-        switch (Projectile.localAI[0])
-        {
-            case 0:
-                color = new(253, 189, 53);
-                break;
-            case 1:
-                color = new(255, 133, 187);
-                break;
-            case 2:
-                color = new(220, 216, 155);
-                break;
-        }
+        Texture2D tex = WhiteOut.Value;
+        Color color = new(253, 189, 53);
 
-        DrawAfterimagesCentered(Projectile, ProjectileID.Sets.TrailingMode[Projectile.type], color * AfterImageOpacity, 2, texture: WhiteOutTexture);
-        
-        Texture2D tex = ModContent.Request<Texture2D>(Texture).Value;
+        if (AfterImageOpacity > 0)
+            for (int i = 0; i < Projectile.oldPos.Length; i++)
+            {
+                float rotation2 = Projectile.oldRot[i];
+                SpriteEffects effects2 = ((Projectile.oldSpriteDirection[i] == -1) ? SpriteEffects.FlipHorizontally : SpriteEffects.None);
+                Vector2 position = Projectile.oldPos[i] + (Projectile.Size / 2f) - Main.screenPosition + new Vector2(0f, Projectile.gfxOffY);
+                Color afterImageColor = Projectile.GetAlpha(color) * ((float)(Projectile.oldPos.Length - i) / (float)Projectile.oldPos.Length);
+                afterImageColor *= AfterImageOpacity;
+                Main.EntitySpriteDraw(tex, position, null, afterImageColor, rotation2 + PiOver4, tex.Size() * 0.5f, Projectile.scale, 0, 0f);
+            }
+
+        tex = TextureAssets.Projectile[Type].Value;
         Vector2 drawPosition = Projectile.Center - Main.screenPosition;
-        Rectangle frame = tex.Frame(1, 3, 0, (int)Projectile.localAI[0]);
 
-        Main.EntitySpriteDraw(tex, drawPosition, frame, Color.White * Projectile.Opacity, Projectile.rotation, frame.Size() * 0.5f, Projectile.scale, SpriteEffects.None);
+        Main.EntitySpriteDraw(tex, drawPosition, null, Color.White * Projectile.Opacity, Projectile.rotation + PiOver4, tex.Size() * 0.5f, Projectile.scale, SpriteEffects.None);
 
         return false;
     }
