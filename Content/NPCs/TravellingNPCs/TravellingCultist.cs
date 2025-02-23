@@ -14,9 +14,6 @@ public class TravellingCultist : ModNPC, ILocalizedModType
     public override string Texture => "Windfall/Assets/NPCs/TravellingNPCs/TravellingCultist";
     public override string HeadTexture => "Windfall/Assets/NPCs/TravellingNPCs/TravellingCultist_Head";
 
-    public const double despawnTime = 48600.0;
-    public static double spawnTime = double.MaxValue;
-    private static Profiles.StackedNPCProfile NPCProfile;
 
     public override void SetBestiary(BestiaryDatabase database, BestiaryEntry bestiaryEntry)
     {
@@ -47,6 +44,9 @@ public class TravellingCultist : ModNPC, ILocalizedModType
     }
     private static bool MilestoneMet(DialogueState CurrentDialogue) => (CurrentDialogue == DialogueState.Quests1 && NPC.downedPlantBoss) || (CurrentDialogue == DialogueState.Quests2 && LunarCultBaseSystem.Recruits.Count == 4) || (CurrentDialogue == DialogueState.Quests3 && RitualQuestProgress >= 3) || (CurrentDialogue == DialogueState.QuestsEnd && RitualQuestProgress < 4);
 
+    public const double despawnTime = 48600.0;
+    public static double spawnTime = double.MaxValue;
+    private static Profiles.StackedNPCProfile NPCProfile;
     public override void SetStaticDefaults()
     {
         Main.npcFrameCount[Type] = 25;
