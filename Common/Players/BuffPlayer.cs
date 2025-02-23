@@ -6,6 +6,7 @@ public class BuffPlayer : ModPlayer
     public bool DeepSeeker = false;
     public bool WretchedHarvest = false;
     public bool Entropy = false;
+    public bool Wildfire = false;
 
     public override void ResetEffects()
     {
@@ -13,6 +14,7 @@ public class BuffPlayer : ModPlayer
         DeepSeeker = false;
         WretchedHarvest = false;
         Entropy = false;
+        Wildfire = false;
     }
     public override void UpdateDead()
     {
@@ -20,6 +22,7 @@ public class BuffPlayer : ModPlayer
         DeepSeeker = false;
         WretchedHarvest = false;
         Entropy = false;
+        Wildfire = false;
     }
     public override void PostUpdateMiscEffects()
     {
@@ -33,7 +36,16 @@ public class BuffPlayer : ModPlayer
     }
     public override void UpdateBadLifeRegen()
     {
+        if(Entropy || Wildfire)
+        {
+            if (Player.lifeRegen > 0)
+                Player.lifeRegen = 0;
+            Player.lifeRegenTime = 0;
+        }
+
         if(Entropy)
-            Player.lifeRegen = -150;
+            Player.lifeRegen -= 150;
+        if(Wildfire)
+            Player.lifeRegen -= 50;
     }
 }

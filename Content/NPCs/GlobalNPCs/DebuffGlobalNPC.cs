@@ -4,6 +4,17 @@ using Windfall.Content.Items.Weapons.Rogue;
 namespace Windfall.Content.NPCs.GlobalNPCs;
 public class DebuffGlobalNPC : GlobalNPC
 {
+    public bool Entropy = false;
+    public bool Wildfire = false;
+
+    public override bool InstancePerEntity => true;
+
+    public override void ResetEffects(NPC npc)
+    {
+        Entropy = false;
+        Wildfire = false;
+    }
+
     public override void UpdateLifeRegen(NPC npc, ref int damage)
     {
         if (npc.onFrostBurn2)
@@ -23,7 +34,20 @@ public class DebuffGlobalNPC : GlobalNPC
                     damage = projectileCount * 5;
             }
         }
+
+        if(Entropy)
+        {
+            int DoT = npc.lifeMax / 3;
+            npc.Calamity().ApplyDPSDebuff(DoT, DoT / 10, ref npc.lifeRegen, ref damage);
+        }
+
+        if(Wildfire)
+        {
+            int WildfireDamage = (int)(100 * HeatDamageMult(npc));
+            npc.Calamity().ApplyDPSDebuff(WildfireDamage, WildfireDamage / 5, ref npc.lifeRegen, ref damage);
+        }
     }
+
     public static double HeatDamageMult(NPC npc)
     {
         bool slimeGod = CalamityLists.SlimeGodIDs.Contains(npc.type);

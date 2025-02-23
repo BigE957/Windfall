@@ -1,4 +1,4 @@
-﻿using Terraria;
+﻿using CalamityMod.NPCs;
 using Windfall.Common.Graphics.Metaballs;
 
 namespace Windfall.Content.Buffs.DoT;
@@ -11,6 +11,9 @@ public class Entropy : ModBuff
         Main.debuff[Type] = true;
         Main.pvpBuff[Type] = true;
         Main.buffNoSave[Type] = true;
+
+        CalamityLists.debuffList.Add(Type);
+        CalamityGlobalNPC.moddedDebuffTextureList.Add((Texture, NPC => NPC.Debuff().Entropy));
     }
 
     public override void Update(Player player, ref int buffIndex)
@@ -25,8 +28,7 @@ public class Entropy : ModBuff
 
     public override void Update(NPC npc, ref int buffIndex)
     {
-        int DoT = npc.lifeMax / 2;
-        npc.Calamity().ApplyDPSDebuff(DoT, DoT / 5, ref npc.lifeRegen, ref npc.damage);
+        npc.Debuff().Entropy = true;
         if (Main.rand.NextBool())
         {
             Vector2 position = npc.Center + new Vector2(Main.rand.NextFloat(-npc.width / 2, npc.width / 2), Main.rand.NextFloat(-npc.height / 2, npc.height / 2));
