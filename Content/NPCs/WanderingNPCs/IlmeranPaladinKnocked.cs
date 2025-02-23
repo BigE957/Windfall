@@ -47,7 +47,7 @@ public class IlmeranPaladinKnocked : ModNPC
         }
         else
         {
-            ProgressiveQuestDialogueHelper(Main.npc[NPC.whoAmI]);
+            //ProgressiveQuestDialogueHelper(Main.npc[NPC.whoAmI]);
         }
     }
 
@@ -56,8 +56,8 @@ public class IlmeranPaladinKnocked : ModNPC
         new NPCShop(Type)
             .AddWithCustomValue<AmidiasSpark>(5000)
             .AddWithCustomValue<Cnidrisnack>(50)
-            .AddWithCustomValue<AncientIlmeranRod>(1000, WindfallConditions.ScoogHunt1ActiveOrCompleted)
-            .AddWithCustomValue<IlmeranHorn>(2000, WindfallConditions.ScoogHunt1Completed)
+            //.AddWithCustomValue<AncientIlmeranRod>(1000, WindfallConditions.ScoogHunt1ActiveOrCompleted)
+            //.AddWithCustomValue<IlmeranHorn>(2000, WindfallConditions.ScoogHunt1Completed)
             .Register();
     }
 

@@ -18,7 +18,7 @@ public class WindfallDropHelper : GlobalNPC
         if (npc.type == NPCID.DarkCaster)
             npcLoot.Add(ItemDropRule.Common(ItemID.WaterBolt, 10));
         if (npc.type == NPCID.AngryBones || npc.type == NPCID.AngryBonesBig || npc.type == NPCID.AngryBonesBigHelmet || npc.type == NPCID.AngryBonesBigMuscle)
-            npcLoot.AddIf(() => TravellingCultist.QuestArtifact.Type == ModContent.ItemType<DeificInsignia>() && NPC.AnyNPCs(ModContent.NPCType<TravellingCultist>()), ModContent.ItemType<DeificInsignia>(), 5);
+            npcLoot.AddIf(() => TravellingCultist.QuestItem.Item1 == ModContent.ItemType<DeificInsignia>() && NPC.AnyNPCs(ModContent.NPCType<TravellingCultist>()), ModContent.ItemType<DeificInsignia>(), 5);
         
         if (npc.type == NPCID.DiabolistRed || npc.type == NPCID.DiabolistWhite)
             npcLoot.AddIf(() => Main.LocalPlayer.LunarCult().apostleQuestTracker == 5, ModContent.ItemType<DiabolicalInsense>(), 5);

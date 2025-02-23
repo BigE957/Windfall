@@ -75,14 +75,14 @@ public class IlmeranPaladin : ModNPC
     public override void SetBestiary(BestiaryDatabase database, BestiaryEntry bestiaryEntry)
     {
         // We can use AddRange instead of calling Add multiple times in order to add multiple items at once
-        bestiaryEntry.Info.AddRange(new IBestiaryInfoElement[] {
+        bestiaryEntry.Info.AddRange([
 			// Sets the preferred biomes of this town NPC listed in the bestiary.
 			// With Town NPCs, you usually set this to what biome it likes the most in regards to NPC happiness.
 			BestiaryDatabaseNPCsPopulator.CommonTags.SpawnConditions.Biomes.Desert,
 
 			// Sets your NPC's flavor text in the bestiary.
 			new FlavorTextBestiaryInfoElement(GetWindfallTextValue($"Bestiary.{nameof(IlmeranPaladin)}")),
-    });
+    ]);
     }
 
     public override void HitEffect(NPC.HitInfo hit)
@@ -159,16 +159,16 @@ public class IlmeranPaladin : ModNPC
     {
         if (firstButton)
             shop = "Shop";
-        else
-            ProgressiveQuestDialogueHelper(Main.npc[NPC.whoAmI]);
+        //else
+            //ProgressiveQuestDialogueHelper(Main.npc[NPC.whoAmI]);
     }
     public override void AddShops()
     {
         new NPCShop(Type)
             .AddWithCustomValue<AmidiasSpark>(50000)
             .AddWithCustomValue<Cnidrisnack>(500)
-            .AddWithCustomValue<AncientIlmeranRod>(10000, WindfallConditions.ScoogHunt1ActiveOrCompleted)
-            .AddWithCustomValue<IlmeranHorn>(20000, WindfallConditions.ScoogHunt1Completed)
+            //.AddWithCustomValue<AncientIlmeranRod>(10000, WindfallConditions.ScoogHunt1ActiveOrCompleted)
+            //.AddWithCustomValue<IlmeranHorn>(20000, WindfallConditions.ScoogHunt1Completed)
             .Register();
     }
     public override bool CheckActive() => !NPC.AnyNPCs(ModContent.NPCType<DesertScourgeHead>());

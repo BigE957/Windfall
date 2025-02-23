@@ -1,0 +1,37 @@
+{
+  "Dialogues": [
+    {
+      "DialogueText": [ { "Text": "Replace Me!" } ],
+      "Responses": [
+        {
+          "Title": "Here you go!",
+          "Heading": 2
+        },
+        {
+          "Title": "Bye!"
+        }
+      ]
+    },
+    {
+      "DialogueText": [ { "Text": "Replace Me!" } ],
+      "Responses": [
+        {
+          "Title": "Here you go!",
+          "Heading": 2
+        },
+        {
+          "Title": "Bye!"
+        }
+      ]
+    },
+    {
+      "DialogueText": [ { "Text": "Replace Me!" } ],
+      "Responses": [
+        {
+          "Title": "Bye!"
+        }
+      ]
+    }
+  ],
+  "Characters": []
+}

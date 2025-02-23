@@ -122,7 +122,7 @@ public class GodseekerKnight : ModNPC
     }
     private DialogueState Dialogue;
     private string Topic = "";
-
+    /*
     private readonly List<dialogueDirections> MyDialogue =
     [
         #region Initial Conversation
@@ -198,6 +198,7 @@ public class GodseekerKnight : ModNPC
         },
         #endregion
     ];
+    */
     public override string GetChat()
     {
         Player player = Main.player[Main.myPlayer];
@@ -236,6 +237,7 @@ public class GodseekerKnight : ModNPC
         WorldSaveSystem.GodseekerKnightChats++;
         return chat;
     }
+    /*
     public override void SetChatButtons(ref string button, ref string button2)
     {
         if (Dialogue != DialogueState.Neutral)
@@ -290,7 +292,7 @@ public class GodseekerKnight : ModNPC
             Main.npcChatText = GetWindfallTextValue($"Dialogue.{nameof(GodseekerKnight)}.Conversation.{Topic}.{Dialogue}");
         }
     }
-
+    */
     public override bool CheckActive() => !NPC.AnyNPCs(ModContent.NPCType<HiveMind>());
     public override void TownNPCAttackStrength(ref int damage, ref float knockback)
     {

@@ -597,7 +597,7 @@ Dialogue: {
 						End: Oh my! What a marvel! How awful that something so beautiful had to die... Thank you again for the help. We're so close to being able to begin the Sealing Ritual. I'll let you know when I narrow down what we else we need. I do wonder, though, why the Dragons went through with this ritual when it cost one of their kind... I suppose they had no choice.
 					}
 
-					PrimalLightShard: {
+					PrimordialLightShard: {
 						Start: Good news! We need just one more thing before we're ready to begin the sealing ritual! Though... This may be the most difficult thing to acquire. Legend states that the Dragon King used the power of "Primordial Light" to ultimately seal away the behemoth. There's only one entity I know of that might allow us to harness this power: the self-appointed "Empress of Light". Perhaps she holds something that would allow us to harness the power of the Light, as the Dragons' mighty King once did.
 						During: I must warn you not to face the Empress during the day. As light bathes the land, she too can harness Primordial Light. Facing her at night would be a far wiser choice.
 						End: Ah ha! This shard certainly holds a unique power. Its radiance... this must be what we're looking for! I'll need some time to finish preparing for the ritual, but I'll notify you once we're ready. I can taste our victory over the Selenic Order just over the horizon.
@@ -1490,6 +1490,11 @@ Items: {
 		HandStatue: {
 			DisplayName: Hand Statue
 			Tooltip: Fits in the palm of your hand... Somehow...
+		}
+
+		DraconicSkeletonItem: {
+			DisplayName: Draconic Skeleton Item
+			Tooltip: ""
 		}
 	}
 

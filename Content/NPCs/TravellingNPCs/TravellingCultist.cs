@@ -5,6 +5,8 @@ using Windfall.Common.Systems;
 using Windfall.Common.Systems.WorldEvents;
 using Windfall.Content.NPCs.WorldEvents.LunarCult;
 using DialogueHelper.UI.Dialogue;
+using Windfall.Content.Items.Quest.SealingRitual;
+using Terraria;
 
 namespace Windfall.Content.NPCs.TravellingNPCs;
 
@@ -92,7 +94,7 @@ public class TravellingCultist : ModNPC, ILocalizedModType
             return; 
         }
         QuestComplete = false;
-        QuestArtifact = new(0, 0);
+        QuestItem = null;
         if (MilestoneMet(CurrentDialogue))
             CurrentDialogue++;
     }
@@ -120,7 +122,8 @@ public class TravellingCultist : ModNPC, ILocalizedModType
         NPCID.Sets.ShimmerTownTransform[Type] = false;
         NPCID.Sets.NoTownNPCHappiness[Type] = true;
         //NPCID.Sets.FaceEmote[Type] = ModContent.EmoteBubbleType<TravellingCultist>();
-        ModContent.GetInstance<DialogueUISystem>().DialogueClose += CloseEffect;
+        ModContent.GetInstance<DialogueUISystem>().DialogueOpen += ModifyTree;
+        ModContent.GetInstance<DialogueUISystem>().DialogueClose += CloseTree;
 
         // Influences how the NPC looks in the Bestiary
         NPCID.Sets.NPCBestiaryDrawModifiers drawModifiers = new()
@@ -170,7 +173,22 @@ public class TravellingCultist : ModNPC, ILocalizedModType
             "Suspicious Looking Cultist",
         ];
     }
-    public static QuestItem QuestArtifact = new(0, 0);
+
+    public static readonly List<Tuple<int, int>> RitualQuestItems =
+    [
+        new(ModContent.ItemType<TabletFragment>(), 1),
+        new (ModContent.ItemType<DraconicBone>(), 1),
+        new (ModContent.ItemType<PrimalLightShard>(), 1),
+    ];
+
+    public static readonly List<Tuple<int, int>> DungeonQuestItems =
+    [
+        new (ItemID.Bone, 50),
+        new (ItemID.WaterBolt, 1),
+        new (ModContent.ItemType<DeificInsignia>(), 5),
+    ];
+
+    public static Tuple<int, int> QuestItem = null;
     public static bool QuestComplete = false;
     public static int RitualQuestProgress = 0;
     private enum DialogueState
@@ -192,80 +210,144 @@ public class TravellingCultist : ModNPC, ILocalizedModType
     public override bool CanChat() => NPC.ai[3] != 1 && !ModContent.GetInstance<DialogueUISystem>().isDialogueOpen;
     public override string GetChat()
     {
+        Main.CloseNPCChatOrSign();
+
         if (!CurrentDialogue.ToString().Contains("Quests"))
         {
-            Main.CloseNPCChatOrSign();
-
             ModContent.GetInstance<DialogueUISystem>().DisplayDialogueTree(Windfall.Instance, "TravellingCultist/" + CurrentDialogue.ToString(), new(Name, [NPC.whoAmI]));
-
-            return base.GetChat();
         }
-        WeightedRandom<string> chat = new();
-
-        chat.Add(GetWindfallTextValue("Dialogue.LunarCult.TravellingCultist.Chat.Standard1"));
-        chat.Add(GetWindfallTextValue("Dialogue.LunarCult.TravellingCultist.Chat.Standard2"));
-        chat.Add(GetWindfallTextValue("Dialogue.LunarCult.TravellingCultist.Chat.Standard3"));
-        if (NPC.AnyNPCs(NPCID.Mechanic) || NPC.AnyNPCs(NPCID.Clothier))
+        else
         {
-            chat.Add(GetWindfallTextValue("Dialogue.LunarCult.TravellingCultist.Chat.AnyDungeonNPC"));
-            if (NPC.AnyNPCs(NPCID.Mechanic))
-                chat.Add(GetWindfallTextValue("Dialogue.LunarCult.TravellingCultist.Chat.Mechanic"));
-            if (NPC.AnyNPCs(NPCID.Clothier))
-                chat.Add(GetWindfallTextValue("Dialogue.LunarCult.TravellingCultist.Chat.Clothier"));
+            ModContent.GetInstance<DialogueUISystem>().DisplayDialogueTree(Windfall.Instance, "FetchQuest", new(Name, [NPC.whoAmI]));
         }
-        if (NPC.downedBoss3)
-            if(Main.rand.NextBool(10))
-                chat.Add(GetWindfallTextValue($"Dialogue.LunarCult.TravellingCultist.Chat.SkeletronRare"));
+        
+        return "";
+    }
+    private static void ModifyTree(string treeKey, int dialogueID, int buttonID)
+    {
+        DialogueUISystem uiSystem = ModContent.GetInstance<DialogueUISystem>();
+        if (uiSystem.CurrentDialogueContext.Catagory != "TravellingCultist")
+            return;
+
+        if(QuestItem == null)
+        {
+            if (CurrentDialogue == DialogueState.Quests3)
+                QuestItem = RitualQuestItems[RitualQuestProgress];
             else
-                chat.Add(GetWindfallTextValue($"Dialogue.LunarCult.TravellingCultist.Chat.Skeletron"));
-        for (int i = 0; i < LunarCultBaseSystem.Recruits.Count; i++)
-            chat.Add(GetWindfallTextValue($"Dialogue.LunarCult.TravellingCultist.Chat.{(RecruitableLunarCultist.RecruitNames)i}"));
-        return chat;
+                QuestItem = DungeonQuestItems[Main.rand.Next(3)];
+        }
+
+        switch (treeKey)
+        {
+            case "TravellingCultist/Default":
+                #region Random Text
+                WeightedRandom<string> chat = new();
+
+                chat.Add(GetWindfallTextValue("Dialogue.LunarCult.TravellingCultist.Chat.Standard1"));
+                chat.Add(GetWindfallTextValue("Dialogue.LunarCult.TravellingCultist.Chat.Standard2"));
+                chat.Add(GetWindfallTextValue("Dialogue.LunarCult.TravellingCultist.Chat.Standard3"));
+                if (NPC.AnyNPCs(NPCID.Mechanic) || NPC.AnyNPCs(NPCID.Clothier))
+                {
+                    chat.Add(GetWindfallTextValue("Dialogue.LunarCult.TravellingCultist.Chat.AnyDungeonNPC"));
+                    if (NPC.AnyNPCs(NPCID.Mechanic))
+                        chat.Add(GetWindfallTextValue("Dialogue.LunarCult.TravellingCultist.Chat.Mechanic"));
+                    if (NPC.AnyNPCs(NPCID.Clothier))
+                        chat.Add(GetWindfallTextValue("Dialogue.LunarCult.TravellingCultist.Chat.Clothier"));
+                }
+                if (NPC.downedBoss3)
+                    if (Main.rand.NextBool(10))
+                        chat.Add(GetWindfallTextValue($"Dialogue.LunarCult.TravellingCultist.Chat.SkeletronRare"));
+                    else
+                        chat.Add(GetWindfallTextValue($"Dialogue.LunarCult.TravellingCultist.Chat.Skeletron"));
+                for (int i = 0; i < LunarCultBaseSystem.Recruits.Count; i++)
+                    chat.Add(GetWindfallTextValue($"Dialogue.LunarCult.TravellingCultist.Chat.{(RecruitableLunarCultist.RecruitNames)i}"));
+
+                uiSystem.CurrentTree.Dialogues[0].DialogueText[0].Text = chat;
+                #endregion
+                switch (LunarCultBaseSystem.Recruits.Count)
+                {
+                    case 0:
+                        uiSystem.CurrentTree.Dialogues[1].DialogueText[0].Text = GetWindfallTextValue("Dialogue.LunarCult.TravellingCultist.Recruits.None");
+                        break;
+                    case 1:
+                        uiSystem.CurrentTree.Dialogues[1].DialogueText[0].Text = GetWindfallLocalText("Dialogue.LunarCult.TravellingCultist.Recruits.One").Format((RecruitableLunarCultist.RecruitNames)LunarCultBaseSystem.Recruits[0]);
+                        break;
+                    case 2:
+                        uiSystem.CurrentTree.Dialogues[1].DialogueText[0].Text = GetWindfallLocalText("Dialogue.LunarCult.TravellingCultist.Recruits.Two").Format((RecruitableLunarCultist.RecruitNames)LunarCultBaseSystem.Recruits[0], (RecruitableLunarCultist.RecruitNames)LunarCultBaseSystem.Recruits[1]);
+                        break;
+                    case 3:
+                        uiSystem.CurrentTree.Dialogues[1].DialogueText[0].Text = GetWindfallLocalText("Dialogue.LunarCult.TravellingCultist.Recruits.Three").Format((RecruitableLunarCultist.RecruitNames)LunarCultBaseSystem.Recruits[0], (RecruitableLunarCultist.RecruitNames)LunarCultBaseSystem.Recruits[1], (RecruitableLunarCultist.RecruitNames)LunarCultBaseSystem.Recruits[2]);
+                        break;
+                    case 4:
+                        uiSystem.CurrentTree.Dialogues[1].DialogueText[0].Text = GetWindfallTextValue("Dialogue.LunarCult.TravellingCultist.Recruits.Four");
+                        break;
+                }
+
+                if (CurrentDialogue.ToString().Contains("Quests"))
+                    uiSystem.CurrentTree.Dialogues[0].Responses[0].Requirement = true;
+                if (CurrentDialogue == DialogueState.Quests2)
+                    uiSystem.CurrentTree.Dialogues[0].Responses[1].Requirement = true;
+
+                break;
+            case "FetchQuest":
+                SetupFetchQuestTree(
+                    ref uiSystem,
+                    CurrentDialogue == DialogueState.Quests3 ? "LunarCult.TravellingCultist.Quests.Ritual." : "LunarCult.TravellingCultist.Quests.Dungeon.",
+                    "TheCalamity",//"TravellingCultist"
+                    QuestItem);
+                break;
+        }
+    }
+    private static void CloseTree(string treeKey, int dialogueID, int buttonID)
+    {
+        DialogueUISystem uiSystem = ModContent.GetInstance<DialogueUISystem>();
+        if (uiSystem.CurrentDialogueContext.Catagory != "TravellingCultist")
+            return;
+
+        NPC cultist = Main.npc[(int)uiSystem.CurrentDialogueContext.Arguments[0]];
+
+        switch (treeKey)
+        {
+            case "TravellingCultist/SearchForHelp":
+                CurrentDialogue = DialogueState.Quests1;
+                break;
+            case "TravellingCultist/LunarCultTalk":
+                CurrentDialogue = DialogueState.Quests2;
+                break;
+            case "TravellingCultist/AllRecruited":
+                CurrentDialogue = DialogueState.Quests3;
+                break;
+            case "TravellingCultist/RitualTalk":
+                CurrentDialogue = DialogueState.QuestsEnd;
+                    break;
+            case "FetchQuest":
+                if (dialogueID == 2)
+                {
+                    if(CurrentDialogue == DialogueState.Quests3)
+                        RitualQuestProgress++;
+                    Item.NewItem(cultist.GetSource_GiftOrReward(), cultist.Center, Vector2.UnitY.RotatedBy(Main.rand.NextFloat(-PiOver4, PiOver4)) * -4, ItemID.DungeonFishingCrateHard);
+                }
+                break;
+        }
     }
 
-    public override void SetChatButtons(ref string button, ref string button2)
-    {
-        if (CurrentDialogue.ToString().Contains("Quests"))
-            button = Language.GetTextValue("LegacyInterface.64");
-        if (CurrentDialogue == DialogueState.Quests2)
-            button2 = "Recruits";
-    }
+    /*
     public override void OnChatButtonClicked(bool firstButton, ref string shop)
     {
         if (firstButton && CurrentDialogue.ToString().Contains("Quests"))
         {
             if (CurrentDialogue == DialogueState.Quests3)
             {
-                QuestArtifact = CollectorQuestDialogueHelper(Main.npc[NPC.whoAmI], ref QuestComplete, QuestArtifact, QuestSystem.RitualQuestItems, RitualQuestProgress);
+                QuestArtifact = CollectorQuestDialogueHelper(Main.npc[NPC.whoAmI], ref QuestComplete, QuestArtifact, QuestSystem.RitualQuestItems, "LunarCult.TravellingCultist.Quests.Ritual", RitualQuestProgress);
                 if (QuestArtifact.Stack == 0)
                     RitualQuestProgress++;
             }
             else
-                QuestArtifact = CollectorQuestDialogueHelper(Main.npc[NPC.whoAmI], ref QuestComplete, QuestArtifact, QuestSystem.DungeonQuestItems);
+                QuestArtifact = CollectorQuestDialogueHelper(Main.npc[NPC.whoAmI], ref QuestComplete, QuestArtifact, QuestSystem.DungeonQuestItems, "LunarCult.TravellingCultist.Quests.Dungeon");
             return;
         }
-        else if (!firstButton && CurrentDialogue == DialogueState.Quests2)
-        {
-            switch (LunarCultBaseSystem.Recruits.Count)
-            {
-                case 0:
-                    Main.npcChatText = GetWindfallTextValue("Dialogue.LunarCult.TravellingCultist.Recruits.None");
-                    break;
-                case 1:
-                    Main.npcChatText = GetWindfallLocalText("Dialogue.LunarCult.TravellingCultist.Recruits.One").Format((RecruitableLunarCultist.RecruitNames)LunarCultBaseSystem.Recruits[0]);
-                    break;
-                case 2:
-                    Main.npcChatText = GetWindfallLocalText("Dialogue.LunarCult.TravellingCultist.Recruits.Two").Format((RecruitableLunarCultist.RecruitNames)LunarCultBaseSystem.Recruits[0], (RecruitableLunarCultist.RecruitNames)LunarCultBaseSystem.Recruits[1]);
-                    break;
-                case 3:
-                    Main.npcChatText = GetWindfallLocalText("Dialogue.LunarCult.TravellingCultist.Recruits.Three").Format((RecruitableLunarCultist.RecruitNames)LunarCultBaseSystem.Recruits[0], (RecruitableLunarCultist.RecruitNames)LunarCultBaseSystem.Recruits[1], (RecruitableLunarCultist.RecruitNames)LunarCultBaseSystem.Recruits[2]);
-                    break;
-                case 4:
-                    Main.npcChatText = GetWindfallTextValue("Dialogue.LunarCult.TravellingCultist.Recruits.Four");
-                    break;
-            }
-        }
     }
+    */
     public override void AI()
     {
         NPC.homeless = true;
@@ -288,22 +370,4 @@ public class TravellingCultist : ModNPC, ILocalizedModType
         attackDelay = 1;
     }
     private static bool MilestoneMet(DialogueState CurrentDialogue) => (CurrentDialogue == DialogueState.Quests1 && NPC.downedPlantBoss) || (CurrentDialogue == DialogueState.Quests2 && LunarCultBaseSystem.Recruits.Count == 4) || (CurrentDialogue == DialogueState.Quests3 && RitualQuestProgress >= 3) || (CurrentDialogue == DialogueState.QuestsEnd && RitualQuestProgress < 4);
-    private static void CloseEffect(string treeKey, int dialogueID, int buttonID)
-    {
-        switch(treeKey)
-        {
-            case "TravellingCultist/SearchForHelp":
-                CurrentDialogue = DialogueState.Quests1;
-                break;
-            case "TravellingCultist/LunarCultTalk":
-                CurrentDialogue = DialogueState.Quests2;
-                break;
-            case "TravellingCultist/AllRecruited":
-                CurrentDialogue = DialogueState.Quests3;
-                break;
-            case "TravellingCultist/RitualTalk":
-                CurrentDialogue = DialogueState.QuestsEnd;
-                break;
-        }
-    }
 }

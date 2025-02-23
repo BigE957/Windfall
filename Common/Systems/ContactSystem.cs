@@ -22,6 +22,7 @@ public class ContactSystem : ModSystem
                 else
                     Main.item[targetItem].active = false;
                 SoundEngine.PlaySound(SoundID.Item2, Main.npc[targetNPC].Center);
+                /*
                 int index = QuestSystem.QuestLog.FindIndex(quest => quest.Name == "CnidrionHunt");
                 if (index != -1)
                 {
@@ -38,6 +39,7 @@ public class ContactSystem : ModSystem
                         QuestSystem.IncrementQuestProgress(index);
                     }
                 }
+                */
             }
         }
     }
