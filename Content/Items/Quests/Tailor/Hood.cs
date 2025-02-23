@@ -1,4 +1,4 @@
-﻿namespace Windfall.Content.Items.Quest.Tailor;
+﻿namespace Windfall.Content.Items.Quests.Tailor;
 
 public class Hood : ModItem, ILocalizedModType
 {

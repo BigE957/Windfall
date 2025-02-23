@@ -1,7 +1,7 @@
 ﻿using Terraria.GameContent.UI.Elements;
 using Terraria.UI;
 using Windfall.Common.Systems.WorldEvents;
-using Windfall.Content.Items.Quest.Tailor;
+using Windfall.Content.Items.Quests.Tailor;
 
 namespace Windfall.Content.UI.Activities;
 internal class TailorInstructionsUIState : UIState

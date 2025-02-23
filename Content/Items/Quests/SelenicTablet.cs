@@ -3,7 +3,7 @@ using Windfall.Content.NPCs.Bosses.Orator;
 using Windfall.Content.Projectiles.Other;
 using Windfall.Content.UI.Selenic;
 
-namespace Windfall.Content.Items.Quest;
+namespace Windfall.Content.Items.Quests;
 
 public class SelenicTablet : ModItem, ILocalizedModType
 {

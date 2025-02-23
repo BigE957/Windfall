@@ -17,6 +17,19 @@ namespace Windfall.Content.NPCs.WanderingNPCs;
 public class IlmeranPaladin : ModNPC
 {
     private static Profiles.StackedNPCProfile NPCProfile;
+    public override void SetBestiary(BestiaryDatabase database, BestiaryEntry bestiaryEntry)
+    {
+        // We can use AddRange instead of calling Add multiple times in order to add multiple items at once
+        bestiaryEntry.Info.AddRange([
+			// Sets the preferred biomes of this town NPC listed in the bestiary.
+			// With Town NPCs, you usually set this to what biome it likes the most in regards to NPC happiness.
+			BestiaryDatabaseNPCsPopulator.CommonTags.SpawnConditions.Biomes.Desert,
+
+			// Sets your NPC's flavor text in the bestiary.
+			new FlavorTextBestiaryInfoElement(GetWindfallTextValue($"Bestiary.{nameof(IlmeranPaladin)}")),
+    ]);
+    }
+
     public override string Texture => "Windfall/Assets/NPCs/WanderingNPCs/IlmeranPaladin";
     public override void SetStaticDefaults()
     {
@@ -51,7 +64,7 @@ public class IlmeranPaladin : ModNPC
     }
     public override void SetDefaults()
     {
-        NPC.friendly = true; // NPC Will not attack player
+        NPC.friendly = true;
         NPC.width = 18;
         NPC.height = 40;
         NPC.aiStyle = 7;
@@ -71,38 +84,9 @@ public class IlmeranPaladin : ModNPC
         if (NPC.ai[1] != 0)
             NPC.spriteDirection = NPC.direction = (int)NPC.ai[1] * -1;
     }
+
     public override bool CanChat() => true;
-    public override void SetBestiary(BestiaryDatabase database, BestiaryEntry bestiaryEntry)
-    {
-        // We can use AddRange instead of calling Add multiple times in order to add multiple items at once
-        bestiaryEntry.Info.AddRange([
-			// Sets the preferred biomes of this town NPC listed in the bestiary.
-			// With Town NPCs, you usually set this to what biome it likes the most in regards to NPC happiness.
-			BestiaryDatabaseNPCsPopulator.CommonTags.SpawnConditions.Biomes.Desert,
 
-			// Sets your NPC's flavor text in the bestiary.
-			new FlavorTextBestiaryInfoElement(GetWindfallTextValue($"Bestiary.{nameof(IlmeranPaladin)}")),
-    ]);
-    }
-
-    public override void HitEffect(NPC.HitInfo hit)
-    {
-        // "Knocks out" the Ilmeran Paladin when the NPC is killed.
-        if (Main.netMode != NetmodeID.Server && NPC.life <= 0)
-        {
-            NPC.life = NPC.lifeMax;
-            NPC.velocity = new Vector2(0, 0);
-            NPC.Transform(ModContent.NPCType<IlmeranPaladinKnocked>());
-        }
-    }
-    public override ITownNPCProfile TownNPCProfile() => NPCProfile;
-    public override List<string> SetNPCNameList() => ["Nasser"];
-    public override float SpawnChance(NPCSpawnInfo spawnInfo)
-    {
-        if (spawnInfo.Player.ZoneDesert)
-            return 0.34f;
-        return 0f;
-    }
     public override string GetChat()
     {
         Player player = Main.player[Main.myPlayer];
@@ -165,13 +149,33 @@ public class IlmeranPaladin : ModNPC
     public override void AddShops()
     {
         new NPCShop(Type)
-            .AddWithCustomValue<AmidiasSpark>(50000)
-            .AddWithCustomValue<Cnidrisnack>(500)
-            //.AddWithCustomValue<AncientIlmeranRod>(10000, WindfallConditions.ScoogHunt1ActiveOrCompleted)
-            //.AddWithCustomValue<IlmeranHorn>(20000, WindfallConditions.ScoogHunt1Completed)
+            .AddWithCustomValue<AmidiasSpark>(5000)
+            .AddWithCustomValue<Cnidrisnack>(50)
+            .AddWithCustomValue<AncientIlmeranRod>(1000, WindfallConditions.ScoogHunt1ActiveOrComplete)
+            .AddWithCustomValue<IlmeranHorn>(20000, WindfallConditions.ScoogHunt1Complete)
             .Register();
     }
     public override bool CheckActive() => !NPC.AnyNPCs(ModContent.NPCType<DesertScourgeHead>());
+    public override void HitEffect(NPC.HitInfo hit)
+    {
+        // "Knocks out" the Ilmeran Paladin when the NPC is killed.
+        if (Main.netMode != NetmodeID.Server && NPC.life <= 0)
+        {
+            NPC.life = NPC.lifeMax;
+            NPC.velocity = new Vector2(0, 0);
+            NPC.Transform(ModContent.NPCType<IlmeranPaladinKnocked>());
+        }
+    }
+
+    #region Town NPC-ness
+    public override ITownNPCProfile TownNPCProfile() => NPCProfile;
+    public override List<string> SetNPCNameList() => ["Nasser"];
+    public override float SpawnChance(NPCSpawnInfo spawnInfo)
+    {
+        if (spawnInfo.Player.ZoneDesert)
+            return 0.34f;
+        return 0f;
+    }
     public override void TownNPCAttackStrength(ref int damage, ref float knockback)
     {
         damage = 10;
@@ -192,6 +196,7 @@ public class IlmeranPaladin : ModNPC
         multiplier = 12f;
         randomOffset = 2f;
     }
+    #endregion
     private static bool WearingVictideHelmet(Player player)
     {
         Item hat = player.armor[10];

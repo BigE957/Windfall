@@ -1,9 +1,9 @@
-﻿namespace Windfall.Content.Items.Quest.Tailor;
+﻿namespace Windfall.Content.Items.Quests.Tailor;
 
-public class LunarCultistHood : ModItem, ILocalizedModType
+public class LunarCultistRobes : ModItem, ILocalizedModType
 {
     public new string LocalizationCategory => "Items.Quest";
-    public override string Texture => $"Windfall/Assets/Items/Quest/Tailor/{nameof(LunarCultistHood)}";
+    public override string Texture => $"Windfall/Assets/Items/Quest/Tailor/{nameof(LunarCultistRobes)}";
     public override void SetDefaults()
     {
         Item.width = 22;
@@ -14,8 +14,8 @@ public class LunarCultistHood : ModItem, ILocalizedModType
     public override void AddRecipes()
     {
         CreateRecipe().
-            AddIngredient<DyedHood>().
-            AddIngredient(ItemID.Silk, 2).
+            AddIngredient<DyedRobes>().
+            AddIngredient(ItemID.Silk, 4).
             AddTile(TileID.Loom).
             Register();
     }

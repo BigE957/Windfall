@@ -1,9 +1,9 @@
-﻿namespace Windfall.Content.Items.Quest.Tailor;
+﻿namespace Windfall.Content.Items.Quests.Tailor;
 
-public class DyedRobes : ModItem, ILocalizedModType
+public class LunarDevoteeMask : ModItem, ILocalizedModType
 {
     public new string LocalizationCategory => "Items.Quest";
-    public override string Texture => $"Windfall/Assets/Items/Quest/Tailor/{nameof(DyedRobes)}";
+    public override string Texture => $"Windfall/Assets/Items/Quest/Tailor/{nameof(LunarDevoteeMask)}";
     public override void SetDefaults()
     {
         Item.width = 22;
@@ -14,8 +14,9 @@ public class DyedRobes : ModItem, ILocalizedModType
     public override void AddRecipes()
     {
         CreateRecipe().
-            AddIngredient(ItemID.Robe).
-            AddIngredient(ItemID.GreenandBlackDye).
+            AddIngredient<Mask>().
+            AddIngredient(ItemID.SilverDye).
+            AddIngredient(ItemID.BrownDye).
             AddTile(TileID.DyeVat).
             Register();
     }

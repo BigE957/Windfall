@@ -1,7 +1,7 @@
 ﻿using Windfall.Common.Systems.WorldEvents;
 using DialogueHelper.UI.Dialogue;
 using static Windfall.Common.Systems.WorldEvents.LunarCultBaseSystem;
-using Windfall.Content.Items.Quest.Cafeteria;
+using Windfall.Content.Items.Quests.Cafeteria;
 
 namespace Windfall.Content.NPCs.WorldEvents.LunarCult;
 

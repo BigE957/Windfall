@@ -5,7 +5,7 @@ using Windfall.Common.Systems;
 using Windfall.Common.Systems.WorldEvents;
 using Windfall.Content.NPCs.WorldEvents.LunarCult;
 using DialogueHelper.UI.Dialogue;
-using Windfall.Content.Items.Quest.SealingRitual;
+using Windfall.Content.Items.Quests.SealingRitual;
 
 namespace Windfall.Content.NPCs.TravellingNPCs;
 
@@ -13,7 +13,6 @@ public class TravellingCultist : ModNPC, ILocalizedModType
 {
     public override string Texture => "Windfall/Assets/NPCs/TravellingNPCs/TravellingCultist";
     public override string HeadTexture => "Windfall/Assets/NPCs/TravellingNPCs/TravellingCultist_Head";
-
 
     public override void SetBestiary(BestiaryDatabase database, BestiaryEntry bestiaryEntry)
     {
@@ -47,6 +46,7 @@ public class TravellingCultist : ModNPC, ILocalizedModType
     public const double despawnTime = 48600.0;
     public static double spawnTime = double.MaxValue;
     private static Profiles.StackedNPCProfile NPCProfile;
+
     public override void SetStaticDefaults()
     {
         Main.npcFrameCount[Type] = 25;

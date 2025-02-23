@@ -10,7 +10,7 @@ public class Windfall : Mod
     public override void Load()
     {
         Instance = this;
-        LunarCoinCurrencyID = CustomCurrencyManager.RegisterCurrency(new Content.Currencies.LunarCoinCurrency(ModContent.ItemType<Content.Items.Quest.LunarCoin>(), 99L, "Mods.Windfall.Currencies.LunarCoinCurrency"));
+        LunarCoinCurrencyID = CustomCurrencyManager.RegisterCurrency(new Content.Currencies.LunarCoinCurrency(ModContent.ItemType<Content.Items.Quests.LunarCoin>(), 99L, "Mods.Windfall.Currencies.LunarCoinCurrency"));
     }
     public override void Unload()
     {

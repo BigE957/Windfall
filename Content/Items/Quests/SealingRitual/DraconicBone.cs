@@ -1,4 +1,4 @@
-﻿namespace Windfall.Content.Items.Quest.SealingRitual;
+﻿namespace Windfall.Content.Items.Quests.SealingRitual;
 
 public class DraconicBone : ModItem, ILocalizedModType
 {

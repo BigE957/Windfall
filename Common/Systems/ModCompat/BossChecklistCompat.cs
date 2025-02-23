@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Windfall.Content.Items.Quest;
+using Windfall.Content.Items.Quests;
 using Windfall.Content.Items.Weapons.Summon;
 using Windfall.Content.NPCs.Bosses.Orator;
 

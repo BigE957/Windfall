@@ -1,4 +1,4 @@
-﻿namespace Windfall.Content.Items.Quest.Casters;
+﻿namespace Windfall.Content.Items.Quests.Casters;
 public class RaggedSack : ModItem, ILocalizedModType
 {
     public new string LocalizationCategory => "Items.Quest";

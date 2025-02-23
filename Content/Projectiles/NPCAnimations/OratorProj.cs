@@ -1,5 +1,5 @@
 ﻿using CalamityMod.Dusts;
-using Windfall.Content.Items.Quest;
+using Windfall.Content.Items.Quests;
 using Windfall.Content.NPCs.WorldEvents.LunarCult;
 
 namespace Windfall.Content.Projectiles.NPCAnimations;

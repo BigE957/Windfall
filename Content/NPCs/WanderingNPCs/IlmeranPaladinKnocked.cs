@@ -37,18 +37,12 @@ public class IlmeranPaladinKnocked : ModNPC
     public override string GetChat()
     {
         NPC.Transform(ModContent.NPCType<IlmeranPaladin>());
+
         return GetWindfallTextValue($"Dialogue.IlmeranPaladin.Chat.Saved");
     }
     public override void OnChatButtonClicked(bool firstButton, ref string shop)
     {
-        if (firstButton)
-        {
-            shop = "Shop";
-        }
-        else
-        {
-            //ProgressiveQuestDialogueHelper(Main.npc[NPC.whoAmI]);
-        }
+        new IlmeranPaladin().OnChatButtonClicked(firstButton, ref shop);
     }
 
     public override void AddShops()
@@ -56,20 +50,10 @@ public class IlmeranPaladinKnocked : ModNPC
         new NPCShop(Type)
             .AddWithCustomValue<AmidiasSpark>(5000)
             .AddWithCustomValue<Cnidrisnack>(50)
-            //.AddWithCustomValue<AncientIlmeranRod>(1000, WindfallConditions.ScoogHunt1ActiveOrCompleted)
-            //.AddWithCustomValue<IlmeranHorn>(2000, WindfallConditions.ScoogHunt1Completed)
+            .AddWithCustomValue<AncientIlmeranRod>(1000, WindfallConditions.ScoogHunt1ActiveOrComplete)
+            .AddWithCustomValue<IlmeranHorn>(20000, WindfallConditions.ScoogHunt1Complete)
             .Register();
     }
 
-    public override bool CheckActive()
-    {
-        if (NPC.AnyNPCs(ModContent.NPCType<DesertScourgeHead>()))
-        {
-            return false;
-        }
-        else
-        {
-            return true;
-        }
-    }
+    public override bool CheckActive() => !NPC.AnyNPCs(ModContent.NPCType<DesertScourgeHead>());
 }

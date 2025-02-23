@@ -1,5 +1,5 @@
 ﻿using Windfall.Content.Items.Placeables;
-using Windfall.Content.Items.Quest.SealingRitual;
+using Windfall.Content.Items.Quests.SealingRitual;
 
 namespace Windfall.Content.Tiles;
 public class DraconicSkeleton : ModTile

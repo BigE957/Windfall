@@ -120,7 +120,7 @@
     <None Remove="Content\Items\Placeables\Furnature\VerletHangers\Decorations\SelenicLantern.png" />
     <None Remove="Content\Items\Placeables\Furnature\WhiteStonePlaque.png" />
     <None Remove="Content\Items\Placeables\Special\DatabaseTerminalItem.png" />
-    <None Remove="Content\Items\Quest\LunarCoin.png" />
+    <None Remove="Content\Items\Quests\LunarCoin.png" />
     <None Remove="Content\Items\Utility\DraedonCharger.png" />
     <None Remove="Content\Items\Weapons\Melee\Boneripper.png" />
     <None Remove="Content\Items\Weapons\Misc\Cnidrisnack.png" />

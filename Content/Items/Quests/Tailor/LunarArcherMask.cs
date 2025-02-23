@@ -1,9 +1,9 @@
-﻿namespace Windfall.Content.Items.Quest.Tailor;
+﻿namespace Windfall.Content.Items.Quests.Tailor;
 
-public class LunarDevoteeMask : ModItem, ILocalizedModType
+public class LunarArcherMask : ModItem, ILocalizedModType
 {
     public new string LocalizationCategory => "Items.Quest";
-    public override string Texture => $"Windfall/Assets/Items/Quest/Tailor/{nameof(LunarDevoteeMask)}";
+    public override string Texture => $"Windfall/Assets/Items/Quest/Tailor/{nameof(LunarArcherMask)}";
     public override void SetDefaults()
     {
         Item.width = 22;

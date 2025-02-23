@@ -1,5 +1,5 @@
 ﻿using Terraria.UI;
-using Windfall.Content.Items.Quest;
+using Windfall.Content.Items.Quests;
 
 namespace Windfall.Content.UI.Selenic;
 

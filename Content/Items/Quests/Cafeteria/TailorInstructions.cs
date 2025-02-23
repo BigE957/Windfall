@@ -1,13 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using static Windfall.Content.UI.WanderersJournals.JournalFullUIState;
-using Windfall.Content.UI.Activities;
+﻿using Windfall.Content.UI.Activities;
 
-namespace Windfall.Content.Items.Quest.Cafeteria;
-public class ChefMenu : ModItem
+namespace Windfall.Content.Items.Quests.Cafeteria;
+internal class TailorInstructions : ModItem
 {
     public override string Texture => "Windfall/Assets/Items/Journals/JournalForest";
     public override void SetDefaults()
@@ -24,10 +18,10 @@ public class ChefMenu : ModItem
     {
         if (Main.myPlayer == player.whoAmI)
         {
-            if (!ChefMenuUISystem.isChefMenuOpen)
-                ModContent.GetInstance<ChefMenuUISystem>().ShowChefMenuUI();
+            if (!TailorInstructionsUISystem.IsTailorInstructionsOpen)
+                ModContent.GetInstance<TailorInstructionsUISystem>().ShowTailorInstructionsUI();
             else
-                ModContent.GetInstance<ChefMenuUISystem>().HideChefMenuUI();
+                ModContent.GetInstance<TailorInstructionsUISystem>().HideTailorInstructionsUI();
         }
         return true;
     }

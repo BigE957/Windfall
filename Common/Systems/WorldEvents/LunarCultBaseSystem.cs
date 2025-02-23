@@ -4,7 +4,7 @@ using Terraria.ModLoader.IO;
 using Terraria.Utilities;
 using Windfall.Common.Graphics.Metaballs;
 using Windfall.Content.Items.Food;
-using Windfall.Content.Items.Quest;
+using Windfall.Content.Items.Quests;
 using Windfall.Content.NPCs.WorldEvents.LunarCult;
 using Windfall.Content.NPCs.Critters;
 using Windfall.Content.Buffs.DoT;
@@ -12,7 +12,7 @@ using Windfall.Content.Projectiles.ProjectileAnimations;
 using Windfall.Content.UI;
 using Terraria.Enums;
 using DialogueHelper.UI.Dialogue;
-using Windfall.Content.Items.Quest.Cafeteria;
+using Windfall.Content.Items.Quests.Cafeteria;
 
 namespace Windfall.Common.Systems.WorldEvents;
 

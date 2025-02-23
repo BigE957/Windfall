@@ -68,9 +68,9 @@ public class IlmeranKnife : ModItem, ILocalizedModType
                     int index = Main.rand.Next(0, ClamLootPool.Count - 1);
                     Item.NewItem(Item.GetSource_DropAsItem(), target.Center, target.Size, ClamLootPool[index].Type, Main.rand.Next(ClamLootPool[index].MinStack, ClamLootPool[index].MaxStack));
                     ClamHitAmountFieldInfo.SetValue(clam, 3);
-                    //int questIndex = QuestSystem.QuestLog.FindIndex(quest => quest.Name == "ShuckinClams");
-                    //if (questIndex != -1)
-                    //    QuestSystem.IncrementQuestProgress(questIndex);
+                    Quest ShuckinClams = QuestSystem.Quests["ShuckinClams"];
+                    if (ShuckinClams.InProgress)
+                        ShuckinClams.IncrementProgress();
                 }
         }
         if (target.type == ModContent.NPCType<PrismBack>() || target.type == ModContent.NPCType<BlindedAngler>())

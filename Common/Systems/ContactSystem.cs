@@ -22,24 +22,20 @@ public class ContactSystem : ModSystem
                 else
                     Main.item[targetItem].active = false;
                 SoundEngine.PlaySound(SoundID.Item2, Main.npc[targetNPC].Center);
-                /*
-                int index = QuestSystem.QuestLog.FindIndex(quest => quest.Name == "CnidrionHunt");
-                if (index != -1)
+
+                Quest CnidrionHunt = QuestSystem.Quests["CnidrionHunt"];
+                if (CnidrionHunt.InProgress)
                 {
-                    if (QuestSystem.QuestLog[index].Active)
+                    CnidrionHunt.IncrementProgress();
+                    if (CnidrionHunt.Complete)
                     {
-                        if (QuestSystem.QuestLog[index].ObjectiveProgress[0] == 4)
+                        ModLoader.TryGetMod("CalValEX", out Mod CalVal);
+                        if (CalVal != null)
                         {
-                            ModLoader.TryGetMod("CalValEX", out Mod CalVal);
-                            if (CalVal != null)
-                            {
-                                Item.NewItem(null, Main.npc[targetNPC].Center, 8, 4, CalVal.Find<ModItem>("SunDriedShrimp").Type);
-                            }
+                            Item.NewItem(null, Main.npc[targetNPC].Center, 8, 4, CalVal.Find<ModItem>("SunDriedShrimp").Type);
                         }
-                        QuestSystem.IncrementQuestProgress(index);
                     }
                 }
-                */
             }
         }
     }

@@ -1,4 +1,4 @@
-﻿namespace Windfall.Content.Items.Quest;
+﻿namespace Windfall.Content.Items.Quests;
 
 public class LunarCoin : ModItem, ILocalizedModType
 {
