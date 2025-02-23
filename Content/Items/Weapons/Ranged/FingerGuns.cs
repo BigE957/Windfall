@@ -1,6 +1,7 @@
 ﻿using CalamityMod.Graphics.Primitives;
 using CalamityMod.Items;
 using Microsoft.Xna.Framework.Input;
+using SteelSeries.GameSense.DeviceZone;
 using System.Collections.ObjectModel;
 using Terraria.Graphics.Shaders;
 
@@ -175,12 +176,13 @@ public class FingerBolt : ModProjectile, ILocalizedModType
         direction = direction + Main.rand.NextFloat(-RotationOffset, RotationOffset);
 
         MyColor = Projectile.whoAmI % 2 == 0 ? myColor.Orange : myColor.Green;
+        Particle pulse = new DirectionalPulseRing(Projectile.Center + Projectile.velocity.SafeNormalize(Vector2.Zero) * 20, Projectile.velocity.SafeNormalize(Vector2.Zero) * 4f, MyColor == myColor.Green ? Color.MediumSeaGreen : Color.Orange, new(0.5f, 1f), Projectile.velocity.ToRotation(), 0f, 0.5f, 16);
+        GeneralParticleHandler.SpawnParticle(pulse);
 
         Time = 0;
 
         Projectile.netUpdate = true;
     }
-
     int localHitCount = 0;
 
     public override void AI()
@@ -376,7 +378,7 @@ public class FingerlingGun : ModProjectile, ILocalizedModType
                 if (rotationOffset != PiOver2)
                 {
                     if (Time == 0)
-                        Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center + toMouse.SafeNormalize(Projectile.rotation.ToRotationVector2()) * 6f, toMouse * 16f, ModContent.ProjectileType<FingerBolt>(), Projectile.damage / 2, 0, Projectile.owner, 1);
+                        Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center + toMouse.SafeNormalize(Projectile.rotation.ToRotationVector2()) * 6f, toMouse * 16f + Projectile.velocity, ModContent.ProjectileType<FingerBolt>(), Projectile.damage / 2, 0, Projectile.owner, 1);
                     if(Time >= 1)
                         rotationOffset = Lerp(0, PiOver2, SineOutEasing((Time - 1) / 8f, 1));
                     Time++;
