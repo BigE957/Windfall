@@ -1,7 +1,7 @@
 ﻿using Windfall.Content.Items.Placeables;
 using Windfall.Content.Items.Quest.SealingRitual;
 
-namespace Windfall.Content.Tiles.Furnature;
+namespace Windfall.Content.Tiles;
 public class DraconicSkeleton : ModTile
 {
     public override string Texture => "Windfall/Assets/Tiles/DraconicSkeleton";
@@ -49,7 +49,7 @@ public class DraconicSkeleton : ModTile
         //noItem = true;
         int boneType = ModContent.ItemType<DraconicBone>();
         if (/*TravellingCultist.QuestArtifact.Type == ModContent.ItemType<DraconicBone>() &&*/ !Main.item.Any(item => item.active && item.type == boneType) && !Main.LocalPlayer.inventory.Any(item => item.active && item.type == boneType))
-            Item.NewItem(Item.GetSource_None(), new Point(i, j).ToWorldCoordinates(), boneType);
+            Item.NewItem(Entity.GetSource_None(), new Point(i, j).ToWorldCoordinates(), boneType);
     }
 }
 

@@ -1,4 +1,4 @@
-﻿using Windfall.Content.Tiles.Furnature;
+﻿using Windfall.Content.Tiles;
 
 namespace Windfall.Content.Items.Placeables;
 public class DraconicSkeletonItem : ModItem, ILocalizedModType, IModType
