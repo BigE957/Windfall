@@ -3,6 +3,7 @@ using CalamityMod.Items.Armor.Victide;
 using CalamityMod.NPCs.DesertScourge;
 using CalamityMod.NPCs.TownNPCs;
 using CalamityMod.Projectiles.Rogue;
+using DialogueHelper.UI.Dialogue;
 using Terraria.GameContent.Bestiary;
 using Terraria.GameContent.Events;
 using Terraria.Utilities;
@@ -93,11 +94,12 @@ public class IlmeranPaladin : ModNPC
         WeightedRandom<string> chat = new();
         if (WorldSaveSystem.IlmeranPaladinChats == 0)
             return GetWindfallTextValue($"Dialogue.IlmeranPaladin.Chat.FirstChat");
-        if (NPC.ai[1] == 1)
+        if (NPC.ai[3] == 1)
         {
-            NPC.ai[1] = 0;
+            NPC.ai[3] = 0;
             return GetWindfallTextValue($"Dialogue.IlmeranPaladin.Chat.Saved");
         }
+
         if (Sandstorm.Happening)
             chat.Add(GetWindfallTextValue($"Dialogue.IlmeranPaladin.Chat.Sandstorm"));
         else
@@ -132,7 +134,10 @@ public class IlmeranPaladin : ModNPC
         chat.Add(GetWindfallTextValue($"Dialogue.IlmeranPaladin.Chat.Standard2"));
         chat.Add(GetWindfallTextValue($"Dialogue.IlmeranPaladin.Chat.Standard3"));
         WorldSaveSystem.IlmeranPaladinChats++;
-        return chat;
+
+        ModContent.GetInstance<DialogueUISystem>().DisplayDialogueTree(Windfall.Instance, "IlmeranPaladin/Default", new(Name, [NPC.whoAmI]));
+
+        return "";
     }
     public override void SetChatButtons(ref string button, ref string button2)
     {

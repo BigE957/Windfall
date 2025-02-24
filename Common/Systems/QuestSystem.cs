@@ -1,39 +1,52 @@
 ﻿using Terraria.ModLoader.IO;
 
 namespace Windfall.Common.Systems;
+
+public delegate void OnModUnload();
+public delegate void OnWorldLoad();
+public delegate void OnWorldUnload();
+public delegate void SaveWorldData(TagCompound tag);
+public delegate void LoadWorldData(TagCompound tag);
+
 public class Quest
 {
     public bool Active { get; set; }
-    public int Progress { get; private set; }
+    public int Progress { get; set; }
     public void IncrementProgress()
     {
-        Progress++;
+        if(InProgress)
+            Progress++;
     }
     public void ResetQuest()
     {
         Active = false;
         Progress = 0;
     }
-    public int CompletionAmount { get; private set; }
-    public bool Complete { get => Progress >= CompletionAmount; }
+    public int AmountToComplete { get; private set; }
+    public bool Complete { get => Progress >= AmountToComplete; }
     public bool InProgress { get => Active && !Complete; }
-    public float CompletionRatio { get => Progress / (float)CompletionAmount; }
+    public float CompletionRatio { get => Progress / (float)AmountToComplete; }
 
-    internal Quest(int completionAmount)
+    internal Quest(int amountToComplete, ref OnWorldLoad worldLoad, ref OnWorldUnload worldUnload, ref SaveWorldData saveWorld, ref LoadWorldData loadWorld)
     {
         Active = false;
         Progress = 0;
-        CompletionAmount = completionAmount;
+        AmountToComplete = amountToComplete;
+
+        worldLoad += ResetQuest;
+        worldUnload += ResetQuest;
+        saveWorld += SaveWorldData;
+        loadWorld += LoadWorldData;
     }
 
-    internal void SaveWorldData(TagCompound tag)
+    private void SaveWorldData(TagCompound tag)
     {
         if (Active)
             tag[nameof(Active)] = true;
         if (Progress != 0)
             tag[nameof(Progress)] = Progress;
     }
-    internal void LoadWorldData(TagCompound tag)
+    private void LoadWorldData(TagCompound tag)
     {
         Active = tag.GetBool(nameof(Active));
         Progress = tag.GetInt(nameof(Progress));
@@ -42,41 +55,64 @@ public class Quest
 
 public class QuestSystem : ModSystem
 {
-    public static readonly Dictionary<string, Quest> Quests;
+    public static OnWorldLoad WorldLoadEvent;
+    public static OnWorldUnload WorldUnloadEvent;
+    public static SaveWorldData SaveWorldEvent;
+    public static LoadWorldData LoadWorldEvent;
 
+    public static readonly Dictionary<string, Quest> Quests = [];
+
+    //Quest Initialization
     public override void OnModLoad()
     {
-        Quests.Add("CnidrionHunt", new Quest(3));
-        Quests.Add("ScoogHunt", new Quest(1));
-        Quests.Add("ShuckinClams", new Quest(8));
-        Quests.Add("ScoogHunt2", new Quest(1));
+        OnModUnload(); //Resets all data just in case
+
+        AddQuest("CnidrionHunt", 3);
+        AddQuest("ScoogHunt", 1);
+        AddQuest("ShuckinClams", 8);
+        AddQuest("TabletFragment", 1);
+        AddQuest("ScoogHunt2", 1);
+        AddQuest("PrimordialLightShard", 1);
+        AddQuest("Recruitment", 4);
+        AddQuest("DraconicBone", 1);
+        AddQuest("SealingRitual", 1);
     }
 
+    private static void AddQuest(string name, int amountToComplete)
+    {
+        if (Quests.ContainsKey(name))
+        {
+            Windfall.Instance.Logger.Warn("Already existing quest of name " + name + " was attempted to be added.");
+            return;
+        }
+        Quests.Add(name, new Quest(amountToComplete, ref WorldLoadEvent, ref WorldUnloadEvent, ref SaveWorldEvent, ref LoadWorldEvent));
+    }
+
+    #region Saving + Reseting
     public override void OnModUnload()
     {
+        WorldLoadEvent = null;
+        WorldUnloadEvent = null;
+        SaveWorldEvent = null;
+        LoadWorldEvent = null;
+
         Quests.Clear();
     }
-
-    #region Saving + Loading
     public override void OnWorldLoad()
     {
-        foreach (Quest quest in Quests.Values)
-            quest.ResetQuest();
+        WorldLoadEvent.Invoke();
     }
     public override void OnWorldUnload()
     {
-        foreach (Quest quest in Quests.Values)
-            quest.ResetQuest();
+        WorldUnloadEvent.Invoke();
     }
     public override void SaveWorldData(TagCompound tag)
     {
-        foreach (Quest quest in Quests.Values)
-            quest.SaveWorldData(tag);
+        SaveWorldEvent.Invoke(tag);
     }
     public override void LoadWorldData(TagCompound tag)
     {
-        foreach (Quest quest in Quests.Values)
-            quest.LoadWorldData(tag);
+        LoadWorldEvent.Invoke(tag);
     }
     #endregion
 }

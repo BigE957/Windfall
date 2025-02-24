@@ -78,13 +78,10 @@ public class SealingRitualSystem : ModSystem
         switch (State)
         {
             case SystemState.CheckReqs:
-                if (TravellingCultist.RitualQuestProgress != 4 || Recruits.Count < 4)
+                if (!QuestSystem.Quests["SealingRitual"].InProgress)
                    return;
-                else
-                {
-                    RitualTimer = -2;
-                    State = SystemState.Spawn;
-                }
+                RitualTimer = -2;
+                State = SystemState.Spawn;
                 break;
             case SystemState.Spawn:
                 if (RitualTimer == -2)
@@ -467,6 +464,7 @@ public class SealingRitualSystem : ModSystem
                 if (!RitualSequenceSeen)
                 {
                     RitualSequenceSeen = true;
+                    QuestSystem.Quests["SealingRitual"].IncrementProgress();
                     foreach (int i in NPCIndexs)
                     {
                         NPC npc = Main.npc[i];                        

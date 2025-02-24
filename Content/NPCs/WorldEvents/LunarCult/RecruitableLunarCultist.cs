@@ -1,6 +1,7 @@
 ﻿using CalamityMod.Projectiles.Ranged;
 using CalamityMod.Projectiles.Rogue;
 using DialogueHelper.UI.Dialogue;
+using Windfall.Common.Systems;
 using Windfall.Common.Systems.WorldEvents;
 using Windfall.Content.NPCs.Bosses.Orator;
 
@@ -145,7 +146,11 @@ public class RecruitableLunarCultist : ModNPC
         {
             if (!LunarCultBaseSystem.Recruits.Contains(TalkingTo))
                 LunarCultBaseSystem.Recruits.Add(TalkingTo);
+
+            QuestSystem.Quests["Recruitment"].Progress = LunarCultBaseSystem.Recruits.Count - 1;
+            QuestSystem.Quests["Recruitment"].IncrementProgress();
             LunarCultBaseSystem.RecruitmentsSkipped = 0;
+
             foreach (NPC npc in Main.npc.Where(n => n.active && n.type == ModContent.NPCType<RecruitableLunarCultist>()))
             {
                 if (npc.ModNPC is RecruitableLunarCultist recruit)

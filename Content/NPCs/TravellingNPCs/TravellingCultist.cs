@@ -36,12 +36,34 @@ public class TravellingCultist : ModNPC, ILocalizedModType
             NPC.direction = 1;
             return; 
         }
-        QuestStatus = questStatus.NotStarted;
+        FetchQuestStatus = questStatus.NotStarted;
         QuestItem = null;
-        if (MilestoneMet(CurrentDialogue))
+        
+        bool MilestoneMet = false;
+
+        switch(CurrentDialogue)
+        {
+            case DialogueState.DungeonQuest1:
+                if(Main.hardMode)
+                    MilestoneMet = true;
+                break;
+            case DialogueState.DungeonQuest2:
+                if (NPC.downedPlantBoss)
+                    MilestoneMet = true;
+                break;
+            case DialogueState.RitualQuest2:
+                if (QuestSystem.Quests["Recruitment"].Complete)
+                    MilestoneMet = true;
+                break;
+            case DialogueState.RitualQuest3:
+                if (QuestSystem.Quests["DraconicBone"].Complete)
+                    MilestoneMet = true;
+                break;
+        }
+
+        if (MilestoneMet)
             CurrentDialogue++;
     }
-    private static bool MilestoneMet(DialogueState CurrentDialogue) => (CurrentDialogue == DialogueState.Quests1 && NPC.downedPlantBoss) || (CurrentDialogue == DialogueState.Quests2 && LunarCultBaseSystem.Recruits.Count == 4) || (CurrentDialogue == DialogueState.Quests3 && RitualQuestProgress >= 3) || (CurrentDialogue == DialogueState.QuestsEnd && RitualQuestProgress < 4);
 
     public const double despawnTime = 48600.0;
     public static double spawnTime = double.MaxValue;
@@ -114,18 +136,18 @@ public class TravellingCultist : ModNPC, ILocalizedModType
         Started,
         Completed
     }
-    public static questStatus QuestStatus = questStatus.NotStarted;
-
-    public static int RitualQuestProgress = 0;
+    public static questStatus FetchQuestStatus = questStatus.NotStarted;
 
     private enum DialogueState
     {
         SearchForHelp,
-        Quests1,
+        DungeonQuest1,
+        RitualQuest1,
+        DungeonQuest2,
         LunarCultTalk,
-        Quests2,
+        RitualQuest2,
         AllRecruited,
-        Quests3,
+        RitualQuest3,
         RitualTalk,
         QuestsEnd,
     }
@@ -140,15 +162,55 @@ public class TravellingCultist : ModNPC, ILocalizedModType
     {
         Main.CloseNPCChatOrSign();
 
-        if (!CurrentDialogue.ToString().Contains("Quests"))
-        {
+        if (!CurrentDialogue.ToString().Contains("Quest"))
             ModContent.GetInstance<DialogueUISystem>().DisplayDialogueTree(Windfall.Instance, "TravellingCultist/" + CurrentDialogue.ToString(), new(Name, [NPC.whoAmI]));
+        else if (CurrentDialogue == DialogueState.RitualQuest1 && !QuestSystem.Quests["TabletFragment"].Active)
+            ModContent.GetInstance<DialogueUISystem>().DisplayDialogueTree(Windfall.Instance, "TravellingCultist/RitualDiscovered", new(Name, [NPC.whoAmI]));
+        else if (CurrentDialogue.ToString().Contains("Dungeon") && FetchQuestStatus != questStatus.Completed)
+            ModContent.GetInstance<DialogueUISystem>().DisplayDialogueTree(Windfall.Instance, "StandardQuestTree", new(Name, [NPC.whoAmI]), FetchQuestStatus == questStatus.Started ? 1 : 0);
+        else if (CurrentDialogue.ToString().Contains("Ritual"))
+        {
+            bool RitualQuestUp = false;
+            bool RitualQuestActive = false;
+
+            switch (CurrentDialogue)
+            {
+                case DialogueState.RitualQuest1:
+                    if(!QuestSystem.Quests["TabletFragment"].Complete)
+                    {
+                        RitualQuestUp = true;
+                        RitualQuestActive = QuestSystem.Quests["TabletFragment"].Active;
+                        if(!RitualQuestActive)
+                            QuestSystem.Quests["TabletFragment"].Active = true;
+                    }
+                    break;
+                case DialogueState.RitualQuest2:
+                    if (!QuestSystem.Quests["PrimordialLightShard"].Complete)
+                    {
+                        RitualQuestUp = true;
+                        RitualQuestActive = QuestSystem.Quests["PrimordialLightShard"].Active;
+                        if (!RitualQuestActive)
+                            QuestSystem.Quests["PrimordialLightShard"].Active = true;
+                    }
+                    break;
+                case DialogueState.RitualQuest3:
+                    if (!QuestSystem.Quests["DraconicBone"].Complete)
+                    {
+                        RitualQuestUp = true;
+                        RitualQuestActive = QuestSystem.Quests["DraconicBone"].Active;
+                        if (!RitualQuestActive)
+                            QuestSystem.Quests["DraconicBone"].Active = true;
+                    }
+                    break;
+            }
+            if(RitualQuestUp)
+                ModContent.GetInstance<DialogueUISystem>().DisplayDialogueTree(Windfall.Instance, "StandardQuestTree", new(Name, [NPC.whoAmI]), RitualQuestActive ? 1 : 0);
+            else
+                ModContent.GetInstance<DialogueUISystem>().DisplayDialogueTree(Windfall.Instance, "TravellingCultist/Default", new(Name, [NPC.whoAmI]));
         }
         else
-        {
-            ModContent.GetInstance<DialogueUISystem>().DisplayDialogueTree(Windfall.Instance, "FetchQuest", new(Name, [NPC.whoAmI]), QuestStatus == questStatus.Started ? 1 : 0);
-        }
-        
+            ModContent.GetInstance<DialogueUISystem>().DisplayDialogueTree(Windfall.Instance, "TravellingCultist/Default", new(Name, [NPC.whoAmI]));
+
         return "";
     }
     private static void ModifyTree(string treeKey, int dialogueID, int buttonID)
@@ -159,8 +221,21 @@ public class TravellingCultist : ModNPC, ILocalizedModType
 
         if(QuestItem == null)
         {
-            if (CurrentDialogue == DialogueState.Quests3)
-                QuestItem = RitualQuestItems[RitualQuestProgress];
+            if (CurrentDialogue.ToString().Contains("Ritual"))
+            {
+                switch(CurrentDialogue)
+                {
+                    case DialogueState.RitualQuest1:
+                        QuestItem = RitualQuestItems[0];
+                        break;
+                    case DialogueState.RitualQuest2:
+                        QuestItem = RitualQuestItems[1];
+                        break;
+                    case DialogueState.RitualQuest3:
+                        QuestItem = RitualQuestItems[2];
+                        break;
+                }
+            }
             else
                 QuestItem = DungeonQuestItems[Main.rand.Next(3)];
         }
@@ -213,14 +288,14 @@ public class TravellingCultist : ModNPC, ILocalizedModType
 
                 if (CurrentDialogue.ToString().Contains("Quests"))
                     uiSystem.CurrentTree.Dialogues[0].Responses[0].Requirement = true;
-                if (CurrentDialogue == DialogueState.Quests2)
+                if (CurrentDialogue == DialogueState.RitualQuest2)
                     uiSystem.CurrentTree.Dialogues[0].Responses[1].Requirement = true;
 
                 break;
-            case "FetchQuest":
+            case "StandardQuestTree":
                 SetupFetchQuestTree(
                     ref uiSystem,
-                    CurrentDialogue == DialogueState.Quests3 ? "LunarCult.TravellingCultist.Quests.Ritual." : "LunarCult.TravellingCultist.Quests.Dungeon.",
+                    CurrentDialogue.ToString().Contains("Ritual") ? "LunarCult.TravellingCultist.Quests.Ritual." : "LunarCult.TravellingCultist.Quests.Dungeon.",
                     "TheCalamity",//"TravellingCultist"
                     QuestItem);
                 break;
@@ -237,28 +312,48 @@ public class TravellingCultist : ModNPC, ILocalizedModType
         switch (treeKey)
         {
             case "TravellingCultist/SearchForHelp":
-                CurrentDialogue = DialogueState.Quests1;
+                CurrentDialogue = DialogueState.DungeonQuest1;
+                break;
+            case "TravellingCultist/RitualDiscovered":
+                QuestSystem.Quests["TabletFragment"].Active = true;
                 break;
             case "TravellingCultist/LunarCultTalk":
-                CurrentDialogue = DialogueState.Quests2;
+                CurrentDialogue = DialogueState.RitualQuest2;
                 break;
             case "TravellingCultist/AllRecruited":
-                CurrentDialogue = DialogueState.Quests3;
+                CurrentDialogue = DialogueState.RitualQuest3;
                 break;
             case "TravellingCultist/RitualTalk":
                 CurrentDialogue = DialogueState.QuestsEnd;
-                    break;
-            case "FetchQuest":
+                QuestSystem.Quests["SealingRitual"].Active = true;
+                break;
+            case "StandardQuestTree":
                 if (dialogueID == 2)
                 {
-                    if(CurrentDialogue == DialogueState.Quests3)
-                        RitualQuestProgress++;
                     Item.NewItem(cultist.GetSource_GiftOrReward(), cultist.Center, Vector2.UnitY.RotatedBy(Main.rand.NextFloat(-PiOver4, PiOver4)) * -4, ItemID.DungeonFishingCrateHard);
-                    QuestItem = null;
-                    QuestStatus = questStatus.NotStarted;
+                    if (CurrentDialogue.ToString().Contains("Dungeon"))
+                    {
+                        QuestItem = null;
+                        FetchQuestStatus = questStatus.NotStarted;
+                    }
+                    else
+                    {
+                        switch (CurrentDialogue)
+                        {
+                            case DialogueState.RitualQuest1:
+                                QuestSystem.Quests["TabletFragment"].IncrementProgress();
+                                break;
+                            case DialogueState.RitualQuest2:
+                                QuestSystem.Quests["PrimordialLightShard"].IncrementProgress();
+                                break;
+                            case DialogueState.RitualQuest3:
+                                QuestSystem.Quests["DraconicBone"].IncrementProgress();
+                                break;
+                        }
+                    }
                 }
-                else
-                    QuestStatus = questStatus.Started;
+                else if (CurrentDialogue.ToString().Contains("Dungeon"))
+                    FetchQuestStatus = questStatus.Started;
                 break;
         }
     }
@@ -289,8 +384,6 @@ public class TravellingCultist : ModNPC, ILocalizedModType
     public override void AI()
     {
         NPC.homeless = true;
-        if (RitualQuestProgress == 3 && CurrentDialogue >= DialogueState.QuestsEnd)
-            RitualQuestProgress++;
     }
 
     #region Town NPC Stuff

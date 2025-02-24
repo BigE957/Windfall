@@ -1,0 +1,41 @@
+{
+  "Dialogues": [
+    { //Default Text
+      "DialogueText": [ { "Text": "Replace Me!" } ],
+      "Responses": [
+        {
+          "Title": "Quest",
+          "Heading": 2,
+          "Requirement": false
+        },
+        {
+          "Title": "Recruits",
+          "Heading": 1,
+          "Requirement": false
+        },
+        {
+          "Title": "Bye"
+        }
+      ]
+    },
+    { //Recruits Text
+      "DialogueText": [ { "Text": "Replace Me!" } ],
+      "Responses": [
+        {
+          "Title": "Bye"
+        }
+      ]
+    },
+    { //Quests Text
+      "DialogueText": [ { "Text": "Replace Me!" } ],
+      "Responses": [
+        {
+          "Title": "Bye"
+        }
+      ]
+    }
+  ],
+  "Characters": [
+    "TheCalamity"
+  ]
+}

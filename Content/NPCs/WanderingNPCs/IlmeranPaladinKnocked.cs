@@ -1,9 +1,4 @@
-﻿using CalamityMod.Items.Accessories;
-using CalamityMod.NPCs.DesertScourge;
-using Windfall.Common.Utils;
-using Windfall.Content.Items.Fishing;
-using Windfall.Content.Items.Utility;
-using Windfall.Content.Items.Weapons.Misc;
+﻿using CalamityMod.NPCs.DesertScourge;
 
 namespace Windfall.Content.NPCs.WanderingNPCs;
 
@@ -36,23 +31,16 @@ public class IlmeranPaladinKnocked : ModNPC
 
     public override string GetChat()
     {
-        NPC.Transform(ModContent.NPCType<IlmeranPaladin>());
+        Main.CloseNPCChatOrSign();
 
-        return GetWindfallTextValue($"Dialogue.IlmeranPaladin.Chat.Saved");
+        NPC.Transform(ModContent.NPCType<IlmeranPaladin>());
+        NPC.ai[3] = 1;
+
+        return "";
     }
     public override void OnChatButtonClicked(bool firstButton, ref string shop)
     {
         new IlmeranPaladin().OnChatButtonClicked(firstButton, ref shop);
-    }
-
-    public override void AddShops()
-    {
-        new NPCShop(Type)
-            .AddWithCustomValue<AmidiasSpark>(5000)
-            .AddWithCustomValue<Cnidrisnack>(50)
-            .AddWithCustomValue<AncientIlmeranRod>(1000, WindfallConditions.ScoogHunt1ActiveOrComplete)
-            .AddWithCustomValue<IlmeranHorn>(20000, WindfallConditions.ScoogHunt1Complete)
-            .Register();
     }
 
     public override bool CheckActive() => !NPC.AnyNPCs(ModContent.NPCType<DesertScourgeHead>());
