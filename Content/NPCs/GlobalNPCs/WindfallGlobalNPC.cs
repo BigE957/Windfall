@@ -67,7 +67,7 @@ public class WindfallGlobalNPC : GlobalNPC
         Mod calamity = ModLoader.GetMod("CalamityMod");
         if (npc.type == calamity.Find<ModNPC>("Cnidrion").Type)
             npc.Transform(ModContent.NPCType<WFCnidrion>());
-        if (!LunarCultBaseSystem.BetrayalActive && (npc.type == NPCID.CultistArcherBlue || npc.type == NPCID.CultistDevote))
+        if (!LunarCultBaseSystem.BetrayalActive && (npc.type == NPCID.CultistArcherBlue || npc.type == NPCID.CultistDevote || npc.type == NPCID.CultistTablet))
             npc.active = false;
         if (npc.type == calamity.Find<ModNPC>("Polterghast").Type)
             SoundEngine.PlaySound(PolterAmbiance with { Volume = 1f }, npc.Center);

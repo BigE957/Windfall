@@ -1,0 +1,36 @@
+{
+  "Dialogues": [
+    {
+      "DialogueText": [ { "Text": "Have you had any luck in finding the Tablet?" } ],
+      "Responses": [
+        {
+          "Title": "I have, but...",
+          "Heading": 1
+        },
+        {
+          "Title": "Not yet I'm afraid.",
+          "Heading": 2
+        }
+      ]
+    },
+    {
+      "DialogueText": [ { "Text": "Its... BROKEN?! How!? ... Hmm, the Temple is indeed very old, but still, I can't believe time could wear down such a finely crafted artifact... Hm, could it be...? Give me time, I must confer with the others. Thank you as always for your hard work; even if we didn't get the result we were hoping for. Hopefully I'll return with some good news." } ],
+      "Responses": [
+        {
+          "Title": "Will do."
+        }
+      ]
+    },
+    {
+      "DialogueText": [ { "Text": "Ah, no worries. Continue you're search; I'm certain we'll find what we need." } ],
+      "Responses": [
+        {
+          "Title": "Will do."
+        }
+      ]
+    }
+  ],
+  "Characters": [
+    "TheCalamity"
+  ]
+}

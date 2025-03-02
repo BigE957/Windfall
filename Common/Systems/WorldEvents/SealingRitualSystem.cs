@@ -54,13 +54,17 @@ public class SealingRitualSystem : ModSystem
     public override void PreUpdateWorld()
     {
         #region Debugging Stuffs
+        //QuestSystem.Quests["SealingRitual"].Active = false;
+        //State = SystemState.CheckReqs;
+
         //RitualSequenceSeen = false;
-        //Recruits = [1,2,3,4];
+        //Recruits = [1, 2, 3, 4];
+        //Recruits = [];
+        //QuestSystem.Quests["Recruitment"].Progress = 4;
         //State = SystemState.CheckReqs; RitualTimer = -2; RitualSequenceSeen = false; Active = false;
         //Main.NewText($"{RitualTimer}, {State}, {(DungeonCoords - Main.LocalPlayer.Center).Length()}, {RitualSequenceSeen}");
         //TravellingCultist.RitualQuestProgress = 4;
         #endregion
-
         if (RitualSequenceSeen)
         {
             if (!Main.projectile.Any(p => p.active && p.type == ModContent.ProjectileType<BurningAltar>()))
@@ -74,7 +78,6 @@ public class SealingRitualSystem : ModSystem
             
             return;
         }
-        
         switch (State)
         {
             case SystemState.CheckReqs:
@@ -82,6 +85,7 @@ public class SealingRitualSystem : ModSystem
                    return;
                 RitualTimer = -2;
                 State = SystemState.Spawn;
+                Main.NewText("SPAWNING SEALING RITUAL!!!");
                 break;
             case SystemState.Spawn:
                 if (RitualTimer == -2)

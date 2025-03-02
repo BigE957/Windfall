@@ -1,0 +1,36 @@
+{
+  "Dialogues": [
+    {
+      "DialogueText": [ { "Text": "Have you had any luck in getting the Wayfinder to work?" } ],
+      "Responses": [
+        {
+          "Title": "I have!",
+          "Heading": 1
+        },
+        {
+          "Title": "Not yet I'm afraid.",
+          "Heading": 2
+        }
+      ]
+    },
+    {
+      "DialogueText": [ { "Text": "Wonderful! Then it should now be capable of leading you to the Temple! Go and bring word of anything you find; especially if you find the Tablet we're looking for!" } ],
+      "Responses": [
+        {
+          "Title": "Will do."
+        }
+      ]
+    },
+    {
+      "DialogueText": [ { "Text": "Ah, no worries. Continue you're search; I'm certain we'll find what we need." } ],
+      "Responses": [
+        {
+          "Title": "Will do."
+        }
+      ]
+    }
+  ],
+  "Characters": [
+    "TheCalamity"
+  ]
+}

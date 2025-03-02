@@ -1,0 +1,20 @@
+{
+  "Dialogues": [
+    {
+      "DialogueText": [ { "Text": "Why, hello my friend! You've been hard at work I've heard! I'm honestly impressed with how many Selenic Order members you've managed to save. Goes to show how truly wretched an organization they are..." } ]
+    },
+    {
+      "DialogueText": [ { "Text": "Your effort is truly commendable! Once we put a stop to their schemes, I'm certain we'll be able to save even more poor souls!" } ],
+      "Responses": [
+        {
+          "Title": "Can't wait!",
+          "Heading": 0,
+          "SwapToTreeKey": "TravellingCultist/Default"
+        }
+      ]
+    }
+  ],
+  "Characters": [
+    "TheCalamity"
+  ]
+}

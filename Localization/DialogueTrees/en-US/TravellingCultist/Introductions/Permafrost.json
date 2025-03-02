@@ -1,0 +1,20 @@
+{
+  "Dialogues": [
+    {
+      "DialogueText": [ { "Text": "I met Permafrost." } ]
+    },
+    {
+      "DialogueText": [ { "Text": "What an odd-ball." } ],
+      "Responses": [
+        {
+          "Title": "Alright, okay!",
+          "Heading": 0,
+          "SwapToTreeKey": "TravellingCultist/Default"
+        }
+      ]
+    }
+  ],
+  "Characters": [
+    "TheCalamity"
+  ]
+}

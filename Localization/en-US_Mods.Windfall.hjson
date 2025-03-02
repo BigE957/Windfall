@@ -568,13 +568,9 @@ Dialogue: {
 					}
 
 					WaterBolt: {
-						Start:
-							'''
-							I hear those Dark Casters carry tend to carry with them a magic tome full of potent water magic. I'd be curious to figure out the origin of these tomes, and if they hold any connection to the Selenic Order. I mean, how can you be dedicated to the moon and not use water magic?
-							Though, now that I think of it, why would the Selenic Order care for something so trivial...
-							'''
-						During: The tome is said to carry with it potent water magic. Why would the Selenic Order care for such simple forms of magic though...
-						End: Ah! You found it! That does indeed look like the right tome, and considering its age, I can imagine it fitting in the hands of those casters nicely. Thank you! I'll let you know if I find any connection between this and that wreched cult.
+						Start: I hear those Dark Casters carry tend to carry with them a magic tome full of potent water magic. I'd be curious to figure out the origin of these tomes, and if they hold any connection to the Selenic Order. I mean, how can you be dedicated to the moon and not use water magic, right?
+						During: The tome is said to carry with it potent water magic, and is wielded by Dark Casters. I wonder if it may provide some insight into the Selenic Order?
+						End: Ah! You found it! That does indeed look like the right tome, and considering its age, I can imagine it fitting in the hands of those casters nicely. Thank you! I'll let you know if I find any connection between this and that wretched cult.
 					}
 
 					DeificInsignia: {
@@ -582,28 +578,6 @@ Dialogue: {
 						During: Those skeletons are quite angry about their eternal imprisonment within the Dungeon. So don't expect them to part with their patrons' tokens so easilly. If you can get me just five, that should suffice.
 						End: Oh, perfect! Yes, these absolutely reek of deific essence... Though I loathe to handle the stuff, this might just give us an edge.
 					}
-				}
-
-				Ritual: {
-					TabletFragment: {
-						Start: Alright, the first thing we'll need is a tablet, which'll act as the ritual's vessel. The Lihzahrds are well versed in rituals such as these; I'm certain they have the materials required to create such a tablet. No followers of the Gods would spare the slightest expense on their toys; I'm sure it'll have the materials we're looking for.
-						During: I'm not telling you to smash their ancient idol and bring me pieces of it... Buuuuuut if something horrible were to happen to that golem unexpectedly, I wouldn't be complaining... and it'd only be right to make something useful out of its parts, right?
-						End: Ah, you got the materials! Yes... These should do perfectly for our tablet. Maybe lets not poke around the Lihzahrds' temple anymore though... you look awfully banged up.
-					}
-
-					DraconicBone: {
-						Start: Alright, I've figured out the next thing we'll need, but uhh... I don't like it any more than you will. We need a Dragon. Well, not a whole dragon. It seems anything that has the genetics of a Dragon can be used. This piece will allow us to interact with the magic used by the dragons, and not be seen as enemies. The remains a draconic offshoot should do the trick, and I've heard that the noble Fishron is quite attracted to a particular type of bait.
-						During: If you're in need of bait, I believe Amidias may be able to lend you a hand. Then you must simply cast the bait in the water. Shouldn't take too long for a Fishron to reveal herself to you...
-						End: Oh my! What a marvel! How awful that something so beautiful had to die... Thank you again for the help. We're so close to being able to begin the Sealing Ritual. I'll let you know when I narrow down what we else we need. I do wonder, though, why the Dragons went through with this ritual when it cost one of their kind... I suppose they had no choice.
-					}
-
-					PrimordialLightShard: {
-						Start: Good news! We need just one more thing before we're ready to begin the sealing ritual! Though... This may be the most difficult thing to acquire. Legend states that the Dragon King used the power of "Primordial Light" to ultimately seal away the behemoth. There's only one entity I know of that might allow us to harness this power: the self-appointed "Empress of Light". Perhaps she holds something that would allow us to harness the power of the Light, as the Dragons' mighty King once did.
-						During: I must warn you not to face the Empress during the day. As light bathes the land, she too can harness Primordial Light. Facing her at night would be a far wiser choice.
-						End: Ah ha! This shard certainly holds a unique power. Its radiance... this must be what we're looking for! I'll need some time to finish preparing for the ritual, but I'll notify you once we're ready. I can taste our victory over the Selenic Order just over the horizon.
-					}
-
-					NoQuest: You've done a great job! I'll be back when I find out what the next thing we need is.
 				}
 			}
 
@@ -1706,6 +1680,16 @@ Items: {
 
 		RaggedSack: {
 			DisplayName: Ragged Sack
+			Tooltip: ""
+		}
+
+		UnchargedWayfinder: {
+			DisplayName: Uncharged Wayfinder
+			Tooltip: ""
+		}
+
+		Wayfinder: {
+			DisplayName: Wayfinder
 			Tooltip: ""
 		}
 	}

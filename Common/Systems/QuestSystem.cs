@@ -14,8 +14,10 @@ public class Quest
     public int Progress { get; set; }
     public void IncrementProgress()
     {
-        if(InProgress)
+        if(Active)
             Progress++;
+        if(AutoDeactivate && Complete)
+            Active = false;
     }
     public void ResetQuest()
     {
@@ -27,11 +29,14 @@ public class Quest
     public bool InProgress { get => Active && !Complete; }
     public float CompletionRatio { get => Progress / (float)AmountToComplete; }
 
-    internal Quest(int amountToComplete, ref OnWorldLoad worldLoad, ref OnWorldUnload worldUnload, ref SaveWorldData saveWorld, ref LoadWorldData loadWorld)
+    private readonly bool AutoDeactivate;
+
+    internal Quest(int amountToComplete, bool autoDeactivates, ref OnWorldLoad worldLoad, ref OnWorldUnload worldUnload, ref SaveWorldData saveWorld, ref LoadWorldData loadWorld)
     {
         Active = false;
         Progress = 0;
         AmountToComplete = amountToComplete;
+        AutoDeactivate = autoDeactivates;
 
         worldLoad += ResetQuest;
         worldUnload += ResetQuest;
@@ -68,24 +73,25 @@ public class QuestSystem : ModSystem
         OnModUnload(); //Resets all data just in case
 
         AddQuest("CnidrionHunt", 3);
-        AddQuest("ScoogHunt", 1);
+        AddQuest("ScoogHunt");
         AddQuest("ShuckinClams", 8);
-        AddQuest("TabletFragment", 1);
-        AddQuest("ScoogHunt2", 1);
-        AddQuest("PrimordialLightShard", 1);
+        AddQuest("ClamHunt");
+        AddQuest("TabletFragment", 2, true);
+        AddQuest("ScoogHunt2");
+        AddQuest("PrimordialLightShard", autoDeactivate: true);
         AddQuest("Recruitment", 4);
-        AddQuest("DraconicBone", 1);
-        AddQuest("SealingRitual", 1);
+        AddQuest("DraconicBone", autoDeactivate: true);
+        AddQuest("SealingRitual", autoDeactivate: true);
     }
 
-    private static void AddQuest(string name, int amountToComplete)
+    private static void AddQuest(string name, int amountToComplete = 1, bool autoDeactivate = false)
     {
         if (Quests.ContainsKey(name))
         {
             Windfall.Instance.Logger.Warn("Already existing quest of name " + name + " was attempted to be added.");
             return;
         }
-        Quests.Add(name, new Quest(amountToComplete, ref WorldLoadEvent, ref WorldUnloadEvent, ref SaveWorldEvent, ref LoadWorldEvent));
+        Quests.Add(name, new Quest(amountToComplete, autoDeactivate, ref WorldLoadEvent, ref WorldUnloadEvent, ref SaveWorldEvent, ref LoadWorldEvent));
     }
 
     #region Saving + Reseting

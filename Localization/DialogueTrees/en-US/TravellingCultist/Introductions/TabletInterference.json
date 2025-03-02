@@ -1,0 +1,18 @@
+{
+  "Dialogues": [
+    {
+      "DialogueText": [ { "Text": "Dude the Selenic Order totally fucked with the Tablet." } ]
+    },
+    {
+      "DialogueText": [ { "Text": "Thankfully we can fix it. So fuck em." } ],
+      "Responses": [
+        {
+          "Title": "Pogsome!"
+        }
+      ]
+    }
+  ],
+  "Characters": [
+    "TheCalamity"
+  ]
+}

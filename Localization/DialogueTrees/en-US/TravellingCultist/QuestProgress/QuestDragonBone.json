@@ -1,0 +1,36 @@
+{
+  "Dialogues": [
+    {
+      "DialogueText": [ { "Text": "Have you had any luck in snatching a Dragon Bone?" } ],
+      "Responses": [
+        {
+          "Title": "I have!",
+          "Heading": 1
+        },
+        {
+          "Title": "Not yet I'm afraid.",
+          "Heading": 2
+        }
+      ]
+    },
+    {
+      "DialogueText": [ { "Text": "Oh my! What a marvel! A truly legendary artifact! To think, the Selenic Order has the entire remains of a Dragon beneath their lair... Thank you once again for the help; with this, we have everything needed for the ritual! I'll need some time to finish preparing for the ritual, but I'll notify you once we're ready. I can taste our victory over the Selenic Order just over the horizon." } ],
+      "Responses": [
+        {
+          "Title": "Will do."
+        }
+      ]
+    },
+    {
+      "DialogueText": [ { "Text": "I know the Selenic Order keeps a tight watch over the lower levels of their hideout, and the Orator himself prevents entry while he's present. You'll need to sneak in when it isn't under such protection." } ],
+      "Responses": [
+        {
+          "Title": "Will do."
+        }
+      ]
+    }
+  ],
+  "Characters": [
+    "TheCalamity"
+  ]
+}

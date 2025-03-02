@@ -1,0 +1,31 @@
+{
+  "Dialogues": [
+    {
+      "DialogueText": [ { "Text": "There's a Dragon Bone. Go steal it." } ],
+      "Responses": [
+        {
+          "Title": "Okay."
+        }
+      ]
+    },
+    {
+      "DialogueText": [ { "Text": "Go get the Dragon Bone!" } ],
+      "Responses": [
+        {
+          "Title": "Alright, okay!"
+        }
+      ]
+    },
+    {
+      "DialogueText": [ { "Text": "Thanks for getting the Dragon Bone." } ],
+      "Responses": [
+        {
+          "Title": "Yw bbg."
+        }
+      ]
+    }
+  ],
+  "Characters": [
+    "TheCalamity"
+  ]
+}

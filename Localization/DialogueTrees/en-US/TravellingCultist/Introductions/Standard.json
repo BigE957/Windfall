@@ -1,0 +1,40 @@
+{
+  "Dialogues": [
+    {
+      "DialogueText": [ { "Text": "Why hello again! Doing well I hope?" } ],
+      "Responses": [
+        {
+          "Title": "Yup! How about you?",
+          "Heading": 1
+        },
+        {
+          "Title": "Not really...",
+          "Heading": 2
+        }
+      ]
+    },
+    {
+      "DialogueText": [ { "Text": "I'm glad to hear! I'm also doing well; thanks for asking!" } ],
+      "Responses": [
+        {
+          "Title": "You're very welcome!",
+          "Heading": 0,
+          "SwapToTreeKey": "TravellingCultist/Default"
+        }
+      ]
+    },
+    {
+      "DialogueText": [ { "Text": "I'm sorry to hear that! If you need a rest or anything, by all means, take one." } ],
+      "Responses": [
+        {
+          "Title": "That's alright.",
+          "Heading":  0,
+          "SwapToTreeKey": "TravellingCultist/Default"
+        }
+      ]
+    }
+  ],
+  "Characters": [
+    "TheCalamity"
+  ]
+}

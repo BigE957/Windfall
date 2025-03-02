@@ -1,7 +1,7 @@
 {
   "Dialogues": [
-    { //Default Text
-      "DialogueText": [ { "Text": "Replace Me!" } ],
+    {
+      "DialogueText": [ { "Text": "Randomized/Segway Default Text" } ],
       "Responses": [
         {
           "Title": "Quest",
@@ -18,16 +18,8 @@
         }
       ]
     },
-    { //Recruits Text
-      "DialogueText": [ { "Text": "Replace Me!" } ],
-      "Responses": [
-        {
-          "Title": "Bye"
-        }
-      ]
-    },
-    { //Quests Text
-      "DialogueText": [ { "Text": "Replace Me!" } ],
+    {
+      "DialogueText": [ { "Text": "Recruit Status Text" } ],
       "Responses": [
         {
           "Title": "Bye"

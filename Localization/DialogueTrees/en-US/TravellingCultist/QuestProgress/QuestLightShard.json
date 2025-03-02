@@ -1,0 +1,36 @@
+{
+  "Dialogues": [
+    {
+      "DialogueText": [ { "Text": "Have you had any luck in beating the Empress?" } ],
+      "Responses": [
+        {
+          "Title": "I have! Take a look.",
+          "Heading": 1
+        },
+        {
+          "Title": "Not yet I'm afraid.",
+          "Heading": 2
+        }
+      ]
+    },
+    {
+      "DialogueText": [ { "Text": "Ah ha! This shard certainly holds a unique power. Its radiance... this must be what we're looking for! To think, the power of the late Dragon King in the palm of my hand... Thank you! This brings us one step closer to stopping the Selenic Order's schemes once and for all!" } ],
+      "Responses": [
+        {
+          "Title": "Indeed!"
+        }
+      ]
+    },
+    {
+      "DialogueText": [ { "Text": "I see. Let me give you this warning: you must not to face the Empress during the day. As light bathes the land, her power overflows to unthinkable levels. However if you can catch her at night, she'll be at her most vulnerable. Best of luck." } ],
+      "Responses": [
+        {
+          "Title": "Thank you!"
+        }
+      ]
+    }
+  ],
+  "Characters": [
+    "TheCalamity"
+  ]
+}
