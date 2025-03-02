@@ -12,7 +12,7 @@ public class DragonArcher : ModNPC
         NPCID.Sets.ActsLikeTownNPC[Type] = true;
         Main.npcFrameCount[Type] = 5;
         NPCID.Sets.NoTownNPCHappiness[Type] = true;
-        ModContent.GetInstance<DialogueUISystem>().DialogueClose += CloseEffect;
+        ModContent.GetInstance<DialogueUISystem>().TreeClose += CloseEffect;
     }
     public override void SetDefaults()
     {
@@ -40,7 +40,7 @@ public class DragonArcher : ModNPC
         return base.GetChat();
     }
     public override bool CheckActive() => false;
-    private static void CloseEffect(string treeKey, int dialogueID, int buttonID)
+    private static void CloseEffect(string treeKey, int dialogueID, int buttonID, bool swapped)
     {
         if(treeKey == "MechanicShed")
         {

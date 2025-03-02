@@ -34,8 +34,8 @@ public class Seamstress : ModNPC
         NPCID.Sets.ActsLikeTownNPC[Type] = true;
         Main.npcFrameCount[Type] = 1;
         NPCID.Sets.NoTownNPCHappiness[Type] = true;
-        ModContent.GetInstance<DialogueUISystem>().DialogueOpen += ModifyTree;
-        ModContent.GetInstance<DialogueUISystem>().DialogueClose += CloseEffect;
+        ModContent.GetInstance<DialogueUISystem>().TreeInitialize += ModifyTree;
+        ModContent.GetInstance<DialogueUISystem>().TreeClose += CloseEffect;
     }
     public override void SetDefaults()
     {
@@ -358,7 +358,7 @@ public class Seamstress : ModNPC
         Main.spriteBatch.Draw(texture, drawPosition, NPC.frame, drawColor * NPC.Opacity, NPC.rotation, origin, NPC.scale, direction, 0f);
         return false;
     }
-    private static void ModifyTree(string treeKey, int dialogueID, int buttonID)
+    private static void ModifyTree(string treeKey, int dialogueID, int buttonID, bool swapped)
     {
         DialogueUISystem uiSystem = ModContent.GetInstance<DialogueUISystem>();
         switch (treeKey)
@@ -383,7 +383,7 @@ public class Seamstress : ModNPC
                 break;
         }
     }
-    private static void CloseEffect(string treeKey, int dialogueID, int buttonID)
+    private static void CloseEffect(string treeKey, int dialogueID, int buttonID, bool swapped)
     {
         if(treeKey.Contains("TheSeamstress/"))
         {

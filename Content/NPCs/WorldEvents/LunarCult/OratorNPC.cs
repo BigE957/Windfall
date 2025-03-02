@@ -29,9 +29,9 @@ public class OratorNPC : ModNPC
         NPCID.Sets.ActsLikeTownNPC[Type] = true;
         Main.npcFrameCount[Type] = 1;
         NPCID.Sets.NoTownNPCHappiness[Type] = true;
-        ModContent.GetInstance<DialogueUISystem>().DialogueOpen += OpenEffect;
+        ModContent.GetInstance<DialogueUISystem>().TreeInitialize += ModifyTree;
         ModContent.GetInstance<DialogueUISystem>().ButtonClick += ClickEffect;
-        ModContent.GetInstance<DialogueUISystem>().DialogueClose += CloseEffect;
+        ModContent.GetInstance<DialogueUISystem>().TreeClose += CloseEffect;
     }
     public override void SetDefaults()
     {
@@ -75,7 +75,7 @@ public class OratorNPC : ModNPC
 
         return "";
     }
-    private static void OpenEffect(string treeKey, int dialogueID, int buttonID)
+    private static void ModifyTree(string treeKey, int dialogueID, int buttonID, bool swapped)
     {
         DialogueUISystem uiSystem = ModContent.GetInstance<DialogueUISystem>();
 
@@ -97,63 +97,27 @@ public class OratorNPC : ModNPC
         }
         if(treeKey == "TheOrator/ApostleQuest1")
         {
-            ItemStack flame = new()
-            {
-                ItemID = ModContent.ItemType<DiabolicalInsense>(),
-                SourceMod = "Windfall",
-                ItemName = "FlameIcon",
-                Stack = 1
-            };
-            ItemStack death = new()
-            {
-                ItemID = ModContent.ItemType<NecromaticRing>(),
-                SourceMod = "Windfall",
-                ItemName = "FlameIcon",
-                Stack = 1
-            };
-            ItemStack light = new()
-            {
-                ItemID = ModContent.ItemType<RaggedSack>(),
-                SourceMod = "Windfall",
-                ItemName = "FlameIcon",
-                Stack = 1
-            };
+            ItemStack flame = new(new Tuple<int, int>(ModContent.ItemType<DiabolicalInsense>(), 1));
+            ItemStack death = new(new Tuple<int, int>(ModContent.ItemType<NecromaticRing>(), 1));
+            ItemStack light = new(new Tuple<int, int>(ModContent.ItemType<RaggedSack>(), 1));
             uiSystem.CurrentTree.Dialogues[6].Responses[0].Requirement = CanAffordCost(Main.LocalPlayer, flame) && CanAffordCost(Main.LocalPlayer, death) && CanAffordCost(Main.LocalPlayer, light);
         }
     }
 
-    private static void ClickEffect(string treeKey, int dialogueID, int buttonID)
+    private static void ClickEffect(string treeKey, int dialogueID, int buttonID, bool swapped)
     {
         if (treeKey == "TheOrator/ApostleQuest1" && dialogueID == 6 && buttonID == 0)
         {
-            ItemStack flame = new()
-            {
-                ItemID = ModContent.ItemType<DiabolicalInsense>(),
-                SourceMod = "Windfall",
-                ItemName = "FlameIcon",
-                Stack = 1
-            };
-            ItemStack death = new()
-            {
-                ItemID = ModContent.ItemType<NecromaticRing>(),
-                SourceMod = "Windfall",
-                ItemName = "FlameIcon",
-                Stack = 1
-            };
-            ItemStack light = new()
-            {
-                ItemID = ModContent.ItemType<RaggedSack>(),
-                SourceMod = "Windfall",
-                ItemName = "FlameIcon",
-                Stack = 1
-            };
+            ItemStack flame = new(new Tuple<int, int>(ModContent.ItemType<DiabolicalInsense>(), 1));
+            ItemStack death = new(new Tuple<int, int>(ModContent.ItemType<NecromaticRing>(), 1));
+            ItemStack light = new(new Tuple<int, int>(ModContent.ItemType<RaggedSack>(), 1));
             PayAffordCost(Main.LocalPlayer, flame);
             PayAffordCost(Main.LocalPlayer, death);
             PayAffordCost(Main.LocalPlayer, light);
         }
     }
 
-    private static void CloseEffect(string treeKey, int dialogueID, int buttonID)
+    private static void CloseEffect(string treeKey, int dialogueID, int buttonID, bool swapped)
     {
         if(treeKey.Contains("TheOrator/"))
         {

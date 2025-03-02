@@ -34,7 +34,7 @@ public class LunarBishop : ModNPC
         this.HideFromBestiary();
         Main.npcFrameCount[Type] = 1;
         NPCID.Sets.NoTownNPCHappiness[Type] = true;
-        ModContent.GetInstance<DialogueUISystem>().DialogueClose += CloseEffect;
+        ModContent.GetInstance<DialogueUISystem>().TreeClose += CloseEffect;
     }
     public override void SetDefaults()
     {
@@ -228,7 +228,7 @@ public class LunarBishop : ModNPC
         return "Rizz"; //Won't actually be seen.
     }
     public override bool CheckActive() => false;
-    private static void CloseEffect(string treeKey, int dialogueID, int buttonID)
+    private static void CloseEffect(string treeKey, int dialogueID, int buttonID, bool swapped)
     {
         if (treeKey == States.SelenicChat.ToString())
         {

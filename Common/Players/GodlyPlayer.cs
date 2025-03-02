@@ -67,7 +67,7 @@ public class GodlyPlayer : ModPlayer
     private static List<NPC> harvestNPCBlacklist = [];
     public override void SetStaticDefaults()
     {
-        ModContent.GetInstance<DialogueUISystem>().DialogueClose += CloseEffect;
+        ModContent.GetInstance<DialogueUISystem>().TreeClose += CloseEffect;
     }
     public override void UpdateDead()
     {            
@@ -577,7 +577,7 @@ public class GodlyPlayer : ModPlayer
         Player.wingTime = Player.wingTimeMax;
         activeAbility = 0;
     }
-    private void CloseEffect(string treeKey, int dialogueID, int buttonID)
+    private void CloseEffect(string treeKey, int dialogueID, int buttonID, bool swapped)
     {
         if (treeKey.Contains("Communion"))
         {

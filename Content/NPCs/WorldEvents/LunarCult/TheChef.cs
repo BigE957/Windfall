@@ -28,9 +28,9 @@ public class TheChef : ModNPC
         NPCID.Sets.ActsLikeTownNPC[Type] = true;
         Main.npcFrameCount[Type] = 1;
         NPCID.Sets.NoTownNPCHappiness[Type] = true;
-        ModContent.GetInstance<DialogueUISystem>().DialogueOpen += ModifyTree;
+        ModContent.GetInstance<DialogueUISystem>().TreeInitialize += ModifyTree;
         ModContent.GetInstance<DialogueUISystem>().ButtonClick += ClickEffect;
-        ModContent.GetInstance<DialogueUISystem>().DialogueClose += CloseEffect;
+        ModContent.GetInstance<DialogueUISystem>().TreeClose += CloseEffect;
 
     }
     public override void SetDefaults()
@@ -197,7 +197,7 @@ public class TheChef : ModNPC
         spriteBatch.Draw(barBG, drawPos, null, bgColor, 0f, barOrigin, barScale, 0f, 0f);
         spriteBatch.Draw(barFG, drawPos, frameCrop, Color.Lerp(Color.Yellow, Color.LimeGreen, TimeCooking / CookTime), 0f, barOrigin, barScale, 0f, 0f);
     }
-    private static void ModifyTree(string treeKey, int dialogueID, int buttonID)
+    private static void ModifyTree(string treeKey, int dialogueID, int buttonID, bool swapped)
     {
         DialogueUISystem uiSystem = ModContent.GetInstance<DialogueUISystem>();
         switch (treeKey)
@@ -220,7 +220,7 @@ public class TheChef : ModNPC
                 break;
         }
     }
-    private static void ClickEffect(string treeKey, int dialogueID, int buttonID)
+    private static void ClickEffect(string treeKey, int dialogueID, int buttonID, bool swapped)
     {
         if (!treeKey.Contains("TheChef"))
             return;
@@ -245,7 +245,7 @@ public class TheChef : ModNPC
         }
     }
 
-    private static void CloseEffect(string treeKey, int dialogueID, int buttonID)
+    private static void CloseEffect(string treeKey, int dialogueID, int buttonID, bool swapped)
     {
         if (treeKey == "TheChef/Abandoned")
             Main.LocalPlayer.LunarCult().spokeToAbandonedChef = true;

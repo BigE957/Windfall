@@ -52,7 +52,7 @@ public class WhiteStonePlaqueTile : ModTile
 
         DustType = DustID.t_Marble;
 
-        ModContent.GetInstance<DialogueUISystem>().DialogueOpen += ModifyTree;
+        ModContent.GetInstance<DialogueUISystem>().TreeInitialize += ModifyTree;
     }
 
     public override void MouseOver(int i, int j)
@@ -92,7 +92,7 @@ public class WhiteStonePlaqueTile : ModTile
         return true;
     }
 
-    private static void ModifyTree(string treeKey, int dialogueID, int buttonID)
+    private static void ModifyTree(string treeKey, int dialogueID, int buttonID, bool swapped)
     {
         if (treeKey == "WhiteStonePlaqueText")
             ModContent.GetInstance<DialogueUISystem>().CurrentTree.Dialogues[0].DialogueText[0].Text = DialogueTileEntity.PlaqueText;

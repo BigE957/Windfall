@@ -24,7 +24,7 @@ public class DisgracedApostleNPC : ModNPC
         NPCID.Sets.ActsLikeTownNPC[Type] = true;
         Main.npcFrameCount[Type] = 1;
         NPCID.Sets.NoTownNPCHappiness[Type] = true;
-        ModContent.GetInstance<DialogueUISystem>().DialogueClose += CloseEffect;
+        ModContent.GetInstance<DialogueUISystem>().TreeClose += CloseEffect;
     }
     public override void SetDefaults()
     {
@@ -62,7 +62,7 @@ public class DisgracedApostleNPC : ModNPC
         return "";
     }
 
-    private static void CloseEffect(string treeKey, int dialogueID, int buttonID)
+    private static void CloseEffect(string treeKey, int dialogueID, int buttonID, bool swapped)
     {
         if (treeKey.Contains("Apostle/"))
         {

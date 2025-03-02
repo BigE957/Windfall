@@ -1,6 +1,6 @@
 {
   "Dialogues": [
-    { //Default Text
+    {
       "DialogueText": [ { "Text": "Replace Me!" } ],
       "Responses": [
         {
@@ -18,7 +18,7 @@
         }
       ]
     },
-    { //Recruits Text
+    {
       "DialogueText": [ { "Text": "Replace Me!" } ],
       "Responses": [
         {
@@ -26,7 +26,7 @@
         }
       ]
     },
-    { //Quests Text
+    {
       "DialogueText": [ { "Text": "Replace Me!" } ],
       "Responses": [
         {

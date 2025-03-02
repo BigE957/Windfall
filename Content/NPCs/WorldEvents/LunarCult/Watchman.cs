@@ -25,7 +25,7 @@ public class Watchman : ModNPC
         this.HideFromBestiary();
         Main.npcFrameCount[Type] = 1;
         NPCID.Sets.NoTownNPCHappiness[Type] = true;
-        ModContent.GetInstance<DialogueUISystem>().DialogueOpen += ModifyTree;
+        ModContent.GetInstance<DialogueUISystem>().TreeInitialize += ModifyTree;
         ModContent.GetInstance<DialogueUISystem>().ButtonClick += ClickEffect;
     }
     public override void SetDefaults()
@@ -81,7 +81,7 @@ public class Watchman : ModNPC
         return "";
     }
     public override bool CheckActive() => false;
-    private static void ModifyTree(string treeKey, int dialogueID, int buttonID)
+    private static void ModifyTree(string treeKey, int dialogueID, int buttonID, bool swapped)
     {
         DialogueUISystem uiSystem = ModContent.GetInstance<DialogueUISystem>();
         switch (treeKey)
@@ -96,7 +96,7 @@ public class Watchman : ModNPC
                 break;
         }
     }
-    private static void ClickEffect(string treeKey, int dialogueID, int buttonID)
+    private static void ClickEffect(string treeKey, int dialogueID, int buttonID, bool swapped)
     {
         if(treeKey == "Watchman/Default" && dialogueID == 11)
             Main.LocalPlayer.LunarCult().askedWatchmanAboutOrator = true;

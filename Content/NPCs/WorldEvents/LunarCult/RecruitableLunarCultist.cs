@@ -58,7 +58,7 @@ public class RecruitableLunarCultist : ModNPC
             Direction = 1
         };
 
-        ModContent.GetInstance<DialogueUISystem>().DialogueClose += CloseEffect;
+        ModContent.GetInstance<DialogueUISystem>().TreeClose += CloseEffect;
     }
     public override void SetDefaults()
     {
@@ -134,7 +134,7 @@ public class RecruitableLunarCultist : ModNPC
             ModContent.GetInstance<DialogueUISystem>().DisplayDialogueTree(Windfall.Instance, "Recruits/" + MyName + "/" + State, new(Name, [NPC.whoAmI]));
         return base.GetChat();
     }
-    private static void CloseEffect(string treeKey, int dialogueID, int buttonID)
+    private static void CloseEffect(string treeKey, int dialogueID, int buttonID, bool swapped)
     {
         if (!treeKey.Contains("Recruits") || !treeKey.Contains(((RecruitNames)TalkingTo).ToString()))
             return;
