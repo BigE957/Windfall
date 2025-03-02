@@ -1,26 +1,19 @@
 {
   "Dialogues": [
     {
-      "DialogueText": [ { "Text": "There's a Dragon Bone. Go steal it." } ],
-      "Responses": [
-        {
-          "Title": "Okay."
-        }
-      ]
+      "DialogueText": [ { "Text": "Hello again! I have some exciting news! I've found the very last thing we'll need for the ritual! However, there's just one problem: the last thing we need is a Dragon... In order to actually be able to perform the ritual, only a Dragon can allow us to interact with the draconic magic which formed the seal." } ]
     },
     {
-      "DialogueText": [ { "Text": "Go get the Dragon Bone!" } ],
-      "Responses": [
-        {
-          "Title": "Alright, okay!"
-        }
-      ]
+      "DialogueText": [ { "Text": "Luckily, I believe we may be able to fake the presence of a Dragon. The remains of one should be enough to let us interact with the seal and restore it, and thanks to you, we've learned where the remains of a Dragon lie: the lower levels of the Selenic Order's lair." } ]
     },
     {
-      "DialogueText": [ { "Text": "Thanks for getting the Dragon Bone." } ],
+      "DialogueText": [ { "Text": "To think that wretch cult has made the late Dragon of Wisdon's library into their vile lair... Its despicable! Once we put a stop to their plans, I'd like noth more than to reclaim the site and cleanse it of their villainy." } ]
+    },
+    {
+      "DialogueText": [ { "Text": "However, there are more pressing matters for us at the moment. I need you to sneak into the lower sanctums, and retrieve but a single bone from the Dragon of Wisdon's remains. With that, we'll have everything needed to perform the sealing ritual!" } ],
       "Responses": [
         {
-          "Title": "Yw bbg."
+          "Title": "Awesome!"
         }
       ]
     }

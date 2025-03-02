@@ -1,18 +1,33 @@
 {
   "Dialogues": [
     {
-      "DialogueText": [ { "Text": "I met Permafrost." } ]
+      "DialogueText": [ { "Text": "Why hello! I just had a most interesting conversation with Permafrost; his thoughts on magic and its potential are turly fascinating! I'm glad I've actually been given the chance to speak with him. I mean, until recently, we all through the Archmage had been killed on orders by the Godseeker!" } ]
     },
     {
-      "DialogueText": [ { "Text": "What an odd-ball." } ],
+      "DialogueText": [ { "Text": "His thoughts on resurrection are especially fascinating... Though I won't bore you with magical theory. He doubts we'll have anything concrete any time soon. For now, true revival seems to still be something only the Dragons were capable of..." } ],
       "Responses": [
         {
-          "Title": "Alright, okay!",
+          "Title": "I see...",
+          "Heading": 0,
+          "SwapToTreeKey": "TravellingCultist/Default"
+        },
+        {
+          "Title": "Magical Theory?",
+          "Heading": -2
+        }
+      ]
+    },
+    {
+      "DialogueText": [ { "Text": "Permafrost is very well versed in the topic. Essentially, its what scholars think magic could be capable of in the future, as we learn more about it. Its interesting to think about the possibilities; we still know so little about the true workings of magic." } ],
+      "Responses": [
+        {
+          "Title": "How interesting!",
           "Heading": 0,
           "SwapToTreeKey": "TravellingCultist/Default"
         }
       ]
     }
+    
   ],
   "Characters": [
     "TheCalamity"

@@ -1,13 +1,13 @@
 {
   "Dialogues": [
     {
-      "DialogueText": [ { "Text": "Dude the Selenic Order totally fucked with the Tablet." } ]
+      "DialogueText": [ { "Text": "Hello, I good news! We'll be able to put the Tablet back together with some time. While that's being worked on, we'll continue gathering what's needed for the ritual." } ]
     },
     {
-      "DialogueText": [ { "Text": "Thankfully we can fix it. So fuck em." } ],
+      "DialogueText": [ { "Text": "I unfortunantly haven't made much progress in figuring out what else we need... I'll keep up my research, but for now hang tight. I'll let you know if I find anything." } ],
       "Responses": [
         {
-          "Title": "Pogsome!"
+          "Title": "Can do."
         }
       ]
     }
