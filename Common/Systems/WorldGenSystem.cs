@@ -38,7 +38,7 @@ public class WorldGenSystem : ModSystem
             int DraedonStructuresIndex = FinalIndex + 7;
 
             int currentFinalIndex = FinalIndex;
-            tasks.Insert(DraedonStructuresIndex + 1, new PassLegacy("Lunar Cult Base", (progress, config) =>
+            tasks.Insert(currentFinalIndex, new PassLegacy("Lunar Cult Base", (progress, config) =>
             {
                 progress.Message = Language.GetOrRegister("Mods.Windfall.UI.WorldGen.LunarCultBase").Value;
 

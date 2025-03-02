@@ -250,7 +250,6 @@ public class GoldenTrinket : ModProjectile, ILocalizedModType
                 bool colliding = false;
                 foreach (Projectile spear in Main.projectile.Where(p => p.active && p.type == ModContent.ProjectileType<GoldenJavelin>() && p.owner == Projectile.owner && (int)p.As<GoldenJavelin>().State == 1))
                 {
-                    float collisionPoint = 0;
                     colliding = spear.As<GoldenJavelin>().Colliding(spear.Hitbox, Projectile.Hitbox).Value;
 
                     if(colliding)
