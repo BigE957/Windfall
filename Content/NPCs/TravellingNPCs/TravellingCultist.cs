@@ -7,6 +7,7 @@ using Windfall.Content.NPCs.WorldEvents.LunarCult;
 using DialogueHelper.UI.Dialogue;
 using Windfall.Content.Items.Quests.SealingRitual;
 using CalamityMod.NPCs.TownNPCs;
+using Terraria.ModLoader.IO;
 
 namespace Windfall.Content.NPCs.TravellingNPCs;
 
@@ -48,6 +49,9 @@ public class TravellingCultist : ModNPC, ILocalizedModType
         //NPCID.Sets.FaceEmote[Type] = ModContent.EmoteBubbleType<TravellingCultist>();
         ModContent.GetInstance<DialogueUISystem>().TreeInitialize += ModifyTree;
         ModContent.GetInstance<DialogueUISystem>().TreeClose += CloseTree;
+
+        QuestSystem.SaveWorldDataEvent += SavePoolData;
+        QuestSystem.LoadWorldDataEvent += LoadPoolData;
 
         // Influences how the NPC looks in the Bestiary
         NPCID.Sets.NPCBestiaryDrawModifiers drawModifiers = new()
@@ -479,6 +483,27 @@ public class TravellingCultist : ModNPC, ILocalizedModType
         //foreach(var item in pool.CirculatingDialogues)
         //Main.NewText(QuestSystem.Quests["SealingRitual"].Progress);
         //CurrentDialogue = DialogueState.RitualQuestWayfinder;
+    }
+
+    private void SavePoolData(TagCompound tag)
+    {
+        tag["TravellingCultistCirculatingDialogueCount"] = pool.CirculatingDialogues.Count;
+        for (int i = 0; i < pool.CirculatingDialogues.Count; i++)
+        {
+            tag["TravellingCultistCirculatingDialogue" + i.ToString()] = pool.CirculatingDialogues[i].TreeKey;
+        }
+    }
+
+    private static void LoadPoolData(TagCompound tag)
+    {
+        int dialogueCount = tag.GetInt("TravellingCultistCirculatingDialogueCount");
+        pool.CirculatingDialogues.Clear();
+
+        for (int i = 0; i < pool.CirculatingDialogues.Count; i++)
+        {
+            var (TreeKey, Requirement, Priority, Repeatable) = pool.Dialogues.First(d => d.TreeKey == tag.GetString("TravellingCultistCirculatingDialogue" + i.ToString()));
+            pool.CirculatingDialogues.Add(new(TreeKey, Requirement, Priority));
+        }
     }
 
     #region Town NPC Stuff

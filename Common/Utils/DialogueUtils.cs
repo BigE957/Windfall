@@ -36,7 +36,7 @@ public static partial class WindfallUtils
 
     public class DialoguePool
     {
-        public static List<(string TreeKey, Func<Player, bool> Requirement, byte Priority, bool Repeatable)> Dialogues;
+        public readonly List<(string TreeKey, Func<Player, bool> Requirement, byte Priority, bool Repeatable)> Dialogues;
         public List<(string TreeKey, Func<Player, bool> Requirement, byte Priority)> CirculatingDialogues = [];
 
         public DialoguePool(List<(string TreeKey, Func<Player, bool> Requirement, byte Priority, bool Repeatable)> dialogues)

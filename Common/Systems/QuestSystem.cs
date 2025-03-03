@@ -10,30 +10,71 @@ public delegate void LoadWorldData(TagCompound tag);
 
 public class Quest
 {
+    #region Fields
     /// <summary>
-    /// The Name of the Quest as is used in the Quests List
+    /// The Name of the <see cref="Quest"/> as is used in the Quests List
     /// </summary>
     public string Name { get;}
+
+    /// <summary>
+    /// Whether or not this <see cref="Quest"/> is currently Active
+    /// </summary>
     public bool Active { get; set; }
+
+    /// <summary>
+    /// How far this <see cref="Quest"/> has been progressed
+    /// </summary>
     public int Progress { get; set; }
+
+    /// <summary>
+    /// How much progress must be made on this <see cref="Quest"/> in order for it to be completed
+    /// </summary>
+    public int AmountToComplete { get; private set; }
+
+    /// <summary>
+    /// Whether or not this <see cref="Quest"/> has been Completed
+    /// </summary>
+    public bool Complete { 
+        get 
+        {
+            bool isComplete = Progress >= AmountToComplete;
+            if(AutoDeactivate && isComplete)
+                Active = false;
+            return isComplete; 
+        } 
+    }
+
+    /// <summary>
+    /// Whether or not this <see cref="Quest"/> is Active but not Complete
+    /// </summary>
+    public bool InProgress { get => Active && !Complete; }
+
+    /// <summary>
+    /// Te ratio of how much progress has been made on this <see cref="Quest"/>
+    /// </summary>
+    public float CompletionRatio { get => Progress / (float)AmountToComplete; }
+
+    private readonly bool AutoDeactivate;
+    #endregion
+
+    /// <summary>
+    /// Increments this <see cref="Quest"/>'s progress by one, and handles Auto Deactivation
+    /// </summary>
     public void IncrementProgress()
     {
-        if(Active)
+        if (Active)
             Progress++;
-        if(AutoDeactivate && Complete)
+        if (AutoDeactivate && Complete)
             Active = false;
     }
+    /// <summary>
+    /// Resets progress on this <see cref="Quest"/>
+    /// </summary>
     public void ResetQuest()
     {
         Active = false;
         Progress = 0;
     }
-    public int AmountToComplete { get; private set; }
-    public bool Complete { get => Progress >= AmountToComplete; }
-    public bool InProgress { get => Active && !Complete; }
-    public float CompletionRatio { get => Progress / (float)AmountToComplete; }
-
-    private readonly bool AutoDeactivate;
 
     internal Quest(string name, int amountToComplete, bool autoDeactivates, ref OnWorldLoad worldLoad, ref OnWorldUnload worldUnload, ref SaveWorldData saveWorld, ref LoadWorldData loadWorld)
     {
@@ -67,8 +108,8 @@ public class QuestSystem : ModSystem
 {
     public static OnWorldLoad WorldLoadEvent;
     public static OnWorldUnload WorldUnloadEvent;
-    public static SaveWorldData SaveWorldEvent;
-    public static LoadWorldData LoadWorldEvent;
+    public static SaveWorldData SaveWorldDataEvent;
+    public static LoadWorldData LoadWorldDataEvent;
 
     public static readonly Dictionary<string, Quest> Quests = [];
 
@@ -99,7 +140,7 @@ public class QuestSystem : ModSystem
             Windfall.Instance.Logger.Warn("Already existing quest of name " + name + " was attempted to be added.");
             return;
         }
-        Quests.Add(name, new Quest(name, amountToComplete, autoDeactivate, ref WorldLoadEvent, ref WorldUnloadEvent, ref SaveWorldEvent, ref LoadWorldEvent));
+        Quests.Add(name, new Quest(name, amountToComplete, autoDeactivate, ref WorldLoadEvent, ref WorldUnloadEvent, ref SaveWorldDataEvent, ref LoadWorldDataEvent));
     }
 
     #region Saving + Reseting
@@ -107,8 +148,8 @@ public class QuestSystem : ModSystem
     {
         WorldLoadEvent = null;
         WorldUnloadEvent = null;
-        SaveWorldEvent = null;
-        LoadWorldEvent = null;
+        SaveWorldDataEvent = null;
+        LoadWorldDataEvent = null;
 
         Quests.Clear();
     }
@@ -122,11 +163,11 @@ public class QuestSystem : ModSystem
     }
     public override void SaveWorldData(TagCompound tag)
     {
-        SaveWorldEvent.Invoke(tag);
+        SaveWorldDataEvent.Invoke(tag);
     }
     public override void LoadWorldData(TagCompound tag)
     {
-        LoadWorldEvent.Invoke(tag);
+        LoadWorldDataEvent.Invoke(tag);
     }
     #endregion
 }
