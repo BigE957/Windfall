@@ -2,6 +2,7 @@
 using CalamityMod.NPCs.HiveMind;
 using CalamityMod.Projectiles.Rogue;
 using Terraria.GameContent.Bestiary;
+using Terraria.ModLoader.IO;
 using Terraria.Utilities;
 using Windfall.Common.Players;
 using Windfall.Common.Systems;
@@ -51,6 +52,9 @@ public class GodseekerKnight : ModNPC
         ];
     }
     private static List<int> GodlyEssenceIDs = [];
+    public static int GodseekerKnightChats = 0;
+    public static bool EssenceExplained = false;
+    public static int EssenceCounter = 0;
     public override void SetDefaults()
     {
         NPC.friendly = true; // NPC Will not attack player
@@ -69,7 +73,7 @@ public class GodseekerKnight : ModNPC
     }
     public override void OnSpawn(IEntitySource source)
     {
-        if (WorldSaveSystem.GodseekerKnightChats == 0)
+        if (GodseekerKnightChats == 0)
             Dialogue = DialogueState.Initial1;
         NPC.velocity = new Vector2(0, NPC.ai[0]);
         if (NPC.ai[1] != 0)
@@ -204,7 +208,7 @@ public class GodseekerKnight : ModNPC
         Player player = Main.player[Main.myPlayer];
         if (Dialogue != DialogueState.Neutral)
         {
-            if (WorldSaveSystem.GodseekerKnightChats == 0)
+            if (GodseekerKnightChats == 0)
                 Topic = "JustMet";
             return GetWindfallTextValue($"Dialogue.{nameof(GodseekerKnight)}.Conversation.{Topic}.{Dialogue}");
         }
@@ -234,7 +238,7 @@ public class GodseekerKnight : ModNPC
             else
                 chat.Add(GetWindfallTextValue($"Dialogue.{nameof(GodseekerKnight)}.Chat.ConsumedLittle"));
         }
-        WorldSaveSystem.GodseekerKnightChats++;
+        GodseekerKnightChats++;
         return chat;
     }
     /*
@@ -294,6 +298,21 @@ public class GodseekerKnight : ModNPC
     }
     */
     public override bool CheckActive() => !NPC.AnyNPCs(ModContent.NPCType<HiveMind>());
+
+    public override void SaveData(TagCompound tag)
+    {
+        tag["seekerChats"] = GodseekerKnightChats;
+        tag["EssenceExplained"] = EssenceExplained;
+        tag["EssenceCounter"] = EssenceCounter;
+    }
+
+    public override void LoadData(TagCompound tag)
+    {
+        GodseekerKnightChats = tag.GetInt("seekerChats");
+        EssenceExplained = tag.GetBool("EssenceExplained");
+        EssenceCounter = tag.GetInt("EssenceCounter");
+    }
+
     public override void TownNPCAttackStrength(ref int damage, ref float knockback)
     {
         damage = 10;

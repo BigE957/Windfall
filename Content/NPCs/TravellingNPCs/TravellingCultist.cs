@@ -50,9 +50,6 @@ public class TravellingCultist : ModNPC, ILocalizedModType
         ModContent.GetInstance<DialogueUISystem>().TreeInitialize += ModifyTree;
         ModContent.GetInstance<DialogueUISystem>().TreeClose += CloseTree;
 
-        QuestSystem.SaveWorldDataEvent += SavePoolData;
-        QuestSystem.LoadWorldDataEvent += LoadPoolData;
-
         // Influences how the NPC looks in the Bestiary
         NPCID.Sets.NPCBestiaryDrawModifiers drawModifiers = new()
         {
@@ -125,11 +122,7 @@ public class TravellingCultist : ModNPC, ILocalizedModType
         RitualTalk,
         QuestlineFinished,
     }
-    private static DialogueState CurrentDialogue
-    {
-        get => (DialogueState)WorldSaveSystem.cultistChatState;
-        set => WorldSaveSystem.cultistChatState = (int)value;
-    }
+    private static DialogueState CurrentDialogue = DialogueState.SearchForHelp;
 
     private enum PriorityTiers
     {
@@ -485,23 +478,27 @@ public class TravellingCultist : ModNPC, ILocalizedModType
         //CurrentDialogue = DialogueState.RitualQuestWayfinder;
     }
 
-    private void SavePoolData(TagCompound tag)
+    public override void SaveData(TagCompound tag)
     {
-        tag["TravellingCultistCirculatingDialogueCount"] = pool.CirculatingDialogues.Count;
+        tag["DialogueState"] = (int)CurrentDialogue;
+
+        List<string> circulatingTrees = [];
         for (int i = 0; i < pool.CirculatingDialogues.Count; i++)
         {
-            tag["TravellingCultistCirculatingDialogue" + i.ToString()] = pool.CirculatingDialogues[i].TreeKey;
+            circulatingTrees.Add(pool.CirculatingDialogues[i].TreeKey);
         }
+        tag["CirculatingDialogue"] = circulatingTrees;
     }
 
-    private static void LoadPoolData(TagCompound tag)
+    public override void LoadData(TagCompound tag)
     {
-        int dialogueCount = tag.GetInt("TravellingCultistCirculatingDialogueCount");
-        pool.CirculatingDialogues.Clear();
+        CurrentDialogue = (DialogueState)tag.GetInt("DialogueState");
 
+        pool.CirculatingDialogues.Clear();
+        List<string> circulatingTrees = (List<string>)tag.GetList<string>("CirculatingDialogue");
         for (int i = 0; i < pool.CirculatingDialogues.Count; i++)
         {
-            var (TreeKey, Requirement, Priority, Repeatable) = pool.Dialogues.First(d => d.TreeKey == tag.GetString("TravellingCultistCirculatingDialogue" + i.ToString()));
+            var (TreeKey, Requirement, Priority, Repeatable) = pool.Dialogues.First(d => d.TreeKey == circulatingTrees[i]);
             pool.CirculatingDialogues.Add(new(TreeKey, Requirement, Priority));
         }
     }
@@ -524,10 +521,9 @@ public class TravellingCultist : ModNPC, ILocalizedModType
 
         if (Main.dayTime && Main.time == 10)
         {
-            if (!travelerIsThere && (Main.rand.NextBool(4) || WorldSaveSystem.PlanteraJustDowned))
+            if (!travelerIsThere && (Main.rand.NextBool(4) || (NPC.downedPlantBoss && CurrentDialogue == DialogueState.RitualQuestGap)))
             {
                 spawnTime = GetRandomSpawnTime(5400, 8100);
-                WorldSaveSystem.PlanteraJustDowned = false;
             }
             else
             {

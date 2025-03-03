@@ -6,6 +6,7 @@ using CalamityMod.Projectiles.Rogue;
 using DialogueHelper.UI.Dialogue;
 using Terraria.GameContent.Bestiary;
 using Terraria.GameContent.Events;
+using Terraria.ModLoader.IO;
 using Terraria.Utilities;
 using Windfall.Common.Systems;
 using Windfall.Common.Utils;
@@ -86,13 +87,15 @@ public class IlmeranPaladin : ModNPC
             NPC.spriteDirection = NPC.direction = (int)NPC.ai[1] * -1;
     }
 
+    public static int IlmeranPaladinChats = 0;
+
     public override bool CanChat() => true;
 
     public override string GetChat()
     {
         Player player = Main.player[Main.myPlayer];
         WeightedRandom<string> chat = new();
-        if (WorldSaveSystem.IlmeranPaladinChats == 0)
+        if (IlmeranPaladinChats == 0)
             return GetWindfallTextValue($"Dialogue.IlmeranPaladin.Chat.FirstChat");
         if (NPC.ai[3] == 1)
         {
@@ -133,7 +136,7 @@ public class IlmeranPaladin : ModNPC
         chat.Add(GetWindfallTextValue($"Dialogue.IlmeranPaladin.Chat.Standard1"));
         chat.Add(GetWindfallTextValue($"Dialogue.IlmeranPaladin.Chat.Standard2"));
         chat.Add(GetWindfallTextValue($"Dialogue.IlmeranPaladin.Chat.Standard3"));
-        WorldSaveSystem.IlmeranPaladinChats++;
+        IlmeranPaladinChats++;
 
         ModContent.GetInstance<DialogueUISystem>().DisplayDialogueTree(Windfall.Instance, "IlmeranPaladin/Default", new(Name, [NPC.whoAmI]));
 
@@ -170,6 +173,15 @@ public class IlmeranPaladin : ModNPC
             NPC.velocity = new Vector2(0, 0);
             NPC.Transform(ModContent.NPCType<IlmeranPaladinKnocked>());
         }
+    }
+
+    public override void SaveData(TagCompound tag)
+    {
+        tag["paladinChats"] = IlmeranPaladinChats;
+    }
+    public override void LoadData(TagCompound tag)
+    {
+        IlmeranPaladinChats = tag.GetInt("paladinChats");
     }
 
     #region Town NPC-ness
