@@ -10,6 +10,10 @@ public delegate void LoadWorldData(TagCompound tag);
 
 public class Quest
 {
+    /// <summary>
+    /// The Name of the Quest as is used in the Quests List
+    /// </summary>
+    public string Name { get;}
     public bool Active { get; set; }
     public int Progress { get; set; }
     public void IncrementProgress()
@@ -31,8 +35,9 @@ public class Quest
 
     private readonly bool AutoDeactivate;
 
-    internal Quest(int amountToComplete, bool autoDeactivates, ref OnWorldLoad worldLoad, ref OnWorldUnload worldUnload, ref SaveWorldData saveWorld, ref LoadWorldData loadWorld)
+    internal Quest(string name, int amountToComplete, bool autoDeactivates, ref OnWorldLoad worldLoad, ref OnWorldUnload worldUnload, ref SaveWorldData saveWorld, ref LoadWorldData loadWorld)
     {
+        Name = name;
         Active = false;
         Progress = 0;
         AmountToComplete = amountToComplete;
@@ -47,14 +52,14 @@ public class Quest
     private void SaveWorldData(TagCompound tag)
     {
         if (Active)
-            tag[nameof(Active)] = true;
+            tag[Name + "/" + nameof(Active)] = true;
         if (Progress != 0)
-            tag[nameof(Progress)] = Progress;
+            tag[Name + "/" + nameof(Progress)] = Progress;
     }
     private void LoadWorldData(TagCompound tag)
     {
-        Active = tag.GetBool(nameof(Active));
-        Progress = tag.GetInt(nameof(Progress));
+        Active = tag.GetBool(Name + "/" + nameof(Active));
+        Progress = tag.GetInt(Name + "/" + nameof(Progress));
     }
 }
 
@@ -72,12 +77,15 @@ public class QuestSystem : ModSystem
     {
         OnModUnload(); //Resets all data just in case
 
+        //Ilmeran Paladin Quests
         AddQuest("CnidrionHunt", 3);
         AddQuest("ScoogHunt");
         AddQuest("ShuckinClams", 8);
         AddQuest("ClamHunt");
-        AddQuest("TabletFragment", 2, true);
         AddQuest("ScoogHunt2");
+
+        //Travelling Cultist Quests
+        AddQuest("TabletFragment", 2, true);
         AddQuest("PrimordialLightShard", autoDeactivate: true);
         AddQuest("Recruitment", 4);
         AddQuest("DraconicBone", autoDeactivate: true);
@@ -91,7 +99,7 @@ public class QuestSystem : ModSystem
             Windfall.Instance.Logger.Warn("Already existing quest of name " + name + " was attempted to be added.");
             return;
         }
-        Quests.Add(name, new Quest(amountToComplete, autoDeactivate, ref WorldLoadEvent, ref WorldUnloadEvent, ref SaveWorldEvent, ref LoadWorldEvent));
+        Quests.Add(name, new Quest(name, amountToComplete, autoDeactivate, ref WorldLoadEvent, ref WorldUnloadEvent, ref SaveWorldEvent, ref LoadWorldEvent));
     }
 
     #region Saving + Reseting
