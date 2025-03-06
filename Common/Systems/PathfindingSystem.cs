@@ -119,7 +119,7 @@ public class PathfindingSystem : ModSystem
         }
     }
 
-    public class FastPriorityQueue<T> where T : class
+    public class FastPriorityQueue<T>(int capacity) where T : class
     {
         private struct QueueItem
         {
@@ -127,18 +127,11 @@ public class PathfindingSystem : ModSystem
             public float Priority;
         }
 
-        private QueueItem[] _heap;
-        private Dictionary<T, int> _itemToIndex;
-        private int _count;
+        private QueueItem[] _heap = new QueueItem[capacity];
+        private readonly Dictionary<T, int> _itemToIndex = new Dictionary<T, int>(capacity);
+        private int _count = 0;
 
         public int Count => _count;
-
-        public FastPriorityQueue(int capacity)
-        {
-            _heap = new QueueItem[capacity];
-            _itemToIndex = new Dictionary<T, int>(capacity);
-            _count = 0;
-        }
 
         public bool Contains(T item)
         {
