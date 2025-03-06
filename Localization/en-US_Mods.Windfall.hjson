@@ -1840,6 +1840,7 @@ NPCs: {
 	SiphonCollider.DisplayName: Sightseer Collider
 	SiphonSpitter.DisplayName: Sightseer Spitter
 	DisgracedApostleNPC.DisplayName: Disgraced Apostle N P C
+	PathUser.DisplayName: Path User
 }
 
 Projectiles: {

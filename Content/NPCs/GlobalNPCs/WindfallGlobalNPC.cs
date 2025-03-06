@@ -97,7 +97,6 @@ public class WindfallGlobalNPC : GlobalNPC
         if (npc.type == NPCID.Plantera && !NPC.downedPlantBoss)
         {
             Projectile.NewProjectile(Entity.GetSource_NaturalSpawn(), npc.Center, Vector2.Zero, ModContent.ProjectileType<OratorEntourageSpawner>(), 0, 0);
-            WorldSaveSystem.PlanteraJustDowned = true;
         }
 
         if (npc.type == calamity.Find<ModNPC>("LeviathanStart").Type)
