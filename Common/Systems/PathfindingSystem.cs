@@ -1,7 +1,4 @@
-﻿using CalamityMod.Items.Accessories;
-using static Terraria.Utilities.NPCUtils;
-
-namespace Windfall.Common.Systems;
+﻿namespace Windfall.Common.Systems;
 public class PathfindingSystem : ModSystem
 {
     // Pathfinding System based on theses videos' implementation of the A* algorithim:
@@ -53,23 +50,27 @@ public class PathfindingSystem : ModSystem
 
         public Node[] Neighbors;
         public Node Connection;
-        public float G = float.MaxValue;
-        public float F = float.MaxValue;
+
+        public int G = int.MaxValue;
+        public int F = int.MaxValue;
+
+        [NonSerialized]
+        public int QueueIndex = -1;
 
         public void SetConnection(Node node) => Connection = node;
-        public void SetG(float g) => G = g;
-        public void SetF(float f) => F = f;
+        public void SetG(int g) => G = g;
+        public void SetF(int f) => F = f;
 
         public int GetDistance(int targetX, int targetY)
         {
             int dx = Math.Abs(X - targetX);
             int dy = Math.Abs(Y - targetY);
-            return (dx > dy) ? (14 * dy + 10 * (dx - dy)) : (14 * dx + 10 * (dy - dx));
+            int min = Math.Min(dx, dy);
+            return 14 * min + 10 * (dx + dy - 2 * min);
         }
 
         public void InitNeighbors()
         {
-            // Pre-allocate array of exact size based on valid neighbors
             List<Node> validNeighbors = new(8);
 
             foreach (Point p in Dirs)
@@ -78,9 +79,7 @@ public class PathfindingSystem : ModSystem
                 int ny = TilePosition.Y + p.Y;
 
                 if (WorldGen.InWorld(nx, ny))
-                {
                     validNeighbors.Add(NodeMap[nx][ny]);
-                }
             }
 
             Neighbors = [.. validNeighbors];
@@ -88,12 +87,11 @@ public class PathfindingSystem : ModSystem
 
         public void ResetState()
         {
-            G = float.MaxValue;
-            F = float.MaxValue;
+            G = int.MaxValue;
+            F = int.MaxValue;
             Connection = null;
         }
 
-        // IComparable implementation directly in the class
         public int CompareTo(object other)
         {
             if (other == null || other is not Node)
@@ -106,74 +104,73 @@ public class PathfindingSystem : ModSystem
         }
     }
 
-    public class Path(Point[] nodes)
+    public class FoundPath(Point[] nodes)
     {
         public Point[] Points { get; } = nodes;
 
         public void DrawPath(SpriteBatch sb)
         {
             for (int i = 0; i < Points.Length - 1; i++)
-            {
                 sb.DrawLineBetter(Points[i].ToWorldCoordinates(), Points[i + 1].ToWorldCoordinates(), Color.Red, 4);
-            }
         }
     }
 
-    public class FastPriorityQueue<T>(int capacity) where T : class
+    public class PriorityQueue(int capacity = 16)
     {
         private struct QueueItem
         {
-            public T Item;
+            public Node Item;
             public float Priority;
         }
 
-        private QueueItem[] _heap = new QueueItem[capacity];
-        private readonly Dictionary<T, int> _itemToIndex = new Dictionary<T, int>(capacity);
-        private int _count = 0;
+        private QueueItem[] heap = new QueueItem[capacity > 0 ? capacity : 16];
+        private readonly Dictionary<Node, int> itemToIndex = new(capacity);
+        private int count = 0;
 
-        public int Count => _count;
+        public int Count => count;
 
-        public bool Contains(T item)
+        public bool Contains(Node item) => itemToIndex.ContainsKey(item);
+
+        public void Enqueue(Node item, float priority)
         {
-            return _itemToIndex.ContainsKey(item);
+            if (count == heap.Length)
+                Resize(heap.Length * 2);
+
+            heap[count] = new QueueItem { Item = item, Priority = priority };
+            itemToIndex[item] = count;
+            BubbleUp(count);
+            count++;
         }
 
-        public void Enqueue(T item, float priority)
+        public Node Dequeue()
         {
-            if (_count == _heap.Length)
-                Resize(_count * 2);
-
-            _heap[_count] = new QueueItem { Item = item, Priority = priority };
-            _itemToIndex[item] = _count;
-            BubbleUp(_count);
-            _count++;
-        }
-
-        public T Dequeue()
-        {
-            if (_count == 0)
+            if (count == 0)
                 throw new InvalidOperationException("Queue is empty");
 
-            T result = _heap[0].Item;
-            _count--;
+            Node result = heap[0].Item;
+            count--;
 
-            _heap[0] = _heap[_count];
-            _itemToIndex[_heap[0].Item] = 0;
-            _itemToIndex.Remove(result);
+            if (count > 0)
+            {
+                heap[0] = heap[count];
+                itemToIndex[heap[0].Item] = 0;
+            }
 
-            if (_count > 0)
+            itemToIndex.Remove(result);
+
+            if (count > 0)
                 BubbleDown(0);
 
             return result;
         }
 
-        public void UpdatePriority(T item, float newPriority)
+        public void UpdatePriority(Node item, float newPriority)
         {
-            if (!_itemToIndex.TryGetValue(item, out int index))
+            if (!itemToIndex.TryGetValue(item, out int index))
                 throw new InvalidOperationException("Item not found in queue");
 
-            float oldPriority = _heap[index].Priority;
-            _heap[index].Priority = newPriority;
+            float oldPriority = heap[index].Priority;
+            heap[index].Priority = newPriority;
 
             if (newPriority < oldPriority)
                 BubbleUp(index);
@@ -183,90 +180,82 @@ public class PathfindingSystem : ModSystem
 
         public void Clear()
         {
-            Array.Clear(_heap);
-            _itemToIndex.Clear();
-            _count = 0;
+            Array.Clear(heap);
+            itemToIndex.Clear();
+            count = 0;
         }
 
         private void BubbleUp(int index)
         {
+            QueueItem item = heap[index];
+
             while (index > 0)
             {
                 int parentIndex = (index - 1) / 2;
-                if (_heap[index].Priority >= _heap[parentIndex].Priority)
+                if (item.Priority >= heap[parentIndex].Priority)
                     break;
 
-                Swap(index, parentIndex);
+                heap[index] = heap[parentIndex];
+                itemToIndex[heap[index].Item] = index;
                 index = parentIndex;
             }
+
+            heap[index] = item;
+            itemToIndex[item.Item] = index;
         }
 
         private void BubbleDown(int index)
         {
+            QueueItem item = heap[index];
+
             while (true)
             {
                 int leftChild = index * 2 + 1;
                 int rightChild = index * 2 + 2;
-                int smallest = index;
 
-                if (leftChild < _count && _heap[leftChild].Priority < _heap[smallest].Priority)
-                    smallest = leftChild;
-
-                if (rightChild < _count && _heap[rightChild].Priority < _heap[smallest].Priority)
-                    smallest = rightChild;
-
-                if (smallest == index)
+                if (leftChild >= count)
                     break;
 
-                Swap(index, smallest);
-                index = smallest;
+                int smallestChild = (rightChild < count && heap[rightChild].Priority < heap[leftChild].Priority)
+                    ? rightChild
+                    : leftChild;
+
+                if (item.Priority <= heap[smallestChild].Priority)
+                    break;
+
+                heap[index] = heap[smallestChild];
+                itemToIndex[heap[index].Item] = index;
+                index = smallestChild;
             }
+
+            heap[index] = item;
+            itemToIndex[item.Item] = index;
         }
 
-        private void Swap(int i, int j)
-        {
-            QueueItem temp = _heap[i];
-            _heap[i] = _heap[j];
-            _heap[j] = temp;
-
-            _itemToIndex[_heap[i].Item] = i;
-            _itemToIndex[_heap[j].Item] = j;
-        }
-
-        private void Resize(int newSize)
-        {
-            Array.Resize(ref _heap, newSize);
-        }
+        private void Resize(int newSize) => Array.Resize(ref heap, newSize);
     }
 
     public class PathFinding
     {
-        public Path MyPath { get; private set; } = null;
+        public FoundPath MyPath { get; private set; } = null;
 
-        private readonly FastPriorityQueue<Node> OpenSet = new(10000);
+        private readonly PriorityQueue OpenSet = new(4096);
         private readonly HashSet<Point> ClosedSet = new(4096);
         private readonly HashSet<Node> ModifiedNodes = new(100);
 
         public void FindPath(Vector2 startWorld, Vector2 targetWorld, Func<Point, Point, bool> isWalkable, float searchRadius = 1225)
         {
+            ClearNodeStates(ModifiedNodes);
+            ModifiedNodes.Clear();
+            OpenSet.Clear();
+            ClosedSet.Clear();
+
             float radiusSquared = searchRadius * searchRadius;
 
             Point startTile = startWorld.ToTileCoordinates();
             Point targetTile = targetWorld.ToTileCoordinates();
 
-            // Quick early exit for out-of-bounds
             if (!WorldGen.InWorld(startTile.X, startTile.Y) || !WorldGen.InWorld(targetTile.X, targetTile.Y))
-            {
-                MyPath = null;
-                return;
-            }
-
-            Node startNode = NodeMap[startTile.X + startTile.X % 2][startTile.Y + startTile.Y % 2];
-
-            int cachedTargetX = targetTile.X + (targetTile.X % 2 == 0 ? 0 : 1);
-            int cachedTargetY = targetTile.Y + (targetTile.Y % 2 == 0 ? 0 : 1);
-
-            if (startNode.GetDistance(cachedTargetX, cachedTargetY) > searchRadius)
             {
                 MyPath = null;
                 return;
@@ -274,20 +263,29 @@ public class PathfindingSystem : ModSystem
 
             if (startTile == targetTile)
             {
-                MyPath = new Path([]);
+                MyPath = new FoundPath([]);
+                return;
+            }
+
+            Node startNode = NodeMap[startTile.X + startTile.X % 2][startTile.Y + startTile.Y % 2];
+
+            int TargetX = targetTile.X + (targetTile.X % 2 == 0 ? 0 : 1);
+            int TargetY = targetTile.Y + (targetTile.Y % 2 == 0 ? 0 : 1);
+            int startToTarget = startNode.GetDistance(TargetX, TargetY);
+
+            if (startToTarget > searchRadius)
+            {
+                MyPath = null;
                 return;
             }
 
             startNode.ResetState();
             startNode.SetG(0);
-            startNode.SetF(startNode.GetDistance(cachedTargetX, cachedTargetY));
+            startNode.SetF(startToTarget);
+            ModifiedNodes.Add(startNode);
 
             const int maxIterations = 5000;
             int iterations = 0;
-
-            OpenSet.Clear();
-            ClosedSet.Clear();
-            ModifiedNodes.Clear();
 
             OpenSet.Enqueue(startNode, startNode.F);
 
@@ -298,11 +296,12 @@ public class PathfindingSystem : ModSystem
                 //Particle p = new GlowOrbParticle(current.TilePosition.ToWorldCoordinates(), Vector2.Zero, false, 2, 0.5f, Color.Red);
                 //GeneralParticleHandler.SpawnParticle(p);
 
-                int distanceToTarget = current.GetDistance(cachedTargetX, cachedTargetY);
+                int distanceToTarget = current.GetDistance(TargetX, TargetY);
                 if (distanceToTarget <= 20 && (targetWorld - current.WorldPosition).LengthSquared() < 800)
                 {
-                    Main.NewText("Iteration Count: " + iterations);
+                    //Main.NewText("Iteration Count: " + iterations);
                     MyPath = ReconstructPath(current, startNode);
+                    //Main.NewText("Path Length: " + MyPath.Points.Length);
                     ClearNodeStates(ModifiedNodes);
                     return;
                 }
@@ -311,38 +310,36 @@ public class PathfindingSystem : ModSystem
 
                 foreach (Node neighbor in current.Neighbors)
                 {
-                    // Fast fail for invalid neighbors
+                    if (ClosedSet.Contains(neighbor.TilePosition))
+                        continue;
+                    
                     if (!isWalkable(current.TilePosition, neighbor.TilePosition))
                         continue;
 
-                    // World distance check before processing
                     if ((targetWorld - neighbor.WorldPosition).LengthSquared() > radiusSquared)
                         continue;
 
-                    // Skip already processed nodes
-                    if (ClosedSet.Contains(neighbor.TilePosition))
-                        continue;
+                    int tentativeG = current.G + current.GetDistance(neighbor.X, neighbor.Y);
 
-                    float tentativeG = current.G + current.GetDistance(neighbor.X, neighbor.Y);
-
-                    // Update if better path found
                     if (tentativeG < neighbor.G)
                     {
                         ModifiedNodes.Add(neighbor);
                         neighbor.SetConnection(current);
                         neighbor.SetG(tentativeG);
 
-                        float newF = tentativeG + neighbor.GetDistance(cachedTargetX, cachedTargetY);
+                        int newF = neighbor.GetDistance(TargetX, TargetY) + heuristic;
                         neighbor.SetF(newF);
 
-                        // Enqueue with new priority
-                        OpenSet.Enqueue(neighbor, newF);
+                        if (OpenSet.Contains(neighbor))
+                            OpenSet.UpdatePriority(neighbor, newF);
+                        else
+                            OpenSet.Enqueue(neighbor, newF);
                     }
                 }
                 iterations++;
             }
 
-            Main.NewText("Iteration Count: " + iterations);
+            //Main.NewText("Iteration Count: " + iterations);
             ClearNodeStates(ModifiedNodes);
             MyPath = null;
             return;
@@ -372,7 +369,6 @@ public class PathfindingSystem : ModSystem
                     return false;
             }
             return true;
-
         }
 
         private static void ClearNodeStates(HashSet<Node> nodes)
@@ -382,13 +378,9 @@ public class PathfindingSystem : ModSystem
             nodes.Clear();
         }
 
-        private static Path ReconstructPath(Node endNode, Node startNode)
+        private static FoundPath ReconstructPath(Node endNode, Node startNode)
         {
-            // Estimate path length to avoid resizing
-            int estimatedLength = (int)(Math.Sqrt(
-                Math.Pow(endNode.X - startNode.X, 2) +
-                Math.Pow(endNode.Y - startNode.Y, 2)
-            )) + 10;
+            int estimatedLength = (int)Math.Sqrt(Math.Pow(endNode.X - startNode.X, 2) +Math.Pow(endNode.Y - startNode.Y, 2)) + 10;
 
             List<Point> path = new(estimatedLength);
             Node current = endNode;
@@ -400,11 +392,10 @@ public class PathfindingSystem : ModSystem
             }
             path.Add(current.TilePosition);
 
-            // Convert to array for better performance
             Point[] pathArray = [.. path];
             Array.Reverse(pathArray);
 
-            return new Path(pathArray);
+            return new FoundPath(pathArray);
         }
     }
 }
