@@ -140,7 +140,7 @@ public class PathfindingSystem : ModSystem
 
             heap[count] = new QueueItem { Item = item, Priority = priority };
             itemToIndex[item] = count;
-            BubbleUp(count);
+            SortUp(count);
             count++;
         }
 
@@ -161,7 +161,7 @@ public class PathfindingSystem : ModSystem
             itemToIndex.Remove(result);
 
             if (count > 0)
-                BubbleDown(0);
+                SortDown(0);
 
             return result;
         }
@@ -175,9 +175,9 @@ public class PathfindingSystem : ModSystem
             heap[index].Priority = newPriority;
 
             if (newPriority < oldPriority)
-                BubbleUp(index);
+                SortUp(index);
             else if (newPriority > oldPriority)
-                BubbleDown(index);
+                SortDown(index);
         }
 
         public void Clear()
@@ -187,7 +187,7 @@ public class PathfindingSystem : ModSystem
             count = 0;
         }
 
-        private void BubbleUp(int index)
+        private void SortUp(int index)
         {
             QueueItem item = heap[index];
 
@@ -206,7 +206,7 @@ public class PathfindingSystem : ModSystem
             itemToIndex[item.Item] = index;
         }
 
-        private void BubbleDown(int index)
+        private void SortDown(int index)
         {
             QueueItem item = heap[index];
 
