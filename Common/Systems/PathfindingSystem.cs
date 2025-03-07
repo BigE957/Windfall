@@ -1,4 +1,6 @@
-﻿namespace Windfall.Common.Systems;
+﻿using CalamityMod.Items.Weapons.Ranged;
+
+namespace Windfall.Common.Systems;
 public class PathfindingSystem : ModSystem
 {
     // Pathfinding System based on theses videos' implementation of the A* algorithim:
@@ -327,7 +329,7 @@ public class PathfindingSystem : ModSystem
                         neighbor.SetConnection(current);
                         neighbor.SetG(tentativeG);
 
-                        int newF = neighbor.GetDistance(TargetX, TargetY) + heuristic;
+                        int newF = tentativeG + neighbor.GetDistance(TargetX, TargetY);
                         neighbor.SetF(newF);
 
                         if (OpenSet.Contains(neighbor))
@@ -339,7 +341,7 @@ public class PathfindingSystem : ModSystem
                 iterations++;
             }
 
-            //Main.NewText("Iteration Count: " + iterations);
+            Main.NewText("Iteration Count: " + iterations);
             ClearNodeStates(ModifiedNodes);
             MyPath = null;
             return;
@@ -380,7 +382,10 @@ public class PathfindingSystem : ModSystem
 
         private static FoundPath ReconstructPath(Node endNode, Node startNode)
         {
-            int estimatedLength = (int)Math.Sqrt(Math.Pow(endNode.X - startNode.X, 2) +Math.Pow(endNode.Y - startNode.Y, 2)) + 10;
+            int estimatedLength = (int)(Math.Sqrt(
+                Math.Pow(endNode.X - startNode.X, 2) +
+                Math.Pow(endNode.Y - startNode.Y, 2)
+            )) + 10;
 
             List<Point> path = new(estimatedLength);
             Node current = endNode;
