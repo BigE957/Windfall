@@ -4,7 +4,8 @@ using Terraria;
 namespace Windfall.Content.Buffs.DoT;
 public class Wildfire : ModBuff
 {
-    public override string Texture => "CalamityMod/Buffs/DamageOverTime/Dragonfire";
+    public override string Texture => "Windfall/Assets/Buffs/Wildfire";
+
     public override void SetStaticDefaults()
     {
         Main.debuff[Type] = true;

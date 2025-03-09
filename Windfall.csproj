@@ -9,6 +9,7 @@
 		<NoWarn>MSB3270</NoWarn>
     </PropertyGroup>
   <ItemGroup>
+    <None Remove="Assets\Buffs\Wildfire.png" />
     <None Remove="Assets\Graphics\Extra\InvertedSwordSmear.png" />
     <None Remove="Assets\Graphics\Extra\PaintSmear.png" />
     <None Remove="Assets\Graphics\Metaballs\Empyrean_Metaball\EmpyreanLayer1.png" />
@@ -85,7 +86,6 @@
     <None Remove="Content\Buffs\Cooldowns\ParryWeaponOutline.png" />
     <None Remove="Content\Buffs\Cooldowns\ParryWeaponOverlay.png" />
     <None Remove="Content\Buffs\Weapons\Minions\ShadowHandBuff.png" />
-    <None Remove="Content\Buffs\Weapons\PerfectFlow.png" />
     <None Remove="Content\Items\Journals\JournalAerie.png" />
     <None Remove="Content\Items\Journals\JournalCompilation.png" />
     <None Remove="Content\Items\Journals\JournalCorruption.png" />
