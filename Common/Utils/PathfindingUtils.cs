@@ -3,7 +3,7 @@
 namespace Windfall.Common.Utils;
 public static partial class WindfallUtils
 {
-    public static void AntiGravityPathfindingMovement(NPC npc, PathFinding pathFinding, ref int currentWaypoint, float accelMult = 1f)
+    public static bool AntiGravityPathfindingMovement(NPC npc, PathFinding pathFinding, ref int currentWaypoint, float accelMult = 1f)
     {
         foreach (NPC user in Main.npc.Where(n => n.active && n.type == npc.type && n.whoAmI != npc.whoAmI))
         {
@@ -15,29 +15,19 @@ public static partial class WindfallUtils
         }
 
         if (pathFinding.MyPath == null || pathFinding.MyPath.Points.Length == 0)
-        {
-            npc.velocity *= 0.9f;
-            return;
-        }
+            return false;
 
         if (currentWaypoint >= pathFinding.MyPath.Points.Length - 1)
-        {
-            npc.velocity *= 0.9f;
-            return;
-        }
+            return false;
 
         float distanceToWaypoint = Vector2.Distance(npc.Center, pathFinding.MyPath.Points[currentWaypoint].ToWorldCoordinates());
         //Main.NewText(dist);
         while (distanceToWaypoint < 24)
         {
             currentWaypoint++;
+            if (currentWaypoint >= pathFinding.MyPath.Points.Length - 1)
+                return false;
             distanceToWaypoint = Vector2.Distance(npc.Center, pathFinding.MyPath.Points[currentWaypoint].ToWorldCoordinates());
-        }
-
-        if (currentWaypoint >= pathFinding.MyPath.Points.Length - 1)
-        {
-            npc.velocity *= 0.9f;
-            return;
         }
 
         for (int x = -1; x <= 1; x++)
@@ -58,9 +48,11 @@ public static partial class WindfallUtils
 
         npc.velocity = npc.velocity.ClampLength(0f, 6f);
         npc.rotation = npc.velocity.ToRotation() + Pi;
+
+        return true;
     }
     
-    public static bool GravityAffectedPathfindingMovement(NPC npc, PathFinding pathFinding, ref int currentWaypoint, out Vector2 velocity, out bool shouldStop, out bool jumpStarted, float maxXSpeed, float jumpForce, float gravityForce, float xAccelMult = 0.5f)
+    public static bool GravityAffectedPathfindingMovement(NPC npc, PathFinding pathFinding, ref int currentWaypoint, out Vector2 velocity, out bool jumpStarted, float maxXSpeed, float jumpForce, float gravityForce, float xAccelMult = 0.5f)
     {
         //Calculate Missing Values
         float testJump = jumpForce;
@@ -82,28 +74,19 @@ public static partial class WindfallUtils
         }
         int finalJumpLength = (int)Math.Ceiling(jumpLength / 16);
 
-        return GravityAffectedPathfindingMovement(npc, pathFinding, ref currentWaypoint, out velocity, out shouldStop, out jumpStarted, maxXSpeed, xAccelMult, jumpForce, gravityForce, finalJumpheight, finalJumpLength);
+        return GravityAffectedPathfindingMovement(npc, pathFinding, ref currentWaypoint, out velocity, out jumpStarted, maxXSpeed, xAccelMult, jumpForce, gravityForce, finalJumpheight, finalJumpLength);
     }
     
-    public static bool GravityAffectedPathfindingMovement(NPC npc, PathFinding pathFinding, ref int currentWaypoint, out Vector2 velocity, out bool shouldStop, out bool jumpStarted, float maxXSpeed = 4, float jumpForce = 12, float gravityForce = 0.66f, float xAccelMult = 0.5f, int jumpHeight = 8, int jumpLength = 10)
+    public static bool GravityAffectedPathfindingMovement(NPC npc, PathFinding pathFinding, ref int currentWaypoint, out Vector2 velocity, out bool jumpStarted, float maxXSpeed = 4, float jumpForce = 12, float gravityForce = 0.66f, float xAccelMult = 0.5f, int jumpHeight = 8, int jumpLength = 10)
     {
-        shouldStop = false;
         jumpStarted = false;
         velocity = npc.velocity;
 
         if (pathFinding.MyPath == null || pathFinding.MyPath.Points.Length == 0)
-        {
-            velocity.X *= 0.9f;
-            velocity.Y += gravityForce;
-            return true;
-        }
+            return false;
 
         if (currentWaypoint >= pathFinding.MyPath.Points.Length - 1)
-        {
-            velocity.X *= 0.9f;
-            velocity.Y += gravityForce;
-            return true;
-        }
+            return false;
 
         float distanceToWaypoint = Vector2.Distance(npc.Center, pathFinding.MyPath.Points[currentWaypoint].ToWorldCoordinates());
         //Main.NewText(dist);
@@ -111,11 +94,8 @@ public static partial class WindfallUtils
         {
             currentWaypoint++;
             if (currentWaypoint >= pathFinding.MyPath.Points.Length - 1)
-            {
-                velocity.X *= 0.9f;
-                velocity.Y += gravityForce;
-                return true;
-            }
+                return false;
+            
             distanceToWaypoint = Vector2.Distance(npc.Center, pathFinding.MyPath.Points[currentWaypoint].ToWorldCoordinates());
         }
 
@@ -193,17 +173,10 @@ public static partial class WindfallUtils
 
                 if (!shouldJump)
                 {
-                    shouldStop = true;
+                    return false;
                     //Main.NewText("CANT MAKE IT STOP!!!");
                 }
             }
-        }
-
-
-        if (shouldStop)
-        {
-            velocity = Vector2.Zero;
-            return false;
         }
         else
         {
