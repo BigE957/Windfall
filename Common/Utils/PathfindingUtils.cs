@@ -60,7 +60,7 @@ public static partial class WindfallUtils
         npc.rotation = npc.velocity.ToRotation() + Pi;
     }
     
-    public static bool GravityAffectedPathfindingMovement(NPC npc, PathFinding pathFinding, ref int currentWaypoint, out Vector2 velocity, out bool shouldStop, out bool jumpStarted, float maxXSpeed, float xAccelMult, float jumpForce, float gravityForce)
+    public static bool GravityAffectedPathfindingMovement(NPC npc, PathFinding pathFinding, ref int currentWaypoint, out Vector2 velocity, out bool shouldStop, out bool jumpStarted, float maxXSpeed, float jumpForce, float gravityForce, float xAccelMult = 0.5f)
     {
         //Calculate Missing Values
         float testJump = jumpForce;
@@ -85,7 +85,7 @@ public static partial class WindfallUtils
         return GravityAffectedPathfindingMovement(npc, pathFinding, ref currentWaypoint, out velocity, out shouldStop, out jumpStarted, maxXSpeed, xAccelMult, jumpForce, gravityForce, finalJumpheight, finalJumpLength);
     }
     
-    public static bool GravityAffectedPathfindingMovement(NPC npc, PathFinding pathFinding, ref int currentWaypoint, out Vector2 velocity, out bool shouldStop, out bool jumpStarted, float maxXSpeed = 4, float xAccelMult = 0.5f, float jumpForce = 12, float gravityForce = 0.66f, int jumpHeight = 8, int jumpLength = 10)
+    public static bool GravityAffectedPathfindingMovement(NPC npc, PathFinding pathFinding, ref int currentWaypoint, out Vector2 velocity, out bool shouldStop, out bool jumpStarted, float maxXSpeed = 4, float jumpForce = 12, float gravityForce = 0.66f, float xAccelMult = 0.5f, int jumpHeight = 8, int jumpLength = 10)
     {
         shouldStop = false;
         jumpStarted = false;
@@ -224,5 +224,305 @@ public static partial class WindfallUtils
         }
 
         return true;
+    }
+
+    public static bool IsWalkableThroughDoors(this NPC NPC, Point fromPoint, Point toPoint)
+    {
+        if (IsSolidNotDoor(new(toPoint.X, toPoint.Y)))
+            return false;
+
+
+        //Direction
+        int dirX = toPoint.X - fromPoint.X;
+        int dirY = toPoint.Y - fromPoint.Y;
+
+        // Adjacent points can use simplified logic
+        if (Math.Abs(dirX) <= 1 && Math.Abs(dirY) <= 1)
+        {
+            // For diagonal movement only, check the two orthogonal tiles
+            if (dirX != 0 && dirY != 0)
+            {
+                if (IsSolidNotDoor(new(fromPoint.X + dirX, fromPoint.Y)) ||
+                    IsSolidNotDoor(new(fromPoint.X, fromPoint.Y + dirY)))
+                    return false;
+            }
+            return true;
+        }
+
+        // Scale direction for midpoint
+        dirX /= 2;
+        dirY /= 2;
+
+        int midX = fromPoint.X + dirX;
+        int midY = fromPoint.Y + dirY;
+
+        // Check if the midpoint is solid
+        if (IsSolidNotDoor(new(midX, midY)))
+            return false;
+
+        // For diagonal movement, check additional points
+        if (dirX != 0 && dirY != 0)
+        {
+            if (IsSolidNotDoor(new(fromPoint.X + dirX, fromPoint.Y)) ||
+                IsSolidNotDoor(new(fromPoint.X, fromPoint.Y + dirY)))
+                return false;
+        }
+
+        // Calculate perpendicular direction
+        int perpX = -dirY;
+        int perpY = dirX;
+
+        // Normalize to ensure we have direction, not magnitude
+        if (perpX != 0 || perpY != 0)
+        {
+            int gcd = GreatestCommonDivisor(Math.Abs(perpX), Math.Abs(perpY));
+            if (gcd > 1)
+            {
+                perpX /= gcd;
+                perpY /= gcd;
+            }
+        }
+
+        if (dirX == 0 || dirY == 0)
+        {
+            Point perpPos = fromPoint + new Point(perpX, perpY);
+            Point perpNeg = fromPoint - new Point(perpX, perpY);
+            bool startLeftBlocked = IsSolidNotDoor(new(perpNeg.X, perpNeg.Y));
+            bool startRightBlocked = IsSolidNotDoor(new(perpPos.X, perpPos.Y));
+
+            perpPos = toPoint + new Point(perpX, perpY);
+            perpNeg = toPoint - new Point(perpX, perpY);
+            bool toLeftBlocked = IsSolidNotDoor(new(perpNeg.X, perpNeg.Y));
+            bool toRightBlocked = IsSolidNotDoor(new(perpPos.X, perpPos.Y));
+
+            if ((startLeftBlocked && toRightBlocked) || (startRightBlocked && toLeftBlocked))
+                return false;
+        }
+
+        // Determine the length to check based on NPC dimensions
+        int npcTileWidth = (int)Math.Round(NPC.width / 16f);
+        int npcTileHeight = (int)Math.Round(NPC.height / 16f);
+
+        int length;
+        if (perpX != 0 && perpY != 0)
+            length = Math.Max(npcTileWidth, npcTileHeight);
+        else if (perpX == 0)
+            length = npcTileHeight;
+        else
+            length = npcTileWidth;
+
+        int gapSize = 1; // Start at 1 due to midpoint being walkable
+        //Dust.NewDustPerfect(fromPoint.ToWorldCoordinates(), DustID.AncientLight, Vector2.Zero).noGravity = true;
+        //Dust.NewDustPerfect(toPoint.ToWorldCoordinates(), DustID.AncientLight, Vector2.Zero).noGravity = true;
+        // Check in both positive and negative directions
+        for (int i = 1; i < length && gapSize < length; i++)
+        {
+            bool posPathClear = true;
+            bool negPathClear = true;
+
+            int posX = midX + (perpX * i);
+            int posY = midY + (perpY * i);
+
+            int negX = midX - (perpX * i);
+            int negY = midY - (perpY * i);
+
+            // For diagonal perpendicular directions, additional corner checks
+            if (perpX != 0 && perpY != 0)
+            {
+                // Check diagonal corners in positive direction
+                if (IsSolidNotDoor(new(midX + (perpX * (i - 1)), posY)) ||
+                    IsSolidNotDoor(new(posX, midY + (perpY * (i - 1)))))
+                {
+                    if (i == 1)
+                        return false;
+                    posPathClear = false;
+                }
+
+                // Check diagonal corners in negative direction
+                if (IsSolidNotDoor(new(midX - (perpX * (i - 1)), negY)) ||
+                    IsSolidNotDoor(new(negX, midY - (perpY * (i - 1)))))
+                {
+                    if (i == 1)
+                        return false;
+                    negPathClear = false;
+                }
+            }
+
+            // Check main tile in positive direction
+            if (posPathClear && !IsSolidNotDoor(new(posX, posY)) && !IsSolidNotDoor(new(posX - dirX, posY - dirY)))
+            {
+                //Dust.NewDustPerfect(new Point(posX, posY).ToWorldCoordinates(), DustID.Terra, Vector2.Zero);
+                gapSize++;
+            }
+            else
+                posPathClear = false;
+
+            // Check main tile in negative direction
+            if (negPathClear && !IsSolidNotDoor(new(negX, negY)) && !IsSolidNotDoor(new(negX - dirX, negY - dirY)))
+            {
+                //Dust.NewDustPerfect(new Point(negX, negY).ToWorldCoordinates(), DustID.Terra, Vector2.Zero);
+                gapSize++;
+            }
+            else
+                negPathClear = false;
+
+            if (gapSize >= length)
+                return true;
+
+            if (!posPathClear && !negPathClear)
+                return false;
+        }
+
+        return false;
+    }
+
+    public static bool IsWalkableNoDoors(this NPC NPC, Point fromPoint, Point toPoint)
+    {
+        if (WorldGen.SolidTile(toPoint.X, toPoint.Y))
+            return false;
+
+
+        //Direction
+        int dirX = toPoint.X - fromPoint.X;
+        int dirY = toPoint.Y - fromPoint.Y;
+
+        // Adjacent points can use simplified logic
+        if (Math.Abs(dirX) <= 1 && Math.Abs(dirY) <= 1)
+        {
+            // For diagonal movement only, check the two orthogonal tiles
+            if (dirX != 0 && dirY != 0)
+            {
+                if (WorldGen.SolidTile(fromPoint.X + dirX, fromPoint.Y) ||
+                    WorldGen.SolidTile(fromPoint.X, fromPoint.Y + dirY))
+                    return false;
+            }
+            return true;
+        }
+
+        // Scale direction for midpoint
+        dirX /= 2;
+        dirY /= 2;
+
+        int midX = fromPoint.X + dirX;
+        int midY = fromPoint.Y + dirY;
+
+        // Check if the midpoint is solid
+        if (WorldGen.SolidTile(midX, midY))
+            return false;
+
+        // For diagonal movement, check additional points
+        if (dirX != 0 && dirY != 0)
+        {
+            if (WorldGen.SolidTile(fromPoint.X + dirX, fromPoint.Y) ||
+                WorldGen.SolidTile(fromPoint.X, fromPoint.Y + dirY))
+                return false;
+        }
+
+        // Calculate perpendicular direction
+        int perpX = -dirY;
+        int perpY = dirX;
+
+        // Normalize to ensure we have direction, not magnitude
+        if (perpX != 0 || perpY != 0)
+        {
+            int gcd = GreatestCommonDivisor(Math.Abs(perpX), Math.Abs(perpY));
+            if (gcd > 1)
+            {
+                perpX /= gcd;
+                perpY /= gcd;
+            }
+        }
+
+        if (dirX == 0 || dirY == 0)
+        {
+            Point perpPos = fromPoint + new Point(perpX, perpY);
+            Point perpNeg = fromPoint - new Point(perpX, perpY);
+            bool startLeftBlocked = WorldGen.SolidTile(perpNeg.X, perpNeg.Y);
+            bool startRightBlocked = WorldGen.SolidTile(perpPos.X, perpPos.Y);
+
+            perpPos = toPoint + new Point(perpX, perpY);
+            perpNeg = toPoint - new Point(perpX, perpY);
+            bool toLeftBlocked = WorldGen.SolidTile(perpNeg.X, perpNeg.Y);
+            bool toRightBlocked = WorldGen.SolidTile(perpPos.X, perpPos.Y);
+
+            if ((startLeftBlocked && toRightBlocked) || (startRightBlocked && toLeftBlocked))
+                return false;
+        }
+
+        // Determine the length to check based on NPC dimensions
+        int npcTileWidth = (int)Math.Round(NPC.width / 16f);
+        int npcTileHeight = (int)Math.Round(NPC.height / 16f);
+
+        int length;
+        if (perpX != 0 && perpY != 0)
+            length = Math.Max(npcTileWidth, npcTileHeight);
+        else if (perpX == 0)
+            length = npcTileHeight;
+        else
+            length = npcTileWidth;
+
+        int gapSize = 1; // Start at 1 due to midpoint being walkable
+        //Dust.NewDustPerfect(fromPoint.ToWorldCoordinates(), DustID.AncientLight, Vector2.Zero).noGravity = true;
+        //Dust.NewDustPerfect(toPoint.ToWorldCoordinates(), DustID.AncientLight, Vector2.Zero).noGravity = true;
+        // Check in both positive and negative directions
+        for (int i = 1; i < length && gapSize < length; i++)
+        {
+            bool posPathClear = true;
+            bool negPathClear = true;
+
+            int posX = midX + (perpX * i);
+            int posY = midY + (perpY * i);
+
+            int negX = midX - (perpX * i);
+            int negY = midY - (perpY * i);
+
+            // For diagonal perpendicular directions, additional corner checks
+            if (perpX != 0 && perpY != 0)
+            {
+                // Check diagonal corners in positive direction
+                if (WorldGen.SolidTile(midX + (perpX * (i - 1)), posY) ||
+                    WorldGen.SolidTile(posX, midY + (perpY * (i - 1))))
+                {
+                    if (i == 1)
+                        return false;
+                    posPathClear = false;
+                }
+
+                // Check diagonal corners in negative direction
+                if (WorldGen.SolidTile(midX - (perpX * (i - 1)), negY) ||
+                    WorldGen.SolidTile(negX, midY - (perpY * (i - 1))))
+                {
+                    if (i == 1)
+                        return false;
+                    negPathClear = false;
+                }
+            }
+
+            // Check main tile in positive direction
+            if (posPathClear && !WorldGen.SolidTile(posX, posY) && !WorldGen.SolidTile(posX - dirX, posY - dirY))
+            {
+                //Dust.NewDustPerfect(new Point(posX, posY).ToWorldCoordinates(), DustID.Terra, Vector2.Zero);
+                gapSize++;
+            }
+            else
+                posPathClear = false;
+
+            // Check main tile in negative direction
+            if (negPathClear && !WorldGen.SolidTile(negX, negY) && !WorldGen.SolidTile(negX - dirX, negY - dirY))
+            {
+                //Dust.NewDustPerfect(new Point(negX, negY).ToWorldCoordinates(), DustID.Terra, Vector2.Zero);
+                gapSize++;
+            }
+            else
+                negPathClear = false;
+
+            if (gapSize >= length)
+                return true;
+
+            if (!posPathClear && !negPathClear)
+                return false;
+        }
+
+        return false;
     }
 }
