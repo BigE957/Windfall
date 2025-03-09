@@ -113,7 +113,11 @@ public class PathfindingSystem : ModSystem
         public void DrawPath(SpriteBatch sb)
         {
             for (int i = 0; i < Points.Length - 1; i++)
+            {
                 sb.DrawLineBetter(Points[i].ToWorldCoordinates(), Points[i + 1].ToWorldCoordinates(), Color.Red, 4);
+                Particle p = new GlowOrbParticle(Points[i].ToWorldCoordinates(), Vector2.Zero, false, 2, 0.5f, Color.Red);
+                GeneralParticleHandler.SpawnParticle(p);
+            }
         }
     }
 
@@ -245,7 +249,48 @@ public class PathfindingSystem : ModSystem
         private readonly HashSet<Point> ClosedSet = new(4096);
         private readonly HashSet<Node> ModifiedNodes = new(100);
 
-        public void FindPath(Vector2 startWorld, Vector2 targetWorld, Func<Point, Point, bool> isWalkable, float searchRadius = 1225)
+        public static Point FindNearestValidNode(Vector2 WorldPos, Func<Point, Point, bool> isWalkable)
+        {
+            Point NodePos = WorldPos.ToTileCoordinates();
+            NodePos.X += NodePos.X % 2;
+            NodePos.Y += NodePos.Y % 2;
+
+            //Dust.NewDustPerfect(NodePos.ToWorldCoordinates(), DustID.Shadowflame, Vector2.Zero);
+
+            Single dist = 999;
+            if (WorldGen.InWorld(NodePos.X, NodePos.Y, 20) && !Framing.GetTileSafely(NodePos.X, NodePos.Y).IsTileSolid())
+                Vector2.Distance(NodePos.ToWorldCoordinates(), WorldPos);
+
+            //Dust.NewDustPerfect(WorldPos, DustID.Electric, Vector2.Zero).noGravity = true;
+
+            for (int x = -1; x <= 1; x++)
+            {
+                for(int y = -1; y <= 1; y++)
+                {
+                    if (x == 0 && y == 0)
+                        continue;
+
+                    Point checkPoint = NodePos + new Point(x * TileScalar, y * TileScalar);
+                    //Dust.NewDustPerfect(checkPoint.ToWorldCoordinates(), DustID.LifeDrain, Vector2.Zero);
+                    if (WorldGen.InWorld(NodePos.X, NodePos.Y) && !Framing.GetTileSafely(checkPoint.X, checkPoint.Y).IsTileSolid() && Collision.CanHit(WorldPos, 1, 1, checkPoint.ToWorldCoordinates(), 1, 1))
+                    {
+                        Single newDist = Vector2.Distance(WorldPos, checkPoint.ToWorldCoordinates());
+                        if (newDist < dist)
+                        {
+                            dist = newDist;
+                            NodePos = checkPoint;
+                        }
+                    }
+                }
+            }
+
+            //Dust.NewDustPerfect(NodePos.ToWorldCoordinates(), DustID.Terra, Vector2.Zero);
+            if (dist == 999)
+                return new Point(-1, -1);
+            return NodePos; //Failed to find a Node, give up.
+        }
+
+        public void FindPath(Vector2 startWorld, Vector2 targetWorld, Func<Point, Point, bool> isWalkable, Func<Point, int> costFunction = null, float searchRadius = 1225)
         {
             ClearNodeStates(ModifiedNodes);
             ModifiedNodes.Clear();
@@ -254,26 +299,24 @@ public class PathfindingSystem : ModSystem
 
             float radiusSquared = searchRadius * searchRadius;
 
-            Point startTile = startWorld.ToTileCoordinates();
-            Point targetTile = targetWorld.ToTileCoordinates();
+            Point StartPoint = FindNearestValidNode(startWorld, isWalkable);
+            Point TargetPoint = FindNearestValidNode(targetWorld, isWalkable);
 
-            if (!WorldGen.InWorld(startTile.X, startTile.Y) || !WorldGen.InWorld(targetTile.X, targetTile.Y))
+            if (StartPoint == new Point(-1, -1) || TargetPoint == new Point(-1, -1))
             {
                 MyPath = null;
                 return;
             }
 
-            if (startTile == targetTile)
+            if (StartPoint == TargetPoint)
             {
                 MyPath = new FoundPath([]);
                 return;
             }
 
-            Node startNode = NodeMap[startTile.X + startTile.X % 2][startTile.Y + startTile.Y % 2];
+            Node startNode = NodeMap[StartPoint.X + StartPoint.X % 2][StartPoint.Y + StartPoint.Y % 2];
 
-            int TargetX = targetTile.X + (targetTile.X % 2 == 0 ? 0 : 1);
-            int TargetY = targetTile.Y + (targetTile.Y % 2 == 0 ? 0 : 1);
-            int startToTarget = startNode.GetDistance(TargetX, TargetY);
+            int startToTarget = startNode.GetDistance(TargetPoint.X, TargetPoint.Y);
 
             if (startToTarget > searchRadius)
             {
@@ -298,7 +341,7 @@ public class PathfindingSystem : ModSystem
                 //Particle p = new GlowOrbParticle(current.TilePosition.ToWorldCoordinates(), Vector2.Zero, false, 2, 0.5f, Color.Red);
                 //GeneralParticleHandler.SpawnParticle(p);
 
-                int distanceToTarget = current.GetDistance(TargetX, TargetY);
+                int distanceToTarget = current.GetDistance(TargetPoint.X, TargetPoint.Y);
                 if (distanceToTarget <= 20 && (targetWorld - current.WorldPosition).LengthSquared() < 800)
                 {
                     //Main.NewText("Iteration Count: " + iterations);
@@ -321,7 +364,7 @@ public class PathfindingSystem : ModSystem
                     if ((targetWorld - neighbor.WorldPosition).LengthSquared() > radiusSquared)
                         continue;
 
-                    int tentativeG = current.G + current.GetDistance(neighbor.X, neighbor.Y);
+                    int tentativeG = current.G + current.GetDistance(neighbor.X, neighbor.Y) + costFunction(neighbor.TilePosition);
 
                     if (tentativeG < neighbor.G)
                     {
@@ -329,7 +372,7 @@ public class PathfindingSystem : ModSystem
                         neighbor.SetConnection(current);
                         neighbor.SetG(tentativeG);
 
-                        int newF = tentativeG + neighbor.GetDistance(TargetX, TargetY);
+                        int newF = tentativeG + neighbor.GetDistance(TargetPoint.X, TargetPoint.Y);
                         neighbor.SetF(newF);
 
                         if (OpenSet.Contains(neighbor))
@@ -341,36 +384,9 @@ public class PathfindingSystem : ModSystem
                 iterations++;
             }
 
-            Main.NewText("Iteration Count: " + iterations);
             ClearNodeStates(ModifiedNodes);
             MyPath = null;
             return;
-        }
-
-        public static bool StandardIsWalkable(Point fromPoint, Point toPoint)
-        {
-            //return !Framing.GetTileSafely(toPoint.X, toPoint.Y).IsTileSolid();
-            if (Framing.GetTileSafely(toPoint.X, toPoint.Y).IsTileSolid())
-                return false;
-
-            int dirX = (toPoint.X - fromPoint.X) / 2;
-            int dirY = (toPoint.Y - fromPoint.Y) / 2;
-
-            int midX = fromPoint.X + dirX;
-            int midY = fromPoint.Y + dirY;
-
-            if (Framing.GetTileSafely(midX, midY).IsTileSolid())
-                return false;
-
-            if (dirX != 0 && dirY != 0)
-            {
-                if (Framing.GetTileSafely(fromPoint.X + dirX, fromPoint.Y).IsTileSolid())
-                    return false;
-
-                if (Framing.GetTileSafely(fromPoint.X, fromPoint.Y + dirY).IsTileSolid())
-                    return false;
-            }
-            return true;
         }
 
         private static void ClearNodeStates(HashSet<Node> nodes)
