@@ -18,6 +18,31 @@ public static partial class WindfallUtils
 
     public static bool IsSolidOrPlatform(Point p) => WorldGen.SolidTile(p) || TileID.Sets.Platforms[Framing.GetTileSafely(p.X, p.Y).TileType];
 
+    public static bool IsSolidNotDoor(Point p)
+    {
+        Tile tile = Framing.GetTileSafely(p.X, p.Y);
+
+        if (!tile.IsTileSolid())
+            return false;
+        return !TileLoader.IsClosedDoor(tile) && tile.TileType != TileID.TallGateClosed;
+    }
+
+    public static bool TryOpenDoor(Point p, int direction)
+    {
+        Tile tile = Framing.GetTileSafely(p.X, p.Y);
+        if (tile.IsTileSolid())
+        {
+            if (Main.netMode != NetmodeID.MultiplayerClient)
+            {
+                if (TileLoader.IsClosedDoor(tile))
+                    return WorldGen.OpenDoor(p.X, p.Y, 1);
+                else if (tile.TileType == TileID.TallGateClosed)
+                    return WorldGen.ShiftTallGate(p.X, p.Y, false);
+            }
+        }
+        return false;
+    }
+
     public static Point FindSurfaceBelow(Point p)
     {
         

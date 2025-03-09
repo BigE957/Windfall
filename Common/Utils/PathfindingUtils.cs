@@ -110,14 +110,13 @@ public static partial class WindfallUtils
         while (distanceToWaypoint < 24)
         {
             currentWaypoint++;
+            if (currentWaypoint >= pathFinding.MyPath.Points.Length - 1)
+            {
+                velocity.X *= 0.9f;
+                velocity.Y += gravityForce;
+                return true;
+            }
             distanceToWaypoint = Vector2.Distance(npc.Center, pathFinding.MyPath.Points[currentWaypoint].ToWorldCoordinates());
-        }
-
-        if (currentWaypoint >= pathFinding.MyPath.Points.Length - 1)
-        {
-            velocity.X *= 0.9f;
-            velocity.Y += gravityForce;
-            return true;
         }
 
         Vector2 waypointDirection = (pathFinding.MyPath.Points[currentWaypoint].ToWorldCoordinates() - npc.Center).SafeNormalize(Vector2.Zero);
@@ -179,7 +178,7 @@ public static partial class WindfallUtils
 
                 for (int i = 0; i <= jumpLength; i++)
                 {
-                    int checkPointX = beneathTilePoint.X + (jumpLength * Math.Sign(velocity.X));
+                    int checkPointX = beneathTilePoint.X + ((jumpLength - i) * Math.Sign(velocity.X));
                     Point checkPoint = new(checkPointX, beneathTilePoint.Y);
                     if (IsSolidOrPlatform(checkPoint))
                     {
@@ -218,8 +217,6 @@ public static partial class WindfallUtils
                 velocity.Y += gravityForce;
 
             velocity.X += waypointDirection.X * xAccelMult;
-
-            //float xClamp = 4 / (Math.Abs(waypointDirection.Y) + 1);
             velocity.X = Clamp(velocity.X, -maxXSpeed, maxXSpeed);
 
             Collision.StepUp(ref npc.position, ref velocity, npc.width, npc.height, ref npc.stepSpeed, ref npc.gfxOffY);
