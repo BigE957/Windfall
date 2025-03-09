@@ -15,6 +15,9 @@ public static partial class WindfallUtils
                 return inventoryIndex;
         return -1;
     }
+
+    public static bool IsSolidOrPlatform(Point p) => WorldGen.SolidTile(p) || TileID.Sets.Platforms[Framing.GetTileSafely(p.X, p.Y).TileType];
+
     public static Point FindSurfaceBelow(Point p)
     {
         
