@@ -1,9 +1,13 @@
-﻿using CalamityMod.Graphics.Primitives;
-using CalamityMod.Items;
+﻿using CalamityMod.Items;
+using CalamityMod.NPCs.SunkenSea;
+using Luminance.Core.Graphics;
 using Microsoft.Xna.Framework.Input;
 using SteelSeries.GameSense.DeviceZone;
 using System.Collections.ObjectModel;
+using System.Reflection;
 using Terraria.Graphics.Shaders;
+using Terraria.ModLoader;
+using static Luminance.Core.Graphics.ShaderRecompilationMonitor;
 
 namespace Windfall.Content.Items.Weapons.Ranged;
 public class FingerGuns : ModItem, ILocalizedModType
@@ -176,7 +180,7 @@ public class FingerBolt : ModProjectile, ILocalizedModType
         direction = direction + Main.rand.NextFloat(-RotationOffset, RotationOffset);
 
         MyColor = Projectile.whoAmI % 2 == 0 ? myColor.Orange : myColor.Green;
-        Particle pulse = new DirectionalPulseRing(Projectile.Center + Projectile.velocity.SafeNormalize(Vector2.Zero) * 20, Projectile.velocity.SafeNormalize(Vector2.Zero) * 4f, MyColor == myColor.Green ? Color.MediumSeaGreen : Color.Orange, new(0.5f, 1f), Projectile.velocity.ToRotation(), 0f, 0.5f, 16);
+        CalamityMod.Particles.Particle pulse = new DirectionalPulseRing(Projectile.Center + Projectile.velocity.SafeNormalize(Vector2.Zero) * 20, Projectile.velocity.SafeNormalize(Vector2.Zero) * 4f, MyColor == myColor.Green ? Color.MediumSeaGreen : Color.Orange, new(0.5f, 1f), Projectile.velocity.ToRotation(), 0f, 0.5f, 16);
         GeneralParticleHandler.SpawnParticle(pulse);
 
         Time = 0;
@@ -187,6 +191,12 @@ public class FingerBolt : ModProjectile, ILocalizedModType
 
     public override void AI()
     {
+        float aberrationPower = (float)(Math.Pow(AperiodicSin(Main.GlobalTimeWrappedHourly * 32f), 2f) * 0.4f);
+        ManagedScreenFilter aberrationShader = ShaderManager.GetFilter("Windfall.ChromaticAberrationShader");
+        aberrationShader.TrySetParameter("splitIntensity", aberrationPower);
+        aberrationShader.TrySetParameter("impactPoint", Vector2.One * 0.5f);
+        aberrationShader.Activate();
+
         if (State == 0)
         {
             if (Time < 60)
@@ -280,8 +290,10 @@ public class FingerBolt : ModProjectile, ILocalizedModType
 
     public override bool PreDraw(ref Color lightColor)
     {
-        GameShaders.Misc["CalamityMod:ImpFlameTrail"].SetShaderTexture(ModContent.Request<Texture2D>("CalamityMod/ExtraTextures/Trails/" + (MyColor == myColor.Green ? "ScarletDevilStreak" : "FabstaffStreak")));
-        PrimitiveRenderer.RenderTrail(Projectile.oldPos, new(WidthFunction, ColorFunction, (_) => Projectile.Size * 0.5f, shader: GameShaders.Misc["CalamityMod:ImpFlameTrail"]), 30);
+        ManagedShader shader = ShaderManager.GetShader("Windfall.GenericFlameTrail");
+        shader.SetTexture(ModContent.Request<Texture2D>("CalamityMod/ExtraTextures/Trails/" + (MyColor == myColor.Green ? "ScarletDevilStreak" : "FabstaffStreak")), 1, SamplerState.LinearWrap);
+        PrimitiveSettings settings = new(WidthFunction, ColorFunction, (_) => Projectile.Size * 0.5f, Shader: shader);
+        PrimitiveRenderer.RenderTrail(Projectile.oldPos, settings, 30);
         /*
         Vector2 drawPos = Projectile.Center - Main.screenPosition;
         Texture2D texture = ModContent.Request<Texture2D>("CalamityMod/Particles/BloomCircle").Value;
