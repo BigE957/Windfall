@@ -66,12 +66,12 @@ public static class WanderersCabin
     {
         List<ChestItem> contents =
         [
-            new ChestItem(ModContent.ItemType<JournalForest>(), 1),
-            new ChestItem(ItemID.Binoculars, 1),
-            new ChestItem(ItemID.HermesBoots, 1),
-            new ChestItem(ItemID.SwiftnessPotion, WorldGen.genRand.Next(1, 3)),
-            new ChestItem(ItemID.SpelunkerPotion, WorldGen.genRand.Next(1, 3)),
-            new ChestItem(ItemID.GoldCoin, WorldGen.genRand.Next(1, 3)),
+            new (ModContent.ItemType<JournalForest>(), 1),
+            new (ItemID.Binoculars, 1),
+            new (ItemID.HermesBoots, 1),
+            new (ItemID.SwiftnessPotion, WorldGen.genRand.Next(1, 3)),
+            new (ItemID.SpelunkerPotion, WorldGen.genRand.Next(1, 3)),
+            new (ItemID.GoldCoin, WorldGen.genRand.Next(1, 3)),
         ];
 
         for (int i = 0; i < contents.Count; i++)

@@ -13,8 +13,11 @@ public class WFSchematicManager : ModSystem
     internal const string WanderersCabinKey = "Wanderers Cabin";
     internal const string WanderersCabinKeyFilename = StructureFilePath + "WanderersCabin.csch";
 
-    internal const string LunarCultKey = "Lunar Cult Base";
-    internal const string LunarCultFileName = StructureFilePath + "LunarCultBase.csch";
+    internal const string LunarCultBaseKey = "Lunar Cult Base";
+    internal const string LunarCultBaseFileName = StructureFilePath + "LunarCultBase.csch";
+
+    internal const string DraconicRuinsKey = "Draconic Ruins";
+    internal const string DraconicRuinsFileName = StructureFilePath + "DragonMonkRuins.csch";
 
     internal static Dictionary<string, SchematicMetaTile[,]> TileMaps =>
         typeof(SchematicManager).GetField("TileMaps", Utilities.UniversalBindingFlags).GetValue(null) as Dictionary<string, SchematicMetaTile[,]>;
@@ -25,8 +28,8 @@ public class WFSchematicManager : ModSystem
     public override void OnModLoad()
     {
         TileMaps[WanderersCabinKey] = LoadWindfallSchematic(WanderersCabinKeyFilename);
-        //TileMaps[SummoningGroundsKey] = LoadWindfallSchematic(SummoningGroundsKeyFilename);
-        TileMaps[LunarCultKey] = LoadWindfallSchematic(LunarCultFileName);
+        TileMaps[LunarCultBaseKey] = LoadWindfallSchematic(LunarCultBaseFileName);
+        TileMaps[DraconicRuinsKey] = LoadWindfallSchematic(DraconicRuinsFileName);
     }
 
     public static SchematicMetaTile[,] LoadWindfallSchematic(string filename)
