@@ -1,5 +1,5 @@
 displayName = Calamity: Windfall
 author = Windfall Team
 version = 0.1
-buildIgnore = .git\*, .github\*, LICENSE, README.md, .editorconfig, .gitignore, .gitattributes
+buildIgnore = .git\*, .github\*, LICENSE, README.md, .editorconfig, .gitignore, .gitattributes, Luminance.pdb, Luminance.xml
 modReferences = CalamityMod, Luminance
