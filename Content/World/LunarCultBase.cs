@@ -1,7 +1,9 @@
 ﻿using CalamityMod.Schematics;
 using CalamityMod.Tiles.DraedonStructures;
+using CalamityMod.Tiles.SunkenSea;
+using CalamityMod.Walls;
 using CalamityMod.Walls.DraedonStructures;
-using CalamityMod.World;
+using Terraria;
 using Terraria.WorldBuilding;
 using Windfall.Common.Systems;
 using Windfall.Common.Systems.WorldEvents;
@@ -38,6 +40,18 @@ public static class LunarCultBase
         tile.WallType == WallID.SpiderUnsafe)
             return true;
 
+        if (tile.TileType == TileID.Sand ||
+        tile.WallType == WallID.Sandstone ||
+        tile.TileType == TileID.Sandstone ||
+        tile.WallType == WallID.HardenedSand)
+            return true;
+
+        if (tile.TileType == ModContent.TileType<Navystone>() ||
+        tile.WallType == ModContent.WallType<NavystoneWall>() ||
+        tile.TileType == ModContent.TileType<EutrophicSand>() ||
+        tile.WallType == ModContent.WallType<EutrophicSandWall>())
+            return true;
+
         if (careAboutMushroom)
         {
             if (tile.TileType == TileID.Mud ||
@@ -72,7 +86,7 @@ public static class LunarCultBase
         int tries = 0;
         do
         {
-            int placementPositionX = centerPlacementPositionX + (genRand.Next(0, 1800) * (facingLeft ? 1 : -1));
+            int placementPositionX = centerPlacementPositionX + (genRand.Next(0, Main.maxTilesX == 8400 ? 2800 : 2200) * (facingLeft ? 1 : -1));
             int placementPositionY = genRand.Next(underworldTop - 800, underworldTop - 175);
 
             placementPoint = new Point(placementPositionX, placementPositionY);
@@ -83,7 +97,7 @@ public static class LunarCultBase
             {
                 for (int y = placementPoint.Y - 4; y < placementPoint.Y + schematicSize.Y + 4; y++)
                 {
-                    if (ShouldAvoidLocation(new Point(x, y), tries < 80000))
+                    if (ShouldAvoidLocation(new Point(x, y), tries < 50000))
                         canGenerateInLocation = false;
                 }
             }
