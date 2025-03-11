@@ -3,9 +3,9 @@ using CalamityMod.Tiles.DraedonStructures;
 using CalamityMod.Tiles.SunkenSea;
 using CalamityMod.Walls;
 using CalamityMod.Walls.DraedonStructures;
-using Terraria.ModLoader;
 using Terraria.WorldBuilding;
 using Windfall.Common.Systems;
+using Windfall.Common.Systems.WorldEvents;
 using Windfall.Content.Items.Journals;
 using static Terraria.WorldGen;
 
@@ -135,6 +135,9 @@ public static class DragonMonkRuins
             placementPoint = new(-1, -1);
 
         } while (tries <= 10000);
+
+        DraconicRuinsSystem.DraconicRuinsLocation = placementPoint + (schematicSize / 2f).ToPoint();
+        DraconicRuinsSystem.FacingLeft = facingLeft;
     }
 
     private static void FillDraconicChests(Chest chest, int Type, bool place)
