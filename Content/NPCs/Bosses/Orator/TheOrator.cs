@@ -61,6 +61,7 @@ public class TheOrator : ModNPC
         NPC.dontTakeDamage = true;
         NPC.Calamity().canBreakPlayerDefense = true;
         NPC.netAlways = true;
+        Music = -1;
 
         noSpawnsEscape = true;
         MonsterDamage = StatCorrections.ScaleProjectileDamage(Main.masterMode ? 360 : CalamityWorld.death ? 280 : CalamityWorld.revenge ? 268 : Main.expertMode ? 240 : 180);

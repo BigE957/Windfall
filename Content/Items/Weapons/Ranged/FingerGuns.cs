@@ -1,13 +1,7 @@
 ﻿using CalamityMod.Items;
-using CalamityMod.NPCs.SunkenSea;
 using Luminance.Core.Graphics;
 using Microsoft.Xna.Framework.Input;
-using SteelSeries.GameSense.DeviceZone;
 using System.Collections.ObjectModel;
-using System.Reflection;
-using Terraria.Graphics.Shaders;
-using Terraria.ModLoader;
-using static Luminance.Core.Graphics.ShaderRecompilationMonitor;
 
 namespace Windfall.Content.Items.Weapons.Ranged;
 public class FingerGuns : ModItem, ILocalizedModType
@@ -30,7 +24,6 @@ public class FingerGuns : ModItem, ILocalizedModType
         Item.shootSpeed = 48f;
         Item.width = 48;
         Item.height = 34;
-        //Item.noUseGraphic = true;
         Item.useStyle = ItemUseStyleID.Shoot;
         Item.value = CalamityGlobalItem.RarityRedBuyPrice;
         Item.rare = ItemRarityID.Red;
