@@ -8,6 +8,8 @@ using DialogueHelper.UI.Dialogue;
 using Windfall.Content.Items.Quests.SealingRitual;
 using CalamityMod.NPCs.TownNPCs;
 using Terraria.ModLoader.IO;
+using Terraria;
+using static Windfall.Common.Systems.PathfindingSystem;
 
 namespace Windfall.Content.NPCs.TravellingNPCs;
 
@@ -36,6 +38,7 @@ public class TravellingCultist : ModNPC, ILocalizedModType
 
     public override void SetStaticDefaults()
     {
+        NPCID.Sets.ActsLikeTownNPC[Type] = true;
         Main.npcFrameCount[Type] = 25;
         NPCID.Sets.ExtraFramesCount[Type] = 9;
         NPCID.Sets.AttackFrameCount[Type] = 4;
@@ -65,20 +68,19 @@ public class TravellingCultist : ModNPC, ILocalizedModType
     }
     public override void SetDefaults()
     {
-        NPC.townNPC = true;
         NPC.friendly = true;
-        NPC.width = 18;
-        NPC.height = 40;
-        NPC.aiStyle = 7;
+        NPC.width = 24;
+        NPC.height = 36;
+        NPC.aiStyle = -1;
         NPC.damage = 10;
         NPC.defense = 15;
         NPC.lifeMax = 250;
         NPC.HitSound = SoundID.NPCHit55;
         NPC.DeathSound = SoundID.NPCDeath59;
         NPC.knockBackResist = 0.5f;
-        AnimationType = NPCID.Stylist;
-        TownNPCStayingHomeless = true;
         NPC.immortal = true;
+
+        myBehavior = BehaviorState.FollowPlayer;
     }
 
     public static readonly List<Tuple<int, int>> RitualQuestItems =
@@ -95,14 +97,14 @@ public class TravellingCultist : ModNPC, ILocalizedModType
     ];
     public static Tuple<int, int> QuestItem = null;
 
-    public enum questStatus
+    public enum QuestStatus
     {
         None = 0,
         NotStarted,
         Started,
         Completed
     }
-    public static questStatus FetchQuestStatus = questStatus.None;
+    public static QuestStatus FetchQuestStatus = QuestStatus.None;
 
     private enum DialogueState
     {
@@ -123,6 +125,15 @@ public class TravellingCultist : ModNPC, ILocalizedModType
         QuestlineFinished,
     }
     private static DialogueState CurrentDialogue = DialogueState.SearchForHelp;
+
+    private enum BehaviorState
+    {
+        StandStill,
+        Wander,
+        FollowPlayer,
+        MoveToTargetLocation
+    }
+    private BehaviorState myBehavior = BehaviorState.Wander;
 
     private enum PriorityTiers
     {
@@ -158,9 +169,9 @@ public class TravellingCultist : ModNPC, ILocalizedModType
         }
 
         if (CurrentDialogue == DialogueState.DungeonQuest)
-            FetchQuestStatus = questStatus.NotStarted;
+            FetchQuestStatus = QuestStatus.NotStarted;
         else
-            FetchQuestStatus = questStatus.None;
+            FetchQuestStatus = QuestStatus.None;
 
         QuestItem = null;
         introductionDone = false;
@@ -309,7 +320,7 @@ public class TravellingCultist : ModNPC, ILocalizedModType
                         break;
                 }
 
-                if (((FetchQuestStatus == questStatus.NotStarted || FetchQuestStatus == questStatus.Started) && QuestItem != null) || AnyQuestsInProgress())
+                if (((FetchQuestStatus == QuestStatus.NotStarted || FetchQuestStatus == QuestStatus.Started) && QuestItem != null) || AnyQuestsInProgress())
                 {
                     uiSystem.CurrentTree.Dialogues[0].Responses[0].Requirement = true;
                     if (AnyQuestsInProgress())
@@ -336,7 +347,7 @@ public class TravellingCultist : ModNPC, ILocalizedModType
                     else
                     {
                         uiSystem.CurrentTree.Dialogues[0].Responses[0].SwapToTreeKey = "StandardQuestTree";
-                        uiSystem.CurrentTree.Dialogues[0].Responses[0].Heading = (FetchQuestStatus == questStatus.NotStarted ? 0 : 1);
+                        uiSystem.CurrentTree.Dialogues[0].Responses[0].Heading = (FetchQuestStatus == QuestStatus.NotStarted ? 0 : 1);
                     }
                 }
                 if (CurrentDialogue >= DialogueState.RitualQuestRecruitmentOnly && CurrentDialogue < DialogueState.RitualQuestRecruitmentFinished)
@@ -381,7 +392,7 @@ public class TravellingCultist : ModNPC, ILocalizedModType
             #region Introductions
             case "TravellingCultist/Introductions/SearchForHelp":
                 CurrentDialogue = DialogueState.DungeonQuest;
-                FetchQuestStatus = questStatus.NotStarted;
+                FetchQuestStatus = QuestStatus.NotStarted;
                 break;
             case "TravellingCultist/Introductions/SelenicOrderTalk":
                 CurrentDialogue = DialogueState.RitualQuestRecruitmentOnly;
@@ -413,10 +424,10 @@ public class TravellingCultist : ModNPC, ILocalizedModType
                 {
                     Item.NewItem(cultist.GetSource_GiftOrReward(), cultist.Center, Vector2.UnitY.RotatedBy(Main.rand.NextFloat(-PiOver4, PiOver4)) * -4, ItemID.DungeonFishingCrateHard);
                     QuestItem = null;
-                    FetchQuestStatus = questStatus.Completed;
+                    FetchQuestStatus = QuestStatus.Completed;
                 }
                 else
-                    FetchQuestStatus = questStatus.Started;
+                    FetchQuestStatus = QuestStatus.Started;
                 break;
             #region Quest Progress
             case "TravellingCultist/QuestProgress/QuestWayfinder":
@@ -468,14 +479,175 @@ public class TravellingCultist : ModNPC, ILocalizedModType
                 return true;
         return false;
     }
+
+    private int Time = 0;
+    private PathFinding pathFinding = new();
+    private int CurrentWaypoint = 0;
+    private float MoveSpeed = 3f;
+    private int jumpTimer = 0;
+
     public override void AI()
     {
-        NPC.homeless = true;
+        //NPC.velocity.Y += 0.66f;
+
+        switch(myBehavior)
+        {
+            case BehaviorState.Wander:
+                //Change movement
+                if(Main.rand.NextBool(NPC.velocity.X == 0 ? 150 : 100))
+                {
+                    if (NPC.velocity.X != 0)// && Main.rand.NextBool())
+                    {
+                        NPC.velocity.X *= 0.8f;
+                    }
+                    else
+                    {
+                        if (NPC.velocity.X != 0)
+                            NPC.velocity.X = -NPC.velocity.X;
+                        else
+                            NPC.velocity.X = 1f * (Main.rand.NextBool() ? 1 : -1);
+                    }
+                }
+
+                Collision.StepUp(ref NPC.position, ref NPC.velocity, NPC.width, NPC.height, ref NPC.stepSpeed, ref NPC.gfxOffY);
+
+                if (NPC.velocity.X != 0)
+                {
+                    if (Math.Abs(NPC.velocity.X) != 1)
+                    {
+                        NPC.velocity.X *= 0.8f;
+                        if (Math.Abs(NPC.velocity.X) < 0.01f)
+                        {
+                            NPC.velocity.X = 0;
+                            return;
+                        }
+                    }
+                    NPC.direction = Math.Sign(NPC.velocity.X);
+                    NPC.spriteDirection = NPC.direction;
+                }
+                break;
+            case BehaviorState.FollowPlayer:
+                Vector2 targetPos = Main.LocalPlayer.Center;
+
+                if (jumpTimer != 0 || Time % 10 == 0)
+                {
+                    pathFinding.FindPath(NPC.Center, targetPos, NPC.IsWalkableThroughDoors, NPC.noGravity ? null : GravityCostFunction, 1300);
+                    
+                    CurrentWaypoint = 1;
+                }
+                /*
+                for (int i = 0; i < pathFinding.MyPath.Points.Length; i++)
+                {
+                    Particle p = new GlowOrbParticle(pathFinding.MyPath.Points[i].ToWorldCoordinates(), Vector2.Zero, false, 2, 0.5f, i == CurrentWaypoint ? Color.White : Color.Red);
+                    GeneralParticleHandler.SpawnParticle(p);
+                }
+                */
+                Time++;
+                if (jumpTimer > 0)
+                    jumpTimer--;
+
+                
+                bool MovementSuccess = true;
+                float distanceToTarget = Vector2.DistanceSquared(NPC.Center, targetPos);
+                bool jumpStarted = false;
+
+                if (distanceToTarget < 10000 && Collision.CanHit(NPC, Main.LocalPlayer))
+                {
+                    if (NPC.noGravity)
+                        NPC.noGravity = false;
+                    MoveSpeed = 3f;
+                    MovementSuccess = false;
+                }
+                else
+                {
+                    if (NPC.noGravity)
+                        MovementSuccess = AntiGravityPathfindingMovement(NPC, pathFinding, ref CurrentWaypoint, 8, 2f, 0.33f);
+                    else
+                    {
+                        if ((distanceToTarget > 250000 && Time % 120 == 0) || (distanceToTarget > 500000 && Time % 30 == 0))
+                        {
+                            if (MoveSpeed < 6f)
+                                MoveSpeed += 1;
+                            else
+                                NPC.noGravity = true;
+                        }
+                        MovementSuccess = GravityAffectedPathfindingMovement(NPC, pathFinding, ref CurrentWaypoint, out NPC.velocity, out jumpStarted, MoveSpeed, 8.5f, 0.25f);
+                    }
+                }
+
+                if (!MovementSuccess)
+                {
+                    if (jumpStarted)
+                        NPC.noGravity = true;
+                    else
+                        NPC.velocity.X *= 0.8f;
+                }
+                else
+                {
+                    if(jumpStarted)
+                    {
+                        jumpTimer = 30;
+                        Vector2 ground = FindSurfaceBelow(Main.LocalPlayer.Center.ToTileCoordinates()).ToWorldCoordinates();
+                        int distance = (int)Vector2.Distance(Main.LocalPlayer.Center, ground);
+                        if (distance > 600)
+                            NPC.noGravity = true;
+                        else if(Main.LocalPlayer.Center.Y < NPC.Center.Y)
+                        {
+                            distance = (int)Vector2.Distance(Main.LocalPlayer.Center, NPC.Center);
+                            if(distance > 800)
+                                NPC.noGravity = true;
+                        }
+                    }
+                }
+
+                if (NPC.velocity.X != 0)
+                {
+                    NPC.direction = Math.Sign(NPC.velocity.X);
+                    NPC.spriteDirection = NPC.direction;
+                }
+                if (NPC.direction == -1)
+                {
+                    Point p = NPC.Left.ToTileCoordinates();
+                    p.X -= 1;
+                    bool opened = TryOpenDoor(p, -1);
+                }
+                else
+                {
+                    Point p = NPC.Right.ToTileCoordinates();
+                    p.X += 1;
+                    bool opened = TryOpenDoor(p, -1);
+
+                }
+                /*
+                if (!MovementSuccess)
+                {
+                    NPC.velocity.X *= 0.8f;
+                    if (Math.Abs(NPC.velocity.X) < 0.01f)
+                    {
+                        NPC.velocity.X = 0;
+                        return;
+                    }
+                }
+                */
+                break;
+        }
+
+        //Debug
         //if (CurrentDialogue == DialogueState.SelenicOrderTalk)
         //    CurrentDialogue++;
         //foreach(var item in pool.CirculatingDialogues)
         //Main.NewText(QuestSystem.Quests["SealingRitual"].Progress);
         //CurrentDialogue = DialogueState.RitualQuestWayfinder;
+    }
+
+    public override bool? CanFallThroughPlatforms()
+    {
+        if (pathFinding.MyPath == null || pathFinding.MyPath.Points.Length == 0 || pathFinding.MyPath.Points.Length <= CurrentWaypoint)
+            return false;
+        int checkIndex = 3;
+        if (pathFinding.MyPath.Points.Length <= CurrentWaypoint + checkIndex)
+            checkIndex = pathFinding.MyPath.Points.Length - 1;
+        return pathFinding.MyPath.Points[checkIndex].Y > pathFinding.MyPath.Points[CurrentWaypoint].Y;
     }
 
     public override void SaveData(TagCompound tag)

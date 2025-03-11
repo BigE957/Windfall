@@ -364,7 +364,7 @@ public class PathfindingSystem : ModSystem
                     if ((targetWorld - neighbor.WorldPosition).LengthSquared() > radiusSquared)
                         continue;
 
-                    int tentativeG = current.G + current.GetDistance(neighbor.X, neighbor.Y) + costFunction(neighbor.TilePosition);
+                    int tentativeG = current.G + current.GetDistance(neighbor.X, neighbor.Y) + (costFunction == null ? 0 : costFunction(neighbor.TilePosition));
 
                     if (tentativeG < neighbor.G)
                     {
