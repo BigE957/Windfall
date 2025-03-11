@@ -28,7 +28,7 @@ public class LunarCultistDevotee : ModNPC
     public bool characterSpokenTo = false;
 
     public Vector2 goalPosition = Vector2.Zero;
-    public override string Texture => "Windfall/Assets/NPCs/WorldEvents/LunarCultistDevotee";
+    public override string Texture => "Windfall/Assets/NPCs/WorldEvents/SelenicCultistDevotee";
     internal static SoundStyle SpawnSound => new("CalamityMod/Sounds/Custom/SCalSounds/BrimstoneHellblastSound");
     public override void SetStaticDefaults()
     {

@@ -52,6 +52,7 @@
     <None Remove="Assets\NPCs\Enemies\Orator_Hand_Cuffs.png" />
     <None Remove="Assets\NPCs\Enemies\SHADOW_HAND_ANIMATION_V2-Sheet.png" />
     <None Remove="Assets\NPCs\WorldEvents\Seamstress.png" />
+    <None Remove="Assets\NPCs\WorldEvents\SelenicCultistDevotee.png" />
     <None Remove="Assets\Projectiles\Boss\BorderAura1.png" />
     <None Remove="Assets\Projectiles\Boss\BorderAura2.png" />
     <None Remove="Assets\Projectiles\Boss\FadingStar.png" />
