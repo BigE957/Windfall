@@ -91,7 +91,7 @@ public static partial class WindfallUtils
 
         float distanceToWaypoint = Vector2.Distance(npc.Center, pathFinding.MyPath.Points[currentWaypoint].ToWorldCoordinates());
         //Main.NewText(dist);
-        while (distanceToWaypoint < Math.Max(npc.width, npc.height) / 2f)
+        while (distanceToWaypoint < Math.Max(npc.width, npc.height) / 1.66f)
         {
             currentWaypoint++;
             if (currentWaypoint >= pathFinding.MyPath.Points.Length - 1)
@@ -99,20 +99,16 @@ public static partial class WindfallUtils
             
             distanceToWaypoint = Vector2.Distance(npc.Center, pathFinding.MyPath.Points[currentWaypoint].ToWorldCoordinates());
         }
-        Vector2 waypointDirection;
-        //if(currentWaypoint != pathFinding.MyPath.Points.Length - 1)
-        //    waypointDirection = (pathFinding.MyPath.Points[currentWaypoint + 1].ToWorldCoordinates() - npc.Bottom).SafeNormalize(Vector2.Zero);
-        //else
-            waypointDirection = (pathFinding.MyPath.Points[currentWaypoint].ToWorldCoordinates() - npc.Bottom).SafeNormalize(Vector2.Zero);
+        Vector2 waypointDirection = (pathFinding.MyPath.Points[currentWaypoint].ToWorldCoordinates() - npc.Center).SafeNormalize(Vector2.Zero);
 
         Point beneathTilePoint = npc.Bottom.ToTileCoordinates();
         bool canJump = (npc.velocity.Y == 0 && npc.oldVelocity.Y == 0.3f) || Main.tile[beneathTilePoint + new Point(0, -1)].LiquidAmount > 0;
         bool shouldJump =
             waypointDirection.Y != 1 &&
-            ((waypointDirection.Y < -0.9f) ||
+            ((waypointDirection.Y < -0.95f) ||
             !IsSolidOrPlatform(beneathTilePoint + new Point(Math.Sign(velocity.X), 0)));
                 
-        if (canJump && shouldJump && !(waypointDirection.Y < -0.9f))
+        if (canJump && shouldJump && !(waypointDirection.Y < -0.95f))
         {
             shouldJump = false;
             bool needJump = true;
@@ -185,8 +181,9 @@ public static partial class WindfallUtils
         }
 
         if (canJump && shouldJump)
-        {                        
-            velocity.X = maxXSpeed * Math.Sign(waypointDirection.X) * (waypointDirection.Y < -0.9f && Main.rand.NextBool() ? -1 : 1);
+        {
+            //Main.NewText(waypointDirection.Y);
+            velocity.X = maxXSpeed * Math.Sign(waypointDirection.X) * (waypointDirection.Y < -0.95f && Main.rand.NextBool() ? -1 : 1);
             velocity.Y = -jumpForce;
             jumpStarted = true;
         }

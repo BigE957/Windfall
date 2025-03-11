@@ -554,14 +554,19 @@ public class TravellingCultist : ModNPC, ILocalizedModType
                 if (distanceToTarget < 10000 && Collision.CanHit(NPC, Main.LocalPlayer))
                 {
                     if (NPC.noGravity)
-                        NPC.noGravity = false;
+                    {
+                        Vector2 ground = FindSurfaceBelow(Main.LocalPlayer.Center.ToTileCoordinates()).ToWorldCoordinates();
+                        int distance = (int)Vector2.Distance(Main.LocalPlayer.Center, ground);
+                        if (distance <= 600)
+                            NPC.noGravity = false;
+                    }
                     MoveSpeed = 3f;
                     MovementSuccess = false;
                 }
                 else
                 {
                     if (NPC.noGravity)
-                        MovementSuccess = AntiGravityPathfindingMovement(NPC, pathFinding, ref CurrentWaypoint, 8, 2f, 0.33f);
+                        MovementSuccess = AntiGravityPathfindingMovement(NPC, pathFinding, ref CurrentWaypoint, 8, 1f, 0.66f);
                     else
                     {
                         if ((distanceToTarget > 250000 && Time % 120 == 0) || (distanceToTarget > 500000 && Time % 30 == 0))
