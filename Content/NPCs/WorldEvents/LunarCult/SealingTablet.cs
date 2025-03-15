@@ -1,5 +1,13 @@
-﻿using Terraria.ModLoader;
+﻿using CalamityMod;
+using CalamityMod.Rarities;
+using Luminance.Common.VerletIntergration;
+using System;
+using Terraria;
+using Terraria.GameContent.Animations;
+using Terraria.ModLoader;
 using Windfall.Common.Graphics.Metaballs;
+using Windfall.Common.Graphics.Verlet;
+using Windfall.Content.Items.Quests.SealingRitual;
 using Windfall.Content.NPCs.Bosses.Orator;
 
 namespace Windfall.Content.NPCs.WorldEvents.LunarCult;
@@ -32,8 +40,26 @@ public class SealingTablet : ModNPC
         NPC.chaseable = false;
     }
     private float summonRatio = 0f;
+    private List<VerletSegment> LeftChain = [];
+    private List<VerletSegment> RightChain = [];
+
+    public override void OnSpawn(IEntitySource source)
+    {
+        int verletCount = 24;
+        for (int i = 0; i < verletCount; i++) 
+        {
+            LeftChain.Add(new(NPC.Bottom + new Vector2(-36, 4 * i), Vector2.Zero, i == 0));
+            RightChain.Add(new(NPC.Bottom + new Vector2(36, 4 * i), Vector2.Zero, i == 0));
+        }
+
+        NPC.position.Y += verletCount * 4;
+
+        LeftChain[^1].Position = NPC.Center + new Vector2(-NPC.width / 2f, 0);
+        RightChain[^1].Position = NPC.Center + new Vector2(NPC.width / 2f, 0);
+    }
     public override void AI()
     {
+        // Orator Summoning
         if (!AnyBossNPCS(true) && !NPC.AnyNPCs(ModContent.NPCType<TheOrator>()) && NPC.ai[0] == 2)
         {
             Lighting.AddLight(NPC.Center, Color.Lerp(new Color(117, 255, 159), new Color(255, 180, 80), (float)(Math.Sin(Main.GlobalTimeWrappedHourly * 1.25f) / 0.5f) + 0.5f).ToVector3() * (summonRatio + 0.25f));
@@ -68,7 +94,103 @@ public class SealingTablet : ModNPC
                     EmpyreanMetaball.SpawnDefaultParticle(boss.Center + new Vector2(Main.rand.NextFloat(-64, 64), 64), Vector2.UnitY * Main.rand.NextFloat(4f, 24f) * -1, Main.rand.NextFloat(110f, 130f));
             }
         }
+
+        //LeftChain[^1].Locked = false;
+        //RightChain[^1].Locked = false;
+
+        AffectVerlets(LeftChain);
+        AffectVerlets(RightChain);
+
+        foreach (Player p in Main.ActivePlayers)
+        {
+            if (p.Hitbox.Intersects(NPC.Hitbox))
+            {
+                LeftChain[^2].Position += p.velocity * 0.25f;
+                RightChain[^2].Position += p.velocity * 0.25f;
+                LeftChain[^1].Position += p.velocity * 0.25f;
+                RightChain[^1].Position += p.velocity * 0.25f;
+            }
+        }
+
+        foreach (Projectile proj in Main.ActiveProjectiles)
+        {
+            if (proj.Hitbox.Intersects(NPC.Hitbox))
+            {
+                LeftChain[^2].Position += proj.velocity * 0.25f;
+                RightChain[^2].Position += proj.velocity * 0.25f;
+                LeftChain[^1].Position += proj.velocity * 0.25f;
+                RightChain[^1].Position += proj.velocity * 0.25f;
+            }
+        }
+
+        //NPC.velocity.Y = 0f;
+        //
+        //NPC.position.Y += 8;
+
+        float chainDistance = Vector2.Distance(LeftChain[^1].Position, RightChain[^1].Position);
+        Vector2 chainToChain = (RightChain[^1].Position - LeftChain[^1].Position).SafeNormalize(Vector2.UnitX);
+
+        if (NPC.ai[0] < 4)
+        {
+            if (chainDistance != NPC.width - 4)
+            {
+                float distanceDif = chainDistance - (NPC.width - 4);
+                LeftChain[^1].Position += chainToChain * distanceDif / 2f;
+                RightChain[^1].Position -= chainToChain * distanceDif / 2f;
+            }
+
+            NPC.Center = LeftChain[^1].Position + (RightChain[^1].Position - LeftChain[^1].Position) / 2f;
+            NPC.position.Y += 8;
+            NPC.rotation = chainToChain.ToRotation();
+        }
+        else
+        {
+            NPC holder = Main.npc[(int)NPC.ai[1]];
+            if (NPC.ai[0] == 4)
+                NPC.Center = holder.Center + new Vector2(holder.direction * 8, -28);
+            else
+            {
+                NPC.noGravity = false;
+                NPC.noTileCollide = false;
+
+                if(NPC.collideX || NPC.collideY)
+                {
+                    SoundEngine.PlaySound(SoundID.Shatter, NPC.Center);
+                    for (int i = 0; i < 5; i++)
+                    {
+                        Item item = Main.item[Item.NewItem(NPC.GetSource_Loot(), NPC.position, new Vector2(NPC.width, NPC.height), ModContent.ItemType<TabletFragment>())];
+                        item.velocity = new(Main.rand.NextFloat(-2f, 5.5f) * Math.Sign(NPC.velocity.X), -3);
+                    }
+                    NPC.velocity = Vector2.Zero;
+                    NPC.active = false;
+                }
+            }
+        }    
+
+        WFVerletSimulations.CalamitySimulation(LeftChain, 4, 30, gravity: 0.6f, windAffected: false);
+        WFVerletSimulations.CalamitySimulation(RightChain, 4, 30, gravity: 0.6f, windAffected: false);
     }
+
+    private void AffectVerlets(List<VerletSegment> verlet)
+    {
+        for (int k = 0; k < verlet.Count; k++)
+        {
+            if (!verlet[k].Locked)
+            {
+                foreach (Player p in Main.ActivePlayers)
+                {
+                    VerletHangerDrawing.MoveChainBasedOnEntity(verlet, p, 0.125f, 0.5f);
+                }
+
+                foreach (Projectile proj in Main.ActiveProjectiles)
+                {
+                    VerletHangerDrawing.MoveChainBasedOnEntity(verlet, proj, 0.125f, 0.5f);
+                }
+            }
+        }
+
+    }
+
     public override bool CheckActive() => false;
     public override void FindFrame(int frameHeight)
     {
@@ -83,10 +205,28 @@ public class SealingTablet : ModNPC
     }
     public override bool PreDraw(SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor)
     {
+        for (int k = 0; k < LeftChain.Count - 1; k++)
+        {
+            Vector2 line = LeftChain[k].Position - LeftChain[k + 1].Position;
+            Color lighting = Lighting.GetColor((LeftChain[k + 1].Position + (line / 2f)).ToTileCoordinates());
+
+            Main.spriteBatch.DrawLineBetter(LeftChain[k].Position, LeftChain[k + 1].Position, Color.White.MultiplyRGB(lighting), 3);
+        }
+
+        for (int k = 0; k < RightChain.Count - 1; k++)
+        {
+            Vector2 line = RightChain[k].Position - RightChain[k + 1].Position;
+            Color lighting = Lighting.GetColor((RightChain[k + 1].Position + (line / 2f)).ToTileCoordinates());
+
+            Main.spriteBatch.DrawLineBetter(RightChain[k].Position, RightChain[k + 1].Position, Color.White.MultiplyRGB(lighting), 3);
+        }
+
         Texture2D texture = TextureAssets.Npc[NPC.type].Value;
         Vector2 halfSizeTexture = new(texture.Width / 2, texture.Height / Main.npcFrameCount[NPC.type] / 2);
         Vector2 drawPosition = NPC.Center - screenPos + (Vector2.UnitY * NPC.gfxOffY);
+        drawPosition.Y -= 16;
         spriteBatch.Draw(texture, drawPosition, NPC.frame, NPC.GetAlpha(drawColor), NPC.rotation, halfSizeTexture, NPC.scale, SpriteEffects.None, 0f);
+        
         return false;
     }
     public override void PostDraw(SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor)

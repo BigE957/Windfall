@@ -1,4 +1,5 @@
-﻿using static Windfall.Common.Systems.PathfindingSystem;
+﻿using Microsoft.Xna.Framework.Graphics;
+using static Windfall.Common.Systems.PathfindingSystem;
 
 namespace Windfall.Common.Utils;
 public static partial class WindfallUtils
@@ -10,7 +11,7 @@ public static partial class WindfallUtils
             Vector2 direction = (npc.Center - user.Center);
             float distance = direction.Length();
             direction = direction.SafeNormalize(Vector2.Zero);
-            if (distance < 64)
+            if (distance < 128)
                 npc.velocity += direction * 16f / (distance + 1);
         }
 
@@ -30,16 +31,15 @@ public static partial class WindfallUtils
             distanceToWaypoint = Vector2.Distance(npc.Center, pathFinding.MyPath.Points[currentWaypoint].ToWorldCoordinates());
         }
 
-        for (int x = -1; x <= 1; x++)
+        int casts = 20;
+        float rayDist = 180;
+        for (int i = 0; i <= casts; i++)
         {
-            for (int y = -1; y <= 1; y++)
+            Vector2 dir = (TwoPi / casts * i).ToRotationVector2();
+            Vector2? endPos = RayCast(npc.Center, dir, rayDist, out float distMoved);
+            if (endPos.HasValue)
             {
-                if (x == 0 && y == 0)
-                    continue;
-                Vector2 dir = new(x, y);
-                dir.Normalize();
-                if (!Collision.CanHit(npc.Center, 1, 1, npc.Center + dir * 96, 1, 1))
-                    npc.velocity -= dir * tileAvoidanceStrength;
+                npc.velocity -= (dir * rayDist / distMoved) * tileAvoidanceStrength;
             }
         }
 
@@ -105,10 +105,10 @@ public static partial class WindfallUtils
         bool canJump = (npc.velocity.Y == 0 && npc.oldVelocity.Y == 0.3f) || Main.tile[beneathTilePoint + new Point(0, -1)].LiquidAmount > 0;
         bool shouldJump =
             waypointDirection.Y != 1 &&
-            ((waypointDirection.Y < -0.95f) ||
+            ((waypointDirection.Y < -0.8f) ||
             !IsSolidOrPlatform(beneathTilePoint + new Point(Math.Sign(velocity.X), 0)));
-                
-        if (canJump && shouldJump && !(waypointDirection.Y < -0.95f))
+        
+        if (canJump && shouldJump && !(waypointDirection.Y < -0.8f))
         {
             shouldJump = false;
             bool needJump = true;
@@ -183,10 +183,11 @@ public static partial class WindfallUtils
         if (canJump && shouldJump)
         {
             //Main.NewText(waypointDirection.Y);
-            velocity.X = maxXSpeed * Math.Sign(waypointDirection.X) * (waypointDirection.Y < -0.95f && Main.rand.NextBool() ? -1 : 1);
+            velocity.X = maxXSpeed * waypointDirection.X;
             velocity.Y = -jumpForce;
             jumpStarted = true;
         }
+        
         velocity.X += Math.Sign(waypointDirection.X) * xAccelMult;
         velocity.X = Clamp(velocity.X, -maxXSpeed, maxXSpeed);
 
@@ -505,7 +506,7 @@ public static partial class WindfallUtils
             return 0;
         //if (distanceToGround > 400)
         //    return 3200;
-        return (distanceToGround - 36) * 8;
+        return (distanceToGround - 36) * 16;
     }
 
 }

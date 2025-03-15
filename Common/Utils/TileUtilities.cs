@@ -300,4 +300,66 @@ public static partial class WindfallUtils
         }
         }
     }
+
+    public static Vector2? RayCast(Vector2 startPosition, Vector2 rayDirection, float maxDist, out float distanceMoved)
+    {
+        Vector2 rayUnitStepSize = new((float)Math.Sqrt(1 + Math.Pow(rayDirection.Y / rayDirection.X, 2)), (float)Math.Sqrt(1 + Math.Pow(rayDirection.X / rayDirection.Y, 2)));
+
+        Vector2 currentCheckPosition = startPosition;
+        
+        Vector2 RayLength1D = new(0, 0);
+        Point Step = new(0, 0);
+
+        if (rayDirection.X < 0)
+        {
+            Step.X = -1;
+            RayLength1D.X = (startPosition.X - currentCheckPosition.X) * rayUnitStepSize.X;
+        }
+        else
+        {
+            Step.X = 1;
+            RayLength1D.X = ((currentCheckPosition.X + 1) - startPosition.X) * rayUnitStepSize.X;
+        }
+
+        if (rayDirection.Y < 0)
+        {
+            Step.Y = -1;
+            RayLength1D.Y = (startPosition.Y - currentCheckPosition.Y) * rayUnitStepSize.Y;
+        }
+        else
+        {
+            Step.Y = 1;
+            RayLength1D.Y = ((currentCheckPosition.Y + 1) - startPosition.Y) * rayUnitStepSize.Y;
+        }
+
+        bool hitTIle = false;
+        distanceMoved = 0f;
+        while(!hitTIle && distanceMoved < maxDist)
+        {
+            if(RayLength1D.X < RayLength1D.Y)
+            {
+                currentCheckPosition.X += Step.X;
+                distanceMoved = RayLength1D.X;
+                RayLength1D.X += rayUnitStepSize.X;
+            }
+            else
+            {
+                currentCheckPosition.Y += Step.Y;
+                distanceMoved = RayLength1D.Y;
+                RayLength1D.Y += rayUnitStepSize.Y;
+            }
+
+            Point p = currentCheckPosition.ToTileCoordinates();
+
+            if (WorldGen.InWorld(p.X, p.Y) && WorldGen.SolidTile(p))
+            {
+                hitTIle = true;
+            }
+        }
+
+        if (hitTIle)
+            return startPosition + rayDirection * distanceMoved;
+
+        return null;
+    }
 }

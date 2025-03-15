@@ -8,7 +8,6 @@ using DialogueHelper.UI.Dialogue;
 using Windfall.Content.Items.Quests.SealingRitual;
 using CalamityMod.NPCs.TownNPCs;
 using Terraria.ModLoader.IO;
-using Terraria;
 using static Windfall.Common.Systems.PathfindingSystem;
 
 namespace Windfall.Content.NPCs.TravellingNPCs;
@@ -231,6 +230,12 @@ public class TravellingCultist : ModNPC, ILocalizedModType
     public override string GetChat()
     {
         Main.CloseNPCChatOrSign();
+        myBehavior = BehaviorState.StandStill;
+        if (NPC.Center.X < Main.LocalPlayer.Center.X)
+            NPC.direction = -1;
+        else
+            NPC.direction = 1;
+        NPC.spriteDirection = -NPC.direction;
 
         if(introductionDone)
             ModContent.GetInstance<DialogueUISystem>().DisplayDialogueTree(Windfall.Instance, "TravellingCultist/Default", new(Name, [NPC.whoAmI]));
@@ -634,6 +639,9 @@ public class TravellingCultist : ModNPC, ILocalizedModType
                     }
                 }
                 */
+                break;
+            case BehaviorState.StandStill:
+                NPC.velocity.X *= 0.8f;
                 break;
         }
 

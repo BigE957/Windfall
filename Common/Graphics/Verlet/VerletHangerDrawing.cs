@@ -88,7 +88,7 @@ public class VerletHangerDrawing : ModSystem
                     if (!p.active || p.dead)
                         continue;
 
-                    MoveChainBasedOnEntity(te.MainVerlet, p, te, 1f);
+                    MoveChainBasedOnEntity(te.MainVerlet, p, 1f);
                 }
 
                 for (int j = 0; j < Main.maxProjectiles; j++)
@@ -98,7 +98,7 @@ public class VerletHangerDrawing : ModSystem
                     if (!proj.active || proj.hostile)
                         continue;
 
-                    MoveChainBasedOnEntity(te.MainVerlet, proj, te, 1f);
+                    MoveChainBasedOnEntity(te.MainVerlet, proj, 1f);
                 }
 
                 Vector2[] segmentPositions = te.MainVerlet.Select(x => x.Position).ToArray();
@@ -162,7 +162,7 @@ public class VerletHangerDrawing : ModSystem
                     }
                 }
 
-                WFVerletSimulations.CalamitySimulationWithWind(te.MainVerlet, 15, 30);
+                WFVerletSimulations.CalamitySimulation(te.MainVerlet, 15, 30);
                 //VerletSimulations.RopeVerletSimulation(te.MainVerlet, StringStart, te.MainVerlet.Count, new(Gravity: 0.5f), StringEnd);
             }
             
@@ -233,7 +233,7 @@ public class VerletHangerDrawing : ModSystem
         }
     }
 
-    public static void MoveChainBasedOnEntity(List<VerletSegment> chain, Entity e, HangerEntity he, float dampening = 0.425f, float cap = 5f)
+    public static void MoveChainBasedOnEntity(List<VerletSegment> chain, Entity e, float dampening = 0.425f, float cap = 5f)
     {
         // Cap the velocity to ensure it doesn't make the chains go flying.
         Vector2 entityVelocity = (e.velocity * dampening).ClampMagnitude(0f, cap);

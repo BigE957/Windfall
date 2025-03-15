@@ -1,6 +1,9 @@
-﻿using DialogueHelper.UI.Dialogue;
+﻿using CalamityMod.Items.Weapons.Melee;
+using DialogueHelper.UI.Dialogue;
+using Terraria;
 using Windfall.Common.Systems.WorldEvents;
 using Windfall.Content.Projectiles.Other;
+using static Windfall.Common.Systems.PathfindingSystem;
 
 namespace Windfall.Content.NPCs.WorldEvents.LunarCult;
 
@@ -13,6 +16,8 @@ public class LunarCultistDevotee : ModNPC
         CafeteriaEvent,
         RitualEvent,
         StaticCharacter,
+        TabletChase,
+        TabletGrabCutscene,
     }
     private States AIState
     {
@@ -33,16 +38,16 @@ public class LunarCultistDevotee : ModNPC
     public override void SetStaticDefaults()
     {
         this.HideFromBestiary();
-        Main.npcFrameCount[Type] = 6;
+        Main.npcFrameCount[Type] = 14;
         NPCID.Sets.NoTownNPCHappiness[Type] = true;
         NPCID.Sets.AllowDoorInteraction[Type] = true;
     }
     public override void SetDefaults()
     {
         NPC.friendly = true; // NPC Will not attack player
-        NPC.width = 34;
+        NPC.width = 24;
         NPC.height = 48;
-        NPC.aiStyle = 0;
+        NPC.aiStyle = -1;
         NPC.damage = 0;
         NPC.defense = 0;
         NPC.lifeMax = 400;
@@ -55,6 +60,8 @@ public class LunarCultistDevotee : ModNPC
     }
     public override void OnSpawn(IEntitySource source)
     {
+        AIState = States.TabletChase;
+
         if(AIState == States.CafeteriaEvent || AIState == States.RitualEvent || AIState == States.StaticCharacter)
             NPC.aiStyle = -1;
         switch (AIState)
@@ -99,6 +106,14 @@ public class LunarCultistDevotee : ModNPC
                 break;
         }
     }
+
+    private int Time = 0;
+    private PathFinding pathFinding = new();
+    private int CurrentWaypoint = 0;
+    private int jumpTimer = 0;
+    private int airTime = 0;
+    private int tripTime = 0;
+
     public override void AI()
     {       
         //AIState = States.RitualEvent;
@@ -266,7 +281,158 @@ public class LunarCultistDevotee : ModNPC
                     }
                 }
                 break;
+            case States.TabletChase:
+                Vector2 targetPos = DraconicRuinsSystem.TabletRoom.ToWorldCoordinates(); //Main.LocalPlayer.Center;//
+
+                if (jumpTimer > 0)
+                    jumpTimer--;
+
+                if (tripTime > 0)
+                    tripTime--;
+
+                if ((NPC.velocity.Y != 0 || NPC.oldVelocity.Y != 0.3f) && !WorldGen.SolidOrSlopedTile(NPC.Bottom.ToTileCoordinates().X, NPC.Bottom.ToTileCoordinates().Y))
+                {
+                    if (jumpTimer == 0)
+                        airTime++;
+                    else
+                        airTime = 16;
+                }
+                else
+                {
+                    if (airTime >= 76)
+                    {
+                        NPC.velocity.X = 0;
+                        //NPC.direction *= -1;
+                        //NPC.spriteDirection = NPC.direction;
+                        tripTime = 120;
+                    }
+                    airTime = 0;
+                    jumpTimer = 0;
+                }               
+
+                if (airTime < 76 && tripTime == 0)
+                {
+
+                    if (jumpTimer != 0 || Time % 10 == 0)
+                    {
+                        pathFinding.FindPath(NPC.Center, targetPos, NPC.IsWalkableThroughDoors, NPC.noGravity ? null : GravityCostFunction, 1200);
+
+                        CurrentWaypoint = 1;
+                    }
+
+                    float MoveSpeed = 2f;
+                    if (pathFinding.MyPath != null)
+                    {
+                        /*
+                        for (int i = 0; i < pathFinding.MyPath.Points.Length; i++)
+                        {
+                            Particle p = new GlowOrbParticle(pathFinding.MyPath.Points[i].ToWorldCoordinates(), Vector2.Zero, false, 2, 0.5f, i == CurrentWaypoint ? Color.White : Color.Red);
+                            GeneralParticleHandler.SpawnParticle(p);
+                        }
+                        */
+                        MoveSpeed = pathFinding.MyPath.Points.Length / 10f + 2;
+                    }
+                    if (MoveSpeed > 4f)
+                        MoveSpeed = 4f;
+
+                    bool MovementSuccess = GravityAffectedPathfindingMovement(NPC, pathFinding, ref CurrentWaypoint, out NPC.velocity, out bool jumpStarted, MoveSpeed, 8.5f, 0.25f);
+
+                    if(!DraconicRuinsSystem.CutsceneActive && Collision.CanHit(NPC, Main.npc[NPC.FindFirstNPC(ModContent.NPCType<SealingTablet>())]))
+                    {
+                        DraconicRuinsSystem.ZoomActive = true;
+
+                        if (Vector2.Distance(NPC.Center, targetPos) < 160)
+                        {
+                            DraconicRuinsSystem.CutsceneActive = true;
+
+                            AIState = States.TabletGrabCutscene;
+                            Time = 0;
+                            return;
+                        }
+                    }
+
+                    if (!MovementSuccess)
+                        NPC.velocity.X *= 0.8f;
+                    if (jumpStarted)
+                        jumpTimer = 30;
+
+                    if (NPC.velocity.X != 0 && airTime < 60 && tripTime == 0)
+                    {
+                        NPC.direction = Math.Sign(NPC.velocity.X);
+                        NPC.spriteDirection = NPC.direction;
+                    }
+                    if (NPC.direction == -1)
+                    {
+                        Point p = NPC.Left.ToTileCoordinates();
+                        p.X -= 1;
+                        bool opened = TryOpenDoor(p, -1);
+                    }
+                    else
+                    {
+                        Point p = NPC.Right.ToTileCoordinates();
+                        //p.X += 1;
+                        bool opened = TryOpenDoor(p, -1);
+                    }
+                }
+
+                if (airTime == 76)
+                {
+                    NPC.direction = -NPC.direction;
+                    NPC.spriteDirection = NPC.direction;
+                }
+                break;
+            case States.TabletGrabCutscene:
+                if (Time < 64)
+                    NPC.velocity.X = 3 * (DraconicRuinsSystem.FacingLeft ? -1 : 1);
+                else if (NPC.velocity.X != 0)
+                    NPC.velocity.X *= 0.95f;
+                if (Time == 36)
+                {
+                    jumpTimer = 40;
+                    NPC.velocity.Y = -6;
+                }
+
+                if (Time == 44)
+                {
+                    NPC tablet = Main.npc[NPC.FindFirstNPC(ModContent.NPCType<SealingTablet>())];
+                    tablet.ai[0] = 4;
+                    tablet.ai[1] = NPC.whoAmI;
+                }
+
+                if (Time >= 76 && Time < 136)
+                {
+                    if (Time == 76)
+                    {
+                        NPC tablet = Main.npc[NPC.FindFirstNPC(ModContent.NPCType<SealingTablet>())];
+                        tablet.ai[0] = 5;
+                        tablet.velocity = new(NPC.direction * 3f, -4f);
+
+                        NPC.direction *= -1;
+                        NPC.spriteDirection = NPC.direction;
+                    }
+                    if (Time < 124)
+                    {                       
+                        tripTime = -1;
+                    }
+                    else if(Time == 124)
+                    {
+                        NPC.rotation -= 0.2f * NPC.direction;
+                    }
+                    else
+                    {
+                        NPC.rotation = 0;
+                        tripTime = 2;
+                    }
+
+                }
+
+                if (jumpTimer > 0)
+                    jumpTimer--;
+
+                break;
         }
+
+        Time++;
     }
     public override bool CanChat() => AIState == States.StaticCharacter || AIState == States.CafeteriaEvent && NPC.ai[3] == 0 && NPC.velocity.X == 0;
     public override string GetChat()
@@ -308,4 +474,89 @@ public class LunarCultistDevotee : ModNPC
     }
 
     public override bool CheckActive() => false;
+
+    int frameCountX = 9;
+
+    public override void FindFrame(int frameHeight)
+    {
+        int frameWidth = TextureAssets.Npc[NPC.type].Value.Width / frameCountX;
+        NPC.frame.Width = frameWidth;
+        NPC.frameCounter -= 1;
+        switch (AIState)
+        {
+            case States.TabletGrabCutscene:
+            case States.TabletChase:
+                if(tripTime == -1)
+                {
+                    NPC.frame.X = frameWidth * 7;
+                    NPC.frame.Y = 0;
+                }
+                else if(tripTime > 0)
+                {
+                    NPC.frame.X = frameWidth * 6;
+                    NPC.frame.Y = 0;
+                }
+                else if (airTime < 16 && jumpTimer == 0)
+                {
+                    NPC.frame.X = frameWidth * 4;
+                    NPC.frame.Y = frameHeight * ((int)NPC.frameCounter % Main.npcFrameCount[NPC.type]);
+
+                    if (NPC.velocity.X == 0 && (NPC.frame.Y / frameHeight == 4 || NPC.frame.Y / frameHeight == 5 || NPC.frame.Y / frameHeight == 12 || NPC.frame.Y / frameHeight == 13 || NPC.frame.Y / frameHeight == 14))
+                    {
+                        NPC.frame.X = frameWidth * 3;
+                        NPC.frame.Y = 0;
+                    }
+                    else
+                    {
+                        NPC.frameCounter += 0.2f * (Math.Abs(NPC.velocity.X) + 1);
+                        NPC.frame.Y = frameHeight * ((int)NPC.frameCounter % Main.npcFrameCount[NPC.type]);
+                    }
+
+                }
+                else
+                {
+                    if(airTime > 76)
+                        NPC.frame.X = frameWidth * 8;
+                    else
+                        NPC.frame.X = frameWidth * 5;
+                    NPC.frame.Y = 0;
+                }
+                break;
+            default:
+                NPC.frame.X = frameWidth * 3;
+                NPC.frame.Y = 0;
+                break;
+        }
+        if (NPC.frame.Y < 0)
+            NPC.frame.Y = 0;
+    }
+
+    public override bool? CanFallThroughPlatforms()
+    {
+        if (pathFinding.MyPath == null || pathFinding.MyPath.Points.Length == 0 || pathFinding.MyPath.Points.Length <= CurrentWaypoint)
+            return false;
+        int checkIndex = 3;
+        if (pathFinding.MyPath.Points.Length <= CurrentWaypoint + checkIndex)
+            checkIndex = pathFinding.MyPath.Points.Length - 1;
+        return pathFinding.MyPath.Points[checkIndex].Y > pathFinding.MyPath.Points[CurrentWaypoint].Y;
+    }
+
+    public override bool PreDraw(SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor)
+    {
+        Texture2D texture = TextureAssets.Npc[NPC.type].Value;
+        Vector2 halfSizeTexture = new(texture.Width / frameCountX / 2, texture.Height / Main.npcFrameCount[NPC.type] / 2);
+        Vector2 drawPosition = NPC.Center - screenPos + (Vector2.UnitY * NPC.gfxOffY);
+        drawPosition.Y += 4;
+        drawPosition.X += 12 * NPC.spriteDirection;
+        if(tripTime != 0)
+            drawPosition.X += 24 * -NPC.spriteDirection;
+
+        SpriteEffects spriteEffects = SpriteEffects.None;
+        if (NPC.spriteDirection == -1)
+            spriteEffects = SpriteEffects.FlipHorizontally;
+        
+        spriteBatch.Draw(texture, drawPosition, NPC.frame, NPC.GetAlpha(drawColor), NPC.rotation, halfSizeTexture, NPC.scale, spriteEffects, 0f);
+        
+        return false;
+    }
 }

@@ -4,7 +4,7 @@ using System;
 namespace Windfall.Common.Graphics.Verlet;
 public static class WFVerletSimulations
 {
-    public static List<VerletSegment> CalamitySimulationWithWind(List<VerletSegment> segments, float segmentDistance, int loops = 10, float gravity = 0.3f)
+    public static List<VerletSegment> CalamitySimulation(List<VerletSegment> segments, float segmentDistance, int loops = 10, float gravity = 0.3f, bool windAffected = true)
     {
         foreach (VerletSegment segment in segments)
         {
@@ -13,7 +13,8 @@ public static class WFVerletSimulations
                 Vector2 vector = segment.Position;
                 segment.Position += segment.Position - segment.OldPosition;
                 segment.Position += Vector2.UnitY * gravity;
-                segment.Position += Vector2.UnitX * Main.windSpeedCurrent;
+                if(windAffected)
+                    segment.Position += Vector2.UnitX * Main.windSpeedCurrent;
                 segment.OldPosition = vector;
             }
         }
