@@ -184,12 +184,6 @@ public class FingerBolt : ModProjectile, ILocalizedModType
 
     public override void AI()
     {
-        float aberrationPower = (float)(Math.Pow(AperiodicSin(Main.GlobalTimeWrappedHourly * 32f), 2f) * 0.4f);
-        ManagedScreenFilter aberrationShader = ShaderManager.GetFilter("Windfall.ChromaticAberrationShader");
-        aberrationShader.TrySetParameter("splitIntensity", aberrationPower);
-        aberrationShader.TrySetParameter("impactPoint", Vector2.One * 0.5f);
-        aberrationShader.Activate();
-
         if (State == 0)
         {
             if (Time < 60)

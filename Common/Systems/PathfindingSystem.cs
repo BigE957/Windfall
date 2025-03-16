@@ -110,6 +110,8 @@ public class PathfindingSystem : ModSystem
     {
         public Point[] Points { get; } = nodes;
 
+        public int Length { get => Points.Length; }
+
         public void DrawPath(SpriteBatch sb)
         {
             for (int i = 0; i < Points.Length - 1; i++)

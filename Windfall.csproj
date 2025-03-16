@@ -10,6 +10,7 @@
     </PropertyGroup>
   <ItemGroup>
     <None Remove="Assets\AutoloadedEffects\Filters\ChromaticAberrationShader.fx" />
+    <None Remove="Assets\AutoloadedEffects\Filters\ShadowShader.fx" />
     <None Remove="Assets\AutoloadedEffects\Shaders\GenericFlameTrail.fx" />
     <None Remove="Assets\Buffs\Wildfire.png" />
     <None Remove="Assets\Graphics\Extra\InvertedSwordSmear.png" />
