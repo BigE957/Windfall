@@ -7,13 +7,16 @@
       "DialogueText": [ { "Text": "In old texts, I've found a good few mentions of a site once used by the Monks of old in their worship of the Dragons. It is said to hold some of their most prized relics; including a tablet used in the very ritual we seek to peform!" } ]
     },
     {
-      "DialogueText": [ { "Text": "Finding such a secretive place would normally be next to impossible, but lucky for you, I have this: a Wayfinder which used to be used by the Monks! There's, uh, just one issue... It isn't exactly working..." } ]
+      "DialogueText": [ { "Text": "Finding such a secretive place would normally be next to impossible, but lucky for you, I have this: a Wayfinder! These arcane devices were used by the Monks to guide them to their temples from across the entire world! There's, uh, just one issue... It isn't exactly working..." } ]
     },
     {
-      "DialogueText": [ { "Text": "Unfortunately, even if we were to find the ruins, we still need a Wayfinder to act as a key to gain entry to the temple. Without it, we're no closer to getting that tablet I'm afraid." } ]
+      "DialogueText": [ { "Text": "And unfortunately, even if we were to find the ruins, Wayfinders also act as a sort of key; allowing entry into the temple. Without it, we'd be no closer to getting that tablet even if we could find the temple ourselves." } ]
     },
     {
-      "DialogueText": [ { "Text": "Luckly the Wayfinder isn't broken, per se, its simply lacking power. It'll be up to you to get it working. I trust you can handle that?" } ],
+      "DialogueText": [ { "Text": "Luckly the Wayfinder isn't broken, per se, its simply lacking power. The Dragons themselves gifted their magic to the Monks, which they used to fuel many of their arcane relics. Lucky for us, thanks to your efforts, a new source of Draconic Magic is available to us: Aerialite." } ]
+    },
+    {
+      "DialogueText": [ { "Text": "If you direct the Wayfinder towards some of the stuff, it should be able to absorb the Draconic Magic housed within it! Harness enough of that magic, and it should be useable again! Think you can handle that?" } ],
       "Responses": [
         {
           "Title": "Of course!",
@@ -22,7 +25,7 @@
       ]
     },
     {
-      "DialogueText": [ { "Text": "Wonderful! Let me know when you get the Wayfinder working, and then we can investigate those ruins!" } ],
+      "DialogueText": [ { "Text": "Wonderful! Let me know when you're finished charging the Wayfinder, and then we can investigate those ruins!" } ],
       "Responses": [
         {
           "Title": "Will do!"
