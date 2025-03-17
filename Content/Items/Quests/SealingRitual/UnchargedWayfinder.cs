@@ -19,7 +19,7 @@ public class UnchargedWayfinder : ModItem, ILocalizedModType
         Item.maxStack = 1;
     }
 
-    private List<int> DustIndexes = [];
+    private readonly List<int> DustIndexes = [];
     private Point currentPoint = new(-1, -1);
     private int holdTime = 0;
     private int charge = 0;
@@ -71,8 +71,6 @@ public class UnchargedWayfinder : ModItem, ILocalizedModType
 
     public override void HoldItem(Player player)
     {
-        if(DustIndexes == null)
-            DustIndexes = [];
         foreach (int i in DustIndexes)
         {
             Vector2 toPlayer = (player.Center - Main.dust[i].position);

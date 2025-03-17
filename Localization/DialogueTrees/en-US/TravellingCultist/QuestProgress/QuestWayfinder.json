@@ -1,31 +1,34 @@
 {
   "Dialogues": [
     {
-      "DialogueText": [ { "Text": "Have you had any luck in getting the Wayfinder to work?" } ],
+      "DialogueText": [ { "Text": "Have you finished charging the Wayfinder?" } ],
       "Responses": [
         {
           "Title": "I have!",
-          "Heading": 1
+          "Heading": 2
         },
         {
           "Title": "Not yet I'm afraid.",
-          "Heading": 2
+          "Heading": 1
         }
       ]
     },
     {
-      "DialogueText": [ { "Text": "Wonderful! Then it should now be capable of leading you to the Temple! Go and bring word of anything you find; especially if you find the Tablet we're looking for!" } ],
+      "DialogueText": [ { "Text": "I see. If you have any Aerialite Ore on hand, you should be able to use that. Just place it down and direct the Wayfinder towards it!" } ],
       "Responses": [
         {
-          "Title": "Will do."
+          "Title": "I see."
         }
       ]
     },
     {
-      "DialogueText": [ { "Text": "Ah, no worries. Continue you're search; I'm certain we'll find what we need." } ],
+      "DialogueText": [ { "Text": "Excellent work! It's quite amazing. We're likely the first to actually use a Wayfinder since the Draconic Era! Truly a most honored privilage." } ]
+    },
+    {
+      "DialogueText": [ { "Text": "Let us begin our journey then! Please, lead the way." } ],
       "Responses": [
         {
-          "Title": "Will do."
+          "Title": "Can do."
         }
       ]
     }

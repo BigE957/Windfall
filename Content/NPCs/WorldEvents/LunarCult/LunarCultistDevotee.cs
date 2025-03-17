@@ -11,13 +11,16 @@ public class LunarCultistDevotee : ModNPC
 {
     private enum States
     {
+        //Selenic Order Base
         Idle,
         Chatting,
         CafeteriaEvent,
         RitualEvent,
         StaticCharacter,
+        //Other States
         TabletChase,
         TabletGrabCutscene,
+        SlowToStop,
     }
     private States AIState
     {
@@ -302,8 +305,6 @@ public class LunarCultistDevotee : ModNPC
                     if (airTime >= 76)
                     {
                         NPC.velocity.X = 0;
-                        //NPC.direction *= -1;
-                        //NPC.spriteDirection = NPC.direction;
                         tripTime = 120;
                     }
                     airTime = 0;
@@ -337,18 +338,25 @@ public class LunarCultistDevotee : ModNPC
 
                     bool MovementSuccess = GravityAffectedPathfindingMovement(NPC, pathFinding, ref CurrentWaypoint, out NPC.velocity, out bool jumpStarted, MoveSpeed, 8.5f, 0.25f);
 
-                    if(!DraconicRuinsSystem.CutsceneActive && Collision.CanHit(NPC, Main.npc[NPC.FindFirstNPC(ModContent.NPCType<SealingTablet>())]))
+                    if (Vector2.DistanceSquared(targetPos, NPC.Center) < 50000)
                     {
-                        DraconicRuinsSystem.ZoomActive = true;
-
-                        if (Vector2.Distance(NPC.Center, targetPos) < 160)
+                        if (DraconicRuinsSystem.State == DraconicRuinsSystem.CutsceneState.Fumble && !DraconicRuinsSystem.CutsceneActive)
                         {
-                            DraconicRuinsSystem.CutsceneActive = true;
+                            DraconicRuinsSystem.StartCutscene();
+
+                            airTime = 0;
+                            jumpTimer = 0;
+                            NPC.direction = Math.Sign(NPC.velocity.X);
 
                             AIState = States.TabletGrabCutscene;
                             Time = 0;
-                            return;
                         }
+                        else
+                        {
+                            AIState = States.SlowToStop;
+                            Time = Main.rand.Next(-60, 0);
+                        }
+                        return;
                     }
 
                     if (!MovementSuccess)
@@ -382,26 +390,27 @@ public class LunarCultistDevotee : ModNPC
                 }
                 break;
             case States.TabletGrabCutscene:
-                if (Time < 64)
+                int time = Time - 16;
+                if (time < 76)
                     NPC.velocity.X = 3 * (DraconicRuinsSystem.FacingLeft ? -1 : 1);
                 else if (NPC.velocity.X != 0)
                     NPC.velocity.X *= 0.95f;
-                if (Time == 36)
+                if (time == 48)
                 {
                     jumpTimer = 40;
                     NPC.velocity.Y = -6;
                 }
 
-                if (Time == 44)
+                if (time == 56)
                 {
                     NPC tablet = Main.npc[NPC.FindFirstNPC(ModContent.NPCType<SealingTablet>())];
                     tablet.ai[0] = 4;
                     tablet.ai[1] = NPC.whoAmI;
                 }
 
-                if (Time >= 76 && Time < 136)
+                if (time >= 88 && time < 148)
                 {
-                    if (Time == 76)
+                    if (time == 88)
                     {
                         NPC tablet = Main.npc[NPC.FindFirstNPC(ModContent.NPCType<SealingTablet>())];
                         tablet.ai[0] = 5;
@@ -410,11 +419,11 @@ public class LunarCultistDevotee : ModNPC
                         NPC.direction *= -1;
                         NPC.spriteDirection = NPC.direction;
                     }
-                    if (Time < 124)
+                    if (time < 136)
                     {                       
                         tripTime = -1;
                     }
-                    else if(Time == 124)
+                    else if(time == 136)
                     {
                         NPC.rotation -= 0.2f * NPC.direction;
                     }
@@ -429,6 +438,10 @@ public class LunarCultistDevotee : ModNPC
                 if (jumpTimer > 0)
                     jumpTimer--;
 
+                break;
+            case States.SlowToStop:
+                if (Time >= 0)
+                    NPC.velocity.X *= 0.8f;
                 break;
         }
 

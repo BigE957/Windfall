@@ -1,10 +1,4 @@
-﻿using CalamityMod;
-using CalamityMod.Rarities;
-using Luminance.Common.VerletIntergration;
-using System;
-using Terraria;
-using Terraria.GameContent.Animations;
-using Terraria.ModLoader;
+﻿using Luminance.Common.VerletIntergration;
 using Windfall.Common.Graphics.Metaballs;
 using Windfall.Common.Graphics.Verlet;
 using Windfall.Content.Items.Quests.SealingRitual;
@@ -45,11 +39,11 @@ public class SealingTablet : ModNPC
 
     public override void OnSpawn(IEntitySource source)
     {
-        int verletCount = 24;
+        int verletCount = 22;
         for (int i = 0; i < verletCount; i++) 
         {
-            LeftChain.Add(new(NPC.Bottom + new Vector2(-36, 4 * i), Vector2.Zero, i == 0));
-            RightChain.Add(new(NPC.Bottom + new Vector2(36, 4 * i), Vector2.Zero, i == 0));
+            LeftChain.Add(new(NPC.Bottom + new Vector2(-48, 4 * i), Vector2.Zero, i == 0));
+            RightChain.Add(new(NPC.Bottom + new Vector2(48, 4 * i), Vector2.Zero, i == 0));
         }
 
         NPC.position.Y += verletCount * 4;
@@ -98,8 +92,8 @@ public class SealingTablet : ModNPC
         //LeftChain[^1].Locked = false;
         //RightChain[^1].Locked = false;
 
-        AffectVerlets(LeftChain);
-        AffectVerlets(RightChain);
+        AffectVerlets(LeftChain, 0.125f, 0.8f);
+        AffectVerlets(RightChain, 0.125f, 0.8f);
 
         foreach (Player p in Main.ActivePlayers)
         {
@@ -132,9 +126,9 @@ public class SealingTablet : ModNPC
 
         if (NPC.ai[0] < 4)
         {
-            if (chainDistance != NPC.width - 4)
+            if (chainDistance != NPC.width - 24)
             {
-                float distanceDif = chainDistance - (NPC.width - 4);
+                float distanceDif = chainDistance - (NPC.width - 24);
                 LeftChain[^1].Position += chainToChain * distanceDif / 2f;
                 RightChain[^1].Position -= chainToChain * distanceDif / 2f;
             }
@@ -167,11 +161,11 @@ public class SealingTablet : ModNPC
             }
         }    
 
-        WFVerletSimulations.CalamitySimulation(LeftChain, 4, 30, gravity: 0.6f, windAffected: false);
-        WFVerletSimulations.CalamitySimulation(RightChain, 4, 30, gravity: 0.6f, windAffected: false);
+        WFVerletSimulations.CalamitySimulation(LeftChain, 4, 30, gravity: 0.8f, windAffected: false);
+        WFVerletSimulations.CalamitySimulation(RightChain, 4, 30, gravity: 0.8f, windAffected: false);
     }
 
-    private void AffectVerlets(List<VerletSegment> verlet)
+    private void AffectVerlets(List<VerletSegment> verlet, float dampening, float cap)
     {
         for (int k = 0; k < verlet.Count; k++)
         {
@@ -179,12 +173,12 @@ public class SealingTablet : ModNPC
             {
                 foreach (Player p in Main.ActivePlayers)
                 {
-                    VerletHangerDrawing.MoveChainBasedOnEntity(verlet, p, 0.125f, 0.5f);
+                    VerletHangerDrawing.MoveChainBasedOnEntity(verlet, p, dampening, cap);
                 }
 
                 foreach (Projectile proj in Main.ActiveProjectiles)
                 {
-                    VerletHangerDrawing.MoveChainBasedOnEntity(verlet, proj, 0.125f, 0.5f);
+                    VerletHangerDrawing.MoveChainBasedOnEntity(verlet, proj, dampening, cap);
                 }
             }
         }

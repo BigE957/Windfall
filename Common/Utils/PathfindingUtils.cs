@@ -86,19 +86,20 @@ public static partial class WindfallUtils
         if (pathFinding.MyPath == null || pathFinding.MyPath.Points.Length == 0)
             return false;
 
-        if (currentWaypoint >= pathFinding.MyPath.Points.Length - 1)
+        if (currentWaypoint > pathFinding.MyPath.Points.Length - 1)
             return false;
-
+        
         float distanceToWaypoint = Vector2.Distance(npc.Center, pathFinding.MyPath.Points[currentWaypoint].ToWorldCoordinates());
         //Main.NewText(dist);
         while (distanceToWaypoint < Math.Max(npc.width, npc.height) / 1.66f)
         {
             currentWaypoint++;
-            if (currentWaypoint >= pathFinding.MyPath.Points.Length - 1)
+            if (currentWaypoint > pathFinding.MyPath.Points.Length - 1)
                 return false;
             
             distanceToWaypoint = Vector2.Distance(npc.Center, pathFinding.MyPath.Points[currentWaypoint].ToWorldCoordinates());
         }
+
         Vector2 waypointDirection = (pathFinding.MyPath.Points[currentWaypoint].ToWorldCoordinates() - npc.Center).SafeNormalize(Vector2.Zero);
 
         Point beneathTilePoint = npc.Bottom.ToTileCoordinates();

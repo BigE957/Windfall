@@ -436,7 +436,7 @@ public class TravellingCultist : ModNPC, ILocalizedModType
                 break;
             #region Quest Progress
             case "TravellingCultist/QuestProgress/QuestWayfinder":
-                if (dialogueID == 1 && QuestSystem.Quests["TabletFragment"].Progress == 0)
+                if (dialogueID == 3 && QuestSystem.Quests["TabletFragment"].Progress == 0)
                 {
                     QuestSystem.Quests["TabletFragment"].IncrementProgress();
                     CurrentDialogue = DialogueState.RitualQuestTablet;
@@ -486,15 +486,14 @@ public class TravellingCultist : ModNPC, ILocalizedModType
     }
 
     private int Time = 0;
-    private PathFinding pathFinding = new();
+    private readonly PathFinding pathFinding = new();
     private int CurrentWaypoint = 0;
     private float MoveSpeed = 3f;
     private int jumpTimer = 0;
 
     public override void AI()
     {
-        //NPC.velocity.Y += 0.66f;
-
+        //myBehavior = BehaviorState.FollowPlayer;
         switch(myBehavior)
         {
             case BehaviorState.Wander:
@@ -532,113 +531,10 @@ public class TravellingCultist : ModNPC, ILocalizedModType
                 }
                 break;
             case BehaviorState.FollowPlayer:
-                Vector2 targetPos = Main.LocalPlayer.Center;
-
-                if (jumpTimer != 0 || Time % 10 == 0)
-                {
-                    pathFinding.FindPath(NPC.Center, targetPos, NPC.IsWalkableThroughDoors, NPC.noGravity ? null : GravityCostFunction, 1300);
-                    
-                    CurrentWaypoint = 1;
-                }
-                /*
-                for (int i = 0; i < pathFinding.MyPath.Points.Length; i++)
-                {
-                    Particle p = new GlowOrbParticle(pathFinding.MyPath.Points[i].ToWorldCoordinates(), Vector2.Zero, false, 2, 0.5f, i == CurrentWaypoint ? Color.White : Color.Red);
-                    GeneralParticleHandler.SpawnParticle(p);
-                }
-                */
-                Time++;
-                if (jumpTimer > 0)
-                    jumpTimer--;
-
-                
-                bool MovementSuccess = true;
-                float distanceToTarget = Vector2.DistanceSquared(NPC.Center, targetPos);
-                bool jumpStarted = false;
-
-                if (distanceToTarget < 10000 && Collision.CanHit(NPC, Main.LocalPlayer))
-                {
-                    if (NPC.noGravity)
-                    {
-                        Vector2 ground = FindSurfaceBelow(Main.LocalPlayer.Center.ToTileCoordinates()).ToWorldCoordinates();
-                        int distance = (int)Vector2.Distance(Main.LocalPlayer.Center, ground);
-                        if (distance <= 600)
-                            NPC.noGravity = false;
-                    }
-                    MoveSpeed = 3f;
-                    MovementSuccess = false;
-                }
-                else
-                {
-                    if (NPC.noGravity)
-                        MovementSuccess = AntiGravityPathfindingMovement(NPC, pathFinding, ref CurrentWaypoint, 8, 1f, 0.66f);
-                    else
-                    {
-                        if ((distanceToTarget > 250000 && Time % 120 == 0) || (distanceToTarget > 500000 && Time % 30 == 0))
-                        {
-                            if (MoveSpeed < 6f)
-                                MoveSpeed += 1;
-                            else
-                                NPC.noGravity = true;
-                        }
-                        MovementSuccess = GravityAffectedPathfindingMovement(NPC, pathFinding, ref CurrentWaypoint, out NPC.velocity, out jumpStarted, MoveSpeed, 8.5f, 0.25f);
-                    }
-                }
-
-                if (!MovementSuccess)
-                {
-                    if (jumpStarted)
-                        NPC.noGravity = true;
-                    else
-                        NPC.velocity.X *= 0.8f;
-                }
-                else
-                {
-                    if(jumpStarted)
-                    {
-                        jumpTimer = 30;
-                        Vector2 ground = FindSurfaceBelow(Main.LocalPlayer.Center.ToTileCoordinates()).ToWorldCoordinates();
-                        int distance = (int)Vector2.Distance(Main.LocalPlayer.Center, ground);
-                        if (distance > 600)
-                            NPC.noGravity = true;
-                        else if(Main.LocalPlayer.Center.Y < NPC.Center.Y)
-                        {
-                            distance = (int)Vector2.Distance(Main.LocalPlayer.Center, NPC.Center);
-                            if(distance > 800)
-                                NPC.noGravity = true;
-                        }
-                    }
-                }
-
-                if (NPC.velocity.X != 0)
-                {
-                    NPC.direction = Math.Sign(NPC.velocity.X);
-                    NPC.spriteDirection = NPC.direction;
-                }
-                if (NPC.direction == -1)
-                {
-                    Point p = NPC.Left.ToTileCoordinates();
-                    p.X -= 1;
-                    bool opened = TryOpenDoor(p, -1);
-                }
-                else
-                {
-                    Point p = NPC.Right.ToTileCoordinates();
-                    p.X += 1;
-                    bool opened = TryOpenDoor(p, -1);
-
-                }
-                /*
-                if (!MovementSuccess)
-                {
-                    NPC.velocity.X *= 0.8f;
-                    if (Math.Abs(NPC.velocity.X) < 0.01f)
-                    {
-                        NPC.velocity.X = 0;
-                        return;
-                    }
-                }
-                */
+                PathfindingMovement(Main.LocalPlayer.Center);
+                break;
+            case BehaviorState.MoveToTargetLocation:
+                PathfindingMovement(DraconicRuinsSystem.RuinsEntrance.ToWorldCoordinates(), 64);
                 break;
             case BehaviorState.StandStill:
                 NPC.velocity.X *= 0.8f;
@@ -646,11 +542,137 @@ public class TravellingCultist : ModNPC, ILocalizedModType
         }
 
         //Debug
-        //if (CurrentDialogue == DialogueState.SelenicOrderTalk)
-        //    CurrentDialogue++;
+        CurrentDialogue = DialogueState.RitualQuestTablet;
         //foreach(var item in pool.CirculatingDialogues)
         //Main.NewText(QuestSystem.Quests["SealingRitual"].Progress);
         //CurrentDialogue = DialogueState.RitualQuestWayfinder;
+    }
+
+    private bool PathfindingMovement(Vector2 targetPos, float requiredDistSquared = 256)
+    {
+        if (jumpTimer != 0 || Time % 10 == 0)
+        {
+            pathFinding.FindPath(NPC.Center, targetPos, NPC.IsWalkableThroughDoors, NPC.noGravity ? null : GravityCostFunction, 1300);
+
+            CurrentWaypoint = 1;
+        }
+        /*
+        for (int i = 0; i < pathFinding.MyPath.Points.Length; i++)
+        {
+            Particle p = new GlowOrbParticle(pathFinding.MyPath.Points[i].ToWorldCoordinates(), Vector2.Zero, false, 2, 0.5f, i == CurrentWaypoint ? Color.White : Color.Red);
+            GeneralParticleHandler.SpawnParticle(p);
+        }
+        */
+        Time++;
+        if (jumpTimer > 0)
+            jumpTimer--;
+
+
+        bool MovementSuccess = true;
+        float distanceToTarget = Vector2.DistanceSquared(NPC.Center, targetPos);
+        bool jumpStarted = false;
+
+        if (distanceToTarget < requiredDistSquared && Collision.CanHit(NPC.Center, 1, 1, targetPos, 1, 1))
+        {
+            if (NPC.noGravity)
+            {
+                Vector2 ground = FindSurfaceBelow(targetPos.ToTileCoordinates()).ToWorldCoordinates();
+                int distance = (int)Vector2.Distance(targetPos, ground);
+                if (distance <= 600)
+                    NPC.noGravity = false;
+            }
+            MoveSpeed = 3f;
+            MovementSuccess = false;
+        }
+        else
+        {
+            if (NPC.noGravity)
+                MovementSuccess = AntiGravityPathfindingMovement(NPC, pathFinding, ref CurrentWaypoint, 8, 1.5f, 0.33f);
+            else
+            {
+                if ((distanceToTarget > 250000 && Time % 120 == 0) || (distanceToTarget > 500000 && Time % 30 == 0))
+                {
+                    if (MoveSpeed < 6f)
+                        MoveSpeed += 1;
+                    else
+                        NPC.noGravity = true;
+                }
+                MovementSuccess = GravityAffectedPathfindingMovement(NPC, pathFinding, ref CurrentWaypoint, out NPC.velocity, out jumpStarted, MoveSpeed, 8.5f, 0.25f);
+            }
+        }
+
+        if (!MovementSuccess)
+        {
+            if (jumpStarted)
+                NPC.noGravity = true;
+            else
+                NPC.velocity.X *= 0.8f;
+        }
+        else
+        {
+            if (jumpStarted)
+            {
+                jumpTimer = 30;
+                Vector2 ground = FindSurfaceBelow(targetPos.ToTileCoordinates()).ToWorldCoordinates();
+                int distance = (int)Vector2.Distance(targetPos, ground);
+                if (distance > 600)
+                    NPC.noGravity = true;
+                else if (targetPos.Y < NPC.Center.Y)
+                {
+                    distance = (int)Vector2.Distance(targetPos, NPC.Center);
+                    if (distance > 800)
+                        NPC.noGravity = true;
+                }
+            }
+        }
+
+        if (NPC.velocity.X != 0)
+        {
+            NPC.direction = Math.Sign(NPC.velocity.X);
+            NPC.spriteDirection = NPC.direction;
+        }
+        if (NPC.direction == -1)
+        {
+            Point p = NPC.Left.ToTileCoordinates();
+            p.X -= 1;
+            bool opened = TryOpenDoor(p, -1);
+        }
+        else
+        {
+            Point p = NPC.Right.ToTileCoordinates();
+            p.X += 1;
+            bool opened = TryOpenDoor(p, -1);
+
+        }
+
+        PathfindingEndConditions();
+
+        return MovementSuccess;
+    }
+
+    private void PathfindingEndConditions()
+    {
+        switch(CurrentDialogue)
+        {
+            case DialogueState.RitualQuestTablet:
+                if (myBehavior == BehaviorState.FollowPlayer)
+                {
+                    if ((int)(NPC.Center.Y / 16) == DraconicRuinsSystem.RuinsEntrance.Y)
+                    {
+                        myBehavior = BehaviorState.MoveToTargetLocation;
+                    }
+                }
+                else if (myBehavior == BehaviorState.MoveToTargetLocation)
+                {
+                    if (Vector2.DistanceSquared(NPC.Center, DraconicRuinsSystem.RuinsEntrance.ToWorldCoordinates()) < 256)
+                    {
+                        Main.NewText("Start Cutscene");
+                        myBehavior = BehaviorState.StandStill;
+                        DraconicRuinsSystem.StartCutscene();
+                    }
+                }
+                break;
+        }
     }
 
     public override bool? CanFallThroughPlatforms()
