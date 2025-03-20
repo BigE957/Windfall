@@ -1,0 +1,75 @@
+{
+  "Dialogues": [
+    {
+      "DialogueText": [ { "Text": "Have you found anything of note?" } ],
+      "Responses": [
+        {
+          "Title": "Just these...",
+          "Heading": 1
+        },
+        {
+          "Title": "Not yet. What about you?",
+          "Heading": 4
+        }
+      ]
+    },
+    {
+      "DialogueText": [ { "Text": "Ah, what remains of the tablet... Hmm, thank you for gathering these up. Its not ideal, but perhaps we'll be able to repair the tablet. Once I leave, I'll see if any of my comrads have any idea how to." } ],
+      "Responses": [
+        {
+          "Title": "Sounds good!",
+          "Heading": -2
+        }
+      ]
+    },
+    {
+      "DialogueText": [ { "Text": "For now though, I'll continue poking around here for a while longer. There's so much here, and, whilst the tablet was of course the most valuable, there may be more that can help us!" } ],
+      "Responses": [
+        {
+          "Title": "Good luck!"
+        }
+      ]
+    },
+    {
+      "DialogueText": [ { "Text": "This place is amazing... Its so full of such a rich history! I feel like I could spend forever just looking through here..." } ],
+      "Responses": [
+        {
+          "Title": "Find anything neat?",
+          "Heading": -2
+        },
+        {
+          "Title": "History?",
+          "Heading": 7
+        }
+      ]
+    },
+    {
+      "DialogueText": [ { "Text": "I've actually found a few things! Namely, some garments that I believe were worn by the Dragon Monks; truly a historical find!" } ]
+    },
+    {
+      "DialogueText": [ { "Text": "According to old records, the surface used to be much hotter that it is now, and because of this, garments such as these were required to protect from the harsh sunlight." } ]
+    },
+    {
+      "DialogueText": [ { "Text": "Hmm... Not exactly useful to us at the moment, I realize, but still an interesting find! I'll continue looking around. I'm sure there's even more to find here!" } ],
+      "Responses": [
+        {
+          "Title": "Sounds good."
+        }
+      ]
+    },
+    {
+      "DialogueText": [ { "Text": "There's some very facinating writings here. They seem to have been written relatively recently; around the tail end of the Draconic Era. They provide us with window into that period of time." } ]
+    },
+    {
+      "DialogueText": [ { "Text": "Though... The writings seem to... Hmm, how to put this... Devolve, towards the end. The writing becomes sparser and less composed compared to what comes before. I wonder if there's more here that could give futher insight into this...?" } ],
+      "Responses": [
+        {
+          "Title": "How strange."
+        }
+      ]
+    }
+  ],
+  "Characters": [
+    "TheCalamity"
+  ]
+}

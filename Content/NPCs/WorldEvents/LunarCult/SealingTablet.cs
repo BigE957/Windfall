@@ -34,8 +34,8 @@ public class SealingTablet : ModNPC
         NPC.chaseable = false;
     }
     private float summonRatio = 0f;
-    private List<VerletSegment> LeftChain = [];
-    private List<VerletSegment> RightChain = [];
+    private readonly List<VerletSegment> LeftChain = [];
+    private readonly List<VerletSegment> RightChain = [];
 
     public override void OnSpawn(IEntitySource source)
     {

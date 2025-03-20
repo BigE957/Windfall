@@ -59,12 +59,18 @@ public class LunarCultistDevotee : ModNPC
         NPC.knockBackResist = 0f;
         NPC.immortal = true;
 
+        Time = 0;
+        pathFinding = new();
+        CurrentWaypoint = 0;
+        jumpTimer = 0;
+        airTime = 0;
+        tripTime = 0;
+        TargetPos = Vector2.Zero;
+
         AnimationType = NPCID.CultistDevote;
     }
     public override void OnSpawn(IEntitySource source)
     {
-        AIState = States.TabletChase;
-
         if(AIState == States.CafeteriaEvent || AIState == States.RitualEvent || AIState == States.StaticCharacter)
             NPC.aiStyle = -1;
         switch (AIState)
@@ -116,12 +122,23 @@ public class LunarCultistDevotee : ModNPC
     private int jumpTimer = 0;
     private int airTime = 0;
     private int tripTime = 0;
+    public Vector2 TargetPos = Vector2.Zero;
 
     public override void AI()
-    {       
-        //AIState = States.RitualEvent;
+    {
         switch (AIState)
         {
+            case States.Idle:
+                int index = NPC.FindClosestPlayer();
+                if (index != -1)
+                {
+                    Player player = Main.player[index];
+                    if (player.Center.X > NPC.Center.X)
+                        NPC.direction = 1;
+                    else
+                        NPC.direction = -1;
+                }
+                break;
             case States.CafeteriaEvent:
                 const int queueGap = 50;
                 int queueIndex = (int)NPC.ai[3];
@@ -143,7 +160,6 @@ public class LunarCultistDevotee : ModNPC
                         NPC.velocity.Y += 0.5f;
 
                     NPC.direction = 1;
-                    NPC.spriteDirection = 1;
                     if (NPC.Center.X - (LunarCultBaseSystem.LunarCultBaseLocation.X * 16 - 850) > 800)
                     {
                         for (int i = 0; i <= 50; i++)
@@ -285,8 +301,6 @@ public class LunarCultistDevotee : ModNPC
                 }
                 break;
             case States.TabletChase:
-                Vector2 targetPos = DraconicRuinsSystem.TabletRoom.ToWorldCoordinates(); //Main.LocalPlayer.Center;//
-
                 if (jumpTimer > 0)
                     jumpTimer--;
 
@@ -313,10 +327,9 @@ public class LunarCultistDevotee : ModNPC
 
                 if (airTime < 76 && tripTime == 0)
                 {
-
                     if (jumpTimer != 0 || Time % 10 == 0)
                     {
-                        pathFinding.FindPath(NPC.Center, targetPos, NPC.IsWalkableThroughDoors, NPC.noGravity ? null : GravityCostFunction, 1200);
+                        pathFinding.FindPath(NPC.Center, TargetPos, NPC.IsWalkableThroughDoors, DraconicRuinsSystem.DraconicRuinsArea, NPC.noGravity ? null : GravityCostFunction);
 
                         CurrentWaypoint = 1;
                     }
@@ -337,24 +350,30 @@ public class LunarCultistDevotee : ModNPC
                         MoveSpeed = 4f;
 
                     bool MovementSuccess = GravityAffectedPathfindingMovement(NPC, pathFinding, ref CurrentWaypoint, out NPC.velocity, out bool jumpStarted, MoveSpeed, 8.5f, 0.25f);
+                    float dist = Vector2.DistanceSquared(TargetPos, NPC.Center);
 
-                    if (Vector2.DistanceSquared(targetPos, NPC.Center) < 50000)
+                    if (Collision.CanHit(NPC.Center, 1, 1, TargetPos, 1, 1) && dist < 50000)
                     {
-                        if (DraconicRuinsSystem.State == DraconicRuinsSystem.CutsceneState.Fumble && !DraconicRuinsSystem.CutsceneActive)
+                        Vector2 TabletRoom = DraconicRuinsSystem.TabletRoom.ToWorldCoordinates();
+                        airTime = 0;
+                        jumpTimer = 0;                     
+
+                        if (TargetPos == TabletRoom && DraconicRuinsSystem.State == DraconicRuinsSystem.CutsceneState.Fumble && !DraconicRuinsSystem.CutsceneActive)
                         {
                             DraconicRuinsSystem.StartCutscene();
 
-                            airTime = 0;
-                            jumpTimer = 0;
                             NPC.direction = Math.Sign(NPC.velocity.X);
 
                             AIState = States.TabletGrabCutscene;
                             Time = 0;
                         }
-                        else
+                        else if(TargetPos == TabletRoom || dist < 1600)
                         {
                             AIState = States.SlowToStop;
-                            Time = Main.rand.Next(-60, 0);
+                            if (TargetPos == TabletRoom)
+                                Time = Main.rand.Next(-60, 0);
+                            else
+                                Time = 0;
                         }
                         return;
                     }
@@ -365,10 +384,8 @@ public class LunarCultistDevotee : ModNPC
                         jumpTimer = 30;
 
                     if (NPC.velocity.X != 0 && airTime < 60 && tripTime == 0)
-                    {
                         NPC.direction = Math.Sign(NPC.velocity.X);
-                        NPC.spriteDirection = NPC.direction;
-                    }
+
                     if (NPC.direction == -1)
                     {
                         Point p = NPC.Left.ToTileCoordinates();
@@ -384,10 +401,8 @@ public class LunarCultistDevotee : ModNPC
                 }
 
                 if (airTime == 76)
-                {
                     NPC.direction = -NPC.direction;
-                    NPC.spriteDirection = NPC.direction;
-                }
+
                 break;
             case States.TabletGrabCutscene:
                 int time = Time - 16;
@@ -417,7 +432,6 @@ public class LunarCultistDevotee : ModNPC
                         tablet.velocity = new(NPC.direction * 3f, -4f);
 
                         NPC.direction *= -1;
-                        NPC.spriteDirection = NPC.direction;
                     }
                     if (time < 136)
                     {                       
@@ -440,10 +454,14 @@ public class LunarCultistDevotee : ModNPC
 
                 break;
             case States.SlowToStop:
+                if(NPC.velocity.X != 0)
+                    NPC.direction = Math.Sign(NPC.velocity.X);
                 if (Time >= 0)
                     NPC.velocity.X *= 0.8f;
                 break;
         }
+
+        NPC.spriteDirection = NPC.direction;
 
         Time++;
     }
@@ -488,7 +506,7 @@ public class LunarCultistDevotee : ModNPC
 
     public override bool CheckActive() => false;
 
-    int frameCountX = 9;
+    const int frameCountX = 9;
 
     public override void FindFrame(int frameHeight)
     {
@@ -497,6 +515,7 @@ public class LunarCultistDevotee : ModNPC
         NPC.frameCounter -= 1;
         switch (AIState)
         {
+            case States.SlowToStop:
             case States.TabletGrabCutscene:
             case States.TabletChase:
                 if(tripTime == -1)
@@ -556,19 +575,22 @@ public class LunarCultistDevotee : ModNPC
 
     public override bool PreDraw(SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor)
     {
+        if (NPC.frame.Width > 200)
+            FindFrame(NPC.frame.Height);
         Texture2D texture = TextureAssets.Npc[NPC.type].Value;
-        Vector2 halfSizeTexture = new(texture.Width / frameCountX / 2, texture.Height / Main.npcFrameCount[NPC.type] / 2);
         Vector2 drawPosition = NPC.Center - screenPos + (Vector2.UnitY * NPC.gfxOffY);
-        drawPosition.Y += 4;
         drawPosition.X += 12 * NPC.spriteDirection;
+        drawPosition.Y += 4;
         if(tripTime != 0)
             drawPosition.X += 24 * -NPC.spriteDirection;
+
+        Vector2 origin = NPC.frame.Size() * 0.5f;
 
         SpriteEffects spriteEffects = SpriteEffects.None;
         if (NPC.spriteDirection == -1)
             spriteEffects = SpriteEffects.FlipHorizontally;
         
-        spriteBatch.Draw(texture, drawPosition, NPC.frame, NPC.GetAlpha(drawColor), NPC.rotation, halfSizeTexture, NPC.scale, spriteEffects, 0f);
+        spriteBatch.Draw(texture, drawPosition, NPC.frame, NPC.GetAlpha(drawColor), NPC.rotation, origin, NPC.scale, spriteEffects, 0f);
         
         return false;
     }

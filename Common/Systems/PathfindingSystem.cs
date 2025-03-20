@@ -297,8 +297,6 @@ public class PathfindingSystem : ModSystem
             OpenSet.Clear();
             ClosedSet.Clear();
 
-            float radiusSquared = searchRadius * searchRadius;
-
             Point StartPoint = FindNearestValidNode(startWorld, isWalkable);
             Point TargetPoint = FindNearestValidNode(targetWorld, isWalkable);
 
@@ -310,19 +308,22 @@ public class PathfindingSystem : ModSystem
 
             if (StartPoint == TargetPoint)
             {
-                MyPath = new FoundPath([]);
+                MyPath = new FoundPath([TargetPoint]);
+                return;
+            }
+
+            float radiusSquared = searchRadius * searchRadius;
+            float distSquared = TargetPoint.ToWorldCoordinates().Distance(StartPoint.ToWorldCoordinates());
+
+            if (distSquared > radiusSquared)
+            {
+                MyPath = null;
                 return;
             }
 
             Node startNode = NodeMap[StartPoint.X + StartPoint.X % 2][StartPoint.Y + StartPoint.Y % 2];
 
-            int startToTarget = startNode.GetDistance(TargetPoint.X, TargetPoint.Y);
-
-            if (startToTarget > searchRadius)
-            {
-                MyPath = null;
-                return;
-            }
+            int startToTarget = startNode.GetDistance(TargetPoint.X, TargetPoint.Y);           
 
             startNode.ResetState();
             startNode.SetG(0);
@@ -388,6 +389,104 @@ public class PathfindingSystem : ModSystem
             MyPath = null;
             return;
         }
+
+        public void FindPath(Vector2 startWorld, Vector2 targetWorld, Func<Point, Point, bool> isWalkable, Rectangle searchArea, Func<Point, int> costFunction = null)
+        {
+            ClearNodeStates(ModifiedNodes);
+            ModifiedNodes.Clear();
+            OpenSet.Clear();
+            ClosedSet.Clear();
+
+            Point StartPoint = FindNearestValidNode(startWorld, isWalkable);
+            Point TargetPoint = FindNearestValidNode(targetWorld, isWalkable);
+
+            if (StartPoint == new Point(-1, -1) || TargetPoint == new Point(-1, -1))
+            {
+                MyPath = null;
+                return;
+            }
+
+            if (StartPoint == TargetPoint)
+            {
+                MyPath = new FoundPath([TargetPoint]);
+                return;
+            }
+
+            if (!searchArea.Contains(StartPoint) || !searchArea.Contains(TargetPoint))
+            {
+                MyPath = null;
+                return;
+            }
+
+            Node startNode = NodeMap[StartPoint.X + StartPoint.X % 2][StartPoint.Y + StartPoint.Y % 2];
+
+            int startToTarget = startNode.GetDistance(TargetPoint.X, TargetPoint.Y);
+
+            startNode.ResetState();
+            startNode.SetG(0);
+            startNode.SetF(startToTarget);
+            ModifiedNodes.Add(startNode);
+
+            const int maxIterations = 5000;
+            int iterations = 0;
+
+            OpenSet.Enqueue(startNode, startNode.F);
+
+            while (OpenSet.Count > 0 && iterations < maxIterations)
+            {
+                Node current = OpenSet.Dequeue();
+
+                //Particle p = new GlowOrbParticle(current.TilePosition.ToWorldCoordinates(), Vector2.Zero, false, 2, 0.5f, Color.Red);
+                //GeneralParticleHandler.SpawnParticle(p);
+
+                int distanceToTarget = current.GetDistance(TargetPoint.X, TargetPoint.Y);
+                if (distanceToTarget <= 20 && (targetWorld - current.WorldPosition).LengthSquared() < 800)
+                {
+                    //Main.NewText("Iteration Count: " + iterations);
+                    MyPath = ReconstructPath(current, startNode);
+                    //Main.NewText("Path Length: " + MyPath.Points.Length);
+                    ClearNodeStates(ModifiedNodes);
+                    return;
+                }
+
+                ClosedSet.Add(current.TilePosition);
+
+                foreach (Node neighbor in current.Neighbors)
+                {
+                    if (ClosedSet.Contains(neighbor.TilePosition))
+                        continue;
+
+                    if (!isWalkable(current.TilePosition, neighbor.TilePosition))
+                        continue;
+
+                    if (!searchArea.Contains(neighbor.TilePosition))
+                        continue;
+
+                    int tentativeG = current.G + current.GetDistance(neighbor.X, neighbor.Y) + (costFunction == null ? 0 : costFunction(neighbor.TilePosition));
+
+                    if (tentativeG < neighbor.G)
+                    {
+                        ModifiedNodes.Add(neighbor);
+                        neighbor.SetConnection(current);
+                        neighbor.SetG(tentativeG);
+
+                        int newF = tentativeG + neighbor.GetDistance(TargetPoint.X, TargetPoint.Y);
+                        neighbor.SetF(newF);
+
+                        if (OpenSet.Contains(neighbor))
+                            OpenSet.UpdatePriority(neighbor, newF);
+                        else
+                            OpenSet.Enqueue(neighbor, newF);
+                    }
+                }
+                iterations++;
+            }
+
+            ClearNodeStates(ModifiedNodes);
+            MyPath = null;
+            return;
+        }
+
 
         private static void ClearNodeStates(HashSet<Node> nodes)
         {

@@ -84,7 +84,7 @@ public class TravellingCultist : ModNPC, ILocalizedModType
 
     public static readonly List<Tuple<int, int>> RitualQuestItems =
     [
-        new(ModContent.ItemType<TabletFragment>(), 1),
+        new (ModContent.ItemType<TabletFragment>(), 1),
         new (ModContent.ItemType<DraconicBone>(), 1),
         new (ModContent.ItemType<PrimalLightShard>(), 1),
     ];
@@ -125,14 +125,14 @@ public class TravellingCultist : ModNPC, ILocalizedModType
     }
     private static DialogueState CurrentDialogue = DialogueState.SearchForHelp;
 
-    private enum BehaviorState
+    public enum BehaviorState
     {
         StandStill,
         Wander,
         FollowPlayer,
         MoveToTargetLocation
     }
-    private BehaviorState myBehavior = BehaviorState.Wander;
+    public BehaviorState myBehavior = BehaviorState.Wander;
 
     private enum PriorityTiers
     {
@@ -186,8 +186,12 @@ public class TravellingCultist : ModNPC, ILocalizedModType
             case DialogueState.RitualDiscovered:
                 MilestoneMet = true;
                 break;
-            case DialogueState.RitualQuestGap:
+            case DialogueState.RitualQuestTablet:
                 if (NPC.downedPlantBoss)
+                    MilestoneMet = true;
+                break;
+            case DialogueState.RitualQuestGap:
+                if (QuestSystem.Quests["TabletFragment"].Complete)
                     MilestoneMet = true;
                 break;
             case DialogueState.RitualQuestRecruitmentOnly:
@@ -237,7 +241,9 @@ public class TravellingCultist : ModNPC, ILocalizedModType
             NPC.direction = 1;
         NPC.spriteDirection = -NPC.direction;
 
-        if(introductionDone)
+        if (CurrentDialogue == DialogueState.RitualQuestTablet && DraconicRuinsSystem.State == DraconicRuinsSystem.CutsceneState.Finished)
+            ModContent.GetInstance<DialogueUISystem>().DisplayDialogueTree(Windfall.Instance, "TravellingCultist/DraconicRuins", new(Name, [NPC.whoAmI]), QuestSystem.Quests["TabletFragment"].Complete ? 3 : 0);
+        else if (introductionDone)
             ModContent.GetInstance<DialogueUISystem>().DisplayDialogueTree(Windfall.Instance, "TravellingCultist/Default", new(Name, [NPC.whoAmI]));
         else
             ModContent.GetInstance<DialogueUISystem>().DisplayDialogueTree(Windfall.Instance, pool.GetTree(Main.LocalPlayer), new(Name, [NPC.whoAmI]));
@@ -366,7 +372,7 @@ public class TravellingCultist : ModNPC, ILocalizedModType
                     "TheCalamity",//"TravellingCultist"
                     QuestItem);
                 break;          
-            case "TravellingCultist/QuestProgress/QuestTablet":
+            case "TravellingCultist/DraconicRuins":
                 AttachCostToResponse(ref uiSystem, new Tuple<int, int>(ModContent.ItemType<TabletFragment>(), 4), 0, 0);
                 break;
             case "TravellingCultist/QuestProgress/QuestLightShard":
@@ -442,11 +448,11 @@ public class TravellingCultist : ModNPC, ILocalizedModType
                     CurrentDialogue = DialogueState.RitualQuestTablet;
                 }
                 break;
-            case "TravellingCultist/QuestProgress/QuestTablet":
-                if (dialogueID == 1)
+            case "TravellingCultist/DraconicRuins":
+                if (dialogueID == 2)
                 {
                     QuestSystem.Quests["TabletFragment"].IncrementProgress();
-                    CurrentDialogue++;
+                    cultist.As<TravellingCultist>().myBehavior = BehaviorState.Wander;
                 }
                 break;
             case "TravellingCultist/QuestProgress/QuestLightShard":
@@ -463,7 +469,7 @@ public class TravellingCultist : ModNPC, ILocalizedModType
 
     public override bool PreAI()
     {
-        if (NPC.ai[3] == 0 && (!Main.dayTime || Main.time >= despawnTime) && !IsNpcOnscreen(NPC.Center)) // If it's past the despawn time and the NPC isn't onscreen
+        if (myBehavior == BehaviorState.Wander && (!Main.dayTime || Main.time >= despawnTime) && !IsNpcOnscreen(NPC.Center)) // If it's past the despawn time and the NPC isn't onscreen
         {
             // Here we despawn the NPC and send a message stating that the NPC has despawned
             if (NPC.active)
@@ -488,12 +494,18 @@ public class TravellingCultist : ModNPC, ILocalizedModType
     private int Time = 0;
     private readonly PathFinding pathFinding = new();
     private int CurrentWaypoint = 0;
-    private float MoveSpeed = 3f;
     private int jumpTimer = 0;
+
+    public float MoveSpeed = 3f;
+    public bool CanFly = true;
+    public bool CanSpeedUp = true;
+    public Vector2 TargetLocation = Vector2.Zero;
 
     public override void AI()
     {
+        CurrentDialogue = DialogueState.RitualQuestTablet;
         //myBehavior = BehaviorState.FollowPlayer;
+        //Main.NewText(myBehavior.ToString());
         switch(myBehavior)
         {
             case BehaviorState.Wander:
@@ -534,7 +546,7 @@ public class TravellingCultist : ModNPC, ILocalizedModType
                 PathfindingMovement(Main.LocalPlayer.Center);
                 break;
             case BehaviorState.MoveToTargetLocation:
-                PathfindingMovement(DraconicRuinsSystem.RuinsEntrance.ToWorldCoordinates(), 64);
+                PathfindingMovement(TargetLocation, 64);
                 break;
             case BehaviorState.StandStill:
                 NPC.velocity.X *= 0.8f;
@@ -542,7 +554,7 @@ public class TravellingCultist : ModNPC, ILocalizedModType
         }
 
         //Debug
-        CurrentDialogue = DialogueState.RitualQuestTablet;
+        //CurrentDialogue = DialogueState.RitualQuestTablet;
         //foreach(var item in pool.CirculatingDialogues)
         //Main.NewText(QuestSystem.Quests["SealingRitual"].Progress);
         //CurrentDialogue = DialogueState.RitualQuestWayfinder;
@@ -572,6 +584,9 @@ public class TravellingCultist : ModNPC, ILocalizedModType
         float distanceToTarget = Vector2.DistanceSquared(NPC.Center, targetPos);
         bool jumpStarted = false;
 
+        //Main.NewText(distanceToTarget);
+        //Main.NewText(requiredDistSquared);
+
         if (distanceToTarget < requiredDistSquared && Collision.CanHit(NPC.Center, 1, 1, targetPos, 1, 1))
         {
             if (NPC.noGravity)
@@ -592,9 +607,9 @@ public class TravellingCultist : ModNPC, ILocalizedModType
             {
                 if ((distanceToTarget > 250000 && Time % 120 == 0) || (distanceToTarget > 500000 && Time % 30 == 0))
                 {
-                    if (MoveSpeed < 6f)
-                        MoveSpeed += 1;
-                    else
+                    if (CanSpeedUp && MoveSpeed < 6f)
+                        MoveSpeed++;
+                    else if(CanFly)
                         NPC.noGravity = true;
                 }
                 MovementSuccess = GravityAffectedPathfindingMovement(NPC, pathFinding, ref CurrentWaypoint, out NPC.velocity, out jumpStarted, MoveSpeed, 8.5f, 0.25f);
@@ -603,9 +618,9 @@ public class TravellingCultist : ModNPC, ILocalizedModType
 
         if (!MovementSuccess)
         {
-            if (jumpStarted)
+            if (jumpStarted && CanFly)
                 NPC.noGravity = true;
-            else
+            else if (distanceToTarget < requiredDistSquared)
                 NPC.velocity.X *= 0.8f;
         }
         else
@@ -615,12 +630,12 @@ public class TravellingCultist : ModNPC, ILocalizedModType
                 jumpTimer = 30;
                 Vector2 ground = FindSurfaceBelow(targetPos.ToTileCoordinates()).ToWorldCoordinates();
                 int distance = (int)Vector2.Distance(targetPos, ground);
-                if (distance > 600)
+                if (distance > 600 && CanFly)
                     NPC.noGravity = true;
                 else if (targetPos.Y < NPC.Center.Y)
                 {
                     distance = (int)Vector2.Distance(targetPos, NPC.Center);
-                    if (distance > 800)
+                    if (distance > 800 && CanFly)
                         NPC.noGravity = true;
                 }
             }
@@ -652,23 +667,47 @@ public class TravellingCultist : ModNPC, ILocalizedModType
 
     private void PathfindingEndConditions()
     {
-        switch(CurrentDialogue)
+        switch (CurrentDialogue)
         {
             case DialogueState.RitualQuestTablet:
                 if (myBehavior == BehaviorState.FollowPlayer)
                 {
-                    if ((int)(NPC.Center.Y / 16) == DraconicRuinsSystem.RuinsEntrance.Y)
+                    if (DraconicRuinsSystem.State == DraconicRuinsSystem.CutsceneState.End)
                     {
-                        myBehavior = BehaviorState.MoveToTargetLocation;
+                        if ((int)(NPC.Center.Y / 16) == DraconicRuinsSystem.TabletRoom.Y)
+                        {
+                            myBehavior = BehaviorState.MoveToTargetLocation;
+                            TargetLocation = DraconicRuinsSystem.TabletRoom.ToWorldCoordinates();
+                        }
+                    }
+                    else if (DraconicRuinsSystem.State == DraconicRuinsSystem.CutsceneState.Arrival)
+                    {
+                        if ((int)(NPC.Center.Y / 16) == DraconicRuinsSystem.RuinsEntrance.Y)
+                        {
+                            myBehavior = BehaviorState.MoveToTargetLocation;
+                            TargetLocation = DraconicRuinsSystem.RuinsEntrance.ToWorldCoordinates();
+                        }
                     }
                 }
                 else if (myBehavior == BehaviorState.MoveToTargetLocation)
                 {
-                    if (Vector2.DistanceSquared(NPC.Center, DraconicRuinsSystem.RuinsEntrance.ToWorldCoordinates()) < 256)
+                    if (DraconicRuinsSystem.State == DraconicRuinsSystem.CutsceneState.End)
                     {
-                        Main.NewText("Start Cutscene");
-                        myBehavior = BehaviorState.StandStill;
-                        DraconicRuinsSystem.StartCutscene();
+                        if (Vector2.DistanceSquared(NPC.Center, DraconicRuinsSystem.TabletRoom.ToWorldCoordinates()) < 256)
+                        {
+                            Main.NewText("Start End Cutscene");
+                            myBehavior = BehaviorState.StandStill;
+                            DraconicRuinsSystem.StartCutscene();
+                        }
+                    }
+                    else if (DraconicRuinsSystem.State == DraconicRuinsSystem.CutsceneState.Arrival)
+                    {
+                        if (Vector2.DistanceSquared(NPC.Center, DraconicRuinsSystem.RuinsEntrance.ToWorldCoordinates()) < 256)
+                        {
+                            Main.NewText("Start Beginning Cutscene");
+                            myBehavior = BehaviorState.StandStill;
+                            DraconicRuinsSystem.StartCutscene();
+                        }
                     }
                 }
                 break;

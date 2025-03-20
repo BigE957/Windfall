@@ -82,15 +82,15 @@ public static partial class WindfallUtils
     {
         jumpStarted = false;
         velocity = npc.velocity;
-
+        
         if (pathFinding.MyPath == null || pathFinding.MyPath.Points.Length == 0)
             return false;
-
+        
         if (currentWaypoint > pathFinding.MyPath.Points.Length - 1)
             return false;
         
         float distanceToWaypoint = Vector2.Distance(npc.Center, pathFinding.MyPath.Points[currentWaypoint].ToWorldCoordinates());
-        //Main.NewText(dist);
+        
         while (distanceToWaypoint < Math.Max(npc.width, npc.height) / 1.66f)
         {
             currentWaypoint++;

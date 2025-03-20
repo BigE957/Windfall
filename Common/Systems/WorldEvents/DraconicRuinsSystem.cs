@@ -8,22 +8,39 @@ public class DraconicRuinsSystem : ModSystem
 {
     public static Point DraconicRuinsLocation = new(-1,-1);
     public static bool FacingLeft = false;
-    public static Point RuinsEntrance => new(DraconicRuinsLocation.X + (FacingLeft ? -19 : 19), DraconicRuinsLocation.Y - 20);
+
+    public static Point RuinsEntrance => new(DraconicRuinsLocation.X + (FacingLeft ? -14 : 14), DraconicRuinsLocation.Y - 20);
+
     public static Point TabletRoom => new(DraconicRuinsLocation.X + (FacingLeft ? 9 : -9), DraconicRuinsLocation.Y + 46);
+
+    public static Point TabletNeighbor => new(DraconicRuinsLocation.X + (FacingLeft ? -26 : 26), DraconicRuinsLocation.Y + 43);
+
+    public static Point MiddleSideRoom => new(DraconicRuinsLocation.X + (FacingLeft ? -1 : 1), DraconicRuinsLocation.Y + 30);
+
+    public static Point LeftSideRoom => new(DraconicRuinsLocation.X + (FacingLeft ? 29 : -29), DraconicRuinsLocation.Y + 18);
+
+    public static Point UpperSideRoom => new(DraconicRuinsLocation.X + (FacingLeft ? 26 : -26), DraconicRuinsLocation.Y + 1);
+
+    public static Rectangle DraconicRuinsArea => new(DraconicRuinsLocation.X - 36, DraconicRuinsLocation.Y - 38, 72, 88);
 
     public enum CutsceneState
     {
         Arrival,
         Fumble,
-        End
+        End,
+        Finished
     }
     public static CutsceneState State = CutsceneState.Arrival;
 
     public static bool CutsceneActive = false;
     public static bool ZoomActive = false;
 
-    private static int CutsceneTime = 0;
+    public static bool AccessGranted = false;
+
+    public static int CutsceneTime = 0;
     private static int CameraTime = 0;
+
+    private static int BishopIndex = -1;
 
     public override void ClearWorld()
     {
@@ -45,11 +62,34 @@ public class DraconicRuinsSystem : ModSystem
 
     public override void PreUpdateWorld()
     {
-        //Dust.NewDustPerfect(RuinsEntrance.ToWorldCoordinates(), DustID.Terra, Vector2.Zero);
-        //Dust.NewDustPerfect(TabletRoom.ToWorldCoordinates(), DustID.Shadowflame, Vector2.Zero);
+        
+        Dust.NewDustPerfect(RuinsEntrance.ToWorldCoordinates(), DustID.Terra, Vector2.Zero);
+        Dust.NewDustPerfect(TabletRoom.ToWorldCoordinates(), DustID.Terra, Vector2.Zero);
+        Dust.NewDustPerfect(TabletNeighbor.ToWorldCoordinates(), DustID.LifeDrain, Vector2.Zero);
+        Dust.NewDustPerfect(MiddleSideRoom.ToWorldCoordinates(), DustID.LifeDrain, Vector2.Zero);
+        Dust.NewDustPerfect(LeftSideRoom.ToWorldCoordinates(), DustID.LifeDrain, Vector2.Zero);
+        Dust.NewDustPerfect(UpperSideRoom.ToWorldCoordinates(), DustID.LifeDrain, Vector2.Zero);
 
-        if(!NPC.AnyNPCs(ModContent.NPCType<SealingTablet>()))
-                NPC.NewNPC(Entity.GetSource_None(), TabletRoom.X * 16 + 8, TabletRoom.Y * 16 - 160, ModContent.NPCType<SealingTablet>());
+        Dust.NewDustPerfect(DraconicRuinsArea.TopLeft().ToWorldCoordinates(), DustID.Shadowflame, Vector2.Zero);
+        Dust.NewDustPerfect(DraconicRuinsArea.Top().ToWorldCoordinates(), DustID.Shadowflame, Vector2.Zero);
+        Dust.NewDustPerfect(DraconicRuinsArea.TopRight().ToWorldCoordinates(), DustID.Shadowflame, Vector2.Zero);
+        Dust.NewDustPerfect(DraconicRuinsArea.Left().ToWorldCoordinates(), DustID.Shadowflame, Vector2.Zero);
+        Dust.NewDustPerfect(DraconicRuinsArea.Right().ToWorldCoordinates(), DustID.Shadowflame, Vector2.Zero);
+        Dust.NewDustPerfect(DraconicRuinsArea.BottomLeft().ToWorldCoordinates(), DustID.Shadowflame, Vector2.Zero);
+        Dust.NewDustPerfect(DraconicRuinsArea.Bottom().ToWorldCoordinates(), DustID.Shadowflame, Vector2.Zero);
+        Dust.NewDustPerfect(DraconicRuinsArea.BottomRight().ToWorldCoordinates(), DustID.Shadowflame, Vector2.Zero);
+
+        /*
+        State = CutsceneState.Arrival;
+        ZoomActive = false;
+        CutsceneActive = false;
+        CutsceneTime = 0;
+        CameraTime = 0;
+        AccessGranted = false;
+        */
+
+        if (State == CutsceneState.Arrival && !NPC.AnyNPCs(ModContent.NPCType<SealingTablet>()))
+            NPC.NewNPC(Entity.GetSource_None(), TabletRoom.X * 16 + 8, TabletRoom.Y * 16 - 160, ModContent.NPCType<SealingTablet>());
 
         if (ZoomActive)
         {
@@ -68,6 +108,8 @@ public class DraconicRuinsSystem : ModSystem
 
                         NPC tc = Main.npc[NPC.FindFirstNPC(ModContent.NPCType<TravellingCultist>())];
 
+                        int offset = 64;
+
                         switch(CutsceneTime)
                         {
                             case 60:
@@ -83,15 +125,87 @@ public class DraconicRuinsSystem : ModSystem
                                 DisplayMessage("I can't wait to learn their secrets!", tc, Color.Orange, 90);
                                 break;
                             case 510:
-                                DisplayMessage("Let's head inside.", tc, Color.Orange, 60);
+                                DisplayMessage("Use the Wayfinder, and it should grant us access!", tc, Color.Orange, 90);
                                 break;
-                            case 570:
+                            case 569:
+                                if(!AccessGranted)
+                                    CutsceneTime--;
+                                break;
+                            case 690:
+                                DisplayMessage("Wonderful!", tc, Color.Orange, 60);
+                                break;
+                            case 780:
+                                DisplayMessage("Well then, let's head in-", tc, Color.Orange, 30);
+                                break;
+                            case 810:
+                                Vector2 spawnPos = RuinsEntrance.ToWorldCoordinates() + Vector2.UnitX * (FacingLeft ? -(84 + offset) : (84 + offset));
+                                BishopIndex = NPC.NewNPC(NPC.GetSource_NaturalSpawn(), (int)spawnPos.X, (int)spawnPos.Y, ModContent.NPCType<LunarBishop>());
+                                break;
+                            case 840:
+                                DisplayMessage("What?!", tc, Color.Orange, 60);
+                                break;
+                            case 870:
+                                DisplayMessage("Excellent work you two.", Main.npc[BishopIndex], Color.LimeGreen, 90);
+                                break;
+                            case 990:
+                                DisplayMessage("We've had our eyes on this site for quite a while.", Main.npc[BishopIndex], Color.LimeGreen, 90);
+                                break;
+                            case 1110:
+                                DisplayMessage("And you've done us the favor of opening it!", Main.npc[BishopIndex], Color.LimeGreen, 90);
+                                break;
+                            case 1230:
+                                DisplayMessage("We won't let you enter!", tc, Color.Orange, 60);
+                                break;
+                            case 1350:
+                                DisplayMessage("You're welcome to try.", Main.npc[BishopIndex], Color.LimeGreen, 60);
+                                break;
+                            case 1380:
+                                spawnPos = RuinsEntrance.ToWorldCoordinates() + Vector2.UnitX * (FacingLeft ? -(56 + offset) : (56 + offset)) - Vector2.UnitY * 16;
+                                NPC cultist = NPC.NewNPCDirect(NPC.GetSource_NaturalSpawn(), (int)spawnPos.X, (int)spawnPos.Y, ModContent.NPCType<LunarCultistDevotee>(), ai2: 7);
+                                cultist.As<LunarCultistDevotee>().TargetPos = TabletRoom.ToWorldCoordinates();
+                                break;
+                            case 1410:
+                                spawnPos = RuinsEntrance.ToWorldCoordinates() + Vector2.UnitX * (FacingLeft ? -(112 + offset) : (112 + offset)) - Vector2.UnitY * 16;
+                                cultist = NPC.NewNPCDirect(NPC.GetSource_NaturalSpawn(), (int)spawnPos.X, (int)spawnPos.Y, ModContent.NPCType<LunarCultistDevotee>(), ai2: 7);
+                                cultist.As<LunarCultistDevotee>().TargetPos = LeftSideRoom.ToWorldCoordinates();
+                                break;
+                            case 1440:
+                                spawnPos = RuinsEntrance.ToWorldCoordinates() + Vector2.UnitX * (FacingLeft ? -(12 + offset) : (12 + offset)) - Vector2.UnitY * 16;
+                                cultist = NPC.NewNPCDirect(NPC.GetSource_NaturalSpawn(), (int)spawnPos.X, (int)spawnPos.Y, ModContent.NPCType<LunarCultistDevotee>(), ai2: 7);
+                                cultist.As<LunarCultistDevotee>().TargetPos = TabletRoom.ToWorldCoordinates();
+                                break;
+                            case 1470:
+                                spawnPos = RuinsEntrance.ToWorldCoordinates() + Vector2.UnitX * (FacingLeft ? -(156 + offset) : (156 + offset)) - Vector2.UnitY * 16;
+                                cultist = NPC.NewNPCDirect(NPC.GetSource_NaturalSpawn(), (int)spawnPos.X, (int)spawnPos.Y, ModContent.NPCType<LunarCultistDevotee>(), ai2: 7);
+                                cultist.As<LunarCultistDevotee>().TargetPos = MiddleSideRoom.ToWorldCoordinates();
+                                break;
+                            case 1500:
+                                spawnPos = RuinsEntrance.ToWorldCoordinates() + Vector2.UnitX * (FacingLeft ? -(34 + offset) : (34 + offset)) - Vector2.UnitY * 16;
+                                cultist = NPC.NewNPCDirect(NPC.GetSource_NaturalSpawn(), (int)spawnPos.X, (int)spawnPos.Y, ModContent.NPCType<LunarCultistDevotee>(), ai2: 7);
+                                cultist.As<LunarCultistDevotee>().TargetPos = UpperSideRoom.ToWorldCoordinates();
+                                break;
+                            case 1590:
+                                DisplayMessage("But can you stop all of us?", Main.npc[BishopIndex], Color.LimeGreen, 60);
+                                break;
+                            case 1710:
+                                DisplayMessage("Go! Claim everything for the cause!", Main.npc[BishopIndex], Color.LimeGreen, 90);
+                                foreach(NPC npc in Main.npc.Where(n => n.active && n.type == ModContent.NPCType<LunarCultistDevotee>()))
+                                {
+                                    npc.ai[2] = 5;
+                                }
+                                break;
+                            case 1740:
+                                DisplayMessage("Hurry!! We can't let them get the Tablet!", tc, Color.Orange, 90);
+                                tc.As<TravellingCultist>().myBehavior = TravellingCultist.BehaviorState.FollowPlayer;
+                                tc.As<TravellingCultist>().CanFly = false;
+                                tc.As<TravellingCultist>().CanSpeedUp = false;
+                                tc.As<TravellingCultist>().MoveSpeed = 5;
                                 ZoomActive = false;
                                 CutsceneActive = false;
                                 CutsceneTime = 0;
                                 CameraTime = 0;
                                 State = CutsceneState.Fumble;
-                                break;
+                                return;
                         }
                         break;
                     case CutsceneState.Fumble:
@@ -99,13 +213,108 @@ public class DraconicRuinsSystem : ModSystem
 
                         CameraPanSystem.Zoom = CircOutEasing(CameraTime / 60f, 1) / 2f;
 
-                        if (CutsceneTime > 240)
+                        switch (CutsceneTime)
                         {
-                            ZoomActive = false;
-                            CutsceneActive = false;
-                            CutsceneTime = 0;
-                            CameraTime = 0;
-                            State = CutsceneState.End;
+                            case 240:
+                                Main.npc[BishopIndex].Center = TabletRoom.ToWorldCoordinates() - Vector2.UnitY * 16;
+                                for (int i = 0; i <= 50; i++)
+                                {
+                                    int dustStyle = Main.rand.NextBool() ? 66 : 263;
+                                    Vector2 speed = Main.rand.NextVector2Circular(1.5f, 2f);
+                                    Dust dust = Dust.NewDustPerfect(Main.npc[BishopIndex].Center, Main.rand.NextBool(3) ? 191 : dustStyle, speed * 3, Scale: Main.rand.NextFloat(1.5f, 2.3f));
+                                    dust.noGravity = true;
+                                    dust.color = dust.type == dustStyle ? Color.LightGreen : default;
+                                }
+                                SoundEngine.PlaySound(LunarCultistDevotee.SpawnSound, Main.npc[BishopIndex].Center);
+                                break;
+                            case 270:
+                                DisplayMessage("Idiot!", Main.npc[BishopIndex], Color.LimeGreen, 30);
+                                break;
+                            case 330:
+                                DisplayMessage("Ugh, no matter.", Main.npc[BishopIndex], Color.LimeGreen, 60);
+                                break;
+                            case 420:
+                                DisplayMessage("Its better destroyed than in the hands of the enemy.", Main.npc[BishopIndex], Color.LimeGreen, 90);
+                                break;
+                            case 540:
+                                DisplayMessage("We're leaving.", Main.npc[BishopIndex], Color.LimeGreen, 60);
+                                break;
+                            case 570:
+                                for (int i = 0; i <= 50; i++)
+                                {
+                                    int dustStyle = Main.rand.NextBool() ? 66 : 263;
+                                    Vector2 speed = Main.rand.NextVector2Circular(1.5f, 2f);
+                                    Dust dust = Dust.NewDustPerfect(Main.npc[BishopIndex].Center, Main.rand.NextBool(3) ? 191 : dustStyle, speed * 3, Scale: Main.rand.NextFloat(1.5f, 2.3f));
+                                    dust.noGravity = true;
+                                    dust.color = dust.type == dustStyle ? Color.LightGreen : default;
+                                }
+                                SoundEngine.PlaySound(LunarCultistDevotee.SpawnSound, Main.npc[BishopIndex].Center);
+                                Main.npc[BishopIndex].active = false;
+                                break;
+                            case 630:
+                                foreach(NPC npc in Main.npc.Where(n => n.active && n.type == ModContent.NPCType<LunarCultistDevotee>()))
+                                {
+                                    for (int i = 0; i <= 50; i++)
+                                    {
+                                        int dustStyle = Main.rand.NextBool() ? 66 : 263;
+                                        Vector2 speed = Main.rand.NextVector2Circular(1.5f, 2f);
+                                        Dust dust = Dust.NewDustPerfect(npc.Center, Main.rand.NextBool(3) ? 191 : dustStyle, speed * 3, Scale: Main.rand.NextFloat(1.5f, 2.3f));
+                                        dust.noGravity = true;
+                                        dust.color = dust.type == dustStyle ? Color.LightGreen : default;
+                                    }
+                                    SoundEngine.PlaySound(LunarCultistDevotee.SpawnSound, npc.Center);
+                                    npc.active = false;
+                                }
+                                break;
+                            case 690:
+                                ZoomActive = false;
+                                CutsceneActive = false;
+                                CutsceneTime = 0;
+                                CameraTime = 0;
+                                State = CutsceneState.End;
+                                break;
+
+                        }                        
+                        break;
+                    case CutsceneState.End:
+                        CameraPanSystem.PanTowards(TabletRoom.ToWorldCoordinates() - new Vector2(0, 120), CircOutEasing(CameraTime / 60f, 1));
+
+                        CameraPanSystem.Zoom = CircOutEasing(CameraTime / 60f, 1) / 2f;
+
+                        tc = Main.npc[NPC.FindFirstNPC(ModContent.NPCType<TravellingCultist>())];
+
+                        switch (CutsceneTime)
+                        {
+                            case 120:
+                                DisplayMessage("Damn it...", tc, Color.Orange, 90);
+                                break;
+                            case 240:
+                                DisplayMessage("This is certainly a setback.", tc, Color.Orange, 90);
+                                break;
+                            case 360:
+                                DisplayMessage("But let's not lose hope.", tc, Color.Orange, 90);
+                                break;
+                            case 480:
+                                DisplayMessage("I'm gonna have a look around.", tc, Color.Orange, 90);
+                                break;
+                            case 600:
+                                DisplayMessage("Perhaps there's more here that can help us.", tc, Color.Orange, 90);
+                                break;
+                            case 720:
+                                DisplayMessage("Let me know if you find anything.", tc, Color.Orange, 90);
+                                break;
+                            case 780:
+                                tc.As<TravellingCultist>().myBehavior = TravellingCultist.BehaviorState.MoveToTargetLocation;
+                                tc.As<TravellingCultist>().TargetLocation = TabletNeighbor.ToWorldCoordinates();
+                                //tc.As<TravellingCultist>().CanSpeedUp = false;
+                                //tc.As<TravellingCultist>().CanFly = false;
+                                tc.As<TravellingCultist>().MoveSpeed = 3f;
+                                ZoomActive = false;
+                                CutsceneActive = false;
+                                CutsceneTime = 0;
+                                CameraTime = 0;
+                                State = CutsceneState.Finished;
+                                break;
                         }
                         break;
                 }
@@ -121,16 +330,6 @@ public class DraconicRuinsSystem : ModSystem
         CutsceneActive = true;
         CutsceneTime = 0;
         CameraTime = 0;
-    }
-
-    private static void DisplayMessage(string key, Rectangle location, Color color, int upTime)
-    {
-        int index = CombatText.NewText(location, color, GetWindfallTextValue($"Dialogue.{key}"), true);
-        if (index == 100)
-            return;
-        CombatText MyDialogue = Main.combatText[index];
-        MyDialogue.lifeTime = upTime;
-        MyDialogue.velocity /= 1.5f;
     }
 
     private static void DisplayMessage(string key, NPC NPC, Color color, int upTime)
