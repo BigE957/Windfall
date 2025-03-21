@@ -373,7 +373,7 @@ public class TravellingCultist : ModNPC, ILocalizedModType
                     QuestItem);
                 break;          
             case "TravellingCultist/DraconicRuins":
-                AttachCostToResponse(ref uiSystem, new Tuple<int, int>(ModContent.ItemType<TabletFragment>(), 4), 0, 0);
+                AttachCostToResponse(ref uiSystem, new Tuple<int, int>(ModContent.ItemType<TabletFragment>(), 5), 0, 0);
                 break;
             case "TravellingCultist/QuestProgress/QuestLightShard":
                 AttachCostToResponse(ref uiSystem, new Tuple<int, int>(ModContent.ItemType<PrimalLightShard>(), 1), 0, 0);
@@ -672,7 +672,7 @@ public class TravellingCultist : ModNPC, ILocalizedModType
             case DialogueState.RitualQuestTablet:
                 if (myBehavior == BehaviorState.FollowPlayer)
                 {
-                    if (DraconicRuinsSystem.State == DraconicRuinsSystem.CutsceneState.End)
+                    if (DraconicRuinsSystem.State == DraconicRuinsSystem.CutsceneState.CultistEnd || DraconicRuinsSystem.State == DraconicRuinsSystem.CutsceneState.PlayerEnd)
                     {
                         if ((int)(NPC.Center.Y / 16) == DraconicRuinsSystem.TabletRoom.Y)
                         {
@@ -691,7 +691,7 @@ public class TravellingCultist : ModNPC, ILocalizedModType
                 }
                 else if (myBehavior == BehaviorState.MoveToTargetLocation)
                 {
-                    if (DraconicRuinsSystem.State == DraconicRuinsSystem.CutsceneState.End)
+                    if (DraconicRuinsSystem.State == DraconicRuinsSystem.CutsceneState.CultistEnd || DraconicRuinsSystem.State == DraconicRuinsSystem.CutsceneState.PlayerEnd)
                     {
                         if (Vector2.DistanceSquared(NPC.Center, DraconicRuinsSystem.TabletRoom.ToWorldCoordinates()) < 256)
                         {

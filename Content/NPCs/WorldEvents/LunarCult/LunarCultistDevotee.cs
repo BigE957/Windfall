@@ -358,7 +358,7 @@ public class LunarCultistDevotee : ModNPC
                         airTime = 0;
                         jumpTimer = 0;                     
 
-                        if (TargetPos == TabletRoom && DraconicRuinsSystem.State == DraconicRuinsSystem.CutsceneState.Fumble && !DraconicRuinsSystem.CutsceneActive)
+                        if (TargetPos == TabletRoom && DraconicRuinsSystem.State == DraconicRuinsSystem.CutsceneState.CultistFumble && !DraconicRuinsSystem.CutsceneActive)
                         {
                             DraconicRuinsSystem.StartCutscene();
 

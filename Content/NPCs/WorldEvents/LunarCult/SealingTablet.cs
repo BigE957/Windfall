@@ -1,6 +1,8 @@
 ﻿using Luminance.Common.VerletIntergration;
 using Windfall.Common.Graphics.Metaballs;
 using Windfall.Common.Graphics.Verlet;
+using Windfall.Common.Systems.WorldEvents;
+using Windfall.Content.Items.Placeables.Furnature.Plaques;
 using Windfall.Content.Items.Quests.SealingRitual;
 using Windfall.Content.NPCs.Bosses.Orator;
 
@@ -36,6 +38,7 @@ public class SealingTablet : ModNPC
     private float summonRatio = 0f;
     private readonly List<VerletSegment> LeftChain = [];
     private readonly List<VerletSegment> RightChain = [];
+    private bool isHovered = false;
 
     public override void OnSpawn(IEntitySource source)
     {
@@ -126,6 +129,29 @@ public class SealingTablet : ModNPC
 
         if (NPC.ai[0] < 4)
         {
+            if (!DraconicRuinsSystem.CutsceneActive && NPC.ai[0] == 0)
+            {
+                if (NPC.Hitbox.Contains((int)Main.MouseWorld.X, (int)Main.MouseWorld.Y))
+                {
+                    isHovered = true;
+
+                    if (Main.mouseRight)
+                    {
+                        NPC.ai[0] = 5;
+                        NPC.velocity = new(Math.Sign(NPC.Center.X - Main.LocalPlayer.Center.X) * 1.5f, -5.5f);
+                        NPC.netUpdate = true;
+                        DraconicRuinsSystem.State = DraconicRuinsSystem.CutsceneState.PlayerFumble;
+                        DraconicRuinsSystem.StartCutscene();
+                        foreach (NPC cultist in Main.npc.Where(n => n.active && n.type == ModContent.NPCType<LunarCultistDevotee>()))
+                            cultist.ai[2] = 7;
+                    }
+                }
+                else
+                {
+                    isHovered = false;
+                }
+            }
+
             if (chainDistance != NPC.width - 24)
             {
                 float distanceDif = chainDistance - (NPC.width - 24);
@@ -156,6 +182,10 @@ public class SealingTablet : ModNPC
                         item.velocity = new(Main.rand.NextFloat(-2f, 5.5f) * Math.Sign(NPC.velocity.X), -3);
                     }
                     NPC.velocity = Vector2.Zero;
+
+                    DraconicRuinsSystem.LeftChain = LeftChain;
+                    DraconicRuinsSystem.RightChain = RightChain;
+
                     NPC.active = false;
                 }
             }
@@ -165,7 +195,7 @@ public class SealingTablet : ModNPC
         WFVerletSimulations.CalamitySimulation(RightChain, 4, 30, gravity: 0.8f, windAffected: false);
     }
 
-    private void AffectVerlets(List<VerletSegment> verlet, float dampening, float cap)
+    public static void AffectVerlets(List<VerletSegment> verlet, float dampening, float cap)
     {
         for (int k = 0; k < verlet.Count; k++)
         {
@@ -225,12 +255,24 @@ public class SealingTablet : ModNPC
     }
     public override void PostDraw(SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor)
     {
-        if (NPC.ai[0] != 2)
+        if (NPC.ai[0] == 2)
+        {
+            Texture2D texture = ModContent.Request<Texture2D>(Texture + "Crack").Value;
+            Vector2 drawPosition = NPC.Center - screenPos + (Vector2.UnitY * NPC.gfxOffY);
+            drawPosition.Y -= 4;
+            Vector2 halfSizeTexture = new(texture.Width / 2, texture.Height / Main.npcFrameCount[NPC.type] / 2);
+            spriteBatch.Draw(texture, drawPosition, null, NPC.GetAlpha(drawColor), NPC.rotation, halfSizeTexture, NPC.scale, SpriteEffects.None, 0f);
             return;
-        Texture2D texture = ModContent.Request<Texture2D>("Windfall/Assets/NPCs/WorldEvents/SealingTabletCrack").Value;
-        Vector2 drawPosition = NPC.Center - screenPos + (Vector2.UnitY * NPC.gfxOffY);
-        drawPosition.Y -= 4;
-        Vector2 halfSizeTexture = new(texture.Width / 2, texture.Height / Main.npcFrameCount[NPC.type] / 2);
-        spriteBatch.Draw(texture, drawPosition, null, NPC.GetAlpha(drawColor), NPC.rotation, halfSizeTexture, NPC.scale, SpriteEffects.None, 0f);
+        }
+        if (NPC.ai[0] == 0 && isHovered)
+        {
+            Texture2D texture = ModContent.Request<Texture2D>(Texture + "Outline").Value;
+            Vector2 origin = texture.Size() * 0.5f;
+            Vector2 drawPosition = NPC.Center - screenPos + (Vector2.UnitY * NPC.gfxOffY);
+            drawPosition.Y -= 16;
+            spriteBatch.Draw(texture, drawPosition, NPC.frame, NPC.GetAlpha(drawColor), NPC.rotation, origin, NPC.scale, SpriteEffects.None, 0f);
+            return;
+        }
+        
     }
 }

@@ -14,7 +14,7 @@ public class DraconicRuinsMusicScene : ModSceneEffect
 
     private static int RuinsMusic()
     {
-        if (DraconicRuinsSystem.CutsceneTime >= 810 && DraconicRuinsSystem.State != DraconicRuinsSystem.CutsceneState.End)
+        if (DraconicRuinsSystem.CutsceneTime >= 810 && DraconicRuinsSystem.State != DraconicRuinsSystem.CutsceneState.CultistEnd)
             return 0;
         return MusicLoader.GetMusicSlot(Windfall.Instance, "Assets/Music/Cliffs");
     }

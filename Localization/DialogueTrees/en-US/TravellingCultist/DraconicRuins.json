@@ -14,7 +14,7 @@
       ]
     },
     {
-      "DialogueText": [ { "Text": "Ah, what remains of the tablet... Hmm, thank you for gathering these up. Its not ideal, but perhaps we'll be able to repair the tablet. Once I leave, I'll see if any of my comrads have any idea how to." } ],
+      "DialogueText": [ { "Text": "Ah, what remains of the tablet... Hmm, thank you for gathering these up. Its not ideal, but perhaps we'll be able to repair the tablet. Once I leave, I'll see if any of my comrades have any idea how to." } ],
       "Responses": [
         {
           "Title": "Sounds good!",
@@ -58,10 +58,10 @@
       ]
     },
     {
-      "DialogueText": [ { "Text": "There's some very facinating writings here. They seem to have been written relatively recently; around the tail end of the Draconic Era. They provide us with window into that period of time." } ]
+      "DialogueText": [ { "Text": "There's some very fascinating writings here. They seem to have been written relatively recently; around the tail end of the Draconic Era. They provide us with a window into that period of time." } ]
     },
     {
-      "DialogueText": [ { "Text": "Though... The writings seem to... Hmm, how to put this... Devolve, towards the end. The writing becomes sparser and less composed compared to what comes before. I wonder if there's more here that could give futher insight into this...?" } ],
+      "DialogueText": [ { "Text": "Though... The writings seem to... Hmm, how to put this... Devolve, towards the end. The writing becomes sparser and less composed compared to what comes before. I wonder if there's more here that could give further insight into this...?" } ],
       "Responses": [
         {
           "Title": "How strange."

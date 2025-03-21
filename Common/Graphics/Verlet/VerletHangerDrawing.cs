@@ -3,9 +3,6 @@ using Windfall.Content.Items.Placeables.Furnature.VerletHangers.Decorations;
 using Windfall.Content.Items.Placeables.Furnature.VerletHangers.Cords;
 using Windfall.Content.Tiles.TileEntities;
 using Windfall.Content.Items.Tools;
-using CalamityMod.DataStructures;
-using Terraria;
-using Luminance.Common.StateMachines;
 
 namespace Windfall.Common.Graphics.Verlet;
 public class VerletHangerDrawing : ModSystem
