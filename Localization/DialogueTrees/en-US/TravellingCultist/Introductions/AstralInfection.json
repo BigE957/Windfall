@@ -1,0 +1,27 @@
+{
+  "Dialogues": [
+    {
+      "DialogueText": [ { "Text": "Hello, my friend! I... stumbled across quite the peculiar sight on my way here. It was a strange, alien landscape that seemed almost hostile. I kept a safe distance, but was able to get a good view of the area. The creatures there were familiar, yet twisted, and they seemed almost mindless. Do you have any idea what that place is?" } ],
+      "Responses": [
+        {
+          "Title": "Astral Infection...",
+          "Heading": -2
+        }
+      ]
+    },
+    {
+      "DialogueText": [ { "Text": "Wow! A whole new ecology, formed in the aftermath of a star colliding with our planet?! How fascinating! Thank you for sharing your findings." } ],
+      "Responses": [
+        {
+          "Title": "Your welcome...?",
+          "Heading": 0,
+          "SwapToTreeKey": "TravellingCultist/Default"
+        }
+      ]
+    }
+
+  ],
+  "Characters": [
+    "TheCalamity"
+  ]
+}

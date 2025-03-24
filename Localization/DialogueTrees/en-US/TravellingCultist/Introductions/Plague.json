@@ -1,0 +1,39 @@
+{
+  "Dialogues": [
+    {
+      "DialogueText": [
+        { "Text": "Hey! I was just passing through the Jungle when I was attacked by these terrifying creatures! They seemed similar to the local wildlife of the area, but were overrun by this... this " },
+        {
+          "Text": "Sickness",
+          "Color": "00FF00"
+        },
+        { "Text":  "! They were almost beyond recognision! Not only that, they were far more agressive than usual; I barely made it out of there! Consider yourself warned. I'd stay out of there if I were you."}
+      ],
+        "Responses": [
+        {
+          "Title": "Thanks for the warning!",
+          "Heading": 0,
+          "SwapToTreeKey": "TravellingCultist/Default"
+        },
+        {
+          "Title": "Sickness?",
+          "Heading": -2
+        }
+      ]
+    },
+    {
+      "DialogueText": [ { "Text": "If I had to wager a guess, I'd say this was the work of the Godseeker's Head Engineer. Cruel experiments such as this make up a large portion of his work... or uh, so I've heard." } ],
+      "Responses": [
+        {
+          "Title": "How frightening...",
+          "Heading": 0,
+          "SwapToTreeKey": "TravellingCultist/Default"
+        }
+      ]
+    }
+
+  ],
+  "Characters": [
+    "TheCalamity"
+  ]
+}

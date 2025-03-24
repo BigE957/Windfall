@@ -1,0 +1,48 @@
+{
+  "Dialogues": [
+    {
+      "DialogueText": [
+        { "Text": "Oh! Hi there. Sorry, I was a bit lost in thought. I happened to be passing by " },
+        {
+          "Text": "the Dungeon ",
+          "Color": "00FFFF"
+        },
+        { "Text": "when I heard a most frightening shriek! It seems that place's haunting has only gotten worse as of recent..." }
+      ]
+    },
+    {
+      "DialogueText": [ { "Text": "If only the Godseeker had stepped in before it reached this point... All of the suffering housed in that place could have been avoided." } ],
+      "Responses": [
+        {
+          "Title": "If only.",
+          "Heading": 0,
+          "SwapToTreeKey": "TravellingCultist/Default"
+        },
+        {
+          "Title": "Why would he?",
+          "Heading": -2
+        }
+      ]
+    },
+    {
+      "DialogueText": [
+        {
+          "Text": "We- ",
+          "EndDelay": 12
+        },
+        { "Text": "I, uh, mean the Dragon Cult and the Godseeker were allies once, as they shared the same ideals of bringing back the Draconic Era. However, the Godseeker's focus slowly narrowed until his Crusade was all he cared for. He neglected everything else; allowing the Dungeon to become overrun by the spirits that now haunt its halls." }
+      ],
+      "Responses": [
+        {
+          "Title": "I see.",
+          "Heading": 0,
+          "SwapToTreeKey": "TravellingCultist/Default"
+        }
+      ]
+    }
+
+  ],
+  "Characters": [
+    "TheCalamity"
+  ]
+}
