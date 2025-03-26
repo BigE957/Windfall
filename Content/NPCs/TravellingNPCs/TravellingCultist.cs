@@ -144,14 +144,19 @@ public class TravellingCultist : ModNPC, ILocalizedModType
     private static readonly DialoguePool pool = new(
     [
         //No Priority
-        new("TravellingCultist/Introductions/Standard", (player) => true, (byte)PriorityTiers.None, true),
+        new("TravellingCultist/Introductions/Standard1", (player) => true, (byte)PriorityTiers.None, true),
+        new("TravellingCultist/Introductions/Standard2", (player) => true, (byte)PriorityTiers.None, true),
+        new("TravellingCultist/Introductions/Permafrost", (player) => DownedBossSystem.downedCryogen && NPC.AnyNPCs(ModContent.NPCType<DILF>()), (byte)PriorityTiers.None, true),
+        new("TravellingCultist/Introductions/AstralInfection", (player) => true, (byte)PriorityTiers.None, false),
+        
         //Minor Events
-        new("TravellingCultist/Introductions/Permafrost", (player) => DownedBossSystem.downedCryogen && NPC.AnyNPCs(ModContent.NPCType<DILF>()), (byte)PriorityTiers.None, true),   
+        new("TravellingCultist/Introductions/CalamitasClone", (player) => !DownedBossSystem.downedCalamitasClone && NPC.downedMechBossAny, (byte)PriorityTiers.MinorEvent, false),
+        
         //Major Events
-        new("TravellingCultist/Introductions/AstralInfection", (player) => NPC.downedMechBossAny, (byte)PriorityTiers.MajorEvent, false),
         new("TravellingCultist/Introductions/Dungeon", (player) => NPC.downedPlantBoss, (byte)PriorityTiers.MajorEvent, false),
-        new("TravellingCultist/Introductions/CalamitasClone", (player) => !DownedBossSystem.downedCalamitasClone, (byte)PriorityTiers.MajorEvent, false),
+        new("TravellingCultist/Introductions/Abyss", (player) => DownedBossSystem.downedLeviathan, (byte)PriorityTiers.MajorEvent, false),
         new("TravellingCultist/Introductions/Plague", (player) => NPC.downedGolemBoss, (byte)PriorityTiers.MajorEvent, false),
+        
         //Quest Updates
         new("TravellingCultist/Introductions/SearchForHelp", (player) => CurrentDialogue == DialogueState.SearchForHelp, (byte)PriorityTiers.QuestUpdate, false),
         new("TravellingCultist/Introductions/RitualDiscovered", (player) => CurrentDialogue == DialogueState.RitualDiscovered, (byte)PriorityTiers.QuestUpdate, false),

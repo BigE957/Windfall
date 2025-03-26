@@ -1,0 +1,43 @@
+{
+  "Dialogues": [
+    {
+      "DialogueText": [ { "Text": "Ah, its good to see you again! It feels like the world around us has gotten so crazy as of late... A simple talk is a much needed refresher." } ],
+      "Responses": [
+        {
+          "Title": "I feel you.",
+          "Heading": 1
+        },
+        {
+          "Title": "Really?",
+          "Heading": 2
+        }
+      ]
+    },
+    {
+      "DialogueText": [ { "Text": "I hope that things calm down once our work is finished. I'm looking forward to a nice vacation after we put a stop to the Selenic Order!" } ],
+      "Responses": [
+        {
+          "Title": "Sounds nice!",
+          "Heading": 0,
+          "SwapToTreeKey": "TravellingCultist/Default"
+        }
+      ]
+    },
+    {
+      "DialogueText": [ { "Text": "You haven't noticed? So much has changed in such a short span of time. The stains of the crusade have grown and festered as of late, and it feels as though new horrors awaken with every passing day..." } ]
+    },
+    {
+      "DialogueText": [ { "Text": "I find myself longing for when things were calmer. Hopefully our efforts in stopping the Selenic Order can contribute to bring about more peaceful times." } ],
+      "Responses": [
+        {
+          "Title": "Right...",
+          "Heading": 0,
+          "SwapToTreeKey": "TravellingCultist/Default"
+        }
+      ]
+    }
+  ],
+  "Characters": [
+    "TheCalamity"
+  ]
+}

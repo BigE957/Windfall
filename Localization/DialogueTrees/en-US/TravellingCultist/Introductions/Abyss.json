@@ -1,0 +1,32 @@
+{
+  "Dialogues": [
+    {
+      "DialogueText": [ { "Text": "I caught wind of another heroic feat of yours. You faced down the Water Elemental and her companion? Rumor has it she once resided in the Abyss, but fled. I must warn you to not got too far deep into that place. It is the home of some truly... terrifying, creatues." } ],
+      "Responses": [
+        {
+          "Title": "Okay...?",
+          "Heading": 0,
+          "SwapToTreeKey": "TravellingCultist/Default"
+        },
+        {
+          "Title": "I wouldn't worry",
+          "Heading": -2
+        }
+      ]
+    },
+    {
+      "DialogueText": [ { "Text": "I'm serious! You mustn't go too deep! This is for your own good." } ],
+      "Responses": [
+        {
+          "Title": "Alright, geez!",
+          "Heading": 0,
+          "SwapToTreeKey": "TravellingCultist/Default"
+        }
+      ]
+    }
+
+  ],
+  "Characters": [
+    "TheCalamity"
+  ]
+}
