@@ -41,4 +41,12 @@ public class HangingCandle : Decoration, ILocalizedModType
 
         spriteBatch.Draw(texture, drawPos - Main.screenPosition, null, lighting, rotation - PiOver2, origin, 1f, 0, 0);
     }
+
+    public override void AddRecipes()
+    {
+        CreateRecipe()
+            .AddIngredient(ItemID.Candle, 1)
+            .AddTile(TileID.Anvils)
+            .Register();
+    }
 }

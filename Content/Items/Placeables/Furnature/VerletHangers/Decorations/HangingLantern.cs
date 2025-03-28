@@ -40,4 +40,13 @@ public class HangingLantern : Decoration, ILocalizedModType
 
         spriteBatch.Draw(texture, drawPos - Main.screenPosition, null, lighting, rotation - PiOver2, origin, 1f, 0, 0);
     }
+
+    public override void AddRecipes()
+    {
+        CreateRecipe()
+            .AddIngredient(ItemID.Torch, 1)
+            .AddRecipeGroup("IronBar", 4)
+            .AddTile(TileID.Anvils)
+            .Register();
+    }
 }

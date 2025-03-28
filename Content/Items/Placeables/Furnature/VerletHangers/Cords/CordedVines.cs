@@ -53,4 +53,12 @@ public class CordedVines : Cord, ILocalizedModType
 
         spriteBatch.Draw(tex, position - Main.screenPosition, frame, lighting, rotation + PiOver2, frame.Size() * 0.5f, 1f, 0, 0);
     }
+
+    public override void AddRecipes()
+    {
+        CreateRecipe()
+            .AddIngredient(ItemID.VineRopeCoil, 3)
+            .AddTile(TileID.Loom)
+            .Register();
+    }
 }

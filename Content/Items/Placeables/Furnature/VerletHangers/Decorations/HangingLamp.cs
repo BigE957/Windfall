@@ -40,4 +40,12 @@ public class HangingLamp : Decoration, ILocalizedModType
 
         spriteBatch.Draw(texture, drawPos - Main.screenPosition, null, lighting, rotation - PiOver2, origin, 1f, 0, 0);
     }
+
+    public override void AddRecipes()
+    {
+        CreateRecipe()
+            .AddIngredient(ItemID.BrassLantern, 1)
+            .AddTile(TileID.Anvils)
+            .Register();
+    }
 }

@@ -19,4 +19,12 @@ public class Hanger : ModItem, ILocalizedModType, IModType
         Item.createTile = ModContent.TileType<HangerTile>();
         Item.rare = ItemRarityID.Lime;
     }
+
+    public override void AddRecipes()
+    {
+        CreateRecipe()
+            .AddIngredient(ItemID.Wood, 4)
+            .AddTile(TileID.Sawmill)
+            .Register();
+    }
 }
