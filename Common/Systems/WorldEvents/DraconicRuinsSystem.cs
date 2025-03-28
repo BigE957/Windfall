@@ -477,6 +477,8 @@ public class DraconicRuinsSystem : ModSystem
 
     private void DrawTabletVerlets(On_Main.orig_DrawProjectiles orig, Main self)
     {
+        orig(self);
+
         if (State != CutsceneState.Arrival && !NPC.AnyNPCs(ModContent.NPCType<SealingTablet>()) && LeftChain.Count != 0 && RightChain.Count != 0)
         {
             Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.PointWrap, DepthStencilState.None, Main.Rasterizer, null, Main.GameViewMatrix.TransformationMatrix);
@@ -498,8 +500,6 @@ public class DraconicRuinsSystem : ModSystem
             }
 
             Main.spriteBatch.End();
-
-            orig(self);
         }
     }
 
