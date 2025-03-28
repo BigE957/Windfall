@@ -5,7 +5,7 @@
         { "Text": "Its good to see you! I had quite the frightening encounter on last night... I was just walking when I suddenly got the overwhelming feeling of being watched... I looked behind me, and in the distance I'm pretty sure I saw... " },
         {
           "Text": "The Brimstone Witch... ",
-          "Color": "ff0040"
+          "Color": "#ff0040"
         },
         { "Text": "I thought I was as good as dead, so I ran the rest of the way! She didn't follow me thankfully, but still... I'm not sure I'll be able to walk around at night again without looking over my shoulder."}
       ],
@@ -30,7 +30,7 @@
         { "Text": "Realy?! That's quite shocking to hear. It wasn't so long ago that she was responsible for " },
         {
           "Text": "Ilmeris' Incineration",
-          "Color": "ff4000"
+          "Color": "#ff4000"
         },
         { "Text": "... Though I suppose it has been some time since she was last seen. No one really knows what's become of her, which is why its all the more frightening that she was following me!" }
       ],

@@ -5,7 +5,7 @@
         { "Text": "Oh! Hi there. Sorry, I was a bit lost in thought. I happened to be passing by " },
         {
           "Text": "the Dungeon ",
-          "Color": "00FFFF"
+          "Color": "#00FFFF"
         },
         { "Text": "when I heard a most frightening shriek! It seems that place's haunting has only gotten worse as of recent..." }
       ]
