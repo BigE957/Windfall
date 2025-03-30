@@ -40,7 +40,7 @@ public class SelenicDialogueStyle : DialogueStyle
             textbox.Left.Pixels = speakerRight ? Main.screenWidth / 12f : Main.screenWidth - textbox.Width.Pixels - Main.screenWidth / 12f;
         textbox.Height.Pixels += 30;
         textbox.Width.Pixels -= 10;
-        UIImage boxTexture = new(ModContent.Request<Texture2D>($"{nameof(Windfall)}/Assets/UI/DialogueStyles/SelenicTextbox"));
+        UIImage boxTexture = new(ModContent.Request<Texture2D>($"{nameof(WindfallMod)}/Assets/UI/DialogueStyles/SelenicTextbox"));
         SetRectangle(boxTexture, left: -70, top: -100, width: boxTexture.Width.Pixels, height: boxTexture.Height.Pixels);
         textbox.Append(boxTexture);
     }
@@ -57,7 +57,7 @@ public class SelenicDialogueStyle : DialogueStyle
         button.Height.Set(50, 0);
         button.Left.Pixels = (textbox.Width.Pixels + 200) * (buttonCounter / responseCount);
         button.Top.Set(2000, 0);
-        UIImage responseTexture = new(ModContent.Request<Texture2D>($"{nameof(Windfall)}/Assets/UI/DialogueStyles/SelenicResponse"));
+        UIImage responseTexture = new(ModContent.Request<Texture2D>($"{nameof(WindfallMod)}/Assets/UI/DialogueStyles/SelenicResponse"));
         responseTexture.Left.Pixels = -40;
         responseTexture.Top.Pixels = -28;
         button.Append(responseTexture);
@@ -166,7 +166,7 @@ public class SelenicDialogueStyle : DialogueStyle
             DialogueUISystem uiSystem = ModContent.GetInstance<DialogueUISystem>();
             if (textbox.Children.Count() == 3 && uiSystem.CurrentTree.Dialogues[uiSystem.CurrentDialogueIndex].Responses.Length == 0)
             {
-                SelenicArrow Arrow = new(ModContent.Request<Texture2D>($"{nameof(Windfall)}/Assets/UI/DialogueStyles/SelenicArrow", AssetRequestMode.ImmediateLoad))
+                SelenicArrow Arrow = new(ModContent.Request<Texture2D>($"{nameof(WindfallMod)}/Assets/UI/DialogueStyles/SelenicArrow", AssetRequestMode.ImmediateLoad))
                 {
                     ImageScale = 0f,
                     NormalizedOrigin = Vector2.One / 2f,
@@ -176,7 +176,7 @@ public class SelenicDialogueStyle : DialogueStyle
                 textbox.Append(Arrow);
                 return;
             }
-            UIElement[] responseButtons = state.Children.Where(c => c != state.Children.First() && c.GetType() == typeof(UIPanel)).ToArray();
+            UIElement[] responseButtons = [.. state.Children.Where(c => c != state.Children.First() && c.GetType() == typeof(UIPanel))];
 
             bool allInPosition = true;
             for (int i = 0; i < responseButtons.Length; i++)
@@ -208,7 +208,7 @@ public class SelenicDialogueStyle : DialogueStyle
                 }
                 else
                 {
-                    responseButtons = textbox.Children.Where(c => c.GetType() == typeof(UIPanel)).ToArray();
+                    responseButtons = [.. textbox.Children.Where(c => c.GetType() == typeof(UIPanel))];
                     for (int i = 0; i < responseButtons.Length; i++)
                     {
                         ButtonCounters ??= new int[responseButtons.Length];
@@ -219,11 +219,11 @@ public class SelenicDialogueStyle : DialogueStyle
                         image.AllowResizingDimensions = false;
                         if (button.IsMouseHovering)
                         {
-                            image.SetImage(ModContent.Request<Texture2D>($"{nameof(Windfall)}/Assets/UI/DialogueStyles/SelenicResponseSelected"));
+                            image.SetImage(ModContent.Request<Texture2D>($"{nameof(WindfallMod)}/Assets/UI/DialogueStyles/SelenicResponseSelected"));
 
                             if (ButtonCounters[i] < 18)
                             {
-                                float value = Lerp(ButtonSize.Y, ButtonSize.Y * 1.25f, SineInEasing(ButtonCounters[i] / 18f, 1));
+                                float value = Lerp(ButtonSize.Y, ButtonSize.Y * 1.25f, SineInEasing(ButtonCounters[i] / 18f));
                                 button.Width.Pixels = value * 3;
                                 button.Height.Pixels = value;
                                 ButtonCounters[i]++;
@@ -237,11 +237,11 @@ public class SelenicDialogueStyle : DialogueStyle
                         }
                         else
                         {
-                            image.SetImage(ModContent.Request<Texture2D>($"{nameof(Windfall)}/Assets/UI/DialogueStyles/SelenicResponse"));
+                            image.SetImage(ModContent.Request<Texture2D>($"{nameof(WindfallMod)}/Assets/UI/DialogueStyles/SelenicResponse"));
 
                             if (ButtonCounters[i] > 0)
                             {
-                                float value = Lerp(ButtonSize.Y * 1.25f, ButtonSize.Y, SineOutEasing(1 - (ButtonCounters[i] / 18f), 1));
+                                float value = Lerp(ButtonSize.Y * 1.25f, ButtonSize.Y, SineOutEasing(1 - (ButtonCounters[i] / 18f)));
                                 button.Width.Pixels = value * 3;
                                 button.Height.Pixels = value;
                                 ButtonCounters[i]--;
@@ -285,7 +285,7 @@ public class SelenicDialogueStyle : DialogueStyle
         {
             DialogueUIState state = ModContent.GetInstance<DialogueUISystem>().DialogueUIState;
 
-            UIElement[] responseButtons = state.Children.Where(c => c != state.Children.First() && c.GetType() == typeof(UIPanel)).ToArray();
+            UIElement[] responseButtons = [.. state.Children.Where(c => c != state.Children.First() && c.GetType() == typeof(UIPanel))];
 
             for (int i = 0; i < responseButtons.Length; i++)
             {
@@ -325,7 +325,7 @@ public class SelenicDialogueStyle : DialogueStyle
         {
             if (Counter < 24)
             {
-                ImageScale = ExpOutEasing(Counter / 24f, 1) / 2f;
+                ImageScale = ExpOutEasing(Counter / 24f) / 2f;
                 Counter++;
             }
             else

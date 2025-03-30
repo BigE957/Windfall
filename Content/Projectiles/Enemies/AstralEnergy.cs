@@ -1,4 +1,5 @@
-﻿using Windfall.Content.Projectiles.GodlyAbilities;
+﻿using CalamityMod.Particles;
+using Windfall.Content.Projectiles.GodlyAbilities;
 using Windfall.Content.Projectiles.Props;
 
 namespace Windfall.Content.Projectiles.Enemies;

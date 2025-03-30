@@ -260,7 +260,7 @@ public class BoneripperProj : ModProjectile
     public static readonly SoundStyle MaxChargeSound = new("CalamityMod/Sounds/Custom/SCalSounds/BrimstoneFireblastImpact");
     public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
     {
-        if (!target.IsAnEnemy())
+        if (!target.IsValidEnemy())
             return;
 
         if (Projectile.Colliding(Projectile.Hitbox, target.Hitbox))

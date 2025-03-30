@@ -1,6 +1,8 @@
-﻿using CalamityMod.Buffs.DamageOverTime;
+﻿using CalamityMod;
+using CalamityMod.Buffs.DamageOverTime;
 using CalamityMod.Items;
 using CalamityMod.Items.Weapons.Rogue;
+using CalamityMod.Particles;
 using Microsoft.Xna.Framework.Input;
 using System.Collections.ObjectModel;
 using Windfall.Common.Graphics.Metaballs;
@@ -117,7 +119,7 @@ public class Prodosia : RogueWeapon, ILocalizedModType
         }
         tooltips.RemoveRange(1, tooltips.Count - 3);
         tooltips.RemoveAt(2);
-        tooltips.Add(new(Windfall.Instance, "LoreTab", GetWindfallTextValue(LocalizationCategory + "." + Name + ".Lore")));
+        tooltips.Add(new(WindfallMod.Instance, "LoreTab", GetWindfallTextValue(LocalizationCategory + "." + Name + ".Lore")));
     }
 
     public override float StealthVelocityMultiplier => 2f;
@@ -209,7 +211,7 @@ public class GoldenTrinket : ModProjectile, ILocalizedModType
                 throwStrength = 1f;
                 if (Time < 30f)
                 {
-                    throwStrength = CircOutEasing(Time / 30f, 1);
+                    throwStrength = CircOutEasing(Time / 30f);
                     angle = 0f.AngleLerp((PiOver2 + PiOver4) * -owner.direction, throwStrength);
                 }
 
@@ -302,7 +304,7 @@ public class GoldenTrinket : ModProjectile, ILocalizedModType
                 float seekTime = 10;
 
                 if(Time < seekTime)
-                    Projectile.velocity = Projectile.velocity.SafeNormalize(Vector2.Zero) * Clamp(Lerp(0.01f, seekVelocity, CircOutEasing(Time / seekTime, 1)), 0.01f, seekVelocity);
+                    Projectile.velocity = Projectile.velocity.SafeNormalize(Vector2.Zero) * Clamp(Lerp(0.01f, seekVelocity, CircOutEasing(Time / seekTime)), 0.01f, seekVelocity);
                 else
                     Projectile.velocity = Projectile.velocity.SafeNormalize(Vector2.Zero) * seekVelocity;
 
@@ -417,7 +419,7 @@ public class GoldenTrinket : ModProjectile, ILocalizedModType
 
         Vector2 drawPosition = Projectile.Center - Main.screenPosition;
 
-        Main.EntitySpriteDraw(tex, drawPosition, frame, color * Projectile.Opacity, Projectile.rotation, frame.Size() * 0.5f, Projectile.scale * 1.25f * CircOutEasing(AfterImageOpacity, 1), SpriteEffects.None);
+        Main.EntitySpriteDraw(tex, drawPosition, frame, color * Projectile.Opacity, Projectile.rotation, frame.Size() * 0.5f, Projectile.scale * 1.25f * CircOutEasing(AfterImageOpacity), SpriteEffects.None);
 
         tex = TextureAssets.Projectile[Type].Value;
 

@@ -8,7 +8,7 @@ public class DragonArcher : ModNPC
     private static SoundStyle SpawnSound => new("CalamityMod/Sounds/Custom/SCalSounds/BrimstoneHellblastSound");
     public override void SetStaticDefaults()
     {
-        this.HideFromBestiary();
+        this.HideBestiaryEntry();
         NPCID.Sets.ActsLikeTownNPC[Type] = true;
         Main.npcFrameCount[Type] = 5;
         NPCID.Sets.NoTownNPCHappiness[Type] = true;
@@ -35,7 +35,7 @@ public class DragonArcher : ModNPC
     {
         Main.CloseNPCChatOrSign();
 
-        ModContent.GetInstance<DialogueUISystem>().DisplayDialogueTree(Windfall.Instance, "MechanicShed", new(Name, [NPC.whoAmI]));
+        ModContent.GetInstance<DialogueUISystem>().DisplayDialogueTree(WindfallMod.Instance, "MechanicShed", new(Name, [NPC.whoAmI]));
 
         return base.GetChat();
     }

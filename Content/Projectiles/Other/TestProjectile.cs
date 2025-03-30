@@ -55,7 +55,7 @@ public class TestProjectile : ModProjectile
     public override bool PreDraw(ref Color lightColor)
     {
         //ScarletDevilStreak, FabstaffStreak
-        GameShaders.Misc["CalamityMod:ImpFlameTrail"].SetShaderTexture(ModContent.Request<Texture2D>("CalamityMod/ExtraTextures/Trails/FabstaffStreak"));
+        GameShaders.Misc["CalamityMod:ImpFlameTrail"].SetTexture(ModContent.Request<Texture2D>("CalamityMod/ExtraTextures/Trails/FabstaffStreak"));
         PrimitiveRenderer.RenderTrail(Projectile.oldPos, new(WidthFunction, ColorFunction, (_) => Projectile.Size * 0.5f, shader: GameShaders.Misc["CalamityMod:ImpFlameTrail"]), 30);
 
         Texture2D texture = ModContent.Request<Texture2D>("Windfall/Assets/Projectiles/Boss/MagicShot").Value;

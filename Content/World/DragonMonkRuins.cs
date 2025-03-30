@@ -14,7 +14,7 @@ public static class DragonMonkRuins
 {
     public static bool ShouldAvoidLocation(Point placementPoint, bool careAboutMoss = false)
     {
-        Tile tile = ParanoidTileRetrieval(placementPoint.X, placementPoint.Y);
+        Tile tile = ParanoidTileRetrieval(placementPoint);
 
         if (tile.LiquidType == LiquidID.Shimmer)
             return true;
@@ -129,7 +129,7 @@ public static class DragonMonkRuins
                 SchematicAnchor anchorType = SchematicAnchor.TopLeft;
                 bool place = true;
                 WFSchematicManager.PlaceFlippableSchematic<Action<Chest>>(mapKey, placementPoint, anchorType, ref place, flipHorizontal: facingLeft);
-                AddProtectedStructure(new Rectangle(placementPoint.X, placementPoint.Y, (int)schematicSize.X, (int)schematicSize.Y), 20);
+                CalamityMod.CalamityUtils.AddProtectedStructure(new Rectangle(placementPoint.X, placementPoint.Y, (int)schematicSize.X, (int)schematicSize.Y), 20);
                 break;
             }
             placementPoint = new(-1, -1);

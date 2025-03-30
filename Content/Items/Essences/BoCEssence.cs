@@ -27,7 +27,7 @@ public class BoCEssence : ModItem, ILocalizedModType
         player.Godly().Evil1Essence = true;
         player.Godly().CrimsonCommunion = true;
         SkyManager.Instance.Activate("Windfall:CrimsonCommunion", args: []);
-        ModContent.GetInstance<DialogueUISystem>().DisplayDialogueTree(Windfall.Instance, "Communions/CrimsonCommunion1", new(Name, []));
+        ModContent.GetInstance<DialogueUISystem>().DisplayDialogueTree(WindfallMod.Instance, "Communions/CrimsonCommunion1", new(Name, []));
         return true;
     }
 }

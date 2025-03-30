@@ -1,6 +1,7 @@
 ﻿
 using Windfall.Common.Systems.WorldEvents;
 using Terraria.ID;
+using CalamityMod.Particles;
 
 namespace Windfall.Content.Items.Quests.SealingRitual;
 

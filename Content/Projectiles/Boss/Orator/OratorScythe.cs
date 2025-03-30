@@ -1,4 +1,5 @@
-﻿using CalamityMod.NPCs.TownNPCs;
+﻿using CalamityMod;
+using CalamityMod.NPCs.TownNPCs;
 using CalamityMod.World;
 using Windfall.Common.Graphics.Metaballs;
 using Windfall.Content.NPCs.Bosses.Orator;
@@ -163,7 +164,7 @@ public class OratorScythe : ModProjectile
     {
         Texture2D tex = ModContent.Request<Texture2D>(Texture).Value;
         Vector2 drawPosition = Projectile.Center - Main.screenPosition;
-        DrawAfterimagesCentered(Projectile, ProjectileID.Sets.TrailingMode[Projectile.type], Color.White * Projectile.Opacity, 1);
+        DrawCenteredAfterimages(Projectile, ProjectileID.Sets.TrailingMode[Projectile.type], Color.White * Projectile.Opacity, 1);
         Main.EntitySpriteDraw(tex, drawPosition, null, Color.White * Projectile.Opacity, Projectile.rotation, tex.Size() * 0.5f, Projectile.scale, SpriteEffects.None);
         return false;
     }

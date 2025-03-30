@@ -33,7 +33,7 @@ public class DatabaseTerminal : ModTile
         TileObjectData.addAlternate(1);
         TileObjectData.addTile(Type);
 
-        AddMapEntry(Color.DarkSlateGray, Language.GetText($"Mods.{nameof(Windfall)}.Tiles.DatabaseTerminal"));
+        AddMapEntry(Color.DarkSlateGray, Language.GetText($"Mods.{nameof(WindfallMod)}.Tiles.DatabaseTerminal"));
 
         DustType = DustID.TheDestroyer;
     }

@@ -1,4 +1,5 @@
-﻿using CalamityMod.Items;
+﻿using CalamityMod;
+using CalamityMod.Items;
 using CalamityMod.Rarities;
 
 namespace Windfall.Content.Items.Utility;

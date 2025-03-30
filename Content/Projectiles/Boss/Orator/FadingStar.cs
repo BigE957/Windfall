@@ -1,4 +1,5 @@
 ﻿using CalamityMod.Graphics.Primitives;
+using CalamityMod.Particles;
 using Terraria.Graphics.Shaders;
 using Windfall.Content.NPCs.Bosses.Orator;
 
@@ -62,7 +63,7 @@ public class FadingStar : ModProjectile, ILocalizedModType
 
         if (positions.Length > 0)
         {
-            GameShaders.Misc["CalamityMod:ImpFlameTrail"].SetShaderTexture(ModContent.Request<Texture2D>("CalamityMod/ExtraTextures/Trails/ScarletDevilStreak"));
+            GameShaders.Misc["CalamityMod:ImpFlameTrail"].SetTexture(ModContent.Request<Texture2D>("CalamityMod/ExtraTextures/Trails/ScarletDevilStreak"));
             PrimitiveRenderer.RenderTrail(positions, new(WidthFunction, ColorFunction, (_) => Vector2.Zero, shader: GameShaders.Misc["CalamityMod:ImpFlameTrail"]), 30);
         }
 

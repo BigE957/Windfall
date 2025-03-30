@@ -20,7 +20,7 @@ public abstract class BaseLoreItem : ModItem
         if (!Main.keyState.IsKeyDown(Microsoft.Xna.Framework.Input.Keys.LeftShift))
         {
             if (line != null)
-                line.Text = GetTextValue("Items.Lore.ShortTooltip");
+                line.Text = CalamityMod.CalamityUtils.GetTextValue("Items.Lore.ShortTooltip");
             return;
         }
         string tooltip = GetWindfallTextValue($"LoreItems.{Key}");

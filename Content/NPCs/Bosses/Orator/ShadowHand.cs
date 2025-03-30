@@ -1,4 +1,5 @@
-﻿using CalamityMod.World;
+﻿using CalamityMod;
+using CalamityMod.World;
 using Terraria.GameContent.Bestiary;
 using Windfall.Common.Graphics.Metaballs;
 using Windfall.Common.Systems;
@@ -320,7 +321,7 @@ public class ShadowHand : ModNPC
                         CurrentAI = AIState.Hunting;
                 }
                 else
-                    NPC.rotation = Lerp(baseAngle.ToRotation() + (Pi * NPC.direction), baseAngle.ToRotation() - (PiOver2 * NPC.direction), SineOutEasing((aiCounter + 15) / 15f, 1));
+                    NPC.rotation = Lerp(baseAngle.ToRotation() + (Pi * NPC.direction), baseAngle.ToRotation() - (PiOver2 * NPC.direction), SineOutEasing((aiCounter + 15) / 15f));
                 break;
             case AIState.Aiming:
                 #region Movement
@@ -381,7 +382,7 @@ public class ShadowHand : ModNPC
                     {
                         NPC.velocity *= 0.95f;
 
-                        NPC.rotation = Lerp((target.Center - NPC.Center).ToRotation(), (target.Center - NPC.Center).ToRotation() + ((PiOver2 + PiOver4) * -NPC.direction), CalamityUtils.ExpOutEasing((aiCounter - 90) / 30f, 1));
+                        NPC.rotation = Lerp((target.Center - NPC.Center).ToRotation(), (target.Center - NPC.Center).ToRotation() + ((PiOver2 + PiOver4) * -NPC.direction), ExpOutEasing((aiCounter - 90) / 30f));
 
                         if (aiCounter == 120)
                         {

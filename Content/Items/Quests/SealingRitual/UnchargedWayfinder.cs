@@ -1,4 +1,5 @@
-﻿using CalamityMod.Tiles.Ores;
+﻿using CalamityMod;
+using CalamityMod.Tiles.Ores;
 
 namespace Windfall.Content.Items.Quests.SealingRitual;
 

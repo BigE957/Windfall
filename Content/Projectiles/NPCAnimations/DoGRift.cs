@@ -1,11 +1,12 @@
-﻿using System;
+﻿using CalamityMod.Particles;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics.Metrics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Windfall.Content.Projectiles.ProjectileAnimations;
+namespace Windfall.Content.Projectiles.NPCAnimations;
 
 public class DoGRift : ModProjectile
 {
@@ -34,20 +35,20 @@ public class DoGRift : ModProjectile
             if (eyeOpacity > 0f)
                 eyeOpacity -= 0.025f;
             if(despawnCounter > 60)
-                Projectile.scale = SineBumpEasing(0.5f + ((despawnCounter - 60) / 40f), 1) * 4f;
+                Projectile.scale = SineBumpEasing(0.5f + (despawnCounter - 60) / 40f) * 4f;
             despawnCounter++;
             if (Projectile.scale <= 0)
                 Projectile.active = false;
             return;
         }
         if (aiCounter < 20)
-            Projectile.scale = SineBumpEasing(aiCounter / 40f, 1) * 4f;
+            Projectile.scale = SineBumpEasing(aiCounter / 40f) * 4f;
 
         if (aiCounter > 20 && aiCounter % 10 == 0)
         {
             Vector2 spawnPosition = Projectile.Center + Main.rand.NextVector2CircularEdge(80f * Projectile.scale, 80f * Projectile.scale);
             Color color = Color.Lerp(Color.Fuchsia, Color.Aqua, Main.rand.NextFloat(0f, 1f));
-            CalamityMod.Particles.Particle particle = new AltSparkParticle(spawnPosition, (spawnPosition - Projectile.Center).SafeNormalize(Vector2.Zero) * (Main.rand.NextFloat(-4, -2f) * Projectile.scale), false, 200, Main.rand.NextFloat(0.25f, 0.5f) * Projectile.scale, color);
+            Particle particle = new AltSparkParticle(spawnPosition, (spawnPosition - Projectile.Center).SafeNormalize(Vector2.Zero) * (Main.rand.NextFloat(-4, -2f) * Projectile.scale), false, 200, Main.rand.NextFloat(0.25f, 0.5f) * Projectile.scale, color);
             GeneralParticleHandler.SpawnParticle(particle);
         }
         if (aiCounter > 60 && eyeOpacity < 1f)
@@ -60,14 +61,14 @@ public class DoGRift : ModProjectile
         SpriteBatch spriteBatch = new(Main.graphics.GraphicsDevice);
         spriteBatch.Begin();
         Texture2D texture = ModContent.Request<Texture2D>("CalamityMod/Particles/LargeBloom").Value;
-        Vector2 drawPosition = Projectile.Center - Main.screenPosition + (Vector2.UnitY * Projectile.gfxOffY);
+        Vector2 drawPosition = Projectile.Center - Main.screenPosition + Vector2.UnitY * Projectile.gfxOffY;
         Vector2 origin = texture.Size() * 0.5f;
         spriteBatch.Draw(texture, drawPosition, null, Projectile.GetAlpha(Color.Black), 0f, origin, Projectile.scale / 2f, SpriteEffects.None, 0f);            
         
         spriteBatch.UseBlendState(BlendState.Additive);
         texture = ModContent.Request<Texture2D>("Windfall/Assets/Skies/OratorMoonBloom2").Value;
         origin = texture.Size() * 0.5f;
-        spriteBatch.Draw(texture, drawPosition, null, Projectile.GetAlpha(Color.Violet), -Projectile.rotation / 2.25f, origin, Projectile.scale * (0.24f + (0.02f * ((float)Math.Sin(aiCounter / -20f) / 2f + 0.5f))), SpriteEffects.None, 0f);
+        spriteBatch.Draw(texture, drawPosition, null, Projectile.GetAlpha(Color.Violet), -Projectile.rotation / 2.25f, origin, Projectile.scale * (0.24f + 0.02f * ((float)Math.Sin(aiCounter / -20f) / 2f + 0.5f)), SpriteEffects.None, 0f);
 
         spriteBatch.UseBlendState(BlendState.AlphaBlend);
         texture = ModContent.Request<Texture2D>("CalamityMod/Particles/LargeBloom").Value;

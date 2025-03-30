@@ -1,4 +1,5 @@
-﻿using CalamityMod.Buffs.DamageOverTime;
+﻿using CalamityMod;
+using CalamityMod.Buffs.DamageOverTime;
 using CalamityMod.Dusts;
 using CalamityMod.Items.Placeables.Furniture.Trophies;
 using CalamityMod.Items.Weapons.Rogue;

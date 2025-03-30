@@ -1,4 +1,5 @@
-﻿using static Windfall.Common.Systems.WorldEvents.LunarCultBaseSystem;
+﻿using CalamityMod;
+using static Windfall.Common.Systems.WorldEvents.LunarCultBaseSystem;
 
 namespace Windfall.Content.Items.GlobalItems;
 

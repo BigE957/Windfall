@@ -1,5 +1,7 @@
-﻿using CalamityMod.Graphics.Primitives;
+﻿using CalamityMod;
+using CalamityMod.Graphics.Primitives;
 using CalamityMod.Items;
+using CalamityMod.Particles;
 using CalamityMod.World;
 using Microsoft.Xna.Framework.Input;
 using System.Collections.ObjectModel;
@@ -77,20 +79,20 @@ public class Apotelesma : ModItem, ILocalizedModType
         for(int i = box.Y; i < box.Y + box.Height; i++)
         {
             float value = Utils.GetLerpValue(box.Y, box.Y + box.Height, i);
-            Main.spriteBatch.DrawLineBetter(new Vector2(box.X, i) + Main.screenPosition, new Vector2(box.X + box.Width, i) + Main.screenPosition, Color.Lerp(new Color(0, 150, 50) * 0.5f, new Color(0, 64, 44), value), 1f);
+            Main.spriteBatch.DrawLineBetween(new Vector2(box.X, i) + Main.screenPosition, new Vector2(box.X + box.Width, i) + Main.screenPosition, Color.Lerp(new Color(0, 150, 50) * 0.5f, new Color(0, 64, 44), value), 1f);
         }
 
-        Main.spriteBatch.DrawLineBetter(box.TopLeft() + Main.screenPosition, box.BottomLeft() + Main.screenPosition, new(48, 38, 8), 8f);
-        Main.spriteBatch.DrawLineBetter(box.TopLeft() + Main.screenPosition, box.BottomLeft() + Main.screenPosition, Color.DarkGoldenrod, 4f);
+        Main.spriteBatch.DrawLineBetween(box.TopLeft() + Main.screenPosition, box.BottomLeft() + Main.screenPosition, new(48, 38, 8), 8f);
+        Main.spriteBatch.DrawLineBetween(box.TopLeft() + Main.screenPosition, box.BottomLeft() + Main.screenPosition, Color.DarkGoldenrod, 4f);
 
-        Main.spriteBatch.DrawLineBetter(box.TopLeft() + Main.screenPosition, box.TopRight() + Main.screenPosition, new(48, 38, 8), 8f);
-        Main.spriteBatch.DrawLineBetter(box.TopLeft() + Main.screenPosition, box.TopRight() + Main.screenPosition, Color.DarkGoldenrod, 4f);
+        Main.spriteBatch.DrawLineBetween(box.TopLeft() + Main.screenPosition, box.TopRight() + Main.screenPosition, new(48, 38, 8), 8f);
+        Main.spriteBatch.DrawLineBetween(box.TopLeft() + Main.screenPosition, box.TopRight() + Main.screenPosition, Color.DarkGoldenrod, 4f);
 
-        Main.spriteBatch.DrawLineBetter(box.BottomRight() + Main.screenPosition, box.TopRight() + Main.screenPosition, new(48, 38, 8), 8f);
-        Main.spriteBatch.DrawLineBetter(box.BottomRight() + Main.screenPosition, box.TopRight() + Main.screenPosition, Color.DarkGoldenrod, 4f);
+        Main.spriteBatch.DrawLineBetween(box.BottomRight() + Main.screenPosition, box.TopRight() + Main.screenPosition, new(48, 38, 8), 8f);
+        Main.spriteBatch.DrawLineBetween(box.BottomRight() + Main.screenPosition, box.TopRight() + Main.screenPosition, Color.DarkGoldenrod, 4f);
 
-        Main.spriteBatch.DrawLineBetter(box.BottomLeft() + Main.screenPosition, box.BottomRight() + Main.screenPosition, new(48, 38, 8), 8f);
-        Main.spriteBatch.DrawLineBetter(box.BottomLeft() + Main.screenPosition, box.BottomRight() + Main.screenPosition, Color.DarkGoldenrod, 4f);
+        Main.spriteBatch.DrawLineBetween(box.BottomLeft() + Main.screenPosition, box.BottomRight() + Main.screenPosition, new(48, 38, 8), 8f);
+        Main.spriteBatch.DrawLineBetween(box.BottomLeft() + Main.screenPosition, box.BottomRight() + Main.screenPosition, Color.DarkGoldenrod, 4f);
 
         Texture2D tex = ModContent.Request<Texture2D>("Windfall/Content/Items/Placeables/Furnature/VerletHangers/Decorations/JadeCrescent").Value;
         Rectangle frame = tex.Frame(verticalFrames: 2, frameY: 1);
@@ -135,7 +137,7 @@ public class Apotelesma : ModItem, ILocalizedModType
         }
         tooltips.RemoveRange(1, tooltips.Count - 3);
         tooltips.RemoveAt(2);
-        tooltips.Add(new(Windfall.Instance, "LoreTab", GetWindfallTextValue(LocalizationCategory + "." + Name + ".Lore")));
+        tooltips.Add(new(WindfallMod.Instance, "LoreTab", GetWindfallTextValue(LocalizationCategory + "." + Name + ".Lore")));
     }
 
     public override bool AltFunctionUse(Player player) => true;
@@ -192,7 +194,7 @@ public class Apotelesma : ModItem, ILocalizedModType
 
         Player myPlayer = Main.LocalPlayer;
 
-        if (myPlayer.ActiveItem() != Item || !myPlayer.active || myPlayer.dead)
+        if (myPlayer.HeldItem() != Item || !myPlayer.active || myPlayer.dead)
         {
             State = AIState.UpSlice;
             return;
@@ -230,7 +232,7 @@ public class Apotelesma : ModItem, ILocalizedModType
             Vector2 currentPos;
 
             if (counter < 30f)
-                currentPos = Vector2.Lerp(GemData[i].Item1, GemData[i].Item2, SineOutEasing(counter / 30f, 1));
+                currentPos = Vector2.Lerp(GemData[i].Item1, GemData[i].Item2, SineOutEasing(counter / 30f));
             else
                 currentPos = GemData[i].Item2;            
 
@@ -317,7 +319,7 @@ public class ApotelesmaProj : ModProjectile
         {
             if (owner.Calamity().mouseRight) //Holding Right Click, consume Gems and prep for right click attack
             {
-                if(owner.ActiveItem().type != ModContent.ItemType<Apotelesma>())
+                if(owner.HeldItem().type != ModContent.ItemType<Apotelesma>())
                 {
                     Projectile.Kill();
                     return;
@@ -331,7 +333,7 @@ public class ApotelesmaProj : ModProjectile
 
                 float lerpVal = 1f;
                 if (Time <= 30)
-                    lerpVal = Clamp(SineOutEasing(Time / 30f, 1), 0f, 1f);
+                    lerpVal = Clamp(SineOutEasing(Time / 30f), 0f, 1f);
                 
                 float angle = -PiOver2 - PiOver4;
                 if (Time <= 30)
@@ -345,7 +347,7 @@ public class ApotelesmaProj : ModProjectile
 
                 owner.SetCompositeArmFront(true, Player.CompositeArmStretchAmount.ThreeQuarters, (Vector2.UnitX * owner.direction).RotatedBy(angle - Lerp(PiOver4, PiOver2, lerpVal)).ToRotation());
 
-                Apotelesma item = (Apotelesma)owner.ActiveItem().ModItem;
+                Apotelesma item = (Apotelesma)owner.HeldItem().ModItem;
 
                 if (Time != 0 && Time % 30 == 0 && item.ApotelesmaCharge > 0)
                 {
@@ -445,7 +447,7 @@ public class ApotelesmaProj : ModProjectile
                     {
                         if (Time == 31 || Projectile.ai[1] == -1)
                         {
-                            NPC tryTarget = Projectile.Center.ClosestNPCAt(1100f, bossPriority: true);
+                            NPC tryTarget = Projectile.Center.ClosestNPC(1100f, bossPriority: true);
                             if (tryTarget != null)
                                 Projectile.ai[1] = tryTarget.whoAmI;
                             else
@@ -460,7 +462,7 @@ public class ApotelesmaProj : ModProjectile
 
                         if (Time <= 30)
                         {
-                            NPC tryTarget = Projectile.Center.ClosestNPCAt(1100f, bossPriority: true);
+                            NPC tryTarget = Projectile.Center.ClosestNPC(1100f, bossPriority: true);
                             if (tryTarget != null)
                                 Projectile.ai[1] = tryTarget.whoAmI;
                             else
@@ -652,7 +654,7 @@ public class ApotelesmaProj : ModProjectile
             spinDirection += PiOver2 + (Pi / 4);
         }
 
-        spinRotation = Lerp(spinDirection, spinDirection + Pi * 4f, SineOutEasing(spinCounter / (float)spinDuration, 1));
+        spinRotation = Lerp(spinDirection, spinDirection + Pi * 4f, SineOutEasing(spinCounter / (float)spinDuration));
 
         if (spinCounter >= spinDuration)
         {
@@ -688,7 +690,7 @@ public class ApotelesmaProj : ModProjectile
             sliceDirection = (player.Calamity().mouseWorld - player.Center).SafeNormalize(Vector2.UnitX * player.direction).ToRotation();
             sliceDirection -= PiOver2;
         }
-        sliceRotation = Lerp(sliceDirection, sliceDirection + (up ? -(PiOver2 + Pi) : PiOver2 + Pi), SineOutEasing(sliceCounter / ((float)sliceDuration - 4), 1));
+        sliceRotation = Lerp(sliceDirection, sliceDirection + (up ? -(PiOver2 + Pi) : PiOver2 + Pi), SineOutEasing(sliceCounter / ((float)sliceDuration - 4)));
         //sliceDirection = sliceDirection.RotatedBy(Clamp(1f - (sliceCounter / 60f), 0.5f, 1f) * PiOver4 * (up ? -0.35f : 0.35f));
         //sliceDirection.Normalize();
 
@@ -724,16 +726,16 @@ public class ApotelesmaProj : ModProjectile
             if (scytheSlice)
             {
                 if (sliceCounter < sliceDuration / 2)
-                    scaleMult = Lerp(0.75f, 1f, SineOutEasing(sliceCounter / 8f, 1));
+                    scaleMult = Lerp(0.75f, 1f, SineOutEasing(sliceCounter / 8f));
                 else if(sliceCounter >= sliceDuration - 10)
-                    scaleMult = Lerp(1f, 0.5f, SineOutEasing((sliceCounter - (sliceDuration - 10)) / 10f, 1));
+                    scaleMult = Lerp(1f, 0.5f, SineOutEasing((sliceCounter - (sliceDuration - 10)) / 10f));
             }
             else if (scytheSpin)
             {
                 if (spinCounter <= 8)
-                    scaleMult = Lerp(0.5f, 1f, SineOutEasing(spinCounter / 8f, 1));
+                    scaleMult = Lerp(0.5f, 1f, SineOutEasing(spinCounter / 8f));
                 else if (spinCounter >= spinDuration - 8)
-                    scaleMult = Lerp(1f, 0.5f, SineOutEasing((spinCounter - (spinDuration - 8)) / 8f, 1));
+                    scaleMult = Lerp(1f, 0.5f, SineOutEasing((spinCounter - (spinDuration - 8)) / 8f));
             }
 
             SpriteEffects effects = SpriteEffects.None;
@@ -756,16 +758,16 @@ public class ApotelesmaProj : ModProjectile
             if (scytheSlice)
             {
                 if (sliceCounter < sliceDuration / 2)
-                    slashFade = Lerp(0f, 1f, SineOutEasing(sliceCounter / 18f, 1));
+                    slashFade = Lerp(0f, 1f, SineOutEasing(sliceCounter / 18f));
                 else if (sliceCounter >= sliceDuration - 10)
-                    slashFade = Lerp(1f, 0f, SineInEasing((sliceCounter - (sliceDuration - 10)) / 10f, 1));
+                    slashFade = Lerp(1f, 0f, SineInEasing((sliceCounter - (sliceDuration - 10)) / 10f));
             }
             else if (scytheSpin)
             {
                 if (spinCounter <= 18)
-                    slashFade = Lerp(0f, 1f, SineOutEasing(spinCounter / 18f, 1));
+                    slashFade = Lerp(0f, 1f, SineOutEasing(spinCounter / 18f));
                 else if (spinCounter >= spinDuration - 16)
-                    slashFade = Lerp(1f, 0f, SineInEasing((spinCounter - (spinDuration - 16)) / 16f, 1));
+                    slashFade = Lerp(1f, 0f, SineInEasing((spinCounter - (spinDuration - 16)) / 16f));
             }
 
             Vector2 dir = Vector2.UnitX.RotatedBy(rotation + ((Apotelesma.AIState)State == Apotelesma.AIState.DownSlice ? -PiOver4 : PiOver4));
@@ -867,7 +869,7 @@ public class RushBolt : ModProjectile
     public override void AI()
     {
         Player owner = Main.player[Projectile.owner];
-        NPC target = owner.Center.ClosestNPCAt(900f, bossPriority: true);
+        NPC target = owner.Center.ClosestNPC(900f, bossPriority: true);
 
         Projectile.rotation = DirectionalVelocity.ToRotation();
         Projectile.velocity = DirectionalVelocity.SafeNormalize(Vector2.UnitX) * (Velocity / 2);

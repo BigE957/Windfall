@@ -11,6 +11,6 @@ public class ChaseMusicScene : ModSceneEffect
     {
         if (DraconicRuinsSystem.CutsceneTime > 136)
             return 0;
-        return MusicLoader.GetMusicSlot(Windfall.Instance, "Assets/Music/TheChase");
+        return MusicLoader.GetMusicSlot(WindfallMod.Instance, "Assets/Music/TheChase");
     }
 }

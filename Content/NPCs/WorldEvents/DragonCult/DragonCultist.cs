@@ -9,7 +9,7 @@ public class DragonCultist : ModNPC
     internal static SoundStyle SpawnSound => new("CalamityMod/Sounds/Custom/SCalSounds/BrimstoneHellblastSound");
     public override void SetStaticDefaults()
     {
-        this.HideFromBestiary();
+        this.HideBestiaryEntry();
         //NPCID.Sets.ActsLikeTownNPC[Type] = true;
         Main.npcFrameCount[Type] = 1;
         NPCID.Sets.NoTownNPCHappiness[Type] = true;
@@ -39,7 +39,7 @@ public class DragonCultist : ModNPC
     {
         Main.CloseNPCChatOrSign();
 
-        ModContent.GetInstance<DialogueUISystem>().DisplayDialogueTree(Windfall.Instance, "SkeletronDefeat", new(Name, [NPC.whoAmI]));
+        ModContent.GetInstance<DialogueUISystem>().DisplayDialogueTree(WindfallMod.Instance, "SkeletronDefeat", new(Name, [NPC.whoAmI]));
 
         return base.GetChat();
     }

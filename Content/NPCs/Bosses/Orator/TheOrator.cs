@@ -10,6 +10,8 @@ using Windfall.Content.Items.Weapons.Summon;
 using Terraria.GameContent.Bestiary;
 using CalamityMod.Items.LoreItems;
 using Windfall.Content.UI.BossBars;
+using CalamityMod;
+using CalamityMod.Particles;
 
 namespace Windfall.Content.NPCs.Bosses.Orator;
 
@@ -1221,11 +1223,11 @@ public class TheOrator : ModNPC
                 if(aiCounter > 90 && aiCounter <= 150)
                 {
                     float ratio = (aiCounter - 90) / 45f;
-                    float EasedRatio = ExpInEasing(ratio, 1);
+                    float EasedRatio = ExpInEasing(ratio);
                     float width = Clamp(96f * EasedRatio, 0f, 64f);
 
                     for (int i = 0; i < 12; i++)
-                        EmpyreanMetaball.SpawnDefaultParticle(NPC.Center + new Vector2(128 + Main.rand.NextFloat(-width, width), Main.rand.NextFloat(-24, 0)).RotatedBy(-PiOver4), new Vector2(Main.rand.Next(-2, 2), Main.rand.Next(1, 5) * SineInEasing(ratio, 1)).RotatedBy(-PiOver4), Main.rand.NextFloat(15f, 25f) * (ratio * 2f));
+                        EmpyreanMetaball.SpawnDefaultParticle(NPC.Center + new Vector2(128 + Main.rand.NextFloat(-width, width), Main.rand.NextFloat(-24, 0)).RotatedBy(-PiOver4), new Vector2(Main.rand.Next(-2, 2), Main.rand.Next(1, 5) * SineInEasing(ratio)).RotatedBy(-PiOver4), Main.rand.NextFloat(15f, 25f) * (ratio * 2f));
                 }
                 if (aiCounter == 150)
                 {
@@ -1243,11 +1245,11 @@ public class TheOrator : ModNPC
                 if (aiCounter > 180 && aiCounter <= 240)
                 {
                     float ratio = (aiCounter - 180) / 45f;
-                    float EasedRatio = ExpInEasing(ratio, 1);
+                    float EasedRatio = ExpInEasing(ratio);
                     float width = Clamp(96f * EasedRatio, 0f, 64f);
 
                     for (int i = 0; i < 12; i++)
-                        EmpyreanMetaball.SpawnDefaultParticle(NPC.Center + new Vector2(-128 + Main.rand.NextFloat(-width, width), Main.rand.NextFloat(-24, 0)).RotatedBy(PiOver4), new Vector2(Main.rand.Next(-2, 2), Main.rand.Next(1, 5) * SineInEasing(ratio, 1)).RotatedBy(PiOver4), Main.rand.NextFloat(15f, 25f) * (ratio * 2f));
+                        EmpyreanMetaball.SpawnDefaultParticle(NPC.Center + new Vector2(-128 + Main.rand.NextFloat(-width, width), Main.rand.NextFloat(-24, 0)).RotatedBy(PiOver4), new Vector2(Main.rand.Next(-2, 2), Main.rand.Next(1, 5) * SineInEasing(ratio)).RotatedBy(PiOver4), Main.rand.NextFloat(15f, 25f) * (ratio * 2f));
                 }
                 if (Main.netMode != NetmodeID.MultiplayerClient && aiCounter == 240)
                 {

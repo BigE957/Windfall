@@ -163,7 +163,7 @@ public class OratorJavelin : ModProjectile
         if (Projectile.timeLeft <= 90)
         {
             Vector2 spawnPos = Projectile.Center - (Projectile.rotation.ToRotationVector2() * Main.rand.NextFloat(-64f, 64f));
-            if (!Main.tile[spawnPos.ToTileCoordinates()].IsTileSolid())
+            if (!Main.tile[spawnPos.ToTileCoordinates()].IsSolid())
                 EmpyreanMetaball.SpawnDefaultParticle(spawnPos, Main.rand.NextVector2Circular(2f, 2f), Main.rand.NextFloat(10f, 20f));
 
         }
@@ -196,7 +196,7 @@ public class OratorJavelin : ModProjectile
             Projectile.Center -= Projectile.rotation.ToRotationVector2();
             hitbox = new((int)Projectile.position.X, (int)Projectile.position.Y, Projectile.width, Projectile.height);
             ModifyDamageHitbox(ref hitbox);
-            if (!Main.tile[hitbox.Center.ToVector2().ToTileCoordinates()].IsTileSolid())
+            if (!Main.tile[hitbox.Center.ToVector2().ToTileCoordinates()].IsSolid())
             {
                 Projectile.Center += Projectile.rotation.ToRotationVector2();
                 hitbox = new((int)Projectile.position.X, (int)Projectile.position.Y, Projectile.width, Projectile.height);
@@ -242,7 +242,7 @@ public class OratorJavelin : ModProjectile
         for (int i = 0; i <= 16; i++)
         {
             Vector2 spawnPos = Projectile.Center - (Projectile.rotation.ToRotationVector2() * Main.rand.NextFloat(-64f, 64f));
-            if (!Main.tile[spawnPos.ToTileCoordinates()].IsTileSolid())
+            if (!Main.tile[spawnPos.ToTileCoordinates()].IsSolid())
                 EmpyreanMetaball.SpawnDefaultParticle(spawnPos, Main.rand.NextVector2Circular(2f, 2f), Main.rand.NextFloat(10f, 20f));
         }
     }
@@ -272,7 +272,7 @@ public class OratorJavelin : ModProjectile
                     break;
             }
 
-            DrawAfterimagesCentered(Projectile, ProjectileID.Sets.TrailingMode[Projectile.type], color * Projectile.Opacity, 2, texture: WhiteOutTexture);
+            DrawCenteredAfterimages(Projectile, ProjectileID.Sets.TrailingMode[Projectile.type], color * Projectile.Opacity, 2, texture: WhiteOutTexture);
         }
         Texture2D tex = ModContent.Request<Texture2D>(Texture).Value;
         Vector2 drawPosition = Projectile.Center - Main.screenPosition;

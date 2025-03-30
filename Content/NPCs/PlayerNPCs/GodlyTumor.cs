@@ -1,5 +1,7 @@
-﻿using CalamityMod.Buffs.DamageOverTime;
+﻿using CalamityMod;
+using CalamityMod.Buffs.DamageOverTime;
 using CalamityMod.NPCs.NormalNPCs;
+using CalamityMod.Particles;
 using Windfall.Content.Buffs.StatBuffs;
 
 namespace Windfall.Content.NPCs.PlayerNPCs;
@@ -12,7 +14,7 @@ public class GodlyTumor : ModNPC
         Main.npcFrameCount[NPC.type] = 4;
         NPCID.Sets.CantTakeLunchMoney[Type] = false;
         NPCID.Sets.ImmuneToAllBuffs[NPC.type] = true;
-        this.HideFromBestiary();
+        this.HideBestiaryEntry();
     }
     public override void SetDefaults()
     {

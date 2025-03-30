@@ -1,4 +1,6 @@
-﻿using CalamityMod.Items;
+﻿using CalamityMod;
+using CalamityMod.Items;
+using CalamityMod.Particles;
 using CalamityMod.Projectiles.BaseProjectiles;
 using Luminance.Common.VerletIntergration;
 using Luminance.Core.Graphics;
@@ -292,7 +294,7 @@ public class RiftWeaverThrow : ModProjectile
                     }
 
                     chargeCounter++;
-                    charge = Clamp(ExpOutEasing(chargeCounter / 120f, 1), 0f, 1f);
+                    charge = Clamp(ExpOutEasing(chargeCounter / 120f), 0f, 1f);
                 }
                 break;
 
@@ -424,7 +426,7 @@ public class RiftWeaverThrow : ModProjectile
 
     public override bool PreDraw(ref Color lightColor)
     {
-        Vector2[] segmentPositions = NeedleString.Select(x => x.Position).ToArray();
+        Vector2[] segmentPositions = [.. NeedleString.Select(x => x.Position)];
 
         PrimitiveRenderer.RenderTrail(segmentPositions, new(widthFunction, colorFunction));
 

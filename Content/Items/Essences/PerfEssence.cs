@@ -27,7 +27,7 @@ public class PerfEssence : ModItem, ILocalizedModType
         player.Godly().Evil2Essence = true;
         player.Godly().CrimsonCommunion = true;
         SkyManager.Instance.Activate("Windfall:CrimsonCommunion", args: []);
-        ModContent.GetInstance<DialogueUISystem>().DisplayDialogueTree(Windfall.Instance, "Communions/CrimsonCommunion2", new(Name, []));
+        ModContent.GetInstance<DialogueUISystem>().DisplayDialogueTree(WindfallMod.Instance, "Communions/CrimsonCommunion2", new(Name, []));
         return true;
     }
 }

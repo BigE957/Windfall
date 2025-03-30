@@ -1,4 +1,5 @@
-﻿using Windfall.Content.NPCs.WanderingNPCs;
+﻿using CalamityMod.Particles;
+using Windfall.Content.NPCs.WanderingNPCs;
 
 namespace Windfall.Content.Projectiles.NPCAnimations;
 

@@ -20,7 +20,7 @@ public class DisgracedApostleNPC : ModNPC
     public override string Texture => "Windfall/Assets/NPCs/WorldEvents/TheOrator_NPC";
     public override void SetStaticDefaults()
     {
-        this.HideFromBestiary();
+        this.HideBestiaryEntry();
         NPCID.Sets.ActsLikeTownNPC[Type] = true;
         Main.npcFrameCount[Type] = 1;
         NPCID.Sets.NoTownNPCHappiness[Type] = true;
@@ -55,9 +55,9 @@ public class DisgracedApostleNPC : ModNPC
     {
         Main.CloseNPCChatOrSign();
         if(AIState == States.PreSiphon)
-            ModContent.GetInstance<DialogueUISystem>().DisplayDialogueTree(Windfall.Instance, "Apostle/AstralSiphonStart", new(Name, [NPC.whoAmI]));
+            ModContent.GetInstance<DialogueUISystem>().DisplayDialogueTree(WindfallMod.Instance, "Apostle/AstralSiphonStart", new(Name, [NPC.whoAmI]));
         else
-            ModContent.GetInstance<DialogueUISystem>().DisplayDialogueTree(Windfall.Instance, "Apostle/AstralSiphonPrep", new(Name, [NPC.whoAmI]));
+            ModContent.GetInstance<DialogueUISystem>().DisplayDialogueTree(WindfallMod.Instance, "Apostle/AstralSiphonPrep", new(Name, [NPC.whoAmI]));
 
         return "";
     }

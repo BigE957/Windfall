@@ -1,4 +1,6 @@
-﻿using CalamityMod.World;
+﻿using CalamityMod;
+using CalamityMod.Particles;
+using CalamityMod.World;
 using Luminance.Core.Graphics;
 using Windfall.Common.Graphics.Metaballs;
 using Windfall.Common.Systems;
@@ -120,7 +122,7 @@ public class UnstableDarkness: ModProjectile
     public override bool PreDraw(ref Color lightColor)
     {
         Color drawColor = Color.White;
-        DrawAfterimagesCentered(Projectile, ProjectileID.Sets.TrailingMode[Projectile.type], drawColor);
+        DrawCenteredAfterimages(Projectile, ProjectileID.Sets.TrailingMode[Projectile.type], drawColor);
         return false;
     }
 }

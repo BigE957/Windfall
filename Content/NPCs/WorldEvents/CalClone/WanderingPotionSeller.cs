@@ -1,4 +1,5 @@
-﻿using Luminance.Core.Graphics;
+﻿using CalamityMod;
+using Luminance.Core.Graphics;
 using Terraria.Utilities;
 using Windfall.Common.Systems;
 

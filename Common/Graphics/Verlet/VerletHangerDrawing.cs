@@ -3,6 +3,7 @@ using Windfall.Content.Items.Placeables.Furnature.VerletHangers.Decorations;
 using Windfall.Content.Items.Placeables.Furnature.VerletHangers.Cords;
 using Windfall.Content.Tiles.TileEntities;
 using Windfall.Content.Items.Tools;
+using CalamityMod.Particles;
 
 namespace Windfall.Common.Graphics.Verlet;
 public class VerletHangerDrawing : ModSystem
@@ -98,7 +99,7 @@ public class VerletHangerDrawing : ModSystem
                     MoveChainBasedOnEntity(te.MainVerlet, proj, 1f);
                 }
 
-                Vector2[] segmentPositions = te.MainVerlet.Select(x => x.Position).ToArray();
+                Vector2[] segmentPositions = [.. te.MainVerlet.Select(x => x.Position)];
 
                 for (int k = 0; k < te.MainVerlet.Count; k++)
                 {
@@ -188,7 +189,7 @@ public class VerletHangerDrawing : ModSystem
 
                 //subVerlet[i].Position = startPos;
                 
-                DecorationID.GetDecoration(te.DecorationVerlets[index].Item2).UpdateDecoration(subVerlet.Select(x => x.Position).ToArray());
+                DecorationID.GetDecoration(te.DecorationVerlets[index].Item2).UpdateDecoration([.. subVerlet.Select(x => x.Position)]);
                 for (int k = 0; k < subVerlet.Count; k++)
                 {
                     if (!subVerlet[k].Locked)
@@ -317,7 +318,7 @@ public class VerletHangerDrawing : ModSystem
 
             foreach (Tuple<List<VerletSegment>, int, int> Decoration in te.DecorationVerlets.Values.Where(v => v.Item1.Count > 0))
             {
-                segmentPositions = Decoration.Item1.Select(x => x.Position).ToArray();
+                segmentPositions = [.. Decoration.Item1.Select(x => x.Position)];
 
                 for (int k = 0; k < segmentPositions.Length; k++)
                 {
@@ -328,7 +329,7 @@ public class VerletHangerDrawing : ModSystem
                         Vector2 line = segmentPositions[k] - segmentPositions[k + 1];
                         Color lighting = Lighting.GetColor((segmentPositions[k + 1] + (line / 2f)).ToTileCoordinates());
 
-                        Main.spriteBatch.DrawLineBetter(segmentPositions[k], segmentPositions[k + 1], Color.White.MultiplyRGB(lighting), 3);
+                        Main.spriteBatch.DrawLineBetween(segmentPositions[k], segmentPositions[k + 1], Color.White.MultiplyRGB(lighting), 3);
                     }                  
                 }
 
@@ -343,7 +344,7 @@ public class VerletHangerDrawing : ModSystem
                 if (te.MainVerlet.Count > 0)
                 {
                     List<VerletSegment> TwineVerlet = te.MainVerlet;
-                    segmentPositions = TwineVerlet.Select(x => x.Position).ToArray();
+                    segmentPositions = [.. TwineVerlet.Select(x => x.Position)];
 
                     if (twine != null)
                     {
@@ -360,7 +361,7 @@ public class VerletHangerDrawing : ModSystem
             if (twine != null)
                 foreach (Tuple<List<VerletSegment>, int, int> Decoration in te.DecorationVerlets.Values.Where(v => v.Item1.Count > 0))
                 {
-                    segmentPositions = Decoration.Item1.Select(x => x.Position).ToArray();
+                    segmentPositions = [.. Decoration.Item1.Select(x => x.Position)];
                     twine.DrawOnRopeEnds(Main.spriteBatch, segmentPositions[0], (segmentPositions[1] - segmentPositions[0]).ToRotation());
                 }
         }

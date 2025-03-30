@@ -1,4 +1,5 @@
-﻿using CalamityMod.Events;
+﻿using CalamityMod;
+using CalamityMod.Events;
 using CalamityMod.Items;
 using CalamityMod.NPCs.AquaticScourge;
 using CalamityMod.NPCs.DesertScourge;

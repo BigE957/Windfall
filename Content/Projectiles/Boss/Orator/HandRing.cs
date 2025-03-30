@@ -68,7 +68,7 @@ public class HandRing : ModProjectile
                 Projectile.velocity = (target.Center - Projectile.Center).SafeNormalize(Vector2.UnitX);
 
             Projectile.velocity = Projectile.velocity.RotateTowards((target.Center - Projectile.Center).ToRotation(), CalamityWorld.death ? 0.045f : CalamityWorld.revenge ? 0.033f : 0.025f);
-            Projectile.velocity = Projectile.velocity.SafeNormalize(Vector2.Zero) * Clamp(Lerp(0.01f, 16f, CircOutEasing((Time - 60) / 120, 1)), 0.01f, 16f);
+            Projectile.velocity = Projectile.velocity.SafeNormalize(Vector2.Zero) * Clamp(Lerp(0.01f, 16f, CircOutEasing((Time - 60) / 120)), 0.01f, 16f);
 
             AfterImageOpacity = 1f;
         }
@@ -117,11 +117,11 @@ public class HandRing : ModProjectile
         }
         if(Projectile.timeLeft <= 90)
             color = Color.Lerp(color, selenicColor, (90 - Projectile.timeLeft) / 60f);
-        DrawAfterimagesCentered(Projectile, ProjectileID.Sets.TrailingMode[Projectile.type], color * AfterImageOpacity, 2, texture: WhiteOutTexture);
+        DrawCenteredAfterimages(Projectile, ProjectileID.Sets.TrailingMode[Projectile.type], color * AfterImageOpacity, 2, texture: WhiteOutTexture);
 
         Vector2 drawPosition = Projectile.Center - Main.screenPosition;
 
-        Main.EntitySpriteDraw(WhiteOutTexture, drawPosition, null, color * Projectile.Opacity, Projectile.rotation, WhiteOutTexture.Size() * 0.5f, Projectile.scale * 1.25f * CircOutEasing(AfterImageOpacity, 1), SpriteEffects.None);
+        Main.EntitySpriteDraw(WhiteOutTexture, drawPosition, null, color * Projectile.Opacity, Projectile.rotation, WhiteOutTexture.Size() * 0.5f, Projectile.scale * 1.25f * CircOutEasing(AfterImageOpacity), SpriteEffects.None);
 
         Texture2D tex = ModContent.Request<Texture2D>(Texture).Value;
         Rectangle frame = tex.Frame(3, 4, (int)Projectile.ai[1], (int)Projectile.localAI[1]);

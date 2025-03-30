@@ -66,9 +66,9 @@ public class OratorBorder : ModProjectile
         else //Spawn in
         {
             if (Time < 90)
-                TrueScale = Lerp(5f, 2f, SineOutEasing(Time / 90f, 1));
+                TrueScale = Lerp(5f, 2f, SineOutEasing(Time / 90f));
             else if (Time > 90)
-                TrueScale = Lerp(2f, 3f, SineInOutEasing((Time - 90) / 90f, 1));
+                TrueScale = Lerp(2f, 3f, SineInOutEasing((Time - 90) / 90f));
             else
                 TrueScale = 2f;
             SineCounter = (3 * Pi / 2) * 20;
@@ -124,6 +124,6 @@ public class OratorBorder : ModProjectile
 
     public override void PostDraw(Color lightColor)
     {
-        DrawAfterimagesCentered(Projectile, ProjectileID.Sets.TrailingMode[Projectile.type], Color.White);
+        DrawCenteredAfterimages(Projectile, ProjectileID.Sets.TrailingMode[Projectile.type], Color.White);
     }
 }

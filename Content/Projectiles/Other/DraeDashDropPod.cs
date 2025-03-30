@@ -1,4 +1,5 @@
-﻿using CalamityMod.NPCs.ExoMechs.Thanatos;
+﻿using CalamityMod;
+using CalamityMod.NPCs.ExoMechs.Thanatos;
 using CalamityMod.Projectiles.Summon;
 using Windfall.Content.UI.DraedonsDatabase;
 

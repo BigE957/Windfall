@@ -1,4 +1,6 @@
-﻿using CalamityMod.Graphics.Primitives;
+﻿using CalamityMod;
+using CalamityMod.Graphics.Primitives;
+using CalamityMod.Particles;
 using CalamityMod.World;
 using ReLogic.Utilities;
 using Terraria.Graphics.Shaders;
@@ -116,8 +118,8 @@ public class SelenicIdol : ModProjectile
                 if (aiCounter <= 60)
                 {
                     float lerp = aiCounter / 60f;
-                    Projectile.scale = CircOutEasing(lerp, 1);
-                    GoopScale = 1 - SineInEasing(lerp, 1);
+                    Projectile.scale = CircOutEasing(lerp);
+                    GoopScale = 1 - SineInEasing(lerp);
                     SpawnDefaultParticle(Projectile.Center + (Main.rand.NextVector2Circular(48f, 48f) * Projectile.scale), Main.rand.NextVector2Circular(18, 18) + Projectile.velocity, 200 * Main.rand.NextFloat(0.75f, 0.9f) * (1 - lerp));
                 }
                 
@@ -211,7 +213,7 @@ public class SelenicIdol : ModProjectile
     
     public override bool PreDraw(ref Color lightColor)
     {
-        GameShaders.Misc["CalamityMod:PhaseslayerRipEffect"].SetShaderTexture(ModContent.Request<Texture2D>("CalamityMod/ExtraTextures/Trails/SwordSlashTexture"));
+        GameShaders.Misc["CalamityMod:PhaseslayerRipEffect"].SetTexture(ModContent.Request<Texture2D>("CalamityMod/ExtraTextures/Trails/SwordSlashTexture"));
 
         PrimitiveRenderer.RenderTrail(Projectile.oldPos, new(WidthFunction, ColorFunction, (_) => Projectile.Size * 0.5f, shader: GameShaders.Misc["CalamityMod:PhaseslayerRipEffect"]), 40);
 
@@ -226,7 +228,7 @@ public class SelenicIdol : ModProjectile
             Color.Goldenrod,
         ];
 
-        Main.EntitySpriteDraw(tex, Projectile.Center - Main.screenPosition, null, MulticolorLerp(Main.GlobalTimeWrappedHourly * 0.25f, colors), Main.GlobalTimeWrappedHourly * 0.25f, tex.Size() * 0.5f, ((Projectile.scale * 0.825f) + (float)(Math.Sin(Main.GlobalTimeWrappedHourly * 4) * 0.025f)) * (1 - GoopScale), 0);
+        Main.EntitySpriteDraw(tex, Projectile.Center - Main.screenPosition, null, LerpColors(Main.GlobalTimeWrappedHourly * 0.25f, colors), Main.GlobalTimeWrappedHourly * 0.25f, tex.Size() * 0.5f, ((Projectile.scale * 0.825f) + (float)(Math.Sin(Main.GlobalTimeWrappedHourly * 4) * 0.025f)) * (1 - GoopScale), 0);
 
         Main.spriteBatch.UseBlendState(BlendState.AlphaBlend);
 

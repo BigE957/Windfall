@@ -1,4 +1,5 @@
-﻿using CalamityMod.NPCs;
+﻿using CalamityMod;
+using CalamityMod.NPCs;
 using Windfall.Content.Items.Weapons.Rogue;
 
 namespace Windfall.Content.NPCs.GlobalNPCs;

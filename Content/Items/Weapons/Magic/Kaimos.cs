@@ -1,5 +1,7 @@
-﻿using CalamityMod.Graphics.Primitives;
+﻿using CalamityMod;
+using CalamityMod.Graphics.Primitives;
 using CalamityMod.Items;
+using CalamityMod.Particles;
 using Microsoft.Xna.Framework.Input;
 using SteelSeries.GameSense.DeviceZone;
 using System.Collections.ObjectModel;
@@ -128,7 +130,7 @@ public class Kaimos : ModItem, ILocalizedModType
         }
         tooltips.RemoveRange(1, tooltips.Count - 3);
         tooltips.RemoveAt(2);
-        tooltips.Add(new(Windfall.Instance, "LoreTab", GetWindfallTextValue(LocalizationCategory + "." + Name + ".Lore")));
+        tooltips.Add(new(WindfallMod.Instance, "LoreTab", GetWindfallTextValue(LocalizationCategory + "." + Name + ".Lore")));
     }
 
     public override bool AltFunctionUse(Player player) => true;
@@ -509,7 +511,7 @@ public class PotGlob : ModProjectile, ILocalizedModType
     {
         if (Trail == TrailType.Shader && Projectile.velocity.LengthSquared() >= 9 && WhoAmIAttachedTo != -2)
         {
-            GameShaders.Misc["CalamityMod:ImpFlameTrail"].SetShaderTexture(ModContent.Request<Texture2D>("CalamityMod/ExtraTextures/Trails/ScarletDevilStreak"));
+            GameShaders.Misc["CalamityMod:ImpFlameTrail"].SetTexture(ModContent.Request<Texture2D>("CalamityMod/ExtraTextures/Trails/ScarletDevilStreak"));
             PrimitiveRenderer.RenderTrail(Projectile.oldPos, new(WidthFunction, ColorFunction, (_) => Projectile.Size * 0.5f, shader: GameShaders.Misc["CalamityMod:ImpFlameTrail"]), 20);
         }
 

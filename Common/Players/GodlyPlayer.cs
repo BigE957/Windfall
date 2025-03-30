@@ -1,6 +1,8 @@
-﻿using CalamityMod.Buffs.DamageOverTime;
+﻿using CalamityMod;
+using CalamityMod.Buffs.DamageOverTime;
 using CalamityMod.Buffs.StatDebuffs;
 using CalamityMod.NPCs.NormalNPCs;
+using CalamityMod.Particles;
 using DialogueHelper.UI.Dialogue;
 using Terraria;
 using Terraria.Graphics.Effects;
@@ -148,7 +150,7 @@ public class GodlyPlayer : ModPlayer
         }
         if(SlimeGodEssence)
         {
-            if(Main.npc.Where(n => n != null && n.active && n.IsAnEnemy() && n.Distance(Player.Center) < 800).Any() && Ambrosia < 100)
+            if(Main.npc.Where(n => n != null && n.active && n.IsValidEnemy() && n.Distance(Player.Center) < 800).Any() && Ambrosia < 100)
             {
                 muckCounter++;
                 if(muckCounter % 120 == 0)
@@ -158,7 +160,7 @@ public class GodlyPlayer : ModPlayer
                     {
                         spawnLocation = Player.Center + (Main.rand.NextVector2Circular(600, 600));
                         Point tileLoation = spawnLocation.ToTileCoordinates();
-                        if (!Main.tile[tileLoation].IsTileSolid())
+                        if (!Main.tile[tileLoation].IsSolid())
                             break;
                         else
                             spawnLocation = Player.Center - new Vector2(Main.rand.NextFloat(-500, 500), Main.rand.NextFloat(100, 500));

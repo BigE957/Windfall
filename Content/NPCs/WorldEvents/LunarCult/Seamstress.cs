@@ -6,6 +6,7 @@ using Windfall.Content.UI;
 using DialogueHelper.UI.Dialogue;
 using static Windfall.Common.Systems.WorldEvents.LunarCultBaseSystem;
 using Windfall.Content.Items.Quests.Cafeteria;
+using CalamityMod;
 
 namespace Windfall.Content.NPCs.WorldEvents.LunarCult;
 
@@ -329,19 +330,19 @@ public class Seamstress : ModNPC
         else if (PlannedActivity == SystemStates.Tailor && State == SystemStates.Ready)
         {
             if (DeclinedStartActivity)
-                ModContent.GetInstance<DialogueUISystem>().DisplayDialogueTree(Windfall.Instance, "TheSeamstress/ReActivityStart", new(Name, [NPC.whoAmI]));
+                ModContent.GetInstance<DialogueUISystem>().DisplayDialogueTree(WindfallMod.Instance, "TheSeamstress/ReActivityStart", new(Name, [NPC.whoAmI]));
             else
             {
                 if (MyPlayer.LunarCult().SeamstressTalked)
-                    ModContent.GetInstance<DialogueUISystem>().DisplayDialogueTree(Windfall.Instance, "TheSeamstress/ActivityStart", new(Name, [NPC.whoAmI]));
+                    ModContent.GetInstance<DialogueUISystem>().DisplayDialogueTree(WindfallMod.Instance, "TheSeamstress/ActivityStart", new(Name, [NPC.whoAmI]));
                 else
-                    ModContent.GetInstance<DialogueUISystem>().DisplayDialogueTree(Windfall.Instance, "TheSeamstress/TailorTutorial", new(Name, [NPC.whoAmI]));
+                    ModContent.GetInstance<DialogueUISystem>().DisplayDialogueTree(WindfallMod.Instance, "TheSeamstress/TailorTutorial", new(Name, [NPC.whoAmI]));
             }
         }
         else if (SealingRitualSystem.RitualSequenceSeen)
-            ModContent.GetInstance<DialogueUISystem>().DisplayDialogueTree(Windfall.Instance, "TheSeamstress/Abandoned", new(Name, [NPC.whoAmI]));
+            ModContent.GetInstance<DialogueUISystem>().DisplayDialogueTree(WindfallMod.Instance, "TheSeamstress/Abandoned", new(Name, [NPC.whoAmI]));
         else
-            ModContent.GetInstance<DialogueUISystem>().DisplayDialogueTree(Windfall.Instance, "TheSeamstress/Default", new(Name, [NPC.whoAmI]), MyPlayer.LunarCult().SeamstressTalked ? 1 : 0);
+            ModContent.GetInstance<DialogueUISystem>().DisplayDialogueTree(WindfallMod.Instance, "TheSeamstress/Default", new(Name, [NPC.whoAmI]), MyPlayer.LunarCult().SeamstressTalked ? 1 : 0);
             
         return "";
     }

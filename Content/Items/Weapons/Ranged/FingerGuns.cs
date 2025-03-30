@@ -1,4 +1,6 @@
-﻿using CalamityMod.Items;
+﻿using CalamityMod;
+using CalamityMod.Items;
+using CalamityMod.Particles;
 using Luminance.Core.Graphics;
 using Microsoft.Xna.Framework.Input;
 using System.Collections.ObjectModel;
@@ -56,23 +58,23 @@ public class FingerGuns : ModItem, ILocalizedModType
         for (int i = box.Y; i < box.Y + box.Height; i++)
         {
             float value = Utils.GetLerpValue(box.Y, box.Y + box.Height, i);
-            Main.spriteBatch.DrawLineBetter(new Vector2(box.X, i) + Main.screenPosition, new Vector2(box.X + box.Width, i) + Main.screenPosition, Color.Lerp(new Color(0, 150, 50) * 0.5f, new Color(0, 64, 44), value), 1f);
+            Main.spriteBatch.DrawLineBetween(new Vector2(box.X, i) + Main.screenPosition, new Vector2(box.X + box.Width, i) + Main.screenPosition, Color.Lerp(new Color(0, 150, 50) * 0.5f, new Color(0, 64, 44), value), 1f);
         }
 
-        Main.spriteBatch.DrawLineBetter(box.TopLeft() + Main.screenPosition, box.BottomLeft() + Main.screenPosition, new(48, 38, 8), 8f);
-        Main.spriteBatch.DrawLineBetter(box.TopLeft() + Main.screenPosition, box.BottomLeft() + Main.screenPosition, Color.DarkGoldenrod, 4f);
+        Main.spriteBatch.DrawLineBetween(box.TopLeft() + Main.screenPosition, box.BottomLeft() + Main.screenPosition, new(48, 38, 8), 8f);
+        Main.spriteBatch.DrawLineBetween(box.TopLeft() + Main.screenPosition, box.BottomLeft() + Main.screenPosition, Color.DarkGoldenrod, 4f);
 
-        Main.spriteBatch.DrawLineBetter(box.TopLeft() + Main.screenPosition, box.TopRight() + Main.screenPosition, new(48, 38, 8), 8f);
-        Main.spriteBatch.DrawLineBetter(box.TopLeft() + Main.screenPosition, box.TopRight() + Main.screenPosition, Color.DarkGoldenrod, 4f);
+        Main.spriteBatch.DrawLineBetween(box.TopLeft() + Main.screenPosition, box.TopRight() + Main.screenPosition, new(48, 38, 8), 8f);
+        Main.spriteBatch.DrawLineBetween(box.TopLeft() + Main.screenPosition, box.TopRight() + Main.screenPosition, Color.DarkGoldenrod, 4f);
 
-        Main.spriteBatch.DrawLineBetter(box.BottomRight() + Main.screenPosition, box.TopRight() + Main.screenPosition, new(48, 38, 8), 8f);
-        Main.spriteBatch.DrawLineBetter(box.BottomRight() + Main.screenPosition, box.TopRight() + Main.screenPosition, Color.DarkGoldenrod, 4f);
+        Main.spriteBatch.DrawLineBetween(box.BottomRight() + Main.screenPosition, box.TopRight() + Main.screenPosition, new(48, 38, 8), 8f);
+        Main.spriteBatch.DrawLineBetween(box.BottomRight() + Main.screenPosition, box.TopRight() + Main.screenPosition, Color.DarkGoldenrod, 4f);
 
-        Main.spriteBatch.DrawLineBetter(box.BottomLeft() + Main.screenPosition, box.BottomRight() + Main.screenPosition, new(48, 38, 8), 8f);
-        Main.spriteBatch.DrawLineBetter(box.BottomLeft() + Main.screenPosition, box.BottomRight() + Main.screenPosition, Color.DarkGoldenrod, 4f);
+        Main.spriteBatch.DrawLineBetween(box.BottomLeft() + Main.screenPosition, box.BottomRight() + Main.screenPosition, new(48, 38, 8), 8f);
+        Main.spriteBatch.DrawLineBetween(box.BottomLeft() + Main.screenPosition, box.BottomRight() + Main.screenPosition, Color.DarkGoldenrod, 4f);
 
         Texture2D tex = ModContent.Request<Texture2D>("Windfall/Content/Items/Placeables/Furnature/VerletHangers/Decorations/JadeCrescent").Value;
-        Rectangle frame = tex.Frame(verticalFrames: 2, frameY: 1);
+        Rectangle frame = tex.Frame(verticalFrames: 2);
         for (int i = 0; i < 4; i++)
         {
             float rotation = 0f;
@@ -114,12 +116,12 @@ public class FingerGuns : ModItem, ILocalizedModType
         }
         tooltips.RemoveRange(1, tooltips.Count - 3);
         tooltips.RemoveAt(2);
-        tooltips.Add(new(Windfall.Instance, "LoreTab", GetWindfallTextValue(LocalizationCategory + "." + Name + ".Lore")));
+        tooltips.Add(new(WindfallMod.Instance, "LoreTab", GetWindfallTextValue(LocalizationCategory + "." + Name + ".Lore")));
     }
 
     public override void UpdateInventory(Player player)
     {
-        if (player.ActiveItem() != Item)
+        if (player.HeldItem() != Item)
             HitCounter = 0;
     }
 }
@@ -189,7 +191,7 @@ public class FingerBolt : ModProjectile, ILocalizedModType
             if (Time < 60)
             {
                 float lerpVal = Clamp(Time / 90f, 0f, 1f);
-                Projectile.velocity = direction.ToRotationVector2() * Lerp(24f, 1f, ExpOutEasing(lerpVal, 1));
+                Projectile.velocity = direction.ToRotationVector2() * Lerp(24f, 1f, ExpOutEasing(lerpVal));
             }
             else if (localHitCount < 3 && Projectile.timeLeft > 60)
             {
@@ -197,14 +199,14 @@ public class FingerBolt : ModProjectile, ILocalizedModType
                     Projectile.damage /= 2;
 
                 Vector2 goalPos;
-                NPC target = Projectile.Center.ClosestNPCAt(1100f, bossPriority: true);
+                NPC target = Projectile.Center.ClosestNPC(1100f, bossPriority: true);
                 if (target == null)
                     goalPos = Main.player[Projectile.owner].Calamity().mouseWorld;
                 else
                     goalPos = target.Center;
 
                 float lerpVal = Clamp((Time - 60) / 45f, 0f, 1f);
-                Projectile.velocity = Projectile.velocity.SafeNormalize(direction.ToRotationVector2()).RotateTowards((goalPos - Projectile.Center).ToRotation(), Lerp(0f, 0.25f, lerpVal)) * Lerp(1f, 24f, SineInEasing(lerpVal, 1));
+                Projectile.velocity = Projectile.velocity.SafeNormalize(direction.ToRotationVector2()).RotateTowards((goalPos - Projectile.Center).ToRotation(), Lerp(0f, 0.25f, lerpVal)) * Lerp(1f, 24f, SineInEasing(lerpVal));
             }
         }
         else
@@ -212,14 +214,14 @@ public class FingerBolt : ModProjectile, ILocalizedModType
             if (localHitCount < 2 && Projectile.timeLeft > 60)
             {
                 Vector2 goalPos;
-                NPC target = Projectile.Center.ClosestNPCAt(1100f, bossPriority: true);
+                NPC target = Projectile.Center.ClosestNPC(1100f, bossPriority: true);
                 if (target == null)
                     goalPos = Main.player[Projectile.owner].Calamity().mouseWorld;
                 else
                     goalPos = target.Center;
 
                 float lerpVal = Clamp(Time / 60f, 0f, 1f);
-                Projectile.velocity = Projectile.velocity.SafeNormalize(direction.ToRotationVector2()).RotateTowards((goalPos - Projectile.Center).ToRotation(), Lerp(0f, 0.25f, lerpVal)) * Lerp(12f, 24f, SineOutEasing(lerpVal, 1));
+                Projectile.velocity = Projectile.velocity.SafeNormalize(direction.ToRotationVector2()).RotateTowards((goalPos - Projectile.Center).ToRotation(), Lerp(0f, 0.25f, lerpVal)) * Lerp(12f, 24f, SineOutEasing(lerpVal));
             }
         }
         Time++;
@@ -238,7 +240,7 @@ public class FingerBolt : ModProjectile, ILocalizedModType
 
         Player owner = Main.player[Projectile.owner];
 
-        if (owner.ActiveItem().type != ModContent.ItemType<FingerGuns>())
+        if (owner.HeldItem().type != ModContent.ItemType<FingerGuns>())
             return;
 
         int gunType = ModContent.ProjectileType<FingerlingGun>();
@@ -246,11 +248,11 @@ public class FingerBolt : ModProjectile, ILocalizedModType
         if (Main.projectile.Where(p => p.active && p.type == gunType && p.owner == owner.whoAmI).Count() >= 7)
             return;
 
-        FingerGuns item = owner.ActiveItem().ModItem as FingerGuns;
+        FingerGuns item = owner.HeldItem().ModItem as FingerGuns;
         if(++item.HitCounter >= 16)
         {
             Vector2 spawnOffset = Main.rand.NextVector2CircularEdge(48 + target.width, 48 + target.height);
-            Projectile.NewProjectile(Projectile.GetSource_OnHit(target), target.Center + spawnOffset, spawnOffset / 3f, gunType, owner.ActiveItem().damage, 0f, Projectile.owner);
+            Projectile.NewProjectile(Projectile.GetSource_OnHit(target), target.Center + spawnOffset, spawnOffset / 3f, gunType, owner.HeldItem().damage, 0f, Projectile.owner);
 
             item.HitCounter = 0;
         }
@@ -355,7 +357,7 @@ public class FingerlingGun : ModProjectile, ILocalizedModType
             case AIState.Idle:
                 if (rotationOffset != 0)
                 {
-                    rotationOffset = Lerp(PiOver2, 0f, SineOutEasing(Time / 24f, 1));
+                    rotationOffset = Lerp(PiOver2, 0f, SineOutEasing(Time / 24f));
                     if(rotationOffset == 0)
                         Time = 0;
                     else
@@ -379,7 +381,7 @@ public class FingerlingGun : ModProjectile, ILocalizedModType
                     if (Time == 0)
                         Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center + toMouse.SafeNormalize(Projectile.rotation.ToRotationVector2()) * 6f, toMouse * 16f + Projectile.velocity, ModContent.ProjectileType<FingerBolt>(), Projectile.damage / 2, 0, Projectile.owner, 1);
                     if(Time >= 1)
-                        rotationOffset = Lerp(0, PiOver2, SineOutEasing((Time - 1) / 8f, 1));
+                        rotationOffset = Lerp(0, PiOver2, SineOutEasing((Time - 1) / 8f));
                     Time++;
                 }
                 else
@@ -390,20 +392,21 @@ public class FingerlingGun : ModProjectile, ILocalizedModType
                 break;
         }
 
-        Projectile.spriteDirection = toMouse.X.DirectionalSign();
+        if(toMouse.X != 0)
+            Projectile.spriteDirection = Math.Sign(toMouse.X);
 
         Projectile.rotation = toMouse.ToRotation() - (rotationOffset * Projectile.spriteDirection);
         
         Projectile.timeLeft = 120;
 
-        if (owner.ActiveItem().type != ModContent.ItemType<FingerGuns>())
+        if (owner.HeldItem().type != ModContent.ItemType<FingerGuns>())
             Projectile.Kill();
     }
 
     public override bool PreDraw(ref Color lightColor)
     {
         Texture2D tex = TextureAssets.Projectile[Type].Value;
-        Rectangle frame = tex.Frame(2, 1, (int)Projectile.localAI[0]);
+        Rectangle frame = tex.Frame(2, (int)Projectile.localAI[0]);
 
         SpriteEffects effects = SpriteEffects.None;
         if (Projectile.spriteDirection == -1)

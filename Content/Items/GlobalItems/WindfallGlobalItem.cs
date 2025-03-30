@@ -46,7 +46,7 @@ public class WindfallGlobalItem : GlobalItem
     }
     public static void InsertJournalTooltop(List<TooltipLine> tooltips)
     {
-        TooltipLine tooltipLine = new(Windfall.Instance, "JournalPage", "Use to add this page to your Wanderer's Journal");
+        TooltipLine tooltipLine = new(WindfallMod.Instance, "JournalPage", "Use to add this page to your Wanderer's Journal");
         tooltips.Add(tooltipLine);
     }
     

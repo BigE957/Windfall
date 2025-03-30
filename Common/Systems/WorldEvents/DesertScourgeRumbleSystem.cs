@@ -1,4 +1,5 @@
-﻿using Luminance.Core.Graphics;
+﻿using CalamityMod;
+using Luminance.Core.Graphics;
 
 namespace Windfall.Common.Systems.WorldEvents;
 
@@ -77,7 +78,7 @@ public class DesertScourgeRumbleSystem : ModSystem
             if (Main.rand.NextFloat() >= groundShakeInterpolant + 0.2f)
                 continue;
             Point point = Utilities.FindGroundVertical((target.Center + new Vector2(Main.rand.NextFloatDirection() * 1200f, -560f)).ToTileCoordinates());
-            bool sandBelow = ParanoidTileRetrieval(point.X, point.Y).TileType == TileID.Sand;
+            bool sandBelow = ParanoidTileRetrieval(point).TileType == TileID.Sand;
             if (sandBelow)
                 Dust.NewDustPerfect(new Vector2(point.ToWorldCoordinates().X, point.ToWorldCoordinates().Y) + new Vector2(Main.rand.NextFloatDirection() * 8f, -8f), DustID.Sand, Main.rand.NextVector2Circular(1.5f, 1.5f) - Vector2.UnitY * 1.5f);
         }

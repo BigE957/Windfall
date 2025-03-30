@@ -1,4 +1,5 @@
 ﻿using CalamityMod.NPCs.Astral;
+using CalamityMod.Particles;
 using Windfall.Content.NPCs.Enemies.AstralSiphon;
 using Windfall.Content.NPCs.WorldEvents.LunarCult;
 using Windfall.Content.Projectiles.Enemies;
@@ -92,7 +93,7 @@ public class SelenicSiphon : ModNPC
             if (Time < 45)
             {
                 float lerpVal = Time / 45f;
-                lerpVal = ExpOutEasing(lerpVal, 1);
+                lerpVal = ExpOutEasing(lerpVal);
 
                 NPC.rotation = Lerp(PiOver4 * Sign, PiOver4 / 2f * -Sign, lerpVal);
                 NPC.Center = new(NPC.Center.X, Lerp(startPos.Y, startPos.Y - (NPC.height / 2f), lerpVal));
@@ -100,7 +101,7 @@ public class SelenicSiphon : ModNPC
             else if (Time < 90)
             {
                 float lerpVal = (Time - 45) / 45f;
-                lerpVal = ExpOutEasing(lerpVal, 1);
+                lerpVal = ExpOutEasing(lerpVal);
 
                 NPC.rotation = Lerp(PiOver4 / 2f * -Sign, PiOver4 / 3f * Sign, lerpVal);
                 NPC.Center = new(NPC.Center.X, Lerp(startPos.Y - (NPC.height / 2f), startPos.Y - (NPC.height / 2f * 1.5f), lerpVal));
@@ -110,7 +111,7 @@ public class SelenicSiphon : ModNPC
             {
                 EventActive = true;
                 float lerpVal = (Time - 90) / 45f;
-                lerpVal = ExpOutEasing(lerpVal, 1);
+                lerpVal = ExpOutEasing(lerpVal);
 
                 NPC.rotation = Lerp(PiOver4 / 3f * Sign, 0, lerpVal);
                 NPC.Center = new(NPC.Center.X, Lerp(startPos.Y - (NPC.height / 2f * 1.5f), startPos.Y - NPC.height, lerpVal));

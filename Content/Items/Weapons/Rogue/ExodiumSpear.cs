@@ -1,7 +1,8 @@
-﻿using CalamityMod.Buffs.DamageOverTime;
+﻿using CalamityMod;
+using CalamityMod.Buffs.DamageOverTime;
 using CalamityMod.Items;
 using CalamityMod.Items.Weapons.Rogue;
-using Luminance.Core.Graphics;
+using CalamityMod.Particles;
 using Windfall.Common.Graphics.Metaballs;
 using static Windfall.Content.NPCs.GlobalNPCs.DebuffGlobalNPC;
 
@@ -55,7 +56,7 @@ public class ExodiumSpearProj : ModProjectile, ILocalizedModType
         Projectile.ignoreWater = true;
         Projectile.penetrate = -1;
         Projectile.DamageType = ModContent.GetInstance<RogueDamageClass>();
-        Projectile.timeLeft = SecondsToFrames(90);
+        Projectile.timeLeft = 5400;
     }
 
     public override void AI()
@@ -169,12 +170,12 @@ public class ExodiumSpearProj : ModProjectile, ILocalizedModType
             target.StrikeNPC(target.CalculateHitInfo(damage, hit.HitDirection, true, hit.Knockback * 2, Projectile.DamageType));
 
             SoundEngine.PlaySound(SoundID.DD2_EtherianPortalDryadTouch, Projectile.Center);
-            ScreenShakeSystem.StartShake(5f);
+            Luminance.Core.Graphics.ScreenShakeSystem.StartShake(5f);
             for (int i = 0; i <= 50; i++)
                 EmpyreanMetaball.SpawnDefaultParticle(Projectile.Center, Main.rand.NextVector2Circular(10f, 10f) * Main.rand.NextFloat(1f, 2f), 40 * Main.rand.NextFloat(3f, 5f));
-            CalamityMod.Particles.Particle pulse = new PulseRing(Projectile.Center, Vector2.Zero, Color.Teal, 0f, 2.5f, 16);
+            Particle pulse = new PulseRing(Projectile.Center, Vector2.Zero, Color.Teal, 0f, 2.5f, 16);
             GeneralParticleHandler.SpawnParticle(pulse);
-            CalamityMod.Particles.Particle explosion = new DetailedExplosion(Projectile.Center, Vector2.Zero, new(117, 255, 159), new Vector2(1f, 1f), 0f, 0f, 1f, 16);
+            Particle explosion = new DetailedExplosion(Projectile.Center, Vector2.Zero, new(117, 255, 159), new Vector2(1f, 1f), 0f, 0f, 1f, 16);
             GeneralParticleHandler.SpawnParticle(explosion);
             Projectile.active = false;
         }

@@ -25,7 +25,7 @@ public class OratorNPC : ModNPC
     public override string Texture => "Windfall/Assets/NPCs/WorldEvents/TheOrator_NPC";
     public override void SetStaticDefaults()
     {
-        this.HideFromBestiary();
+        this.HideBestiaryEntry();
         NPCID.Sets.ActsLikeTownNPC[Type] = true;
         Main.npcFrameCount[Type] = 1;
         NPCID.Sets.NoTownNPCHappiness[Type] = true;
@@ -55,23 +55,23 @@ public class OratorNPC : ModNPC
         switch(Main.LocalPlayer.LunarCult().apostleQuestTracker)
         {
             case 4:
-                ModContent.GetInstance<DialogueUISystem>().DisplayDialogueTree(Windfall.Instance, "TheOrator/ApostleQuest1", new(Name, [NPC.whoAmI]));
+                ModContent.GetInstance<DialogueUISystem>().DisplayDialogueTree(WindfallMod.Instance, "TheOrator/ApostleQuest1", new(Name, [NPC.whoAmI]));
                 return "";
             case 7:
-                ModContent.GetInstance<DialogueUISystem>().DisplayDialogueTree(Windfall.Instance, "TheOrator/ApostleQuest2", new(Name, [NPC.whoAmI]));
+                ModContent.GetInstance<DialogueUISystem>().DisplayDialogueTree(WindfallMod.Instance, "TheOrator/ApostleQuest2", new(Name, [NPC.whoAmI]));
                 return "";
             case 9:
-                ModContent.GetInstance<DialogueUISystem>().DisplayDialogueTree(Windfall.Instance, "TheOrator/ApostleQuest2", new(Name, [NPC.whoAmI]), 6);
+                ModContent.GetInstance<DialogueUISystem>().DisplayDialogueTree(WindfallMod.Instance, "TheOrator/ApostleQuest2", new(Name, [NPC.whoAmI]), 6);
                 return "";
             case 11:
-                ModContent.GetInstance<DialogueUISystem>().DisplayDialogueTree(Windfall.Instance, "TheOrator/ApostleQuest3", new(Name, [NPC.whoAmI]), 6);
+                ModContent.GetInstance<DialogueUISystem>().DisplayDialogueTree(WindfallMod.Instance, "TheOrator/ApostleQuest3", new(Name, [NPC.whoAmI]), 6);
                 return "";
         }
 
         if (NPC.ai[0] == 0)
-            ModContent.GetInstance<DialogueUISystem>().DisplayDialogueTree(Windfall.Instance, "TheOrator/Default", new(Name, [NPC.whoAmI]));
+            ModContent.GetInstance<DialogueUISystem>().DisplayDialogueTree(WindfallMod.Instance, "TheOrator/Default", new(Name, [NPC.whoAmI]));
         else
-            ModContent.GetInstance<DialogueUISystem>().DisplayDialogueTree(Windfall.Instance, "TheOrator/" + AIState.ToString(), new(Name, [NPC.whoAmI]));           
+            ModContent.GetInstance<DialogueUISystem>().DisplayDialogueTree(WindfallMod.Instance, "TheOrator/" + AIState.ToString(), new(Name, [NPC.whoAmI]));           
 
         return "";
     }
@@ -198,61 +198,61 @@ public class OratorNPC : ModNPC
         {
             DamageType = DamageClass.Melee,
             shopCustomPrice = 5,
-            shopSpecialCurrency = Windfall.LunarCoinCurrencyID
+            shopSpecialCurrency = WindfallMod.LunarCoinCurrencyID
         });                      
         //Accessories
         shop.Add(new Item(ItemID.MoonCharm)
         {
             shopCustomPrice = 3,
-            shopSpecialCurrency = Windfall.LunarCoinCurrencyID
+            shopSpecialCurrency = WindfallMod.LunarCoinCurrencyID
         });
         shop.Add(new Item(ItemID.MoonStone)
         {
             shopCustomPrice = 3,
-            shopSpecialCurrency = Windfall.LunarCoinCurrencyID
+            shopSpecialCurrency = WindfallMod.LunarCoinCurrencyID
         });
         //Misc Utility Items
         shop.Add(new Item(ModContent.ItemType<Moonlight>())
         {
             shopCustomPrice = 3,
-            shopSpecialCurrency = Windfall.LunarCoinCurrencyID
+            shopSpecialCurrency = WindfallMod.LunarCoinCurrencyID
         });
         shop.Add(new Item(ItemID.Moondial)
         {
             shopCustomPrice = 3,
-            shopSpecialCurrency = Windfall.LunarCoinCurrencyID
+            shopSpecialCurrency = WindfallMod.LunarCoinCurrencyID
         });
         shop.Add(new Item(ItemID.MoonGlobe)
         {
             shopCustomPrice = 2,
-            shopSpecialCurrency = Windfall.LunarCoinCurrencyID
+            shopSpecialCurrency = WindfallMod.LunarCoinCurrencyID
         });
         //Furnature/Decor
         shop.Add(new Item(ModContent.ItemType<HammerChisel>())
         {
             shopCustomPrice = 2,
-            shopSpecialCurrency = Windfall.LunarCoinCurrencyID
+            shopSpecialCurrency = WindfallMod.LunarCoinCurrencyID
         });
         shop.Add(new Item(ModContent.ItemType<DarkStonePlaque>())
         {
             shopCustomPrice = 3,
-            shopSpecialCurrency = Windfall.LunarCoinCurrencyID
+            shopSpecialCurrency = WindfallMod.LunarCoinCurrencyID
         });
         shop.Add(new Item(ModContent.ItemType<WhiteStonePlaque>())
         {
             shopCustomPrice = 3,
-            shopSpecialCurrency = Windfall.LunarCoinCurrencyID
+            shopSpecialCurrency = WindfallMod.LunarCoinCurrencyID
         });
         //Paintings
         shop.Add(new Item(ItemID.MoonmanandCompany)
         {
             shopCustomPrice = 2,
-            shopSpecialCurrency = Windfall.LunarCoinCurrencyID
+            shopSpecialCurrency = WindfallMod.LunarCoinCurrencyID
         });
         shop.Add(new Item(ItemID.ShiningMoon)
         {
             shopCustomPrice = 2,
-            shopSpecialCurrency = Windfall.LunarCoinCurrencyID
+            shopSpecialCurrency = WindfallMod.LunarCoinCurrencyID
         });
         shop.Register();
 
@@ -260,7 +260,7 @@ public class OratorNPC : ModNPC
         shop.Add(new Item(ItemID.MoonMask)
         {
             shopCustomPrice = 2,
-            shopSpecialCurrency = Windfall.LunarCoinCurrencyID
+            shopSpecialCurrency = WindfallMod.LunarCoinCurrencyID
         });
     }
 

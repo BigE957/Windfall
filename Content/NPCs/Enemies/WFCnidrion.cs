@@ -1,4 +1,5 @@
-﻿using CalamityMod.Items.Placeables.Banners;
+﻿using CalamityMod;
+using CalamityMod.Items.Placeables.Banners;
 using CalamityMod.NPCs.NormalNPCs;
 using CalamityMod.Projectiles.Enemy;
 using CalamityMod.World;

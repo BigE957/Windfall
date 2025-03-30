@@ -1,4 +1,5 @@
 ﻿using CalamityMod.NPCs.Astral;
+using CalamityMod.Particles;
 using Windfall.Common.Systems;
 using Windfall.Content.Projectiles.Props;
 

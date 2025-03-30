@@ -15,12 +15,12 @@ public class Happy : Emoticon
         base.Update(gameTime);
 
         if (Counter <= 60 && !Fading)
-            ImageScale = Clamp(Lerp(0, 1f, SineOutEasing(Counter / 60f, 1)), 0, 1f);
+            ImageScale = Clamp(Lerp(0, 1f, SineOutEasing(Counter / 60f)), 0, 1f);
         else
             ImageScale = 1f;
 
         if (Counter <= 90)
-            Opacity = Clamp(Lerp(0, 1f, SineOutEasing(Counter / 90f, 1)), 0, 1f);
+            Opacity = Clamp(Lerp(0, 1f, SineOutEasing(Counter / 90f)), 0, 1f);
         else
             Opacity = 1f;
     }
@@ -54,7 +54,7 @@ public class Happy : Emoticon
             Vector2 offset = new Vector2(1,-1) * 12 / Math.Abs(i- halfCOunt == 0 ? 0.75f : i- halfCOunt);
             offset += angle.ToRotationVector2() * 32;
 
-            Vector2 squishFactor = new(FlattenedCos(Counter / 8f * Math.Sign(ID) + ID) * ExpOutEasing(1/(float)Math.Abs(ID*4), 1), 1 - (0.5f * Math.Abs(ID) * FlattenedCos(Counter / 8f * Math.Sign(ID)) * ExpOutEasing(1 / (float)Math.Abs(ID * 4), 1)));
+            Vector2 squishFactor = new(FlattenedCos(Counter / 8f * Math.Sign(ID) + ID) * ExpOutEasing(1/(float)Math.Abs(ID*4)), 1 - (0.5f * Math.Abs(ID) * FlattenedCos(Counter / 8f * Math.Sign(ID)) * ExpOutEasing(1 / (float)Math.Abs(ID * 4))));
             squishFactor *= 0.5f;
             squishFactor += Vector2.One / 2f;
             squishFactor.Y -= 0.25f;

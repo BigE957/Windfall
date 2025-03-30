@@ -1,9 +1,4 @@
 ﻿using Windfall.Content.Items.Weapons.Rogue;
-using System.Collections.Generic;
-using CalamityMod.Items.Placeables.Ores;
-using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
-using Terraria;
 using CalamityMod.Tiles.Ores;
 
 namespace Windfall.Content.Tiles.Special;

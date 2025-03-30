@@ -1,4 +1,5 @@
-﻿using CalamityMod.Dusts;
+﻿using CalamityMod;
+using CalamityMod.Dusts;
 using CalamityMod.Projectiles.BaseProjectiles;
 using Windfall.Common.Utils;
 using Windfall.Content.Buffs.Cooldowns;
@@ -40,7 +41,7 @@ public class ParryBlade : ModItem
     public override bool? UseItem(Player player)
     {
         if (!player.Buff().PerfectFlow)
-            player.AddCooldown(ParryWeapon.ID, SecondsToFrames(30));
+            player.AddCooldown(ParryWeapon.ID, 1800);
         return true;
     }
 }

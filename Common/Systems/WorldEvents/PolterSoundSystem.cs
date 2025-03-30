@@ -1,4 +1,6 @@
-﻿namespace Windfall.Common.Systems.WorldEvents;
+﻿using CalamityMod;
+
+namespace Windfall.Common.Systems.WorldEvents;
 
 public class PolterSoundSystem : ModSystem
 {

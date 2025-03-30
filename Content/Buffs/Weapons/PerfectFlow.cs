@@ -1,4 +1,6 @@
-﻿namespace Windfall.Content.Buffs.Weapons;
+﻿using CalamityMod;
+
+namespace Windfall.Content.Buffs.Weapons;
 
 public class PerfectFlow : ModBuff
 {
@@ -14,6 +16,6 @@ public class PerfectFlow : ModBuff
     {
         player.Buff().PerfectFlow = true;
         if (Main.player[Main.myPlayer].buffTime[buffIndex] == 1)
-            player.AddCooldown(Cooldowns.ParryWeapon.ID, SecondsToFrames(30));
+            player.AddCooldown(Cooldowns.ParryWeapon.ID, 1800);
     }
 }

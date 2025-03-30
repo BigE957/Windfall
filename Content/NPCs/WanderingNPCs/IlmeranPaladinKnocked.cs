@@ -7,7 +7,7 @@ public class IlmeranPaladinKnocked : ModNPC
     public override string Texture => "Windfall/Assets/NPCs/WanderingNPCs/IlmeranPaladinKnocked";
     public override void SetStaticDefaults()
     {
-        this.HideFromBestiary();
+        this.HideBestiaryEntry();
         NPCID.Sets.ActsLikeTownNPC[Type] = true;
         NPCID.Sets.NoTownNPCHappiness[Type] = true;
     }

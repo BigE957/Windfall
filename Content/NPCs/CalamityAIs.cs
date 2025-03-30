@@ -1,4 +1,5 @@
-﻿using CalamityMod.Dusts;
+﻿using CalamityMod;
+using CalamityMod.Dusts;
 using CalamityMod.NPCs;
 using CalamityMod.NPCs.CalClone;
 using CalamityMod.NPCs.SupremeCalamitas;

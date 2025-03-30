@@ -1,6 +1,8 @@
-﻿using CalamityMod.Dusts;
+﻿using CalamityMod;
+using CalamityMod.Dusts;
 using CalamityMod.NPCs;
 using CalamityMod.NPCs.Astral;
+using CalamityMod.Particles;
 using CalamityMod.Sounds;
 using Terraria;
 using Windfall.Content.Projectiles.Enemies;
@@ -13,7 +15,7 @@ public class SiphonSpitter : ModNPC
     public static Asset<Texture2D> glowmask;
     public override void SetStaticDefaults()
     {
-        this.HideFromBestiary();
+        this.HideBestiaryEntry();
         Main.npcFrameCount[NPC.type] = 4;
         if (!Main.dedServ)
             glowmask = ModContent.Request<Texture2D>("CalamityMod/NPCs/Astral/SightseerSpitterGlow", AssetRequestMode.AsyncLoad);

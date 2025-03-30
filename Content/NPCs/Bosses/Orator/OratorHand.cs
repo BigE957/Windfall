@@ -1,4 +1,6 @@
-﻿using CalamityMod.World;
+﻿using CalamityMod;
+using CalamityMod.Particles;
+using CalamityMod.World;
 using Luminance.Core.Graphics;
 using Terraria.Chat;
 using Terraria.GameContent.Bestiary;

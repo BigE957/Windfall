@@ -169,7 +169,7 @@ public class DarkTide : ModProjectile
 
     public override void PostDraw(Color lightColor)
     {
-        DrawAfterimagesCentered(Projectile, ProjectileID.Sets.TrailingMode[Projectile.type], Color.White);
+        DrawCenteredAfterimages(Projectile, ProjectileID.Sets.TrailingMode[Projectile.type], Color.White);
     }
 
     public static bool isLeft(Vector2 a, Vector2 b, Vector2 c) => (b.X - a.X) * (c.Y - a.Y) - (b.Y - a.Y) * (c.X - a.X) > 0;

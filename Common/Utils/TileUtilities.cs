@@ -22,7 +22,7 @@ public static partial class WindfallUtils
     {
         Tile tile = Framing.GetTileSafely(p.X, p.Y);
 
-        if (!tile.IsTileSolid())
+        if (!tile.IsSolid())
             return false;
         return !TileLoader.IsClosedDoor(tile) && tile.TileType != TileID.TallGateClosed;
     }
@@ -30,7 +30,7 @@ public static partial class WindfallUtils
     public static bool TryOpenDoor(Point p, int direction)
     {
         Tile tile = Framing.GetTileSafely(p.X, p.Y);
-        if (tile.IsTileSolid())
+        if (tile.IsSolid())
         {
             if (Main.netMode != NetmodeID.MultiplayerClient)
             {
@@ -361,5 +361,70 @@ public static partial class WindfallUtils
             return startPosition + rayDirection * distanceMoved;
 
         return null;
+    }
+
+    public static T FindTileEntity<T>(int i, int j, int width, int height, int sheetSquare = 16) where T : ModTileEntity
+    {
+        Tile tile = Main.tile[i, j];
+        int x = i - tile.TileFrameX % (width * sheetSquare) / sheetSquare;
+        int y = j - tile.TileFrameY % (height * sheetSquare) / sheetSquare;
+        int type = ModContent.GetInstance<T>().Type;
+        if (!TileEntity.ByPosition.TryGetValue(new Point16(x, y), out var value) || value.type != type)
+        {
+            return null;
+        }
+
+        return (T)value;
+    }
+
+    public static bool IsSolid(this Tile tile)
+    {
+        if (tile != null && tile.HasUnactuatedTile && Main.tileSolid[tile.TileType])
+        {
+            return !TileID.Sets.Platforms[tile.TileType];
+        }
+
+        return false;
+    }
+
+    public static Tile ParanoidTileRetrieval(Point p)
+    {
+        if (!WorldGen.InWorld(p.X, p.Y))
+        {
+            return default;
+        }
+
+        return Main.tile[p.X, p.Y];
+    }
+
+    public static Tile ParanoidTileRetrieval(int x, int y)
+    {
+        if (!WorldGen.InWorld(x, y))
+        {
+            return default;
+        }
+
+        return Main.tile[x, y];
+    }
+
+    public static Point ToBoundTileCoordinates(this Vector2 vec)
+    {
+        return new Point((int)MathHelper.Clamp((int)vec.X >> 4, 0f, Main.maxTilesX), (int)MathHelper.Clamp((int)vec.Y >> 4, 0f, Main.maxTilesY));
+    }
+
+    public static void SetMerge(int type1, int type2, bool merge = true)
+    {
+        if (type1 != type2)
+        {
+            Main.tileMerge[type1][type2] = merge;
+            Main.tileMerge[type2][type1] = merge;
+        }
+    }
+    public static void MergeWithSet(int myType, params int[] otherTypes)
+    {
+        for (int i = 0; i < otherTypes.Length; i++)
+        {
+            SetMerge(myType, otherTypes[i]);
+        }
     }
 }

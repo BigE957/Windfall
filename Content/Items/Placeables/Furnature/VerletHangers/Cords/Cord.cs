@@ -1,4 +1,5 @@
-﻿using Windfall.Content.Tiles.Furnature.VerletHangers.Hangers;
+﻿using CalamityMod.Particles;
+using Windfall.Content.Tiles.Furnature.VerletHangers.Hangers;
 using Windfall.Content.Tiles.TileEntities;
 
 namespace Windfall.Content.Items.Placeables.Furnature.VerletHangers.Cords;

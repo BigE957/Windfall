@@ -74,7 +74,7 @@ public class GodlyEbonianGlob : ModProjectile
         lightColor.R = (byte)(255 * Projectile.Opacity);
         lightColor.G = (byte)(255 * Projectile.Opacity);
         lightColor.B = (byte)(255 * Projectile.Opacity);
-        DrawAfterimagesCentered(Projectile, ProjectileID.Sets.TrailingMode[Projectile.type], lightColor, 1);
+        DrawCenteredAfterimages(Projectile, ProjectileID.Sets.TrailingMode[Projectile.type], lightColor, 1);
         return false;
     }
     public override void OnKill(int timeLeft)

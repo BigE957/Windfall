@@ -14,6 +14,7 @@ using Windfall.Content.Projectiles.NPCAnimations;
 using Windfall.Content.Projectiles.Other;
 using Windfall.Content.Projectiles.Props;
 using Terraria.ID;
+using CalamityMod;
 
 namespace Windfall.Content.NPCs.GlobalNPCs;
 

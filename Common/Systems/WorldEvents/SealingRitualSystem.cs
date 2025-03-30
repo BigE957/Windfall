@@ -445,10 +445,10 @@ public class SealingRitualSystem : ModSystem
                         {
                             float ratio = Clamp((RitualTimer - (60 * 50)) / 60f, 0f, 1f);
                             //Main.NewText(ratio);
-                            float width = 64f * ExpInEasing(ratio, 1);
+                            float width = 64f * ExpInEasing(ratio);
                             width = Clamp(width, 0f, 72f);
                             for (int i = 0; i < 18; i++)
-                                EmpyreanMetaball.SpawnDefaultParticle(new Vector2(DungeonCoords.X + Main.rand.NextFloat(-width, width), DungeonCoords.Y + Main.rand.NextFloat(0, 24f)), new Vector2(Main.rand.Next(-2, 2), Main.rand.Next(-3, -1) * SineInEasing(ratio, 1)), Main.rand.NextFloat(14f, 28f) * ratio);
+                                EmpyreanMetaball.SpawnDefaultParticle(new Vector2(DungeonCoords.X + Main.rand.NextFloat(-width, width), DungeonCoords.Y + Main.rand.NextFloat(0, 24f)), new Vector2(Main.rand.Next(-2, 2), Main.rand.Next(-3, -1) * SineInEasing(ratio)), Main.rand.NextFloat(14f, 28f) * ratio);
                         }
 
                         if (Recruit1.Center.Y <= SealingTablet.Center.Y)

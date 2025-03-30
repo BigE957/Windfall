@@ -1,4 +1,5 @@
 ﻿using CalamityMod.Items.Weapons.Ranged;
+using CalamityMod.Particles;
 
 namespace Windfall.Common.Systems;
 public class PathfindingSystem : ModSystem
@@ -114,7 +115,7 @@ public class PathfindingSystem : ModSystem
         {
             for (int i = 0; i < Points.Length - 1; i++)
             {
-                sb.DrawLineBetter(Points[i].ToWorldCoordinates(), Points[i + 1].ToWorldCoordinates(), Color.Red, 4);
+                sb.DrawLineBetween(Points[i].ToWorldCoordinates(), Points[i + 1].ToWorldCoordinates(), Color.Red, 4);
                 Particle p = new GlowOrbParticle(Points[i].ToWorldCoordinates(), Vector2.Zero, false, 2, 0.5f, Color.Red);
                 GeneralParticleHandler.SpawnParticle(p);
             }
@@ -258,7 +259,7 @@ public class PathfindingSystem : ModSystem
             //Dust.NewDustPerfect(NodePos.ToWorldCoordinates(), DustID.Shadowflame, Vector2.Zero);
 
             Single dist = 999;
-            if (WorldGen.InWorld(NodePos.X, NodePos.Y, 20) && !Framing.GetTileSafely(NodePos.X, NodePos.Y).IsTileSolid())
+            if (WorldGen.InWorld(NodePos.X, NodePos.Y, 20) && !Framing.GetTileSafely(NodePos.X, NodePos.Y).IsSolid())
                 Vector2.Distance(NodePos.ToWorldCoordinates(), WorldPos);
 
             //Dust.NewDustPerfect(WorldPos, DustID.Electric, Vector2.Zero).noGravity = true;
@@ -272,7 +273,7 @@ public class PathfindingSystem : ModSystem
 
                     Point checkPoint = NodePos + new Point(x * TileScalar, y * TileScalar);
                     //Dust.NewDustPerfect(checkPoint.ToWorldCoordinates(), DustID.LifeDrain, Vector2.Zero);
-                    if (WorldGen.InWorld(NodePos.X, NodePos.Y) && !Framing.GetTileSafely(checkPoint.X, checkPoint.Y).IsTileSolid() && Collision.CanHit(WorldPos, 1, 1, checkPoint.ToWorldCoordinates(), 1, 1))
+                    if (WorldGen.InWorld(NodePos.X, NodePos.Y) && !Framing.GetTileSafely(checkPoint.X, checkPoint.Y).IsSolid() && Collision.CanHit(WorldPos, 1, 1, checkPoint.ToWorldCoordinates(), 1, 1))
                     {
                         Single newDist = Vector2.Distance(WorldPos, checkPoint.ToWorldCoordinates());
                         if (newDist < dist)

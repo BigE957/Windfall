@@ -58,8 +58,8 @@ public static class WanderersCabin
         bool place = true;
         PlaceSchematic(mapKey, placementPoint, anchorType, ref place, new Action<Chest, int, bool>(FillWanderersChest));
 
-        Rectangle protectionArea = GetSchematicProtectionArea(schematic, placementPoint, anchorType);
-        AddProtectedStructure(protectionArea, 30);
+        Rectangle protectionArea = CalamityMod.CalamityUtils.GetSchematicProtectionArea(schematic, placementPoint, anchorType);
+        CalamityMod.CalamityUtils.AddProtectedStructure(protectionArea, 30);
     }
 
     private static void FillWanderersChest(Chest chest, int Type, bool place)

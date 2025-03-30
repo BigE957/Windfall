@@ -1,6 +1,8 @@
 ﻿
 
+using CalamityMod;
 using CalamityMod.Graphics.Primitives;
+using CalamityMod.Particles;
 using Terraria.Graphics.Shaders;
 
 namespace Windfall.Content.Projectiles.Boss.Orator;
@@ -100,7 +102,7 @@ public class DarkBolt : ModProjectile
     {
         if (Velocity > 2)
         {
-            GameShaders.Misc["CalamityMod:ImpFlameTrail"].SetShaderTexture(ModContent.Request<Texture2D>("CalamityMod/ExtraTextures/Trails/" + (MyColor == myColor.Green ? "ScarletDevilStreak" : "FabstaffStreak")));
+            GameShaders.Misc["CalamityMod:ImpFlameTrail"].SetTexture(ModContent.Request<Texture2D>("CalamityMod/ExtraTextures/Trails/" + (MyColor == myColor.Green ? "ScarletDevilStreak" : "FabstaffStreak")));
             PrimitiveRenderer.RenderTrail(Projectile.oldPos, new(WidthFunction, ColorFunction, (_) => Projectile.Size * 0.5f, shader: GameShaders.Misc["CalamityMod:ImpFlameTrail"]), 30);
         }
 

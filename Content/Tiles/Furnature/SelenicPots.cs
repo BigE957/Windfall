@@ -22,7 +22,7 @@ public class SelenicPots : ModTile
 
     public override IEnumerable<Item> GetItemDrops(int i, int j)
     {
-        Tile tileAtPosition = CalamityUtils.ParanoidTileRetrieval(i, j);
+        Tile tileAtPosition = ParanoidTileRetrieval(i, j);
         if (tileAtPosition.TileFrameX % 36 == 0 && tileAtPosition.TileFrameY % 36 == 0)
         {
             if (Main.netMode != NetmodeID.Server)

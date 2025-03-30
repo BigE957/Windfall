@@ -1,4 +1,6 @@
-﻿using Luminance.Core.Graphics;
+﻿using CalamityMod;
+using CalamityMod.Particles;
+using Luminance.Core.Graphics;
 using Terraria.GameContent.Bestiary;
 using Windfall.Common.Systems.WorldEvents;
 using Windfall.Content.Items.Weapons.Misc;
@@ -134,7 +136,7 @@ public class PortalMole : ModNPC
         }
         #region Visuals
         if (aiCounter < 20)
-            NPC.scale = SineBumpEasing((float)aiCounter / 40f, 1);
+            NPC.scale = SineBumpEasing((float)aiCounter / 40f);
         else
             NPC.scale = (0.5f * (NPC.life / (float)NPC.lifeMax)) + 0.5f;
 

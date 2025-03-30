@@ -9,6 +9,7 @@ using Windfall.Content.Items.Quests.SealingRitual;
 using CalamityMod.NPCs.TownNPCs;
 using Terraria.ModLoader.IO;
 using static Windfall.Common.Systems.PathfindingSystem;
+using CalamityMod;
 
 namespace Windfall.Content.NPCs.TravellingNPCs;
 
@@ -240,6 +241,8 @@ public class TravellingCultist : ModNPC, ILocalizedModType
 
         if (MilestoneMet)
             CurrentDialogue++;
+
+        Main.NewText(CurrentDialogue);
     }
 
     public override bool CanChat() => NPC.ai[3] != 1 && !ModContent.GetInstance<DialogueUISystem>().isDialogueOpen;
@@ -254,11 +257,11 @@ public class TravellingCultist : ModNPC, ILocalizedModType
         NPC.spriteDirection = -NPC.direction;
 
         if (CurrentDialogue == DialogueState.RitualQuestTablet && DraconicRuinsSystem.State == DraconicRuinsSystem.CutsceneState.Finished)
-            ModContent.GetInstance<DialogueUISystem>().DisplayDialogueTree(Windfall.Instance, "TravellingCultist/DraconicRuins", new(Name, [NPC.whoAmI]), QuestSystem.Quests["TabletFragment"].Complete ? 3 : 0);
+            ModContent.GetInstance<DialogueUISystem>().DisplayDialogueTree(WindfallMod.Instance, "TravellingCultist/DraconicRuins", new(Name, [NPC.whoAmI]), QuestSystem.Quests["TabletFragment"].Complete ? 3 : 0);
         else if (introductionDone)
-            ModContent.GetInstance<DialogueUISystem>().DisplayDialogueTree(Windfall.Instance, "TravellingCultist/Default", new(Name, [NPC.whoAmI]));
+            ModContent.GetInstance<DialogueUISystem>().DisplayDialogueTree(WindfallMod.Instance, "TravellingCultist/Default", new(Name, [NPC.whoAmI]));
         else
-            ModContent.GetInstance<DialogueUISystem>().DisplayDialogueTree(Windfall.Instance, pool.GetTree(Main.LocalPlayer), new(Name, [NPC.whoAmI]));
+            ModContent.GetInstance<DialogueUISystem>().DisplayDialogueTree(WindfallMod.Instance, pool.GetTree(Main.LocalPlayer), new(Name, [NPC.whoAmI]));
 
         return "";
     }
@@ -485,7 +488,7 @@ public class TravellingCultist : ModNPC, ILocalizedModType
         {
             // Here we despawn the NPC and send a message stating that the NPC has despawned
             if (NPC.active)
-                DisplayLocalizedText("The " + DisplayName + " has departed!", new(50, 125, 255));
+                CalamityMod.CalamityUtils.DisplayLocalizedText("The " + DisplayName + " has departed!", new(50, 125, 255));
             NPC.netSkip = -1;
             NPC.active = false;
             return false;

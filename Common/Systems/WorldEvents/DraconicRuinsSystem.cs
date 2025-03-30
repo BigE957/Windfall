@@ -119,9 +119,9 @@ public class DraconicRuinsSystem : ModSystem
                 switch (State)
                 {
                     case CutsceneState.Arrival:
-                        CameraPanSystem.PanTowards(RuinsEntrance.ToWorldCoordinates() - new Vector2(0, 120), CircOutEasing(CameraTime / 60f, 1));
+                        CameraPanSystem.PanTowards(RuinsEntrance.ToWorldCoordinates() - new Vector2(0, 120), CircOutEasing(CameraTime / 60f));
 
-                        CameraPanSystem.Zoom = CircOutEasing(CameraTime / 60f, 1) / 2f;
+                        CameraPanSystem.Zoom = CalamityMod.CalamityUtils.CircOutEasing(CameraTime / 60f, 1) / 2f;
 
                         NPC tc = Main.npc[NPC.FindFirstNPC(ModContent.NPCType<TravellingCultist>())];
 
@@ -226,9 +226,9 @@ public class DraconicRuinsSystem : ModSystem
                         }
                         break;
                     case CutsceneState.CultistFumble:
-                        CameraPanSystem.PanTowards(TabletRoom.ToWorldCoordinates() - new Vector2(0, 120), CircOutEasing(CameraTime / 60f, 1));
+                        CameraPanSystem.PanTowards(TabletRoom.ToWorldCoordinates() - new Vector2(0, 120), CircOutEasing(CameraTime / 60f));
 
-                        CameraPanSystem.Zoom = CircOutEasing(CameraTime / 60f, 1) / 2f;
+                        CameraPanSystem.Zoom = CircOutEasing(CameraTime / 60f) / 2f;
 
                         switch (CutsceneTime)
                         {
@@ -293,9 +293,9 @@ public class DraconicRuinsSystem : ModSystem
                         }                        
                         break;
                     case CutsceneState.PlayerFumble:
-                        CameraPanSystem.PanTowards(TabletRoom.ToWorldCoordinates() - new Vector2(0, 120), CircOutEasing(CameraTime / 60f, 1));
+                        CameraPanSystem.PanTowards(TabletRoom.ToWorldCoordinates() - new Vector2(0, 120), CircOutEasing(CameraTime / 60f));
 
-                        CameraPanSystem.Zoom = CircOutEasing(CameraTime / 60f, 1) / 2f;
+                        CameraPanSystem.Zoom = CircOutEasing(CameraTime / 60f) / 2f;
 
                         switch (CutsceneTime)
                         {
@@ -363,9 +363,9 @@ public class DraconicRuinsSystem : ModSystem
                         }
                         break;
                     case CutsceneState.CultistEnd:
-                        CameraPanSystem.PanTowards(TabletRoom.ToWorldCoordinates() - new Vector2(0, 120), CircOutEasing(CameraTime / 60f, 1));
+                        CameraPanSystem.PanTowards(TabletRoom.ToWorldCoordinates() - new Vector2(0, 120), CircOutEasing(CameraTime / 60f));
 
-                        CameraPanSystem.Zoom = CircOutEasing(CameraTime / 60f, 1) / 2f;
+                        CameraPanSystem.Zoom = CircOutEasing(CameraTime / 60f) / 2f;
 
                         tc = Main.npc[NPC.FindFirstNPC(ModContent.NPCType<TravellingCultist>())];
 
@@ -404,9 +404,9 @@ public class DraconicRuinsSystem : ModSystem
                         }
                         break;
                     case CutsceneState.PlayerEnd:
-                        CameraPanSystem.PanTowards(TabletRoom.ToWorldCoordinates() - new Vector2(0, 120), CircOutEasing(CameraTime / 60f, 1));
+                        CameraPanSystem.PanTowards(TabletRoom.ToWorldCoordinates() - new Vector2(0, 120), CircOutEasing(CameraTime / 60f));
 
-                        CameraPanSystem.Zoom = CircOutEasing(CameraTime / 60f, 1) / 2f;
+                        CameraPanSystem.Zoom = CircOutEasing(CameraTime / 60f) / 2f;
 
                         tc = Main.npc[NPC.FindFirstNPC(ModContent.NPCType<TravellingCultist>())];
 
@@ -488,7 +488,7 @@ public class DraconicRuinsSystem : ModSystem
                 Vector2 line = LeftChain[k].Position - LeftChain[k + 1].Position;
                 Color lighting = Lighting.GetColor((LeftChain[k + 1].Position + (line / 2f)).ToTileCoordinates());
 
-                Main.spriteBatch.DrawLineBetter(LeftChain[k].Position, LeftChain[k + 1].Position, Color.White.MultiplyRGB(lighting), 3);
+                Main.spriteBatch.DrawLineBetween(LeftChain[k].Position, LeftChain[k + 1].Position, Color.White.MultiplyRGB(lighting), 3);
             }
 
             for (int k = 0; k < RightChain.Count - 1; k++)
@@ -496,7 +496,7 @@ public class DraconicRuinsSystem : ModSystem
                 Vector2 line = RightChain[k].Position - RightChain[k + 1].Position;
                 Color lighting = Lighting.GetColor((RightChain[k + 1].Position + (line / 2f)).ToTileCoordinates());
 
-                Main.spriteBatch.DrawLineBetter(RightChain[k].Position, RightChain[k + 1].Position, Color.White.MultiplyRGB(lighting), 3);
+                Main.spriteBatch.DrawLineBetween(RightChain[k].Position, RightChain[k + 1].Position, Color.White.MultiplyRGB(lighting), 3);
             }
 
             Main.spriteBatch.End();

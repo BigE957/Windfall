@@ -1,4 +1,6 @@
-﻿using CalamityMod.World;
+﻿using CalamityMod;
+using CalamityMod.Particles;
+using CalamityMod.World;
 using Luminance.Core.Graphics;
 using Windfall.Common.Graphics.Metaballs;
 using Windfall.Content.NPCs.Bosses.Orator;
@@ -169,7 +171,7 @@ public class DarkCoalescence : ModProjectile
     public override bool PreDraw(ref Color lightColor)
     {
         Color drawColor = Color.White;
-        DrawAfterimagesCentered(Projectile, ProjectileID.Sets.TrailingMode[Projectile.type], drawColor);
+        CalamityMod.CalamityUtils.DrawAfterimagesCentered(Projectile, ProjectileID.Sets.TrailingMode[Projectile.type], drawColor);
         return false;
     }
     public override bool? Colliding(Rectangle projHitbox, Rectangle targetHitbox)

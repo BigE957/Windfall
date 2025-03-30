@@ -92,9 +92,9 @@ public class HammerChiselProjectile : ModProjectile
     public override void AI()
     {
         if (aiCounter < 5)
-            Projectile.Center = Vector2.Lerp(spawnPos, goalPos, SineOutEasing(aiCounter / 5f, 1));
+            Projectile.Center = Vector2.Lerp(spawnPos, goalPos, CalamityMod.CalamityUtils.SineOutEasing(aiCounter / 5f, 1));
         else if (aiCounter >= 24)
-            Projectile.Center = Vector2.Lerp(goalPos, spawnPos, SineOutEasing((aiCounter - 20) / 4f, 1));
+            Projectile.Center = Vector2.Lerp(goalPos, spawnPos, SineOutEasing((aiCounter - 20) / 4f));
         else
             Projectile.Center = goalPos;
 

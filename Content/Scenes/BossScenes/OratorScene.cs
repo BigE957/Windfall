@@ -5,7 +5,7 @@ namespace Windfall.Content.Scenes.BossScenes;
 
 public class OratorScene : ModSceneEffect
 {
-    public override int Music => MusicLoader.GetMusicSlot(Windfall.Instance, "Assets/Music/Orator");
+    public override int Music => MusicLoader.GetMusicSlot(WindfallMod.Instance, "Assets/Music/Orator");
     
     public override bool IsSceneEffectActive(Player player) => NPC.AnyNPCs(ModContent.NPCType<TheOrator>());
     

@@ -72,10 +72,10 @@ public class Fingerling : ModNPC
         }
         #region Block Ahead Checks
         Vector2 heading = new(NPC.direction, NPC.directionY);
-        Point tileCheck = (NPC.Center + (heading.RotatedBy(PiOver2 * NPC.spriteDirection) * 5f) + new Vector2(NPC.width / 1.66f * NPC.direction, NPC.width / 1.66f * NPC.directionY)).ToSafeTileCoordinates();
+        Point tileCheck = (NPC.Center + (heading.RotatedBy(PiOver2 * NPC.spriteDirection) * 5f) + new Vector2(NPC.width / 1.66f * NPC.direction, NPC.width / 1.66f * NPC.directionY)).ToBoundTileCoordinates();
         //Dust d = Dust.NewDustPerfect(tileCheck.ToWorldCoordinates(), DustID.AncientLight, Vector2.Zero, newColor: Color.Red);
         //d.noGravity = true;
-        if (Main.tile[tileCheck] != null && Main.tile[tileCheck].HasTile && Main.tile[tileCheck].IsTileSolid() && ((!Main.tile[tileCheck].IsHalfBlock && onHalfSlab) || !onHalfSlab))
+        if (Main.tile[tileCheck] != null && Main.tile[tileCheck].HasTile && Main.tile[tileCheck].IsSolid() && ((!Main.tile[tileCheck].IsHalfBlock && onHalfSlab) || !onHalfSlab))
         {
             Tile aheadTile = Main.tile[tileCheck];
             //Main.NewText($"On: {SlopeOn}, Ahead: {aheadTile.Slope}, Heading: {heading}");
@@ -337,14 +337,14 @@ public class Fingerling : ModNPC
         Tile belowTile = Main.tile[tileCheck];
         //d = Dust.NewDustPerfect(tileCheck.ToWorldCoordinates(), DustID.AncientLight, Vector2.Zero, newColor: Color.Green);
         //d.noGravity = true;
-        if (rotateCooldown == 0 && Main.tile[tileCheck] != null && (!belowTile.HasTile || !belowTile.IsTileSolid()))
+        if (rotateCooldown == 0 && Main.tile[tileCheck] != null && (!belowTile.HasTile || !belowTile.IsSolid()))
         {
             tileCheck = (NPC.Center - (new Vector2(NPC.direction, NPC.directionY) * NPC.width / 2f) + new Vector2(NPC.width / 1f * NPC.direction, NPC.width / 1f * NPC.directionY).RotatedBy(PiOver2 * NPC.spriteDirection)).ToTileCoordinates();
             belowTile = Main.tile[tileCheck];
 
             //d = Dust.NewDustPerfect(tileCheck.ToWorldCoordinates(), DustID.AncientLight, Vector2.Zero, newColor: Color.Yellow);
             //d.noGravity = true;
-                if (Main.tile[tileCheck] != null && !belowTile.IsHalfBlock && (!belowTile.HasTile || !belowTile.IsTileSolid()))
+                if (Main.tile[tileCheck] != null && !belowTile.IsHalfBlock && (!belowTile.HasTile || !belowTile.IsSolid()))
             {
                 if (SlopeOn != SlopeType.Solid)
                 {

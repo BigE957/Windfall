@@ -1,6 +1,4 @@
-﻿global using CalamityMod;
-global using CalamityMod.Particles;
-global using Microsoft.Xna.Framework;
+﻿global using Microsoft.Xna.Framework;
 global using Microsoft.Xna.Framework.Graphics;
 global using ReLogic.Content;
 global using System;
@@ -15,7 +13,6 @@ global using Terraria.ID;
 global using Terraria.Localization;
 global using Terraria.ModLoader;
 global using Terraria.ObjectData;
-global using static CalamityMod.CalamityUtils;
 global using static Microsoft.Xna.Framework.MathHelper;
 global using Luminance.Common.Utilities;
 global using static Windfall.Common.Utils.WindfallUtils;

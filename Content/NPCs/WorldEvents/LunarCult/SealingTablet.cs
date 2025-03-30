@@ -12,7 +12,7 @@ public class SealingTablet : ModNPC
     public override string Texture => "Windfall/Assets/NPCs/WorldEvents/SealingTablet";
     public override void SetStaticDefaults()
     {
-        this.HideFromBestiary();
+        this.HideBestiaryEntry();
         Main.npcFrameCount[Type] = 5;
     }
     public override void SetDefaults()
@@ -75,11 +75,11 @@ public class SealingTablet : ModNPC
                 EmpyreanMetaball.SpawnDefaultParticle(NPC.Center + spawnOffset, spawnOffset.RotatedBy((Main.rand.NextBool() ? PiOver2 : -PiOver2) + Main.rand.NextFloat(-PiOver4, PiOver4)).SafeNormalize(Vector2.Zero) * Main.rand.NextFloat(0f, 4f), Main.rand.NextFloat(10, 20));
             if (summonRatio > 0.75f)
             {                    
-                float width = 124f * ExpInEasing((summonRatio - 0.75f) / 0.25f, 1);
+                float width = 124f * ExpInEasing((summonRatio - 0.75f) / 0.25f);
                 width = Clamp(width, 0f, 96f);
                 //Main.NewText(width);
                 for (int i = 0; i < 18; i++)
-                    EmpyreanMetaball.SpawnDefaultParticle(new Vector2(DungeonCoords.X + Main.rand.NextFloat(-width, width), DungeonCoords.Y + Main.rand.NextFloat(0, 24f)), new Vector2(Main.rand.Next(-2, 2), Main.rand.Next(-5, -1) * SineInEasing((summonRatio - 0.75f) / 0.25f, 1)), Main.rand.NextFloat(15f, 25f) * ((summonRatio - 0.75f) / 0.25f) * 2f);
+                    EmpyreanMetaball.SpawnDefaultParticle(new Vector2(DungeonCoords.X + Main.rand.NextFloat(-width, width), DungeonCoords.Y + Main.rand.NextFloat(0, 24f)), new Vector2(Main.rand.Next(-2, 2), Main.rand.Next(-5, -1) * SineInEasing((summonRatio - 0.75f) / 0.25f)), Main.rand.NextFloat(15f, 25f) * ((summonRatio - 0.75f) / 0.25f) * 2f);
             }
             if (summonRatio >= 1f && !NPC.AnyNPCs(ModContent.NPCType<TheOrator>()))
             {
@@ -233,7 +233,7 @@ public class SealingTablet : ModNPC
             Vector2 line = LeftChain[k].Position - LeftChain[k + 1].Position;
             Color lighting = Lighting.GetColor((LeftChain[k + 1].Position + (line / 2f)).ToTileCoordinates());
 
-            Main.spriteBatch.DrawLineBetter(LeftChain[k].Position, LeftChain[k + 1].Position, Color.White.MultiplyRGB(lighting), 3);
+            Main.spriteBatch.DrawLineBetween(LeftChain[k].Position, LeftChain[k + 1].Position, Color.White.MultiplyRGB(lighting), 3);
         }
 
         for (int k = 0; k < RightChain.Count - 1; k++)
@@ -241,7 +241,7 @@ public class SealingTablet : ModNPC
             Vector2 line = RightChain[k].Position - RightChain[k + 1].Position;
             Color lighting = Lighting.GetColor((RightChain[k + 1].Position + (line / 2f)).ToTileCoordinates());
 
-            Main.spriteBatch.DrawLineBetter(RightChain[k].Position, RightChain[k + 1].Position, Color.White.MultiplyRGB(lighting), 3);
+            Main.spriteBatch.DrawLineBetween(RightChain[k].Position, RightChain[k + 1].Position, Color.White.MultiplyRGB(lighting), 3);
         }
 
         Texture2D texture = TextureAssets.Npc[NPC.type].Value;

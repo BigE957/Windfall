@@ -16,12 +16,12 @@ public class Angry : Emoticon
         base.Update(gameTime);
 
         if (Counter <= 60 && !Fading)
-            ImageScale = Clamp(Lerp(0, 1f, SineOutEasing(Counter / 60f, 1)), 0, 1f);
+            ImageScale = Clamp(Lerp(0, 1f, SineOutEasing(Counter / 60f)), 0, 1f);
         else
             ImageScale = 1f;
 
         if (Counter <= 90)
-            Opacity = Clamp(Lerp(0, 1f, SineOutEasing(Counter / 90f, 1)), 0, 1f);
+            Opacity = Clamp(Lerp(0, 1f, SineOutEasing(Counter / 90f)), 0, 1f);
         else
             Opacity = 1f;
     }
@@ -32,7 +32,7 @@ public class Angry : Emoticon
     {
         if (Counter >= 60 || Fading)
             return new(SpeakerHeadArea.Width * 0.75f, -SpeakerHeadArea.Height * 2);
-        float lerp = SineOutEasing(Counter / 60f, 1);
+        float lerp = SineOutEasing(Counter / 60f);
         return new(Lerp(0, SpeakerHeadArea.Width * 0.75f, lerp), -Lerp(0, SpeakerHeadArea.Height * 2, lerp));
     }
 

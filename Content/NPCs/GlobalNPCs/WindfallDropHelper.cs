@@ -1,4 +1,5 @@
-﻿using Terraria.GameContent.ItemDropRules;
+﻿using CalamityMod;
+using Terraria.GameContent.ItemDropRules;
 using Windfall.Common.Systems;
 using Windfall.Content.Items.Essences;
 using Windfall.Content.Items.Journals;

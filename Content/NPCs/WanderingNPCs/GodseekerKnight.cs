@@ -1,4 +1,5 @@
-﻿using CalamityMod.Items.Armor.Statigel;
+﻿using CalamityMod;
+using CalamityMod.Items.Armor.Statigel;
 using CalamityMod.NPCs.HiveMind;
 using CalamityMod.Projectiles.Rogue;
 using Terraria.GameContent.Bestiary;

@@ -24,7 +24,7 @@ public class TheChef : ModNPC
     }
     public override void SetStaticDefaults()
     {
-        this.HideFromBestiary();
+        this.HideBestiaryEntry();
         NPCID.Sets.ActsLikeTownNPC[Type] = true;
         Main.npcFrameCount[Type] = 1;
         NPCID.Sets.NoTownNPCHappiness[Type] = true;
@@ -166,14 +166,14 @@ public class TheChef : ModNPC
                 CombatText.NewText(NPC.Hitbox, Color.LimeGreen, GetWindfallTextValue(chefPath + "Activity.Interuptted." + Main.rand.Next(3)), true);
                 return "";
             }
-            ModContent.GetInstance<DialogueUISystem>().DisplayDialogueTree(Windfall.Instance, "TheChef/FoodSelection", new(Name, [NPC.whoAmI]));
+            ModContent.GetInstance<DialogueUISystem>().DisplayDialogueTree(WindfallMod.Instance, "TheChef/FoodSelection", new(Name, [NPC.whoAmI]));
         }
         else if (PlannedActivity == SystemStates.Cafeteria && State == SystemStates.Ready)
-            ModContent.GetInstance<DialogueUISystem>().DisplayDialogueTree(Windfall.Instance, "TheChef/CafeteriaActivityStart", new(Name, [NPC.whoAmI]));
+            ModContent.GetInstance<DialogueUISystem>().DisplayDialogueTree(WindfallMod.Instance, "TheChef/CafeteriaActivityStart", new(Name, [NPC.whoAmI]));
         else if (SealingRitualSystem.RitualSequenceSeen)
-            ModContent.GetInstance<DialogueUISystem>().DisplayDialogueTree(Windfall.Instance, "TheChef/Abandoned", new(Name, [NPC.whoAmI]));
+            ModContent.GetInstance<DialogueUISystem>().DisplayDialogueTree(WindfallMod.Instance, "TheChef/Abandoned", new(Name, [NPC.whoAmI]));
         else
-            ModContent.GetInstance<DialogueUISystem>().DisplayDialogueTree(Windfall.Instance, "TheChef/Default", new(Name, [NPC.whoAmI]));                
+            ModContent.GetInstance<DialogueUISystem>().DisplayDialogueTree(WindfallMod.Instance, "TheChef/Default", new(Name, [NPC.whoAmI]));                
         return "Hey chat!";
     }
     public override bool CheckActive() => !NPC.downedAncientCultist;

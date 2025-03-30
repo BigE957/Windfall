@@ -1,4 +1,5 @@
-﻿using CalamityMod.Dusts;
+﻿using CalamityMod;
+using CalamityMod.Dusts;
 using CalamityMod.NPCs.CalClone;
 using Luminance.Core.Graphics;
 using Terraria.Utilities;

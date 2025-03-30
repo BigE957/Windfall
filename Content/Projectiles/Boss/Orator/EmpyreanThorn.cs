@@ -111,7 +111,7 @@ public class EmpyreanThorn : ModProjectile
         Rectangle frame = tex.Frame(1, Main.projFrames[Projectile.type], 0, Projectile.frame);
 
         Color drawColor = Color.White;
-        DrawAfterimagesCentered(Projectile, ProjectileID.Sets.TrailingMode[Projectile.type], drawColor);
+        DrawCenteredAfterimages(Projectile, ProjectileID.Sets.TrailingMode[Projectile.type], drawColor);
         return false;
     }
 

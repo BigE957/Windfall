@@ -3,16 +3,17 @@ using Luminance.Core.Graphics;
 using Terraria.ModLoader.IO;
 using Terraria.Utilities;
 using Windfall.Common.Graphics.Metaballs;
+using Windfall.Common.Utils;
 using Windfall.Content.Items.Food;
 using Windfall.Content.Items.Quests;
 using Windfall.Content.NPCs.WorldEvents.LunarCult;
 using Windfall.Content.NPCs.Critters;
 using Windfall.Content.Buffs.DoT;
-using Windfall.Content.Projectiles.ProjectileAnimations;
 using Windfall.Content.UI;
 using Terraria.Enums;
 using DialogueHelper.UI.Dialogue;
 using Windfall.Content.Items.Quests.Cafeteria;
+using Windfall.Content.Projectiles.NPCAnimations;
 
 namespace Windfall.Common.Systems.WorldEvents;
 
@@ -1484,12 +1485,12 @@ public class LunarCultBaseSystem : ModSystem
             int checkPositionX = spawnArea.X + Main.rand.Next(spawnArea.Width);
             int checkPositionY = spawnArea.Y + Main.rand.Next(spawnArea.Height);
             Vector2 checkPosition = new(checkPositionX * 16 + 8, checkPositionY * 16);
-
+            
             Tile SpawnTile = ParanoidTileRetrieval(checkPositionX, checkPositionY);
-            bool nearPlayer = CalamityUtils.ManhattanDistance(checkPosition, Main.player[Player.FindClosest(checkPosition, 16, 16)].Center) < 800f;
+            bool nearPlayer = WindfallUtils.ManhattanDistance(checkPosition, Main.player[Player.FindClosest(checkPosition, 16, 16)].Center) < 800f;
             bool isVaildWall = SpawnTile.WallType == WallID.AncientSilverBrickWall || SpawnTile.WallType == WallID.GreenStainedGlass || SpawnTile.WallType == WallID.EmeraldGemspark;
             isVaildWall |= SpawnTile.WallType == WallID.PlatinumBrick || SpawnTile.WallType == WallID.PearlstoneBrick;
-            if (!isVaildWall || nearPlayer || SpawnTile.IsTileSolid() || Lighting.Brightness(checkPositionX, checkPositionY) <= 0.4f)
+            if (!isVaildWall || nearPlayer || SpawnTile.IsSolid() || Lighting.Brightness(checkPositionX, checkPositionY) <= 0.4f)
                 continue;
 
             int spawnedNPC = NPC.NewNPC(NPC.GetSource_NaturalSpawn(), checkPositionX * 16 + 8, checkPositionY * 16, ModContent.NPCType<Fingerling>());

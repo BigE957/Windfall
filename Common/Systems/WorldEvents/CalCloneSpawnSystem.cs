@@ -1,4 +1,5 @@
-﻿using Windfall.Content.Projectiles.NPCAnimations;
+﻿using CalamityMod;
+using Windfall.Content.Projectiles.NPCAnimations;
 
 namespace Windfall.Common.Systems.WorldEvents;
 

@@ -1,4 +1,5 @@
-﻿using CalamityMod.NPCs.AstrumDeus;
+﻿using CalamityMod;
+using CalamityMod.NPCs.AstrumDeus;
 using CalamityMod.Projectiles.Rogue;
 using Terraria;
 using Windfall.Content.Items.Weapons.Summon;

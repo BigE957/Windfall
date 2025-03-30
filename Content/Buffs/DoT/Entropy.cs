@@ -1,4 +1,5 @@
-﻿using CalamityMod.NPCs;
+﻿using CalamityMod;
+using CalamityMod.NPCs;
 using Windfall.Common.Graphics.Metaballs;
 
 namespace Windfall.Content.Buffs.DoT;

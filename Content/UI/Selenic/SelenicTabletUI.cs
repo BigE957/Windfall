@@ -26,7 +26,7 @@ internal class SelenicTabletUIState : UIState
         SelenicUIPanel.BorderColor = new Color(132, 225, 211);
         Append(SelenicUIPanel);
 
-        Asset<Texture2D> ArrowRightTexture = ModContent.Request<Texture2D>($"{nameof(Windfall)}/Assets/UI/DraedonsDatabase/DraedonUIArrowRight");
+        Asset<Texture2D> ArrowRightTexture = ModContent.Request<Texture2D>($"{nameof(WindfallMod)}/Assets/UI/DraedonsDatabase/DraedonUIArrowRight");
         nextButton = new(ArrowRightTexture, "Continue...");
         SetRectangle(nextButton, left: 280f, top: 100f, width: 56f, height: 26f);
         nextButton.OnLeftClick += new MouseEvent(NextPage);

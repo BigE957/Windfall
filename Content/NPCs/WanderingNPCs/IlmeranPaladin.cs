@@ -1,4 +1,5 @@
-﻿using CalamityMod.Items.Accessories;
+﻿using CalamityMod;
+using CalamityMod.Items.Accessories;
 using CalamityMod.Items.Armor.Victide;
 using CalamityMod.NPCs.DesertScourge;
 using CalamityMod.NPCs.TownNPCs;
@@ -138,7 +139,7 @@ public class IlmeranPaladin : ModNPC
         chat.Add(GetWindfallTextValue($"Dialogue.IlmeranPaladin.Chat.Standard3"));
         IlmeranPaladinChats++;
 
-        ModContent.GetInstance<DialogueUISystem>().DisplayDialogueTree(Windfall.Instance, "IlmeranPaladin/Default", new(Name, [NPC.whoAmI]));
+        ModContent.GetInstance<DialogueUISystem>().DisplayDialogueTree(WindfallMod.Instance, "IlmeranPaladin/Default", new(Name, [NPC.whoAmI]));
 
         return "";
     }
@@ -157,10 +158,10 @@ public class IlmeranPaladin : ModNPC
     public override void AddShops()
     {
         new NPCShop(Type)
-            .AddWithCustomValue<AmidiasSpark>(5000)
-            .AddWithCustomValue<Cnidrisnack>(50)
-            .AddWithCustomValue<AncientIlmeranRod>(1000, WindfallConditions.ScoogHunt1ActiveOrComplete)
-            .AddWithCustomValue<IlmeranHorn>(20000, WindfallConditions.ScoogHunt1Complete)
+            .AddWithPrice<AmidiasSpark>(5000)
+            .AddWithPrice<Cnidrisnack>(50)
+            .AddWithPrice<AncientIlmeranRod>(1000, WindfallConditions.ScoogHunt1ActiveOrComplete)
+            .AddWithPrice<IlmeranHorn>(20000, WindfallConditions.ScoogHunt1Complete)
             .Register();
     }
     public override bool CheckActive() => !NPC.AnyNPCs(ModContent.NPCType<DesertScourgeHead>());
