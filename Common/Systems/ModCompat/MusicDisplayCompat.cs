@@ -14,7 +14,7 @@ public class MusicDisplayCompat : ModSystem
         {
             LocalizedText author = GetWindfallLocalText(displayPath + name + ".Author");
             LocalizedText displayName = GetWindfallLocalText(displayPath + name + ".DisplayName");
-            display.Call("AddMusic", (short)MusicLoader.GetMusicSlot(WindfallMod.Instance, path), displayName, author, modName);
+            display.Call("AddMusic", (short)MusicLoader.GetMusicSlot(Windfall.Instance, path), displayName, author, modName);
         }
 
         AddMusic("Assets/Music/Orator", "Orator");

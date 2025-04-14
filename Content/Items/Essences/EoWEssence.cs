@@ -27,7 +27,7 @@ public class EoWEssence : ModItem, ILocalizedModType
         player.Godly().Evil1Essence = true;
         player.Godly().CorruptCommunion = true;
         SkyManager.Instance.Activate("Windfall:CorruptCommunion", args: []);
-        ModContent.GetInstance<DialogueUISystem>().DisplayDialogueTree(WindfallMod.Instance, "Communions/CorruptCommunion1", new(Name, []));
+        ModContent.GetInstance<DialogueUISystem>().DisplayDialogueTree(Windfall.Instance, "Communions/CorruptCommunion1", new(Name, []));
         return true;
     }
 }

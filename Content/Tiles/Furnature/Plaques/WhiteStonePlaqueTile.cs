@@ -87,7 +87,7 @@ public class WhiteStonePlaqueTile : ModTile
             if (uiSystem.isDialogueOpen)
                 uiSystem.isDialogueOpen = false;
             else
-                uiSystem.DisplayDialogueTree(WindfallMod.Instance, "WhiteStonePlaqueText", new(Name, []));
+                uiSystem.DisplayDialogueTree(Windfall.Instance, "WhiteStonePlaqueText", new(Name, []));
         }
         return true;
     }

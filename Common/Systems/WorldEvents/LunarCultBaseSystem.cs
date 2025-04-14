@@ -139,7 +139,7 @@ public class LunarCultBaseSystem : ModSystem
         None,
         CurrentEvents,
         Mission,
-        Paradise
+        Goals
     }
     public static MeetingTopic CurrentMeetingTopic = MeetingTopic.None;
     #endregion
@@ -711,7 +711,7 @@ public class LunarCultBaseSystem : ModSystem
                                                     break;
                                             }
                                             break;
-                                        case MeetingTopic.Paradise:
+                                        case MeetingTopic.Goals:
                                             switch (y)
                                             {
                                                 case 1:
@@ -933,7 +933,7 @@ public class LunarCultBaseSystem : ModSystem
                                     break;
                             }
                             break;
-                        case MeetingTopic.Paradise:
+                        case MeetingTopic.Goals:
                             switch (ActivityTimer)
                             {
                                 case 1:

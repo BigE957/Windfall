@@ -25,18 +25,18 @@ internal class TailorInstructionsUIState : UIState
         UIPanel.BackgroundColor = Color.Transparent;
         Append(UIPanel);
 
-        Asset<Texture2D> pageTexture = ModContent.Request<Texture2D>($"{nameof(WindfallMod)}/Assets/UI/WanderersJournals/JournalPage");
+        Asset<Texture2D> pageTexture = ModContent.Request<Texture2D>($"{nameof(Windfall)}/Assets/UI/WanderersJournals/JournalPage");
         UIImage pageImage = new(pageTexture);
         SetRectangle(pageImage, left: -55f, top: -25f, width: 400f, height: 518f);
         UIPanel.Append(pageImage);
 
-        Asset<Texture2D> journalArrowRightTexture = ModContent.Request<Texture2D>($"{nameof(WindfallMod)}/Assets/UI/WanderersJournals/JournalArrowRight");
+        Asset<Texture2D> journalArrowRightTexture = ModContent.Request<Texture2D>($"{nameof(Windfall)}/Assets/UI/WanderersJournals/JournalArrowRight");
         UIButton nextPageButton = new(journalArrowRightTexture, "Next Page");
         SetRectangle(nextPageButton, left: 325f, top: 500f, width: 56f, height: 26f);
         nextPageButton.OnLeftClick += new MouseEvent(NextPage);
         UIPanel.Append(nextPageButton);
 
-        Asset<Texture2D> journalArrowLeftTexture = ModContent.Request<Texture2D>($"{nameof(WindfallMod)}/Assets/UI/WanderersJournals/JournalArrowLeft");
+        Asset<Texture2D> journalArrowLeftTexture = ModContent.Request<Texture2D>($"{nameof(Windfall)}/Assets/UI/WanderersJournals/JournalArrowLeft");
         UIButton previousPageButton = new(journalArrowLeftTexture, "Previous Page");
         SetRectangle(previousPageButton, left: 25f, top: 500f, width: 56f, height: 26f);
         previousPageButton.OnLeftClick += new MouseEvent(PreviousPage);

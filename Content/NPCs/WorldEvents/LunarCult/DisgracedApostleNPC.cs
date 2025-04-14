@@ -55,9 +55,9 @@ public class DisgracedApostleNPC : ModNPC
     {
         Main.CloseNPCChatOrSign();
         if(AIState == States.PreSiphon)
-            ModContent.GetInstance<DialogueUISystem>().DisplayDialogueTree(WindfallMod.Instance, "Apostle/AstralSiphonStart", new(Name, [NPC.whoAmI]));
+            ModContent.GetInstance<DialogueUISystem>().DisplayDialogueTree(Windfall.Instance, "Apostle/AstralSiphonStart", new(Name, [NPC.whoAmI]));
         else
-            ModContent.GetInstance<DialogueUISystem>().DisplayDialogueTree(WindfallMod.Instance, "Apostle/AstralSiphonPrep", new(Name, [NPC.whoAmI]));
+            ModContent.GetInstance<DialogueUISystem>().DisplayDialogueTree(Windfall.Instance, "Apostle/AstralSiphonPrep", new(Name, [NPC.whoAmI]));
 
         return "";
     }

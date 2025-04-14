@@ -36,16 +36,20 @@
       ]
     },
     {
-      "DialogueText": [ { "Text": "Themis was the Goddess of Justice. If my memory serves, she was one of three to claim the souls of some infamous trio of dragons. Hers held the aspect of Power, but I can't recall the other two... After her ascension, she founded our city where she became quite famous as a judge of sorts. Those with disputes would far and wide to our humble city just for her decree on the matter. Though in the end, she died by the Godseeker's hand, as many deities have." } ],
+      "DialogueText": [ { "Text": "Themis was the Goddess of Justice, and ruled over the city I once called home. If my memory serves, she was one of three to claim the souls of some infamous trio of dragons. Hers held the aspect of Power, but I can't recall the other two... After her ascension, she founded our city where she became quite famous as a judge of sorts. Those with disputes would far and wide to our humble city just for her decree on the matter. Though in the end, she died by the Godseeker's hand... A deserved end if you ask me." } ],
       "Responses": [
         {
-          "Title": "Quite interesting!",
+          "Title": "I see.",
           "Heading": 7
+        },
+        {
+          "Title": "What makes you say that?",
+          "Heading": 8
         }
       ]
     },
     {
-      "DialogueText": [ { "Text": "Paradise, as we refer to it, has always been a somewhat... vague concept. But that's because we simply aren't able to put what it is into proper words! Such a magestic thing... I look forward to its arrival greatly!" } ],
+      "DialogueText": [ { "Text": "The Great One, as we refer to it, has always been a somewhat... vague concept until now. We'be come so far! Its an honor to be allowed to learn of its true nature. Such a magestic thing... I look forward to its arrival greatly!" } ],
       "Responses": [
         {
           "Title": "Why?",
@@ -58,10 +62,14 @@
       ]
     },
     {
-      "DialogueText": [ { "Text": "Well, it is my belief that with its arrival, all conflict shall cease. Such a wonderous being, its able to provide for us all. There would be nothing left to fight over! We shall all live happily together with open arms... such a wonderful thing." } ],
+      "DialogueText": [ { "Text": "Well, I believe it will do much good for the world. The Gods... The Brimstone Witch... The Godseeker... Our lives have been dominated by these few, powerful individuals for too long! With them gone, I think we'll finally be able to live in peace. Peace... Its been far too long since our world knew peace." } ],
       "Responses": [
         {
-          "Title": "How wonderful!",
+          "Title": "That sounds nice.",
+          "Heading": 7
+        },
+        {
+          "Title": "That's true.",
           "Heading": 7
         }
       ]
@@ -79,11 +87,30 @@
       "DialogueText": [ { "Text": "Well, it's been nice talking to you! Hope to see you next time!" } ],
       "Responses": [
         {
-          "Title": ""
+          "Title": "Be seeing you."
         },
         {
-          "Title": "",
-          "Heading": -1
+          "Title": "Bye!"
+        }
+      ]
+    },
+    {
+      "DialogueText": [ { "Text": "If she had gone out to face the Godseeker's armies, or even just left the city, then so many lives may have been spared. Its because she chose to hide away that the Godseeker tore through our city. A God using her people as nothing more than shields..." } ],
+      "Responses": [
+        {
+          "Title": "That's awful!",
+          "Heading": 9
+        }
+      ]
+    },
+    {
+      "DialogueText": [ { "Text": "Oh, I hope I'm not being too much of a downer! I think I'll be on my way now. Hope to see you again! It was nice chatting with you; even if it was about some less than pleasant stuff." } ],
+      "Responses": [
+        {
+          "Title": "Be seeing you."
+        },
+        {
+          "Title": "Nice talking to you too!"
         }
       ]
     }

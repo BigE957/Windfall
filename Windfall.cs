@@ -3,9 +3,9 @@ using Windfall.Common.Netcode;
 
 namespace Windfall;
 
-public class WindfallMod : Mod
+public class Windfall : Mod
 {
-    internal static WindfallMod Instance;
+    internal static Windfall Instance;
     public static int LunarCoinCurrencyID;
     public override void Load()
     {

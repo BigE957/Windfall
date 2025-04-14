@@ -18,7 +18,7 @@ internal class ChefMenuUIState : UIState
         UIPanel.BackgroundColor = Color.Transparent;
         Append(UIPanel);
 
-        Asset<Texture2D> pageTexture = ModContent.Request<Texture2D>($"{nameof(WindfallMod)}/Assets/UI/WanderersJournals/JournalPage");
+        Asset<Texture2D> pageTexture = ModContent.Request<Texture2D>($"{nameof(Windfall)}/Assets/UI/WanderersJournals/JournalPage");
         UIImage page = new(pageTexture);
         SetRectangle(page, left: -55f, top: -25f, width: 400f, height: 518f);
         UIPanel.Append(page);

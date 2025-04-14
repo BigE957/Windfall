@@ -27,7 +27,7 @@ public class HiveEssence : ModItem, ILocalizedModType
         player.Godly().Evil2Essence = true;
         player.Godly().CorruptCommunion = true;
         SkyManager.Instance.Activate("Windfall:CorruptCommunion", args: []);
-        ModContent.GetInstance<DialogueUISystem>().DisplayDialogueTree(WindfallMod.Instance, "Communions/CorruptCommunion2", new(Name, []));
+        ModContent.GetInstance<DialogueUISystem>().DisplayDialogueTree(Windfall.Instance, "Communions/CorruptCommunion2", new(Name, []));
         return true;
     }
 }

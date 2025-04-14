@@ -26,7 +26,7 @@ public class SlimeEssence : ModItem, ILocalizedModType
         player.Godly().SlimeGodEssence = true;
         player.Godly().SlimyCommunion = true;
         SkyManager.Instance.Activate("Windfall:SlimyCommunion", args: []);
-        ModContent.GetInstance<DialogueUISystem>().DisplayDialogueTree(WindfallMod.Instance, "Communions/SlimyCommunion", new(Name, []));
+        ModContent.GetInstance<DialogueUISystem>().DisplayDialogueTree(Windfall.Instance, "Communions/SlimyCommunion", new(Name, []));
         return true;
     }
 }

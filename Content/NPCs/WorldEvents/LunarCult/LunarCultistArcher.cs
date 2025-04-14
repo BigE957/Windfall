@@ -167,7 +167,7 @@ public class LunarCultistArcher : ModNPC
         switch(AIState)
         {
             case States.StaticCharacter:
-                ModContent.GetInstance<DialogueUISystem>().DisplayDialogueTree(WindfallMod.Instance, $"SelenicCultists/{myCharacter}", new(Name, [NPC.whoAmI]), characterSpokenTo ? 1 : 0);
+                ModContent.GetInstance<DialogueUISystem>().DisplayDialogueTree(Windfall.Instance, $"SelenicCultists/{myCharacter}", new(Name, [NPC.whoAmI]), characterSpokenTo ? 1 : 0);
                 characterSpokenTo = true;
                 break;
             case States.CafeteriaEvent:

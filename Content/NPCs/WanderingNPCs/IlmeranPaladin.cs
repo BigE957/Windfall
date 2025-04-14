@@ -139,7 +139,7 @@ public class IlmeranPaladin : ModNPC
         chat.Add(GetWindfallTextValue($"Dialogue.IlmeranPaladin.Chat.Standard3"));
         IlmeranPaladinChats++;
 
-        ModContent.GetInstance<DialogueUISystem>().DisplayDialogueTree(WindfallMod.Instance, "IlmeranPaladin/Default", new(Name, [NPC.whoAmI]));
+        ModContent.GetInstance<DialogueUISystem>().DisplayDialogueTree(Windfall.Instance, "IlmeranPaladin/Default", new(Name, [NPC.whoAmI]));
 
         return "";
     }

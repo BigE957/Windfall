@@ -35,7 +35,7 @@ public class WFSchematicManager : ModSystem
     public static SchematicMetaTile[,] LoadWindfallSchematic(string filename)
     {
         SchematicMetaTile[,] ret = null;
-        using (Stream st = WindfallMod.Instance.GetFileStream(filename, true))
+        using (Stream st = Windfall.Instance.GetFileStream(filename, true))
             ret = (SchematicMetaTile[,])ImportSchematicMethod.Invoke(null, [st]);
         return ret;
     }
@@ -45,7 +45,7 @@ public class WFSchematicManager : ModSystem
         // If no schematic exists with this name, cancel with a helpful log message.
         if (!TileMaps.TryGetValue(name, out SchematicMetaTile[,] schematic))
         {
-            WindfallMod.Instance.Logger.Warn($"Tried to place a schematic with name \"{name}\". No matching schematic file found.");
+            Windfall.Instance.Logger.Warn($"Tried to place a schematic with name \"{name}\". No matching schematic file found.");
             return;
         }
 
@@ -105,7 +105,7 @@ public class WFSchematicManager : ModSystem
         // Make sure that all four corners of the target area are actually in the world.
         if (!WorldGen.InWorld(cornerX, cornerY) || !WorldGen.InWorld(cornerX + width, cornerY + height))
         {
-            WindfallMod.Instance.Logger.Warn("Schematic failed to place: Part of the target location is outside the game world.");
+            Windfall.Instance.Logger.Warn("Schematic failed to place: Part of the target location is outside the game world.");
             return;
         }
 
@@ -433,7 +433,7 @@ public class WFSchematicManager : ModSystem
                     TileEntity.PlaceEntityNet(x, y, ModContent.TileEntityType<TEHostileLabTurret>());
                     break;
                 case 2:
-                    WindfallMod.Instance.Logger.Debug($"Attempting to place Projector with frame data: {t.TileFrameX}, {t.TileFrameY}");
+                    Windfall.Instance.Logger.Debug($"Attempting to place Projector with frame data: {t.TileFrameX}, {t.TileFrameY}");
                     TileEntity.PlaceEntityNet(x, y, ModContent.TileEntityType<TELabHologramProjector>());                    
                     break;
                 case 3:

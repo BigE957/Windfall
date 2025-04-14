@@ -193,10 +193,10 @@ public class LunarBishop : ModNPC
         switch (AIState)
         {
             case States.SelenicChat:
-                ModContent.GetInstance<DialogueUISystem>().DisplayDialogueTree(WindfallMod.Instance, AIState.ToString(), new(Name, [NPC.whoAmI]));
+                ModContent.GetInstance<DialogueUISystem>().DisplayDialogueTree(Windfall.Instance, AIState.ToString(), new(Name, [NPC.whoAmI]));
                 break;
             case States.StaticCharacter:
-                ModContent.GetInstance<DialogueUISystem>().DisplayDialogueTree(WindfallMod.Instance, $"SelenicCultists/{myCharacter}", new(Name, [NPC.whoAmI]), characterSpokenTo ? 1 : 0);
+                ModContent.GetInstance<DialogueUISystem>().DisplayDialogueTree(Windfall.Instance, $"SelenicCultists/{myCharacter}", new(Name, [NPC.whoAmI]), characterSpokenTo ? 1 : 0);
                 characterSpokenTo = true;
                 break;
             case States.CafeteriaEvent:

@@ -137,7 +137,7 @@ public class Apotelesma : ModItem, ILocalizedModType
         }
         tooltips.RemoveRange(1, tooltips.Count - 3);
         tooltips.RemoveAt(2);
-        tooltips.Add(new(WindfallMod.Instance, "LoreTab", GetWindfallTextValue(LocalizationCategory + "." + Name + ".Lore")));
+        tooltips.Add(new(Windfall.Instance, "LoreTab", GetWindfallTextValue(LocalizationCategory + "." + Name + ".Lore")));
     }
 
     public override bool AltFunctionUse(Player player) => true;

@@ -66,7 +66,7 @@ public class Watchman : ModNPC
 
         if(AIState == States.Idle)
         {
-            ModContent.GetInstance<DialogueUISystem>().DisplayDialogueTree(WindfallMod.Instance, $"Watchman/{LunarCultBaseSystem.PlannedActivity}", new(Name, [NPC.whoAmI]));
+            ModContent.GetInstance<DialogueUISystem>().DisplayDialogueTree(Windfall.Instance, $"Watchman/{LunarCultBaseSystem.PlannedActivity}", new(Name, [NPC.whoAmI]));
             return "";
         }
 
@@ -76,7 +76,7 @@ public class Watchman : ModNPC
             Main.LocalPlayer.LunarCult().timesWatchmenTalked++;
         }
 
-        ModContent.GetInstance<DialogueUISystem>().DisplayDialogueTree(WindfallMod.Instance, "Watchman/Default", new(Name, [NPC.whoAmI]), Main.LocalPlayer.LunarCult().timesWatchmenTalked >= 3 ? 2 : 0);
+        ModContent.GetInstance<DialogueUISystem>().DisplayDialogueTree(Windfall.Instance, "Watchman/Default", new(Name, [NPC.whoAmI]), Main.LocalPlayer.LunarCult().timesWatchmenTalked >= 3 ? 2 : 0);
 
         return "";
     }

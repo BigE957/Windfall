@@ -257,11 +257,11 @@ public class TravellingCultist : ModNPC, ILocalizedModType
         NPC.spriteDirection = -NPC.direction;
 
         if (CurrentDialogue == DialogueState.RitualQuestTablet && DraconicRuinsSystem.State == DraconicRuinsSystem.CutsceneState.Finished)
-            ModContent.GetInstance<DialogueUISystem>().DisplayDialogueTree(WindfallMod.Instance, "TravellingCultist/DraconicRuins", new(Name, [NPC.whoAmI]), QuestSystem.Quests["TabletFragment"].Complete ? 3 : 0);
+            ModContent.GetInstance<DialogueUISystem>().DisplayDialogueTree(Windfall.Instance, "TravellingCultist/DraconicRuins", new(Name, [NPC.whoAmI]), QuestSystem.Quests["TabletFragment"].Complete ? 3 : 0);
         else if (introductionDone)
-            ModContent.GetInstance<DialogueUISystem>().DisplayDialogueTree(WindfallMod.Instance, "TravellingCultist/Default", new(Name, [NPC.whoAmI]));
+            ModContent.GetInstance<DialogueUISystem>().DisplayDialogueTree(Windfall.Instance, "TravellingCultist/Default", new(Name, [NPC.whoAmI]));
         else
-            ModContent.GetInstance<DialogueUISystem>().DisplayDialogueTree(WindfallMod.Instance, pool.GetTree(Main.LocalPlayer), new(Name, [NPC.whoAmI]));
+            ModContent.GetInstance<DialogueUISystem>().DisplayDialogueTree(Windfall.Instance, pool.GetTree(Main.LocalPlayer), new(Name, [NPC.whoAmI]));
 
         return "";
     }

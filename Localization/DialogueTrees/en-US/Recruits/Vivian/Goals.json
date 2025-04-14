@@ -1,20 +1,27 @@
 {
   "Dialogues": [
     {
-      "DialogueText": [ { "Text": "God, that was so boring. I don't know how the rest of y'all eat up that slop. Paradise this, Paradise that... If I hear that word one more time, I might just lose it!" } ],
+      "DialogueText": [ { "Text": "God, that was so boring. I don't know how the rest of y'all eat up that slop. 'Great One' this, 'Great One' that... If I hear about it one more time, I might just lose it!" } ],
       "Responses": [
         {
           "Title": "I know, right?",
           "Heading": 3
         },
         {
-          "Title": "Paradise.",
+          "Title": "Great One?",
           "Heading": 1
         }
       ]
     },
     {
-      "DialogueText": [ { "Text": "I'LL KILL YOU." } ],
+      "DialogueText": [
+        { "Text": "DO YOU " },
+        {
+          "Text": "WANT ",
+          "TextEffect": "DialogueHelper.UI.Dialogue.TextEffects.ShakyText"
+        },
+        { "Text":  "TO DIE?! "}
+      ],
       "Responses": [
         {
           "Title": "Sorry!",
@@ -38,7 +45,7 @@
       "DialogueText": [ { "Text": "You're on thin ice, pal... But apology accepted, I suppose. Here I thought these things couldn't get any worse..." } ],
       "Responses": [
         {
-          "Title": "I know, right?",
+          "Title": "Yeah, that sucked.",
           "Heading": 3
         }
       ]
@@ -57,14 +64,14 @@
       ]
     },
     {
-      "DialogueText": [ { "Text": "The Orator has been kind enough to train me in the ways of magic; he believes I have much potential. His knowledge is most certainly vast, and he has opened my eyes to the vast possibilities of my magic. Though... I can't shake the feeling he's... disappointed in me." } ],
+      "DialogueText": [ { "Text": "The Orator's been kind enough to train me in magic; he says I've got potential. He's a really smart guy, and showed me how much I can really do with my magic. Though... I can't shake the feeling he's... disappointed in me." } ],
       "Responses": [
         {
           "Title": "That's natural.",
           "Heading": 5
         },
         {
-          "Title": "Perhaps because of Calamitas?",
+          "Title": "Maybe because of Calamitas?",
           "Heading": 6
         }
       ]
@@ -79,20 +86,45 @@
       ]
     },
     {
-      "DialogueText": [ { "Text": "Ugh, please do not compare me to... her. Though... You might be onto something... Is that the only reason the Orator's training me? To have a Brimstone Witch of his own?! Thats- ..." } ],
+      "DialogueText": [
+        { "Text": "Ugh, please do not compare me to... "},
+        {
+          "Text": "her. ",
+          "Color": "#ff0040",
+          "TextEffect": "DialogueHelper.UI.Dialogue.TextEffects.ShakyText"
+        },
+        { "Text": "Though... You might be onto something... Is that the only reason the Orator's training me? " },
+        {
+          "Text": "To have a Brimstone Witch of his own?! ",
+          "Color": "#FFA500",
+          "TextEffect": "DialogueHelper.UI.Dialogue.TextEffects.ShakyText"
+        },
+        { "Text": "Thats- ..." }
+      ],
       "Responses": [
         {
           "Title": "Sounds like it.",
           "Heading": 7
         },
         {
-          "Title": "Surely not.",
+          "Title": "That can't be it!",
           "Heading": 8
         }
       ]
     },
     {
-      "DialogueText": [ { "Text": "I can't believe it! That's seriously all he wanted out of me?! I can't believe I was so stupid! Screw this!! I'm DONE!!! Done with all of this dumb garbage!" } ],
+      "DialogueText": [
+        { "Text": "I can't believe it!" },
+        {
+          "Text": " That's seriously all he wanted out of me?! ",
+          "TextEffect": "DialogueHelper.UI.Dialogue.TextEffects.ShakyText"
+        },
+        { "Text": " I can't believe I was so stupid! " },
+        {
+          "Text": "Screw this!! I'm DONE!!! ",
+          "TextEffect": "DialogueHelper.UI.Dialogue.TextEffects.ShakyText"
+        }
+      ],
       "Responses": [
         {
           "Title": "Hell yeah!",
@@ -118,7 +150,7 @@
       ]
     },
     {
-      "DialogueText": [ { "Text": "Hmm... Never really thought about it like that. My magic and skills have certainly grown, but... I don't really know if there's much more he's got for me. If he were just leading me along so I keep showing up to these things... Well, I'd be pissed that's for sure!" } ],
+      "DialogueText": [ { "Text": "Hmm... Never really thought about it like that. My magic and skills have certainly grown, but... I don't really know if there's much more he's got for me. If he's just leading me along so I keep showing up to these things... Well, I'd be pissed that's for sure!" } ],
       "Responses": [
         {
           "Title": "It's possible.",
@@ -134,7 +166,7 @@
       "DialogueText": [ { "Text": "Yeah... He does seem like the type. Well screw him! I'm plenty powerful with my magic now; I don't need his help anymore! And if it means getting out of showing up to these, well that's just the cherry on top!" } ],
       "Responses": [
         {
-          "Title": "True!",
+          "Title": "Hell yeah!",
           "Heading": 12
         },
         {
@@ -157,7 +189,7 @@
       ]
     },
     {
-      "DialogueText": [ { "Text": "Well, thanks for the help I guess. Not sure I'd have been able to piece that all together on my own... Makes me feel... kinda stupid, but whatever. I'm happy I can kiss these stupid things goodbye at least!" } ],
+      "DialogueText": [ { "Text": "Well, thanks for the help I guess. Not sure I'd have been able to piece that all together on my own... Makes me feel... kinda stupid, but whatever. I'm happy I can kiss these awful meetings goodbye!" } ],
       "Responses": [
         {
           "Title": "It's okay."

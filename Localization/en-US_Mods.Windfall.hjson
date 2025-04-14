@@ -317,19 +317,19 @@ Dialogue: {
 						#DiaDoGue
 						4: You've grown better at establishing our connection...
 						5: Impressive!
-						6: I have no doubt our goals shall indeed be realized.
-						7: The seal shall shatter.
+						6: I have no doubt our goals are soon to be realized.
+						7: The seal will shatter.
 						8: Luna shall break.
-						9: And Paradise shall awaken unto you.
+						9: And from Heaven, the Great One soon descends.
 						10: That which struck down the Dragons shall too strike down the Gods.
-						11: This stagnant era shall at last conclude.
-						12: Then, together, we shall make something new.
+						11: This stagnant era at last will meet its end.
+						12: Then, together, we can make something new.
 						13: Something better.
 						14: Won't that be wonderful?
 						#endOFDialDoGue
 						15: It is as our benefactor says.
 						16: Continue our righteous works,
-						17: and we shall be see our Paradise.
+						17: and we the world shall be cleansed.
 						18: And you!
 						19: Well done.
 						20: Your help is, as always, appreciated.
@@ -637,7 +637,7 @@ Dialogue: {
 				1: Let us begin.
 			}
 
-			Paradise: {
+			Goals: {
 				0: Greetings!
 				1: Let us begin.
 				2: I know for some here this may feel...
@@ -645,28 +645,28 @@ Dialogue: {
 				4: But I'd like to remind everyone here of our mission.
 				5: Our goal.
 				6: Ugh, again...
-				7: Once we succeed here, Paradise shall at last bless the lands.
-				8: Prosperity shall befall those selfless few who've aided in its return.
+				7: Once we succeed here, the Great One shall cleanse the world of its rot.
+				8: Prosperity shall bless those selfless few who've aided in its return.
 				9: Your efforts here shall soon be rewarded.
-				10: All that you could desire, Paradise shall fullfil!
+				10: All that you could desire, the Great One shall fullfil!
 				11: It'll all be worth it...
 				12: Indeed, indeed!
-				13: Paradise rewards those who devote themselves to its return.
-				14: What... is Paradise?
-				15: Well...
-				16: Paradise, it is...
-				17: A great and mighty power.
-				18: Its might was feared, and sealed away.
-				19: Now it is up to us to restore it.
-				20: Free it.
-				21: That the world might bathe once more under its glow!
+				13: Our savior rewards those who devote themselves to its return.
+				14: What... is the 'Great One' exactly?
+				15: Hmm, I suppose it is time I told you all.
+				16: The Great One is a being from beyond the stars.
+				17: Long ago, it arrived to this world, and tried to rid it of its tyrants.
+				18: However, it was thwarted before it could succeed, and was sealed away.
+				19: Now it is up to us to break the seal, and allow it to finish what it began.
+				20: Where once the Dragons were our tyrants, now there are gods, as well as the Godseeker.
+				21: They will fall before the Great One's might, and we will be free of tyrants forevermore.
 				22: How...
 				23: ...insightful...
 				24: How intriguing!
-				25: Happy to help enlighten!
-				26: Well, with everyone informed, we can wrap up!
+				25: Now you all know the truth of our mission.
+				26: Well, that will be all for today.
 				27: Hold steady your faith. It shall very soon be rewarded.
-				28: Until we next meet.
+				28: Farewell.
 			}
 		}
 

@@ -39,7 +39,7 @@ public class DragonCultist : ModNPC
     {
         Main.CloseNPCChatOrSign();
 
-        ModContent.GetInstance<DialogueUISystem>().DisplayDialogueTree(WindfallMod.Instance, "SkeletronDefeat", new(Name, [NPC.whoAmI]));
+        ModContent.GetInstance<DialogueUISystem>().DisplayDialogueTree(Windfall.Instance, "SkeletronDefeat", new(Name, [NPC.whoAmI]));
 
         return base.GetChat();
     }

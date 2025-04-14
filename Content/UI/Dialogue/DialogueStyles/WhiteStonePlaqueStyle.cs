@@ -29,7 +29,7 @@ public class WhiteStonePlaqueStyle : DialogueStyle
                 textbox.Left.Pixels = speakerRight ? Main.screenWidth / 12f : Main.screenWidth - textbox.Width.Pixels - Main.screenWidth / 12f;
         }
 
-        UIImage boxTexture = new(ModContent.Request<Texture2D>($"{nameof(WindfallMod)}/Assets/UI/DialogueStyles/WhiteStonePlaqueTextbox"));
+        UIImage boxTexture = new(ModContent.Request<Texture2D>($"{nameof(Windfall)}/Assets/UI/DialogueStyles/WhiteStonePlaqueTextbox"));
         SetRectangle(boxTexture, left: -60, top: -30, width: boxTexture.Width.Pixels, height: boxTexture.Height.Pixels);
         textbox.Append(boxTexture);
     }

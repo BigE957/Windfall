@@ -137,7 +137,7 @@ public class QuestSystem : ModSystem
     {
         if (Quests.ContainsKey(name))
         {
-            WindfallMod.Instance.Logger.Warn("Already existing quest of name " + name + " was attempted to be added.");
+            Windfall.Instance.Logger.Warn("Already existing quest of name " + name + " was attempted to be added.");
             return;
         }
         Quests.Add(name, new Quest(name, amountToComplete, autoDeactivate, ref WorldLoadEvent, ref WorldUnloadEvent, ref SaveWorldDataEvent, ref LoadWorldDataEvent));

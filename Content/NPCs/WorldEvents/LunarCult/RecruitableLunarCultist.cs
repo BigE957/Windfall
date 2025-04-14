@@ -126,12 +126,12 @@ public class RecruitableLunarCultist : ModNPC
         if (State == DialogueState.Talkable)
         {
             if(LunarCultBaseSystem.CurrentMeetingTopic == 0)
-                ModContent.GetInstance<DialogueUISystem>().DisplayDialogueTree(WindfallMod.Instance, "Recruits/" + MyName + "/Default", new(Name, [NPC.whoAmI]));
+                ModContent.GetInstance<DialogueUISystem>().DisplayDialogueTree(Windfall.Instance, "Recruits/" + MyName + "/Default", new(Name, [NPC.whoAmI]));
             else
-                ModContent.GetInstance<DialogueUISystem>().DisplayDialogueTree(WindfallMod.Instance, "Recruits/" + MyName + "/" + LunarCultBaseSystem.CurrentMeetingTopic, new(Name, [NPC.whoAmI]));
+                ModContent.GetInstance<DialogueUISystem>().DisplayDialogueTree(Windfall.Instance, "Recruits/" + MyName + "/" + LunarCultBaseSystem.CurrentMeetingTopic, new(Name, [NPC.whoAmI]));
         }
         else
-            ModContent.GetInstance<DialogueUISystem>().DisplayDialogueTree(WindfallMod.Instance, "Recruits/" + MyName + "/" + State, new(Name, [NPC.whoAmI]));
+            ModContent.GetInstance<DialogueUISystem>().DisplayDialogueTree(Windfall.Instance, "Recruits/" + MyName + "/" + State, new(Name, [NPC.whoAmI]));
         return base.GetChat();
     }
     private static void CloseEffect(string treeKey, int dialogueID, int buttonID, bool swapped)

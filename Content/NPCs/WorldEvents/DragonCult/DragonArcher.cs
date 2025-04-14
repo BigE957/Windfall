@@ -35,7 +35,7 @@ public class DragonArcher : ModNPC
     {
         Main.CloseNPCChatOrSign();
 
-        ModContent.GetInstance<DialogueUISystem>().DisplayDialogueTree(WindfallMod.Instance, "MechanicShed", new(Name, [NPC.whoAmI]));
+        ModContent.GetInstance<DialogueUISystem>().DisplayDialogueTree(Windfall.Instance, "MechanicShed", new(Name, [NPC.whoAmI]));
 
         return base.GetChat();
     }
