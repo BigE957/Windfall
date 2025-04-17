@@ -1842,6 +1842,7 @@ NPCs: {
 	SiphonSpitter.DisplayName: Sightseer Spitter
 	DisgracedApostleNPC.DisplayName: Disgraced Apostle N P C
 	PathUser.DisplayName: Path User
+	TestVerletObject.DisplayName: Test Verlet Object
 }
 
 Projectiles: {

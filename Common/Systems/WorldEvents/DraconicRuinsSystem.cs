@@ -4,6 +4,7 @@ using Terraria.ModLoader.IO;
 using Windfall.Common.Graphics.Verlet;
 using Windfall.Content.NPCs.TravellingNPCs;
 using Windfall.Content.NPCs.WorldEvents.LunarCult;
+using static Windfall.Common.Graphics.Verlet.VerletIntegration;
 
 namespace Windfall.Common.Systems.WorldEvents;
 public class DraconicRuinsSystem : ModSystem
@@ -46,8 +47,8 @@ public class DraconicRuinsSystem : ModSystem
 
     private static int BishopIndex = -1;
 
-    public static List<VerletSegment> LeftChain = [];
-    public static List<VerletSegment> RightChain = [];
+    public static List<VerletPoint> LeftChain = [];
+    public static List<VerletPoint> RightChain = [];
 
     public override void OnModLoad()
     {
@@ -464,14 +465,14 @@ public class DraconicRuinsSystem : ModSystem
 
         if (LeftChain.Count > 0)
         {
-            SealingTablet.AffectVerlets(LeftChain, 0.125f, 0.8f);
-            WFVerletSimulations.CalamitySimulation(LeftChain, 4, 30, gravity: 0.5f, windAffected: false);
+            AffectVerlets(LeftChain, 0.125f, 0.8f);
+            Simulate(LeftChain, 30, gravity: 0.5f, windAffected: false);
         }
 
         if (LeftChain.Count > 0)
         {
-            SealingTablet.AffectVerlets(RightChain, 0.125f, 0.8f);
-            WFVerletSimulations.CalamitySimulation(RightChain, 4, 30, gravity: 0.5f, windAffected: false);
+            AffectVerlets(RightChain, 0.125f, 0.8f);
+            Simulate(RightChain, 30, gravity: 0.5f, windAffected: false);
         }
     }
 

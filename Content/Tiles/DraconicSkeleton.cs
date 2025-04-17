@@ -17,7 +17,7 @@ public class DraconicSkeleton : ModTile
         TileObjectData.newTile.Width = 16;
         TileObjectData.newTile.Height = 7;
 
-        TileObjectData.newTile.Origin = new Point16(8, 7);
+        TileObjectData.newTile.Origin = new Point16(8, 6);
         TileObjectData.newTile.CoordinateHeights = new int[7];
         for (int i = 0; i < 7; i++)
         {

@@ -1,9 +1,9 @@
-﻿using Luminance.Common.VerletIntergration;
-using Windfall.Common.Graphics.Metaballs;
+﻿using Windfall.Common.Graphics.Metaballs;
 using Windfall.Common.Graphics.Verlet;
 using Windfall.Common.Systems.WorldEvents;
 using Windfall.Content.Items.Quests.SealingRitual;
 using Windfall.Content.NPCs.Bosses.Orator;
+using static Windfall.Common.Graphics.Verlet.VerletIntegration;
 
 namespace Windfall.Content.NPCs.WorldEvents.LunarCult;
 
@@ -35,24 +35,25 @@ public class SealingTablet : ModNPC
         NPC.chaseable = false;
     }
     private float summonRatio = 0f;
-    private readonly List<VerletSegment> LeftChain = [];
-    private readonly List<VerletSegment> RightChain = [];
     private bool isHovered = false;
+
+    List<VerletPoint> box = [];
+    List<VerletPoint> LeftChain = [];
+    List<VerletPoint> RightChain = [];
 
     public override void OnSpawn(IEntitySource source)
     {
         int verletCount = 22;
-        for (int i = 0; i < verletCount; i++) 
-        {
-            LeftChain.Add(new(NPC.Bottom + new Vector2(-48, 4 * i), Vector2.Zero, i == 0));
-            RightChain.Add(new(NPC.Bottom + new Vector2(48, 4 * i), Vector2.Zero, i == 0));
-        }
 
-        NPC.position.Y += verletCount * 4;
+        box = CreateVerletBox(new((int)NPC.position.X, (int)NPC.position.Y, NPC.width, NPC.height));
 
-        LeftChain[^1].Position = NPC.Center + new Vector2(-NPC.width / 2f, 0);
-        RightChain[^1].Position = NPC.Center + new Vector2(NPC.width / 2f, 0);
+        LeftChain = CreateVerletChain(NPC.Bottom + new Vector2(-48, 0), box[0].Position, verletCount, 4);
+        RightChain = CreateVerletChain(NPC.Bottom + new Vector2(48, 0), box[2].Position, verletCount, 4);
+
+        ConnectVerlets(LeftChain[^1], box[0], 4);
+        ConnectVerlets(RightChain[^1], box[2], 4);
     }
+
     public override void AI()
     {
         // Orator Summoning
@@ -91,37 +92,8 @@ public class SealingTablet : ModNPC
             }
         }
 
-        //LeftChain[^1].Locked = false;
-        //RightChain[^1].Locked = false;
-
         AffectVerlets(LeftChain, 0.125f, 0.8f);
         AffectVerlets(RightChain, 0.125f, 0.8f);
-
-        foreach (Player p in Main.ActivePlayers)
-        {
-            if (p.Hitbox.Intersects(NPC.Hitbox))
-            {
-                LeftChain[^2].Position += p.velocity * 0.25f;
-                RightChain[^2].Position += p.velocity * 0.25f;
-                LeftChain[^1].Position += p.velocity * 0.25f;
-                RightChain[^1].Position += p.velocity * 0.25f;
-            }
-        }
-
-        foreach (Projectile proj in Main.ActiveProjectiles)
-        {
-            if (proj.Hitbox.Intersects(NPC.Hitbox))
-            {
-                LeftChain[^2].Position += proj.velocity * 0.25f;
-                RightChain[^2].Position += proj.velocity * 0.25f;
-                LeftChain[^1].Position += proj.velocity * 0.25f;
-                RightChain[^1].Position += proj.velocity * 0.25f;
-            }
-        }
-
-        //NPC.velocity.Y = 0f;
-        //
-        //NPC.position.Y += 8;
 
         float chainDistance = Vector2.Distance(LeftChain[^1].Position, RightChain[^1].Position);
         Vector2 chainToChain = (RightChain[^1].Position - LeftChain[^1].Position).SafeNormalize(Vector2.UnitX);
@@ -151,19 +123,27 @@ public class SealingTablet : ModNPC
                 }
             }
 
-            if (chainDistance != NPC.width - 24)
-            {
-                float distanceDif = chainDistance - (NPC.width - 24);
-                LeftChain[^1].Position += chainToChain * distanceDif / 2f;
-                RightChain[^1].Position -= chainToChain * distanceDif / 2f;
-            }
+            Simulate(LeftChain, 30, gravity: 0.8f, windAffected: false);
+            Simulate(RightChain, 30, gravity: 0.8f, windAffected: false);
 
-            NPC.Center = LeftChain[^1].Position + (RightChain[^1].Position - LeftChain[^1].Position) / 2f;
-            NPC.position.Y += 8;
-            NPC.rotation = chainToChain.ToRotation();
+            NPC.Center = (LeftChain[^1].Position + RightChain[^1].Position) / 2f;
+            NPC.rotation = (LeftChain[^1].Position - RightChain[^1].Position).ToRotation() + Pi;
         }
         else
         {
+            if(box.Count != 0)
+            {
+                BreakVerletConnection(LeftChain[^1], box[0]);
+                BreakVerletConnection(RightChain[^1], box[2]);
+
+                DraconicRuinsSystem.LeftChain = LeftChain;
+                DraconicRuinsSystem.RightChain = RightChain;
+
+                box.Clear();
+                LeftChain.Clear();
+                RightChain.Clear();
+            }
+
             NPC holder = Main.npc[(int)NPC.ai[1]];
             if (NPC.ai[0] == 4)
                 NPC.Center = holder.Center + new Vector2(holder.direction * 8, -28);
@@ -182,36 +162,12 @@ public class SealingTablet : ModNPC
                     }
                     NPC.velocity = Vector2.Zero;
 
-                    DraconicRuinsSystem.LeftChain = LeftChain;
-                    DraconicRuinsSystem.RightChain = RightChain;
-
                     NPC.active = false;
                 }
             }
         }    
 
-        WFVerletSimulations.CalamitySimulation(LeftChain, 4, 30, gravity: 0.8f, windAffected: false);
-        WFVerletSimulations.CalamitySimulation(RightChain, 4, 30, gravity: 0.8f, windAffected: false);
-    }
-
-    public static void AffectVerlets(List<VerletSegment> verlet, float dampening, float cap)
-    {
-        for (int k = 0; k < verlet.Count; k++)
-        {
-            if (!verlet[k].Locked)
-            {
-                foreach (Player p in Main.ActivePlayers)
-                {
-                    VerletHangerDrawing.MoveChainBasedOnEntity(verlet, p, dampening, cap);
-                }
-
-                foreach (Projectile proj in Main.ActiveProjectiles)
-                {
-                    VerletHangerDrawing.MoveChainBasedOnEntity(verlet, proj, dampening, cap);
-                }
-            }
-        }
-
+        
     }
 
     public override bool CheckActive() => false;

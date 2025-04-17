@@ -4,13 +4,84 @@ using Windfall.Content.Items.Placeables.Furnature.VerletHangers.Cords;
 using Windfall.Content.Tiles.TileEntities;
 using Windfall.Content.Items.Tools;
 using CalamityMod.Particles;
+using Terraria;
 
 namespace Windfall.Common.Graphics.Verlet;
-public class VerletHangerDrawing : ModSystem
+public class PlaceableVerletDrawing : ModSystem
 {
+    public static readonly Dictionary<string, Asset<Texture2D>> ObjectAssets = [];
+    
+    public struct VerletObject(Vector2 center, string key, Vector2 size, List<List<VerletSegment>> chains, int segLength = 4, int loops = 30, float gravStrength = 0.8f)
+    {
+        Vector2 Center = center;
+        Vector2 Size = size;
+        float Rotation;
+        string AssetKey = key;
+
+        readonly Rectangle Hitbox => new((int)(Center.X - Size.X / 2f), (int)(Center.Y - Size.Y / 2f), (int)Size.X, (int)Size.Y);
+
+        readonly List<List<VerletSegment>> Chains = chains;
+        int SegmentLength = segLength;
+        int LoopCount = loops;
+        float Gravity = gravStrength;
+
+        void Update()
+        {
+            foreach (List<VerletSegment> verlet in Chains)
+            {
+                AffectVerlets(verlet, Hitbox, 0.125f, 0.8f);
+            }
+
+            float chainDistance = Vector2.Distance(Chains[0][^1].Position, Chains[^1][^1].Position);
+            Vector2 chainToChain = (Chains[^1][^1].Position - Chains[0][^1].Position).SafeNormalize(Vector2.UnitX);
+
+            if (chainDistance != Size.X)
+            {
+                float distanceDif = chainDistance - Size.X;
+                Chains[0][^1].Position += chainToChain * distanceDif / 2f;
+                Chains[^1][^1].Position -= chainToChain * distanceDif / 2f;
+            }
+
+            Center = Chains[0][^1].Position + (Chains[^1][^1].Position - Chains[0][^1].Position) / 2f;
+            Center.Y += 8;
+            Rotation = chainToChain.ToRotation();
+
+            foreach(List<VerletSegment> verlet in Chains)
+                WFVerletSimulations.CalamitySimulation(verlet, SegmentLength, LoopCount, gravity: Gravity, windAffected: false);
+        }
+
+        void Draw(SpriteBatch sb)
+        {
+            foreach (List<VerletSegment> verlet in Chains)
+            {
+                for(int i = 0; i < verlet.Count - 1; i++)
+                {
+                    Vector2 line = verlet[i].Position - verlet[i + 1].Position;
+                    Color lighting = Lighting.GetColor((verlet[i + 1].Position + (line / 2f)).ToTileCoordinates());
+                    Main.spriteBatch.DrawLineBetween(verlet[i].Position, verlet[i + 1].Position, Color.White.MultiplyRGB(lighting), 3);
+                }
+            }
+            Main.spriteBatch.Draw(ObjectAssets[AssetKey].Value, Center, Hitbox, Lighting.GetColor(Center.ToTileCoordinates()), Rotation, ObjectAssets[AssetKey].Size() * 0.5f, 1f, 0, 0);
+        }
+    }
+
+    public List<VerletObject> NpcLayerObjects = [];
+    public List<VerletObject> ProjectileLayerObjects = [];
+
     public override void OnModLoad()
     {
         On_Main.DrawProjectiles += DrawHangerVerlets;
+
+        if (!Main.dedServ)
+        {
+            ObjectAssets.Add("DragonSkull", ModContent.Request<Texture2D>("Windfall/Assets/NPCs/DragonSkeleton/DragonSkull", AssetRequestMode.AsyncLoad));
+            ObjectAssets.Add("DragonRibs", ModContent.Request<Texture2D>("Windfall/Assets/NPCs/DragonSkeleton/DragonRibs", AssetRequestMode.AsyncLoad));
+            ObjectAssets.Add("DragonFrontWing", ModContent.Request<Texture2D>("Windfall/Assets/NPCs/DragonSkeleton/DragonFrontWing", AssetRequestMode.AsyncLoad));
+            ObjectAssets.Add("DragonBackWing", ModContent.Request<Texture2D>("Windfall/Assets/NPCs/DragonSkeleton/DragonBackWing", AssetRequestMode.AsyncLoad));
+            ObjectAssets.Add("DragonFrontLeg", ModContent.Request<Texture2D>("Windfall/Assets/NPCs/DragonSkeleton/DragonFrontLeg", AssetRequestMode.AsyncLoad));
+            ObjectAssets.Add("DragonBackLeg", ModContent.Request<Texture2D>("Windfall/Assets/NPCs/DragonSkeleton/DragonBackLeg", AssetRequestMode.AsyncLoad));
+            ObjectAssets.Add("DragonTail", ModContent.Request<Texture2D>("Windfall/Assets/NPCs/DragonSkeleton/DragonTail", AssetRequestMode.AsyncLoad));
+        }
     }
 
     public override void PreUpdateProjectiles()
@@ -229,6 +300,70 @@ public class VerletHangerDrawing : ModSystem
                 VerletSimulations.RopeVerletSimulation(subVerlet, startPos, 12 * subVerlet.Count, new());
             }
         }
+    }
+
+    public static void AffectVerlets(List<VerletSegment> verlet, NPC npc, float dampening, float cap)
+    {
+        for (int k = 0; k < verlet.Count; k++)
+        {
+            if (!verlet[k].Locked)
+            {
+                foreach (Player p in Main.ActivePlayers)
+                {
+                    MoveChainBasedOnEntity(verlet, p, dampening, cap);
+
+                    if (p.Hitbox.Intersects(npc.Hitbox))
+                    {
+                        verlet[^2].Position += p.velocity * 0.25f;
+                        verlet[^1].Position += p.velocity * 0.25f;
+                    }
+                }
+
+                foreach (Projectile proj in Main.ActiveProjectiles)
+                {
+                    MoveChainBasedOnEntity(verlet, proj, dampening, cap);
+
+                    if (proj.Hitbox.Intersects(npc.Hitbox))
+                    {
+                        verlet[^2].Position += proj.velocity * 0.25f;
+                        verlet[^1].Position += proj.velocity * 0.25f;
+                    }
+                }
+            }
+        }
+
+    }
+    
+    public static void AffectVerlets(List<VerletSegment> verlet, Rectangle hitbox, float dampening, float cap)
+    {
+        for (int k = 0; k < verlet.Count; k++)
+        {
+            if (!verlet[k].Locked)
+            {
+                foreach (Player p in Main.ActivePlayers)
+                {
+                    MoveChainBasedOnEntity(verlet, p, dampening, cap);
+
+                    if (p.Hitbox.Intersects(hitbox))
+                    {
+                        verlet[^2].Position += p.velocity * 0.25f;
+                        verlet[^1].Position += p.velocity * 0.25f;
+                    }
+                }
+
+                foreach (Projectile proj in Main.ActiveProjectiles)
+                {
+                    MoveChainBasedOnEntity(verlet, proj, dampening, cap);
+
+                    if (proj.Hitbox.Intersects(hitbox))
+                    {
+                        verlet[^2].Position += proj.velocity * 0.25f;
+                        verlet[^1].Position += proj.velocity * 0.25f;
+                    }
+                }
+            }
+        }
+
     }
 
     public static void MoveChainBasedOnEntity(List<VerletSegment> chain, Entity e, float dampening = 0.425f, float cap = 5f)
