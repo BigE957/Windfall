@@ -67,7 +67,7 @@ public class CordageMeter : ModItem
             }
             if (HE.DecorationVerlets[HangIndex].segmentCount == 2 && sizeChange == -1)
                 return true;
-            (List<VerletPoint>, int, int) newDV = new(HE.DecorationVerlets[HangIndex].chain, HE.DecorationVerlets[HangIndex].decorationID, HE.DecorationVerlets[HangIndex].segmentCount + sizeChange);
+            (VerletObject, int, int) newDV = new(HE.DecorationVerlets[HangIndex].chain, HE.DecorationVerlets[HangIndex].decorationID, HE.DecorationVerlets[HangIndex].segmentCount + sizeChange);
             HE.DecorationVerlets.Remove(HangIndex);
             HE.DecorationVerlets[HangIndex] = newDV;
             HE.SendSyncPacket();

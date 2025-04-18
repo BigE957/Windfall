@@ -41,7 +41,7 @@ public abstract class Decoration : ModItem
             }
 
             Vector2 startPos = HangIndex == -2 ? HE.Position.ToWorldCoordinates() : HE.MainVerlet[HangIndex].Position;
-            List <VerletPoint> newVerlet = CreateVerletChain(startPos, startPos + (Vector2.UnitY * 120f), 8, 15);
+            VerletObject newVerlet = CreateVerletChain(startPos, startPos + (Vector2.UnitY * 120f), 8, 15);
 
             if (HangIndex == -2)
             {

@@ -47,8 +47,8 @@ public class DraconicRuinsSystem : ModSystem
 
     private static int BishopIndex = -1;
 
-    public static List<VerletPoint> LeftChain = [];
-    public static List<VerletPoint> RightChain = [];
+    public static VerletObject LeftChain = null;
+    public static VerletObject RightChain = null;
 
     public override void OnModLoad()
     {
@@ -463,15 +463,15 @@ public class DraconicRuinsSystem : ModSystem
         if (CutsceneActive)
             CutsceneTime++;
 
-        if (LeftChain.Count > 0)
+        if (LeftChain != null)
         {
-            AffectVerlets(LeftChain, 0.125f, 0.8f);
+            AffectVerletObject(LeftChain, 0.125f, 0.8f);
             VerletSimulation(LeftChain, 30, gravity: 0.5f, windAffected: false);
         }
 
-        if (LeftChain.Count > 0)
+        if (RightChain != null)
         {
-            AffectVerlets(RightChain, 0.125f, 0.8f);
+            AffectVerletObject(RightChain, 0.125f, 0.8f);
             VerletSimulation(RightChain, 30, gravity: 0.5f, windAffected: false);
         }
     }
@@ -480,7 +480,7 @@ public class DraconicRuinsSystem : ModSystem
     {
         orig(self);
 
-        if (State != CutsceneState.Arrival && !NPC.AnyNPCs(ModContent.NPCType<SealingTablet>()) && LeftChain.Count != 0 && RightChain.Count != 0)
+        if (State != CutsceneState.Arrival && !NPC.AnyNPCs(ModContent.NPCType<SealingTablet>()) && LeftChain != null && RightChain != null)
         {
             Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.PointWrap, DepthStencilState.None, Main.Rasterizer, null, Main.GameViewMatrix.TransformationMatrix);
 

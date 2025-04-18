@@ -8,6 +8,18 @@ public static class VerletIntegration
         public List<(VerletPoint Point, float Length)> Connections = [];
     }
 
+    public class VerletObject(List<VerletPoint> points)
+    {
+        public List<VerletPoint> Points = points;
+        public int Count => Points.Count;
+
+        public VerletPoint this[Index key]
+        {
+            get => Points[key];
+            set => Points[key] = value;
+        }
+    }
+
     public static void VerletSimulation(List<VerletPoint> chain, int loops = 10, float gravity = 0.3f, bool windAffected = true)
     {
         foreach (VerletPoint point in chain)
@@ -55,7 +67,12 @@ public static class VerletIntegration
             VerletSimulation(chain, loops, gravity, windAffected);
     }
 
-    public static List<VerletPoint> CreateVerletChain(Vector2 startPos, Vector2 endPos, int count, float distBetween, bool lockStart = true, bool lockEnd = false)
+    public static void VerletSimulation(VerletObject obj, int loops = 10, float gravity = 0.3f, bool windAffected = true)
+    {
+        VerletSimulation(obj.Points, loops, gravity, windAffected);
+    }
+
+    public static VerletObject CreateVerletChain(Vector2 startPos, Vector2 endPos, int count, float distBetween, bool lockStart = true, bool lockEnd = false)
     {
         List<VerletPoint> output = [];
 
@@ -69,10 +86,10 @@ public static class VerletIntegration
                 ConnectVerlets(output[i - 1], output[i], distBetween);
         }
 
-        return output;
+        return new(output);
     }
 
-    public static List<VerletPoint> CreateVerletBox(Rectangle r)
+    public static VerletObject CreateVerletBox(Rectangle r)
     {
         List<VerletPoint> output = [];
 
@@ -87,7 +104,7 @@ public static class VerletIntegration
         ConnectVerlets(output[2], output[3], r.Width);
         ConnectVerlets(output[0], output[2], (r.TopLeft() - r.BottomRight()).Length());
 
-        return output;
+        return new(output);
     }
 
     public static void ConnectVerlets(VerletPoint a, VerletPoint b, float length)
@@ -119,40 +136,54 @@ public static class VerletIntegration
         myList.RemoveVerletPoint(myList.FindIndex(c => c == p));
     }
 
-    public static void AffectVerlets(List<VerletPoint> verlet, float dampening, float cap)
+    public static void AffectVerletObject(VerletObject obj, float dampening, float cap)
     {
-        for (int k = 0; k < verlet.Count; k++)
-            if (!verlet[k].Locked)
+        for (int k = 0; k < obj.Points.Count; k++)
+            if (!obj[k].Locked)
             {
                 foreach (Player p in Main.ActivePlayers)
-                    MoveChainBasedOnEntity(verlet, p, dampening / 2f, cap / 2f);
+                    MoveObjectBasedOnEntity(obj, p, dampening / 2f, cap / 2f);
 
                 foreach (Projectile proj in Main.ActiveProjectiles)
-                    MoveChainBasedOnEntity(verlet, proj, dampening, cap);
+                    MoveObjectBasedOnEntity(obj, proj, dampening, cap);
             }
     }
 
-    public static void MoveChainBasedOnEntity(List<VerletPoint> chain, Entity e, float dampening = 0.425f, float cap = 5f)
+    public static void MoveObjectBasedOnEntity(VerletObject obj, Entity e, float dampening = 0.425f, float cap = 5f)
     {
         Vector2 entityVelocity = (e.velocity * dampening).ClampMagnitude(0f, cap);
 
-        for (int i = 1; i < chain.Count - 1; i++)
+        for (int i = 0; i < obj.Points.Count; i++)
         {
-            VerletPoint segment = chain[i];
-            VerletPoint next = chain[i + 1];
-            float _ = 0f;
-            if (Collision.CheckAABBvLineCollision(e.TopLeft, e.Size, segment.Position, next.Position, 20f, ref _))
-            {
-                // Weigh the entity's distance between the two segments.
-                float distanceBetweenSegments = segment.Position.Distance(next.Position);
-                float distanceToChains = e.Distance(segment.Position);
-                float currentMovementOffsetInterpolant = Utilities.InverseLerp(distanceToChains, distanceBetweenSegments, distanceBetweenSegments * 0.2f);
-                float nextMovementOffsetInterpolant = 1f - currentMovementOffsetInterpolant;
+            if (obj[i].Locked)
+                continue;
 
-                // Move the segments based on the weight values.
-                segment.Position += entityVelocity * currentMovementOffsetInterpolant;
-                if (!next.Locked)
-                    next.Position += entityVelocity * nextMovementOffsetInterpolant;
+            VerletPoint segment = obj[i];
+            bool mainSegmentHit = false;
+            for (int j = 0; j < obj[i].Connections.Count; j++)
+            {
+                if (obj[i].Connections[j].Length == -1)
+                    continue;
+
+                VerletPoint next = obj[i].Connections[j].Point;
+                float _ = 0f;
+                if (Collision.CheckAABBvLineCollision(e.TopLeft, e.Size, segment.Position, next.Position, 20f, ref _))
+                {
+                    // Weigh the entity's distance between the two segments.
+                    float distanceBetweenSegments = segment.Position.Distance(next.Position);
+                    float distanceToChains = e.Distance(segment.Position);
+                    float currentMovementOffsetInterpolant = Utilities.InverseLerp(distanceToChains, distanceBetweenSegments, distanceBetweenSegments * 0.2f);
+                    float nextMovementOffsetInterpolant = 1f - currentMovementOffsetInterpolant;
+
+                    // Move the segments based on the weight values.
+                    if (!mainSegmentHit)
+                    {
+                        segment.Position += entityVelocity * currentMovementOffsetInterpolant;
+                        mainSegmentHit = true;
+                    }
+                    if (!next.Locked)
+                        next.Position += entityVelocity * nextMovementOffsetInterpolant;
+                }
             }
         }
     }

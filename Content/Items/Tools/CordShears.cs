@@ -37,7 +37,7 @@ public class CordShears : ModItem
                 return true;
             }
 
-            if(HE.DecorationVerlets.TryGetValue(-1, out (List<VerletPoint> chain, int id, int count) value))
+            if(HE.DecorationVerlets.TryGetValue(-1, out (VerletObject chain, int id, int count) value))
                 Item.NewItem(Item.GetSource_DropAsItem(), HE.Position.ToWorldCoordinates(), DecorationID.DecorationTypes[value.id]);
             bool removalFail = !HE.DecorationVerlets.Remove(-1);
 
@@ -47,13 +47,13 @@ public class CordShears : ModItem
                 switch (HE.State)
                 {
                     case 1:
-                        HE.MainVerlet.Clear();
+                        HE.MainVerlet = null;
                         HE.DecorationVerlets.Clear();
                         break;
                     case 2:
                         HangerEntity mainEntity = FindTileEntity<HangerEntity>(HE.PartnerLocation.Value.X, HE.PartnerLocation.Value.Y, 1, 1);
-                        mainEntity.MainVerlet.Clear();
-                        if (mainEntity.DecorationVerlets.TryGetValue(-1, out (List<VerletPoint> chain, int decorationID, int segmentCount) hangerDecor))
+                        mainEntity.MainVerlet = null;
+                        if (mainEntity.DecorationVerlets.TryGetValue(-1, out (VerletObject chain, int decorationID, int segmentCount) hangerDecor))
                         {
                             mainEntity.DecorationVerlets.Clear();
                             mainEntity.DecorationVerlets.Add(-1, hangerDecor);

@@ -37,9 +37,9 @@ public class SealingTablet : ModNPC
     private float summonRatio = 0f;
     private bool isHovered = false;
 
-    List<VerletPoint> box = [];
-    List<VerletPoint> LeftChain = [];
-    List<VerletPoint> RightChain = [];
+    VerletObject box;
+    VerletObject LeftChain;
+    VerletObject RightChain;
 
     public override void OnSpawn(IEntitySource source)
     {
@@ -92,8 +92,8 @@ public class SealingTablet : ModNPC
             }
         }
 
-        AffectVerlets(LeftChain, 0.125f, 0.8f);
-        AffectVerlets(RightChain, 0.125f, 0.8f);
+        AffectVerletObject(LeftChain, 0.125f, 0.8f);
+        AffectVerletObject(RightChain, 0.125f, 0.8f);
 
         float chainDistance = Vector2.Distance(LeftChain[^1].Position, RightChain[^1].Position);
         Vector2 chainToChain = (RightChain[^1].Position - LeftChain[^1].Position).SafeNormalize(Vector2.UnitX);
@@ -131,7 +131,7 @@ public class SealingTablet : ModNPC
         }
         else
         {
-            if(box.Count != 0)
+            if(box != null)
             {
                 BreakVerletConnection(LeftChain[^1], box[0]);
                 BreakVerletConnection(RightChain[^1], box[2]);
@@ -139,9 +139,9 @@ public class SealingTablet : ModNPC
                 DraconicRuinsSystem.LeftChain = LeftChain;
                 DraconicRuinsSystem.RightChain = RightChain;
 
-                box.Clear();
-                LeftChain.Clear();
-                RightChain.Clear();
+                box = null;
+                LeftChain = null;
+                RightChain = null;
             }
 
             NPC holder = Main.npc[(int)NPC.ai[1]];

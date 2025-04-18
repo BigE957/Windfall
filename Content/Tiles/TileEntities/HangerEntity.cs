@@ -60,9 +60,9 @@ public class HangerEntity : ModTileEntity
         }
     }
 
-    public List<VerletPoint> MainVerlet = [];
+    public VerletObject MainVerlet = null;
 
-    public Dictionary<int, (List<VerletPoint> chain, int decorationID, int segmentCount)> DecorationVerlets = [];
+    public Dictionary<int, (VerletObject chain, int decorationID, int segmentCount)> DecorationVerlets = [];
 
     public override bool IsTileValidForEntity(int x, int y)
     {
@@ -153,7 +153,7 @@ public class HangerEntity : ModTileEntity
         
         int decorationCount = tag.GetInt("DecorationCount");
         for (int i = 0; i < decorationCount; i++)
-            DecorationVerlets.Add(tag.GetInt($"DecorationIndex{i}"), new([], tag.GetInt($"DecorationType{i}"), tag.GetInt($"DecorationLength{i}")));
+            DecorationVerlets.Add(tag.GetInt($"DecorationIndex{i}"), new(null, tag.GetInt($"DecorationType{i}"), tag.GetInt($"DecorationLength{i}")));
     }
 
     public override void NetSend(BinaryWriter writer)
@@ -185,7 +185,7 @@ public class HangerEntity : ModTileEntity
         DecorationVerlets.Clear();
         int decorationCount = reader.ReadInt32();
         for (int i = 0; i < decorationCount; i++)
-            DecorationVerlets.Add(reader.ReadInt32(), new([], reader.ReadInt32(), reader.ReadInt32()));
+            DecorationVerlets.Add(reader.ReadInt32(), new(null, reader.ReadInt32(), reader.ReadInt32()));
     }
 
     public void SendSyncPacket()
@@ -224,10 +224,10 @@ public class HangerEntity : ModTileEntity
         int segmentCount = reader.ReadInt32();
         byte cordID = reader.ReadByte();
 
-        Dictionary<int, (List<VerletPoint>, int, int)> DecorationVerlets = [];
+        Dictionary<int, (VerletObject, int, int)> DecorationVerlets = [];
         int decorationCount = reader.ReadInt32();
         for (int i = 0; i < decorationCount; i++)
-            DecorationVerlets.Add(reader.ReadInt32(), new([], reader.ReadInt32(), reader.ReadInt32()));
+            DecorationVerlets.Add(reader.ReadInt32(), new(null, reader.ReadInt32(), reader.ReadInt32()));
 
         if (exists && te is HangerEntity hanger)
         {

@@ -81,15 +81,15 @@ public class PlaceableVerletDrawing : ModSystem
                 Vector2 StringStart = te.Position.ToWorldCoordinates();
                 Vector2 StringEnd = te.PartnerLocation.Value.ToWorldCoordinates();
 
-                if (te.MainVerlet.Count != te.SegmentCount)
+                if (te.MainVerlet == null || te.MainVerlet.Count != te.SegmentCount)
                     te.MainVerlet = CreateVerletChain(StringStart, StringEnd, te.SegmentCount, 15, lockEnd: true);
 
                 te.MainVerlet[0].Position = StringStart;
                 te.MainVerlet[^1].Position = StringEnd;
 
-                AffectVerlets(te.MainVerlet, 1f, 0.425f);
+                AffectVerletObject(te.MainVerlet, 1f, 0.425f);
 
-                Vector2[] segmentPositions = [.. te.MainVerlet.Select(x => x.Position)];
+                Vector2[] segmentPositions = [.. te.MainVerlet.Points.Select(x => x.Position)];
 
                 for (int k = 0; k < te.MainVerlet.Count; k++)
                 {
@@ -156,25 +156,24 @@ public class PlaceableVerletDrawing : ModSystem
             for (int i = 0; i < te.DecorationVerlets.Count; i++)
             {
                 int index = te.DecorationVerlets.ElementAt(i).Key;
-                List<VerletPoint> subVerlet = te.DecorationVerlets[index].chain;
+                VerletObject subVerlet = te.DecorationVerlets[index].chain;
                 Vector2 startPos;
                 if (index == -1)
                     startPos = te.Position.ToWorldCoordinates();
                 else
                     startPos = te.MainVerlet[index].Position;
 
-                if (subVerlet.Count != te.DecorationVerlets[index].segmentCount)
+                if (subVerlet == null || subVerlet.Count != te.DecorationVerlets[index].segmentCount)
                 {
-                    te.DecorationVerlets[index].chain.Clear();
-                    te.DecorationVerlets[index].chain.AddRange(CreateVerletChain(startPos, startPos + Vector2.UnitY * (12 * te.DecorationVerlets[index].segmentCount), te.DecorationVerlets[index].segmentCount, 15));
+                    te.DecorationVerlets[index] = new(CreateVerletChain(startPos, startPos + Vector2.UnitY * (12 * te.DecorationVerlets[index].segmentCount), te.DecorationVerlets[index].segmentCount, 15), te.DecorationVerlets[index].decorationID, te.DecorationVerlets[index].segmentCount);
                     subVerlet = te.DecorationVerlets[index].chain;
                 }
 
                 subVerlet[0].Position = startPos;
 
-                DecorationID.GetDecoration(te.DecorationVerlets[index].decorationID).UpdateDecoration([.. subVerlet.Select(x => x.Position)]);
+                DecorationID.GetDecoration(te.DecorationVerlets[index].decorationID).UpdateDecoration([.. subVerlet.Points.Select(x => x.Position)]);
                 
-                AffectVerlets(subVerlet, 0.125f, 0.8f);
+                AffectVerletObject(subVerlet, 0.125f, 0.8f);
 
                 VerletSimulation(subVerlet, 10, 0.8f);
             }
@@ -227,14 +226,14 @@ public class PlaceableVerletDrawing : ModSystem
                     twine = partner.CordID.HasValue ? CordID.GetTwine(partner.CordID.Value) : null;
             }
 
-            foreach ((List<VerletPoint> chain, int decorationID, int segementCount) in te.DecorationVerlets.Values.Where(v => v.chain.Count > 0))
+            foreach ((VerletObject obj, int decorationID, int segementCount) in te.DecorationVerlets.Values.Where(v => v.chain != null && v.chain.Count > 0))
             {
-                segmentPositions = [.. chain.Select(x => x.Position)];
+                segmentPositions = [.. obj.Points.Select(x => x.Position)];
 
                 for (int k = 0; k < segmentPositions.Length; k++)
                 {
                     if (twine != null)
-                        twine.DrawDecorationSegment(Main.spriteBatch, chain, k);
+                        twine.DrawDecorationSegment(Main.spriteBatch, obj.Points, k);
                     else if (k != segmentPositions.Length - 1)
                     {                       
                         Vector2 line = segmentPositions[k] - segmentPositions[k + 1];
@@ -252,10 +251,10 @@ public class PlaceableVerletDrawing : ModSystem
 
             if (te.State == 1)
             {
-                if (te.MainVerlet.Count > 0)
+                if (te.MainVerlet != null && te.MainVerlet.Count > 0)
                 {
-                    List<VerletPoint> TwineVerlet = te.MainVerlet;
-                    segmentPositions = [.. TwineVerlet.Select(x => x.Position)];
+                    VerletObject obj = te.MainVerlet;
+                    segmentPositions = [.. obj.Points.Select(x => x.Position)];
 
                     if (twine != null)
                     {
@@ -264,14 +263,16 @@ public class PlaceableVerletDrawing : ModSystem
                     }
 
                     for (int k = 0; k < segmentPositions.Length; k++)
-                        twine.DrawRopeSegment(Main.spriteBatch, TwineVerlet, k);
+                        twine.DrawRopeSegment(Main.spriteBatch, obj.Points, k);
                 }
             }
 
             if (twine != null)
-                foreach ((List<VerletPoint> chain, int, int) Decoration in te.DecorationVerlets.Values.Where(v => v.chain.Count > 0))
+                foreach ((VerletObject obj, int, int) Decoration in te.DecorationVerlets.Values.Where(v => v.chain != null && v.chain.Count > 0))
                 {
-                    segmentPositions = [.. Decoration.chain.Select(x => x.Position)];
+                    if (Decoration.obj == null)
+                        continue;
+                    segmentPositions = [.. Decoration.obj.Points.Select(x => x.Position)];
                     twine.DrawOnRopeEnds(Main.spriteBatch, segmentPositions[0], (segmentPositions[1] - segmentPositions[0]).ToRotation());
                 }
         }
