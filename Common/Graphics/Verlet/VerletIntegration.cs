@@ -8,9 +8,16 @@ public static class VerletIntegration
         public List<(VerletPoint Point, float Length)> Connections = [];
     }
 
-    public class VerletObject(List<VerletPoint> points)
+    public enum ObjectType
+    {
+        Chain,
+        Shape
+    }
+
+    public class VerletObject(List<VerletPoint> points, ObjectType type)
     {
         public List<VerletPoint> Points = points;
+        public readonly ObjectType Type = type;
         public int Count => Points.Count;
 
         public VerletPoint this[Index key]
@@ -86,7 +93,7 @@ public static class VerletIntegration
                 ConnectVerlets(output[i - 1], output[i], distBetween);
         }
 
-        return new(output);
+        return new(output, ObjectType.Chain);
     }
 
     public static VerletObject CreateVerletBox(Rectangle r)
@@ -103,8 +110,9 @@ public static class VerletIntegration
         ConnectVerlets(output[1], output[2], r.Height);
         ConnectVerlets(output[2], output[3], r.Width);
         ConnectVerlets(output[0], output[2], (r.TopLeft() - r.BottomRight()).Length());
+        ConnectVerlets(output[1], output[3], (r.TopRight() - r.BottomLeft()).Length());
 
-        return new(output);
+        return new(output, ObjectType.Shape);
     }
 
     public static void ConnectVerlets(VerletPoint a, VerletPoint b, float length)
