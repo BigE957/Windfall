@@ -466,13 +466,13 @@ public class DraconicRuinsSystem : ModSystem
         if (LeftChain.Count > 0)
         {
             AffectVerlets(LeftChain, 0.125f, 0.8f);
-            Simulate(LeftChain, 30, gravity: 0.5f, windAffected: false);
+            VerletSimulation(LeftChain, 30, gravity: 0.5f, windAffected: false);
         }
 
         if (LeftChain.Count > 0)
         {
             AffectVerlets(RightChain, 0.125f, 0.8f);
-            Simulate(RightChain, 30, gravity: 0.5f, windAffected: false);
+            VerletSimulation(RightChain, 30, gravity: 0.5f, windAffected: false);
         }
     }
 

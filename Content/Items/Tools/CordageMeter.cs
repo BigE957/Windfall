@@ -1,7 +1,6 @@
 ﻿using CalamityMod.Items;
-using Luminance.Common.VerletIntergration;
-using Windfall.Content.Items.Placeables.Furnature.VerletHangers.Decorations;
 using Windfall.Content.Tiles.TileEntities;
+using static Windfall.Common.Graphics.Verlet.VerletIntegration;
 
 namespace Windfall.Content.Items.Tools;
 public class CordageMeter : ModItem
@@ -66,9 +65,9 @@ public class CordageMeter : ModItem
                 HangIndex = -1;
                 return true;
             }
-            if (HE.DecorationVerlets[HangIndex].Item3 == 2 && sizeChange == -1)
+            if (HE.DecorationVerlets[HangIndex].segmentCount == 2 && sizeChange == -1)
                 return true;
-            Tuple<List<VerletSegment>, int, int> newDV = new(HE.DecorationVerlets[HangIndex].Item1, HE.DecorationVerlets[HangIndex].Item2, HE.DecorationVerlets[HangIndex].Item3 + sizeChange);
+            (List<VerletPoint>, int, int) newDV = new(HE.DecorationVerlets[HangIndex].chain, HE.DecorationVerlets[HangIndex].decorationID, HE.DecorationVerlets[HangIndex].segmentCount + sizeChange);
             HE.DecorationVerlets.Remove(HangIndex);
             HE.DecorationVerlets[HangIndex] = newDV;
             HE.SendSyncPacket();

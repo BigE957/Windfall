@@ -1,5 +1,5 @@
 ﻿namespace Windfall.Common.Graphics.Verlet;
-public class VerletIntegration
+public static class VerletIntegration
 {
     public class VerletPoint(Vector2 start, bool locked)
     {
@@ -8,7 +8,7 @@ public class VerletIntegration
         public List<(VerletPoint Point, float Length)> Connections = [];
     }
 
-    public static void Simulate(List<VerletPoint> chain, int loops = 10, float gravity = 0.3f, bool windAffected = true)
+    public static void VerletSimulation(List<VerletPoint> chain, int loops = 10, float gravity = 0.3f, bool windAffected = true)
     {
         foreach (VerletPoint point in chain)
         {
@@ -33,6 +33,8 @@ public class VerletIntegration
                 for (int j = 0; j < point.Connections.Count; j++)
                 {
                     float segmentDistance = point.Connections[j].Length;
+                    if (segmentDistance == -1)
+                        continue;
                     Vector2 segmentCenter = (point.Position + point.Connections[j].Point.Position) / 2f;
                     Vector2 segmentDirection = (point.Position - point.Connections[j].Point.Position).SafeNormalize(Vector2.UnitY);
 
@@ -47,45 +49,10 @@ public class VerletIntegration
         }
     }
 
-    public static void Simulate(List<VerletPoint>[] chains, int loops = 10, float gravity = 0.3f, bool windAffected = true)
+    public static void VerletSimulation(List<VerletPoint>[] chains, int loops = 10, float gravity = 0.3f, bool windAffected = true)
     {
-        foreach(List<VerletPoint> chain in chains)
-            foreach (VerletPoint point in chain)
-            {
-                if (point.Locked)
-                    continue;
-
-                Vector2 posBeforeUpdate = point.Position;
-                point.Position += point.Position - point.OldPosition;
-                point.Position += Vector2.UnitY * gravity;
-                if (windAffected)
-                    point.Position += Vector2.UnitX * Main.windSpeedCurrent;
-                point.OldPosition = posBeforeUpdate;
-            }
-
-        for (int i = 0; i < loops; i++)
-        {
-            foreach (List<VerletPoint> chain in chains)
-                foreach (VerletPoint point in chain)
-                {
-                    if (point.Connections.Count == 0)
-                        continue;
-
-                    for (int j = 0; j < point.Connections.Count; j++)
-                    {
-                        float segmentDistance = point.Connections[j].Length;
-                        Vector2 segmentCenter = (point.Position + point.Connections[j].Point.Position) / 2f;
-                        Vector2 segmentDirection = (point.Position - point.Connections[j].Point.Position).SafeNormalize(Vector2.UnitY);
-
-                        if (!point.Locked)
-                            point.Position = segmentCenter + segmentDirection * segmentDistance / 2f;
-
-                        if (!point.Connections[j].Point.Locked)
-                            point.Connections[j].Point.Position = segmentCenter - segmentDirection * segmentDistance / 2f;
-
-                    }
-                }
-        }
+        foreach (List<VerletPoint> chain in chains)
+            VerletSimulation(chain, loops, gravity, windAffected);
     }
 
     public static List<VerletPoint> CreateVerletChain(Vector2 startPos, Vector2 endPos, int count, float distBetween, bool lockStart = true, bool lockEnd = false)
@@ -93,9 +60,14 @@ public class VerletIntegration
         List<VerletPoint> output = [];
 
         for (int i = 0; i < count; i++)
-            output.Add(new(Vector2.Lerp(startPos, endPos, i / (count - 1)), i == 0 ? lockStart : i == count - 1 && lockEnd));
-        for (int i = 0; i < count - 1; i++)
-            ConnectVerlets(output[i], output[i + 1], distBetween);
+        {
+            Vector2 spawnPos = Vector2.Lerp(startPos, endPos, i / (float)(count - 1));
+
+            VerletPoint newPoint = new(spawnPos, i == 0 ? lockStart : i == count - 1 && lockEnd);
+            output.Add(newPoint);
+            if(i != 0)
+                ConnectVerlets(output[i - 1], output[i], distBetween);
+        }
 
         return output;
     }
@@ -121,6 +93,7 @@ public class VerletIntegration
     public static void ConnectVerlets(VerletPoint a, VerletPoint b, float length)
     {
         a.Connections.Add((b, length));
+        a.Connections.Add((b, -1));
     }
 
     public static void BreakVerletConnection(VerletPoint a, VerletPoint b)
@@ -128,12 +101,22 @@ public class VerletIntegration
         int index = a.Connections.FindIndex(c => c.Point == b);
         if (index != -1)
             a.Connections.RemoveAt(index);
-        else
-        {
-            index = b.Connections.FindIndex(c => c.Point == a);
-            if (index != -1)
-                b.Connections.RemoveAt(index);
-        }
+        index = b.Connections.FindIndex(c => c.Point == a);
+        if (index != -1)
+            b.Connections.RemoveAt(index);
+    }
+
+    public static void RemoveVerletPoint(this List<VerletPoint> myList, int index)
+    {
+        VerletPoint p = myList[index];
+        for(int i = 0; i < p.Connections.Count; i++)
+            BreakVerletConnection(p, p.Connections[i].Point);
+
+        myList.RemoveAt(index);
+    }
+    public static void RemoveVerletPoint(this List<VerletPoint> myList, VerletPoint p)
+    {
+        myList.RemoveVerletPoint(myList.FindIndex(c => c == p));
     }
 
     public static void AffectVerlets(List<VerletPoint> verlet, float dampening, float cap)

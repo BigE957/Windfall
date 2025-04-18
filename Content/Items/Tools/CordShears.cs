@@ -1,8 +1,7 @@
 ﻿using CalamityMod.Items;
-using System.Collections.Generic;
 using Windfall.Content.Items.Placeables.Furnature.VerletHangers.Decorations;
-using Windfall.Content.Tiles.Furnature.VerletHangers.Hangers;
 using Windfall.Content.Tiles.TileEntities;
+using static Windfall.Common.Graphics.Verlet.VerletIntegration;
 
 namespace Windfall.Content.Items.Tools;
 public class CordShears : ModItem
@@ -38,8 +37,8 @@ public class CordShears : ModItem
                 return true;
             }
 
-            if(HE.DecorationVerlets.TryGetValue(-1, out Tuple<List<Luminance.Common.VerletIntergration.VerletSegment>, int, int> value))
-                Item.NewItem(Item.GetSource_DropAsItem(), HE.Position.ToWorldCoordinates(), DecorationID.DecorationTypes[value.Item2]);
+            if(HE.DecorationVerlets.TryGetValue(-1, out (List<VerletPoint> chain, int id, int count) value))
+                Item.NewItem(Item.GetSource_DropAsItem(), HE.Position.ToWorldCoordinates(), DecorationID.DecorationTypes[value.id]);
             bool removalFail = !HE.DecorationVerlets.Remove(-1);
 
             if (removalFail)
@@ -54,9 +53,8 @@ public class CordShears : ModItem
                     case 2:
                         HangerEntity mainEntity = FindTileEntity<HangerEntity>(HE.PartnerLocation.Value.X, HE.PartnerLocation.Value.Y, 1, 1);
                         mainEntity.MainVerlet.Clear();
-                        if (mainEntity.DecorationVerlets.ContainsKey(-1))
+                        if (mainEntity.DecorationVerlets.TryGetValue(-1, out (List<VerletPoint> chain, int decorationID, int segmentCount) hangerDecor))
                         {
-                            var hangerDecor = mainEntity.DecorationVerlets[-1];
                             mainEntity.DecorationVerlets.Clear();
                             mainEntity.DecorationVerlets.Add(-1, hangerDecor);
                         }
@@ -89,7 +87,7 @@ public class CordShears : ModItem
                 HangIndex = -1;
                 return true;
             }
-            Item.NewItem(Item.GetSource_DropAsItem(), HE.MainVerlet[HangIndex].Position, DecorationID.DecorationTypes[HE.DecorationVerlets[HangIndex].Item2]);
+            Item.NewItem(Item.GetSource_DropAsItem(), HE.MainVerlet[HangIndex].Position, DecorationID.DecorationTypes[HE.DecorationVerlets[HangIndex].decorationID]);
             HE.DecorationVerlets.Remove(HangIndex);
             HE.SendSyncPacket();
         }

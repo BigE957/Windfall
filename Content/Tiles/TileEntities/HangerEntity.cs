@@ -1,7 +1,8 @@
 ﻿using Terraria.ModLoader.IO;
 using Windfall.Content.Tiles.Furnature.VerletHangers.Hangers;
-using Luminance.Common.VerletIntergration;
 using static Windfall.Common.Netcode.WindfallNetcode;
+using static Windfall.Common.Graphics.Verlet.VerletIntegration;
+using System;
 
 namespace Windfall.Content.Tiles.TileEntities;
 public class HangerEntity : ModTileEntity
@@ -59,9 +60,9 @@ public class HangerEntity : ModTileEntity
         }
     }
 
-    public List<VerletSegment> MainVerlet = [];
+    public List<VerletPoint> MainVerlet = [];
 
-    public Dictionary<int, Tuple<List<VerletSegment>, int, int>> DecorationVerlets = [];
+    public Dictionary<int, (List<VerletPoint> chain, int decorationID, int segmentCount)> DecorationVerlets = [];
 
     public override bool IsTileValidForEntity(int x, int y)
     {
@@ -135,8 +136,8 @@ public class HangerEntity : ModTileEntity
             for (int i = 0; i < DecorationVerlets.Count; i++)
             {
                 tag[$"DecorationIndex{i}"] = DecorationVerlets.Keys.ToArray()[i];
-                tag[$"DecorationType{i}"] = DecorationVerlets.Values.ToArray()[i].Item2;
-                tag[$"DecorationLength{i}"] = DecorationVerlets.Values.ToArray()[i].Item3;
+                tag[$"DecorationType{i}"] = DecorationVerlets.Values.ToArray()[i].decorationID;
+                tag[$"DecorationLength{i}"] = DecorationVerlets.Values.ToArray()[i].segmentCount;
             }
         }
     }
@@ -152,9 +153,7 @@ public class HangerEntity : ModTileEntity
         
         int decorationCount = tag.GetInt("DecorationCount");
         for (int i = 0; i < decorationCount; i++)
-        {
             DecorationVerlets.Add(tag.GetInt($"DecorationIndex{i}"), new([], tag.GetInt($"DecorationType{i}"), tag.GetInt($"DecorationLength{i}")));
-        }
     }
 
     public override void NetSend(BinaryWriter writer)
@@ -169,8 +168,8 @@ public class HangerEntity : ModTileEntity
         for (int i = 0; i < DecorationVerlets.Count; i++)
         {
             writer.Write(DecorationVerlets.Keys.ToArray()[i]);
-            writer.Write(DecorationVerlets.Values.ToArray()[i].Item2);
-            writer.Write(DecorationVerlets.Values.ToArray()[i].Item3);
+            writer.Write(DecorationVerlets.Values.ToArray()[i].decorationID);
+            writer.Write(DecorationVerlets.Values.ToArray()[i].segmentCount);
         }
     }
 
@@ -186,9 +185,7 @@ public class HangerEntity : ModTileEntity
         DecorationVerlets.Clear();
         int decorationCount = reader.ReadInt32();
         for (int i = 0; i < decorationCount; i++)
-        {
             DecorationVerlets.Add(reader.ReadInt32(), new([], reader.ReadInt32(), reader.ReadInt32()));
-        }
     }
 
     public void SendSyncPacket()
@@ -209,8 +206,8 @@ public class HangerEntity : ModTileEntity
         for (int i = 0; i < DecorationVerlets.Count; i++)
         {
             packet.Write(DecorationVerlets.Keys.ToArray()[i]);
-            packet.Write(DecorationVerlets.Values.ToArray()[i].Item2);
-            packet.Write(DecorationVerlets.Values.ToArray()[i].Item3);
+            packet.Write(DecorationVerlets.Values.ToArray()[i].decorationID);
+            packet.Write(DecorationVerlets.Values.ToArray()[i].segmentCount);
         }
         packet.Send(-1, -1);
     }
@@ -227,12 +224,10 @@ public class HangerEntity : ModTileEntity
         int segmentCount = reader.ReadInt32();
         byte cordID = reader.ReadByte();
 
-        Dictionary<int, Tuple<List<VerletSegment>, int, int>> DecorationVerlets = [];
+        Dictionary<int, (List<VerletPoint>, int, int)> DecorationVerlets = [];
         int decorationCount = reader.ReadInt32();
         for (int i = 0; i < decorationCount; i++)
-        {
             DecorationVerlets.Add(reader.ReadInt32(), new([], reader.ReadInt32(), reader.ReadInt32()));
-        }
 
         if (exists && te is HangerEntity hanger)
         {

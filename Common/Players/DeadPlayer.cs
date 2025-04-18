@@ -10,23 +10,23 @@ public class DeadPlayer : ModPlayer
         if ((damage == 10 && hitDirection == 0 && damageSource.SourceOtherIndex == 8) || damageSource.SourceProjectileType == ModContent.ProjectileType<EmpyreanThorn>())
         {
             if(Player.Buff().Entropy)
-                damageSource = PlayerDeathReason.ByCustomReason(GetWindfallLocalText("Status.Death.Entropy." + Main.rand.Next(1, 3 + 1)).Format(Player.name));
+                damageSource = PlayerDeathReason.ByCustomReason(NetworkText.FromKey("Status.Death.Entropy." + Main.rand.Next(1, 3 + 1), Player.name));
         }
         if ((damageSource.SourceNPCIndex >= 0 && Main.npc[damageSource.SourceNPCIndex].type == ModContent.NPCType<TheOrator>()) || damageSource.SourceProjectileType == ModContent.ProjectileType<DarkBolt>() || damageSource.SourceProjectileType == ModContent.ProjectileType<DarkGlob>() || damageSource.SourceProjectileType == ModContent.ProjectileType<OratorScythe>() || damageSource.SourceProjectileType == ModContent.ProjectileType<OratorJavelin>() || damageSource.SourceProjectileType == ModContent.ProjectileType<FadingStar>() || damageSource.SourceProjectileType == ModContent.ProjectileType<HandRing>())
         {
-            damageSource = PlayerDeathReason.ByCustomReason(GetWindfallLocalText("Status.Death.Orator." + Main.rand.Next(1, 3 + 1)).Format(Player.name));
+            damageSource = PlayerDeathReason.ByCustomReason(NetworkText.FromKey("Status.Death.Orator." + Main.rand.Next(1, 3 + 1), Player.name));
         }
         if (damageSource.SourceNPCIndex >= 0 && Main.npc[damageSource.SourceNPCIndex].type == ModContent.NPCType<OratorHand>())
         {
-            damageSource = PlayerDeathReason.ByCustomReason(GetWindfallLocalText("Status.Death.Hand." + Main.rand.Next(1, 3 + 1)).Format(Player.name));
+            damageSource = PlayerDeathReason.ByCustomReason(NetworkText.FromKey("Status.Death.Hand." + Main.rand.Next(1, 3 + 1), Player.name));
         }
         if ((damageSource.SourceNPCIndex >= 0 && Main.npc[damageSource.SourceNPCIndex].type == ModContent.NPCType<ShadowHand>()) || damageSource.SourceProjectileType == ModContent.ProjectileType<DarkCoalescence>() || damageSource.SourceProjectileType == ModContent.ProjectileType<UnstableDarkness>() || damageSource.SourceProjectileType == ModContent.ProjectileType<EmpyreanThorn>())
         {
-            damageSource = PlayerDeathReason.ByCustomReason(GetWindfallLocalText("Status.Death.BigDark." + Main.rand.Next(1, 3 + 1)).Format(Player.name));
+            damageSource = PlayerDeathReason.ByCustomReason(NetworkText.FromKey("Status.Death.BigDark." + Main.rand.Next(1, 3 + 1), Player.name));
         }
         if (damageSource.SourceProjectileType == ModContent.ProjectileType<SelenicIdol>())
         {
-            damageSource = PlayerDeathReason.ByCustomReason(GetWindfallLocalText("Status.Death.Idol." + Main.rand.Next(1, 3 + 1)).Format(Player.name));
+            damageSource = PlayerDeathReason.ByCustomReason(NetworkText.FromKey("Status.Death.Idol." + Main.rand.Next(1, 3 + 1), Player.name));
         }
         return true;
     }

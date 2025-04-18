@@ -1,4 +1,6 @@
-﻿namespace Windfall.Content.Items.Placeables.Furnature.VerletHangers.Cords;
+﻿using static Windfall.Common.Graphics.Verlet.VerletIntegration;
+
+namespace Windfall.Content.Items.Placeables.Furnature.VerletHangers.Cords;
 public class SelenicTwine : Cord, ILocalizedModType
 {
     public new string LocalizationCategory => "Items.Placeables";
@@ -18,26 +20,21 @@ public class SelenicTwine : Cord, ILocalizedModType
 
     public override int cordID => CordID.SelenicTwine;
 
-    public override void DrawRopeSegment(SpriteBatch spriteBatch, int index, Vector2[] segmentPositions)
+    public override void DrawRopeSegment(SpriteBatch spriteBatch, List<VerletPoint> points, int index)
     {
+        VerletPoint p = points[index];
+
         Texture2D tex = ModContent.Request<Texture2D>("Windfall/Content/Items/Placeables/Furnature/VerletHangers/Cords/SelenicTwineAtlas").Value;
 
-        Vector2 line;
-        if (index == segmentPositions.Length - 1)
-            line = segmentPositions[index - 1] - segmentPositions[index];
-        else if (index == 0)
-            line = segmentPositions[index + 1] - segmentPositions[index];
-        else
-            line = segmentPositions[index] - segmentPositions[index + 1];
+        foreach ((VerletPoint p2, float l) in p.Connections)
+        {
+            float rot = (p2.Position - p.Position).ToRotation();
+            Vector2 midPoint = (p.Position + p2.Position) / 2f;
 
-        Color lighting = Lighting.GetColor(segmentPositions[index].ToTileCoordinates());
-        Vector2 origin = new(0, tex.Size().Y * 0.5f);
+            Color lighting = Lighting.GetColor(midPoint.ToTileCoordinates());
+            Vector2 origin = new(0, tex.Size().Y * 0.5f);
 
-        spriteBatch.Draw(tex, segmentPositions[index] - Main.screenPosition, null, lighting, line.ToRotation(), origin, 1f, 0, 0);
-    }
-
-    public override void DrawDecorationSegment(SpriteBatch spriteBatch, int index, Vector2[] segmentPositions)
-    {
-        base.DrawDecorationSegment(spriteBatch, index, segmentPositions);
+            spriteBatch.Draw(tex, p.Position - Main.screenPosition, null, lighting, rot, origin, 1f, 0, 0);
+        }
     }
 }

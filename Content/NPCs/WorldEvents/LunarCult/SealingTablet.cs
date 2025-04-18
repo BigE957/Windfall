@@ -123,8 +123,8 @@ public class SealingTablet : ModNPC
                 }
             }
 
-            Simulate(LeftChain, 30, gravity: 0.8f, windAffected: false);
-            Simulate(RightChain, 30, gravity: 0.8f, windAffected: false);
+            VerletSimulation(LeftChain, 30, gravity: 0.8f, windAffected: false);
+            VerletSimulation(RightChain, 30, gravity: 0.8f, windAffected: false);
 
             NPC.Center = (LeftChain[^1].Position + RightChain[^1].Position) / 2f;
             NPC.rotation = (LeftChain[^1].Position - RightChain[^1].Position).ToRotation() + Pi;

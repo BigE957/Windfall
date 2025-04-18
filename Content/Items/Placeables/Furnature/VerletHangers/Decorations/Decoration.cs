@@ -1,7 +1,6 @@
-﻿using Luminance.Common.VerletIntergration;
-using System;
-using System.Collections.Generic;
+﻿using System;
 using Windfall.Content.Tiles.TileEntities;
+using static Windfall.Common.Graphics.Verlet.VerletIntegration;
 
 namespace Windfall.Content.Items.Placeables.Furnature.VerletHangers.Decorations;
 public abstract class Decoration : ModItem
@@ -41,17 +40,9 @@ public abstract class Decoration : ModItem
                 return true;
             }
 
-            List<VerletSegment> newVerlet = [];
-            for (int k = 0; k < 8; k++)
-            {
-                if(HangIndex == -2)
-                    newVerlet.Add(new VerletSegment(Vector2.Lerp(HE.Position.ToWorldCoordinates(), HE.Position.ToWorldCoordinates() + Vector2.UnitY * 96f, k / 8f), Vector2.Zero, false));
-                else
-                    newVerlet.Add(new VerletSegment(Vector2.Lerp(HE.MainVerlet[HangIndex].Position, HE.MainVerlet[HangIndex].Position + Vector2.UnitY * 96f, k / 8f), Vector2.Zero, false));
-                newVerlet[k].OldPosition = newVerlet[k].Position;
-                newVerlet[k].Velocity.Y = 19;
-            }
-            newVerlet[0].Locked = true;
+            Vector2 startPos = HangIndex == -2 ? HE.Position.ToWorldCoordinates() : HE.MainVerlet[HangIndex].Position;
+            List <VerletPoint> newVerlet = CreateVerletChain(startPos, startPos + (Vector2.UnitY * 120f), 8, 15);
+
             if (HangIndex == -2)
             {
                 HE.DecorationVerlets.Add(-1, new(newVerlet, DecorID, 8));

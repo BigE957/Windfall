@@ -1,15 +1,16 @@
 ﻿using CalamityMod.Particles;
 using Windfall.Content.Tiles.Furnature.VerletHangers.Hangers;
 using Windfall.Content.Tiles.TileEntities;
+using static Windfall.Common.Graphics.Verlet.VerletIntegration;
 
 namespace Windfall.Content.Items.Placeables.Furnature.VerletHangers.Cords;
 public abstract class Cord : ModItem
 {
     public virtual int cordID => 0;
 
-    public virtual void DrawRopeSegment(SpriteBatch spriteBatch, int index, Vector2[] segmentPositions) { }
+    public virtual void DrawRopeSegment(SpriteBatch spriteBatch, List<VerletPoint> points, int index) { }
 
-    public virtual void DrawDecorationSegment(SpriteBatch spriteBatch, int index, Vector2[] segmentPositions) { DrawRopeSegment(spriteBatch, index, segmentPositions); }
+    public virtual void DrawDecorationSegment(SpriteBatch spriteBatch, List<VerletPoint> points, int index) { DrawRopeSegment(spriteBatch, points, index); }
 
     public virtual void DrawOnRopeEnds(SpriteBatch spriteBatch, Vector2 position, float rotation) { }
 

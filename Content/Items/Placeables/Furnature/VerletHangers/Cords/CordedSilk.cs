@@ -1,4 +1,6 @@
-﻿namespace Windfall.Content.Items.Placeables.Furnature.VerletHangers.Cords;
+﻿using static Windfall.Common.Graphics.Verlet.VerletIntegration;
+
+namespace Windfall.Content.Items.Placeables.Furnature.VerletHangers.Cords;
 public class CordedSilk : Cord, ILocalizedModType
 {
     public new string LocalizationCategory => "Items.Placeables";
@@ -18,23 +20,23 @@ public class CordedSilk : Cord, ILocalizedModType
 
     public override int cordID => CordID.CordedSilk;
 
-    public override void DrawRopeSegment(SpriteBatch spriteBatch, int index, Vector2[] segmentPositions)
+    public override void DrawRopeSegment(SpriteBatch spriteBatch, List<VerletPoint> points, int index)
     {
+        VerletPoint p = points[index];
+
         Texture2D tex = ModContent.Request<Texture2D>("Windfall/Content/Items/Placeables/Furnature/VerletHangers/Cords/CordedSilkAtlas").Value;
 
-        Vector2 line;
-        if (index == segmentPositions.Length - 1)
-            line = segmentPositions[index - 1] - segmentPositions[index];
-        else if (index == 0)
-            line = segmentPositions[index + 1] - segmentPositions[index];
-        else
-            line = segmentPositions[index] - segmentPositions[index + 1];
+        foreach ((VerletPoint p2, float l) in p.Connections)
+        {
+            float rot = (p2.Position - p.Position).ToRotation();
+            Vector2 midPoint = (p.Position + p2.Position) / 2f;
 
-        Color lighting = Lighting.GetColor(segmentPositions[index].ToTileCoordinates());
-        Rectangle frame = tex.Frame(1, 2);
-        Vector2 origin = new(0, frame.Size().Y * 0.5f);
+            Color lighting = Lighting.GetColor(midPoint.ToTileCoordinates());
+            Rectangle frame = tex.Frame(1, 2);
+            Vector2 origin = new(0, frame.Size().Y * 0.5f);
 
-        spriteBatch.Draw(tex, segmentPositions[index] - Main.screenPosition, frame, lighting, line.ToRotation(), origin, 1f, 0, 0);
+            spriteBatch.Draw(tex, p.Position - Main.screenPosition, frame, lighting, rot, origin, 1f, 0, 0);
+        }
     }
 
     public override void DrawOnRopeEnds(SpriteBatch spriteBatch, Vector2 position, float rotation)
