@@ -169,12 +169,14 @@ public class PlaceableVerletDrawing : ModSystem
                     te.DecorationVerlets[index].chain.AddRange(CreateVerletChain(startPos, startPos + Vector2.UnitY * (12 * te.DecorationVerlets[index].segmentCount), te.DecorationVerlets[index].segmentCount, 15));
                     subVerlet = te.DecorationVerlets[index].chain;
                 }
-                
+
+                subVerlet[0].Position = startPos;
+
                 DecorationID.GetDecoration(te.DecorationVerlets[index].decorationID).UpdateDecoration([.. subVerlet.Select(x => x.Position)]);
                 
                 AffectVerlets(subVerlet, 0.125f, 0.8f);
 
-                VerletSimulation(subVerlet, 10, 0.6f);
+                VerletSimulation(subVerlet, 10, 0.8f);
             }
         }
     }

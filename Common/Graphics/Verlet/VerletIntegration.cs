@@ -125,7 +125,7 @@ public static class VerletIntegration
             if (!verlet[k].Locked)
             {
                 foreach (Player p in Main.ActivePlayers)
-                    MoveChainBasedOnEntity(verlet, p, dampening, cap);
+                    MoveChainBasedOnEntity(verlet, p, dampening / 2f, cap / 2f);
 
                 foreach (Projectile proj in Main.ActiveProjectiles)
                     MoveChainBasedOnEntity(verlet, proj, dampening, cap);
