@@ -30,6 +30,7 @@ public class PlaceableVerletDrawing : ModSystem
     {       
         if (Main.dedServ)
             return;
+
         const float loadedDist = 1000f;
 
         List<HangerEntity> ActiveTEs = [];
@@ -37,19 +38,16 @@ public class PlaceableVerletDrawing : ModSystem
         {
             HangerEntity h = FindTileEntity<HangerEntity>(p16.X, p16.Y, 1, 1);
             if (h == null)
-            {
                 continue;
-            }
 
             if ((h.State != 1 || !h.PartnerLocation.HasValue) && !h.DecorationVerlets.ContainsKey(-1))
                 continue;
 
             bool visable = false;
             foreach (Player p in Main.ActivePlayers)
-            {
                 if ((h.Position.ToWorldCoordinates() - p.Center).Length() < loadedDist || h.PartnerLocation.HasValue && (h.PartnerLocation.Value.ToWorldCoordinates() - p.Center).Length() < loadedDist)
                     visable = true;
-            }
+            
             if (!visable)
                 continue;
 
@@ -90,7 +88,6 @@ public class PlaceableVerletDrawing : ModSystem
                 AffectVerletObject(te.MainVerlet, 1f, 0.425f);
 
                 for (int k = 0; k < te.MainVerlet.Count; k++)
-                {
                     if (k % 5 == 2)
                     {
                         particle = null;
@@ -146,7 +143,6 @@ public class PlaceableVerletDrawing : ModSystem
                         if(particle != null)
                             GeneralParticleHandler.SpawnParticle(particle);
                     }
-                }
 
                 VerletSimulation(te.MainVerlet, 30);
             }
@@ -194,10 +190,9 @@ public class PlaceableVerletDrawing : ModSystem
 
             bool visable = false;
             foreach (Player p in Main.ActivePlayers)
-            {
                 if ((h.Position.ToWorldCoordinates() - p.Center).Length() < loadedDist || (h.PartnerLocation.HasValue && (h.PartnerLocation.Value.ToWorldCoordinates() - p.Center).Length() < loadedDist))
                     visable = true;
-            }
+
             if (!visable)
                 continue;
 
@@ -244,21 +239,18 @@ public class PlaceableVerletDrawing : ModSystem
                 DecorationID.GetDecoration(decorationID).DrawOnVerletEnd(Main.spriteBatch, obj.Positions);
             }
 
-            if (te.State == 1)
+            if (te.State == 1 && te.MainVerlet != null && te.MainVerlet.Count > 0)
             {
-                if (te.MainVerlet != null && te.MainVerlet.Count > 0)
+                VerletObject obj = te.MainVerlet;
+
+                if (twine != null)
                 {
-                    VerletObject obj = te.MainVerlet;
-
-                    if (twine != null)
-                    {
-                        twine.DrawOnRopeEnds(Main.spriteBatch, obj.Positions[0], (obj.Positions[1] - obj.Positions[0]).ToRotation());
-                        twine.DrawOnRopeEnds(Main.spriteBatch, obj.Positions[^1], (obj.Positions[^2] - obj.Positions[^1]).ToRotation());
-                    }
-
-                    for (int k = 0; k < obj.Count; k++)
-                        twine.DrawRopeSegment(Main.spriteBatch, obj.Points, k);
+                    twine.DrawOnRopeEnds(Main.spriteBatch, obj.Positions[0], (obj.Positions[1] - obj.Positions[0]).ToRotation());
+                    twine.DrawOnRopeEnds(Main.spriteBatch, obj.Positions[^1], (obj.Positions[^2] - obj.Positions[^1]).ToRotation());
                 }
+
+                for (int k = 0; k < obj.Count; k++)
+                    twine.DrawRopeSegment(Main.spriteBatch, obj.Points, k);
             }
 
             if (twine != null)

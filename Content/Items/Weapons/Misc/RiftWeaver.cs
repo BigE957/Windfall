@@ -2,7 +2,6 @@
 using CalamityMod.Items;
 using CalamityMod.Particles;
 using CalamityMod.Projectiles.BaseProjectiles;
-using Luminance.Common.VerletIntergration;
 using Luminance.Core.Graphics;
 using Windfall.Content.NPCs.WorldEvents.LunarCult;
 using static Windfall.Common.Graphics.Verlet.VerletIntegration;
@@ -40,10 +39,7 @@ public class RiftWeaver : ModItem, ILocalizedModType
         Item.rare = ItemRarityID.Lime;
     }
 
-    public override bool CanUseItem(Player player)
-    {
-        return true;
-    }
+    public override bool CanUseItem(Player player) => true;
 
     public override bool AltFunctionUse(Player player) => true;
 
@@ -77,10 +73,7 @@ public class RiftWeaver : ModItem, ILocalizedModType
         return false;
     }
 
-    public override void ModifyResearchSorting(ref ContentSamples.CreativeHelper.ItemGroup itemGroup)
-    {
-        itemGroup = (ContentSamples.CreativeHelper.ItemGroup)CalamityResearchSorting.ClasslessWeapon;
-    }
+    public override void ModifyResearchSorting(ref ContentSamples.CreativeHelper.ItemGroup itemGroup) => itemGroup = (ContentSamples.CreativeHelper.ItemGroup)CalamityResearchSorting.ClasslessWeapon;
 
     public override void PostDrawInWorld(SpriteBatch spriteBatch, Color lightColor, Color alphaColor, float rotation, float scale, int whoAmI)
     {
@@ -378,6 +371,8 @@ public class RiftWeaverThrow : ModProjectile
                 break;
         }
         VerletSimulation(NeedleString, windAffected: false);
+        NeedleString.Points[0].Position = owner.Center;
+        NeedleString.Points[^1].Position = Projectile.Center;
     }
     public override bool? CanHitNPC(NPC target) => target.type == ModContent.NPCType<PortalMole>() || !SpacialDamage;
 

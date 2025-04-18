@@ -20,8 +20,7 @@ public class SealingTablet : ModNPC
         NPC.lifeMax = 400;
         NPC.defense = 0;
         NPC.damage = 0;
-        NPC.width = 54;
-        NPC.height = 54;
+        NPC.width = NPC.height = 54;
         NPC.aiStyle = -1;
         NPC.HitSound = SoundID.NPCHit4;
         NPC.DeathSound = SoundID.NPCDeath14;
@@ -45,7 +44,7 @@ public class SealingTablet : ModNPC
     {
         int verletCount = 22;
 
-        box = CreateVerletBox(new((int)NPC.position.X, (int)NPC.position.Y, NPC.width, NPC.height));
+        box = CreateVerletBox(new((int)NPC.position.X, (int)NPC.position.Y, 18, 18));
 
         LeftChain = CreateVerletChain(NPC.Bottom + new Vector2(-48, 0), box[0].Position, verletCount, 4);
         RightChain = CreateVerletChain(NPC.Bottom + new Vector2(48, 0), box[2].Position, verletCount, 4);
@@ -92,6 +91,7 @@ public class SealingTablet : ModNPC
             }
         }
 
+        AffectVerletObject(box, 0.125f, 0.8f);
         AffectVerletObject(LeftChain, 0.125f, 0.8f);
         AffectVerletObject(RightChain, 0.125f, 0.8f);
 
@@ -123,11 +123,12 @@ public class SealingTablet : ModNPC
                 }
             }
 
+            VerletSimulation(box, 30, gravity: 0.8f, windAffected: false);
             VerletSimulation(LeftChain, 30, gravity: 0.8f, windAffected: false);
             VerletSimulation(RightChain, 30, gravity: 0.8f, windAffected: false);
 
-            NPC.Center = (LeftChain[^1].Position + RightChain[^1].Position) / 2f;
-            NPC.rotation = (LeftChain[^1].Position - RightChain[^1].Position).ToRotation() + Pi;
+            NPC.Center = (box[0].Position + box[2].Position) / 2f;
+            NPC.rotation = (box[0].Position - box[2].Position).ToRotation() + Pi;
         }
         else
         {
@@ -184,21 +185,23 @@ public class SealingTablet : ModNPC
     }
     public override bool PreDraw(SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor)
     {
-        for (int k = 0; k < LeftChain.Count - 1; k++)
-        {
-            Vector2 line = LeftChain[k].Position - LeftChain[k + 1].Position;
-            Color lighting = Lighting.GetColor((LeftChain[k + 1].Position + (line / 2f)).ToTileCoordinates());
+        if(LeftChain != null)
+            for (int k = 0; k < LeftChain.Count - 1; k++)
+            {
+                Vector2 line = LeftChain[k].Position - LeftChain[k + 1].Position;
+                Color lighting = Lighting.GetColor((LeftChain[k + 1].Position + (line / 2f)).ToTileCoordinates());
 
-            Main.spriteBatch.DrawLineBetween(LeftChain[k].Position, LeftChain[k + 1].Position, Color.White.MultiplyRGB(lighting), 3);
-        }
+                Main.spriteBatch.DrawLineBetween(LeftChain[k].Position, LeftChain[k + 1].Position, Color.White.MultiplyRGB(lighting), 3);
+            }
 
-        for (int k = 0; k < RightChain.Count - 1; k++)
-        {
-            Vector2 line = RightChain[k].Position - RightChain[k + 1].Position;
-            Color lighting = Lighting.GetColor((RightChain[k + 1].Position + (line / 2f)).ToTileCoordinates());
+        if (RightChain != null)
+            for (int k = 0; k < RightChain.Count - 1; k++)
+            {
+                Vector2 line = RightChain[k].Position - RightChain[k + 1].Position;
+                Color lighting = Lighting.GetColor((RightChain[k + 1].Position + (line / 2f)).ToTileCoordinates());
 
-            Main.spriteBatch.DrawLineBetween(RightChain[k].Position, RightChain[k + 1].Position, Color.White.MultiplyRGB(lighting), 3);
-        }
+                Main.spriteBatch.DrawLineBetween(RightChain[k].Position, RightChain[k + 1].Position, Color.White.MultiplyRGB(lighting), 3);
+            }
 
         Texture2D texture = TextureAssets.Npc[NPC.type].Value;
         Vector2 halfSizeTexture = new(texture.Width / 2, texture.Height / Main.npcFrameCount[NPC.type] / 2);
