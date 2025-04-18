@@ -5,6 +5,7 @@ using CalamityMod.Projectiles.BaseProjectiles;
 using Luminance.Common.VerletIntergration;
 using Luminance.Core.Graphics;
 using Windfall.Content.NPCs.WorldEvents.LunarCult;
+using static Windfall.Common.Graphics.Verlet.VerletIntegration;
 
 namespace Windfall.Content.Items.Weapons.Misc;
 
@@ -202,7 +203,7 @@ public class RiftWeaverStab : BaseShortswordProjectile
 public class RiftWeaverThrow : ModProjectile
 {
     public override string Texture => "Windfall/Assets/Items/Weapons/Misc/RiftWeaverProj";
-    private readonly List<VerletSegment> NeedleString = [];
+    private VerletObject NeedleString = null;
     private bool SpacialDamage
     {
         get => Projectile.ai[2] != 0;
@@ -224,11 +225,7 @@ public class RiftWeaverThrow : ModProjectile
     {
         damage = Projectile.damage;
         Projectile.damage = 0;
-        if (NeedleString.Count == 0)
-        {
-            for (int i = 0; i < 16; i++)
-                NeedleString.Add(new((Projectile.Center - new Vector2(24, -32)) - (Vector2.UnitY * (-12 * i)), Vector2.Zero, i == 0));
-        }
+        NeedleString = CreateVerletChain(Projectile.Center - new Vector2(24, -32), Projectile.Center - new Vector2(24, -32) - (Vector2.UnitY * -192), 16, 12.5f);
     }
     private int damage = 0;
     private int aiCounter
@@ -380,7 +377,7 @@ public class RiftWeaverThrow : ModProjectile
                 }
                 break;
         }
-        VerletSimulations.RopeVerletSimulation(NeedleString, Projectile.Center - (Vector2.UnitX * 32f).RotatedBy(Projectile.rotation), 200f, new(), owner.Center);
+        VerletSimulation(NeedleString, windAffected: false);
     }
     public override bool? CanHitNPC(NPC target) => target.type == ModContent.NPCType<PortalMole>() || !SpacialDamage;
 
@@ -426,9 +423,7 @@ public class RiftWeaverThrow : ModProjectile
 
     public override bool PreDraw(ref Color lightColor)
     {
-        Vector2[] segmentPositions = [.. NeedleString.Select(x => x.Position)];
-
-        PrimitiveRenderer.RenderTrail(segmentPositions, new(widthFunction, colorFunction));
+        PrimitiveRenderer.RenderTrail(NeedleString.Positions, new(widthFunction, colorFunction));
 
         Texture2D tex = ModContent.Request<Texture2D>(Texture).Value;
         Vector2 drawPosition = Projectile.Center - Main.screenPosition;

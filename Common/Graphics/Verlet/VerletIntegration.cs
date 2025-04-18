@@ -18,7 +18,9 @@ public static class VerletIntegration
     {
         public List<VerletPoint> Points = points;
         public readonly ObjectType Type = type;
+
         public int Count => Points.Count;
+        public Vector2[] Positions => [.. Points.Select(x => x.Position)];
 
         public VerletPoint this[Index key]
         {
