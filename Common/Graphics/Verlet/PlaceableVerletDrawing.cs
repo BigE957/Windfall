@@ -8,22 +8,10 @@ using static Windfall.Common.Graphics.Verlet.VerletIntegration;
 namespace Windfall.Common.Graphics.Verlet;
 public class PlaceableVerletDrawing : ModSystem
 {
-    public static readonly Dictionary<string, Asset<Texture2D>> ObjectAssets = [];
 
     public override void OnModLoad()
     {
         On_Main.DrawProjectiles += DrawHangerVerlets;
-
-        if (!Main.dedServ)
-        {
-            ObjectAssets.Add("DragonSkull", ModContent.Request<Texture2D>("Windfall/Assets/NPCs/DragonSkeleton/DragonSkull", AssetRequestMode.AsyncLoad));
-            ObjectAssets.Add("DragonRibs", ModContent.Request<Texture2D>("Windfall/Assets/NPCs/DragonSkeleton/DragonRibs", AssetRequestMode.AsyncLoad));
-            ObjectAssets.Add("DragonFrontWing", ModContent.Request<Texture2D>("Windfall/Assets/NPCs/DragonSkeleton/DragonFrontWing", AssetRequestMode.AsyncLoad));
-            ObjectAssets.Add("DragonBackWing", ModContent.Request<Texture2D>("Windfall/Assets/NPCs/DragonSkeleton/DragonBackWing", AssetRequestMode.AsyncLoad));
-            ObjectAssets.Add("DragonFrontLeg", ModContent.Request<Texture2D>("Windfall/Assets/NPCs/DragonSkeleton/DragonFrontLeg", AssetRequestMode.AsyncLoad));
-            ObjectAssets.Add("DragonBackLeg", ModContent.Request<Texture2D>("Windfall/Assets/NPCs/DragonSkeleton/DragonBackLeg", AssetRequestMode.AsyncLoad));
-            ObjectAssets.Add("DragonTail", ModContent.Request<Texture2D>("Windfall/Assets/NPCs/DragonSkeleton/DragonTail", AssetRequestMode.AsyncLoad));
-        }
     }
 
     public override void PreUpdateProjectiles()

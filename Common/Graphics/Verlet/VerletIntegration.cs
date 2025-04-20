@@ -76,6 +76,12 @@ public static class VerletIntegration
             VerletSimulation(chain, loops, gravity, windAffected);
     }
 
+    public static void VerletSimulation(List<VerletObject> objs, int loops = 10, float gravity = 0.3f, bool windAffected = true)
+    {
+        foreach (VerletObject obj in objs)
+            VerletSimulation(obj, loops, gravity, windAffected);
+    }
+
     public static void VerletSimulation(VerletObject obj, int loops = 10, float gravity = 0.3f, bool windAffected = true)
     {
         VerletSimulation(obj.Points, loops, gravity, windAffected);
@@ -146,20 +152,20 @@ public static class VerletIntegration
         myList.RemoveVerletPoint(myList.FindIndex(c => c == p));
     }
 
-    public static void AffectVerletObject(VerletObject obj, float dampening, float cap)
+    public static void AffectVerletObject(VerletObject obj, float dampening, float cap, bool isChain = true)
     {
         for (int k = 0; k < obj.Points.Count; k++)
             if (!obj[k].Locked)
             {
                 foreach (Player p in Main.ActivePlayers)
-                    MoveObjectBasedOnEntity(obj, p, dampening / 2f, cap / 2f);
+                    MoveObjectBasedOnEntity(obj, p, dampening / 2f, cap / 2f, isChain);
 
                 foreach (Projectile proj in Main.ActiveProjectiles)
-                    MoveObjectBasedOnEntity(obj, proj, dampening, cap);
+                    MoveObjectBasedOnEntity(obj, proj, dampening, cap, isChain);
             }
     }
 
-    public static void MoveObjectBasedOnEntity(VerletObject obj, Entity e, float dampening = 0.425f, float cap = 5f)
+    public static void MoveObjectBasedOnEntity(VerletObject obj, Entity e, float dampening = 0.425f, float cap = 5f, bool isChain = true)
     {
         Vector2 entityVelocity = (e.velocity * dampening).ClampMagnitude(0f, cap);
 
@@ -169,32 +175,37 @@ public static class VerletIntegration
                 continue;
 
             VerletPoint segment = obj[i];
-            bool mainSegmentHit = false;
-            for (int j = 0; j < obj[i].Connections.Count; j++)
+            if (isChain)
             {
-                if (obj[i].Connections[j].Length == -1)
-                    continue;
-
-                VerletPoint next = obj[i].Connections[j].Point;
-                float _ = 0f;
-                if (Collision.CheckAABBvLineCollision(e.TopLeft, e.Size, segment.Position, next.Position, 20f, ref _))
+                bool mainSegmentHit = false;
+                for (int j = 0; j < obj[i].Connections.Count; j++)
                 {
-                    // Weigh the entity's distance between the two segments.
-                    float distanceBetweenSegments = segment.Position.Distance(next.Position);
-                    float distanceToChains = e.Distance(segment.Position);
-                    float currentMovementOffsetInterpolant = Utilities.InverseLerp(distanceToChains, distanceBetweenSegments, distanceBetweenSegments * 0.2f);
-                    float nextMovementOffsetInterpolant = 1f - currentMovementOffsetInterpolant;
+                    if (obj[i].Connections[j].Length == -1)
+                        continue;
 
-                    // Move the segments based on the weight values.
-                    if (!mainSegmentHit)
+                    VerletPoint next = obj[i].Connections[j].Point;
+                    float _ = 0f;
+                    if (Collision.CheckAABBvLineCollision(e.TopLeft, e.Size, segment.Position, next.Position, 20f, ref _))
                     {
-                        segment.Position += entityVelocity * currentMovementOffsetInterpolant;
-                        mainSegmentHit = true;
+                        // Weigh the entity's distance between the two segments.
+                        float distanceBetweenSegments = segment.Position.Distance(next.Position);
+                        float distanceToChains = e.Distance(segment.Position);
+                        float currentMovementOffsetInterpolant = Utilities.InverseLerp(distanceToChains, distanceBetweenSegments, distanceBetweenSegments * 0.2f);
+                        float nextMovementOffsetInterpolant = 1f - currentMovementOffsetInterpolant;
+
+                        // Move the segments based on the weight values.
+                        if (!mainSegmentHit)
+                        {
+                            segment.Position += entityVelocity * currentMovementOffsetInterpolant;
+                            mainSegmentHit = true;
+                        }
+                        if (!next.Locked)
+                            next.Position += entityVelocity * nextMovementOffsetInterpolant;
                     }
-                    if (!next.Locked)
-                        next.Position += entityVelocity * nextMovementOffsetInterpolant;
                 }
             }
+            else if(e.Hitbox.Contains((int)segment.Position.X, (int)segment.Position.Y))
+                segment.Position += entityVelocity;
         }
     }
 

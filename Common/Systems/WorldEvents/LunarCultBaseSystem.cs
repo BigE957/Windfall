@@ -14,6 +14,9 @@ using Terraria.Enums;
 using DialogueHelper.UI.Dialogue;
 using Windfall.Content.Items.Quests.Cafeteria;
 using Windfall.Content.Projectiles.NPCAnimations;
+using static Windfall.Common.Graphics.Verlet.VerletIntegration;
+using Windfall.Content.Items.Placeables.Furnature.VerletHangers.Cords;
+using Luminance.Common.Utilities;
 
 namespace Windfall.Common.Systems.WorldEvents;
 
@@ -41,6 +44,39 @@ public class LunarCultBaseSystem : ModSystem
 
     private static int spawnChance = 5;
 
+    public static readonly Dictionary<string, Asset<Texture2D>> SkeletonAssets = [];
+
+    public static readonly Dictionary<string, List<VerletObject>> SkeletonVerletGroups = [];
+
+    public override void OnModLoad()
+    {
+        On_Main.DrawProjectiles += DrawHangingSkeleton;
+
+        if (!Main.dedServ)
+        {
+            SkeletonAssets.Add("BackWing", ModContent.Request<Texture2D>("Windfall/Assets/NPCs/DragonSkeleton/DragonBackWing", AssetRequestMode.AsyncLoad));
+            SkeletonVerletGroups.Add("BackWing", []);
+
+            SkeletonAssets.Add("BackLeg", ModContent.Request<Texture2D>("Windfall/Assets/NPCs/DragonSkeleton/DragonBackLeg", AssetRequestMode.AsyncLoad));
+            SkeletonVerletGroups.Add("BackLeg", []);
+
+            SkeletonAssets.Add("Tail", ModContent.Request<Texture2D>("Windfall/Assets/NPCs/DragonSkeleton/DragonTail", AssetRequestMode.AsyncLoad));
+            SkeletonVerletGroups.Add("Tail", []);
+
+            SkeletonAssets.Add("Ribs", ModContent.Request<Texture2D>("Windfall/Assets/NPCs/DragonSkeleton/DragonRibs", AssetRequestMode.AsyncLoad));
+            SkeletonVerletGroups.Add("Ribs", []);
+
+            SkeletonAssets.Add("Skull", ModContent.Request<Texture2D>("Windfall/Assets/NPCs/DragonSkeleton/DragonSkull", AssetRequestMode.AsyncLoad));
+            SkeletonVerletGroups.Add("Skull", []);
+            
+            SkeletonAssets.Add("FrontWing", ModContent.Request<Texture2D>("Windfall/Assets/NPCs/DragonSkeleton/DragonFrontWing", AssetRequestMode.AsyncLoad));
+            SkeletonVerletGroups.Add("FrontWing", []);
+
+            SkeletonAssets.Add("FrontLeg", ModContent.Request<Texture2D>("Windfall/Assets/NPCs/DragonSkeleton/DragonFrontLeg", AssetRequestMode.AsyncLoad));
+            SkeletonVerletGroups.Add("FrontLeg", []);
+        }
+    }
+
     public override void ClearWorld()
     {
         LunarCultBaseLocation = new(-1, -1);
@@ -66,6 +102,7 @@ public class LunarCultBaseSystem : ModSystem
         Active = false;
         State = SystemStates.CheckReqs;
     }
+
     public override void LoadWorldData(TagCompound tag)
     {
         LunarCultBaseLocation = tag.Get<Point>("LunarCultBaseLocation");
@@ -90,6 +127,7 @@ public class LunarCultBaseSystem : ModSystem
 
         spawnChance = tag.GetInt("spawnChance");
     }
+
     public override void SaveWorldData(TagCompound tag)
     {
         tag["LunarCultBaseLocation"] = LunarCultBaseLocation;
@@ -1448,6 +1486,183 @@ public class LunarCultBaseSystem : ModSystem
                 break;
         }
     }
+
+    public override void PreUpdateProjectiles()
+    {
+        // Handle Verlet Sims
+        for(int i = 0; i < SkeletonVerletGroups.Count; i++)
+        {
+            var pair = SkeletonVerletGroups.ElementAt(i);
+            //pair.Value.Clear();
+            // Instanciate 
+            if (pair.Value.Count == 0)
+            {
+                Vector2 spawnCenter;
+                int verletCount;
+
+                VerletObject box;
+                VerletObject chain1;
+                VerletObject chain2;
+
+                switch (pair.Key)
+                {
+                    case "Skull":
+                        spawnCenter = CultBaseWorldArea.Center.ToVector2() + new Vector2(-160, 512);
+                        verletCount = 12;
+
+                        box = CreateVerletBox(new((int)spawnCenter.X, (int)spawnCenter.Y, 32, 32));
+                        chain1 = CreateVerletChain(spawnCenter + new Vector2(-32, 0), box[0].Position, verletCount, 15);
+                        chain2 = CreateVerletChain(spawnCenter + new Vector2(32, 0), box[2].Position, verletCount, 15);
+
+                        ConnectVerlets(chain1[^1], box[0], 15);
+                        ConnectVerlets(chain2[^1], box[2], 15);
+                        break;
+                    case "Ribs":
+                        spawnCenter = CultBaseWorldArea.Center.ToVector2() + new Vector2(0, 512);
+                        verletCount = 11;
+
+                        box = CreateVerletBox(new((int)spawnCenter.X, (int)spawnCenter.Y, 156, 64));
+                        chain1 = CreateVerletChain(spawnCenter + new Vector2(-72, 0), box[0].Position, verletCount, 15);
+                        chain2 = CreateVerletChain(spawnCenter + new Vector2(72, 0), box[1].Position, verletCount, 15);
+
+                        ConnectVerlets(chain1[^1], box[0], 15);
+                        ConnectVerlets(chain2[^1], box[1], 15);
+                        break;
+                    case "FrontWing":
+                        spawnCenter = CultBaseWorldArea.Center.ToVector2() + new Vector2(BaseFacingLeft ? 24 : 72, 512);
+                        verletCount = 4;
+
+                        box = CreateVerletBox(new((int)spawnCenter.X, (int)spawnCenter.Y, 156, 96));
+                        chain1 = CreateVerletChain(spawnCenter + new Vector2(-84, 0), box[0].Position, verletCount, 15);
+                        chain2 = CreateVerletChain(spawnCenter + new Vector2(84, 0), box[1].Position, verletCount, 15);
+
+                        ConnectVerlets(chain1[^1], box[0], 15);
+                        ConnectVerlets(chain2[^1], box[1], 15);
+                        break;
+                    case "BackWing":
+                        spawnCenter = CultBaseWorldArea.Center.ToVector2() + new Vector2(BaseFacingLeft ? 72 : 24, 512);
+                        verletCount = 4;
+
+                        box = CreateVerletBox(new((int)spawnCenter.X, (int)spawnCenter.Y, 128, 96));
+                        chain1 = CreateVerletChain(spawnCenter + new Vector2(-84, 0), box[0].Position, verletCount, 15);
+                        chain2 = CreateVerletChain(spawnCenter + new Vector2(84, 0), box[1].Position, verletCount, 15);
+
+                        ConnectVerlets(chain1[^1], box[0], 15);
+                        ConnectVerlets(chain2[^1], box[1], 15);
+                        break;
+                    case "FrontLeg":
+                        spawnCenter = CultBaseWorldArea.Center.ToVector2() + new Vector2(BaseFacingLeft ? 96 : 144, 512);
+                        verletCount = 20;
+
+                        box = CreateVerletBox(new((int)spawnCenter.X, (int)spawnCenter.Y, 128, 64));
+                        chain1 = CreateVerletChain(spawnCenter + new Vector2(-32, 0), box[0].Position, verletCount - 4, 15);
+                        chain2 = CreateVerletChain(spawnCenter + new Vector2(32, 0), box[2].Position, verletCount, 15);
+
+                        ConnectVerlets(chain1[^1], box[0], 15);
+                        ConnectVerlets(chain2[^1], box[2], 15);
+                        break;
+                    case "BackLeg":
+                        spawnCenter = CultBaseWorldArea.Center.ToVector2() + new Vector2(BaseFacingLeft ? 144 : 96, 512);
+                        verletCount = 20;
+
+                        box = CreateVerletBox(new((int)spawnCenter.X, (int)spawnCenter.Y, 128, 64));
+                        chain1 = CreateVerletChain(spawnCenter + new Vector2(-32, 0), box[0].Position, verletCount - 4, 15);
+                        chain2 = CreateVerletChain(spawnCenter + new Vector2(32, 0), box[2].Position, verletCount, 15);
+
+                        ConnectVerlets(chain1[^1], box[0], 15);
+                        ConnectVerlets(chain2[^1], box[2], 15);
+                        break;
+                    case "Tail":
+                        spawnCenter = CultBaseWorldArea.Center.ToVector2() + new Vector2(192, 512);
+                        verletCount = 11;
+
+                        box = CreateVerletBox(new((int)spawnCenter.X, (int)spawnCenter.Y, 88, 32));
+                        chain1 = CreateVerletChain(spawnCenter + new Vector2(-32, 0), box[0].Position, verletCount, 15);
+                        chain2 = CreateVerletChain(spawnCenter + new Vector2(32, 0), box[1].Position, verletCount, 15);
+
+                        ConnectVerlets(chain1[^1], box[0], 15);
+                        ConnectVerlets(chain2[^1], box[1], 15);
+                        break;
+                    default:
+                        spawnCenter = CultBaseWorldArea.Center.ToVector2() + new Vector2(0, 512);
+                        verletCount = 9;
+
+                        box = CreateVerletBox(new((int)spawnCenter.X, (int)spawnCenter.Y, 32, 32));
+                        chain1 = CreateVerletChain(spawnCenter + new Vector2(-32, 0), box[0].Position, verletCount, 15);
+                        chain2 = CreateVerletChain(spawnCenter + new Vector2(32, 0), box[2].Position, verletCount, 15);
+
+                        ConnectVerlets(chain1[^1], box[0], 15);
+                        ConnectVerlets(chain2[^1], box[2], 15);
+                        break;
+                }
+
+                pair.Value.Add(box);
+                pair.Value.Add(chain1);
+                pair.Value.Add(chain2);
+
+                if(i != 0)
+                {
+                    switch(pair.Key)
+                    {
+                        case "Ribs":
+                            VerletObject ribBox = pair.Value[0];
+                            ribBox.Points[1].Connections.Add((SkeletonVerletGroups["Tail"][0].Points[0], 64));
+                            ribBox.Points[2].Connections.Add((SkeletonVerletGroups["BackLeg"][0].Points[0], 24));
+                            ribBox.Points[0].Connections.Add((SkeletonVerletGroups["BackWing"][0].Points[3], 48));
+                            break;
+                        case "Skull":
+                            pair.Value[0].Points[2].Connections.Add((SkeletonVerletGroups["Ribs"][0].Points[0], 84));
+                            pair.Value[0].Points[2].Connections.Add((SkeletonVerletGroups["Ribs"][0].Points[3], 84));
+                            break;
+                        case "FrontWing":
+                            pair.Value[0].Points[3].Connections.Add((SkeletonVerletGroups["Ribs"][0].Points[0], 96));
+                            break;
+                        case "FrontLeg":
+                            pair.Value[0].Points[0].Connections.Add((SkeletonVerletGroups["Ribs"][0].Points[2], 48));
+                            break;
+                    }
+                }
+            }
+
+            for (int j = 0; j < pair.Value.Count; j++)
+            {
+                VerletObject obj = pair.Value[j];
+                AffectVerletObject(obj, 0.05f, 0.5f, j != 0);
+            }
+
+            VerletSimulation(pair.Value, 30, 0.8f, false);
+        }
+    }
+
+    private void DrawHangingSkeleton(On_Main.orig_DrawProjectiles orig, Main self)
+    {
+        Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.PointWrap, DepthStencilState.None, Main.Rasterizer, null, Main.GameViewMatrix.TransformationMatrix);
+
+        foreach (KeyValuePair<string, List<VerletObject>> pair in SkeletonVerletGroups)
+        {
+            for(int j = 1; j < pair.Value.Count; j++)
+            {
+                for (int i = 0; i < pair.Value[j].Count; i++)
+                        new SelenicTwine().DrawRopeSegment(Main.spriteBatch, pair.Value[j].Points, i);
+            }
+
+            if (pair.Value.Count > 0)
+            {
+                Vector2 drawPos = (pair.Value[0].Positions[0] + pair.Value[0].Positions[2]) / 2f;
+                var drawRot = pair.Key switch
+                {
+                    "Ribs" or "FrontWing" or "BackWing" or "FrontLeg" or "BackLeg" or "Tail" => (pair.Value[0].Positions[0] - pair.Value[0].Positions[1]).ToRotation() + Pi,
+                    _ => (pair.Value[0].Positions[0] - pair.Value[0].Positions[2]).ToRotation() + Pi,
+                };
+                Main.spriteBatch.Draw(SkeletonAssets[pair.Key].Value, drawPos - Main.screenPosition, null, Lighting.GetColor(drawPos.ToTileCoordinates()), drawRot, SkeletonAssets[pair.Key].Size() * 0.5f, 1f, BaseFacingLeft ? SpriteEffects.FlipHorizontally : 0, 0);
+            }
+        }
+
+        Main.spriteBatch.End();
+
+        orig(self);
+    }
+
     internal static CombatText DisplayMessage(Rectangle location, Color color, string text)
     {
         CombatText MyDialogue = Main.combatText[CombatText.NewText(location, color, GetWindfallTextValue(text), true)];
@@ -1473,7 +1688,6 @@ public class LunarCultBaseSystem : ModSystem
         return Responses;
     }
     public static void ResetTimer() => ActivityTimer = 0;
-
     public static void SpawnFingerling()
     {
         if (Main.netMode == NetmodeID.MultiplayerClient)

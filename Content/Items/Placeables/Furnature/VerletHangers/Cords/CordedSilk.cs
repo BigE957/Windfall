@@ -28,6 +28,9 @@ public class CordedSilk : Cord, ILocalizedModType
 
         foreach ((VerletPoint p2, float l) in p.Connections)
         {
+            if (l == -1)
+                continue;
+
             float rot = (p2.Position - p.Position).ToRotation();
             Vector2 midPoint = (p.Position + p2.Position) / 2f;
 
