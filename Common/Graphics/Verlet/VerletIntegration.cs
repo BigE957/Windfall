@@ -129,6 +129,15 @@ public static class VerletIntegration
         a.Connections.Add((b, -1));
     }
 
+    public static void SetupMidPointConnection(VerletObject holder, int holderIndex, VerletPoint endPoint, float length)
+    {
+        Vector2 startPos = (holder.Points[holderIndex].Position + endPoint.Position) / 2f;
+        VerletPoint midPoint1 = new(startPos, false);
+        ConnectVerlets(holder.Points[holderIndex], midPoint1, length);
+        ConnectVerlets(midPoint1, endPoint, length);
+        holder.Points.Add(midPoint1);
+    }
+
     public static void BreakVerletConnection(VerletPoint a, VerletPoint b)
     {
         int index = a.Connections.FindIndex(c => c.Point == b);
@@ -204,8 +213,24 @@ public static class VerletIntegration
                     }
                 }
             }
-            else if(e.Hitbox.Contains((int)segment.Position.X, (int)segment.Position.Y))
-                segment.Position += entityVelocity;
+            else
+            {
+                for (int j = 0; j < obj[i].Connections.Count; j++)
+                {
+                    if (obj[i].Connections[j].Length == -1)
+                        continue;
+
+                    VerletPoint next = obj[i].Connections[j].Point;
+                    float _ = 0f;
+                    if (Collision.CheckAABBvLineCollision(e.TopLeft, e.Size, segment.Position, next.Position, 20f, ref _))
+                    {
+                        segment.Position += entityVelocity;
+                        foreach (var conn in obj[i].Connections)
+                            conn.Point.Position += entityVelocity;
+                        return;
+                    }
+                }
+            }
         }
     }
 
