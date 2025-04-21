@@ -114,6 +114,9 @@ public class DraconicRuinsSystem : ModSystem
         {
             foreach(Player player in Main.ActivePlayers)
             {
+                if (player.dead)
+                    continue;
+
                 Rectangle inflatedArea = DraconicRuinsArea;
                 inflatedArea.X += 32;
                 inflatedArea.Y += 32;

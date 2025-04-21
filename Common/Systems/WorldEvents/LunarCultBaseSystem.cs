@@ -278,10 +278,10 @@ public class LunarCultBaseSystem : ModSystem
 
         foreach (Player player in Main.ActivePlayers)
         {
-            if (CultBaseTileArea.Contains(player.Center.ToTileCoordinates()))
+            if (!player.dead && CultBaseTileArea.Contains(player.Center.ToTileCoordinates()))
             {
                 #region Basement Teleport
-                if (!QuestSystem.Quests["DraconicBone"].Active && !player.dead && player.Center.Y > (LunarCultBaseLocation.Y + 30) * 16)
+                if (!QuestSystem.Quests["DraconicBone"].Active && player.Center.Y > (LunarCultBaseLocation.Y + 30) * 16)
                 {
                     for (int i = 0; i <= 20; i++)
                         EmpyreanMetaball.SpawnDefaultParticle(player.Center, Main.rand.NextVector2Circular(5f, 5f), 30 * Main.rand.NextFloat(1.5f, 2.3f));
@@ -300,8 +300,6 @@ public class LunarCultBaseSystem : ModSystem
 
                 player.AddBuff(ModContent.BuffType<SpacialLock>(), 2);
             }
-
-
 
             if (player.LunarCult().apostleQuestTracker == 11)
                 spawnApostle = true;
