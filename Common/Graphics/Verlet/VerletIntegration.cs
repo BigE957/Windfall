@@ -161,22 +161,36 @@ public static class VerletIntegration
         myList.RemoveVerletPoint(myList.FindIndex(c => c == p));
     }
 
-    public static void AffectVerletObject(VerletObject obj, float dampening, float cap, bool isChain = true)
+    public static bool AffectVerletObject(VerletObject obj, float dampening, float cap, bool isChain = true)
     {
+        bool notableMove = false;
+
         for (int k = 0; k < obj.Points.Count; k++)
             if (!obj[k].Locked)
             {
+                bool temp = false;
                 foreach (Player p in Main.ActivePlayers)
-                    MoveObjectBasedOnEntity(obj, p, dampening / 2f, cap / 2f, isChain);
+                {
+                    temp = MoveObjectBasedOnEntity(obj, p, dampening / 2f, cap / 2f, isChain);
+                    if(!notableMove && temp)
+                        notableMove = true;
+                }
 
                 foreach (Projectile proj in Main.ActiveProjectiles)
-                    MoveObjectBasedOnEntity(obj, proj, dampening, cap, isChain);
+                {
+                    temp = MoveObjectBasedOnEntity(obj, proj, dampening, cap, isChain);
+                    if (!notableMove && temp)
+                        notableMove = true;
+                }
             }
+
+        return notableMove;
     }
 
-    public static void MoveObjectBasedOnEntity(VerletObject obj, Entity e, float dampening = 0.425f, float cap = 5f, bool isChain = true)
+    public static bool MoveObjectBasedOnEntity(VerletObject obj, Entity e, float dampening = 0.425f, float cap = 5f, bool isChain = true)
     {
         Vector2 entityVelocity = (e.velocity * dampening).ClampMagnitude(0f, cap);
+        bool notableMove = false;
 
         for (int i = 0; i < obj.Points.Count; i++)
         {
@@ -207,6 +221,8 @@ public static class VerletIntegration
                         {
                             segment.Position += entityVelocity * currentMovementOffsetInterpolant;
                             mainSegmentHit = true;
+                            if(entityVelocity.Length() >= cap)
+                                notableMove = true;
                         }
                         if (!next.Locked)
                             next.Position += entityVelocity * nextMovementOffsetInterpolant;
@@ -225,13 +241,17 @@ public static class VerletIntegration
                     if (Collision.CheckAABBvLineCollision(e.TopLeft, e.Size, segment.Position, next.Position, 20f, ref _))
                     {
                         segment.Position += entityVelocity;
+                        if (entityVelocity.Length() >= cap)
+                            notableMove = true;
                         foreach (var conn in obj[i].Connections)
                             conn.Point.Position += entityVelocity;
-                        return;
+                        return notableMove;
                     }
                 }
             }
         }
+
+        return notableMove;
     }
 
 

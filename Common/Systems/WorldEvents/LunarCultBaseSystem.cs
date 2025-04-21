@@ -17,6 +17,7 @@ using Windfall.Content.Projectiles.NPCAnimations;
 using static Windfall.Common.Graphics.Verlet.VerletIntegration;
 using Windfall.Content.Items.Placeables.Furnature.VerletHangers.Cords;
 using Luminance.Common.Utilities;
+using Windfall.Content.Items.Quests.SealingRitual;
 
 namespace Windfall.Common.Systems.WorldEvents;
 
@@ -270,11 +271,11 @@ public class LunarCultBaseSystem : ModSystem
         foreach (Player player in Main.player.Where(p => p.active))
         {
             #region Basement Teleport
-            if (!player.dead && CultBaseTileArea.Contains(player.Center.ToTileCoordinates()) && player.Center.Y > (LunarCultBaseLocation.Y + 30) * 16)
+            if (false && !player.dead && CultBaseTileArea.Contains(player.Center.ToTileCoordinates()) && player.Center.Y > (LunarCultBaseLocation.Y + 30) * 16)
             {
                 for (int i = 0; i <= 20; i++)
                     EmpyreanMetaball.SpawnDefaultParticle(player.Center, Main.rand.NextVector2Circular(5f, 5f), 30 * Main.rand.NextFloat(1.5f, 2.3f));
-                player.Teleport(new Vector2((CultBaseTileArea.Right - 21) * 16, (CultBaseTileArea.Top + 27) * 16), TeleportationStyleID.DebugTeleport);
+                player.Teleport(new Vector2((LunarCultBaseLocation.X - 106) * 16, (CultBaseTileArea.Top + 27) * 16), TeleportationStyleID.DebugTeleport);
                 SoundEngine.PlaySound(SoundID.Item8, player.Center);
                 for (int i = 0; i <= 20; i++)
                     EmpyreanMetaball.SpawnDefaultParticle(player.Center, Main.rand.NextVector2Circular(5f, 5f), 30 * Main.rand.NextFloat(1.5f, 2.3f));
@@ -1624,10 +1625,22 @@ public class LunarCultBaseSystem : ModSystem
                 }
             }
 
+            bool itemDropped = false;
+            int boneType = ModContent.ItemType<DraconicBone>();
+
             for (int j = 0; j < pair.Value.Count; j++)
             {
                 VerletObject obj = pair.Value[j];
-                AffectVerletObject(obj, 0.005f, 0.1f, j != 0);
+                bool temp = AffectVerletObject(obj, 0.005f, 0.1f, j != 0);
+                if (QuestSystem.Quests["DraconicBone"].Active && !itemDropped && temp && !Main.item.Any(t => t.active && t.type == boneType) && Main.rand.NextBool(50))
+                {
+                    if (Main.netMode != NetmodeID.MultiplayerClient)
+                    {
+                        Vector2 spawnPos = obj.Type == ObjectType.Chain ? obj[obj.Count / 2].Position : (obj[0].Position + obj[2].Position) / 2f;
+                        Item.NewItem(Item.GetSource_NaturalSpawn(), spawnPos, boneType);
+                    }
+                    itemDropped = true;
+                }
             }
 
             VerletSimulation(pair.Value, 30, 0.8f, false);
