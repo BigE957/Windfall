@@ -7,6 +7,8 @@ namespace Windfall.Content.Items.GlobalItems;
 
 public class WindfallGlobalItem : GlobalItem
 {
+    public static readonly HashSet<int> SpacialLockAffectedItems = [];
+
     public override bool PreDrawTooltipLine(Item item, DrawableTooltipLine line, ref int yOffset)
     {
         // only exists to fix an issue with WMITF that was bugging me
@@ -22,6 +24,10 @@ public class WindfallGlobalItem : GlobalItem
     {
         if (GodlyPlayer.IsUsingAbility(player))
             return false;
+
+        if(player.Buff().SpacialLock) { 
+        }
+
         return true;
     }       
     
