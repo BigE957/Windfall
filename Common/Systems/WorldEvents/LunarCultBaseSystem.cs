@@ -248,7 +248,7 @@ public class LunarCultBaseSystem : ModSystem
             else
             {
                 if (!NPC.AnyNPCs(oratorType))
-                    NPC.NewNPC(Entity.GetSource_None(), LunarCultBaseLocation.X * 16 + (BaseFacingLeft ? -1858 : 1858), (CultBaseTileArea.Top + 30) * 16, oratorType));
+                    NPC.NewNPC(Entity.GetSource_None(), LunarCultBaseLocation.X * 16 + (BaseFacingLeft ? -1858 : 1858), (CultBaseTileArea.Top + 30) * 16, oratorType);
             }
 
             #endregion
