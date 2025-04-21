@@ -1,4 +1,5 @@
 ﻿using CalamityMod.Items.Weapons.Melee;
+using CalamityMod.Particles;
 using DialogueHelper.UI.Dialogue;
 using Terraria;
 using Windfall.Common.Systems.WorldEvents;
@@ -21,6 +22,7 @@ public class LunarCultistDevotee : ModNPC
         TabletChase,
         TabletGrabCutscene,
         SlowToStop,
+        Enemy
     }
     private States AIState
     {
@@ -71,8 +73,7 @@ public class LunarCultistDevotee : ModNPC
     }
     public override void OnSpawn(IEntitySource source)
     {
-        if(AIState == States.CafeteriaEvent || AIState == States.RitualEvent || AIState == States.StaticCharacter)
-            NPC.aiStyle = -1;
+        // AIState = States.Enemy;
         switch (AIState)
         {
             case States.CafeteriaEvent:
@@ -88,6 +89,11 @@ public class LunarCultistDevotee : ModNPC
                 NPC.alpha = 0;
                 NPC.noGravity = false;
                 NPC.aiStyle = -1;
+                break;
+            case States.Enemy:
+                NPC.damage = 100;
+                // NPC.friendly = false;
+                NPC.dontTakeDamageFromHostiles = true;
                 break;
             default:
                 NPC.alpha = 255;
@@ -124,10 +130,28 @@ public class LunarCultistDevotee : ModNPC
     private int tripTime = 0;
     public Vector2 TargetPos = Vector2.Zero;
 
+    private int playerAgro
+    {
+        get => (int)NPC.ai[1];
+        set => NPC.ai[1] = value;
+    }
+    private enum AttackState
+    {
+        None,
+        Ranged,
+        Melee
+    }
+    private AttackState Attack
+    {
+        get => (AttackState)NPC.ai[0];
+        set => NPC.ai[0] = (float)value;
+    }
+
     public override void AI()
     {
         switch (AIState)
         {
+            #region Selenic Order Base
             case States.Idle:
                 int index = NPC.FindClosestPlayer();
                 if (index != -1)
@@ -300,6 +324,8 @@ public class LunarCultistDevotee : ModNPC
                     }
                 }
                 break;
+            #endregion
+            #region Tablet Chase Sequence
             case States.TabletChase:
                 if (jumpTimer > 0)
                     jumpTimer--;
@@ -453,14 +479,140 @@ public class LunarCultistDevotee : ModNPC
                     jumpTimer--;
 
                 break;
+            #endregion
             case States.SlowToStop:
                 if(NPC.velocity.X != 0)
                     NPC.direction = Math.Sign(NPC.velocity.X);
                 if (Time >= 0)
                     NPC.velocity.X *= 0.8f;
                 break;
-        }
+            case States.Enemy:
+                if(playerAgro != -1)
+                {
+                    Player target = Main.player[playerAgro];
 
+                    switch(Attack)
+                    {
+                        case AttackState.Melee:
+                            if (Time == 0)
+                            {
+                                NPC.direction = Math.Sign(target.Center.X - NPC.Center.X);
+                                NPC.velocity.X = 0;
+                            }
+                            if(Time >= 12)
+                            {
+                                if (Time == 12)
+                                    NPC.velocity.X = 8 * NPC.direction;
+                                else
+                                    NPC.velocity.X *= 0.95f;
+                                Collision.StepUp(ref NPC.position, ref NPC.velocity, NPC.width, NPC.height, ref NPC.stepSpeed, ref NPC.gfxOffY);
+                                if (Math.Abs(NPC.velocity.X) < 1f)
+                                {
+                                    Attack = AttackState.None;
+                                    pathFinding.FindPath(NPC.Center, target.Center, NPC.IsWalkableThroughDoors, NPC.noGravity ? null : GravityCostFunction, searchRadius: 800f);
+                                }
+                            }
+
+                            NPC.spriteDirection = NPC.direction;
+                            Time++;
+                            return;
+                        case AttackState.Ranged:
+                            Projectile.NewProjectile(NPC.GetSource_FromThis(), NPC.Center, (target.Center - NPC.Center).SafeNormalize(Vector2.UnitX * NPC.direction) * 12f, ProjectileID.WoodenArrowHostile, 100, 0.5f);
+                            Attack = AttackState.None;
+                            break;
+                    }
+                    if (jumpTimer > 0)
+                        jumpTimer--;
+
+                    if ((NPC.velocity.Y != 0 || NPC.oldVelocity.Y != 0.3f) && !WorldGen.SolidOrSlopedTile(NPC.Bottom.ToTileCoordinates().X, NPC.Bottom.ToTileCoordinates().Y))
+                    {
+                        if (jumpTimer == 0)
+                            airTime++;
+                        else
+                            airTime = 16;
+                    }
+                    else
+                    {
+                        airTime = 0;
+                        jumpTimer = 0;
+                    }
+
+                    if (jumpTimer != 0 || Time % 10 == 0)
+                    {
+                        pathFinding.FindPath(NPC.Center, target.Center, NPC.IsWalkableThroughDoors, NPC.noGravity ? null : GravityCostFunction, searchRadius: 800f);
+
+                        CurrentWaypoint = 1;
+                    }
+
+                    float MoveSpeed = 4f;
+
+                    if (pathFinding.MyPath != null)
+                    {
+                        /*
+                        for (int i = 0; i < pathFinding.MyPath.Points.Length; i++)
+                        {
+                            Particle p = new GlowOrbParticle(pathFinding.MyPath.Points[i].ToWorldCoordinates(), Vector2.Zero, false, 2, 0.5f, i == CurrentWaypoint ? Color.White : Color.Red);
+                            GeneralParticleHandler.SpawnParticle(p);
+                        }
+                        */
+                        if (Attack == AttackState.None)
+                        {
+                            if (pathFinding.MyPath.Points.Length < 4 && airTime == 0)
+                            {
+                                Attack = AttackState.Melee;
+                                Time = 0;
+                                return;
+                            }
+                            else if (Time % 60 == 0 && Main.rand.NextBool(4))
+                            {
+                                Attack = AttackState.Ranged;
+                                Time++;
+                                NPC.netUpdate = true;
+                                return;
+                            }
+                        }
+                    }
+
+                    bool MovementSuccess = GravityAffectedPathfindingMovement(NPC, pathFinding, ref CurrentWaypoint, out NPC.velocity, out bool jumpStarted, MoveSpeed, 8.5f, 0.25f);
+                    float dist = Vector2.DistanceSquared(TargetPos, NPC.Center);
+
+                    if (!MovementSuccess)
+                        playerAgro = -1;
+                    if (jumpStarted)
+                        jumpTimer = 30;
+
+                    if (NPC.velocity.X != 0 && airTime < 60 && tripTime == 0)
+                        NPC.direction = Math.Sign(NPC.velocity.X);
+
+                    if (NPC.direction == -1)
+                    {
+                        Point p = NPC.Left.ToTileCoordinates();
+                        p.X -= 1;
+                        bool opened = TryOpenDoor(p, -1);
+                    }
+                    else
+                    {
+                        Point p = NPC.Right.ToTileCoordinates();
+                        //p.X += 1;
+                        bool opened = TryOpenDoor(p, -1);
+                    }
+                }
+                else
+                {
+                    foreach(Player p in Main.player)
+                    {
+                        if(Collision.CanHit(NPC, p) && (p.Center - NPC.Center).LengthSquared() < 360000)
+                        {
+                            playerAgro = p.whoAmI;
+                            break;
+                        }
+                    }
+
+                    //Wander
+                    NPC.velocity.X = 0;
+                }
+                break;
+        }
         NPC.spriteDirection = NPC.direction;
 
         Time++;
@@ -551,6 +703,30 @@ public class LunarCultistDevotee : ModNPC
                         NPC.frame.X = frameWidth * 8;
                     else
                         NPC.frame.X = frameWidth * 5;
+                    NPC.frame.Y = 0;
+                }
+                break;
+            case States.Enemy:
+                if (airTime < 16 && jumpTimer == 0)
+                {
+                    NPC.frame.X = frameWidth * 4;
+                    NPC.frame.Y = frameHeight * ((int)NPC.frameCounter % Main.npcFrameCount[NPC.type]);
+
+                    if (NPC.velocity.X == 0 && (NPC.frame.Y / frameHeight == 4 || NPC.frame.Y / frameHeight == 5 || NPC.frame.Y / frameHeight == 12 || NPC.frame.Y / frameHeight == 13 || NPC.frame.Y / frameHeight == 14))
+                    {
+                        NPC.frame.X = frameWidth * 3;
+                        NPC.frame.Y = 0;
+                    }
+                    else
+                    {
+                        NPC.frameCounter += 0.2f * (Math.Abs(NPC.velocity.X) + 1);
+                        NPC.frame.Y = frameHeight * ((int)NPC.frameCounter % Main.npcFrameCount[NPC.type]);
+                    }
+
+                }
+                else
+                {
+                    NPC.frame.X = frameWidth * 5;
                     NPC.frame.Y = 0;
                 }
                 break;
