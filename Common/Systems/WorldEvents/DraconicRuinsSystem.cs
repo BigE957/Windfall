@@ -2,6 +2,7 @@
 using Luminance.Core.Graphics;
 using Terraria.ModLoader.IO;
 using Windfall.Common.Graphics.Verlet;
+using Windfall.Content.Buffs.Inhibitors;
 using Windfall.Content.NPCs.TravellingNPCs;
 using Windfall.Content.NPCs.WorldEvents.LunarCult;
 using static Windfall.Common.Graphics.Verlet.VerletIntegration;
@@ -108,6 +109,20 @@ public class DraconicRuinsSystem : ModSystem
 
         if (State == CutsceneState.Arrival && !NPC.AnyNPCs(ModContent.NPCType<SealingTablet>()))
             NPC.NewNPC(Entity.GetSource_None(), TabletRoom.X * 16 + 8, TabletRoom.Y * 16 - 160, ModContent.NPCType<SealingTablet>());
+
+        if(State == CutsceneState.CultistFumble)
+        {
+            foreach(Player player in Main.ActivePlayers)
+            {
+                Rectangle inflatedArea = DraconicRuinsArea;
+                inflatedArea.X += 32;
+                inflatedArea.Y += 32;
+                inflatedArea.Width += 64;
+                inflatedArea.Height += 64;
+                if (inflatedArea.Contains(player.Center.ToTileCoordinates()))
+                    player.AddBuff(ModContent.BuffType<SpacialLock>(), 2);
+            }
+        }
 
         if (ZoomActive)
         {

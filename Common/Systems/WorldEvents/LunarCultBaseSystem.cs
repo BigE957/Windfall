@@ -17,6 +17,7 @@ using Windfall.Content.Projectiles.NPCAnimations;
 using static Windfall.Common.Graphics.Verlet.VerletIntegration;
 using Windfall.Content.Items.Placeables.Furnature.VerletHangers.Cords;
 using Windfall.Content.Items.Quests.SealingRitual;
+using Windfall.Content.Buffs.Inhibitors;
 
 namespace Windfall.Common.Systems.WorldEvents;
 
@@ -275,25 +276,32 @@ public class LunarCultBaseSystem : ModSystem
 
         bool spawnApostle = false;
 
-        foreach (Player player in Main.player.Where(p => p.active))
+        foreach (Player player in Main.ActivePlayers)
         {
-            #region Basement Teleport
-            if (!QuestSystem.Quests["DraconicBone"].Active && !player.dead && CultBaseTileArea.Contains(player.Center.ToTileCoordinates()) && player.Center.Y > (LunarCultBaseLocation.Y + 30) * 16)
+            if (CultBaseTileArea.Contains(player.Center.ToTileCoordinates()))
             {
-                for (int i = 0; i <= 20; i++)
-                    EmpyreanMetaball.SpawnDefaultParticle(player.Center, Main.rand.NextVector2Circular(5f, 5f), 30 * Main.rand.NextFloat(1.5f, 2.3f));
-                player.Teleport(new Vector2((LunarCultBaseLocation.X - 106) * 16, (CultBaseTileArea.Top + 27) * 16), TeleportationStyleID.DebugTeleport);
-                SoundEngine.PlaySound(SoundID.Item8, player.Center);
-                for (int i = 0; i <= 20; i++)
-                    EmpyreanMetaball.SpawnDefaultParticle(player.Center, Main.rand.NextVector2Circular(5f, 5f), 30 * Main.rand.NextFloat(1.5f, 2.3f));
-                if (NPC.AnyNPCs(ModContent.NPCType<OratorNPC>()))
+                #region Basement Teleport
+                if (!QuestSystem.Quests["DraconicBone"].Active && !player.dead && player.Center.Y > (LunarCultBaseLocation.Y + 30) * 16)
                 {
-                    NPC orator = Main.npc[NPC.FindFirstNPC(ModContent.NPCType<OratorNPC>())];
-                    string path = "Dialogue.LunarCult.TheOrator.WorldText.Basement." + Main.rand.Next(3);
-                    DisplayMessage(orator.Hitbox, Color.LimeGreen, path);
+                    for (int i = 0; i <= 20; i++)
+                        EmpyreanMetaball.SpawnDefaultParticle(player.Center, Main.rand.NextVector2Circular(5f, 5f), 30 * Main.rand.NextFloat(1.5f, 2.3f));
+                    player.Teleport(new Vector2((LunarCultBaseLocation.X - 106) * 16, (CultBaseTileArea.Top + 27) * 16), TeleportationStyleID.DebugTeleport);
+                    SoundEngine.PlaySound(SoundID.Item8, player.Center);
+                    for (int i = 0; i <= 20; i++)
+                        EmpyreanMetaball.SpawnDefaultParticle(player.Center, Main.rand.NextVector2Circular(5f, 5f), 30 * Main.rand.NextFloat(1.5f, 2.3f));
+                    if (NPC.AnyNPCs(ModContent.NPCType<OratorNPC>()))
+                    {
+                        NPC orator = Main.npc[NPC.FindFirstNPC(ModContent.NPCType<OratorNPC>())];
+                        string path = "Dialogue.LunarCult.TheOrator.WorldText.Basement." + Main.rand.Next(3);
+                        DisplayMessage(orator.Hitbox, Color.LimeGreen, path);
+                    }
                 }
+                #endregion
+
+                player.AddBuff(ModContent.BuffType<SpacialLock>(), 2);
             }
-            #endregion
+
+
 
             if (player.LunarCult().apostleQuestTracker == 11)
                 spawnApostle = true;
