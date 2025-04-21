@@ -230,15 +230,15 @@ public class LunarCultBaseSystem : ModSystem
         {
             #region Main Character Spawning
             if (!NPC.AnyNPCs(ModContent.NPCType<Seamstress>()))
-                NPC.NewNPC(Entity.GetSource_None(), LunarCultBaseLocation.X * 16 + (BaseFacingLeft ? -1428 : 1408), (LunarCultBaseLocation.Y * 16) + 480, ModContent.NPCType<Seamstress>());
+                NPC.NewNPC(Entity.GetSource_None(), LunarCultBaseLocation.X * 16 + (BaseFacingLeft ? -1396 : 1408), (LunarCultBaseLocation.Y * 16) + 480, ModContent.NPCType<Seamstress>());
             if (!NPC.AnyNPCs(ModContent.NPCType<TheChef>()))
-                NPC.NewNPC(Entity.GetSource_None(), LunarCultBaseLocation.X * 16 + (BaseFacingLeft ? -196 : 128), (LunarCultBaseLocation.Y * 16), ModContent.NPCType<TheChef>());
+                NPC.NewNPC(Entity.GetSource_None(), LunarCultBaseLocation.X * 16 + (BaseFacingLeft ? -168 : 128), (LunarCultBaseLocation.Y * 16), ModContent.NPCType<TheChef>());
             if (!Main.npc.Any(n => n.active && n.type == ModContent.NPCType<Watchman>()))
                 NPC.NewNPC(Entity.GetSource_None(), LunarCultBaseLocation.X * 16 + (BaseFacingLeft ? -2100 : 2100), (LunarCultBaseLocation.Y - 6) * 16 - 5, ModContent.NPCType<Watchman>());
             if (SealingRitualSystem.RitualSequenceSeen)
                 return;
             if (!NPC.AnyNPCs(ModContent.NPCType<OratorNPC>()))
-                NPC.NewNPC(Entity.GetSource_None(), LunarCultBaseLocation.X * 16 + (BaseFacingLeft ? -1890 : 1858), (CultBaseTileArea.Top + 31) * 16, ModContent.NPCType<OratorNPC>());
+                NPC.NewNPC(Entity.GetSource_None(), LunarCultBaseLocation.X * 16 + (BaseFacingLeft ? -1858 : 1858), (CultBaseTileArea.Top + 30) * 16, ModContent.NPCType<OratorNPC>());
 
             #endregion
 
@@ -1640,6 +1640,7 @@ public class LunarCultBaseSystem : ModSystem
 
         foreach (KeyValuePair<string, List<VerletObject>> pair in SkeletonVerletGroups)
         {
+            /*
             foreach(var point in pair.Value[0].Points)
             {
                 foreach(var connection in point.Connections)
@@ -1649,7 +1650,7 @@ public class LunarCultBaseSystem : ModSystem
                     Main.spriteBatch.DrawLineBetween(point.Position, connection.Point.Position, Color.Red.MultiplyRGB(lighting), 3);
                 }
             }
-            
+            */
             for(int j = 1; j < pair.Value.Count; j++)
             {
                 for (int i = 0; i < pair.Value[j].Count; i++)
@@ -1660,7 +1661,7 @@ public class LunarCultBaseSystem : ModSystem
             {
                 Vector2 drawPos = (pair.Value[0].Positions[0] + pair.Value[0].Positions[2]) / 2f;
                 var drawRot = (pair.Value[0].Positions[0] - pair.Value[0].Positions[1]).ToRotation() + Pi;
-                //Main.spriteBatch.Draw(SkeletonAssets[pair.Key].Value, drawPos - Main.screenPosition, null, Lighting.GetColor(drawPos.ToTileCoordinates()), drawRot, SkeletonAssets[pair.Key].Size() * 0.5f, 1f, BaseFacingLeft ? SpriteEffects.FlipHorizontally : 0, 0);
+                Main.spriteBatch.Draw(SkeletonAssets[pair.Key].Value, drawPos - Main.screenPosition, null, Lighting.GetColor(drawPos.ToTileCoordinates()), drawRot, SkeletonAssets[pair.Key].Size() * 0.5f, 1f, 0, 0);
             }
         }
 
