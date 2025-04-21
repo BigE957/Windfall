@@ -16,7 +16,6 @@ using Windfall.Content.Items.Quests.Cafeteria;
 using Windfall.Content.Projectiles.NPCAnimations;
 using static Windfall.Common.Graphics.Verlet.VerletIntegration;
 using Windfall.Content.Items.Placeables.Furnature.VerletHangers.Cords;
-using Luminance.Common.Utilities;
 using Windfall.Content.Items.Quests.SealingRitual;
 
 namespace Windfall.Common.Systems.WorldEvents;
@@ -238,8 +237,19 @@ public class LunarCultBaseSystem : ModSystem
                 NPC.NewNPC(Entity.GetSource_None(), LunarCultBaseLocation.X * 16 + (BaseFacingLeft ? -2100 : 2100), (LunarCultBaseLocation.Y - 6) * 16 - 5, ModContent.NPCType<Watchman>());
             if (SealingRitualSystem.RitualSequenceSeen)
                 return;
-            if (!NPC.AnyNPCs(ModContent.NPCType<OratorNPC>()))
-                NPC.NewNPC(Entity.GetSource_None(), LunarCultBaseLocation.X * 16 + (BaseFacingLeft ? -1858 : 1858), (CultBaseTileArea.Top + 30) * 16, ModContent.NPCType<OratorNPC>());
+
+            int oratorType = ModContent.NPCType<OratorNPC>();
+            if (QuestSystem.Quests["DraconicBone"].Active)
+            {
+                if (NPC.AnyNPCs(oratorType))
+                    foreach (NPC orator in Main.npc.Where(n => n.active && n.type == oratorType))
+                        orator.active = false;
+            }
+            else
+            {
+                if (!NPC.AnyNPCs(oratorType))
+                    NPC.NewNPC(Entity.GetSource_None(), LunarCultBaseLocation.X * 16 + (BaseFacingLeft ? -1858 : 1858), (CultBaseTileArea.Top + 30) * 16, oratorType));
+            }
 
             #endregion
 
@@ -271,7 +281,7 @@ public class LunarCultBaseSystem : ModSystem
         foreach (Player player in Main.player.Where(p => p.active))
         {
             #region Basement Teleport
-            if (false && !player.dead && CultBaseTileArea.Contains(player.Center.ToTileCoordinates()) && player.Center.Y > (LunarCultBaseLocation.Y + 30) * 16)
+            if (!QuestSystem.Quests["DraconicBone"].Active && !player.dead && CultBaseTileArea.Contains(player.Center.ToTileCoordinates()) && player.Center.Y > (LunarCultBaseLocation.Y + 30) * 16)
             {
                 for (int i = 0; i <= 20; i++)
                     EmpyreanMetaball.SpawnDefaultParticle(player.Center, Main.rand.NextVector2Circular(5f, 5f), 30 * Main.rand.NextFloat(1.5f, 2.3f));
