@@ -33,7 +33,8 @@ public class Fingerling : ModNPC
         NPC.lifeMax = 40;
         NPC.HitSound = SoundID.NPCHit1;
         NPC.DeathSound = SoundID.NPCDeath1;
-        NPC.knockBackResist = 0.5f;  
+        NPC.knockBackResist = 0.5f; 
+        NPC.dontTakeDamage = true;
     }
     public override void OnSpawn(IEntitySource source)
     {
