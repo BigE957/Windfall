@@ -5,6 +5,8 @@ using DialogueHelper.UI.Dialogue;
 using Windfall.Content.Items.Quests.Casters;
 using Windfall.Content.Items.Tools;
 using Windfall.Content.Items.Placeables.Furnature.Plaques;
+using Windfall.Common.Systems;
+using Windfall.Content.Buffs.DoT;
 
 namespace Windfall.Content.NPCs.WorldEvents.LunarCult;
 
@@ -67,26 +69,36 @@ public class OratorNPC : ModNPC
             if (Time == 60)
                 ModContent.GetInstance<DialogueUISystem>().DisplayDialogueTree(Windfall.Instance, "Cutscenes/OratorDraconicBone", new(Name, [NPC.whoAmI]));
 
-            if(Main.netMode != NetmodeID.MultiplayerClient && Time > 60 && Time <= 420 && Time % 30 == 0)
+            if (Time > 60)
             {
-                Vector2 spawnLocation = ((Time / 30) - 2) switch
+                if (Main.netMode != NetmodeID.MultiplayerClient && Time <= 420 && Time % 30 == 0)
                 {
-                    1 => LunarCultBaseSystem.CultBaseWorldArea.Center() + new Vector2(408, 699),
-                    2 => LunarCultBaseSystem.CultBaseWorldArea.Center() + new Vector2(-440, 699),
-                    3 => LunarCultBaseSystem.CultBaseWorldArea.Center() + new Vector2(-870, 427),
-                    4 => LunarCultBaseSystem.CultBaseWorldArea.Center() + new Vector2(584, 387),
-                    5 => LunarCultBaseSystem.CultBaseWorldArea.Center() + new Vector2(391, 427),
-                    6 => LunarCultBaseSystem.CultBaseWorldArea.Center() + new Vector2(378, 427),
-                    7 => LunarCultBaseSystem.CultBaseWorldArea.Center() + new Vector2(-722, -117),
-                    8 => LunarCultBaseSystem.CultBaseWorldArea.Center() + new Vector2(-281, -117),
-                    9 => LunarCultBaseSystem.CultBaseWorldArea.Center() + new Vector2(-199, -117),
-                    10 => LunarCultBaseSystem.CultBaseWorldArea.Center() + new Vector2(311, -117),
-                    11 => LunarCultBaseSystem.CultBaseWorldArea.Center() + new Vector2(538, -117),
-                    12 => LunarCultBaseSystem.CultBaseWorldArea.Center() + new Vector2(-300, -389),
-                    _ => LunarCultBaseSystem.CultBaseWorldArea.Center(),
-                };
-                NPC.NewNPC(NPC.GetSource_FromThis(), (int)spawnLocation.X, (int)spawnLocation.Y, ModContent.NPCType<LunarCultistDevotee>(), ai2: 8, ai3: 1);
-            }
+                    Vector2 spawnLocation = ((Time / 30) - 2) switch
+                    {
+                        1 => LunarCultBaseSystem.CultBaseWorldArea.Center() + new Vector2(408, 699),
+                        2 => LunarCultBaseSystem.CultBaseWorldArea.Center() + new Vector2(-440, 699),
+                        3 => LunarCultBaseSystem.CultBaseWorldArea.Center() + new Vector2(-870, 427),
+                        4 => LunarCultBaseSystem.CultBaseWorldArea.Center() + new Vector2(584, 387),
+                        5 => LunarCultBaseSystem.CultBaseWorldArea.Center() + new Vector2(391, 427),
+                        6 => LunarCultBaseSystem.CultBaseWorldArea.Center() + new Vector2(378, 427),
+                        7 => LunarCultBaseSystem.CultBaseWorldArea.Center() + new Vector2(-722, -117),
+                        8 => LunarCultBaseSystem.CultBaseWorldArea.Center() + new Vector2(-281, -117),
+                        9 => LunarCultBaseSystem.CultBaseWorldArea.Center() + new Vector2(-199, -117),
+                        10 => LunarCultBaseSystem.CultBaseWorldArea.Center() + new Vector2(311, -117),
+                        11 => LunarCultBaseSystem.CultBaseWorldArea.Center() + new Vector2(538, -117),
+                        12 => LunarCultBaseSystem.CultBaseWorldArea.Center() + new Vector2(-300, -389),
+                        _ => LunarCultBaseSystem.CultBaseWorldArea.Center(),
+                    };
+                    NPC.NewNPC(NPC.GetSource_FromThis(), (int)spawnLocation.X, (int)spawnLocation.Y, ModContent.NPCType<LunarCultistDevotee>(), ai2: 8, ai3: 1);
+                }
+
+                foreach (Player player in Main.ActivePlayers)
+                {
+                    Rectangle inflatedArea = new(LunarCultBaseSystem.CultBaseWorldArea.X - 512, LunarCultBaseSystem.CultBaseWorldArea.Y + 512, LunarCultBaseSystem.CultBaseWorldArea.Width + 1024, CultBaseWorldArea.Height + 1024);
+                    Rectangle inflatedBridge = new(LunarCultBaseSystem.CultBaseBridgeArea.X * 16 - 512, LunarCultBaseSystem.CultBaseBridgeArea.Y * 16 + 512, LunarCultBaseSystem.CultBaseBridgeArea.Width * 16 + 1024, CLunarCultBaseSystem.ultBaseBridgeArea.Height * 16 + 1024);
+                    if (inflatedArea.Contains((int)player.Center.X, (int)player.Center.Y) || inflatedBridge.Contains((int)player.Center.X, (int)player.Center.Y))
+                        player.AddBuff(ModContent.BuffType<Entropy>(), 2);
+                }
 
             Time++;
         }

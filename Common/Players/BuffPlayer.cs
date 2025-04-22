@@ -1,4 +1,7 @@
-﻿namespace Windfall.Common.Players;
+﻿using Windfall.Common.Systems;
+using Windfall.Content.NPCs.Bosses.Orator;
+
+namespace Windfall.Common.Players;
 
 public class BuffPlayer : ModPlayer
 {
@@ -47,7 +50,7 @@ public class BuffPlayer : ModPlayer
         }
 
         if(Entropy)
-            Player.lifeRegen -= 150;
+            Player.lifeRegen -= QuestSystem.Quests["DraconicBone"].Active ? 50 : 150;
         if(Wildfire)
             Player.lifeRegen -= 50;
     }

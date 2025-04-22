@@ -18,6 +18,7 @@ using static Windfall.Common.Graphics.Verlet.VerletIntegration;
 using Windfall.Content.Items.Placeables.Furnature.VerletHangers.Cords;
 using Windfall.Content.Items.Quests.SealingRitual;
 using Windfall.Content.Buffs.Inhibitors;
+using Terraria;
 
 namespace Windfall.Common.Systems.WorldEvents;
 
@@ -282,6 +283,14 @@ public class LunarCultBaseSystem : ModSystem
 
         foreach (Player player in Main.ActivePlayers)
         {
+            if (QuestSystem.Quests["DraconicBone"].Complete && !DownedNPCSystem.downedOrator)
+            {
+                Rectangle inflatedArea = new(CultBaseWorldArea.X - 512, CultBaseWorldArea.Y + 512, CultBaseWorldArea.Width + 1024, CultBaseWorldArea.Height + 1024);
+                Rectangle inflatedBridge = new(CultBaseBridgeArea.X * 16 - 512, CultBaseBridgeArea.Y * 16 + 512, CultBaseBridgeArea.Width * 16 + 1024, CultBaseBridgeArea.Height * 16 + 1024);
+                if (inflatedArea.Contains((int)player.Center.X, (int)player.Center.Y) || inflatedBridge.Contains((int)player.Center.X, (int)player.Center.Y))
+                    player.AddBuff(ModContent.BuffType<Entropy>(), 2);
+            }
+
             if (!player.dead && CultBaseTileArea.Contains(player.Center.ToTileCoordinates()))
             {
                 #region Basement Teleport
