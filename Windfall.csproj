@@ -66,7 +66,6 @@
     <None Remove="Assets\Projectiles\Boss\TideNoise1.png" />
     <None Remove="Assets\Projectiles\Boss\TideNoise2.png" />
     <None Remove="Assets\Skies\OratorMoon.png" />
-    <None Remove="Assets\Tiles\DraconicSkeleton.png" />
     <None Remove="Assets\UI\CharacterAssets\DragonArcher\Default.png" />
     <None Remove="Assets\UI\CharacterAssets\LunaticCultist\Default.png" />
     <None Remove="Assets\UI\CharacterAssets\Seamstress\Default.png" />
@@ -171,6 +170,7 @@
     <Folder Include="Content\Items\Armor\Selenic\" />
     <Folder Include="Localization\DialogueTrees\en-US\Apostle\" />
     <Folder Include="Localization\DialogueTrees\en-US\IlmeranPaladin\" />
+    <Folder Include="Localization\DialogueTrees\en-US\Cutscenes\" />
     <Folder Include="Localization\DialogueTrees\en-US\TravellingCultist\QuestProgress\" />
   </ItemGroup>
   <ItemGroup>
