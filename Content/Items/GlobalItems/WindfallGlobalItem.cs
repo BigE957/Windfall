@@ -25,8 +25,8 @@ public class WindfallGlobalItem : GlobalItem
         if (GodlyPlayer.IsUsingAbility(player))
             return false;
 
-        if(player.Buff().SpacialLock) { 
-        }
+        if(player.Buff().SpacialLock && SpacialLockAffectedItems.Contains(item.type))
+            return false;
 
         return true;
     }       

@@ -7,7 +7,7 @@ public class BuffPlayer : ModPlayer
     public bool WretchedHarvest = false;
     public bool Entropy = false;
     public bool Wildfire = false;
-    public bool SpacialLock = true;
+    public bool SpacialLock = false;
 
     public override void ResetEffects()
     {
@@ -16,6 +16,7 @@ public class BuffPlayer : ModPlayer
         WretchedHarvest = false;
         Entropy = false;
         Wildfire = false;
+        SpacialLock = false;
     }
     public override void UpdateDead()
     {
@@ -24,6 +25,7 @@ public class BuffPlayer : ModPlayer
         WretchedHarvest = false;
         Entropy = false;
         Wildfire = false;
+        SpacialLock = false;
     }
     public override void PostUpdateMiscEffects()
     {
