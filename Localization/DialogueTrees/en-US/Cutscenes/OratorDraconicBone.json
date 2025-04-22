@@ -1,0 +1,78 @@
+{
+  "Dialogues": [
+    {
+      "DialogueText": [ { "Text": "My my... I had hoped your time with us would've made you wiser than this... At least wise enough to know what would happen if you dared to betray me. And yet, here you are. In a place I warned you not to enter, and stealing from me no less!" } ]
+    },
+    {
+      "DialogueText": [ { "Text": "What a waste." } ]
+    },
+    {
+      "DialogueText": [
+        {
+          "Text": "Do you really believe those fanatics have your interests at heart? I'm sure they've convinced you that what I wish to achieve is an evil that must be stopped at all costs, but did you ever think to question their motives? What exactly do think they'll do after I'm dealt with? Is the future they wish to bring truly one you'd wish to be a part of?",
+          "Responses": [
+            {
+              "Title": "I do.",
+              "Heading": 3
+            },
+            {
+              "Title": "...",
+              "Heading": 6
+            },
+            {
+              "Title": "I'm... Unsure.'"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "DialogueText": [ { "Text": "Then I truly was mistaken to ever think you might be of use. You're just as foolish as they are, and I have no use for fools. This shall be where we say goodbye." } ]
+    },
+    {
+      "DialogueText": [
+        {
+          "Text": "My devoted followers! Seize this traitor, and put an end to their follies!",
+          "Responses": [
+            {
+              "Title": "Uh oh!"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "DialogueText": [ { "Text": "Though, I suppose there's little point in asking you all this now. For I don't intend on letting you escape here alive." } ]
+    },
+    {
+      "DialogueText": [
+        {
+          "Text": "My devoted followers! Seize this traitor, and put an end to their follies!",
+          "Responses": [
+            {
+              "Title": "Uh oh!"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "DialogueText": [ { "Text": "You would betray me for a cause you don't even have faith in?! You're somehow more foolish than they are. Allow me to put an end to your pathetic existence..." } ]
+    },
+    {
+      "DialogueText": [
+        {
+          "Text": "My devoted followers! Seize this traitor, and rid us their follies!",
+          "Responses": [
+            {
+              "Title": "Uh oh!"
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "Characters": [
+    "TheOrator"
+  ]
+}

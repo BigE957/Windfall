@@ -537,9 +537,12 @@ public class LunarCultistDevotee : ModNPC
                         jumpTimer = 0;
                     }
 
-                    if (jumpTimer != 0 || Time % 10 == 0)
+                    if (jumpTimer != 0 || Time % 30 == 0)
                     {
-                        pathFinding.FindPath(NPC.Center, target.Center, NPC.IsWalkableThroughDoors, NPC.noGravity ? null : GravityCostFunction, searchRadius: 800f);
+                        if (NPC.ai[3] == 0)
+                            pathFinding.FindPath(NPC.Center, target.Center, NPC.IsWalkableThroughDoors, NPC.noGravity ? null : GravityCostFunction, searchRadius: 800f);
+                        else
+                            pathFinding.FindPath(NPC.Center, target.Center, NPC.IsWalkableThroughDoors, LunarCultBaseSystem.CultBaseTileArea, NPC.noGravity ? null : GravityCostFunction);
 
                         CurrentWaypoint = 1;
                     }
@@ -601,10 +604,21 @@ public class LunarCultistDevotee : ModNPC
                 {
                     foreach(Player p in Main.player)
                     {
-                        if(Collision.CanHit(NPC, p) && (p.Center - NPC.Center).LengthSquared() < 360000)
+                        if (NPC.ai[3] == 0)
                         {
-                            playerAgro = p.whoAmI;
-                            break;
+                            if (Collision.CanHit(NPC, p) && (p.Center - NPC.Center).LengthSquared() < 360000)
+                            {
+                                playerAgro = p.whoAmI;
+                                break;
+                            }
+                        }
+                        else
+                        {
+                            if(LunarCultBaseSystem.CultBaseWorldArea.Contains(p.Center.ToPoint()))
+                            {
+                                playerAgro = p.whoAmI;
+                                break;
+                            }
                         }
                     }
 

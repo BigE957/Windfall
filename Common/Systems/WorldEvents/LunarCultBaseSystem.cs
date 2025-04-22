@@ -49,6 +49,10 @@ public class LunarCultBaseSystem : ModSystem
 
     public static readonly Dictionary<string, List<VerletObject>> SkeletonVerletGroups = [];
 
+    public static bool DraconicBoneSequenceActive = false;
+
+    public static int DraconicBoneTimer = 0;
+
     public override void OnModLoad()
     {
         On_Main.DrawProjectiles += DrawHangingSkeleton;
@@ -242,7 +246,7 @@ public class LunarCultBaseSystem : ModSystem
             int oratorType = ModContent.NPCType<OratorNPC>();
             if (QuestSystem.Quests["DraconicBone"].Active)
             {
-                if (NPC.AnyNPCs(oratorType))
+                if (!DraconicBoneSequenceActive && NPC.AnyNPCs(oratorType))
                     foreach (NPC orator in Main.npc.Where(n => n.active && n.type == oratorType))
                         orator.active = false;
             }
@@ -304,6 +308,9 @@ public class LunarCultBaseSystem : ModSystem
             if (player.LunarCult().apostleQuestTracker == 11)
                 spawnApostle = true;
         }
+
+        if(DraconicBoneSequenceActive)
+            DraconicBoneSequence();
 
         if (spawnApostle && !NPC.AnyNPCs(ModContent.NPCType<DisgracedApostleNPC>()))
             NPC.NewNPC(Entity.GetSource_None(), LunarCultBaseLocation.X * 16 + (BaseFacingLeft ? -1800 : 1800), (CultBaseTileArea.Top + 30) * 16, ModContent.NPCType<DisgracedApostleNPC>());
@@ -1501,6 +1508,17 @@ public class LunarCultBaseSystem : ModSystem
         }
     }
 
+    private void DraconicBoneSequence()
+    {
+        if (DraconicBoneTimer == 60)
+        {
+            Point spawnPos = CultBaseWorldArea.Center().ToPoint() + new Point(-16, 891);
+            NPC.NewNPC(Entity.GetSource_None(), spawnPos.X, spawnPos.Y, ModContent.NPCType<OratorNPC>(), ai0: 4);
+        }
+
+        DraconicBoneTimer++;
+    }
+
     public override void PreUpdateProjectiles()
     {
         // Handle Verlet Sims
@@ -1645,6 +1663,15 @@ public class LunarCultBaseSystem : ModSystem
             {
                 VerletObject obj = pair.Value[j];
                 bool temp = AffectVerletObject(obj, 0.005f, 0.1f, j != 0);
+                if (itemDropped)
+                    continue;
+
+                foreach(Player player in Main.ActivePlayers)
+                {
+                    if (itemDropped = player.HasItem(boneType))
+                        break;
+                }
+
                 if (QuestSystem.Quests["DraconicBone"].Active && !itemDropped && temp && !Main.item.Any(t => t.active && t.type == boneType) && Main.rand.NextBool(50))
                 {
                     if (Main.netMode != NetmodeID.MultiplayerClient)

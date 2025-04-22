@@ -1323,6 +1323,11 @@ Items: {
 			DisplayName: The Structureizer
 			Tooltip: ""
 		}
+
+		QuestTester: {
+			DisplayName: Quest Tester
+			Tooltip: ""
+		}
 	}
 
 	Utility: {
@@ -1950,7 +1955,12 @@ Buffs: {
 
 	Wildfire: {
 		DisplayName: Wildfire
-		Description: Mods.Windfall.Buffs.Wildfire.Description
+		Description: Raging fire consumes you.
+	}
+
+	SpacialLock: {
+		DisplayName: Spacial Lock
+		Description: All forms of Teleportation are disabled.
 	}
 }
 

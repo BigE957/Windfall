@@ -16,12 +16,21 @@ public class OratorNPC : ModNPC
         TutorialChat,
         RitualEvent,
         BetrayalChat,
+        DraconicBoneSequence
     }
+
     private States AIState
     {
         get => (States)NPC.ai[0];
         set => NPC.ai[0] = (float)value;
     }
+
+    private int Time
+    {
+        get => (int)NPC.ai[1];
+        set => NPC.ai[1] = value;
+    }
+
     public override string Texture => "Windfall/Assets/NPCs/WorldEvents/TheOrator_NPC";
     public override void SetStaticDefaults()
     {
@@ -38,7 +47,7 @@ public class OratorNPC : ModNPC
         NPC.friendly = true; // NPC Will not attack player
         NPC.width = 58;
         NPC.height = 70;
-        NPC.aiStyle = 0;
+        NPC.aiStyle = -1;
         NPC.damage = 0;
         NPC.defense = 0;
         NPC.lifeMax = 1000;
@@ -47,7 +56,43 @@ public class OratorNPC : ModNPC
         NPC.knockBackResist = 0f;
         NPC.immortal = true;
     }
-    public override bool CanChat() => !ModContent.GetInstance<DialogueUISystem>().isDialogueOpen && !LunarCultBaseSystem.IsRitualActivityActive();
+
+    public override void AI()
+    {
+        if(AIState == States.DraconicBoneSequence)
+        {
+            if (ModContent.GetInstance<DialogueUISystem>().isDialogueOpen)
+                return;
+
+            if (Time == 60)
+                ModContent.GetInstance<DialogueUISystem>().DisplayDialogueTree(Windfall.Instance, "Cutscenes/OratorDraconicBone", new(Name, [NPC.whoAmI]));
+
+            if(Main.netMode != NetmodeID.MultiplayerClient && Time > 60 && Time <= 420 && Time % 30 == 0)
+            {
+                Vector2 spawnLocation = ((Time / 30) - 2) switch
+                {
+                    1 => LunarCultBaseSystem.CultBaseWorldArea.Center() + new Vector2(408, 699),
+                    2 => LunarCultBaseSystem.CultBaseWorldArea.Center() + new Vector2(-440, 699),
+                    3 => LunarCultBaseSystem.CultBaseWorldArea.Center() + new Vector2(-870, 427),
+                    4 => LunarCultBaseSystem.CultBaseWorldArea.Center() + new Vector2(584, 387),
+                    5 => LunarCultBaseSystem.CultBaseWorldArea.Center() + new Vector2(391, 427),
+                    6 => LunarCultBaseSystem.CultBaseWorldArea.Center() + new Vector2(378, 427),
+                    7 => LunarCultBaseSystem.CultBaseWorldArea.Center() + new Vector2(-722, -117),
+                    8 => LunarCultBaseSystem.CultBaseWorldArea.Center() + new Vector2(-281, -117),
+                    9 => LunarCultBaseSystem.CultBaseWorldArea.Center() + new Vector2(-199, -117),
+                    10 => LunarCultBaseSystem.CultBaseWorldArea.Center() + new Vector2(311, -117),
+                    11 => LunarCultBaseSystem.CultBaseWorldArea.Center() + new Vector2(538, -117),
+                    12 => LunarCultBaseSystem.CultBaseWorldArea.Center() + new Vector2(-300, -389),
+                    _ => LunarCultBaseSystem.CultBaseWorldArea.Center(),
+                };
+                NPC.NewNPC(NPC.GetSource_FromThis(), (int)spawnLocation.X, (int)spawnLocation.Y, ModContent.NPCType<LunarCultistDevotee>(), ai2: 8, ai3: 1);
+            }
+
+            Time++;
+        }
+    }
+
+    public override bool CanChat() => !ModContent.GetInstance<DialogueUISystem>().isDialogueOpen && !LunarCultBaseSystem.IsRitualActivityActive() && AIState != States.DraconicBoneSequence;
     public override string GetChat()
     {
         Main.CloseNPCChatOrSign();

@@ -1,7 +1,5 @@
-﻿using Luminance.Common.VerletIntergration;
-using Luminance.Core.Graphics;
+﻿using Luminance.Core.Graphics;
 using Terraria.ModLoader.IO;
-using Windfall.Common.Graphics.Verlet;
 using Windfall.Content.Buffs.Inhibitors;
 using Windfall.Content.NPCs.TravellingNPCs;
 using Windfall.Content.NPCs.WorldEvents.LunarCult;
