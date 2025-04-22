@@ -7,6 +7,7 @@ using DialogueHelper.UI.Dialogue;
 using static Windfall.Common.Systems.WorldEvents.LunarCultBaseSystem;
 using Windfall.Content.Items.Quests.Cafeteria;
 using CalamityMod;
+using Windfall.Common.Systems;
 
 namespace Windfall.Content.NPCs.WorldEvents.LunarCult;
 
@@ -196,7 +197,7 @@ public class Seamstress : ModNPC
         else
             yapCounter = 0;
     }
-    public override bool CanChat() => TalkDelay <= 0 && yapCounter == 0;
+    public override bool CanChat() => !QuestSystem.Quests["DraconicBone"].Complete && !ModContent.GetInstance<DialogueUISystem>().isDialogueOpen && TalkDelay <= 0 && yapCounter == 0;
     public bool DeclinedStartActivity = false;
     public override string GetChat()
     {

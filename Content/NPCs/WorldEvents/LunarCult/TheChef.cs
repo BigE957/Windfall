@@ -2,6 +2,7 @@
 using DialogueHelper.UI.Dialogue;
 using static Windfall.Common.Systems.WorldEvents.LunarCultBaseSystem;
 using Windfall.Content.Items.Quests.Cafeteria;
+using Windfall.Common.Systems;
 
 namespace Windfall.Content.NPCs.WorldEvents.LunarCult;
 
@@ -146,7 +147,7 @@ public class TheChef : ModNPC
         }
         NPC.spriteDirection = NPC.direction;
     }
-    public override bool CanChat() => interuptedTimer == 0;
+    public override bool CanChat() => !QuestSystem.Quests["DraconicBone"].Complete && !ModContent.GetInstance<DialogueUISystem>().isDialogueOpen && interuptedTimer == 0;
     public override string GetChat()
     {
         Main.CloseNPCChatOrSign();

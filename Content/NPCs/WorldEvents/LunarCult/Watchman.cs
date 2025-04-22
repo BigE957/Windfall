@@ -1,4 +1,5 @@
 ﻿using DialogueHelper.UI.Dialogue;
+using Windfall.Common.Systems;
 using Windfall.Common.Systems.WorldEvents;
 
 namespace Windfall.Content.NPCs.WorldEvents.LunarCult;
@@ -59,7 +60,7 @@ public class Watchman : ModNPC
                 break;
         }
     }
-    public override bool CanChat() => AIState != States.Greeting;
+    public override bool CanChat() => !QuestSystem.Quests["DraconicBone"].Complete && !ModContent.GetInstance<DialogueUISystem>().isDialogueOpen && AIState != States.Greeting;
     public override string GetChat()
     {
         Main.CloseNPCChatOrSign();

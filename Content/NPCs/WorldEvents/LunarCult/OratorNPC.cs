@@ -5,8 +5,8 @@ using DialogueHelper.UI.Dialogue;
 using Windfall.Content.Items.Quests.Casters;
 using Windfall.Content.Items.Tools;
 using Windfall.Content.Items.Placeables.Furnature.Plaques;
-using Windfall.Common.Systems;
 using Windfall.Content.Buffs.DoT;
+using Windfall.Common.Systems;
 
 namespace Windfall.Content.NPCs.WorldEvents.LunarCult;
 
@@ -61,7 +61,7 @@ public class OratorNPC : ModNPC
 
     public override void AI()
     {
-        if(AIState == States.DraconicBoneSequence)
+        if (AIState == States.DraconicBoneSequence)
         {
             if (ModContent.GetInstance<DialogueUISystem>().isDialogueOpen)
                 return;
@@ -94,24 +94,25 @@ public class OratorNPC : ModNPC
 
                 foreach (Player player in Main.ActivePlayers)
                 {
-                    Rectangle inflatedArea = new(LunarCultBaseSystem.CultBaseWorldArea.X - 512, LunarCultBaseSystem.CultBaseWorldArea.Y + 512, LunarCultBaseSystem.CultBaseWorldArea.Width + 1024, CultBaseWorldArea.Height + 1024);
-                    Rectangle inflatedBridge = new(LunarCultBaseSystem.CultBaseBridgeArea.X * 16 - 512, LunarCultBaseSystem.CultBaseBridgeArea.Y * 16 + 512, LunarCultBaseSystem.CultBaseBridgeArea.Width * 16 + 1024, CLunarCultBaseSystem.ultBaseBridgeArea.Height * 16 + 1024);
+                    Rectangle inflatedArea = new(LunarCultBaseSystem.CultBaseWorldArea.X - 512, LunarCultBaseSystem.CultBaseWorldArea.Y + 512, LunarCultBaseSystem.CultBaseWorldArea.Width + 1024, LunarCultBaseSystem.CultBaseWorldArea.Height + 1024);
+                    Rectangle inflatedBridge = new(LunarCultBaseSystem.CultBaseBridgeArea.X * 16 - 512, LunarCultBaseSystem.CultBaseBridgeArea.Y * 16 + 512, LunarCultBaseSystem.CultBaseBridgeArea.Width * 16 + 1024, LunarCultBaseSystem.CultBaseBridgeArea.Height * 16 + 1024);
                     if (inflatedArea.Contains((int)player.Center.X, (int)player.Center.Y) || inflatedBridge.Contains((int)player.Center.X, (int)player.Center.Y))
                         player.AddBuff(ModContent.BuffType<Entropy>(), 2);
                 }
 
-            Time++;
-        }
+                Time++;
+            }
 
-        int index = Player.FindClosest(NPC.position, NPC.width, NPC.height);
-        if (index != -1)
-        {
-            Player nearest = Main.player[index];
-            NPC.direction = nearest.Center.X > NPC.Center.X ? 1 : -1;
+            int index = Player.FindClosest(NPC.position, NPC.width, NPC.height);
+            if (index != -1)
+            {
+                Player nearest = Main.player[index];
+                NPC.direction = nearest.Center.X > NPC.Center.X ? 1 : -1;
+            }
         }
     }
 
-    public override bool CanChat() => !ModContent.GetInstance<DialogueUISystem>().isDialogueOpen && !LunarCultBaseSystem.IsRitualActivityActive() && AIState != States.DraconicBoneSequence;
+    public override bool CanChat() => !QuestSystem.Quests["DraconicBone"].Complete && !ModContent.GetInstance<DialogueUISystem>().isDialogueOpen && !LunarCultBaseSystem.IsRitualActivityActive() && AIState != States.DraconicBoneSequence;
     public override string GetChat()
     {
         Main.CloseNPCChatOrSign();
