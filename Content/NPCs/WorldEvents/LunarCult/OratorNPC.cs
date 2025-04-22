@@ -90,6 +90,13 @@ public class OratorNPC : ModNPC
 
             Time++;
         }
+
+        int index = Player.FindClosest(NPC.position, NPC.width, NPC.height);
+        if (index != -1)
+        {
+            Player nearest = Main.player[index];
+            NPC.direction = nearest.Center.X > NPC.Center.X ? 1 : -1;
+        }
     }
 
     public override bool CanChat() => !ModContent.GetInstance<DialogueUISystem>().isDialogueOpen && !LunarCultBaseSystem.IsRitualActivityActive() && AIState != States.DraconicBoneSequence;
