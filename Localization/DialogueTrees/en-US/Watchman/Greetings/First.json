@@ -1,0 +1,16 @@
+{
+  "Dialogues": [
+    {
+      "DialogueText": [ { "Text": "Ah! You must be our newest member!" } ]
+    },
+    {
+      "DialogueText": [ { "Text": "It's my honor to welcome you into our sanctum. You join us at quite the pivotal time! I suggest you have a look around, and once you are done..." } ]
+    },
+    {
+      "DialogueText": [ { "Text": "The Orator shall meet with you. You'll find him upstairs at our sanctum's peak. He shall act as your guide, as he has for us all. With the help of someone as wise as him, I'm certain you'll find your place within our Order." } ]
+    }
+  ],
+  "Characters": [
+    "Watchman"
+  ]
+}

@@ -1,0 +1,16 @@
+{
+  "Dialogues": [
+    {
+      "DialogueText": [ { "Text": "Welcome back! Let me see what we have for you today..." } ]
+    },
+    {
+      "DialogueText": [ { "Text": "Ah! There you are. You'll be helping our Chef tonight. The Cafeteria should be opening for dinner soon." } ]
+    },
+    {
+      "DialogueText": [ { "Text": "You'll find it across the hall. Best of luck to you both!" } ]
+    }
+  ],
+  "Characters": [
+    "Watchman"
+  ]
+}

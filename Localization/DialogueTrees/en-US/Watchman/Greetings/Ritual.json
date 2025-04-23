@@ -1,0 +1,16 @@
+{
+  "Dialogues": [
+    {
+      "DialogueText": [ { "Text": "Welcome back! Let me see what we have for you today..." } ]
+    },
+    {
+      "DialogueText": [ { "Text": "Ah! There you are. You'll be working alongside the Orator today; how lucky!" } ]
+    },
+    {
+      "DialogueText": [ { "Text": "You'll find him in the Ritual Site upstairs. Best of luck to you both!" } ]
+    }
+  ],
+  "Characters": [
+    "Watchman"
+  ]
+}

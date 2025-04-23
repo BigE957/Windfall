@@ -1,0 +1,16 @@
+{
+  "Dialogues": [
+    {
+      "DialogueText": [ { "Text": "Welcome back! Let me see what we have for you today..." } ]
+    },
+    {
+      "DialogueText": [ { "Text": "Ah! There you are. You'll be helping our Seamstress tonight; creating all these robes is tough work!" } ]
+    },
+    {
+      "DialogueText": [ { "Text": "You'll find her in the Tailor downstairs. Best of luck to you both!" } ]
+    }
+  ],
+  "Characters": [
+    "Watchman"
+  ]
+}

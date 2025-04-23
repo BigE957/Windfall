@@ -1,0 +1,16 @@
+{
+  "Dialogues": [
+    {
+      "DialogueText": [ { "Text": "Welcome back! Let me see what we have for you today..." } ]
+    },
+    {
+      "DialogueText": [ { "Text": "Ah! There you are. Tonight, there's a meeting for you to attend. I believe its about to start shortly..." } ]
+    },
+    {
+      "DialogueText": [ { "Text": "You'll find the Meeting Hall downstairs. I hope you enjoy the discussion!" } ]
+    }
+  ],
+  "Characters": [
+    "Watchman"
+  ]
+}

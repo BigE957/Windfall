@@ -44,6 +44,8 @@ public class LunarCultBaseSystem : ModSystem
 
     public static bool BetrayalActive = false;
 
+    public static bool FinalActivitySeen = false;
+
     private static int spawnChance = 5;
 
     public static readonly Dictionary<string, Asset<Texture2D>> SkeletonAssets = [];
@@ -132,6 +134,8 @@ public class LunarCultBaseSystem : ModSystem
         BetrayalActive = tag.GetBool("BetrayalActive");
 
         spawnChance = tag.GetInt("spawnChance");
+
+        FinalActivitySeen = tag.GetBool("FinalActivitySeen");
     }
 
     public override void SaveWorldData(TagCompound tag)
@@ -151,6 +155,8 @@ public class LunarCultBaseSystem : ModSystem
         tag["BetrayalActive"] = BetrayalActive;
 
         tag["spawnChance"] = spawnChance;
+
+        tag["FinalActivitySeen"] = FinalActivitySeen;
     }
 
     public enum SystemStates
@@ -165,6 +171,7 @@ public class LunarCultBaseSystem : ModSystem
         Tailor,
         Cafeteria,
         Ritual,
+        FinalMeeting,
         End,
     }
     public static SystemStates State = SystemStates.CheckReqs;
@@ -321,6 +328,9 @@ public class LunarCultBaseSystem : ModSystem
         if(DraconicBoneSequenceActive)
             DraconicBoneSequence();
 
+        if (FinalActivitySeen)
+            return;
+
         if (spawnApostle && !NPC.AnyNPCs(ModContent.NPCType<DisgracedApostleNPC>()))
             NPC.NewNPC(Entity.GetSource_None(), LunarCultBaseLocation.X * 16 + (BaseFacingLeft ? -1800 : 1800), (CultBaseTileArea.Top + 30) * 16, ModContent.NPCType<DisgracedApostleNPC>());
 
@@ -366,9 +376,9 @@ public class LunarCultBaseSystem : ModSystem
 
                     #region Assumed upcoming Activity
                     if (!TutorialComplete || RecruitmentsSkipped >= 3) //Orator Visit\
-                    {
                         PlannedActivity = SystemStates.OratorVisit;
-                    }
+                    else if (QuestSystem.Quests["Recruitment"].Complete && !FinalActivitySeen)
+                        PlannedActivity = SystemStates.FinalMeeting;
                     else
                     {
                         switch ((MoonPhase)Main.moonPhase)
@@ -481,7 +491,7 @@ public class LunarCultBaseSystem : ModSystem
                 #endregion
 
                 #region Moon Phase Change Check
-                if (PlannedActivity != SystemStates.OratorVisit)
+                if (PlannedActivity != SystemStates.OratorVisit && PlannedActivity != SystemStates.FinalMeeting)
                 {
                     switch ((MoonPhase)Main.moonPhase)
                     {
@@ -528,110 +538,15 @@ public class LunarCultBaseSystem : ModSystem
                 break;
             case SystemStates.Yap:
                 NPC watchman = Main.npc.First(n => n.active && n.type == ModContent.NPCType<Watchman>());
-                string path = "Dialogue.LunarCult.Watchman.Greeting.";
+                string Activity = !TutorialComplete ? "First" : PlannedActivity.ToString();
 
-                #region First Time Chat
-                if (!TutorialComplete)
+                if(ActivityTimer == 30)
+                    ModContent.GetInstance<DialogueUISystem>().DisplayDialogueTree(Windfall.Instance, $"Watchman/Greetings/{Activity}", new(Name, [watchman.whoAmI]));
+                else if(ActivityTimer > 30 && !ModContent.GetInstance<DialogueUISystem>().isDialogueOpen)
                 {
-                    path += "First.";
-                    switch (ActivityTimer)
-                    {
-                        case 30:
-                            DisplayMessage(watchman.Hitbox, Color.LimeGreen, path + 0);
-                            break;
-                        case 120:
-                            DisplayMessage(watchman.Hitbox, Color.LimeGreen, path + 1);
-                            break;
-                        case 240:
-                            DisplayMessage(watchman.Hitbox, Color.LimeGreen, path + 2);
-                            break;
-                        case 360:
-                            DisplayMessage(watchman.Hitbox, Color.LimeGreen, path + 3);
-                            break;
-                        case 480:
-                            DisplayMessage(watchman.Hitbox, Color.LimeGreen, path + 4);
-                            break;
-                        case 600:
-                            DisplayMessage(watchman.Hitbox, Color.LimeGreen, path + 5);
-                            break;
-                        case 720:
-                            DisplayMessage(watchman.Hitbox, Color.LimeGreen, path + 6);
-                            break;
-                        case 840:
-                            DisplayMessage(watchman.Hitbox, Color.LimeGreen, path + 7);
-                            break;
-                        case 960:
-                            DisplayMessage(watchman.Hitbox, Color.LimeGreen, path + 8);
-                            break;
-                        case 1020:
-                            watchman.ai[2]++;
-                            State = SystemStates.Ready;
-                            break;
-                    }
+                    watchman.ai[2]++;
+                    State = SystemStates.Ready;
                 }
-                #endregion
-
-                #region Activity Chats
-                else
-                {
-                    if (RecruitmentsSkipped >= 3)
-                    {
-                        path += "Betrayal";
-                        switch (ActivityTimer)
-                        {
-                            case 30:
-                                DisplayMessage(watchman.Hitbox, Color.LimeGreen, path + 0);
-                                break;
-                            case 120:
-                                DisplayMessage(watchman.Hitbox, Color.LimeGreen, path + 1);
-                                break;
-                            case 240:
-                                DisplayMessage(watchman.Hitbox, Color.LimeGreen, path + 2);
-                                break;
-                            case 360:
-                                DisplayMessage(watchman.Hitbox, Color.LimeGreen, path + 3);
-                                break;
-                            case 420:
-                                watchman.ai[2]++;
-                                State = SystemStates.Ready;
-                                break;
-                        }
-                    }
-                    else
-                    {
-                        path += PlannedActivity.ToString() + ".";
-
-                        switch (ActivityTimer)
-                        {
-                            case 30:
-                                DisplayMessage(watchman.Hitbox, Color.LimeGreen, path + 0);
-                                break;
-                            case 120:
-                                DisplayMessage(watchman.Hitbox, Color.LimeGreen, path + 1);
-                                break;
-                            case 240:
-                                DisplayMessage(watchman.Hitbox, Color.LimeGreen, path + 2);
-                                break;
-                            case 360:
-                                DisplayMessage(watchman.Hitbox, Color.LimeGreen, path + 3);
-                                break;
-                            case 420:
-                                DisplayMessage(watchman.Hitbox, Color.LimeGreen, path + 4);
-                                break;
-                            case 540:
-                                DisplayMessage(watchman.Hitbox, Color.LimeGreen, path + 5);
-                                break;
-                            case 660:
-                                DisplayMessage(watchman.Hitbox, Color.LimeGreen, path + 6);
-                                break;
-                            case 780:
-                                watchman.ai[2]++;
-                                State = SystemStates.Ready;
-                                break;
-                        }
-                    }
-                }
-                #endregion
 
                 #region Camera Setup
                 entranceArea = watchman.Center;
@@ -1460,6 +1375,8 @@ public class LunarCultBaseSystem : ModSystem
                     ActivityTimer++;
                 if(!Active)
                     State = SystemStates.End;
+                break;
+            case SystemStates.FinalMeeting:
                 break;
             case SystemStates.End:
                 ActivityCoords = new(-1, -1);
