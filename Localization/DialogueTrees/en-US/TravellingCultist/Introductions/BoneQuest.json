@@ -4,16 +4,34 @@
       "DialogueText": [ { "Text": "Hello again! I have some exciting news! I've found the very last thing we'll need for the ritual! However, there's just one problem: the last thing we need is a Dragon... In order to actually be able to perform the ritual, only a Dragon can allow us to interact with the draconic magic which formed the seal." } ]
     },
     {
-      "DialogueText": [ { "Text": "Luckily, I believe we may be able to fake the presence of a Dragon. The remains of one should be enough to let us interact with the seal and restore it, and thanks to you, we've learned where the remains of a Dragon lie: the lower levels of the Selenic Order's lair." } ]
+      "DialogueText": [ { "Text": "Luckily, I believe we may be able to fake the presence of a Dragon. The remains of one should be enough to let us interact with the seal and restore it, and I've learned where we can find some; somewhere you're already familiar with as a matter of fact: the Selenic Order's lair." } ]
     },
     {
-      "DialogueText": [ { "Text": "To think that wretch cult has made the late Dragon of Wisdon's library into their vile lair... Its despicable! Once we put a stop to their plans, I'd like noth more than to reclaim the site and cleanse it of their villainy." } ]
+      "DialogueText": [ { "Text": "You see, my comrads and I have been doing some digging into the Selenic Order, and we've learned something truly shocking! The Selenic Order's lair wasn't always that. In fact, in the Draconic Era, it was actually a library built by none other than the Dragon of Wisdom!" } ]
     },
     {
-      "DialogueText": [ { "Text": "However, there are more pressing matters for us at the moment. I need you to sneak into the lower sanctums, and retrieve but a single bone from the Dragon of Wisdon's remains. With that, we'll have everything needed to perform the sealing ritual!" } ],
+      "DialogueText": [ { "Text": "To think that wretched cult turned such a venerated site into their vile lair... Its despicable! Once we put a stop to their plans, I'd like nothing more than to reclaim the library and restore it to its former glory. I'm certain it still contains a great many texts that'd be of great value to us!" } ]
+    },
+    {
+      "DialogueText": [ { "Text": "However, there are more pressing matters for us at the moment. I need you to sneak into the lower sanctums of the library. We have reason to believe that the Dragon of Wisdom's remains are still down there. After all, the Orator must have a reason for keeping you out of that area. Go downt there, and retrieve but a single bone from the Dragon of Wisdon's remains. You may need to use your weapon to actually remove a bone from it, as the bones of a Dragon are rather durable. Once you retrieve one, we'll have everything needed to perform the sealing ritual!" } ],
       "Responses": [
         {
-          "Title": "Awesome!"
+          "Title": "How?"
+        }
+      ]
+    },
+    {
+      "DialogueText": [
+        {
+          "Text": "Worry not, I'll be ensuring that the Orator won't be present when you get there. We have a... clever distraction in mind to get their attention. With them away, you'll be able to enter without a problem! Though, do try and be quick. There's no telling how long we'll be able to hold their attention.",
+          "Responses": [
+            {
+              "Title": "Understood."
+            },
+            {
+              "Title": "Can do!"
+            }
+          ]
         }
       ]
     }

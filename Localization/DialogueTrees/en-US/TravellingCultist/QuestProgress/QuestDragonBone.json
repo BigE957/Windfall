@@ -1,7 +1,7 @@
 {
   "Dialogues": [
     {
-      "DialogueText": [ { "Text": "Have you had any luck in snatching a Dragon Bone?" } ],
+      "DialogueText": [ { "Text": "Were you able to retrieve the a bone from the Dragon of Wisdom's remains?" } ],
       "Responses": [
         {
           "Title": "I have!",
@@ -18,16 +18,23 @@
       "Responses": [
         {
           "Title": "Will do."
+        },
+        {
+          "Title": "About the Dragon...",
+          "Heading": 3
         }
       ]
     },
     {
-      "DialogueText": [ { "Text": "I know the Selenic Order keeps a tight watch over the lower levels of their hideout, and the Orator himself prevents entry while he's present. You'll need to sneak in when it isn't under such protection." } ],
+      "DialogueText": [ { "Text": "My comrads and I can bring the Orator's attention elsewhere. If you head to the Selenic Order's lair now, you should be able to enter the lower levels without issue. Then just retrieve a bone from the Dragon of Widsom's remains. You may need to use your weapon to actually get a bone off of it..." } ],
       "Responses": [
         {
           "Title": "Will do."
         }
       ]
+    },
+    {
+      "DialogueText": [ { "Text": "The remains were... HUNG ON DISPLAY?! That wretch! How dare he?! After we complete the ritual, I'll be sure the Dragon of Widsom laid to rest properly!" } ]
     }
   ],
   "Characters": [
