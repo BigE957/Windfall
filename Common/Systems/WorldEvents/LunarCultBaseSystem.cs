@@ -18,7 +18,6 @@ using static Windfall.Common.Graphics.Verlet.VerletIntegration;
 using Windfall.Content.Items.Placeables.Furnature.VerletHangers.Cords;
 using Windfall.Content.Items.Quests.SealingRitual;
 using Windfall.Content.Buffs.Inhibitors;
-using Terraria;
 
 namespace Windfall.Common.Systems.WorldEvents;
 
@@ -44,7 +43,7 @@ public class LunarCultBaseSystem : ModSystem
 
     public static bool BetrayalActive = false;
 
-    public static bool FinalActivitySeen = false;
+    public static bool FinalMeetingSeen = false;
 
     private static int spawnChance = 5;
 
@@ -135,7 +134,7 @@ public class LunarCultBaseSystem : ModSystem
 
         spawnChance = tag.GetInt("spawnChance");
 
-        FinalActivitySeen = tag.GetBool("FinalActivitySeen");
+        FinalMeetingSeen = tag.GetBool("FinalActivitySeen");
     }
 
     public override void SaveWorldData(TagCompound tag)
@@ -156,7 +155,7 @@ public class LunarCultBaseSystem : ModSystem
 
         tag["spawnChance"] = spawnChance;
 
-        tag["FinalActivitySeen"] = FinalActivitySeen;
+        tag["FinalActivitySeen"] = FinalMeetingSeen;
     }
 
     public enum SystemStates
@@ -328,7 +327,7 @@ public class LunarCultBaseSystem : ModSystem
         if(DraconicBoneSequenceActive)
             DraconicBoneSequence();
 
-        if (FinalActivitySeen)
+        if (FinalMeetingSeen)
             return;
 
         if (spawnApostle && !NPC.AnyNPCs(ModContent.NPCType<DisgracedApostleNPC>()))
@@ -377,7 +376,7 @@ public class LunarCultBaseSystem : ModSystem
                     #region Assumed upcoming Activity
                     if (!TutorialComplete || RecruitmentsSkipped >= 3) //Orator Visit\
                         PlannedActivity = SystemStates.OratorVisit;
-                    else if (QuestSystem.Quests["Recruitment"].Complete && !FinalActivitySeen)
+                    else if (QuestSystem.Quests["Recruitment"].Complete && !FinalMeetingSeen)
                         PlannedActivity = SystemStates.FinalMeeting;
                     else
                     {
@@ -542,7 +541,7 @@ public class LunarCultBaseSystem : ModSystem
 
                 if(ActivityTimer == 30)
                     ModContent.GetInstance<DialogueUISystem>().DisplayDialogueTree(Windfall.Instance, $"Watchman/Greetings/{Activity}", new(Name, [watchman.whoAmI]));
-                else if(ActivityTimer > 30 && !ModContent.GetInstance<DialogueUISystem>().isDialogueOpen)
+                else if(ActivityTimer > 60 && !ModContent.GetInstance<DialogueUISystem>().isDialogueOpen)
                 {
                     watchman.ai[2]++;
                     State = SystemStates.Ready;
@@ -1377,6 +1376,21 @@ public class LunarCultBaseSystem : ModSystem
                     State = SystemStates.End;
                 break;
             case SystemStates.FinalMeeting:
+                if(Active)
+                {
+                    NPC orator = Main.npc[NPC.FindFirstNPC(ModContent.NPCType<OratorNPC>())];
+
+                    if (ActivityTimer == 30)
+                        ModContent.GetInstance<DialogueUISystem>().DisplayDialogueTree(Windfall.Instance, "Cutscenes/CultMeetings/Final", new(Name, [orator.whoAmI]));
+                    else if (ActivityTimer > 60 && !ModContent.GetInstance<DialogueUISystem>().isDialogueOpen)
+                        Active = false;
+
+                }
+                else
+                {
+                    State = SystemStates.End;
+                    FinalMeetingSeen = true;
+                }
                 break;
             case SystemStates.End:
                 ActivityCoords = new(-1, -1);
@@ -1434,7 +1448,7 @@ public class LunarCultBaseSystem : ModSystem
         }
     }
 
-    private void DraconicBoneSequence()
+    private static void DraconicBoneSequence()
     {
         if (DraconicBoneTimer == 60)
         {

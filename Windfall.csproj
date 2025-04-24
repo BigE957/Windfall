@@ -169,8 +169,8 @@
   <ItemGroup>
     <Folder Include="Content\Items\Armor\Selenic\" />
     <Folder Include="Localization\DialogueTrees\en-US\Apostle\" />
+    <Folder Include="Localization\DialogueTrees\en-US\Cutscenes\CultMeetings\" />
     <Folder Include="Localization\DialogueTrees\en-US\IlmeranPaladin\" />
-    <Folder Include="Localization\DialogueTrees\en-US\Cutscenes\" />
     <Folder Include="Localization\DialogueTrees\en-US\TravellingCultist\QuestProgress\" />
     <Folder Include="Localization\DialogueTrees\en-US\Watchman\Greetings\" />
   </ItemGroup>
