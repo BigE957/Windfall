@@ -1,0 +1,23 @@
+{
+  "Dialogues": [
+    {
+      "DialogueText": [ { "Text": "Why hello everyone! Thank you all for making it here tonight! I'm hear with you all because I have some truly exciting news! We are entering the final stages of enacting the Great One's return!" } ]
+    },
+    {
+      "DialogueText": [ { "Text": "The future we have been striving to bring about is now at our doorstep! As such, our time together here nears its end. You will no longer be called upon to work here; instead, I shall call upon you all when the time arrives. It is then that we will perform our final ritual, and break the Great One's seal." } ]
+    },
+    {
+      "DialogueText": [ { "Text": "It has been my pleasure to work with you all, and I hope that feeling is mutual. You all have grown a great deal since you first joined this Order; I couldn't be more proud." } ]
+    },
+    {
+      "DialogueText": [ { "Text": "With your work here now at its end, I believe it is only fitting that you all recieve a reward for all of your hard work! It'd be a shame if you missed out on any rewards you had been eyeing, so enjoy!" } ]
+    },
+    {
+      "DialogueText": [ { "Text": "That will be all for tonight! Be ready for when you are called upon, and prepare to enjoy the wonderous future that we all have been longing for!" } ]
+    }
+  ],
+  "Characters": [
+    "TheOrator",
+    "TheCalamity"
+  ]
+}
