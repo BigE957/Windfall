@@ -8,7 +8,7 @@ namespace Windfall.Content.NPCs.WorldEvents.LunarCult;
 
 public class TheChef : ModNPC
 {
-    public override string Texture => "Windfall/Assets/NPCs/WorldEvents/LunarBishop";
+    public override string Texture => "Windfall/Assets/NPCs/WorldEvents/Chef";
     private static SoundStyle SpawnSound => new("CalamityMod/Sounds/Custom/SCalSounds/BrimstoneHellblastSound");
     private static readonly string chefPath = "Dialogue.LunarCult.TheChef.";
 
