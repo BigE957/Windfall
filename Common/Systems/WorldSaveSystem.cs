@@ -9,7 +9,7 @@ public class WorldSaveSystem : ModSystem
     public static bool CloneRevealed = false;
     public static bool ScoogFished = false;
     public static bool MechanicCultistsEncountered = false;
-
+    public static bool SelenicChestOpened = false;
 
     public static List<string> CreditDataNames;
     public static List<int> CreditDataCredits;
@@ -22,6 +22,7 @@ public class WorldSaveSystem : ModSystem
         CloneRevealed = tag.GetBool("CloneRevealed");
         ScoogFished = tag.GetBool("ScoogFished");
         MechanicCultistsEncountered = tag.GetBool("MechanicCultistsEncountered");
+        SelenicChestOpened = tag.GetBool("SelenicChestOpened");
 
         JournalsCollected = (List<bool>)tag.GetList<bool>("JournalsCollected");
 
@@ -34,6 +35,7 @@ public class WorldSaveSystem : ModSystem
         tag["CloneRevealed"] = CloneRevealed;
         tag["ScoogFished"] = ScoogFished;
         tag["MechanicCultistsEncountered"] = MechanicCultistsEncountered;
+        tag["SelenicChestOpened"] = SelenicChestOpened;
 
         tag["JournalsCollected"] = JournalsCollected;
 
@@ -45,6 +47,7 @@ public class WorldSaveSystem : ModSystem
         CloneRevealed = false;
         ScoogFished = false;
         MechanicCultistsEncountered = false;
+        SelenicChestOpened = false;
 
         for (int i = 0; i < JournalsCollected.Count; i++)
         {

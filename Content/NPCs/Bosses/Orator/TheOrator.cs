@@ -12,6 +12,7 @@ using CalamityMod.Items.LoreItems;
 using Windfall.Content.UI.BossBars;
 using CalamityMod;
 using CalamityMod.Particles;
+using Windfall.Content.Items.Utility;
 
 namespace Windfall.Content.NPCs.Bosses.Orator;
 
@@ -1711,6 +1712,7 @@ public class TheOrator : ModNPC
         npcLoot.DefineConditionalDropSet(DropHelper.RevAndMaster).Add(ItemID.LunaticCultistMasterTrophy);
 
         //Lore
+        npcLoot.AddConditionalPerPlayer(() => !WorldSaveSystem.SelenicChestOpened, ModContent.ItemType<CrescentKey>(), desc: "Drops until its chest is opened");
         npcLoot.AddConditionalPerPlayer(() => !DownedNPCSystem.downedOrator, ModContent.ItemType<OraLore>(), desc: DropHelper.FirstKillText);
         npcLoot.AddConditionalPerPlayer(() => !DownedNPCSystem.downedOrator, ModContent.ItemType<LorePrelude>(), desc: DropHelper.FirstKillText);
     }       
