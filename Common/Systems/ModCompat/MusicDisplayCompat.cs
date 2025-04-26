@@ -23,5 +23,6 @@ public class MusicDisplayCompat : ModSystem
         AddMusic("Assets/Music/ItsRainingSomewhereElse", "LunarCultBase");
         AddMusic("Assets/Music/Amalgam", "Ritual");
         AddMusic("Assets/Music/Premonition", "EmptyBase");
+        AddMusic("Assets/Music/DragonRuin", "DragonRuin");
     }
 }

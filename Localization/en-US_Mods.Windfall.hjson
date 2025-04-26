@@ -1411,6 +1411,11 @@ Items: {
 			DisplayName: Draconic Skeleton Item
 			Tooltip: ""
 		}
+
+		SelenicChest: {
+			DisplayName: Selenic Chest
+			Tooltip: ""
+		}
 	}
 
 	Fishing: {
@@ -1745,6 +1750,11 @@ Items: {
 		DisplayName: Cord Shears
 		Tooltip: ""
 	}
+
+	CrescentKey: {
+		DisplayName: Crescent Key
+		Tooltip: ""
+	}
 }
 
 NPCs: {
@@ -2060,12 +2070,17 @@ ModCompat: {
 			DisplayName: Premonition
 			Author: by Toby Fox
 		}
+
+		DragonRuin: {
+			DisplayName: Sand Fell Through My Fingers
+			Author: by Sidetracked
+		}
 	}
 
 	BossChecklist: {
 		Orator: {
-			SpawnInfo: Complete the Sealing Ritual or use the [i:Windfall/SelenicTablet] after completing the Sealing Ritual.
-			DespawnMessage: "[c/39FFA2:The Orator vanishes to resume their work... The end draws ever closer...]"
+			SpawnInfo: Complete the Sealing Ritual or visit the Dungeon's Entrance after completing the Sealing Ritual.
+			DespawnMessage: "[c/39FFA2:The Orator vanishes to resume their work... A new future draws ever closer...]"
 		}
 	}
 }
@@ -2086,4 +2101,11 @@ Events: {
 Currencies: {
 	LunarCoinCurrency: Lunar Coins
 	SkibidiCurrency: toilets
+}
+
+Tiles: {
+	SelenicChestTile: {
+		Unlocked: Selenic Chest
+		Locked: Locked Selenic Chest
+	}
 }
