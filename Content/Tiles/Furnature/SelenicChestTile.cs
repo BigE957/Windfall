@@ -36,8 +36,8 @@ public class SelenicChestTile : ModTile
 
         AdjTiles = [TileID.Containers];
 
-        AddMapEntry(new Color(174, 129, 92), this.GetLocalization("MapEntry0"), MapChestName);
-        AddMapEntry(new Color(174, 129, 92), this.GetLocalization("MapEntry1"), MapChestName);
+        AddMapEntry(new Color(174, 129, 92), this.GetLocalization("Unlocked"), MapChestName);
+        AddMapEntry(new Color(174, 129, 92), this.GetLocalization("Locked"), MapChestName);
         DustType = DustID.Gold;
     }
 
@@ -51,8 +51,8 @@ public class SelenicChestTile : ModTile
         int option = frameX / 36;
         return this.GetLocalization("MapEntry" + option);
     }
-    public override void MouseOver(int i, int j) => CalamityUtils.ChestMouseOver<AstralChest>(i, j);
-    public override void MouseOverFar(int i, int j) => CalamityUtils.ChestMouseFar<AstralChest>(i, j);
+    public override void MouseOver(int i, int j) => CalamityUtils.ChestMouseOver<SelenicChest>(i, j);
+    public override void MouseOverFar(int i, int j) => CalamityUtils.ChestMouseFar<SelenicChest>(i, j);
     public override void KillMultiTile(int i, int j, int frameX, int frameY) => Chest.DestroyChest(i, j);
 
     // Locked Chest stuff

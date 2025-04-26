@@ -2,6 +2,7 @@
 public class CrescentKey : ModItem
 {
     public new string LocalizationCategory => "Items.Utility";
+    public override string Texture => "Windfall/Assets/Items/Utility/CrescentKey";
     public override void SetDefaults()
     {
         Item.width = 26;
