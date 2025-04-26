@@ -29,12 +29,25 @@ public class Seamstress : ModNPC
         get => (int)NPC.ai[0];
         set => NPC.ai[0] = value;
     }
+
+    private enum Animation
+    {
+        Idle,
+        Shock,
+        Clap
+    }
+    private Animation CurrentAnimation
+    {
+        get => (Animation)NPC.ai[2];
+        set => NPC.ai[2] = (float)value;
+    }
+
     private List<int> ClothingIDs = [];
     public override void SetStaticDefaults()
     {
         this.HideFromBestiary();
         NPCID.Sets.ActsLikeTownNPC[Type] = true;
-        Main.npcFrameCount[Type] = 1;
+        Main.npcFrameCount[Type] = 10;
         NPCID.Sets.NoTownNPCHappiness[Type] = true;
         ModContent.GetInstance<DialogueUISystem>().TreeInitialize += ModifyTree;
         ModContent.GetInstance<DialogueUISystem>().TreeClose += CloseEffect;
@@ -65,8 +78,10 @@ public class Seamstress : ModNPC
 
         AnimationType = NPCID.BartenderUnconscious;
     }
+
     public override void OnSpawn(IEntitySource source)
     {
+        CurrentAnimation = Animation.Idle;
         NPC.GivenName = "The Seamstress";
 
         NPC.alpha = 255;
@@ -89,8 +104,21 @@ public class Seamstress : ModNPC
         }
         SoundEngine.PlaySound(SpawnSound, NPC.Center);
     }
+
+    int Time = 0;
     public override void AI()
     {
+        if (CurrentAnimation == Animation.Idle)
+        {
+            if (Time == 90)
+            {
+                CurrentAnimation = Main.rand.NextBool() ? Animation.Shock : Animation.Clap;
+                Time = 0;
+            }
+            else
+                Time++;
+        }  
+
         if (TalkDelay > 0)
             TalkDelay--;
         if (BeginActivity)
@@ -197,6 +225,7 @@ public class Seamstress : ModNPC
         else
             yapCounter = 0;
     }
+
     public override bool CanChat() => !QuestSystem.Quests["DraconicBone"].Complete && !ModContent.GetInstance<DialogueUISystem>().isDialogueOpen && TalkDelay <= 0 && yapCounter == 0;
     public bool DeclinedStartActivity = false;
     public override string GetChat()
@@ -348,18 +377,63 @@ public class Seamstress : ModNPC
         return "";
     }
     public override bool CheckActive() => !NPC.downedAncientCultist;
+
+
+    public override void FindFrame(int frameHeight)
+    {
+        int frameWidth = TextureAssets.Npc[Type].Width() / 3;
+
+        switch(CurrentAnimation)
+        {
+            case Animation.Idle:
+                NPC.frame.X = 0; 
+
+                NPC.frame.Y = 0;
+
+                NPC.frameCounter = 0;
+                break;
+            case Animation.Shock:
+                NPC.frame.X = frameWidth;
+
+                if (NPC.frameCounter + 0.2f >= Main.npcFrameCount[NPC.type])
+                {
+                    CurrentAnimation = Animation.Idle;
+                    break;
+                }
+                NPC.frame.Y = frameHeight * ((int)NPC.frameCounter % Main.npcFrameCount[NPC.type]);
+
+                NPC.frameCounter += 0.2f;
+                break;
+            case Animation.Clap:
+                NPC.frame.X = frameWidth * 2;
+
+                if(NPC.frameCounter + 0.2f >= 13f)
+                {
+                    CurrentAnimation = Animation.Idle;
+                    break;
+                }
+                NPC.frame.Y = frameHeight * ((int)NPC.frameCounter % 6);
+
+                NPC.frameCounter += 0.2f;
+                break;
+        }
+
+        NPC.frame.Width = frameWidth;
+        NPC.frame.Height = frameHeight;
+    }
     public override bool PreDraw(SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor)
     {
         SpriteEffects direction = SpriteEffects.None;
         if (NPC.spriteDirection == -1)
             direction = SpriteEffects.FlipHorizontally;
         Texture2D texture = TextureAssets.Npc[Type].Value;
-        Vector2 drawPosition = NPC.Center - Main.screenPosition - Vector2.UnitY * 20;
+        Vector2 drawPosition = NPC.Center - Main.screenPosition - Vector2.UnitY * 8;
         Vector2 origin = NPC.frame.Size() * 0.5f;
 
         Main.spriteBatch.Draw(texture, drawPosition, NPC.frame, drawColor * NPC.Opacity, NPC.rotation, origin, NPC.scale, direction, 0f);
         return false;
     }
+
     private static void ModifyTree(string treeKey, int dialogueID, int buttonID, bool swapped)
     {
         DialogueUISystem uiSystem = ModContent.GetInstance<DialogueUISystem>();

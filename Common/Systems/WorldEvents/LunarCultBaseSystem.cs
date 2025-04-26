@@ -242,7 +242,7 @@ public class LunarCultBaseSystem : ModSystem
         {
             #region Main Character Spawning
             if (!NPC.AnyNPCs(ModContent.NPCType<Seamstress>()))
-                NPC.NewNPC(Entity.GetSource_None(), LunarCultBaseLocation.X * 16 + (BaseFacingLeft ? -1396 : 1408), (LunarCultBaseLocation.Y * 16) + 480, ModContent.NPCType<Seamstress>());
+                NPC.NewNPC(Entity.GetSource_None(), LunarCultBaseLocation.X * 16 + (BaseFacingLeft ? -1400 : 1408), (LunarCultBaseLocation.Y * 16) + 480, ModContent.NPCType<Seamstress>());
             if (!NPC.AnyNPCs(ModContent.NPCType<TheChef>()))
                 NPC.NewNPC(Entity.GetSource_None(), LunarCultBaseLocation.X * 16 + (BaseFacingLeft ? -168 : 128), (LunarCultBaseLocation.Y * 16), ModContent.NPCType<TheChef>());
             if (!Main.npc.Any(n => n.active && n.type == ModContent.NPCType<Watchman>()))

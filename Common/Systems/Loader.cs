@@ -2,6 +2,7 @@
 using DialogueHelper.UI.Dialogue;
 using System.Reflection;
 using Terraria.Graphics.Effects;
+using Windfall.Content.Items.GlobalItems;
 using Windfall.Content.Skies;
 using Windfall.Content.Skies.CorruptCommunion;
 using Windfall.Content.Skies.CrimsonCommunion;
@@ -39,6 +40,24 @@ public class Loading : ModSystem
         guis.Add(Activator.CreateInstance(typeof(CafeteriaEventBar)) as InvasionProgressUI);
         guis.Add(Activator.CreateInstance(typeof(RitualEventBar)) as InvasionProgressUI);
         guis.Add(Activator.CreateInstance(typeof(AstralSiphonEventBar)) as InvasionProgressUI);
+        #endregion
+
+        #region Spacial Lock Affected Items
+        WindfallGlobalItem.SpacialLockAffectedItems.Add(ItemID.RodofDiscord);
+        WindfallGlobalItem.SpacialLockAffectedItems.Add(ItemID.RodOfHarmony);
+        WindfallGlobalItem.SpacialLockAffectedItems.Add(ItemID.TeleportationPotion);
+        WindfallGlobalItem.SpacialLockAffectedItems.Add(ItemID.RecallPotion);
+        WindfallGlobalItem.SpacialLockAffectedItems.Add(ItemID.PotionOfReturn);
+        WindfallGlobalItem.SpacialLockAffectedItems.Add(ItemID.MagicMirror);
+        WindfallGlobalItem.SpacialLockAffectedItems.Add(ItemID.IceMirror);
+        WindfallGlobalItem.SpacialLockAffectedItems.Add(ItemID.CellPhone);
+        WindfallGlobalItem.SpacialLockAffectedItems.Add(ItemID.Shellphone);
+        WindfallGlobalItem.SpacialLockAffectedItems.Add(ItemID.ShellphoneDummy);
+        WindfallGlobalItem.SpacialLockAffectedItems.Add(ItemID.ShellphoneHell);
+        WindfallGlobalItem.SpacialLockAffectedItems.Add(ItemID.ShellphoneOcean);
+        WindfallGlobalItem.SpacialLockAffectedItems.Add(ItemID.ShellphoneSpawn);
+        WindfallGlobalItem.SpacialLockAffectedItems.Add(ItemID.MagicConch);
+        WindfallGlobalItem.SpacialLockAffectedItems.Add(ItemID.DemonConch);
         #endregion
     }
 }
