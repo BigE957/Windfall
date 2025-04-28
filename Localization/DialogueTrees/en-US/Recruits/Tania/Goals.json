@@ -1,7 +1,7 @@
 {
   "Dialogues": [
     {
-      "DialogueText": [ { "Text": "Another... 'enlightening' experience as always... Even now they don't give us any details on what we're really working towards... Worst of all, we've been given little to do as the end approaches... Hopefully that change soon." } ],
+      "DialogueText": [ { "Text": "Another... 'enlightening' experience as always... Even now, I still don't feel like I understand this 'Great One' or how exactly it will save us... Worst of all, it feels like we've been left to just sit here until the end of our mission is reached. Hopefully that will change sometime soon." } ],
       "Responses": [
         {
           "Title": "Kinda confusing...",
@@ -14,15 +14,15 @@
       ]
     },
     {
-      "DialogueText": [ { "Text": "I still know so little about we're doing... It can be a little frustrating... Though these people showed me kindness when I was at my lowest; it would be wrong to be untrusting. If they promise things will turn out well, I'll believe them." } ],
+      "DialogueText": [ { "Text": "I still know so little about we're doing... It can be a little frustrating... Though, these people showed me kindness when I was at my lowest; it would be wrong to be untrusting. If they promise things will turn out well, I'll believe them." } ],
       "Responses": [
         {
           "Title": "How kind!",
-          "Heading": 1
+          "Heading": 2
         },
         {
           "Title": "That sounds... wrong.",
-          "Heading": 5
+          "Heading": 3
         }
       ]
     },
@@ -36,10 +36,10 @@
       ]
     },
     {
-      "DialogueText": [ { "Text": "Wrong you say? What makes you think that?" } ],
+      "DialogueText": [ { "Text": "Really? ...What makes you think that?" } ],
       "Responses": [
         {
-          "Title": "It sounds... Manipulative.",
+          "Title": "It sounds manipulative.",
           "Heading": 4
         }
       ]

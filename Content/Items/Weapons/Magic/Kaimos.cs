@@ -3,7 +3,6 @@ using CalamityMod.Graphics.Primitives;
 using CalamityMod.Items;
 using CalamityMod.Particles;
 using Microsoft.Xna.Framework.Input;
-using SteelSeries.GameSense.DeviceZone;
 using System.Collections.ObjectModel;
 using Terraria.Graphics.Shaders;
 using Windfall.Common.Graphics.Metaballs;

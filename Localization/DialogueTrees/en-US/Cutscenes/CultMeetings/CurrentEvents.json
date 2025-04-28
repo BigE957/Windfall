@@ -1,7 +1,59 @@
 {
   "Dialogues": [
     {
-      "DialogueText": [ { "Text": "" } ]
+      "DialogueText": [ { "Text": "Greetings, all! It is my pleasure to be your speaker for tonight. It is my hope that we will all learn something tonight. Let us begin." } ]
+    },
+    {
+      "DialogueText": [ { "Text": "I'm here tonight to discuss some events that have transpired as of recently. A lot has happened as of late. It feels as though the our world's balance of power shifts; does it not?" } ]
+    },
+    {
+      "DialogueText": [ { "Text": "It does! I've heard some rather frightening rumors about disgusting creatures and shrieks coming from the Dungeon! I don't even feel safe being outside in the evening anymore... Do you know what's going on?" } ],
+      "CharacterIndex": 1
+    },
+    {
+      "DialogueText": [ { "Text": "I do... These new terrors that have been unleashed on our world; they are the works of our enemies. The writhing remains of the long dead gods sense what it is we wish to achieve, and they have unleashed their abhorrent spawn to impede us." } ]
+    },
+    {
+      "DialogueText": [ { "Text": "As for those shrieks, they are very much real, and are no doubt the work of the antiquated Dragon Cult. Their depraved incantations stir the souls of those passed into a frenzy, and for what? Their only goal is to replace one set of tyrants with another! The Dragons ruled over humanity with fear and cruelty. Their extinction was a just act of the Great One, and to see it undone would be heresy unrivaled." } ]
+    },
+    {
+      "DialogueText": [ { "Text": "Our enemies' vile actions are all the more reason for us to press forward! Once we succeed, these vile stains on our world shall be wiped clean! Our work draws closer to its end with every passing day; we mustn't be threatened by the desperate writhing of our enemies." } ]
+    },
+    {
+      "DialogueText": [ { "Text": "Why don't we just go and stop them ourselves? We've got skilled fighters, and powerful mages: like Vivian! I bet we could put a stop to their evil-doing no problem!" } ],
+      "CharacterIndex": 3
+    },
+    {
+      "DialogueText": [ { "Text": "Hey, don't you try and drag me into this! I'm not going anywhere near that gross god stuff!" } ],
+      "CharacterIndex": 2
+    },
+    {
+      "DialogueText": [ { "Text": "You are certainly correct that we have the strength to match our enemies, Doro. However, what you are suggesting is only treating the symptoms of a much larger disease. Curing the world of this disease should be our goal, and that is exactly what it is we are working towards." } ]
+    },
+    {
+      "DialogueText": [ { "Text": "I... guess that makes sense." } ],
+      "CharacterIndex": 3
+    },
+    {
+      "DialogueText": [ { "Text": "Sounds good to me!" } ],
+      "CharacterIndex": 2
+    },
+    {
+      "DialogueText": [ { "Text": "With that, I believe that is all I wish to discuss for tonight. Are there any questions for me?" } ]
+    },
+    {
+      "DialogueText": [ { "Text": "Oh, I've got one: you mentioned the Dragon Cult and their 'Incantations' earlier. I was wondering, in terms of magical proficiency, would the best mages of the Dragon Cult be comparable to The Orator?" } ],
+      "CharacterIndex": 4
+    },
+    {
+      "DialogueText": [ { "Text": "That's a rather... Interesting question, but I can confidently say that our Master would have little trouble in besting whatever the Dragon Cult could hope to muster. Their ways are antiquated, and quite pathetic when compared to what our Master is capable of." } ]
+    },
+    {
+      "DialogueText": [ { "Text": "Oooooh, I see, I see. Hang on, let me write that down..." } ],
+      "CharacterIndex": 4
+    },
+    {
+      "DialogueText": [ { "Text": "Are there any other questions? If not, I believe that will be all for tonight." } ]
     }
   ],
   "Characters": [

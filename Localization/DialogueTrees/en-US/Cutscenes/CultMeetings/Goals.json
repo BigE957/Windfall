@@ -1,7 +1,77 @@
 {
   "Dialogues": [
     {
-      "DialogueText": [ { "Text": "" } ]
+      "DialogueText": [ { "Text": "Hello everyone. I will be your speaker for tonight. I'd like to remind everyone that this is a learning experience, and I expect both your respect and attention during this meeting. With that out of the way, let's begin." } ]
+    },
+    {
+      "DialogueText": [ { "Text": "I know this topic may feel... repetitive, to those who've been with us for a long time now, but regardless, tonight we'll be covering what exactly it is that our Order seeks to achieve: our goal." } ]
+    },
+    {
+      "DialogueText": [ { "Text": "...Ugh, for real...?" } ],
+      "CharacterIndex": 1
+    },
+    {
+      "DialogueText": [ { "Text": "What was that? Do you have something to share with the group?" } ]
+    },
+    {
+      "DialogueText": [ { "Text": "Oh, uhm no... Sorry... sir." } ],
+      "CharacterIndex": 1
+    },
+    {
+      "DialogueText": [ { "Text": "I see. Well, as I was saying. Our goal is to bring about a bright new future. One free from the mighty tyrants who have, for so long now, dominated our world. The Auric Dragons, the Gods, and the Godseeker... All of these individuals have ruled over the weak through power and fear. We seek to cleanse the world of these tyrants, and usher in a bright future for all!" } ],
+      "Responses": [
+        {
+          "Title": "How?",
+          "Heading": 8
+        },
+        {
+          "Title": "Auric Dragons?",
+          "Heading": 6
+        }
+      ]
+    },
+    {
+      "DialogueText": [ { "Text": "Ah, unfamiliar with them? I suppose we can do a short history lesson. Long ago, in a time known as the Draconic Era, Dragons ruled over the Earth, and all others were in their servitude. This was a dark period, but one that came to an end with the near extinction of the Dragons. As a matter of fact, the extinction of the Dragons leads us nicely back into our main topic." } ]
+    },
+    {
+      "DialogueText": [ { "Text": "Our Master has been long interested in what led to the downfall of the Dragons, and he has learned the truth. It begins with an ancient star-farer from beyond, the Great One, arriving to our world. It bore witness to the vile tyranny of the Dragons, and, in an effort to free us, sought to destroy them. In this, it nearly succeeded, but was thwarted and sealed away on our world's Moon." } ],
+      "Responses": [
+        {
+          "Title": "I see...",
+          "Heading": 9
+        }
+      ]
+    },
+    {
+      "DialogueText": [ { "Text": "That is a good question! Of course, we alone could not bring this future about. However, our Master has found a power that can: the Great One. The Great One is an ancient star-farer from beyond our world. It arrived to our world during the age of Dragons, and upon witnessing their vile tyranny, sought to destroy them. In this, it nearly succeeded, but was thwarted and sealed away on our world's Moon." } ]
+    },
+    {
+      "DialogueText": [ { "Text": "The Orator believes this being to be the key to achieving our goal of a peaceful future; free of tyrants. By breaking the seal trapping it on the Moon, it shall descend upon the world, and at last finish its holy work! The Gods and even the Godseeker shall be erased, and a new, prosperous future will begin!" } ]
+    },
+    {
+      "DialogueText": [ { "Text": "What a wonderful motivation for us! Truly inspired!" } ],
+      "CharacterIndex": 3
+    },
+    {
+      "DialogueText": [ { "Text": "A peaceful future... It sounds truly wonderful! We'll have to keep working hard to ensure it comes to pass!" } ],
+      "CharacterIndex": 4
+    },
+    {
+      "DialogueText": [ { "Text": "I couldn't have said it better myself, Tirith! For too long our world has been plagued with strife. It is up to us to put an end to this chaos, and usher in an era of peace." } ]
+    },
+    {
+      "DialogueText": [ { "Text": "And... This 'Great One' will help in that endeavor?" } ],
+      "CharacterIndex": 2
+    },
+    {
+      "DialogueText": [ { "Text": "That is correct, Tania! I'm glad that you've all been so attentive." } ]
+    },
+    {
+      "DialogueText": [ { "Text": "Right... That, uh, makes sense." } ],
+      "CharacterIndex": 2
+    },
+    {
+      "DialogueText": [ { "Text": "Well with that, I believe that's everything I wanted to cover for tonight. Are there any questions before we wrap up?" } ]
     }
   ],
   "Characters": [

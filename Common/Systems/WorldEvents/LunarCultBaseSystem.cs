@@ -188,7 +188,7 @@ public class LunarCultBaseSystem : ModSystem
     {
         None,
         CurrentEvents,
-        Mission,
+        //DragonCult,
         Goals
     }
     public static MeetingTopic CurrentMeetingTopic = MeetingTopic.None;
@@ -672,27 +672,6 @@ public class LunarCultBaseSystem : ModSystem
                                                     break;
                                             }
                                             break;
-                                        case MeetingTopic.Mission:
-                                            switch (y)
-                                            {
-                                                case 1:
-                                                    Recruit.MyName = RecruitableLunarCultist.RecruitNames.Doro;
-                                                    Recruit.canRecruit = false;
-                                                    break;
-                                                case 2:
-                                                    Recruit.MyName = RecruitableLunarCultist.RecruitNames.Skylar;
-                                                    Recruit.canRecruit = true;
-                                                    break;
-                                                case 3:
-                                                    Recruit.MyName = RecruitableLunarCultist.RecruitNames.Tania;
-                                                    Recruit.canRecruit = false;
-                                                    break;
-                                                case 4:
-                                                    Recruit.MyName = RecruitableLunarCultist.RecruitNames.Jamie;
-                                                    Recruit.canRecruit = true;
-                                                    break;
-                                            }
-                                            break;
                                         case MeetingTopic.Goals:
                                             switch (y)
                                             {
@@ -711,6 +690,28 @@ public class LunarCultBaseSystem : ModSystem
                                                 case 4:
                                                     Recruit.MyName = RecruitableLunarCultist.RecruitNames.Tirith;
                                                     Recruit.canRecruit = false;
+                                                    break;
+                                            }
+                                            break;
+                                        default:
+                                        //case MeetingTopic.DragonCult:
+                                            switch (y)
+                                            {
+                                                case 1:
+                                                    Recruit.MyName = RecruitableLunarCultist.RecruitNames.Doro;
+                                                    Recruit.canRecruit = false; // Accepts the idea that the Dragon Cult is no good pretty easilly
+                                                    break;
+                                                case 2:
+                                                    Recruit.MyName = RecruitableLunarCultist.RecruitNames.Skylar;
+                                                    Recruit.canRecruit = true; // Is shocked by how genuine the hate for the Dragon Cult feels
+                                                    break;
+                                                case 3:
+                                                    Recruit.MyName = RecruitableLunarCultist.RecruitNames.Tania;
+                                                    Recruit.canRecruit = false; // Already dislikes the Dragon Cult for their association with Yharim
+                                                    break;
+                                                case 4:
+                                                    Recruit.MyName = RecruitableLunarCultist.RecruitNames.Jamie;
+                                                    Recruit.canRecruit = true; // Is upset of the Order's disregard for the historical significant of Dragons and the history held by the Dragon Cult
                                                     break;
                                             }
                                             break;
@@ -808,8 +809,6 @@ public class LunarCultBaseSystem : ModSystem
                 if (Active)
                 {
                     #region Meeting Scene
-                    CombatText Text;
-
                     NPC Bishop = Main.npc[NPCIndexs[0]];
                     NPC Cultist1 = Main.npc[NPCIndexs[1]];
                     NPC Cultist2 = Main.npc[NPCIndexs[2]];
@@ -822,195 +821,14 @@ public class LunarCultBaseSystem : ModSystem
                     Rectangle Cultist3Location = new((int)Cultist3.Center.X, (int)Cultist3.Center.Y, Cultist3.width, Cultist3.width);
                     Rectangle Cultist4Location = new((int)Cultist4.Center.X, (int)Cultist4.Center.Y, Cultist4.width, Cultist4.width);
 
-                    string key = $"Dialogue.LunarCult.CultMeetings.{CurrentMeetingTopic}.";
+                    string key = $"Cutscenes/CultMeetings/{CurrentMeetingTopic}.";
 
-                    switch (CurrentMeetingTopic)
-                    {
-                        case MeetingTopic.CurrentEvents:
-                            switch (ActivityTimer)
-                            {
-                                case 1:
-                                    Text = DisplayMessage(BishopLocation, Color.Blue, (key + 0));
-                                    Text.lifeTime = 60;
-                                    break;
-                                case 90:
-                                    Text = DisplayMessage(BishopLocation, Color.Blue, (key + 1));
-                                    Text.lifeTime = 60;
-                                    break;
-                                case 3 * 60:
-                                    Text = DisplayMessage(BishopLocation, Color.Blue, (key + 2));
-                                    break;
-                                case 6 * 60:
-                                    Text = DisplayMessage(Cultist1Location, Color.Yellow, (key + 3));
-                                    break;
-                                case 8 * 60:
-                                    Text = DisplayMessage(BishopLocation, Color.Blue, (key + 4));
-                                    break;
-                                case 10 * 60:
-                                    Text = DisplayMessage(Cultist1Location, Color.Yellow, "!?");
-                                    DisplayMessage(Cultist2Location, Color.Red, "!?");
-                                    DisplayMessage(Cultist3Location, Color.SandyBrown, "?");
-                                    DisplayMessage(Cultist4Location, Color.Orange, "!?");
-                                    break;
-                                case 12 * 60:
-                                    Text = DisplayMessage(BishopLocation, Color.Blue, (key + 5));
-                                    break;
-                                case 14 * 60:
-                                    Text = DisplayMessage(BishopLocation, Color.Blue, (key + 6));
-                                    break;
-                                case 16 * 60:
-                                    Text = DisplayMessage(Cultist3Location, Color.SandyBrown, (key + 7));
-                                    break;
-                                case 18 * 60:
-                                    Text = DisplayMessage(BishopLocation, Color.Blue, (key + 8));
-                                    break;
-                                case 20 * 60:
-                                    Text = DisplayMessage(Cultist3Location, Color.SandyBrown, (key + 9));
-                                    break;
-                                case 22 * 60:
-                                    Text = DisplayMessage(Cultist2Location, Color.Red, (key + 10));
-                                    break;
-                                case 24 * 60:
-                                    Text = DisplayMessage(BishopLocation, Color.Blue, (key + 11));
-                                    break;
-                                case 26 * 60:
-                                    Text = DisplayMessage(Cultist2Location, Color.Red, (key + 12));
-                                    break;
-                                case 28 * 60:
-                                    Text = DisplayMessage(Cultist4Location, Color.Orange, (key + 13));
-                                    break;
-                                case 30 * 60:
-                                    Text = DisplayMessage(BishopLocation, Color.Blue, (key + 14));
-                                    break;
-                                case 32 * 60:
-                                    Text = DisplayMessage(Cultist4Location, Color.Orange, (key + 15));
-                                    break;
-                                case 34 * 60:
-                                    Text = DisplayMessage(BishopLocation, Color.Blue, (key + 16));
-                                    break;
-                                case 36 * 60:
-                                    Text = DisplayMessage(BishopLocation, Color.Blue, (key + 17));
-                                    break;
-                                case 37 * 60:
-                                    Active = false;
-                                    break;
-                            }
-                            break;
-                        case MeetingTopic.Mission:
-                            switch (ActivityTimer)
-                            {
-                                case 1:
-                                    Text = DisplayMessage(BishopLocation, Color.Blue, (key + 0));
-                                    Text.lifeTime = 60;
-                                    break;
-                                case 90:
-                                    Text = DisplayMessage(BishopLocation, Color.Blue, (key + 1));
-                                    Text.lifeTime = 60;
-                                    break;
-                                case 60 * 3:
-                                    Text = DisplayMessage(BishopLocation, Color.Blue, (key + 2));
-                                    break;
-                                case 60 * 5:
-                                    Active = false;
-                                    break;
-                            }
-                            break;
-                        case MeetingTopic.Goals:
-                            switch (ActivityTimer)
-                            {
-                                case 1:
-                                    Text = DisplayMessage(BishopLocation, Color.Blue, (key + 0));
-                                    Text.lifeTime = 60;
-                                    break;
-                                case 90:
-                                    Text = DisplayMessage(BishopLocation, Color.Blue, (key + 1));
-                                    Text.lifeTime = 60;
-                                    break;
-                                case 60 * 3:
-                                    Text = DisplayMessage(BishopLocation, Color.Blue, (key + 2));
-                                    break;
-                                case 60 * 5:
-                                    Text = DisplayMessage(BishopLocation, Color.Blue, (key + 3));
-                                    break;
-                                case 60 * 7:
-                                    Text = DisplayMessage(BishopLocation, Color.Blue, (key + 4));
-                                    break;
-                                case 60 * 9:
-                                    Text = DisplayMessage(BishopLocation, Color.Blue, (key + 5));
-                                    break;
-                                case 60 * 10:
-                                    Text = DisplayMessage(Cultist1Location, Color.Red, (key + 6));
-                                    break;
-                                case 60 * 11:
-                                    Text = DisplayMessage(BishopLocation, Color.Blue, (key + 7));
-                                    break;
-                                case 60 * 13:
-                                    Text = DisplayMessage(BishopLocation, Color.Blue, (key + 8));
-                                    break;
-                                case 60 * 15:
-                                    Text = DisplayMessage(BishopLocation, Color.Blue, (key + 9));
-                                    break;
-                                case 60 * 17:
-                                    Text = DisplayMessage(BishopLocation, Color.Blue, (key + 10));
-                                    break;
-                                case 60 * 19:
-                                    Text = DisplayMessage(Cultist4Location, Color.Yellow, (key + 11));
-                                    break;
-                                case 60 * 21:
-                                    Text = DisplayMessage(BishopLocation, Color.Blue, (key + 12));
-                                    break;
-                                case 60 * 23:
-                                    Text = DisplayMessage(BishopLocation, Color.Blue, (key + 13));
-                                    break;
-                                case 60 * 25:
-                                    Text = DisplayMessage(Cultist2Location, Color.SeaGreen, (key + 14));
-                                    break;
-                                case 60 * 27:
-                                    Text = DisplayMessage(BishopLocation, Color.Blue, (key + 15));
-                                    break;
-                                case 60 * 29:
-                                    Text = DisplayMessage(BishopLocation, Color.Blue, (key + 16));
-                                    break;
-                                case 60 * 31:
-                                    Text = DisplayMessage(BishopLocation, Color.Blue, (key + 17));
-                                    break;
-                                case 60 * 33:
-                                    Text = DisplayMessage(BishopLocation, Color.Blue, (key + 18));
-                                    break;
-                                case 60 * 35:
-                                    Text = DisplayMessage(BishopLocation, Color.Blue, (key + 19));
-                                    break;
-                                case 60 * 37:
-                                    Text = DisplayMessage(BishopLocation, Color.Blue, (key + 20));
-                                    break;
-                                case 60 * 39:
-                                    Text = DisplayMessage(BishopLocation, Color.Blue, (key + 21));
-                                    break;
-                                case 60 * 41:
-                                    Text = DisplayMessage(Cultist2Location, Color.SeaGreen, (key + 22));
-                                    break;
-                                case 60 * 43:
-                                    DisplayMessage(Cultist2Location, Color.SeaGreen, (key + 23));
-                                    DisplayMessage(Cultist3Location, Color.Violet, (key + 24));
-                                    break;
-                                case 60 * 45:
-                                    Text = DisplayMessage(BishopLocation, Color.Blue, (key + 25));
-                                    break;
-                                case 60 * 47:
-                                    Text = DisplayMessage(BishopLocation, Color.Blue, (key + 26));
-                                    break;
-                                case 60 * 49:
-                                    Text = DisplayMessage(BishopLocation, Color.Blue, (key + 27));
-                                    break;
-                                case 60 * 51:
-                                    Text = DisplayMessage(BishopLocation, Color.Blue, (key + 28));
-                                    break;
-                                case 60 * 52:
-                                    Active = false;
-                                    break;
-                            }
-                            break;
-                    }
+                    if(ActivityTimer == 30)
+                        ModContent.GetInstance<DialogueUISystem>().DisplayDialogueTree(Windfall.Instance, "Cutscenes/OratorDraconicBone", new(Name, [Bishop.whoAmI]));
+
+                    if (ActivityTimer > 40 && !ModContent.GetInstance<DialogueUISystem>().isDialogueOpen)
+                        Active = false;
+
                     #endregion
 
                     #region Camera Setup
