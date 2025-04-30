@@ -1,5 +1,5 @@
 ﻿namespace Windfall.Content.Tiles.Blocks;
-public class WornSlabTile : ModTile
+public class NectarslabTile : ModTile
 {
     public override void SetStaticDefaults()
     {

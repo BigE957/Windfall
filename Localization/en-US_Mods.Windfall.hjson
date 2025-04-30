@@ -1417,9 +1417,9 @@ Items: {
 			Tooltip: ""
 		}
 
-		WornSlab: {
-			DisplayName: Worn Slab
-			Tooltip: ""
+		Nectarslab: {
+			DisplayName: Nectarslab
+			Tooltip: "It gives off a rather sweet smell"
 		}
 	}
 

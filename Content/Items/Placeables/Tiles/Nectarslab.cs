@@ -1,7 +1,7 @@
 ﻿using Windfall.Content.Tiles.Blocks;
 
 namespace Windfall.Content.Items.Placeables.Tiles;
-public class WornSlab : ModItem, ILocalizedModType
+public class Nectarslab : ModItem, ILocalizedModType
 {
     public new string LocalizationCategory => "Items.Placeables";
     public override void SetStaticDefaults()
@@ -20,15 +20,15 @@ public class WornSlab : ModItem, ILocalizedModType
         Item.useTime = 10;
         Item.useStyle = ItemUseStyleID.Swing;
         Item.consumable = true;
-        Item.createTile = ModContent.TileType<WornSlabTile>();
+        Item.createTile = ModContent.TileType<NectarslabTile>();
     }
 
     public override void AddRecipes()
     {
         CreateRecipe(100).
             AddIngredient(ItemID.StoneSlab, 100).
-            AddIngredient(ItemID.BrownDye).
-            AddTile(TileID.DyeVat).
+            AddIngredient(ItemID.CrispyHoneyBlock, 10).
+            AddTile(TileID.HeavyWorkBench).
             Register();
     }
 }
