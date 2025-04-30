@@ -1416,6 +1416,11 @@ Items: {
 			DisplayName: Selenic Chest
 			Tooltip: ""
 		}
+
+		WornSlab: {
+			DisplayName: Worn Slab
+			Tooltip: ""
+		}
 	}
 
 	Fishing: {
