@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Windfall.Content.Tiles.Blocks;
+﻿namespace Windfall.Content.Tiles.Blocks;
 public class WornSlabTile : ModTile
 {
     public override void SetStaticDefaults()
