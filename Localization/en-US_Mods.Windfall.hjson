@@ -1419,7 +1419,22 @@ Items: {
 
 		Nectarslab: {
 			DisplayName: Nectarslab
-			Tooltip: "It gives off a rather sweet smell"
+			Tooltip: It gives off a rather sweet smell
+		}
+
+		DriedSeeds: {
+			DisplayName: Dried Seeds
+			Tooltip: ""
+		}
+
+		DriedMud: {
+			DisplayName: Dried Mud
+			Tooltip: ""
+		}
+
+		Nectarbrick: {
+			DisplayName: Nectarbrick
+			Tooltip: ""
 		}
 	}
 

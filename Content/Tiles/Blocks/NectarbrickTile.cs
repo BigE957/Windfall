@@ -1,10 +1,9 @@
 ﻿namespace Windfall.Content.Tiles.Blocks;
-public class NectarslabTile : ModTile
+public class NectarbrickTile : ModTile
 {
     public override void SetStaticDefaults()
     {
         Main.tileSolid[Type] = true;
-        Main.tileLargeFrames[Type] = 1;
         Main.tileMergeDirt[Type] = false;
         Main.tileBlockLight[Type] = true;
         HitSound = SoundID.Tink;
