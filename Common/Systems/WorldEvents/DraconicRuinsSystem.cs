@@ -105,6 +105,9 @@ public class DraconicRuinsSystem : ModSystem
         AccessGranted = false;
         */
 
+        if (DraconicRuinsLocation == new Point(-1, -1))
+            return;
+
         if (State == CutsceneState.Arrival && !NPC.AnyNPCs(ModContent.NPCType<SealingTablet>()))
             NPC.NewNPC(Entity.GetSource_None(), TabletRoom.X * 16 + 8, TabletRoom.Y * 16 - 160, ModContent.NPCType<SealingTablet>());
 

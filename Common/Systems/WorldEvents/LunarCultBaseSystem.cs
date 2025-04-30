@@ -1279,8 +1279,11 @@ public class LunarCultBaseSystem : ModSystem
 
     public override void PreUpdateProjectiles()
     {
+        if (LunarCultBaseLocation == new Point(-1, -1))
+            return;
+
         // Handle Verlet Sims
-        for(int i = 0; i < SkeletonVerletGroups.Count; i++)
+        for (int i = 0; i < SkeletonVerletGroups.Count; i++)
         {
             var pair = SkeletonVerletGroups.ElementAt(i);
             //pair.Value.Clear();
@@ -1447,6 +1450,12 @@ public class LunarCultBaseSystem : ModSystem
 
     private void DrawHangingSkeleton(On_Main.orig_DrawProjectiles orig, Main self)
     {
+        if (LunarCultBaseLocation == new Point(-1, -1))
+        {
+            orig(self);
+            return;
+        }
+
         Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.PointWrap, DepthStencilState.None, Main.Rasterizer, null, Main.GameViewMatrix.TransformationMatrix);
 
         foreach (KeyValuePair<string, List<VerletObject>> pair in SkeletonVerletGroups)
