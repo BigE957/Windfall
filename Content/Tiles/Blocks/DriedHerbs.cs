@@ -1,19 +1,13 @@
-﻿using CalamityMod.Dusts;
-using CalamityMod;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using CalamityMod;
 using Terraria.GameContent.Metadata;
 using Windfall.Content.Items.Placeables;
-using Windfall.Content.Items.Weapons.Rogue;
 
 namespace Windfall.Content.Tiles.Blocks;
-public class DriedAmbients : ModTile
+public class DriedHerbs : ModTile
 {
     public override void SetStaticDefaults()
     {
+        Main.tileLighted[Type] = false;
         Main.tileCut[Type] = true;
         Main.tileSolid[Type] = false;
         Main.tileNoAttach[Type] = true;
@@ -23,6 +17,9 @@ public class DriedAmbients : ModTile
         Main.tileFrameImportant[Type] = true;
         TileID.Sets.ReplaceTileBreakUp[Type] = true;
         TileID.Sets.SwaysInWindBasic[Type] = true;
+        TileObjectData.newTile.CopyFrom(TileObjectData.Style1x2);
+        TileObjectData.newTile.StyleHorizontal = true;
+        TileObjectData.addTile(Type);
         TileMaterials.SetForTileId(Type, TileMaterials._materialsByName["Plant"]);
 
         DustType = DustID.Hay;
@@ -31,14 +28,14 @@ public class DriedAmbients : ModTile
 
         AddMapEntry(new Color(127, 111, 144));
 
-        FlexibleTileWand.RubblePlacementSmall.AddVariations(ModContent.ItemType<DriedSeeds>(), Type, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15);
+        FlexibleTileWand.RubblePlacementSmall.AddVariations(ModContent.ItemType<DriedSeeds>(), Type, 0, 1, 2, 3, 4, 5, 6, 7, 8);
 
         base.SetStaticDefaults();
     }
 
     public override void SetDrawPositions(int i, int j, ref int width, ref int offsetY, ref int height, ref short tileFrameX, ref short tileFrameY)
     {
-        offsetY = 2;
+        offsetY = 6;
     }
 
     public override IEnumerable<Item> GetItemDrops(int i, int j)
