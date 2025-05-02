@@ -18,6 +18,8 @@ using static Windfall.Common.Graphics.Verlet.VerletIntegration;
 using Windfall.Content.Items.Placeables.Furnature.VerletHangers.Cords;
 using Windfall.Content.Items.Quests.SealingRitual;
 using Windfall.Content.Buffs.Inhibitors;
+using static Windfall.Content.NPCs.WorldEvents.LunarCult.RecruitableLunarCultist;
+using Terraria;
 
 namespace Windfall.Common.Systems.WorldEvents;
 
@@ -638,11 +640,11 @@ public class LunarCultBaseSystem : ModSystem
                             NPCIndexs =
                             [
                                 NPC.NewNPC(Entity.GetSource_None(), ActivityCoords.X, ActivityCoords.Y - 2, ModContent.NPCType<LunarBishop>()),
-                                    NPC.NewNPC(Entity.GetSource_None(), ActivityCoords.X - 280, ActivityCoords.Y + 100, ModContent.NPCType<RecruitableLunarCultist>()),
-                                    NPC.NewNPC(Entity.GetSource_None(), ActivityCoords.X - 138, ActivityCoords.Y + 100, ModContent.NPCType<RecruitableLunarCultist>()),
-                                    NPC.NewNPC(Entity.GetSource_None(), ActivityCoords.X + 138, ActivityCoords.Y + 100, ModContent.NPCType<RecruitableLunarCultist>()),
-                                    NPC.NewNPC(Entity.GetSource_None(), ActivityCoords.X + 280, ActivityCoords.Y + 100, ModContent.NPCType<RecruitableLunarCultist>()),
-                                ];
+                                NPC.NewNPC(Entity.GetSource_None(), ActivityCoords.X - 280, ActivityCoords.Y + 100, ModContent.NPCType<RecruitableLunarCultist>()),
+                                NPC.NewNPC(Entity.GetSource_None(), ActivityCoords.X - 138, ActivityCoords.Y + 100, ModContent.NPCType<RecruitableLunarCultist>()),
+                                NPC.NewNPC(Entity.GetSource_None(), ActivityCoords.X + 138, ActivityCoords.Y + 100, ModContent.NPCType<RecruitableLunarCultist>()),
+                                NPC.NewNPC(Entity.GetSource_None(), ActivityCoords.X + 280, ActivityCoords.Y + 100, ModContent.NPCType<RecruitableLunarCultist>()),
+                            ];
                             int y = 0;
                             foreach (int k in NPCIndexs)
                             {
@@ -752,6 +754,42 @@ public class LunarCultBaseSystem : ModSystem
                                 Main.npc[NPC.FindFirstNPC(ModContent.NPCType<OratorNPC>())].ai[0] = 1;
                             State = SystemStates.OratorVisit;
                             Active = true;
+                            break;
+                        case SystemStates.FinalMeeting:
+                            #region Location Selection
+                            ActivityCoords = new Point(LunarCultBaseLocation.X + (BaseFacingLeft ? -25 : 23), LunarCultBaseLocation.Y + 18);
+                            ActivityCoords.X *= 16;
+                            ActivityCoords.X += BaseFacingLeft ? -8 : 8;
+                            ActivityCoords.Y *= 16;
+                            #endregion
+
+                            NPCIndexs =
+                            [
+                                NPC.NewNPC(Entity.GetSource_None(), ActivityCoords.X, ActivityCoords.Y - 2, ModContent.NPCType<OratorNPC>()),
+                                NPC.NewNPC(Entity.GetSource_None(), ActivityCoords.X - 280, ActivityCoords.Y + 100, ModContent.NPCType<RecruitableLunarCultist>()),
+                                NPC.NewNPC(Entity.GetSource_None(), ActivityCoords.X - 138, ActivityCoords.Y + 100, ModContent.NPCType<LunarCultistDevotee>()),
+                                NPC.NewNPC(Entity.GetSource_None(), ActivityCoords.X + 138, ActivityCoords.Y + 100, ModContent.NPCType<LunarCultistDevotee>()),
+                                NPC.NewNPC(Entity.GetSource_None(), ActivityCoords.X + 280, ActivityCoords.Y + 100, ModContent.NPCType<RecruitableLunarCultist>()),
+                            ];
+
+                            List<int> recruits = Recruits;
+                            for (int i = 0; i < 6; i++)
+                            {
+                                if (recruits.Contains(i))
+                                    continue;
+                                recruits.Add(i);
+                                Main.npc[NPCIndexs[1]].As<RecruitableLunarCultist>().MyName = (RecruitNames)i;
+                                break;
+                            }
+                            for (int i = 0; i < 6; i++)
+                            {
+                                if (recruits.Contains(i))
+                                    continue;
+                                recruits.Add(i);
+                                Main.npc[NPCIndexs[4]].As<RecruitableLunarCultist>().MyName = (RecruitNames)i;
+                                break;
+                            }
+
                             break;
                     }
                     #endregion                        
@@ -1196,7 +1234,16 @@ public class LunarCultBaseSystem : ModSystem
             case SystemStates.FinalMeeting:
                 if(Active)
                 {
-                    NPC orator = Main.npc[NPC.FindFirstNPC(ModContent.NPCType<OratorNPC>())];
+                    #region Camera Setup
+                    if (ActivityTimer < 100)
+                        zoom = Lerp(zoom, 0.4f, 0.075f);
+                    else
+                        zoom = 0.4f;
+                    CameraPanSystem.Zoom = zoom;
+                    CameraPanSystem.PanTowards(new Vector2(ActivityCoords.X, ActivityCoords.Y - 150), zoom);
+                    #endregion
+
+                    NPC orator = Main.npc[NPCIndexs[0]];
 
                     if (ActivityTimer == 30)
                         ModContent.GetInstance<DialogueUISystem>().DisplayDialogueTree(Windfall.Instance, "Cutscenes/CultMeetings/Final", new(Name, [orator.whoAmI]));
@@ -1206,6 +1253,14 @@ public class LunarCultBaseSystem : ModSystem
                 }
                 else
                 {
+                    NPC orator = Main.npc[NPCIndexs[0]];
+
+                    for (int i = 0; i < 25; i++)
+                    {
+                        Item item = Main.item[Item.NewItem(orator.GetSource_Loot(), orator.Center, new Vector2(8, 4), ModContent.ItemType<LunarCoin>())];
+                        item.velocity = Vector2.UnitY.RotatedBy(Main.rand.NextFloat(-PiOver2, PiOver2)) * -4;
+                    }
+
                     State = SystemStates.End;
                     FinalMeetingSeen = true;
                 }
