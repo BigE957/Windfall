@@ -1,0 +1,22 @@
+{
+  "Dialogues": [
+    {
+      "DialogueText": [ { "Text": "So... At last we meet. I've heard so much about you and your feats!  We've been watching you keenly since you bested the Dungeon's keeper, and now you've bested yet another soul-filled terror." } ]
+    },
+    {
+      "DialogueText": [ { "Text": "It seems that this world's stagnation nears its end, and we may very well have you to thank for that. Though I can't help but wonder, what is it that you truly aim to accomplish by upsetting the balance?" } ]
+    },
+    {
+      "DialogueText": [ { "Text": "I believe our goals may align. I and my Order too wish to bring about change; we wish to usher in a new era of peace and prosperity, and our method to bring about such change will soon be ready." } ]
+    },
+    {
+      "DialogueText": [ { "Text": "We invite you to join us on our journey of change. There is much you could learn at our side, and with your help, I have no doubt a bright future awaits us all." } ]
+    },
+    {
+      "DialogueText": [ { "Text": "We will be waiting." } ]
+    }
+  ],
+  "Characters": [
+    "TheOrator"
+  ]
+}

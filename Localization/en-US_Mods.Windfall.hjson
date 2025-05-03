@@ -289,19 +289,6 @@ Dialogue: {
 
 		TheOrator: {
 			WorldText: {
-				Post-Plant: {
-					0: So... At last we meet.
-					1: We've been watching you keenly since you bested the Dungeon's keeper.
-					2: Now you've bested yet another soul-filled terror.
-					3: The delicate balance we've long worked to maintain is falling apart...
-					4: ...and we have you to thank for that.
-					5: However soon, that won't matter.
-					6: None of this will.
-					7: We invite you to partake in the Fruit of our Knowledge.
-					8: That you might come to see the Light buried within the Dark.
-					9: We will be waiting.
-				}
-
 				Basement: {
 					0: The basement is off limits.
 					1: You aren't allowed in there.
@@ -507,66 +494,6 @@ Dialogue: {
 				19: To think the Orator really thought he'd be able to usurp *us*!
 				20: Once we're done here I'll put an end to that-
 				21: ...fool?
-			}
-		}
-
-		CultMeetings: {
-			CurrentEvents: {
-				0: Greetings!
-				1: Let us begin.
-				2: I'm sure you are all aware of some... recent developments.
-				3: Yeah, what's really going on?!
-				4: The end of our journey together is fast approaching!
-				5: Yes! Our goals are quickly becoming in reach.
-				6: The time shall come when all of you will be called upon to play your part.
-				7: Uhm... What are our 'parts'?
-				8: That will be revealed to you in due time.
-				9: Oh... Okay.
-				10: Does this mean we've learned all there is to learn?
-				11: Not at all. In the coming days, much more shall be revealed to you.
-				12: I see...
-				13: Will we see the Orator?
-				14: It is very possible he might grace us with his prescence as the time nears.
-				15: Awesome!
-				16: Hold steady your faith. It shall very soon be rewarded.
-				17: Until we next meet.
-			}
-
-			Mission: {
-				0: Greetings!
-				1: Let us begin.
-			}
-
-			Goals: {
-				0: Greetings!
-				1: Let us begin.
-				2: I know for some here this may feel...
-				3: Repetitive...
-				4: But I'd like to remind everyone here of our mission.
-				5: Our goal.
-				6: Ugh, again...
-				7: Once we succeed here, the Great One shall cleanse the world of its rot.
-				8: Prosperity shall bless those selfless few who've aided in its return.
-				9: Your efforts here shall soon be rewarded.
-				10: All that you could desire, the Great One shall fullfil!
-				11: It'll all be worth it...
-				12: Indeed, indeed!
-				13: Our savior rewards those who devote themselves to its return.
-				14: What... is the 'Great One' exactly?
-				15: Hmm, I suppose it is time I told you all.
-				16: The Great One is a being from beyond the stars.
-				17: Long ago, it arrived to this world, and tried to rid it of its tyrants.
-				18: However, it was thwarted before it could succeed, and was sealed away.
-				19: Now it is up to us to break the seal, and allow it to finish what it began.
-				20: Where once the Dragons were our tyrants, now there are gods, as well as the Godseeker.
-				21: They will fall before the Great One's might, and we will be free of tyrants forevermore.
-				22: How...
-				23: ...insightful...
-				24: How intriguing!
-				25: Now you all know the truth of our mission.
-				26: Well, that will be all for today.
-				27: Hold steady your faith. It shall very soon be rewarded.
-				28: Farewell.
 			}
 		}
 
