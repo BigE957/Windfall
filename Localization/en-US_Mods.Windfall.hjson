@@ -294,18 +294,6 @@ Dialogue: {
 					1: You aren't allowed in there.
 					2: Keep out of there.
 				}
-
-				SealingRitual: {
-					Initial: {
-						0: So this is what's become of you?
-						1: A dog for those who desperately cling to the past?
-						2: Pathetic...
-						3: To think I once saw promise in you.
-						4: Now... You are but a nuiscence.
-						5: One that now stands in the path to my ambition.
-						6: One... I shall very soon be rid of...
-					}
-				}
 			}
 
 			BossText: {

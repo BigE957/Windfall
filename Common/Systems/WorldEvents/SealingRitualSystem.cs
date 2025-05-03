@@ -1,6 +1,8 @@
-﻿using Luminance.Core.Graphics;
+﻿using DialogueHelper.UI.Dialogue;
+using Luminance.Core.Graphics;
 using Terraria.ModLoader.IO;
 using Windfall.Common.Graphics.Metaballs;
+using Windfall.Content.Items.Lore;
 using Windfall.Content.NPCs.Bosses.Orator;
 using Windfall.Content.NPCs.TravellingNPCs;
 using Windfall.Content.NPCs.WorldEvents.LunarCult;
@@ -19,16 +21,36 @@ public class SealingRitualSystem : ModSystem
         Spawn,
         End,
     }
-    private SystemState State = SystemState.CheckReqs;
+    private static SystemState State = SystemState.CheckReqs;
 
     private static bool Active = false;
     private static int RitualTimer = -1;
     private static List<int> NPCIndexs = [];
     private static float zoom = 0;
     private static Vector2 DungeonCoords = new Vector2(Main.dungeonX - 4, Main.dungeonY).ToWorldCoordinates();
-    private static bool CultistFacePlayer = true;
+    
+    private enum CultistFacing
+    {
+        Left = -1,
+        Player,
+        Right,
+        UhmHeavenIg
+    }
+    private static CultistFacing CultistDir = CultistFacing.Player;
+
+    private static readonly bool[] RecruitsHover = [false, false, false, false];
+
+    private static bool StopTimer = false;
 
     public static bool RitualSequenceSeen = false;
+
+    public override void OnModLoad()
+    {
+        ModContent.GetInstance<DialogueUISystem>().TreeInitialize += ModifyTree;
+        ModContent.GetInstance<DialogueUISystem>().ButtonClick += ClickEffect;
+        ModContent.GetInstance<DialogueUISystem>().TreeClose += CloseEffect;
+    }
+
     public override void ClearWorld()
     {
         RitualSequenceSeen = false;            
@@ -85,7 +107,6 @@ public class SealingRitualSystem : ModSystem
                    return;
                 RitualTimer = -2;
                 State = SystemState.Spawn;
-                Main.NewText("SPAWNING SEALING RITUAL!!!");
                 break;
             case SystemState.Spawn:
                 if (RitualTimer == -2)
@@ -150,300 +171,115 @@ public class SealingRitualSystem : ModSystem
                         if (NPCIndexs.Count == 6)
                             LunaticCultist = Main.npc[NPCIndexs[5]];
 
-                        NPC Orator = null;
-                        if (NPC.FindFirstNPC(ModContent.NPCType<OratorNPC>()) != -1)
+                        DialogueUISystem uiSystem = ModContent.GetInstance<DialogueUISystem>();
+                        switch (RitualTimer)
                         {
-                            Orator = Main.npc[NPC.FindFirstNPC(ModContent.NPCType<OratorNPC>())];
-                        }
+                            case 30:
+                                uiSystem.DisplayDialogueTree(Windfall.Instance, "Cutscenes/DraconicRuins/Arrival", new(Name, [LunaticCultist.whoAmI]));
+                                RitualTimer++;
+                                StopTimer = true;
+                                break;
 
-                        Rectangle Recruit1Location = new((int)Recruit1.Center.X, (int)Recruit1.Center.Y, Recruit1.width, Recruit1.width);
-                        Rectangle Recruit2Location = new((int)Recruit2.Center.X, (int)Recruit2.Center.Y, Recruit2.width, Recruit2.width);
-                        Rectangle Recruit3Location = new((int)Recruit3.Center.X, (int)Recruit3.Center.Y, Recruit3.width, Recruit3.width);
-                        Rectangle Recruit4Location = new((int)Recruit4.Center.X, (int)Recruit4.Center.Y, Recruit4.width, Recruit4.width);
-                        Rectangle LunaticLocation = new();
-                        if (LunaticCultist != null)
-                            LunaticLocation = new((int)LunaticCultist.Center.X, (int)LunaticCultist.Center.Y, LunaticCultist.width, LunaticCultist.width);
-                        Rectangle OratorLocation = new();
-                        if (Orator != null)
-                            OratorLocation = new((int)Orator.Center.X, (int)Orator.Center.Y, Orator.width, Orator.width);
+                            case 60:
+                                RecruitsHover[1] = true;
+                                break;
 
-                        CombatText Text;
-                        Color TextColor = Color.Cyan;
-                        string key = "LunarCult.TravellingCultist.SealingRitual.";
-                        if (RitualTimer > 60 * 61)
-                            key = "LunarCult.TheOrator.WorldText.SealingRitual.Initial.";
+                            case 90:
+                                RecruitsHover[2] = true;
+                                break;
 
-                        if (Recruit1.ModNPC is RecruitableLunarCultist Recruitable1 && Recruit2.ModNPC is RecruitableLunarCultist Recruitable2 && Recruit3.ModNPC is RecruitableLunarCultist Recruitable3 && Recruit4.ModNPC is RecruitableLunarCultist Recruitable4)
-                        {
-                            switch (RitualTimer)
-                            {
-                                case 1:
-                                    Text = DisplayMessage(LunaticLocation, Color.Cyan, key + '0');
-                                    Text.lifeTime = 60;
-                                    break;
-                                case 60:
-                                    Text = DisplayMessage(LunaticLocation, Color.Cyan, key + '1');
-                                    break;
-                                case 60 * 3:
-                                    GetRecruitValues(Recruitable3.MyName.ToString(), ref TextColor, ref key);
-                                    Text = DisplayMessage(Recruit3Location, TextColor, key + '0'); //So this is gonna seal Moon Lord?
-                                    CultistFacePlayer = false;
-                                    LunaticCultist.direction = -1;
-                                    break;
-                                case 60 * 5:
-                                    Text = DisplayMessage(LunaticLocation, Color.Cyan, key + '2');
-                                    break;
-                                case 60 * 7:
-                                    GetRecruitValues(Recruitable1.MyName.ToString(), ref TextColor, ref key);
-                                    Text = DisplayMessage(Recruit1Location, TextColor, key + '1'); //Can't believe we were helping with something so disasterous...
-                                    break;
-                                case 60 * 10:
-                                    Text = DisplayMessage(LunaticLocation, Color.Cyan, key + '3');
-                                    Text.lifeTime = 90;
-                                    break;
-                                case 60 * 12:
-                                    Text = DisplayMessage(LunaticLocation, Color.Cyan, key + '4');
-                                    break;
-                                case 60 * 14:
-                                    GetRecruitValues(Recruitable2.MyName.ToString(), ref TextColor, ref key);
-                                    Text = DisplayMessage(Recruit2Location, TextColor, key + '2'); //What do we do?
-                                    break;
-                                case 60 * 16:
-                                    Text = DisplayMessage(LunaticLocation, Color.Cyan, key + '5');
-                                    break;
-                                case 60 * 18:
-                                    SoundEngine.PlaySound(SoundID.Item8, Recruit1.Center);
-                                    Text = DisplayMessage(LunaticLocation, Color.Cyan, key + '6');
-                                    Text.lifeTime = 60;
-                                    Recruit2.noGravity = true;
-                                    Recruit2.velocity = Vector2.Zero;
-                                    GetRecruitValues(Recruitable2.MyName.ToString(), ref TextColor, ref key);
-                                    DisplayMessage(Recruit2Location, TextColor, "Emoticons.Shock");
-                                    break;
-                                case 60 * 19:
-                                    Text = DisplayMessage(LunaticLocation, Color.Cyan, key + '7');
-                                    Text.lifeTime = 60;
-                                    Recruit3.noGravity = true;
-                                    Recruit3.velocity = Vector2.Zero;
-                                    GetRecruitValues(Recruitable3.MyName.ToString(), ref TextColor, ref key);
-                                    DisplayMessage(Recruit3Location, TextColor, "Emoticons.Shock");
-                                    break;
-                                case 60 * 20:
-                                    Text = DisplayMessage(LunaticLocation, Color.Cyan, key + '8');
-                                    SoundEngine.PlaySound(SoundID.Item8, Recruit2.Center);
-                                    Text.lifeTime = 60;
-                                    Recruit1.noGravity = true;
-                                    Recruit1.velocity = Vector2.Zero;
-                                    GetRecruitValues(Recruitable1.MyName.ToString(), ref TextColor, ref key);
-                                    DisplayMessage(Recruit1Location, TextColor, "Emoticons.Shock");
-                                    break;
-                                case 60 * 21:
-                                    Recruit4.noGravity = true;
-                                    Recruit4.velocity = Vector2.Zero;
-                                    GetRecruitValues(Recruitable4.MyName.ToString(), ref TextColor, ref key);
-                                    DisplayMessage(Recruit4Location, TextColor, "Emoticons.Shock");
-                                    break;
-                                case 60 * 22:
-                                    for(int i = 0; i < 30; i++)
-                                    {
-                                        Vector2 speed = Main.rand.NextVector2Circular(1.5f, 2f);
-                                        Dust d = Dust.NewDustPerfect(SealingTablet.Center + Main.rand.NextVector2CircularEdge(24, 24), DustID.GoldFlame, speed * 2, Scale: 1.5f);
-                                        d.noGravity = true;
-                                    }
-                                    SealingTablet.ai[0] = 1;
-                                    break;
-                                case 60 * 23:
-                                    Text = DisplayMessage(LunaticLocation, Color.Cyan, key + '9');
-                                    Text.lifeTime = 60;
-                                    break;
-                                case 60 * 25:
-                                    Text = DisplayMessage(LunaticLocation, Color.Cyan, key + "10");
-                                    CultistFacePlayer = true;
-                                    break;
-                                case 60 * 27:
-                                    Text = DisplayMessage(LunaticLocation, Color.Cyan, key + "11");
-                                    CultistFacePlayer = false;
-                                    LunaticCultist.direction = -1;
-                                    break;
-                                case 60 * 28:
-                                    LunaticCultist.direction = 1;
-                                    break;
-                                case 60 * 29:
-                                    Text = DisplayMessage(LunaticLocation, Color.Cyan, key + "12");
-                                    CultistFacePlayer = true;
-                                    break;
-                                case 60 * 31:
-                                    Text = DisplayMessage(LunaticLocation, Color.Cyan, key + "13");
-                                    break;
-                                case 60 * 34:
-                                    Text = DisplayMessage(LunaticLocation, Color.Cyan, key + "14");
-                                    break;
-                                case 60 * 36:
-                                    Text = DisplayMessage(LunaticLocation, Color.Cyan, key + "15");
-                                    break;
-                                case 60 * 38:
-                                    Text = DisplayMessage(LunaticLocation, Color.Cyan, key + "16");
-                                    CultistFacePlayer = false;
-                                    LunaticCultist.direction = -1;
-                                    Text.lifeTime = 180;
-                                    break;
-                                case 60 * 41:
-                                    Text = DisplayMessage(LunaticLocation, Color.Cyan, key + "17");
-                                    Text.lifeTime = 180;
-                                    LunaticCultist.direction = 1;
-                                    break;
-                                case 60 * 44:
-                                    Text = DisplayMessage(LunaticLocation, Color.Cyan, key + "18");
-                                    Text.lifeTime = 180;
-                                    CultistFacePlayer = true;
-                                    break;
-                                case 60 * 47:
-                                    Text = DisplayMessage(LunaticLocation, Color.Cyan, key + "19");
-                                    Text.lifeTime = 180;
-                                    break;
-                                case 60 * 50:
-                                    Text = DisplayMessage(LunaticLocation, Color.Cyan, key + "20");
-                                    break;
-                                case 60 * 52:
-                                    SoundEngine.PlaySound(SoundID.Item71, DungeonCoords);
-                                    Projectile.NewProjectile(Entity.GetSource_NaturalSpawn(), DungeonCoords, new Vector2(0, -20), ModContent.ProjectileType<EmpyreanThorn>(), 200, 0f, ai0: -1);
-                                    CultistFacePlayer = false;
-                                    LunaticCultist.noGravity = true;
-                                    LunaticCultist.position.Y -= 64;
-                                    LunaticCultist.velocity = Vector2.Zero;
-                                    LunaticCultist.rotation = -Pi / 2;
-                                    break;
-                                case 60 * 55:
-                                    Text = DisplayMessage(LunaticLocation, Color.Cyan, key + "21");
-                                    Text.lifeTime = 60;
-                                    break;
-                                case 60 * 58:
-                                    NPCIndexs.RemoveAt(4);
-                                    LunaticCultist.immortal = false;
-                                    LunaticCultist.StrikeInstantKill();
-                                    Recruit1.noGravity = false; Recruit2.noGravity = false; Recruit3.noGravity = false; Recruit4.noGravity = false;
-                                    SealingTablet.ai[0] = 0;
-                                    break;
-                                case 60 * 63:
-                                    NPC orator = NPC.NewNPCDirect(Entity.GetSource_NaturalSpawn(), (int)DungeonCoords.X, (int)DungeonCoords.Y - 8, ModContent.NPCType<OratorNPC>());
-                                    SoundEngine.PlaySound(SoundID.DD2_EtherianPortalDryadTouch, orator.Center);
-                                    for (int i = 0; i < 32; i++)
-                                        EmpyreanMetaball.SpawnDefaultParticle(orator.Center + new Vector2(Main.rand.NextFloat(-64, 64), 64), Vector2.UnitY * Main.rand.NextFloat(4f, 24f) * -1, Main.rand.NextFloat(110f, 130f));
-                                    break;
-                                case 60 * 64:
+                            case 120:
+                                RecruitsHover[0] = true;
+                                break;
+
+                            case 150:
+                                RecruitsHover[3] = true;
+                                RitualTimer++;
+                                StopTimer = true;
+                                break;
+
+                            case 270:
+                                SoundEngine.PlaySound(SoundID.Item71, DungeonCoords);
+                                Projectile.NewProjectile(Entity.GetSource_NaturalSpawn(), DungeonCoords, new Vector2(0, -20), ModContent.ProjectileType<EmpyreanThorn>(), 200, 0f, ai0: -1);
+                                CultistDir = CultistFacing.UhmHeavenIg;
+                                LunaticCultist.noGravity = true;
+                                LunaticCultist.position.Y -= 64;
+                                LunaticCultist.velocity = Vector2.Zero;
+                                LunaticCultist.rotation = -Pi / 2;
+
+                                RitualTimer++;
+                                StopTimer = true;
+                                break;
+
+                            case 870:
+                                NPC orator = NPC.NewNPCDirect(Entity.GetSource_NaturalSpawn(), (int)DungeonCoords.X, (int)DungeonCoords.Y - 8, ModContent.NPCType<OratorNPC>());
+                                SoundEngine.PlaySound(SoundID.DD2_EtherianPortalDryadTouch, orator.Center);
+                                for (int i = 0; i < 32; i++)
+                                    EmpyreanMetaball.SpawnDefaultParticle(orator.Center + new Vector2(Main.rand.NextFloat(-64, 64), 64), Vector2.UnitY * Main.rand.NextFloat(4f, 24f) * -1, Main.rand.NextFloat(110f, 130f));
+                                break;
+
+                            case 930:
+                                if (Recruit1.ModNPC is RecruitableLunarCultist Recruitable1 && Recruit2.ModNPC is RecruitableLunarCultist Recruitable2 && Recruit3.ModNPC is RecruitableLunarCultist Recruitable3 && Recruit4.ModNPC is RecruitableLunarCultist Recruitable4)
+                                {
                                     Recruit1.velocity.Y = Recruit2.velocity.Y = Recruit3.velocity.Y = Recruit4.velocity.Y = -5;
 
-                                    GetRecruitValues(Recruitable1.MyName.ToString(), ref TextColor, ref key);
-                                    DisplayMessage(Recruit1Location, TextColor, "Emoticons.Shock");
+                                    GetRecruitValues(Recruitable1.MyName.ToString(), out Color TextColor, out string key);
+                                    DisplayMessage(Recruit1.Hitbox, TextColor, "Emoticons.Shock");
 
-                                    GetRecruitValues(Recruitable2.MyName.ToString(), ref TextColor, ref key);
-                                    DisplayMessage(Recruit2Location, TextColor, "Emoticons.Shock");
+                                    GetRecruitValues(Recruitable2.MyName.ToString(), out TextColor, out key);
+                                    DisplayMessage(Recruit2.Hitbox, TextColor, "Emoticons.Shock");
 
-                                    GetRecruitValues(Recruitable3.MyName.ToString(), ref TextColor, ref key);
-                                    DisplayMessage(Recruit3Location, TextColor, "Emoticons.Shock");
+                                    GetRecruitValues(Recruitable3.MyName.ToString(), out TextColor, out key);
+                                    DisplayMessage(Recruit3.Hitbox, TextColor, "Emoticons.Shock");
 
-                                    GetRecruitValues(Recruitable4.MyName.ToString(), ref TextColor, ref key);
-                                    DisplayMessage(Recruit4Location, TextColor, "Emoticons.Shock");
+                                    GetRecruitValues(Recruitable4.MyName.ToString(), out TextColor, out key);
+                                    DisplayMessage(Recruit4.Hitbox, TextColor, "Emoticons.Shock");
+                                }
+                                break;
 
-                                    break;
-                                case 60 * 66:
-                                    Text = DisplayMessage(OratorLocation, Color.LightGreen, key + "0");
-                                    break;
-                                case 60 * 68:
-                                    Text = DisplayMessage(OratorLocation, Color.LightGreen, key + "1");
-                                    break;
-                                case 60 * 70:
-                                    Text = DisplayMessage(OratorLocation, Color.LightGreen, key + "2");
-                                    Text.lifeTime = 60;
-                                    break;
-                                case 60 * 71:
-                                    Text = DisplayMessage(OratorLocation, Color.LightGreen, key + "3");
-                                    break;
-                                case 60 * 74:
-                                    Text = DisplayMessage(OratorLocation, Color.LightGreen, key + "4");
-                                    break;
-                                case 60 * 77:
-                                    Text = DisplayMessage(OratorLocation, Color.LightGreen, key + "5");
-                                    break;
-                                case 60 * 80:
-                                    Text = DisplayMessage(OratorLocation, Color.LightGreen, key + "6");
-                                    break;
-
-                                default:
-                                    if (RitualTimer > 60 * 82)
-                                    {
-                                        SoundEngine.PlaySound(SoundID.Roar, Orator.Center);
-                                        Orator.Transform(ModContent.NPCType<TheOrator>());
-                                        Orator.ModNPC.OnSpawn(NPC.GetSource_NaturalSpawn());
-                                        State = SystemState.End;
-                                    }
-                                    break;
-                            }
+                            case 1050:
+                                uiSystem.DisplayDialogueTree(Windfall.Instance, "Cutscenes/DraconicRuins/OratorIntro", new(Name, [LunaticCultist.whoAmI]));
+                                RitualTimer++;
+                                StopTimer = true;
+                                break;
                         }
+
+                        if (!StopTimer)
+                            RitualTimer++;
+                        
                         if (RitualTimer < 30)
                             zoom = Lerp(zoom, 0.4f, 0.075f);
                         else
                             zoom = 0.4f;
                         CameraPanSystem.Zoom = zoom;
                         CameraPanSystem.PanTowards(new Vector2(DungeonCoords.X, DungeonCoords.Y - 150), zoom);
-                        //Main.NewText(RitualTimer / 60);
+                        
                         #region Additional Visuals 
+
                         #region Recruit Hover
-                        if (RitualTimer >= 60 * 20 && RitualTimer <= 60 * 58)
+                        for(int i = 0; i < 4; i++)
                         {
+                            if (!RecruitsHover[i])
+                                continue;
+
+                            NPC recruit = Main.npc[NPCIndexs[i]];
+
                             Vector2 speed = Main.rand.NextVector2Circular(1.5f, 2f);
-                            Dust d = Dust.NewDustPerfect(Recruit1.Center + new Vector2(Main.rand.Next(Recruit1.width * -1, Recruit1.width), Main.rand.Next(Recruit1.height * -1, Recruit1.height)), DustID.GoldFlame, speed * 2, Scale: 1.5f);
+                            Dust d = Dust.NewDustPerfect(recruit.Center + new Vector2(Main.rand.Next(recruit.width * -1, recruit.width), Main.rand.Next(recruit.height * -1, recruit.height)), DustID.GoldFlame, speed * 2, Scale: 1.5f);
                             d.noGravity = true;
                             if (RitualTimer >= 60 * 21)
                             {
-                                Recruit1.velocity.Y = (float)(1 * Math.Sin(RitualTimer / 10));
+                                recruit.velocity.Y = (float)(1 * Math.Sin(RitualTimer / 10));
                             }
-                            else if (Recruit1.velocity.Length() < 2)
-                                Recruit1.velocity.Y -= 0.1f;
-                        }
-
-                        if (RitualTimer >= 60 * 18 && RitualTimer <= 60 * 58)
-                        {
-                            Vector2 speed = Main.rand.NextVector2Circular(1.5f, 2f);
-                            Dust d = Dust.NewDustPerfect(Recruit2.Center + new Vector2(Main.rand.Next(Recruit2.width * -1, Recruit2.width), Main.rand.Next(Recruit2.height * -1, Recruit2.height)), DustID.GoldFlame, speed * 2, Scale: 1.5f);
-                            d.noGravity = true;
-                            if (RitualTimer >= 60 * 19)
-                            {
-                                Recruit2.velocity.Y = (float)(1 * Math.Sin((RitualTimer + 10) / 10));
-                            }
-                            else if (Recruit2.velocity.Length() < 2)
-                                Recruit2.velocity.Y -= 0.1f;
-                        }
-
-                        if (RitualTimer >= 60 * 19 && RitualTimer <= 60 * 58)
-                        {
-                            Vector2 speed = Main.rand.NextVector2Circular(1.5f, 2f);
-                            Dust d = Dust.NewDustPerfect(Recruit3.Center + new Vector2(Main.rand.Next(Recruit3.width * -1, Recruit3.width), Main.rand.Next(Recruit3.height * -1, Recruit3.height)), DustID.GoldFlame, speed * 2, Scale: 1.5f);
-                            d.noGravity = true;
-                            if (RitualTimer >= 60 * 20)
-                            {
-                                Recruit3.velocity.Y = (float)(1 * Math.Sin(RitualTimer / 10));
-                            }
-                            else if (Recruit3.velocity.Length() < 2)
-                                Recruit3.velocity.Y -= 0.1f;
-                        }
-
-                        if (RitualTimer >= 60 * 21 && RitualTimer <= 60 * 58)
-                        {
-                            Vector2 speed = Main.rand.NextVector2Circular(1.5f, 2f);
-                            Dust d = Dust.NewDustPerfect(Recruit4.Center + new Vector2(Main.rand.Next(Recruit4.width * -1, Recruit4.width), Main.rand.Next(Recruit4.height * -1, Recruit4.height)), DustID.GoldFlame, speed * 2, Scale: 1.5f);
-                            d.noGravity = true;
-                            if (RitualTimer >= 60 * 22)
-                            {
-                                Recruit4.velocity.Y = (float)(1 * Math.Sin((RitualTimer + 10) / 10));
-                            }
-                            else if (Recruit4.velocity.Length() < 2)
-                                Recruit4.velocity.Y -= 0.1f;
+                            else if (recruit.velocity.Length() < 2)
+                                recruit.velocity.Y -= 0.1f;
                         }
                         #endregion
-                        if (RitualTimer >= 60 * 50 && RitualTimer <= 60 * 63)
+
+                        #region Orator Goop
+                        if (RitualTimer >= 152 && RitualTimer <= 870)
                         {
-                            float ratio = Clamp((RitualTimer - (60 * 50)) / 60f, 0f, 1f);
+                            float ratio = Clamp((RitualTimer - 152) / 60f, 0f, 1f);
                             //Main.NewText(ratio);
                             float width = 64f * ExpInEasing(ratio);
                             width = Clamp(width, 0f, 72f);
@@ -454,11 +290,20 @@ public class SealingRitualSystem : ModSystem
                         if (Recruit1.Center.Y <= SealingTablet.Center.Y)
                             Recruit1.velocity = Vector2.Zero;
                         #endregion
-                        if (LunaticCultist != null && RitualTimer < 60 * 51)
-                            if (CultistFacePlayer)
-                                LunaticCultist.aiStyle = 0;
-                            else
-                                LunaticCultist.aiStyle = -1;
+
+                        #endregion
+
+                        if (LunaticCultist != null && CultistDir != CultistFacing.UhmHeavenIg)
+                            switch(CultistDir)
+                            {
+                                case CultistFacing.Player:
+                                    LunaticCultist.aiStyle = 0;
+                                    break;
+                                default:
+                                    LunaticCultist.aiStyle = -1;
+                                    LunaticCultist.direction = (int)CultistDir * Main.dungeonX > Main.spawnTileX ? 1 : -1;
+                                    break;
+                            }
                         RitualTimer++;
                     }
                 }                    
@@ -486,7 +331,7 @@ public class SealingRitualSystem : ModSystem
         CombatText MyDialogue = Main.combatText[CombatText.NewText(location, color, GetWindfallTextValue($"Dialogue.{key}"), true)];
         return MyDialogue;
     }
-    private static void GetRecruitValues(string name, ref Color TextColor, ref string Key)
+    private static void GetRecruitValues(string name, out Color TextColor, out string Key)
     {
         switch (name)
         {
@@ -508,8 +353,78 @@ public class SealingRitualSystem : ModSystem
             case "Jamie":
                 TextColor = Color.Orange;
                 break;
+            default:
+                TextColor = Color.White;
+                break;
         }
         Key = $"LunarCult.Recruits.{name}.SealingRitual.";
 
+    }
+
+    private static void ModifyTree(string treeKey, int dialogueID, int buttonID, bool swapped)
+    {
+        throw new NotImplementedException();
+    }
+
+    private static void ClickEffect(string treeKey, int dialogueID, int buttonID, bool swapped)
+    {
+        if (treeKey != "Cutscenes/SealingRitual/RitualMain")
+            return;
+        switch (dialogueID)
+        {
+            case 0:
+                CultistDir = CultistFacing.Left;
+                break;
+            case 2:
+                CultistDir = CultistFacing.Right;
+                break;
+            case 3:
+                CultistDir = CultistFacing.Player;
+                break;
+            case 4:
+                CultistDir = CultistFacing.Right;
+                break;
+            case 5:
+                StopTimer = false;
+                break;
+            case 6:
+                CultistDir = CultistFacing.Player;
+                for (int i = 0; i < 30; i++)
+                {
+                    Vector2 speed = Main.rand.NextVector2Circular(1.5f, 2f);
+                    Dust d = Dust.NewDustPerfect(Main.npc[NPCIndexs[4]].Center + Main.rand.NextVector2CircularEdge(24, 24), DustID.GoldFlame, speed * 2, Scale: 1.5f);
+                    d.noGravity = true;
+                }
+                Main.npc[NPCIndexs[4]].ai[0] = 1;
+                break;
+            case 9:
+                StopTimer = false;
+                break;
+            case 11:
+                NPC LunaticCultist = Main.npc[NPCIndexs[5]];
+                NPC SealingTablet = Main.npc[NPCIndexs[4]];
+                LunaticCultist.immortal = false;
+                LunaticCultist.StrikeInstantKill();
+                NPCIndexs.RemoveAt(5);
+
+                for(int i = 0; i < 4; i++)
+                    RecruitsHover[i] = false;
+
+                SealingTablet.ai[0] = 0;
+                StopTimer = false;
+                break;
+        }
+    }
+
+    private static void CloseEffect(string treeKey, int dialogueID, int buttonID, bool swapped)
+    {
+        if (treeKey != "Cutscenes/SealingRitual/OratorIntro")
+        {
+            NPC Orator = Main.npc[NPC.FindFirstNPC(ModContent.NPCType<OratorNPC>())];
+            SoundEngine.PlaySound(SoundID.Roar, Orator.Center);
+            Orator.Transform(ModContent.NPCType<TheOrator>());
+            Orator.ModNPC.OnSpawn(NPC.GetSource_NaturalSpawn());
+            State = SystemState.End;
+        }
     }
 }

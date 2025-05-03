@@ -1,0 +1,59 @@
+{
+	"Dialogues": [
+		{
+			"DialogueText": [ { "Text": "Ah! You're here! Let's hurry and get this started. We haven't a moment to waste!" } ]
+		},
+		{
+			"DialogueText": [ { "Text": "Recruit1: So this thing will stop the apocalypse?" } ]
+		},
+		{
+			"DialogueText": [ { "Text": "That's quite right. With this ritual, the Selenic Order's plans will be stopped in their tracks! Whatever despicable future they wished to bring about will not come to pass!" } ]
+		},
+		{
+			"DialogueText": [ { "Text": "Recruit3: To think we were helping such a villainous group..." } ]
+		},
+		{
+			"DialogueText": [ { "Text": "Yes, yes, I'm well aware of how regretful you all are. It is quite alright, however we really must get started with this. There's no teeling how long we have until the we draw the Order's attention!" } ]
+		},
+		{
+			"DialogueText": [ { "Text": "Recruit4: And... how do we do that?" } ]
+		},
+		{
+			"DialogueText": [ { "Text": "It's actually quite simple! ...Just. ...Hold. ...Still." } ],
+			"Skippable": false
+		},
+		{
+			"DialogueText": [ { "Text": "Perfect! You did a wonderful job, my friend. I mean, luring in vessels as expendable as these? A magnificent idea! We won't need to worry about them, and can simply complete the ritual here and now!" } ],
+			"Responses": [
+				{
+					"Title": "No!",
+					"Heading": -2
+				},
+				{
+					"Title": "That's not-!",
+					"Heading": -2
+				},
+				{
+					"Title": "What?!",
+					"Heading": -2
+				}
+			]
+		},
+		{
+			"DialogueText": [ { "Text": "Oh come now, don't be like that... Their sacrifice will be for the greater good! Its the least they can do to atone for their service to that vile cult, and four lives are nothing when compared to that of a whole species!" } ]
+		},
+		{
+			"DialogueText": [ { "Text": "With the Selenic Order dealt with, nothing will stop the return of the Dragons! To think the Orator really thought he'd be able to stop US! We, who have dedicated oruselves to the true rulers of this world?!" } ]
+		},
+		{
+			"DialogueText": [ { "Text": "Once we're done here we'll be sure to put an end to that-" } ],
+			"Skippable": false
+		},
+		{
+			"DialogueText": [ { "Text": ". . . f o o l . . . ?" } ]
+		}
+	],
+  "Characters": [
+    "TheCalamity"
+  ]
+}
