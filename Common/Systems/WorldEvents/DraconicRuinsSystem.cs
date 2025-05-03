@@ -141,7 +141,7 @@ public class DraconicRuinsSystem : ModSystem
                 switch (State)
                 {
                     case CutsceneState.Arrival:
-                        CameraPanSystem.PanTowards(RuinsEntrance.ToWorldCoordinates() - new Vector2(0, 120), CircOutEasing(CameraTime / 60f));
+                        CameraPanSystem.PanTowards(RuinsEntrance.ToWorldCoordinates() + new Vector2(0, 20), CircOutEasing(CameraTime / 60f));
 
                         CameraPanSystem.Zoom = CalamityMod.CalamityUtils.CircOutEasing(CameraTime / 60f, 1) / 2f;
 
@@ -159,11 +159,11 @@ public class DraconicRuinsSystem : ModSystem
                                     CutsceneTime++;
                                     break;
                                 case 120:
-                                    uiSystem.DisplayDialogueTree(Windfall.Instance, "Cutscenes/DraconicRuins/Arrival", new(Name, [tc.whoAmI]));
+                                    uiSystem.DisplayDialogueTree(Windfall.Instance, "Cutscenes/DraconicRuins/Arrival", new(Name, [tc.whoAmI]), 2);
                                     CutsceneTime++;
                                     break;
                                 case 180:
-                                    uiSystem.DisplayDialogueTree(Windfall.Instance, "Cutscenes/DraconicRuins/Arrival", new(Name, [tc.whoAmI]));
+                                    uiSystem.DisplayDialogueTree(Windfall.Instance, "Cutscenes/DraconicRuins/Arrival", new(Name, [tc.whoAmI]), 3);
                                     CutsceneTime++;
                                     break;
                                 case 210:
@@ -220,7 +220,7 @@ public class DraconicRuinsSystem : ModSystem
                             CutsceneTime--;
                         break;
                     case CutsceneState.CultistFumble:
-                        CameraPanSystem.PanTowards(TabletRoom.ToWorldCoordinates() - new Vector2(0, 120), CircOutEasing(CameraTime / 60f));
+                        CameraPanSystem.PanTowards(TabletRoom.ToWorldCoordinates() - new Vector2(0, 20), CircOutEasing(CameraTime / 60f));
 
                         CameraPanSystem.Zoom = CircOutEasing(CameraTime / 60f) / 2f;
 
@@ -284,7 +284,7 @@ public class DraconicRuinsSystem : ModSystem
                             CutsceneTime++;
                         break;
                     case CutsceneState.PlayerFumble:
-                        CameraPanSystem.PanTowards(TabletRoom.ToWorldCoordinates() - new Vector2(0, 120), CircOutEasing(CameraTime / 60f));
+                        CameraPanSystem.PanTowards(TabletRoom.ToWorldCoordinates() - new Vector2(0, 20), CircOutEasing(CameraTime / 60f));
 
                         CameraPanSystem.Zoom = CircOutEasing(CameraTime / 60f) / 2f;
 
@@ -348,7 +348,7 @@ public class DraconicRuinsSystem : ModSystem
                             CutsceneTime++;
                         break;
                     case CutsceneState.CultistEnd:
-                        CameraPanSystem.PanTowards(TabletRoom.ToWorldCoordinates() - new Vector2(0, 120), CircOutEasing(CameraTime / 60f));
+                        CameraPanSystem.PanTowards(TabletRoom.ToWorldCoordinates() - new Vector2(0, 20), CircOutEasing(CameraTime / 60f));
 
                         CameraPanSystem.Zoom = CircOutEasing(CameraTime / 60f) / 2f;
 
@@ -375,7 +375,7 @@ public class DraconicRuinsSystem : ModSystem
                         
                         break;
                     case CutsceneState.PlayerEnd:
-                        CameraPanSystem.PanTowards(TabletRoom.ToWorldCoordinates() - new Vector2(0, 120), CircOutEasing(CameraTime / 60f));
+                        CameraPanSystem.PanTowards(TabletRoom.ToWorldCoordinates() - new Vector2(0, 20), CircOutEasing(CameraTime / 60f));
 
                         CameraPanSystem.Zoom = CircOutEasing(CameraTime / 60f) / 2f;
 

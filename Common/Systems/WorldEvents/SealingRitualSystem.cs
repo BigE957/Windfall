@@ -2,7 +2,6 @@
 using Luminance.Core.Graphics;
 using Terraria.ModLoader.IO;
 using Windfall.Common.Graphics.Metaballs;
-using Windfall.Content.Items.Lore;
 using Windfall.Content.NPCs.Bosses.Orator;
 using Windfall.Content.NPCs.TravellingNPCs;
 using Windfall.Content.NPCs.WorldEvents.LunarCult;
@@ -363,7 +362,14 @@ public class SealingRitualSystem : ModSystem
 
     private static void ModifyTree(string treeKey, int dialogueID, int buttonID, bool swapped)
     {
-        throw new NotImplementedException();
+        if (treeKey != "Cutscenes/SealingRitual/RitualMain")
+            return;
+
+        DialogueUISystem uiSystem = ModContent.GetInstance<DialogueUISystem>();
+
+        uiSystem.CurrentTree.Dialogues[1].DialogueText[0].Text = GetWindfallTextValue($"Dialogue.LunarCult.Recruits.{(RecruitableLunarCultist.RecruitNames)Recruits[0]}.SealingRitual.0");
+        uiSystem.CurrentTree.Dialogues[3].DialogueText[0].Text = GetWindfallTextValue($"Dialogue.LunarCult.Recruits.{(RecruitableLunarCultist.RecruitNames)Recruits[2]}.SealingRitual.1");
+        uiSystem.CurrentTree.Dialogues[4].DialogueText[0].Text = GetWindfallTextValue($"Dialogue.LunarCult.Recruits.{(RecruitableLunarCultist.RecruitNames)Recruits[3]}.SealingRitual.2");
     }
 
     private static void ClickEffect(string treeKey, int dialogueID, int buttonID, bool swapped)
@@ -418,7 +424,7 @@ public class SealingRitualSystem : ModSystem
 
     private static void CloseEffect(string treeKey, int dialogueID, int buttonID, bool swapped)
     {
-        if (treeKey != "Cutscenes/SealingRitual/OratorIntro")
+        if (treeKey == "Cutscenes/SealingRitual/OratorIntro")
         {
             NPC Orator = Main.npc[NPC.FindFirstNPC(ModContent.NPCType<OratorNPC>())];
             SoundEngine.PlaySound(SoundID.Roar, Orator.Center);

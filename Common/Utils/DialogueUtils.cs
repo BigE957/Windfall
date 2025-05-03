@@ -42,6 +42,11 @@ public static partial class WindfallUtils
         public DialoguePool(List<(string TreeKey, Func<Player, bool> Requirement, byte Priority, bool Repeatable)> dialogues)
         {
             Dialogues = dialogues;
+            ResetCirculatingDialogues();
+        }
+
+        public void ResetCirculatingDialogues()
+        {
             foreach (var (TreeKey, Requirement, Priority, Repeatable) in Dialogues)
             {
                 (string TreeKey, Func<Player, bool> Requirement, byte Priority) myDialogue = new(TreeKey, Requirement, Priority);
@@ -58,7 +63,7 @@ public static partial class WindfallUtils
                 if(Requirement.Invoke(player) && Priority > topPriority)
                     topPriority = Priority;
             }
-
+            Main.NewText(topPriority);
             if (topPriority == -1)
             {
                 foreach (var (TreeKey, Requirement, Priority, Repeatable) in Dialogues)

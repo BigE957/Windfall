@@ -7,7 +7,6 @@ using Windfall.Content.NPCs.WorldEvents.LunarCult;
 using DialogueHelper.UI.Dialogue;
 using Windfall.Content.Items.Quests.SealingRitual;
 using CalamityMod.NPCs.TownNPCs;
-using Terraria.ModLoader.IO;
 using static Windfall.Common.Systems.PathfindingSystem;
 using CalamityMod;
 
@@ -79,8 +78,6 @@ public class TravellingCultist : ModNPC, ILocalizedModType
         NPC.DeathSound = SoundID.NPCDeath59;
         NPC.knockBackResist = 0.5f;
         NPC.immortal = true;
-
-        myBehavior = BehaviorState.FollowPlayer;
     }
 
     public static readonly List<Tuple<int, int>> RitualQuestItems =
@@ -106,7 +103,7 @@ public class TravellingCultist : ModNPC, ILocalizedModType
     }
     public static QuestStatus FetchQuestStatus = QuestStatus.None;
 
-    private enum DialogueState
+    public enum DialogueState
     {
         SearchForHelp,
         DungeonQuest,
@@ -124,7 +121,7 @@ public class TravellingCultist : ModNPC, ILocalizedModType
         RitualTalk,
         QuestlineFinished,
     }
-    private static DialogueState CurrentDialogue = DialogueState.SearchForHelp;
+    public static DialogueState CurrentDialogue = DialogueState.SearchForHelp;
 
     public enum BehaviorState
     {
@@ -142,7 +139,7 @@ public class TravellingCultist : ModNPC, ILocalizedModType
         MajorEvent,
         QuestUpdate
     }
-    private static readonly DialoguePool pool = new(
+    public static readonly DialoguePool pool = new(
     [
         //No Priority
         new("TravellingCultist/Introductions/Standard1", (player) => true, (byte)PriorityTiers.None, true),
@@ -242,7 +239,9 @@ public class TravellingCultist : ModNPC, ILocalizedModType
         if (MilestoneMet)
             CurrentDialogue++;
 
-        Main.NewText(CurrentDialogue);
+        //CurrentDialogue = DialogueState.RitualQuestWayfinder;
+        //Main.NewText(CurrentDialogue);
+        //pool.ResetCirculatingDialogues();
     }
 
     public override bool CanChat() => NPC.ai[3] != 1 && !ModContent.GetInstance<DialogueUISystem>().isDialogueOpen;
@@ -255,7 +254,7 @@ public class TravellingCultist : ModNPC, ILocalizedModType
         else
             NPC.direction = 1;
         NPC.spriteDirection = -NPC.direction;
-
+        
         if (CurrentDialogue == DialogueState.RitualQuestTablet && DraconicRuinsSystem.State == DraconicRuinsSystem.CutsceneState.Finished)
             ModContent.GetInstance<DialogueUISystem>().DisplayDialogueTree(Windfall.Instance, "TravellingCultist/DraconicRuins", new(Name, [NPC.whoAmI]), QuestSystem.Quests["TabletFragment"].Complete ? 3 : 0);
         else if (introductionDone)
@@ -412,7 +411,7 @@ public class TravellingCultist : ModNPC, ILocalizedModType
 
         if (treeKey.Contains("Introductions"))
             cultist.As<TravellingCultist>().introductionDone = true;
-
+        //Main.NewText(QuestSystem.Quests["TabletFragment"].Progress = 0);
         switch (treeKey)
         {
             #region Introductions
@@ -461,6 +460,7 @@ public class TravellingCultist : ModNPC, ILocalizedModType
                 {
                     QuestSystem.Quests["TabletFragment"].IncrementProgress();
                     CurrentDialogue = DialogueState.RitualQuestTablet;
+                    cultist.As<TravellingCultist>().myBehavior = BehaviorState.FollowPlayer;
                 }
                 break;
             case "TravellingCultist/DraconicRuins":
@@ -518,9 +518,6 @@ public class TravellingCultist : ModNPC, ILocalizedModType
 
     public override void AI()
     {
-        CurrentDialogue = DialogueState.RitualQuestTablet;
-        //myBehavior = BehaviorState.FollowPlayer;
-        //Main.NewText(myBehavior.ToString());
         switch(myBehavior)
         {
             case BehaviorState.Wander:
@@ -682,6 +679,10 @@ public class TravellingCultist : ModNPC, ILocalizedModType
 
     private void PathfindingEndConditions()
     {
+        Main.NewText(CurrentDialogue);
+        //CanFly = false;
+        //MoveSpeed = 3f;
+        //NPC.noGravity = false;
         switch (CurrentDialogue)
         {
             case DialogueState.RitualQuestTablet:
@@ -692,6 +693,8 @@ public class TravellingCultist : ModNPC, ILocalizedModType
                         if ((int)(NPC.Center.Y / 16) == DraconicRuinsSystem.TabletRoom.Y)
                         {
                             myBehavior = BehaviorState.MoveToTargetLocation;
+                            CanFly = false;
+                            NPC.noGravity = false;
                             TargetLocation = DraconicRuinsSystem.TabletRoom.ToWorldCoordinates();
                         }
                     }
@@ -710,7 +713,7 @@ public class TravellingCultist : ModNPC, ILocalizedModType
                     {
                         if (Vector2.DistanceSquared(NPC.Center, DraconicRuinsSystem.TabletRoom.ToWorldCoordinates()) < 256)
                         {
-                            Main.NewText("Start End Cutscene");
+                            //Main.NewText("Start End Cutscene");
                             myBehavior = BehaviorState.StandStill;
                             DraconicRuinsSystem.StartCutscene();
                         }
@@ -719,7 +722,7 @@ public class TravellingCultist : ModNPC, ILocalizedModType
                     {
                         if (Vector2.DistanceSquared(NPC.Center, DraconicRuinsSystem.RuinsEntrance.ToWorldCoordinates()) < 256)
                         {
-                            Main.NewText("Start Beginning Cutscene");
+                            //Main.NewText("Start Beginning Cutscene");
                             myBehavior = BehaviorState.StandStill;
                             DraconicRuinsSystem.StartCutscene();
                         }
@@ -737,31 +740,6 @@ public class TravellingCultist : ModNPC, ILocalizedModType
         if (pathFinding.MyPath.Points.Length <= CurrentWaypoint + checkIndex)
             checkIndex = pathFinding.MyPath.Points.Length - 1;
         return pathFinding.MyPath.Points[checkIndex].Y > pathFinding.MyPath.Points[CurrentWaypoint].Y;
-    }
-
-    public override void SaveData(TagCompound tag)
-    {
-        tag["DialogueState"] = (int)CurrentDialogue;
-
-        List<string> circulatingTrees = [];
-        for (int i = 0; i < pool.CirculatingDialogues.Count; i++)
-        {
-            circulatingTrees.Add(pool.CirculatingDialogues[i].TreeKey);
-        }
-        tag["CirculatingDialogue"] = circulatingTrees;
-    }
-
-    public override void LoadData(TagCompound tag)
-    {
-        CurrentDialogue = (DialogueState)tag.GetInt("DialogueState");
-
-        pool.CirculatingDialogues.Clear();
-        List<string> circulatingTrees = (List<string>)tag.GetList<string>("CirculatingDialogue");
-        for (int i = 0; i < pool.CirculatingDialogues.Count; i++)
-        {
-            var (TreeKey, Requirement, Priority, Repeatable) = pool.Dialogues.First(d => d.TreeKey == circulatingTrees[i]);
-            pool.CirculatingDialogues.Add(new(TreeKey, Requirement, Priority));
-        }
     }
 
     #region Town NPC Stuff

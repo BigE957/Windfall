@@ -1,5 +1,6 @@
 ﻿using Terraria.ModLoader.IO;
 using Windfall.Common.Systems.WorldEvents;
+using Windfall.Content.NPCs.TravellingNPCs;
 
 namespace Windfall.Common.Systems;
 
@@ -26,8 +27,18 @@ public class WorldSaveSystem : ModSystem
 
         JournalsCollected = (List<bool>)tag.GetList<bool>("JournalsCollected");
 
-        CreditDataNames = (List<string>)tag.GetList<string>("CreditDataNames");
-        CreditDataCredits = (List<int>)tag.GetList<int>("CreditDataCredits");
+        TravellingCultist.CurrentDialogue = (TravellingCultist.DialogueState)tag.GetInt("DialogueState");
+
+        if (tag.ContainsKey("CirculatingDialogue"))
+        {
+            TravellingCultist.pool.CirculatingDialogues.Clear();
+            List<string> circulatingTrees = (List<string>)tag.GetList<string>("CirculatingDialogue");
+            for (int i = 0; i < TravellingCultist.pool.CirculatingDialogues.Count; i++)
+            {
+                var (TreeKey, Requirement, Priority, Repeatable) = TravellingCultist.pool.Dialogues.First(d => d.TreeKey == circulatingTrees[i]);
+                TravellingCultist.pool.CirculatingDialogues.Add(new(TreeKey, Requirement, Priority));
+            }
+        }
     }
 
     public override void SaveWorldData(TagCompound tag)
@@ -39,8 +50,17 @@ public class WorldSaveSystem : ModSystem
 
         tag["JournalsCollected"] = JournalsCollected;
 
-        tag["CreditDataNames"] = CreditDataNames;
-        tag["CreditDataCredits"] = CreditDataCredits;
+        tag["DialogueState"] = (int)TravellingCultist.CurrentDialogue;
+
+        if (TravellingCultist.pool.CirculatingDialogues.Count != TravellingCultist.pool.Dialogues.Count)
+        {
+            List<string> circulatingTrees = [];
+            for (int i = 0; i < TravellingCultist.pool.CirculatingDialogues.Count; i++)
+            {
+                circulatingTrees.Add(TravellingCultist.pool.CirculatingDialogues[i].TreeKey);
+            }
+            tag["CirculatingDialogue"] = circulatingTrees;
+        }
     }
     public static void ResetWorldData()
     {
@@ -54,8 +74,8 @@ public class WorldSaveSystem : ModSystem
             JournalsCollected[i] = false;
         }
 
-        CreditDataNames = [];
-        CreditDataCredits = [];
+        TravellingCultist.CurrentDialogue = TravellingCultist.DialogueState.SearchForHelp;
+        TravellingCultist.pool.ResetCirculatingDialogues();
 
         SealingRitualSystem.RitualSequenceSeen = false;
         DownedNPCSystem.downedOrator = false;

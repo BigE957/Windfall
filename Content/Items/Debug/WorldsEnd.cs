@@ -1,4 +1,5 @@
-﻿using Windfall.Common.Systems;
+﻿using DialogueHelper.UI.Dialogue;
+using Windfall.Common.Systems;
 
 namespace Windfall.Content.Items.Debug;
 
@@ -16,7 +17,7 @@ public class WorldsEnd : ModItem, ILocalizedModType
     }
     public override bool? UseItem(Player player)
     {
-        WorldSaveSystem.ResetWorldData();
+        ModContent.GetInstance<DialogueUISystem>().DisplayDialogueTree(Windfall.Instance, "Cutscenes/DraconicRuins/Arrival", new(Name, [-1]), 3);
         return true;
     }
 }
