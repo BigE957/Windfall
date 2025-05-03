@@ -1,0 +1,19 @@
+{
+  "Dialogues": [
+    {
+      "DialogueText": [ { "Text": "What?!" } ]
+    },
+    {
+      "DialogueText": [ { "Text": "Trying to keep that relic out of our hands, are you? How coniving... However, you've stopped nothing." } ]
+    },
+    {
+      "DialogueText": [ { "Text": "Our plans shall still unfold, even if you dare to stand in our way!" } ]
+    },
+    {
+      "DialogueText": [ { "Text": "We'll be watching you keenly..." } ]
+    }
+  ],
+  "Characters": [
+    "Apostle"
+  ]
+}

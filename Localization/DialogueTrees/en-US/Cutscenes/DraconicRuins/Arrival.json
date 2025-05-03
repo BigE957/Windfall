@@ -1,0 +1,37 @@
+{
+  "Dialogues": [
+    {
+      "DialogueText": [ { "Text": "Wow... I can't believe I'm really here! These ruins... I'm certain they hold so much of the Monks' forgotten knowledge as well as the tablet we're looking for. It'll be a true honor to learn from what they left behind." } ]
+    },
+    {
+      "DialogueText": [ { "Text": "Now's the time to use the Wayfinder. It should allow us to enter, and we'll be able to begin our exploration!" } ],
+      "CloseDialogue": true
+    },
+    {
+      "DialogueText": [ { "Text": "Aha! It really worked! The spell over the ruins has been dispersed for the time being. Let's head on-" } ],
+      "CloseDialogue": true
+    },
+    {
+      "DialogueText": [ { "Text": "What?!" } ]
+    },
+    {
+      "DialogueText": [ { "Text": "Excellent work you two! We've had our eyes on these ruins for quite a while, and now you've done us the favor of removing its protective seal! You have our thanks." } ],
+      "CharacterIndex": 1
+    },
+    {
+      "DialogueText": [ { "Text": "We won't let you enter this place!" } ]
+    },
+    {
+      "DialogueText": [ { "Text": "You're welcome to try, but do you think you'll be able to stop all of us?" } ],
+      "CharacterIndex": 1
+    },
+    {
+      "DialogueText": [ { "Text": "...What?" } ],
+      "CloseDialogue": true
+    }
+  ],
+  "Characters": [
+    "TheCalamity",
+    "Apostle"
+  ]
+}

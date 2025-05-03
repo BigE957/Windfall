@@ -1,0 +1,16 @@
+{
+  "Dialogues": [
+    {
+      "DialogueText": [ { "Text": "You idiot!!" } ]
+    },
+    {
+      "DialogueText": [ { "Text": "Ugh, no matter. It's better off destroyed than in the hands of the enemy." } ]
+    },
+    {
+      "DialogueText": [ { "Text": "We're leaving. I hope for your sake the Orator isn't too displeased with your failure." } ]
+    }
+  ],
+  "Characters": [
+    "Apostle"
+  ]
+}

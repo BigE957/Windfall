@@ -1,0 +1,14 @@
+{
+  "Dialogues": [
+    {
+      "DialogueText": [ { "Text": "Damn it... This is... a rather large set back, but.. let's not lose hope! I'm going to have a look around; there msut be more here that could help us." } ]
+    },
+    {
+      "DialogueText": [ { "Text": "You should have a look around as well. Do let me know if you find anything of note." } ],
+      "Responses": [ { "Title": "Will do."} ]
+    }
+  ],
+  "Characters": [
+    "TheCalamity"
+  ]
+}

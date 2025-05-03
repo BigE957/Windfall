@@ -1,0 +1,20 @@
+{
+  "Dialogues": [
+    {
+      "DialogueText": [ { "Text": "Damn it... This is... a rather large set back. Could you not have been more careful with that...?" } ]
+    },
+    {
+      "DialogueText": [ { "Text": "Ugh, apologies... It was so chaotic with those cultists... I shouldn't be blaming you for their interference." } ]
+    },
+    {
+      "DialogueText": [ { "Text": "Let's not lose hope just yet. I'm gonna have a look around, and see if perhaps there's more here that can help us." } ]
+    },
+    {
+      "DialogueText": [ { "Text": "You should have a look around as well. Do let me know if you find anything of note." } ],
+      "Responses": [ { "Title": "Will do." } ]
+    }
+  ],
+  "Characters": [
+    "TheCalamity"
+  ]
+}
