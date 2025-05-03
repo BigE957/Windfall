@@ -1,0 +1,33 @@
+{
+  "Dialogues": [
+    {
+      "DialogueText": [ { "Text": "At last, the connection has been established once again! Open your ears everyone! Let our communion commence!" } ],
+      "CharacterIndex": 1
+    },
+    {
+      "DialogueText": [ { "Text": "Your aptitude for reaching me grows with every rite you perform... How impressive! I have no doubt the future we strive for will soon come to pass." } ],
+      "CharacterIndex": 0
+    },
+    {
+      "DialogueText": [ { "Text": "I can see it unfolding before me... The seal will be shattered, the moon shall crumble, and the Lunar Titan moves to cleanse the world of impurity. That which struck down the Dragons shall too strike down the Gods. This stagnant era at last will meet its end, and in its place a new era may bloom: A bright future. Won't that be wonderful?" } ],
+      "CharacterIndex": 0
+    },
+    {
+      "DialogueText": [ { "Text": "Let us continue our work together; that this future may be realized. Your abilities grow; I have no doubt you'll see this through." } ],
+      "CharacterIndex": 0
+    },
+    {
+      "DialogueText": [ { "Text": "It is as our benefactor says! Hold steady your faith, for the time draws near that it shall be rewarded." } ],
+      "CharacterIndex": 1,
+      "CloseDialogue": true
+    },
+    {
+      "DialogueText": [ { "Text": "And you! Your combat skills hold up well; very well done! Your continued help in these proceedings will be of great help. Please, help yourself to this reward. I, however, must be off. There is much still to be done." } ],
+      "CharacterIndex": 1
+    }
+  ],
+  "Characters": [
+    "RiftDoG",
+    "TheOrator"
+  ]
+}

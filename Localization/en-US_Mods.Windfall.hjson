@@ -308,41 +308,6 @@ Dialogue: {
 					2: Keep out of there.
 				}
 
-				Ritual: {
-					Success: {
-						0: Aha!
-						1: Yes, I've found it!
-						2: At last, we may begin...
-						3: How wonderous...
-						#DiaDoGue
-						4: You've grown better at establishing our connection...
-						5: Impressive!
-						6: I have no doubt our goals are soon to be realized.
-						7: The seal will shatter.
-						8: Luna shall break.
-						9: And from Heaven, the Great One soon descends.
-						10: That which struck down the Dragons shall too strike down the Gods.
-						11: This stagnant era at last will meet its end.
-						12: Then, together, we can make something new.
-						13: Something better.
-						14: Won't that be wonderful?
-						#endOFDialDoGue
-						15: It is as our benefactor says.
-						16: Continue our righteous works,
-						17: and we the world shall be cleansed.
-						18: And you!
-						19: Well done.
-						20: Your help is, as always, appreciated.
-					}
-
-					Failure: {
-						0: Drats...
-						1: Seems this ritual can no longer continue.
-						2: Oh well.
-						3: There is always next time.
-					}
-				}
-
 				SealingRitual: {
 					Initial: {
 						0: So this is what's become of you?
@@ -358,10 +323,10 @@ Dialogue: {
 
 			BossText: {
 				PhaseChange: {
-					0: Hey!
-					1: Do you have any idea how long those take to make?!
-					2: That's it!
-					3: I'm KILLING you.
+					0: You're still as strong as ever...
+					1: But even you can't stop what is to come.
+					2: I won't allow you to get in my way.
+					3: So allow me to show you what I've learned.
 				}
 
 				Defeat: {
@@ -369,8 +334,8 @@ Dialogue: {
 					1: No matter.
 					2: I need not best you here.
 					3: All I need do is buy time for...
-					4: That.
-					5: At last the end is now at our doorstep!
+					4: That!
+					5: At last! The end our our journey draws near!
 					6: I shall grant you the privlage of witnessing it.
 					7: Until we meet again...
 				}

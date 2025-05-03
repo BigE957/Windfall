@@ -1,0 +1,13 @@
+{
+  "Dialogues": [
+    {
+      "DialogueText": [ { "Text": "How unfortunate... It would seem we are no longer able to proceed." } ]
+    },
+    {
+      "DialogueText": [ { "Text": "Well, there's always next time. I best be off." } ]
+    }
+  ],
+  "Characters": [
+    "TheOrator"
+  ]
+}

@@ -993,221 +993,116 @@ public class LunarCultBaseSystem : ModSystem
                 }
                 else if (PortalsDowned >= RequiredPortalKills)
                 {
-                    NPC orator = Main.npc[NPC.FindFirstNPC(ModContent.NPCType<OratorNPC>())];                                               
-
-                    switch(ActivityTimer)
-                    {
-                        case 0:
-                            DisplayMessage(orator.Hitbox, Color.LimeGreen, "Dialogue.LunarCult.TheOrator.WorldText.Ritual.Success.0");
-                            break;
-                        case 120:
-                            DisplayMessage(orator.Hitbox, Color.LimeGreen, "Dialogue.LunarCult.TheOrator.WorldText.Ritual.Success.1");
-                            break;
-                        case 240:
-                            DisplayMessage(orator.Hitbox, Color.LimeGreen, "Dialogue.LunarCult.TheOrator.WorldText.Ritual.Success.2");
-                            break;
-                        case 400:
-                            if (Main.netMode != NetmodeID.MultiplayerClient)
-                            {
-                                Vector2 spawnPos = new(ActivityCoords.X, ActivityCoords.Y - 280);
-                                Projectile.NewProjectile(Projectile.GetSource_NaturalSpawn(), spawnPos, Vector2.Zero, ModContent.ProjectileType<DoGRift>(), 0, 0f);
-                            }
-                            break;
-                        case 520:
-                            DisplayMessage(orator.Hitbox, Color.LimeGreen, "Dialogue.LunarCult.TheOrator.WorldText.Ritual.Success.3");
-                            break;
-                        case 640:
-                            Projectile dogRift = Main.projectile.First(p => p.active && p.type == ModContent.ProjectileType<DoGRift>());
-                            DisplayMessage(dogRift.Hitbox, Color.Aqua, "Dialogue.LunarCult.TheOrator.WorldText.Ritual.Success.4");
-                            break;
-                        case 720:
-                            dogRift = Main.projectile.First(p => p.active && p.type == ModContent.ProjectileType<DoGRift>());
-                            DisplayMessage(dogRift.Hitbox, Color.Aqua, "Dialogue.LunarCult.TheOrator.WorldText.Ritual.Success.5");
-                            break;
-                        case 840:
-                            dogRift = Main.projectile.First(p => p.active && p.type == ModContent.ProjectileType<DoGRift>());
-                            DisplayMessage(dogRift.Hitbox, Color.Aqua, "Dialogue.LunarCult.TheOrator.WorldText.Ritual.Success.6");
-                            break;
-                        case 960:
-                            dogRift = Main.projectile.First(p => p.active && p.type == ModContent.ProjectileType<DoGRift>());
-                            DisplayMessage(dogRift.Hitbox, Color.Aqua, "Dialogue.LunarCult.TheOrator.WorldText.Ritual.Success.7");
-                            break;
-                        case 1080:
-                            dogRift = Main.projectile.First(p => p.active && p.type == ModContent.ProjectileType<DoGRift>());
-                            DisplayMessage(dogRift.Hitbox, Color.Aqua, "Dialogue.LunarCult.TheOrator.WorldText.Ritual.Success.8");
-                            break;
-                        case 1200:
-                            dogRift = Main.projectile.First(p => p.active && p.type == ModContent.ProjectileType<DoGRift>());
-                            DisplayMessage(dogRift.Hitbox, Color.Aqua, "Dialogue.LunarCult.TheOrator.WorldText.Ritual.Success.9");
-                            break;
-                        case 1320:
-                            dogRift = Main.projectile.First(p => p.active && p.type == ModContent.ProjectileType<DoGRift>());
-                            DisplayMessage(dogRift.Hitbox, Color.Aqua, "Dialogue.LunarCult.TheOrator.WorldText.Ritual.Success.10");
-                            break;
-                        case 1440:
-                            dogRift = Main.projectile.First(p => p.active && p.type == ModContent.ProjectileType<DoGRift>());
-                            DisplayMessage(dogRift.Hitbox, Color.Aqua, "Dialogue.LunarCult.TheOrator.WorldText.Ritual.Success.11");
-                            break;
-                        case 1560:
-                            dogRift = Main.projectile.First(p => p.active && p.type == ModContent.ProjectileType<DoGRift>());
-                            DisplayMessage(dogRift.Hitbox, Color.Aqua, "Dialogue.LunarCult.TheOrator.WorldText.Ritual.Success.12");
-                            break;
-                        case 1680:
-                            dogRift = Main.projectile.First(p => p.active && p.type == ModContent.ProjectileType<DoGRift>());
-                            DisplayMessage(dogRift.Hitbox, Color.Aqua, "Dialogue.LunarCult.TheOrator.WorldText.Ritual.Success.13");
-                            break;
-                        case 1800:
-                            dogRift = Main.projectile.First(p => p.active && p.type == ModContent.ProjectileType<DoGRift>());
-                            DisplayMessage(dogRift.Hitbox, Color.Aqua, "Dialogue.LunarCult.TheOrator.WorldText.Ritual.Success.14");
-                            break;
-                        case 1860:
-                            dogRift = Main.projectile.First(p => p.active && p.type == ModContent.ProjectileType<DoGRift>());
-                            dogRift.ai[0] = 1;
-                            break;
-                        case 1920:
-                            DisplayMessage(orator.Hitbox, Color.LimeGreen, "Dialogue.LunarCult.TheOrator.WorldText.Ritual.Success.15");
-                            break;
-                        case 2040:
-                            DisplayMessage(orator.Hitbox, Color.LimeGreen, "Dialogue.LunarCult.TheOrator.WorldText.Ritual.Success.16");
-                            break;
-                        case 2160:
-                            DisplayMessage(orator.Hitbox, Color.LimeGreen, "Dialogue.LunarCult.TheOrator.WorldText.Ritual.Success.17");
-                            break;
-                        case 2220:
-                            if (Main.npc[NPCIndexs[0]].active)
-                            {
-                                for (int j = 0; j <= 50; j++)
-                                {
-                                    int dustStyle = Main.rand.NextBool() ? 66 : 263;
-                                    Vector2 speed = Main.rand.NextVector2Circular(1.5f, 2f);
-                                    Dust dust = Dust.NewDustPerfect(Main.npc[NPCIndexs[0]].Center, Main.rand.NextBool(3) ? 191 : dustStyle, speed * 3, Scale: Main.rand.NextFloat(1.5f, 2.3f));
-                                    dust.noGravity = true;
-                                    dust.color = dust.type == dustStyle ? Color.LightGreen : default;
-                                }
-                                SoundEngine.PlaySound(LunarCultistDevotee.SpawnSound, Main.npc[NPCIndexs[0]].Center);
-                                Main.npc[NPCIndexs[0]].active = false;
-                            }
-                            if (Main.npc[NPCIndexs[5]].active)
-                            {
-                                for (int j = 0; j <= 50; j++)
-                                {
-                                    int dustStyle = Main.rand.NextBool() ? 66 : 263;
-                                    Vector2 speed = Main.rand.NextVector2Circular(1.5f, 2f);
-                                    Dust dust = Dust.NewDustPerfect(Main.npc[NPCIndexs[5]].Center, Main.rand.NextBool(3) ? 191 : dustStyle, speed * 3, Scale: Main.rand.NextFloat(1.5f, 2.3f));
-                                    dust.noGravity = true;
-                                    dust.color = dust.type == dustStyle ? Color.LightGreen : default;
-                                }
-                                SoundEngine.PlaySound(LunarCultistDevotee.SpawnSound, Main.npc[NPCIndexs[5]].Center);
-                                Main.npc[NPCIndexs[5]].active = false;
-                            }
-                            break;
-                        case 2240:
-                            if (Main.npc[NPCIndexs[1]].active)
-                            {
-                                for (int j = 0; j <= 50; j++)
-                                {
-                                    int dustStyle = Main.rand.NextBool() ? 66 : 263;
-                                    Vector2 speed = Main.rand.NextVector2Circular(1.5f, 2f);
-                                    Dust dust = Dust.NewDustPerfect(Main.npc[NPCIndexs[1]].Center, Main.rand.NextBool(3) ? 191 : dustStyle, speed * 3, Scale: Main.rand.NextFloat(1.5f, 2.3f));
-                                    dust.noGravity = true;
-                                    dust.color = dust.type == dustStyle ? Color.LightGreen : default;
-                                }
-                                SoundEngine.PlaySound(LunarCultistDevotee.SpawnSound, Main.npc[NPCIndexs[1]].Center);
-                                Main.npc[NPCIndexs[1]].active = false;
-                            }
-                            if (Main.npc[NPCIndexs[4]].active)
-                            {
-                                for (int j = 0; j <= 50; j++)
-                                {
-                                    int dustStyle = Main.rand.NextBool() ? 66 : 263;
-                                    Vector2 speed = Main.rand.NextVector2Circular(1.5f, 2f);
-                                    Dust dust = Dust.NewDustPerfect(Main.npc[NPCIndexs[4]].Center, Main.rand.NextBool(3) ? 191 : dustStyle, speed * 3, Scale: Main.rand.NextFloat(1.5f, 2.3f));
-                                    dust.noGravity = true;
-                                    dust.color = dust.type == dustStyle ? Color.LightGreen : default;
-                                }
-                                SoundEngine.PlaySound(LunarCultistDevotee.SpawnSound, Main.npc[NPCIndexs[4]].Center);
-                                Main.npc[NPCIndexs[4]].active = false;
-                            }
-                            break;
-                        case 2260:
-                            if (Main.npc[NPCIndexs[2]].active)
-                            {
-                                for (int j = 0; j <= 50; j++)
-                                {
-                                    int dustStyle = Main.rand.NextBool() ? 66 : 263;
-                                    Vector2 speed = Main.rand.NextVector2Circular(1.5f, 2f);
-                                    Dust dust = Dust.NewDustPerfect(Main.npc[NPCIndexs[2]].Center, Main.rand.NextBool(3) ? 191 : dustStyle, speed * 3, Scale: Main.rand.NextFloat(1.5f, 2.3f));
-                                    dust.noGravity = true;
-                                    dust.color = dust.type == dustStyle ? Color.LightGreen : default;
-                                }
-                                SoundEngine.PlaySound(LunarCultistDevotee.SpawnSound, Main.npc[NPCIndexs[2]].Center);
-                                Main.npc[NPCIndexs[2]].active = false;
-                            }
-                            if (Main.npc[NPCIndexs[3]].active)
-                            {
-                                for (int j = 0; j <= 50; j++)
-                                {
-                                    int dustStyle = Main.rand.NextBool() ? 66 : 263;
-                                    Vector2 speed = Main.rand.NextVector2Circular(1.5f, 2f);
-                                    Dust dust = Dust.NewDustPerfect(Main.npc[NPCIndexs[3]].Center, Main.rand.NextBool(3) ? 191 : dustStyle, speed * 3, Scale: Main.rand.NextFloat(1.5f, 2.3f));
-                                    dust.noGravity = true;
-                                    dust.color = dust.type == dustStyle ? Color.LightGreen : default;
-                                }
-                                SoundEngine.PlaySound(LunarCultistDevotee.SpawnSound, Main.npc[NPCIndexs[3]].Center);
-                                Main.npc[NPCIndexs[3]].active = false;
-                            }
-                            break;
-                        case 2290:
-                            DisplayMessage(orator.Hitbox, Color.LimeGreen, "Dialogue.LunarCult.TheOrator.WorldText.Ritual.Success.18");
-                            break;
-                        case 2410:
-                            DisplayMessage(orator.Hitbox, Color.LimeGreen, "Dialogue.LunarCult.TheOrator.WorldText.Ritual.Success.19");
-                            break;
-                        case 2530:
-                            DisplayMessage(orator.Hitbox, Color.LimeGreen, "Dialogue.LunarCult.TheOrator.WorldText.Ritual.Success.20");
-                            break;
-                        case 2560:
-                            for (int j = 0; j <= 50; j++)
-                            {
-                                int dustStyle = Main.rand.NextBool() ? 66 : 263;
-                                Vector2 speed = Main.rand.NextVector2Circular(2f, 2.5f);
-                                Dust dust = Dust.NewDustPerfect(orator.Center, Main.rand.NextBool(3) ? 191 : dustStyle, speed * 3, Scale: Main.rand.NextFloat(1.5f, 2.3f));
-                                dust.noGravity = true;
-                                dust.color = dust.type == dustStyle ? Color.LightGreen : default;
-                            }
-                            SoundEngine.PlaySound(LunarCultistDevotee.SpawnSound, orator.Center);
-
-                            Item i = Main.item[Item.NewItem(orator.GetSource_Loot(), orator.Center, new Vector2(8, 4), ModContent.ItemType<LunarCoin>())];
-                            i.velocity = Vector2.UnitY * -4;
-
-                            Main.npc[NPCIndexs[6]].active = false;
-                            
-                            NPCIndexs = [];
-                            Active = false;
-                            break;
-                    }
-
-                    ActivityTimer++;
-                }
-                else if(RemainingCultists <= 0)
-                {
                     NPC orator = Main.npc[NPC.FindFirstNPC(ModContent.NPCType<OratorNPC>())];
 
-                    switch (ActivityTimer)
+                    if(NPCIndexs.Count != 0)
+                    { 
+                        if (ActivityTimer == 30)
+                            ModContent.GetInstance<DialogueUISystem>().DisplayDialogueTree(Windfall.Instance, "Cutscenes/RitualSuccess1", new(Name, [orator.whoAmI]));
+                        else if (ActivityTimer > 60)
+                        {
+                            if (ModContent.GetInstance<DialogueUISystem>().isDialogueOpen)
+                                ActivityTimer = 60;
+                            else
+                                switch (ActivityTimer)
+                                {
+                                    case 110:
+                                        if (Main.npc[NPCIndexs[0]].active)
+                                        {
+                                            for (int j = 0; j <= 50; j++)
+                                            {
+                                                int dustStyle = Main.rand.NextBool() ? 66 : 263;
+                                                Vector2 speed = Main.rand.NextVector2Circular(1.5f, 2f);
+                                                Dust dust = Dust.NewDustPerfect(Main.npc[NPCIndexs[0]].Center, Main.rand.NextBool(3) ? 191 : dustStyle, speed * 3, Scale: Main.rand.NextFloat(1.5f, 2.3f));
+                                                dust.noGravity = true;
+                                                dust.color = dust.type == dustStyle ? Color.LightGreen : default;
+                                            }
+                                            SoundEngine.PlaySound(LunarCultistDevotee.SpawnSound, Main.npc[NPCIndexs[0]].Center);
+                                            Main.npc[NPCIndexs[0]].active = false;
+                                        }
+                                        if (Main.npc[NPCIndexs[5]].active)
+                                        {
+                                            for (int j = 0; j <= 50; j++)
+                                            {
+                                                int dustStyle = Main.rand.NextBool() ? 66 : 263;
+                                                Vector2 speed = Main.rand.NextVector2Circular(1.5f, 2f);
+                                                Dust dust = Dust.NewDustPerfect(Main.npc[NPCIndexs[5]].Center, Main.rand.NextBool(3) ? 191 : dustStyle, speed * 3, Scale: Main.rand.NextFloat(1.5f, 2.3f));
+                                                dust.noGravity = true;
+                                                dust.color = dust.type == dustStyle ? Color.LightGreen : default;
+                                            }
+                                            SoundEngine.PlaySound(LunarCultistDevotee.SpawnSound, Main.npc[NPCIndexs[5]].Center);
+                                            Main.npc[NPCIndexs[5]].active = false;
+                                        }
+                                        break;
+                                    case 130:
+                                        if (Main.npc[NPCIndexs[1]].active)
+                                        {
+                                            for (int j = 0; j <= 50; j++)
+                                            {
+                                                int dustStyle = Main.rand.NextBool() ? 66 : 263;
+                                                Vector2 speed = Main.rand.NextVector2Circular(1.5f, 2f);
+                                                Dust dust = Dust.NewDustPerfect(Main.npc[NPCIndexs[1]].Center, Main.rand.NextBool(3) ? 191 : dustStyle, speed * 3, Scale: Main.rand.NextFloat(1.5f, 2.3f));
+                                                dust.noGravity = true;
+                                                dust.color = dust.type == dustStyle ? Color.LightGreen : default;
+                                            }
+                                            SoundEngine.PlaySound(LunarCultistDevotee.SpawnSound, Main.npc[NPCIndexs[1]].Center);
+                                            Main.npc[NPCIndexs[1]].active = false;
+                                        }
+                                        if (Main.npc[NPCIndexs[4]].active)
+                                        {
+                                            for (int j = 0; j <= 50; j++)
+                                            {
+                                                int dustStyle = Main.rand.NextBool() ? 66 : 263;
+                                                Vector2 speed = Main.rand.NextVector2Circular(1.5f, 2f);
+                                                Dust dust = Dust.NewDustPerfect(Main.npc[NPCIndexs[4]].Center, Main.rand.NextBool(3) ? 191 : dustStyle, speed * 3, Scale: Main.rand.NextFloat(1.5f, 2.3f));
+                                                dust.noGravity = true;
+                                                dust.color = dust.type == dustStyle ? Color.LightGreen : default;
+                                            }
+                                            SoundEngine.PlaySound(LunarCultistDevotee.SpawnSound, Main.npc[NPCIndexs[4]].Center);
+                                            Main.npc[NPCIndexs[4]].active = false;
+                                        }
+                                        break;
+                                    case 150:
+                                        if (Main.npc[NPCIndexs[2]].active)
+                                        {
+                                            for (int j = 0; j <= 50; j++)
+                                            {
+                                                int dustStyle = Main.rand.NextBool() ? 66 : 263;
+                                                Vector2 speed = Main.rand.NextVector2Circular(1.5f, 2f);
+                                                Dust dust = Dust.NewDustPerfect(Main.npc[NPCIndexs[2]].Center, Main.rand.NextBool(3) ? 191 : dustStyle, speed * 3, Scale: Main.rand.NextFloat(1.5f, 2.3f));
+                                                dust.noGravity = true;
+                                                dust.color = dust.type == dustStyle ? Color.LightGreen : default;
+                                            }
+                                            SoundEngine.PlaySound(LunarCultistDevotee.SpawnSound, Main.npc[NPCIndexs[2]].Center);
+                                            Main.npc[NPCIndexs[2]].active = false;
+                                        }
+                                        if (Main.npc[NPCIndexs[3]].active)
+                                        {
+                                            for (int j = 0; j <= 50; j++)
+                                            {
+                                                int dustStyle = Main.rand.NextBool() ? 66 : 263;
+                                                Vector2 speed = Main.rand.NextVector2Circular(1.5f, 2f);
+                                                Dust dust = Dust.NewDustPerfect(Main.npc[NPCIndexs[3]].Center, Main.rand.NextBool(3) ? 191 : dustStyle, speed * 3, Scale: Main.rand.NextFloat(1.5f, 2.3f));
+                                                dust.noGravity = true;
+                                                dust.color = dust.type == dustStyle ? Color.LightGreen : default;
+                                            }
+                                            SoundEngine.PlaySound(LunarCultistDevotee.SpawnSound, Main.npc[NPCIndexs[3]].Center);
+                                            Main.npc[NPCIndexs[3]].active = false;
+                                        }
+                                        break;
+                                    case 210:
+                                        NPCIndexs = [];
+                                        ActivityTimer = 0;
+                                        break;
+                                }
+                        }
+                    }
+                    else
                     {
-                        case 0:
-                            DisplayMessage(orator.Hitbox, Color.LimeGreen, "Dialogue.LunarCult.TheOrator.WorldText.Ritual.Failure.0");
-                            break;
-                        case 120:
-                            DisplayMessage(orator.Hitbox, Color.LimeGreen, "Dialogue.LunarCult.TheOrator.WorldText.Ritual.Failure.1");
-                            break;
-                        case 240:
-                            DisplayMessage(orator.Hitbox, Color.LimeGreen, "Dialogue.LunarCult.TheOrator.WorldText.Ritual.Failure.2");
-                            break;
-                        case 360:
-                            DisplayMessage(orator.Hitbox, Color.LimeGreen, "Dialogue.LunarCult.TheOrator.WorldText.Ritual.Failure.3");
-                            break;
-                        case 420:
+                        if (ActivityTimer == 30)
+                            ModContent.GetInstance<DialogueUISystem>().DisplayDialogueTree(Windfall.Instance, "Cutscenes/RitualSuccess1", new(Name, [orator.whoAmI]), 5);
+                        else if (ActivityTimer > 60 && !ModContent.GetInstance<DialogueUISystem>().isDialogueOpen)
+                        {
                             for (int i = 0; i <= 50; i++)
                             {
                                 int dustStyle = Main.rand.NextBool() ? 66 : 263;
@@ -1218,12 +1113,38 @@ public class LunarCultBaseSystem : ModSystem
                             }
                             SoundEngine.PlaySound(LunarCultistDevotee.SpawnSound, orator.Center);
 
-                            Main.npc[NPCIndexs[6]].active = false;
+                            orator.active = false;
 
-                            NPCIndexs = [];
                             Active = false;
-                            break;
+                        }
                     }
+
+                    ActivityTimer++;
+                }
+                else if(RemainingCultists <= 0)
+                {
+                    NPC orator = Main.npc[NPCIndexs[6]];
+
+                    if (ActivityTimer == 30)
+                        ModContent.GetInstance<DialogueUISystem>().DisplayDialogueTree(Windfall.Instance, "Cutscenes/RitualFailure", new(Name, [orator.whoAmI]));
+                    else if (ActivityTimer > 60 && !ModContent.GetInstance<DialogueUISystem>().isDialogueOpen)
+                    {
+                        for (int i = 0; i <= 50; i++)
+                        {
+                            int dustStyle = Main.rand.NextBool() ? 66 : 263;
+                            Vector2 speed = Main.rand.NextVector2Circular(2f, 2.5f);
+                            Dust dust = Dust.NewDustPerfect(orator.Center, Main.rand.NextBool(3) ? 191 : dustStyle, speed * 3, Scale: Main.rand.NextFloat(1.5f, 2.3f));
+                            dust.noGravity = true;
+                            dust.color = dust.type == dustStyle ? Color.LightGreen : default;
+                        }
+                        SoundEngine.PlaySound(LunarCultistDevotee.SpawnSound, orator.Center);
+
+                        orator.active = false;
+
+                        NPCIndexs = [];
+                        Active = false;
+                    }
+
                     ActivityTimer++;
                 }
                 else
