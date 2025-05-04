@@ -9,6 +9,7 @@ using Windfall.Content.Items.Quests.SealingRitual;
 using CalamityMod.NPCs.TownNPCs;
 using static Windfall.Common.Systems.PathfindingSystem;
 using CalamityMod;
+using Terraria;
 
 namespace Windfall.Content.NPCs.TravellingNPCs;
 
@@ -244,7 +245,7 @@ public class TravellingCultist : ModNPC, ILocalizedModType
         //pool.ResetCirculatingDialogues();
     }
 
-    public override bool CanChat() => NPC.ai[3] != 1 && !ModContent.GetInstance<DialogueUISystem>().isDialogueOpen;
+    public override bool CanChat() => NPC.ai[3] != 1 && (myBehavior == BehaviorState.StandStill || myBehavior == BehaviorState.Wander) && !ModContent.GetInstance<DialogueUISystem>().isDialogueOpen;
     public override string GetChat()
     {
         Main.CloseNPCChatOrSign();
@@ -395,6 +396,9 @@ public class TravellingCultist : ModNPC, ILocalizedModType
             case "TravellingCultist/QuestProgress/QuestDragonBone":
                 AttachCostToResponse(ref uiSystem, new Tuple<int, int>(ModContent.ItemType<DraconicBone>(), 1), 0, 0);
                 break;
+            case "TravellingCultist/QuestProgress/QuestWayfinder":
+                uiSystem.CurrentTree.Dialogues[0].Responses[0].Requirement = Main.LocalPlayer.inventory.Where(i => i.type == ModContent.ItemType<Wayfinder>()).Any();
+                break;
         }
     }
     private static bool AnyQuestsInProgress() => (QuestSystem.Quests["TabletFragment"].InProgress && (CurrentDialogue == DialogueState.RitualQuestWayfinder || CurrentDialogue == DialogueState.RitualQuestTablet)) ||
@@ -432,7 +436,7 @@ public class TravellingCultist : ModNPC, ILocalizedModType
             case "TravellingCultist/Introductions/WayfinderQuest":
                 QuestSystem.Quests["TabletFragment"].ResetQuest();
                 QuestSystem.Quests["TabletFragment"].Active = true;
-                Main.item[Item.NewItem(cultist.GetSource_Loot(), cultist.Hitbox, ModContent.ItemType<UnchargedWayfinder>())].velocity = Vector2.UnitX * cultist.direction * 3f;
+                Main.item[Item.NewItem(cultist.GetSource_Loot(), cultist.Hitbox, ModContent.ItemType<UnchargedWayfinder>())].velocity = Vector2.UnitX * cultist.direction * -3f;
                 break;
             case "TravellingCultist/Introductions/LightShardQuest":
                 CurrentDialogue = DialogueState.RitualQuestRecruitmentAndShard;
@@ -445,6 +449,7 @@ public class TravellingCultist : ModNPC, ILocalizedModType
                 QuestSystem.Quests["DraconicBone"].Active = true;
                 break;
             #endregion
+            
             case "StandardQuestTree":
                 if (dialogueID == 2)
                 {
@@ -455,6 +460,7 @@ public class TravellingCultist : ModNPC, ILocalizedModType
                 else
                     FetchQuestStatus = QuestStatus.Started;
                 break;
+            
             #region Quest Progress
             case "TravellingCultist/QuestProgress/QuestWayfinder":
                 if (dialogueID == 3 && QuestSystem.Quests["TabletFragment"].Progress == 0)
@@ -494,6 +500,7 @@ public class TravellingCultist : ModNPC, ILocalizedModType
             NPC.active = false;
             return false;
         }
+
         return true;
     }
     private static bool IsNpcOnscreen(Vector2 center)
@@ -506,6 +513,7 @@ public class TravellingCultist : ModNPC, ILocalizedModType
                 return true;
         return false;
     }
+    public override bool CheckActive() => myBehavior == BehaviorState.Wander;
 
     private int Time = 0;
     private readonly PathFinding pathFinding = new();
@@ -554,15 +562,20 @@ public class TravellingCultist : ModNPC, ILocalizedModType
                     NPC.direction = Math.Sign(NPC.velocity.X);
                     NPC.spriteDirection = NPC.direction;
                 }
+                NPC.noGravity = false;
                 break;
             case BehaviorState.FollowPlayer:
-                PathfindingMovement(Main.LocalPlayer.Center);
+                if (Vector2.DistanceSquared(Main.LocalPlayer.Center, NPC.Center) > 1690000) //1300^2
+                    NPC.Center = Main.LocalPlayer.Center;
+                else
+                    PathfindingMovement(Main.LocalPlayer.Center);
                 break;
             case BehaviorState.MoveToTargetLocation:
                 PathfindingMovement(TargetLocation, 64);
                 break;
             case BehaviorState.StandStill:
                 NPC.velocity.X *= 0.8f;
+                NPC.noGravity = false;
                 break;
         }
 
@@ -615,7 +628,7 @@ public class TravellingCultist : ModNPC, ILocalizedModType
         else
         {
             if (NPC.noGravity)
-                MovementSuccess = AntiGravityPathfindingMovement(NPC, pathFinding, ref CurrentWaypoint, 8, 1.5f, 0.33f);
+                MovementSuccess = AntiGravityPathfindingMovement(NPC, pathFinding, ref CurrentWaypoint, 8, 1.5f, 0f);
             else
             {
                 if ((distanceToTarget > 250000 && Time % 120 == 0) || (distanceToTarget > 500000 && Time % 30 == 0))
@@ -680,7 +693,7 @@ public class TravellingCultist : ModNPC, ILocalizedModType
 
     private void PathfindingEndConditions()
     {
-        Main.NewText(CurrentDialogue);
+        //Main.NewText(CurrentDialogue);
         //CanFly = false;
         //MoveSpeed = 3f;
         //NPC.noGravity = false;
@@ -728,6 +741,9 @@ public class TravellingCultist : ModNPC, ILocalizedModType
                             DraconicRuinsSystem.StartCutscene();
                         }
                     }
+                    else if (DraconicRuinsSystem.State == DraconicRuinsSystem.CutsceneState.Finished)
+                        if(NPC.velocity.X == 0)
+                            myBehavior = BehaviorState.StandStill;
                 }
                 break;
         }

@@ -95,8 +95,8 @@ public class SealingTablet : ModNPC
         AffectVerletObject(LeftChain, 0.125f, 0.8f);
         AffectVerletObject(RightChain, 0.125f, 0.8f);
 
-        float chainDistance = Vector2.Distance(LeftChain[^1].Position, RightChain[^1].Position);
-        Vector2 chainToChain = (RightChain[^1].Position - LeftChain[^1].Position).SafeNormalize(Vector2.UnitX);
+        //float chainDistance = Vector2.Distance(LeftChain[^1].Position, RightChain[^1].Position);
+        //Vector2 chainToChain = (RightChain[^1].Position - LeftChain[^1].Position).SafeNormalize(Vector2.UnitX);
 
         if (NPC.ai[0] < 4)
         {

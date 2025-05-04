@@ -165,6 +165,9 @@ public static class VerletIntegration
     {
         bool notableMove = false;
 
+        if (obj == null)
+            return false;
+
         for (int k = 0; k < obj.Points.Count; k++)
             if (!obj[k].Locked)
             {

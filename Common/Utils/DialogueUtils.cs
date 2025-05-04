@@ -63,7 +63,7 @@ public static partial class WindfallUtils
                 if(Requirement.Invoke(player) && Priority > topPriority)
                     topPriority = Priority;
             }
-            Main.NewText(topPriority);
+
             if (topPriority == -1)
             {
                 foreach (var (TreeKey, Requirement, Priority, Repeatable) in Dialogues)

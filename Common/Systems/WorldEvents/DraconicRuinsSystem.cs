@@ -97,8 +97,6 @@ public class DraconicRuinsSystem : ModSystem
 
         //Reset State
         /*
-        LeftChain = [];
-        RightChain = [];
         State = CutsceneState.Arrival;
         ZoomActive = false;
         CutsceneActive = false;
@@ -162,12 +160,16 @@ public class DraconicRuinsSystem : ModSystem
                                     uiSystem.DisplayDialogueTree(Windfall.Instance, "Cutscenes/DraconicRuins/Arrival", new(Name, [tc.whoAmI]), 2);
                                     CutsceneTime++;
                                     break;
+                                case 150:
+                                    Vector2 spawnPos = RuinsEntrance.ToWorldCoordinates() + Vector2.UnitX * (FacingLeft ? -(84 + offset) : (84 + offset));
+                                    BishopIndex = NPC.NewNPC(NPC.GetSource_NaturalSpawn(), (int)spawnPos.X, (int)spawnPos.Y, ModContent.NPCType<LunarBishop>());
+                                    break;
                                 case 180:
                                     uiSystem.DisplayDialogueTree(Windfall.Instance, "Cutscenes/DraconicRuins/Arrival", new(Name, [tc.whoAmI]), 3);
                                     CutsceneTime++;
                                     break;
                                 case 210:
-                                    Vector2 spawnPos = RuinsEntrance.ToWorldCoordinates() + Vector2.UnitX * (FacingLeft ? -(56 + offset) : (56 + offset)) - Vector2.UnitY * 16;
+                                    spawnPos = RuinsEntrance.ToWorldCoordinates() + Vector2.UnitX * (FacingLeft ? -(56 + offset) : (56 + offset)) - Vector2.UnitY * 16;
                                     NPC cultist = NPC.NewNPCDirect(NPC.GetSource_NaturalSpawn(), (int)spawnPos.X, (int)spawnPos.Y, ModContent.NPCType<LunarCultistDevotee>(), ai2: 7);
                                     cultist.As<LunarCultistDevotee>().TargetPos = TabletRoom.ToWorldCoordinates();
                                     break;
@@ -220,7 +222,7 @@ public class DraconicRuinsSystem : ModSystem
                             CutsceneTime--;
                         break;
                     case CutsceneState.CultistFumble:
-                        CameraPanSystem.PanTowards(TabletRoom.ToWorldCoordinates() - new Vector2(0, 20), CircOutEasing(CameraTime / 60f));
+                        CameraPanSystem.PanTowards(TabletRoom.ToWorldCoordinates() - new Vector2(0, -20), CircOutEasing(CameraTime / 60f));
 
                         CameraPanSystem.Zoom = CircOutEasing(CameraTime / 60f) / 2f;
 
@@ -284,7 +286,7 @@ public class DraconicRuinsSystem : ModSystem
                             CutsceneTime++;
                         break;
                     case CutsceneState.PlayerFumble:
-                        CameraPanSystem.PanTowards(TabletRoom.ToWorldCoordinates() - new Vector2(0, 20), CircOutEasing(CameraTime / 60f));
+                        CameraPanSystem.PanTowards(TabletRoom.ToWorldCoordinates() - new Vector2(0, -20), CircOutEasing(CameraTime / 60f));
 
                         CameraPanSystem.Zoom = CircOutEasing(CameraTime / 60f) / 2f;
 
@@ -348,7 +350,7 @@ public class DraconicRuinsSystem : ModSystem
                             CutsceneTime++;
                         break;
                     case CutsceneState.CultistEnd:
-                        CameraPanSystem.PanTowards(TabletRoom.ToWorldCoordinates() - new Vector2(0, 20), CircOutEasing(CameraTime / 60f));
+                        CameraPanSystem.PanTowards(TabletRoom.ToWorldCoordinates() - new Vector2(0, -20), CircOutEasing(CameraTime / 60f));
 
                         CameraPanSystem.Zoom = CircOutEasing(CameraTime / 60f) / 2f;
 
@@ -357,7 +359,7 @@ public class DraconicRuinsSystem : ModSystem
                         tc = Main.npc[NPC.FindFirstNPC(ModContent.NPCType<TravellingCultist>())];
 
                         if (CutsceneTime == 30)
-                            ModContent.GetInstance<DialogueUISystem>().DisplayDialogueTree(Windfall.Instance, "Cutscenes/CultistEnd", new(Name, [tc.whoAmI]));
+                            ModContent.GetInstance<DialogueUISystem>().DisplayDialogueTree(Windfall.Instance, "Cutscenes/DraconicRuins/CultistEnd", new(Name, [tc.whoAmI]));
                         else if (CutsceneTime > 60 && !ModContent.GetInstance<DialogueUISystem>().isDialogueOpen)
                         {
                             tc.As<TravellingCultist>().myBehavior = TravellingCultist.BehaviorState.MoveToTargetLocation;
@@ -375,7 +377,7 @@ public class DraconicRuinsSystem : ModSystem
                         
                         break;
                     case CutsceneState.PlayerEnd:
-                        CameraPanSystem.PanTowards(TabletRoom.ToWorldCoordinates() - new Vector2(0, 20), CircOutEasing(CameraTime / 60f));
+                        CameraPanSystem.PanTowards(TabletRoom.ToWorldCoordinates() - new Vector2(0, -20), CircOutEasing(CameraTime / 60f));
 
                         CameraPanSystem.Zoom = CircOutEasing(CameraTime / 60f) / 2f;
 
@@ -384,7 +386,7 @@ public class DraconicRuinsSystem : ModSystem
                         tc = Main.npc[NPC.FindFirstNPC(ModContent.NPCType<TravellingCultist>())];
 
                         if (CutsceneTime == 30)
-                            ModContent.GetInstance<DialogueUISystem>().DisplayDialogueTree(Windfall.Instance, "Cutscenes/PlayerEnd", new(Name, [tc.whoAmI]));
+                            ModContent.GetInstance<DialogueUISystem>().DisplayDialogueTree(Windfall.Instance, "Cutscenes/DraconicRuins/PlayerEnd", new(Name, [tc.whoAmI]));
                         else if (CutsceneTime > 60 && !ModContent.GetInstance<DialogueUISystem>().isDialogueOpen)
                         {
                             tc.As<TravellingCultist>().myBehavior = TravellingCultist.BehaviorState.MoveToTargetLocation;
