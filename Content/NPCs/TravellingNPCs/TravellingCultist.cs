@@ -432,6 +432,7 @@ public class TravellingCultist : ModNPC, ILocalizedModType
             case "TravellingCultist/Introductions/WayfinderQuest":
                 QuestSystem.Quests["TabletFragment"].ResetQuest();
                 QuestSystem.Quests["TabletFragment"].Active = true;
+                Main.item[Item.NewItem(cultist.GetSource_Loot(), cultist.Hitbox, ModContent.ItemType<UnchargedWayfinder>())].velocity = Vector2.UnitX * cultist.direction * 3f;
                 break;
             case "TravellingCultist/Introductions/LightShardQuest":
                 CurrentDialogue = DialogueState.RitualQuestRecruitmentAndShard;
