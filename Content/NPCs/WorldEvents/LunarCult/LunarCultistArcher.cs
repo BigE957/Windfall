@@ -108,9 +108,19 @@ public class LunarCultistArcher : ModNPC
                         NPC.velocity.X += 0.05f;
                     else
                         NPC.velocity.X = 1.5f;
+
+                    float goalY = (LunarCultBaseSystem.LunarCultBaseLocation.Y * 16 - 96) - NPC.height;
+                    if (NPC.velocity.Y >= 0 && NPC.position.Y >= goalY)
+                    {
+                        NPC.position.Y = goalY;
+                        if (NPC.velocity.Y != 0)
+                            NPC.velocity.Y = 0;
+                    }
+                    if (NPC.position.Y < goalY)
+                        NPC.velocity.Y += 0.5f;
+
                     NPC.direction = 1;
-                    NPC.spriteDirection = 1;
-                    if (NPC.Center.X - (LunarCultBaseSystem.LunarCultBaseLocation.X * 16 - 850) > 800)
+                    if (NPC.Center.X - (LunarCultBaseSystem.LunarCultBaseLocation.X * 16 - (380 * (LunarCultBaseSystem.BaseFacingLeft ? 1 : -1))) > 800)
                     {
                         for (int i = 0; i <= 50; i++)
                         {
@@ -126,8 +136,25 @@ public class LunarCultistArcher : ModNPC
                 }
                 else
                 {
-                    Vector2 goalPosition = new(LunarCultBaseSystem.LunarCultBaseLocation.X * 16 - 850 + queueGap * queueIndex, LunarCultBaseSystem.LunarCultBaseLocation.Y * 16 - 96);
-                    NPC.position.Y = goalPosition.Y - NPC.height;
+                    Vector2 goalPosition = new(LunarCultBaseSystem.LunarCultBaseLocation.X * 16 - (320 * (LunarCultBaseSystem.BaseFacingLeft ? 1 : -1)) + queueGap * queueIndex, LunarCultBaseSystem.LunarCultBaseLocation.Y * 16 - 96);
+                    float angerRatio = (LunarCultBaseSystem.CustomerQueue.Where(c => c.HasValue).Count() - 4) / ((float)LunarCultBaseSystem.CustomerLimit - 4);
+                    if (LunarCultBaseSystem.CustomerQueue.Where(c => c.HasValue).Count() <= 4)
+                        angerRatio = 0f;
+                    if (NPC.velocity.Y >= 0 && NPC.position.Y >= goalPosition.Y - NPC.height)
+                    {
+                        NPC.position.Y = goalPosition.Y - NPC.height;
+                        if (NPC.velocity.Y != 0)
+                            NPC.velocity.Y = 0;
+                    }
+                    if (NPC.velocity.Y == 0 && NPC.position.Y == goalPosition.Y - NPC.height && Main.rand.NextBool(angerRatio))
+                    {
+                        if (Main.rand.NextBool(5))
+                            CombatText.NewText(NPC.Hitbox, Color.Lerp(Color.White, Color.Red, angerRatio), GetWindfallTextValue("Dialogue.LunarCult.LunarBishop.Cafeteria.Madge." + Main.rand.Next(6)));
+                        if (Main.rand.NextBool())
+                            NPC.velocity.Y = -4;
+                    }
+                    if (NPC.position.Y < goalPosition.Y - NPC.height)
+                        NPC.velocity.Y += 0.5f;
                     if (queueIndex != 0 && !LunarCultBaseSystem.CustomerQueue[queueIndex - 1].HasValue)
                     {
                         goalPosition.X -= queueGap;

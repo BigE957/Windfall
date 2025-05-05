@@ -105,8 +105,6 @@ public class LunarBishop : ModNPC
                         NPC.velocity.X += 0.05f;
                     else
                         NPC.velocity.X = 1.5f;
-                    NPC.direction = 1;
-                    NPC.spriteDirection = 1;
 
                     float goalY = (LunarCultBaseSystem.LunarCultBaseLocation.Y * 16 - 96) - NPC.height;
                     if (NPC.velocity.Y >= 0 && NPC.position.Y >= goalY)
@@ -118,7 +116,8 @@ public class LunarBishop : ModNPC
                     if (NPC.position.Y < goalY)
                         NPC.velocity.Y += 0.5f;
 
-                    if (NPC.Center.X - ((LunarCultBaseSystem.LunarCultBaseLocation.X * 16) - 850) > 800)
+                    NPC.direction = 1;
+                    if (NPC.Center.X - (LunarCultBaseSystem.LunarCultBaseLocation.X * 16 - (380 * (LunarCultBaseSystem.BaseFacingLeft ? 1 : -1))) > 800)
                     {
                         for (int i = 0; i <= 50; i++)
                         {
@@ -134,8 +133,8 @@ public class LunarBishop : ModNPC
                 }
                 else
                 {
-                    Vector2 goalPosition = new(LunarCultBaseSystem.LunarCultBaseLocation.X * 16 - 850 + queueGap * queueIndex, LunarCultBaseSystem.LunarCultBaseLocation.Y * 16 - 96);
-                    float angerRatio = LunarCultBaseSystem.CustomerQueue.Where(c => c.HasValue).Count() - 4 / (float)LunarCultBaseSystem.CustomerLimit - 4;
+                    Vector2 goalPosition = new(LunarCultBaseSystem.LunarCultBaseLocation.X * 16 - (320 * (LunarCultBaseSystem.BaseFacingLeft ? 1 : -1)) + queueGap * queueIndex, LunarCultBaseSystem.LunarCultBaseLocation.Y * 16 - 96);
+                    float angerRatio = (LunarCultBaseSystem.CustomerQueue.Where(c => c.HasValue).Count() - 4) / ((float)LunarCultBaseSystem.CustomerLimit - 4);
                     if (LunarCultBaseSystem.CustomerQueue.Where(c => c.HasValue).Count() <= 4)
                         angerRatio = 0f;
                     if (NPC.velocity.Y >= 0 && NPC.position.Y >= goalPosition.Y - NPC.height)

@@ -1,7 +1,7 @@
 {
   "Dialogues": [
     {
-      "DialogueText": [ { "Text": "You were approached by the Selenic Order? Oh my... That was the Orator, the Selenic Order's leader. The fact he's invited you into the cult personally can't be good. However, it may be a opportunity to learn more about their plans..." } ],
+      "DialogueText": [ { "Text": "You were approached by the Selenic Order? Oh my... That was the Orator, the Selenic Order's leader. The fact they invited you into the cult personally can't be good. However, it may be a opportunity to learn more about their plans..." } ],
       "Responses": [
         {
           "Title": "Why was I invited?",
@@ -14,7 +14,7 @@
       ]
     },
     {
-      "DialogueText": [ { "Text": "The Orator is the mastermind of the entire Selenic Order's operation. I have yet to able to piece together his true ambition, but he's been dabling with dark forces for a very long time. His manipulations have strung along so many people... Its truly saddening." } ],
+      "DialogueText": [ { "Text": "The Orator is the mastermind of the entire Selenic Order's operation. I have yet to able to piece together their true ambition, but they've been dabling with dark forces for a very long time. Their manipulations have strung along so many people... Its truly saddening." } ],
       "Responses": [
         {
           "Title": "Can we help them?",
