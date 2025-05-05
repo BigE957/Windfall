@@ -59,10 +59,9 @@ public class LunarBishop : ModNPC
                 Vector2 oldPos = NPC.position;
                 NPC.position.Y = FindSurfaceBelow(new Point((int)NPC.position.X / 16, (int)NPC.position.Y / 16)).Y * 16 - NPC.height;
 
-                float altY = 0;
                 for (int i = 0; i < 2; i++)
                 {
-                    altY = (FindSurfaceBelow(new Point((int)(oldPos.X / 16 + i), (int)(oldPos.Y / 16 - 2))).Y - 1) * 16 - NPC.height + 16;
+                    float altY = (FindSurfaceBelow(new Point((int)(oldPos.X / 16 + i), (int)(oldPos.Y / 16 - 2))).Y - 1) * 16 - NPC.height + 16;
                     if (altY < NPC.position.Y)
                         NPC.position.Y = altY;
                 }

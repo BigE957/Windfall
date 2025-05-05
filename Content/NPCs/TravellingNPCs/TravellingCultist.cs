@@ -187,7 +187,7 @@ public class TravellingCultist : ModNPC, ILocalizedModType
         introductionDone = false;
 
         bool MilestoneMet = false;
-
+        
         switch (CurrentDialogue)
         {
             case DialogueState.DungeonQuest:
@@ -198,11 +198,11 @@ public class TravellingCultist : ModNPC, ILocalizedModType
                 MilestoneMet = true;
                 break;
             case DialogueState.RitualQuestTablet:
-                if (NPC.downedPlantBoss)
+                if (QuestSystem.Quests["TabletFragment"].Complete)
                     MilestoneMet = true;
                 break;
             case DialogueState.RitualQuestGap:
-                if (QuestSystem.Quests["TabletFragment"].Complete)
+                if (NPC.downedPlantBoss)
                     MilestoneMet = true;
                 break;
             case DialogueState.RitualQuestRecruitmentOnly:

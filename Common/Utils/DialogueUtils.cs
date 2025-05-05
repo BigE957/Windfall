@@ -47,6 +47,8 @@ public static partial class WindfallUtils
 
         public void ResetCirculatingDialogues()
         {
+            CirculatingDialogues.Clear();
+
             foreach (var (TreeKey, Requirement, Priority, Repeatable) in Dialogues)
             {
                 (string TreeKey, Func<Player, bool> Requirement, byte Priority) myDialogue = new(TreeKey, Requirement, Priority);

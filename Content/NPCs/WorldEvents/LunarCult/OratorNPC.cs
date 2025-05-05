@@ -12,13 +12,14 @@ namespace Windfall.Content.NPCs.WorldEvents.LunarCult;
 
 public class OratorNPC : ModNPC
 {
-    private enum States
+    public enum States
     {
         Idle,
         TutorialChat,
         RitualEvent,
         BetrayalChat,
-        DraconicBoneSequence
+        DraconicBoneSequence,
+        Cutscene
     }
 
     private States AIState
@@ -59,6 +60,23 @@ public class OratorNPC : ModNPC
         NPC.immortal = true;
     }
 
+    public override void OnSpawn(IEntitySource source)
+    {
+        if (AIState == States.Cutscene)
+        {
+            Vector2 oldPos = NPC.position;
+            NPC.position.Y = FindSurfaceBelow(new Point((int)NPC.position.X / 16, (int)NPC.position.Y / 16)).Y * 16 - NPC.height;
+
+            for (int i = 0; i < 2; i++)
+            {
+                float altY = (FindSurfaceBelow(new Point((int)(oldPos.X / 16 + i), (int)(oldPos.Y / 16 - 2))).Y - 1) * 16 - NPC.height + 16;
+                if (altY < NPC.position.Y)
+                    NPC.position.Y = altY;
+            }
+
+            NPC.position.Y += 24;
+        }
+    }
     public override void AI()
     {
         if (AIState == States.DraconicBoneSequence)
@@ -112,7 +130,7 @@ public class OratorNPC : ModNPC
         }
     }
 
-    public override bool CanChat() => !QuestSystem.Quests["DraconicBone"].Complete && !ModContent.GetInstance<DialogueUISystem>().isDialogueOpen && !LunarCultBaseSystem.IsRitualActivityActive() && AIState != States.DraconicBoneSequence;
+    public override bool CanChat() => !QuestSystem.Quests["DraconicBone"].Complete && !ModContent.GetInstance<DialogueUISystem>().isDialogueOpen && !LunarCultBaseSystem.IsRitualActivityActive() && AIState != States.DraconicBoneSequence && AIState != States.Cutscene;
     public override string GetChat()
     {
         Main.CloseNPCChatOrSign();
