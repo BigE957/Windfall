@@ -25,6 +25,7 @@ namespace Windfall.Common.Systems.WorldEvents;
 
 public class LunarCultBaseSystem : ModSystem
 {
+    #region Static Variables
     public static Point LunarCultBaseLocation;
 
     public static Rectangle CultBaseTileArea;
@@ -56,6 +57,7 @@ public class LunarCultBaseSystem : ModSystem
     public static bool DraconicBoneSequenceActive = false;
 
     public static int DraconicBoneTimer = 0;
+    #endregion
 
     public override void OnModLoad()
     {
@@ -239,7 +241,7 @@ public class LunarCultBaseSystem : ModSystem
     {
         if (NPC.downedAncientCultist || LunarCultBaseLocation == new Point(-1, -1))
             return;
-        //Main.NewText("Active");
+
         if (NPC.downedPlantBoss)
         {
             #region Main Character Spawning
@@ -574,7 +576,7 @@ public class LunarCultBaseSystem : ModSystem
                     {
                         case SystemStates.Ritual:
                             #region Location Selection
-                            ActivityCoords = new Point(LunarCultBaseLocation.X + (BaseFacingLeft ? -36 : 36), LunarCultBaseLocation.Y - 24);
+                            ActivityCoords = new Point(LunarCultBaseLocation.X + (BaseFacingLeft ? -32 : 32), LunarCultBaseLocation.Y - 24);
                             ActivityCoords.X *= 16;
                             //ActivityCoords.X += 8;
                             ActivityCoords.Y *= 16;
@@ -861,8 +863,11 @@ public class LunarCultBaseSystem : ModSystem
 
                     string key = $"Cutscenes/CultMeetings/{CurrentMeetingTopic}.";
 
-                    if(ActivityTimer == 30)
-                        ModContent.GetInstance<DialogueUISystem>().DisplayDialogueTree(Windfall.Instance, "Cutscenes/OratorDraconicBone", new(Name, [Bishop.whoAmI]));
+                    if (ActivityTimer == 30)
+                    {
+                        ModContent.GetInstance<DialogueUISystem>().DisplayDialogueTree(Windfall.Instance, key, new(Name, [Bishop.whoAmI]));
+                        ActivityTimer++;
+                    }
 
                     if (ActivityTimer > 40 && !ModContent.GetInstance<DialogueUISystem>().isDialogueOpen)
                         Active = false;
@@ -875,7 +880,7 @@ public class LunarCultBaseSystem : ModSystem
                     else
                         zoom = 0.4f;
                     CameraPanSystem.Zoom = zoom;
-                    CameraPanSystem.PanTowards(new Vector2(ActivityCoords.X, ActivityCoords.Y - 150), zoom);
+                    CameraPanSystem.PanTowards(new Vector2(ActivityCoords.X - 128 * (LunarCultBaseSystem.BaseFacingLeft ? 1 : -1), ActivityCoords.Y + 176), zoom * 2.5f);
                     #endregion
 
                     ActivityTimer++;
@@ -1437,6 +1442,7 @@ public class LunarCultBaseSystem : ModSystem
         foreach (KeyValuePair<string, List<VerletObject>> pair in SkeletonVerletGroups)
         {
             /*
+            Debug Lines
             foreach(var point in pair.Value[0].Points)
             {
                 foreach(var connection in point.Connections)

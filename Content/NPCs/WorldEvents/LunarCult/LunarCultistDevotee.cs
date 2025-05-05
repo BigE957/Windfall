@@ -68,8 +68,6 @@ public class LunarCultistDevotee : ModNPC
         airTime = 0;
         tripTime = 0;
         TargetPos = Vector2.Zero;
-
-        AnimationType = NPCID.CultistDevote;
     }
     public override void OnSpawn(IEntitySource source)
     {
@@ -184,7 +182,7 @@ public class LunarCultistDevotee : ModNPC
                         NPC.velocity.Y += 0.5f;
 
                     NPC.direction = 1;
-                    if (NPC.Center.X - (LunarCultBaseSystem.LunarCultBaseLocation.X * 16 - 850) > 800)
+                    if (NPC.Center.X - (LunarCultBaseSystem.LunarCultBaseLocation.X * 16 - (850 * (LunarCultBaseSystem.BaseFacingLeft ? 1 : -1))) > 800)
                     {
                         for (int i = 0; i <= 50; i++)
                         {
@@ -200,7 +198,7 @@ public class LunarCultistDevotee : ModNPC
                 }
                 else
                 {
-                    Vector2 goalPosition = new(LunarCultBaseSystem.LunarCultBaseLocation.X * 16 - 850 + queueGap * queueIndex, LunarCultBaseSystem.LunarCultBaseLocation.Y * 16 - 96);
+                    Vector2 goalPosition = new(LunarCultBaseSystem.LunarCultBaseLocation.X * 16 - (850 * (LunarCultBaseSystem.BaseFacingLeft ? 1 : -1)) + queueGap * queueIndex, LunarCultBaseSystem.LunarCultBaseLocation.Y * 16 - 96);
                     float angerRatio = (LunarCultBaseSystem.CustomerQueue.Where(c => c.HasValue).Count() - 4) / ((float)LunarCultBaseSystem.CustomerLimit - 4);
                     if (LunarCultBaseSystem.CustomerQueue.Where(c => c.HasValue).Count() <= 4)
                         angerRatio = 0f;

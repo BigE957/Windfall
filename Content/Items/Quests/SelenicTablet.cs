@@ -21,27 +21,9 @@ public class SelenicTablet : ModItem, ILocalizedModType
     }
     public override bool CanShoot(Player player)
     {
-        return !SealingRitualSystem.RitualSequenceSeen && LunarCultBaseSystem.ActivityCoords != new Point(-1,-1);
+        return !SealingRitualSystem.RitualSequenceSeen && LunarCultBaseSystem.State == LunarCultBaseSystem.SystemStates.Waiting;
     }
-    public static string Key = NPC.downedEmpressOfLight || DownedBossSystem.downedRavager ? "Pre-Lunar" : NPC.downedGolemBoss ? "Post-Golem" : "Post-Plant";
-    public override bool? UseItem(Player player)
-    {
-        if (CanShoot(player)) //Cult Meeting Active
-        {
-            return true;
 
-        }
-        else //Cult Meeting In-Active
-        {
-            return false;
-            /*
-            if (player.LunarCult().apostleQuestTracker == 13 && player.InAstral(1))
-            {
-                Main.NewText("Start Astral Siphon");
-            }
-            */
-        }
-    }
     public override void ModifyTooltips(List<TooltipLine> tooltips)
     {
         TooltipLine line = tooltips.FirstOrDefault(x => x.Mod == "Terraria" && x.Name == "Tooltip0");
@@ -51,7 +33,7 @@ public class SelenicTablet : ModItem, ILocalizedModType
                 line.Text = GetWindfallTextValue("Items.Quest.SelenicTablet.SeekerTooltip");
             return;
         }
-        string tooltip = GetWindfallTextValue("Items.Quest.SelenicTablet.SummonTooltip");
+        string tooltip = GetWindfallTextValue("Items.Quest.SelenicTablet.SilentTooltip");
         if (line != null)
             line.Text = tooltip;
     }

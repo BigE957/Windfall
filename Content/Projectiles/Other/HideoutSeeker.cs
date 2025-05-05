@@ -1,4 +1,5 @@
-﻿using static Windfall.Common.Systems.WorldEvents.LunarCultBaseSystem;
+﻿using Windfall.Common.Systems.WorldEvents;
+using static Windfall.Common.Systems.WorldEvents.LunarCultBaseSystem;
 
 namespace Windfall.Content.Projectiles.Other;
 
@@ -17,13 +18,12 @@ public class HideoutSeeker : ModProjectile
     }
     public override void AI()
     {
-        if (ActivityCoords != new Point(-1, -1))
-        {
-            Vector2 DistanceVector = new(ActivityCoords.X - Projectile.Center.X, ActivityCoords.Y - Projectile.Center.Y);
-            Projectile.velocity += DistanceVector.SafeNormalize(Vector2.UnitX);
-        }
+        Vector2 DistanceVector = new(CultBaseWorldArea.Center.X - Projectile.Center.X, CultBaseWorldArea.Center.Y - Projectile.Center.Y);
+        Projectile.velocity += DistanceVector.SafeNormalize(Vector2.Zero);
+        if (Projectile.velocity.LengthSquared() > 256)
+            Projectile.velocity = Projectile.velocity.SafeNormalize(Vector2.Zero) * 16;
 
-        int dustType = DustID.GoldFlame;
-        Dust.NewDustPerfect(Projectile.Center, dustType);
+        int dustType = DustID.DungeonSpirit;
+        Dust.NewDustPerfect(Projectile.Center, dustType).noGravity = true;
     }
 }
