@@ -861,7 +861,7 @@ public class LunarCultBaseSystem : ModSystem
                     Rectangle Cultist3Location = new((int)Cultist3.Center.X, (int)Cultist3.Center.Y, Cultist3.width, Cultist3.width);
                     Rectangle Cultist4Location = new((int)Cultist4.Center.X, (int)Cultist4.Center.Y, Cultist4.width, Cultist4.width);
 
-                    string key = $"Cutscenes/CultMeetings/{CurrentMeetingTopic}.";
+                    string key = $"Cutscenes/CultMeetings/{CurrentMeetingTopic}";
 
                     if (ActivityTimer == 30)
                     {
