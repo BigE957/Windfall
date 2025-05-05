@@ -146,7 +146,7 @@ public class TravellingCultist : ModNPC, ILocalizedModType
         new("TravellingCultist/Introductions/Standard1", (player) => true, (byte)PriorityTiers.None, true),
         new("TravellingCultist/Introductions/Standard2", (player) => true, (byte)PriorityTiers.None, true),
         new("TravellingCultist/Introductions/Permafrost", (player) => DownedBossSystem.downedCryogen && NPC.AnyNPCs(ModContent.NPCType<DILF>()), (byte)PriorityTiers.None, true),
-        new("TravellingCultist/Introductions/AstralInfection", (player) => true, (byte)PriorityTiers.None, false),
+        new("TravellingCultist/Introductions/AstralInfection", (player) => Main.hardMode, (byte)PriorityTiers.None, false),
         
         //Minor Events
         new("TravellingCultist/Introductions/CalamitasClone", (player) => !DownedBossSystem.downedCalamitasClone && NPC.downedMechBossAny, (byte)PriorityTiers.MinorEvent, false),
@@ -742,7 +742,7 @@ public class TravellingCultist : ModNPC, ILocalizedModType
                         }
                     }
                     else if (DraconicRuinsSystem.State == DraconicRuinsSystem.CutsceneState.Finished)
-                        if(NPC.velocity.X == 0)
+                        if(NPC.velocity.X == 0 && pathFinding.MyPath.Points.Length <= 3)
                             myBehavior = BehaviorState.StandStill;
                 }
                 break;

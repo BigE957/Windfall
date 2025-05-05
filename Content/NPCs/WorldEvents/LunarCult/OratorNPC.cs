@@ -73,8 +73,6 @@ public class OratorNPC : ModNPC
                 if (altY < NPC.position.Y)
                     NPC.position.Y = altY;
             }
-
-            NPC.position.Y += 24;
         }
     }
     public override void AI()

@@ -1,6 +1,5 @@
 ﻿using DialogueHelper.UI.Dialogue;
 using Luminance.Core.Graphics;
-using System.Diagnostics.Metrics;
 using Windfall.Content.Buffs.Inhibitors;
 using Windfall.Content.Items.Quests;
 using Windfall.Content.NPCs.WorldEvents.LunarCult;
@@ -54,7 +53,7 @@ public class OratorEntourageSpawner : ModProjectile
                     dust.noGravity = true;
                     dust.color = dust.type == dustStyle ? Color.LightGreen : default;
                 }
-                OratorIndex = NPC.NewNPC(Entity.GetSource_FromAI(), (int)spawnPos.X, (int)spawnPos.Y, ModContent.NPCType<OratorNPC>(), (int)OratorNPC.States.Cutscene);
+                OratorIndex = NPC.NewNPC(Entity.GetSource_FromAI(), (int)spawnPos.X, (int)spawnPos.Y, ModContent.NPCType<OratorNPC>(), 0, (int)OratorNPC.States.Cutscene);
                 SoundEngine.PlaySound(SpawnSound, spawnPos);
                 break;
         }

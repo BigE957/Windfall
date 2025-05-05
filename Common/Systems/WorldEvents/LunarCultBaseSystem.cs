@@ -244,9 +244,9 @@ public class LunarCultBaseSystem : ModSystem
         {
             #region Main Character Spawning
             if (!NPC.AnyNPCs(ModContent.NPCType<Seamstress>()))
-                NPC.NewNPC(Entity.GetSource_None(), LunarCultBaseLocation.X * 16 + (BaseFacingLeft ? -1400 : 1408), (LunarCultBaseLocation.Y * 16) + 480, ModContent.NPCType<Seamstress>());
+                NPC.NewNPC(Entity.GetSource_None(), LunarCultBaseLocation.X * 16 + (BaseFacingLeft ? -1400 : 1400), (LunarCultBaseLocation.Y * 16) + 480, ModContent.NPCType<Seamstress>());
             if (!NPC.AnyNPCs(ModContent.NPCType<TheChef>()))
-                NPC.NewNPC(Entity.GetSource_None(), LunarCultBaseLocation.X * 16 + (BaseFacingLeft ? -168 : 128), (LunarCultBaseLocation.Y * 16), ModContent.NPCType<TheChef>());
+                NPC.NewNPC(Entity.GetSource_None(), LunarCultBaseLocation.X * 16 + (BaseFacingLeft ? -168 : 168), (LunarCultBaseLocation.Y * 16), ModContent.NPCType<TheChef>());
             if (!Main.npc.Any(n => n.active && n.type == ModContent.NPCType<Watchman>()))
                 NPC.NewNPC(Entity.GetSource_None(), LunarCultBaseLocation.X * 16 + (BaseFacingLeft ? -2100 : 2100), (LunarCultBaseLocation.Y - 6) * 16 - 5, ModContent.NPCType<Watchman>());
             if (SealingRitualSystem.RitualSequenceSeen)
@@ -556,7 +556,7 @@ public class LunarCultBaseSystem : ModSystem
                 else
                     zoom = 0.4f;
                 CameraPanSystem.Zoom = zoom;
-                CameraPanSystem.PanTowards(new Vector2(entranceArea.X, entranceArea.Y - 120), zoom);
+                CameraPanSystem.PanTowards(new Vector2(entranceArea.X, entranceArea.Y + 60), zoom);
                 #endregion
 
                 ActivityTimer++;
