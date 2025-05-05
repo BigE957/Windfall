@@ -322,7 +322,7 @@ public class TravellingCultist : ModNPC, ILocalizedModType
                         else
                             chat.Add(GetWindfallTextValue($"Dialogue.LunarCult.TravellingCultist.Chat.Skeletron"));
                     for (int i = 0; i < LunarCultBaseSystem.Recruits.Count; i++)
-                        chat.Add(GetWindfallTextValue($"Dialogue.LunarCult.TravellingCultist.Chat.{(RecruitableLunarCultist.RecruitNames)i}"));
+                        chat.Add(GetWindfallTextValue($"Dialogue.LunarCult.TravellingCultist.Chat.{(RecruitableLunarCultist.RecruitNames)LunarCultBaseSystem.Recruits[i]}"));
 
                     uiSystem.CurrentTree.Dialogues[0].DialogueText[0].Text = chat;
                 }
