@@ -576,7 +576,7 @@ public class LunarCultBaseSystem : ModSystem
                     {
                         case SystemStates.Ritual:
                             #region Location Selection
-                            ActivityCoords = new Point(LunarCultBaseLocation.X + (BaseFacingLeft ? -32 : 32), LunarCultBaseLocation.Y - 24);
+                            ActivityCoords = new Point(LunarCultBaseLocation.X + (BaseFacingLeft ? -36 : 36), LunarCultBaseLocation.Y - 24);
                             ActivityCoords.X *= 16;
                             //ActivityCoords.X += 8;
                             ActivityCoords.Y *= 16;
@@ -623,7 +623,7 @@ public class LunarCultBaseSystem : ModSystem
                             break;
                         case SystemStates.Meeting:
                             #region Location Selection
-                            ActivityCoords = new Point(LunarCultBaseLocation.X + (BaseFacingLeft ? -25 : 23), LunarCultBaseLocation.Y + 18);
+                            ActivityCoords = new Point(LunarCultBaseLocation.X + (BaseFacingLeft ? -23 : 23), LunarCultBaseLocation.Y + 18);
                             ActivityCoords.X *= 16;
                             ActivityCoords.X += BaseFacingLeft ? -8 : 8;
                             ActivityCoords.Y *= 16;
@@ -871,7 +871,6 @@ public class LunarCultBaseSystem : ModSystem
 
                     if (ActivityTimer > 40 && !ModContent.GetInstance<DialogueUISystem>().isDialogueOpen)
                         Active = false;
-
                     #endregion
 
                     #region Camera Setup
