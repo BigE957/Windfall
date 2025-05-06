@@ -1,4 +1,5 @@
 ﻿using DialogueHelper.UI.Dialogue;
+using MonoMod.Core.Platforms;
 using Windfall.Common.Systems;
 using Windfall.Common.Systems.WorldEvents;
 
@@ -88,6 +89,7 @@ public class Watchman : ModNPC
         switch (treeKey)
         {
             case "Watchman/Default":
+                uiSystem.CurrentTree.Dialogues[0].Responses[0].Heading = 3;
                 if(Main.LocalPlayer.LunarCult().askedWatchmanAboutOrator)
                 {
                     uiSystem.CurrentTree.Dialogues[2].Responses[2].Requirement = false;

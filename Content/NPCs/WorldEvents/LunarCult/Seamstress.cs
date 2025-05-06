@@ -127,7 +127,7 @@ public class Seamstress : ModNPC
             switch (yapCounter)
             {
                 case 0:
-                    Item i = Main.item[Item.NewItem(Entity.GetSource_Loot(), NPC.Center, new Vector2(8, 4), ModContent.ItemType<ChefMenu>())];
+                    Item i = Main.item[Item.NewItem(Entity.GetSource_Loot(), NPC.Center, new Vector2(8, 4), ModContent.ItemType<TailorInstructions>())];
                     i.velocity = Vector2.UnitX * -4;
                     break;
                 case 60:

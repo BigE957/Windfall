@@ -9,7 +9,6 @@ using Windfall.Content.Items.Quests.SealingRitual;
 using CalamityMod.NPCs.TownNPCs;
 using static Windfall.Common.Systems.PathfindingSystem;
 using CalamityMod;
-using Terraria;
 
 namespace Windfall.Content.NPCs.TravellingNPCs;
 
@@ -84,8 +83,8 @@ public class TravellingCultist : ModNPC, ILocalizedModType
     public static readonly List<Tuple<int, int>> RitualQuestItems =
     [
         new (ModContent.ItemType<TabletFragment>(), 1),
-        new (ModContent.ItemType<DraconicBone>(), 1),
         new (ModContent.ItemType<PrimalLightShard>(), 1),
+        new (ModContent.ItemType<DraconicBone>(), 1),
     ];
     public static readonly List<Tuple<int, int>> DungeonQuestItems =
     [
@@ -171,6 +170,8 @@ public class TravellingCultist : ModNPC, ILocalizedModType
 
     public override void OnSpawn(IEntitySource source)
     {
+        Main.NewText(CurrentDialogue);
+
         if (NPC.ai[3] == 1)
         {
             NPC.aiStyle = -1;
@@ -272,7 +273,7 @@ public class TravellingCultist : ModNPC, ILocalizedModType
             return;
 
         NPC cultist = Main.npc[(int)uiSystem.CurrentDialogueContext.Arguments[0]];
-
+        
         if (QuestItem == null)
         {
             if (CurrentDialogue.ToString().Contains("Ritual"))
@@ -317,10 +318,12 @@ public class TravellingCultist : ModNPC, ILocalizedModType
                             chat.Add(GetWindfallTextValue("Dialogue.LunarCult.TravellingCultist.Chat.Clothier"));
                     }
                     if (NPC.downedBoss3)
+                    {
                         if (Main.rand.NextBool(10))
                             chat.Add(GetWindfallTextValue($"Dialogue.LunarCult.TravellingCultist.Chat.SkeletronRare"));
                         else
                             chat.Add(GetWindfallTextValue($"Dialogue.LunarCult.TravellingCultist.Chat.Skeletron"));
+                    }
                     for (int i = 0; i < LunarCultBaseSystem.Recruits.Count; i++)
                         chat.Add(GetWindfallTextValue($"Dialogue.LunarCult.TravellingCultist.Chat.{(RecruitableLunarCultist.RecruitNames)LunarCultBaseSystem.Recruits[i]}"));
 
