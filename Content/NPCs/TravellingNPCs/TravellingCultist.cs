@@ -224,12 +224,16 @@ public class TravellingCultist : ModNPC, ILocalizedModType
                 break;
             case DialogueState.RitualQuestRecruitmentAndShard:
                 if (QuestSystem.Quests["Recruitment"].Complete)
-                {
                     CurrentDialogue = DialogueState.RitualQuestRecruitmentFinished;
-                }
+                if (QuestSystem.Quests["PrimordialLightShard"].Complete)
+                    CurrentDialogue = DialogueState.RitualQuestShardFinished;
                 break;
             case DialogueState.RitualQuestRecruitmentFinished:
                 if (QuestSystem.Quests["PrimordialLightShard"].Complete)
+                    CurrentDialogue = DialogueState.RitualQuestBone;
+                break;
+            case DialogueState.RitualQuestShardFinished:
+                if (QuestSystem.Quests["Recruitment"].Complete)
                     CurrentDialogue = DialogueState.RitualQuestBone;
                 break;
             case DialogueState.RitualQuestBone:
@@ -250,6 +254,9 @@ public class TravellingCultist : ModNPC, ILocalizedModType
     public override string GetChat()
     {
         Main.CloseNPCChatOrSign();
+        //if(!pool.CirculatingDialogues.Any(d => d.TreeKey == "TravellingCultist/Introductions/BoneQuest"))
+        //    pool.CirculatingDialogues.Add(new("TravellingCultist/Introductions/BoneQuest", (player) => CurrentDialogue == DialogueState.RitualQuestBone, (byte)PriorityTiers.QuestUpdate));
+
         myBehavior = BehaviorState.StandStill;
         if (NPC.Center.X < Main.LocalPlayer.Center.X)
             NPC.direction = -1;

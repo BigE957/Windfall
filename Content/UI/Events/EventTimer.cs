@@ -31,16 +31,6 @@ internal class EventTimer : UIState
 
     public override void Update(GameTime gameTime)
     {
-        if (!GodlyPlayer.AnyGodlyEssence(Main.LocalPlayer))
-            return;
-
-        if (timerText.ContainsPoint(Main.MouseScreen))
-        {
-            var modPlayer = Main.LocalPlayer.Godly();
-            string category = "UI";
-            Main.LocalPlayer.mouseInterface = true;
-            Main.instance.MouseText(GetWindfallLocalText($"{category}.Ambrosia").Format(modPlayer.Ambrosia, 100));
-        }
         if(timer < 0)
         {
             ModContent.GetInstance<TimerUISystem>().TimerEnd();

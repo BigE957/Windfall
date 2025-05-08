@@ -123,15 +123,18 @@ public class RecruitableLunarCultist : ModNPC
     {
         Main.CloseNPCChatOrSign();
         TalkingTo = (int)MyName;
+
+        DialogueUISystem uiSystem = ModContent.GetInstance<DialogueUISystem>();
+
         if (State == DialogueState.Talkable)
         {
             if(LunarCultBaseSystem.CurrentMeetingTopic == 0)
-                ModContent.GetInstance<DialogueUISystem>().DisplayDialogueTree(Windfall.Instance, "Recruits/" + MyName + "/Default", new(Name, [NPC.whoAmI]));
+                uiSystem.DisplayDialogueTree(Windfall.Instance, "Recruits/" + MyName + "/Default", new(Name, [NPC.whoAmI]));
             else
-                ModContent.GetInstance<DialogueUISystem>().DisplayDialogueTree(Windfall.Instance, "Recruits/" + MyName + "/" + LunarCultBaseSystem.CurrentMeetingTopic, new(Name, [NPC.whoAmI]));
+                uiSystem.DisplayDialogueTree(Windfall.Instance, "Recruits/" + MyName + "/" + LunarCultBaseSystem.CurrentMeetingTopic, new(Name, [NPC.whoAmI]));
         }
         else
-            ModContent.GetInstance<DialogueUISystem>().DisplayDialogueTree(Windfall.Instance, "Recruits/" + MyName + "/" + State, new(Name, [NPC.whoAmI]));
+            uiSystem.DisplayDialogueTree(Windfall.Instance, "Recruits/" + MyName + "/" + State, new(Name, [NPC.whoAmI]));
         return base.GetChat();
     }
     private static void CloseEffect(string treeKey, int dialogueID, int buttonID, bool swapped)
@@ -142,6 +145,7 @@ public class RecruitableLunarCultist : ModNPC
             return;
         DialogueUISystem uiSystem = ModContent.GetInstance<DialogueUISystem>();
         NPC me = Main.npc[(int)uiSystem.CurrentDialogueContext.Arguments[0]];
+        
         if (treeKey.Contains("Recruitable") && dialogueID == 1)
         {
             if (!LunarCultBaseSystem.Recruits.Contains(TalkingTo))
@@ -168,7 +172,8 @@ public class RecruitableLunarCultist : ModNPC
             else
                 me.As<RecruitableLunarCultist>().State = DialogueState.Recruitable;
         }
-        TalkingTo = -1;
+        if(!swapped)
+            TalkingTo = -1;
     }
     public override bool CheckActive() => Chattable;
     public override void TownNPCAttackStrength(ref int damage, ref float knockback)

@@ -929,9 +929,7 @@ public class LunarCultBaseSystem : ModSystem
                 }
                 else
                 {
-                    if (ActivityTimer == 240)
-                        ModContent.GetInstance<TimerUISystem>().TimerStart(2 * 60 * 60);
-                    else if (ActivityTimer > 240 && (ModContent.GetInstance<TimerUISystem>().EventTimer == null || ModContent.GetInstance<TimerUISystem>().EventTimer.timer < 0))
+                    if (ActivityTimer > 245 && (ModContent.GetInstance<TimerUISystem>().EventTimer == null || ModContent.GetInstance<TimerUISystem>().EventTimer.timer < 0))
                         Main.npc[NPC.FindFirstNPC(ModContent.NPCType<Seamstress>())].As<Seamstress>().EndActivity = true;
                     ActivityTimer++;
                 }

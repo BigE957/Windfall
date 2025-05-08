@@ -148,7 +148,7 @@ public class Seamstress : ModNPC
                 case 240:
                     location = new((int)NPC.Center.X, (int)NPC.Center.Y, NPC.width, NPC.width);
                     CombatText.NewText(location, Color.LimeGreen, GetWindfallTextValue(seamstressPath + "Activity.Start.3"), true);
-
+                    ModContent.GetInstance<TimerUISystem>().TimerStart(2 * 60 * 60);
                     BeginActivity = false;
                     break;
             }
