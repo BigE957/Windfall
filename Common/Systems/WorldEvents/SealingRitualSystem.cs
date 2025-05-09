@@ -222,14 +222,14 @@ public class SealingRitualSystem : ModSystem
                                 StopTimer = true;
                                 break;
 
-                            case 870:
+                            case 390:
                                 NPC orator = NPC.NewNPCDirect(Entity.GetSource_NaturalSpawn(), (int)DungeonCoords.X, (int)DungeonCoords.Y - 8, ModContent.NPCType<OratorNPC>());
                                 SoundEngine.PlaySound(SoundID.DD2_EtherianPortalDryadTouch, orator.Center);
                                 for (int i = 0; i < 32; i++)
                                     EmpyreanMetaball.SpawnDefaultParticle(orator.Center + new Vector2(Main.rand.NextFloat(-64, 64), 64), Vector2.UnitY * Main.rand.NextFloat(4f, 24f) * -1, Main.rand.NextFloat(110f, 130f));
                                 break;
 
-                            case 930:
+                            case 420:
                                 if (Recruit1.ModNPC is RecruitableLunarCultist Recruitable1 && Recruit2.ModNPC is RecruitableLunarCultist Recruitable2 && Recruit3.ModNPC is RecruitableLunarCultist Recruitable3 && Recruit4.ModNPC is RecruitableLunarCultist Recruitable4)
                                 {
                                     Recruit1.velocity.Y = Recruit2.velocity.Y = Recruit3.velocity.Y = Recruit4.velocity.Y = -5;
@@ -248,7 +248,7 @@ public class SealingRitualSystem : ModSystem
                                 }
                                 break;
 
-                            case 1050:
+                            case 510:
                                 uiSystem.DisplayDialogueTree(Windfall.Instance, "Cutscenes/SealingRitual/OratorIntro", new(Name, [NPC.FindFirstNPC(ModContent.NPCType<OratorNPC>())]));
                                 RitualTimer++;
                                 StopTimer = true;
@@ -299,7 +299,7 @@ public class SealingRitualSystem : ModSystem
                         #endregion
 
                         #region Orator Goop
-                        if (RitualTimer >= 152 && RitualTimer <= 870)
+                        if (RitualTimer >= 152 && RitualTimer <= 390)
                         {
                             float ratio = Clamp((RitualTimer - 152) / 60f, 0f, 1f);
                             //Main.NewText(ratio);
