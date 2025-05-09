@@ -13,10 +13,11 @@
       "DialogueText": [ { "Text": "To think that wretched cult turned such a venerated site into their vile lair... Its despicable! Once we put a stop to their plans, I'd like nothing more than to reclaim the library and restore it to its former glory. I'm certain it still contains a great many texts that'd be of great value to us!" } ]
     },
     {
-      "DialogueText": [ { "Text": "However, there are more pressing matters for us at the moment. I need you to sneak into the lower sanctums of the library. We have reason to believe that the Dragon of Wisdom's remains are still down there. After all, the Orator must have a reason for keeping you out of that area. Go downt there, and retrieve but a single bone from the Dragon of Wisdon's remains. You may need to use your weapon to actually remove a bone from it, as the bones of a Dragon are rather durable. Once you retrieve one, we'll have everything needed to perform the sealing ritual!" } ],
+      "DialogueText": [ { "Text": "However, there are more pressing matters for us at the moment. I need you to sneak into the lower sanctums of the library. We have reason to believe that the Dragon of Wisdom's remains are still down there. Go downt there, and retrieve but a single bone from the Dragon of Wisdon's remains. Once you retrieve one, we'll have everything needed to perform the sealing ritual!" } ],
       "Responses": [
         {
-          "Title": "How?"
+          "Title": "How?",
+          "Heading": -2
         }
       ]
     },

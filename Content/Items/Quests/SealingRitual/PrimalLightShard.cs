@@ -14,8 +14,7 @@ public class PrimalLightShard : ModItem, ILocalizedModType
     }
     public override void SetDefaults()
     {
-        Item.width = 40;
-        Item.height = 38;
+        Item.width = Item.height = 30;
         Item.rare = ItemRarityID.Quest;
         Item.maxStack = 99;
     }

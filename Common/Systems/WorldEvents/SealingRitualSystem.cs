@@ -27,7 +27,8 @@ public class SealingRitualSystem : ModSystem
     private static List<int> NPCIndexs = [];
     private static float zoom = 0;
     private static Vector2 DungeonCoords = new Vector2(Main.dungeonX - 4, Main.dungeonY).ToWorldCoordinates();
-    
+
+
     private enum CultistFacing
     {
         Left = -1,
@@ -37,7 +38,7 @@ public class SealingRitualSystem : ModSystem
     }
     private static CultistFacing CultistDir = CultistFacing.Player;
 
-    private static readonly bool[] RecruitsHover = [false, false, false, false];
+    private static readonly int[] RecruitsHover = [-1, -1, -1, -1];
 
     private static bool StopTimer = false;
 
@@ -75,10 +76,11 @@ public class SealingRitualSystem : ModSystem
     public override void PreUpdateWorld()
     {
         #region Debugging Stuffs
-        //QuestSystem.Quests["SealingRitual"].Active = false;
-        //State = SystemState.CheckReqs;
+        QuestSystem.Quests["SealingRitual"].ResetQuest();
+        QuestSystem.Quests["SealingRitual"].Active = true;
+        State = SystemState.CheckReqs;  
+        RitualSequenceSeen = false;
 
-        //RitualSequenceSeen = false;
         //Recruits = [1, 2, 3, 4];
         //Recruits = [];
         //QuestSystem.Quests["Recruitment"].Progress = 4;
@@ -86,6 +88,7 @@ public class SealingRitualSystem : ModSystem
         //Main.NewText($"{RitualTimer}, {State}, {(DungeonCoords - Main.LocalPlayer.Center).Length()}, {RitualSequenceSeen}");
         //TravellingCultist.RitualQuestProgress = 4;
         #endregion
+
         if (RitualSequenceSeen)
         {
             if (!Main.projectile.Any(p => p.active && p.type == ModContent.ProjectileType<BurningAltar>()))
@@ -110,15 +113,20 @@ public class SealingRitualSystem : ModSystem
             case SystemState.Spawn:
                 if (RitualTimer == -2)
                 {
+                    StopTimer = false;
                     Active = false;
                     zoom = 0;
+                    RecruitsHover[0] = -1;
+                    RecruitsHover[1] = -1;
+                    RecruitsHover[2] = -1;
+                    RecruitsHover[3] = -1;
                     NPCIndexs =
                     [
                         NPC.NewNPC(Entity.GetSource_None(), (int)(DungeonCoords.X - 220), (int)DungeonCoords.Y - 8, ModContent.NPCType<RecruitableLunarCultist>()),
                         NPC.NewNPC(Entity.GetSource_None(), (int)(DungeonCoords.X - 150), (int)DungeonCoords.Y - 8, ModContent.NPCType<RecruitableLunarCultist>()),
                         NPC.NewNPC(Entity.GetSource_None(), (int)(DungeonCoords.X + 150), (int)DungeonCoords.Y - 8, ModContent.NPCType<RecruitableLunarCultist>()),
                         NPC.NewNPC(Entity.GetSource_None(), (int)(DungeonCoords.X + 220), (int)DungeonCoords.Y - 8, ModContent.NPCType<RecruitableLunarCultist>()),
-                        NPC.NewNPC(Entity.GetSource_None(), (int)DungeonCoords.X, (int)DungeonCoords.Y - 128, ModContent.NPCType<SealingTablet>()),
+                        NPC.NewNPC(Entity.GetSource_None(), (int)DungeonCoords.X, (int)DungeonCoords.Y - 216, ModContent.NPCType<SealingTablet>()),
                         NPC.NewNPC(Entity.GetSource_None(), (int)DungeonCoords.X, (int)DungeonCoords.Y - 8, ModContent.NPCType<TravellingCultist>(), ai3: 1),
                         
                     ];
@@ -174,25 +182,29 @@ public class SealingRitualSystem : ModSystem
                         switch (RitualTimer)
                         {
                             case 30:
-                                uiSystem.DisplayDialogueTree(Windfall.Instance, "Cutscenes/DraconicRuins/Arrival", new(Name, [LunaticCultist.whoAmI]));
+                                uiSystem.DisplayDialogueTree(Windfall.Instance, "Cutscenes/SealingRitual/MainRitual", new(Name, [LunaticCultist.whoAmI]));
                                 RitualTimer++;
                                 StopTimer = true;
                                 break;
 
                             case 60:
-                                RecruitsHover[1] = true;
+                                RecruitsHover[1] = 0;
+                                Recruit2.velocity.Y = -3;
                                 break;
 
                             case 90:
-                                RecruitsHover[2] = true;
+                                RecruitsHover[2] = 0;
+                                Recruit3.velocity.Y = -3;
                                 break;
 
                             case 120:
-                                RecruitsHover[0] = true;
+                                RecruitsHover[0] = 0;
+                                Recruit1.velocity.Y = -3;
                                 break;
 
                             case 150:
-                                RecruitsHover[3] = true;
+                                RecruitsHover[3] = 0;
+                                Recruit4.velocity.Y = -3;
                                 RitualTimer++;
                                 StopTimer = true;
                                 break;
@@ -237,7 +249,7 @@ public class SealingRitualSystem : ModSystem
                                 break;
 
                             case 1050:
-                                uiSystem.DisplayDialogueTree(Windfall.Instance, "Cutscenes/DraconicRuins/OratorIntro", new(Name, [LunaticCultist.whoAmI]));
+                                uiSystem.DisplayDialogueTree(Windfall.Instance, "Cutscenes/SealingRitual/OratorIntro", new(Name, [NPC.FindFirstNPC(ModContent.NPCType<OratorNPC>())]));
                                 RitualTimer++;
                                 StopTimer = true;
                                 break;
@@ -251,27 +263,38 @@ public class SealingRitualSystem : ModSystem
                         else
                             zoom = 0.4f;
                         CameraPanSystem.Zoom = zoom;
-                        CameraPanSystem.PanTowards(new Vector2(DungeonCoords.X, DungeonCoords.Y - 150), zoom);
+                        CameraPanSystem.PanTowards(new Vector2(DungeonCoords.X + 120, DungeonCoords.Y), zoom * 2.5f);
                         
                         #region Additional Visuals 
 
                         #region Recruit Hover
                         for(int i = 0; i < 4; i++)
                         {
-                            if (!RecruitsHover[i])
-                                continue;
-
                             NPC recruit = Main.npc[NPCIndexs[i]];
 
-                            Vector2 speed = Main.rand.NextVector2Circular(1.5f, 2f);
-                            Dust d = Dust.NewDustPerfect(recruit.Center + new Vector2(Main.rand.Next(recruit.width * -1, recruit.width), Main.rand.Next(recruit.height * -1, recruit.height)), DustID.GoldFlame, speed * 2, Scale: 1.5f);
-                            d.noGravity = true;
-                            if (RitualTimer >= 60 * 21)
+                            if (RecruitsHover[i] == -1)
                             {
-                                recruit.velocity.Y = (float)(1 * Math.Sin(RitualTimer / 10));
+                                recruit.noGravity = false;
+                                continue;
                             }
-                            else if (recruit.velocity.Length() < 2)
-                                recruit.velocity.Y -= 0.1f;
+
+                            if (Main.rand.NextBool())
+                            {
+                                Vector2 speed = Main.rand.NextVector2Circular(1.5f, 2f) * 2f;
+                                Dust d = Dust.NewDustPerfect(recruit.position + new Vector2(Main.rand.Next(0, recruit.width), Main.rand.Next(0, recruit.height)), DustID.GoldFlame, speed, Scale: Main.rand.NextFloat(1f, 1.5f));
+                                d.noGravity = true;
+                            }
+
+                            recruit.noGravity = true;
+
+                            if (recruit.velocity.Length() > 1)
+                                recruit.velocity.Y += 0.1f;
+                            else
+                            {
+                                recruit.velocity.Y = (float)(-Math.Cos(RecruitsHover[i] / 10));
+                                RecruitsHover[i]++;
+                            }
+                                
                         }
                         #endregion
 
@@ -303,7 +326,6 @@ public class SealingRitualSystem : ModSystem
                                     LunaticCultist.direction = (int)CultistDir * Main.dungeonX > Main.spawnTileX ? 1 : -1;
                                     break;
                             }
-                        RitualTimer++;
                     }
                 }                    
                 break;
@@ -362,7 +384,7 @@ public class SealingRitualSystem : ModSystem
 
     private static void ModifyTree(string treeKey, int dialogueID, int buttonID, bool swapped)
     {
-        if (treeKey != "Cutscenes/SealingRitual/RitualMain")
+        if (treeKey != "Cutscenes/SealingRitual/MainRitual")
             return;
 
         DialogueUISystem uiSystem = ModContent.GetInstance<DialogueUISystem>();
@@ -374,7 +396,7 @@ public class SealingRitualSystem : ModSystem
 
     private static void ClickEffect(string treeKey, int dialogueID, int buttonID, bool swapped)
     {
-        if (treeKey != "Cutscenes/SealingRitual/RitualMain")
+        if (treeKey != "Cutscenes/SealingRitual/MainRitual")
             return;
         switch (dialogueID)
         {
@@ -414,7 +436,7 @@ public class SealingRitualSystem : ModSystem
                 NPCIndexs.RemoveAt(5);
 
                 for(int i = 0; i < 4; i++)
-                    RecruitsHover[i] = false;
+                    RecruitsHover[i] = -1;
 
                 SealingTablet.ai[0] = 0;
                 StopTimer = false;
@@ -433,4 +455,5 @@ public class SealingRitualSystem : ModSystem
             State = SystemState.End;
         }
     }
+
 }

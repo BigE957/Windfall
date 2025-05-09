@@ -55,6 +55,9 @@ public class SealingTablet : ModNPC
 
     public override void AI()
     {
+        if (!IsNPCOnScreen(NPC.Center))
+            return;
+
         // Orator Summoning
         if (!AnyBossNPCS(true) && !NPC.AnyNPCs(ModContent.NPCType<TheOrator>()) && NPC.ai[0] == 2)
         {
@@ -166,9 +169,7 @@ public class SealingTablet : ModNPC
                     NPC.active = false;
                 }
             }
-        }    
-
-        
+        }           
     }
 
     public override bool CheckActive() => false;
@@ -218,11 +219,11 @@ public class SealingTablet : ModNPC
             Texture2D texture = ModContent.Request<Texture2D>(Texture + "Crack").Value;
             Vector2 drawPosition = NPC.Center - screenPos + (Vector2.UnitY * NPC.gfxOffY);
             drawPosition.Y -= 4;
-            Vector2 halfSizeTexture = new(texture.Width / 2, texture.Height / Main.npcFrameCount[NPC.type] / 2);
-            spriteBatch.Draw(texture, drawPosition, null, NPC.GetAlpha(drawColor), NPC.rotation, halfSizeTexture, NPC.scale, SpriteEffects.None, 0f);
+            Vector2 origin = texture.Size() * 0.5f;
+            spriteBatch.Draw(texture, drawPosition, NPC.frame, NPC.GetAlpha(drawColor), NPC.rotation, origin, NPC.scale, SpriteEffects.None, 0f);
             return;
         }
-        if (NPC.ai[0] == 0 && isHovered)
+        if (DraconicRuinsSystem.State == DraconicRuinsSystem.CutsceneState.CultistFumble && NPC.ai[0] == 0 && isHovered)
         {
             Texture2D texture = ModContent.Request<Texture2D>(Texture + "Outline").Value;
             Vector2 origin = texture.Size() * 0.5f;

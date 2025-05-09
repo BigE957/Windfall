@@ -10,10 +10,10 @@
       ]
     },
     {
-      "DialogueText": [ { "Text": "Old legends by the Monks state that the Dragon King used the power of \"Primordial Light\" to ultimately seal away the behemoth that had devestated the Dragons, and we'll need our own source of that power to fuel the ritual. You may think we're out of luck without the Dragon King, but fear not, there's another entity I know of that might allow us to harness this power: the self-appointed \"Empress of Light\". If there were any being left in this world who could channel Primordial Light as the Dragons' mighty King once did, I believe it would be her; as nauseating as her existence is." } ]
+      "DialogueText": [ { "Text": "Old legends by the Monks state that the Dragon King used the power of \"Primordial Light\" to ultimately seal away the behemoth that had devestated the Dragons, and we'll need our own source of that power to fuel the ritual. You may think we're out of luck without the Dragon King, but fear not, there's another entity I know of that might allow us to harness this power: the self-appointed \"Empress of Light\"." } ]
     },
     {
-      "DialogueText": [ { "Text": "She's a graceless despot; same as the Gods. As such, I'm tasking you with slaying her. She is nothing compared to the might Dragon King, and because of this, I doubt she wields that power all on her own. I'm hopeful you'll discover the method by which she harnesses Primordial Light during your encounter with her. That is, if you're willing to face her?" } ],
+      "DialogueText": [ { "Text": "If there were any being left in this world who could channel Primordial Light as the Dragons' mighty King once did, I believe it would be her; as nauseating as her existence is. She's a graceless despot; same as the Gods. As such, I'm tasking you with slaying her. She is nothing compared to the might Dragon King, and because of this, I doubt she wields that power all on her own. I'm hopeful you'll discover the method by which she harnesses Primordial Light during your encounter with her. That is, if you're willing to face her?" } ],
       "Responses": [
         {
           "Title": "I am.",

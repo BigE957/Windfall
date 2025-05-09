@@ -35,22 +35,7 @@
           "TextEffect": "DialogueHelper.UI.Dialogue.TextEffects.WavyText"
         },
         {
-          "Text": " underling's come to see me when we don't even have work to do! I guess nobody can keep away from my "
-        },
-        {
-          "Text": "magne",
-          "Color": "#ff0000"
-        },
-        {
-          "Text": "n",
-          "Color": "#808080"
-        },
-        {
-          "Text": "etic",
-          "Color": "#0000ff"
-        },
-        {
-          "Text": " personality. "
+          "Text": " underling's come to see me when we don't even have work to do! I guess nobody can keep away from my magnetic personality."
         }
       ],
       "Emoticon": "Windfall.Content.UI.Dialogue.Emoticons.Happy",

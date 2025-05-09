@@ -166,8 +166,16 @@ public static partial class WindfallUtils
         return shop.Add(item, conditions);
     }
 
-    public static NPCShop AddWithPrice<T>(this NPCShop shop, int customValue, params Condition[] conditions) where T : ModItem
+    public static NPCShop AddWithPrice<T>(this NPCShop shop, int customValue, params Condition[] conditions) where T : ModItem => shop.AddWithCustomValue(ModContent.ItemType<T>(), customValue, conditions);
+
+    public static bool IsNPCOnScreen(Vector2 center)
     {
-        return shop.AddWithCustomValue(ModContent.ItemType<T>(), customValue, conditions);
+        int w = NPC.sWidth + NPC.safeRangeX * 2;
+        int h = NPC.sHeight + NPC.safeRangeY * 2;
+        Rectangle npcScreenRect = new((int)center.X - w / 2, (int)center.Y - h / 2, w, h);
+        foreach (Player player in Main.player)
+            if (player.active && player.getRect().Intersects(npcScreenRect))
+                return true;
+        return false;
     }
 }

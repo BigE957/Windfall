@@ -13,19 +13,17 @@ using Windfall.Content.UI;
 using Terraria.Enums;
 using DialogueHelper.UI.Dialogue;
 using Windfall.Content.Items.Quests.Cafeteria;
-using Windfall.Content.Projectiles.NPCAnimations;
 using static Windfall.Common.Graphics.Verlet.VerletIntegration;
 using Windfall.Content.Items.Placeables.Furnature.VerletHangers.Cords;
 using Windfall.Content.Items.Quests.SealingRitual;
 using Windfall.Content.Buffs.Inhibitors;
 using static Windfall.Content.NPCs.WorldEvents.LunarCult.RecruitableLunarCultist;
-using Terraria;
 
 namespace Windfall.Common.Systems.WorldEvents;
 
 public class LunarCultBaseSystem : ModSystem
 {
-    #region Static Variables
+    #region Wide Use Static Variables
     public static Point LunarCultBaseLocation;
 
     public static Rectangle CultBaseTileArea;
@@ -57,6 +55,18 @@ public class LunarCultBaseSystem : ModSystem
     public static bool DraconicBoneSequenceActive = false;
 
     public static int DraconicBoneTimer = 0;
+
+    private static bool OnCooldown = true;
+
+    public static bool Active = false;
+
+    private static int ActivityTimer = -1;
+
+    public static Point ActivityCoords = new(-1, -1);
+
+    private static List<int> NPCIndexs = [];
+
+    private static float zoom = 0;
     #endregion
 
     public override void OnModLoad()
@@ -124,7 +134,7 @@ public class LunarCultBaseSystem : ModSystem
 
         CultBaseWorldArea = new(CultBaseTileArea.X * 16, CultBaseTileArea.Y * 16, CultBaseTileArea.Width * 16, CultBaseTileArea.Height * 16);
 
-        CultBaseBridgeArea = new(BaseFacingLeft ? CultBaseTileArea.Left - 90 : CultBaseTileArea.Right, CultBaseTileArea.Top + 4, 90, CultBaseTileArea.Height - 54);
+        CultBaseBridgeArea = new(BaseFacingLeft ? CultBaseTileArea.Left - 90 : CultBaseTileArea.Right, CultBaseTileArea.Top + 4, 96, CultBaseTileArea.Height - 54);
 
         Recruits = (List<int>)tag.GetList<int>("Recruits");
 
@@ -178,14 +188,7 @@ public class LunarCultBaseSystem : ModSystem
         End,
     }
     public static SystemStates State = SystemStates.CheckReqs;
-    public static SystemStates PlannedActivity = SystemStates.End;
-
-    private static bool OnCooldown = true;
-    public static bool Active = false;
-    private static int ActivityTimer = -1;
-    public static Point ActivityCoords = new(-1, -1);
-    private static List<int> NPCIndexs = [];
-    private static float zoom = 0;        
+    public static SystemStates PlannedActivity = SystemStates.End;    
 
     #region Meeting Variables
     public enum MeetingTopic
@@ -270,7 +273,7 @@ public class LunarCultBaseSystem : ModSystem
 
             Player closestPlayer = Main.player[Player.FindClosest(CultBaseWorldArea.TopLeft(), CultBaseWorldArea.Width, CultBaseWorldArea.Height)];
             float PlayerDistFromHideout = (closestPlayer.Center - CultBaseWorldArea.Center()).Length();
-            if (PlayerDistFromHideout < 1600 && Main.npc.Where(n => n.active && n.type == ModContent.NPCType<Fingerling>()).Count() < 16)
+            if (PlayerDistFromHideout < 1600 && Main.npc.Where(n => n.active && n.type == ModContent.NPCType<Fingerling>()).Count() < 8)
                 SpawnFingerling();
 
             #region Nearby Enemy Murdering
@@ -346,7 +349,7 @@ public class LunarCultBaseSystem : ModSystem
         switch (State)
         {
             case SystemStates.CheckReqs:
-                if (!NPC.downedPlantBoss || Recruits.Count == 4 || OnCooldown || Main.dayTime || AnyBossNPCS(true))
+                if (!NPC.downedPlantBoss || FinalMeetingSeen || OnCooldown || Main.dayTime || AnyBossNPCS(true))
                 {
                     if (Main.dayTime)
                     {
@@ -452,7 +455,7 @@ public class LunarCultBaseSystem : ModSystem
                         case SystemStates.OratorVisit:
                             break;
                     }
-                    if(PlannedActivity != SystemStates.Meeting)
+                    if(PlannedActivity != SystemStates.Meeting && PlannedActivity != SystemStates.FinalMeeting)
                     {
                         NPC speaker = NPC.NewNPCDirect(Entity.GetSource_None(), LunarCultBaseLocation.X * 16 + (BaseFacingLeft ? -816 : 816), (LunarCultBaseLocation.Y + 24) * 16, ModContent.NPCType<LunarBishop>(), ai2: 4);
                         speaker.As<LunarBishop>().myCharacter = LunarBishop.Character.Speaker;
@@ -488,8 +491,8 @@ public class LunarCultBaseSystem : ModSystem
                 #region Player Proximity
                 Vector2 entranceArea = Main.npc[NPC.FindFirstNPC(ModContent.NPCType<Watchman>())].Center;
                 Player closestPlayer = Main.player[Player.FindClosest(entranceArea, 1, 1)];
-                float PlayerDistFromHideout = (entranceArea - closestPlayer.Center).Length();
-                if (PlayerDistFromHideout < 160f && closestPlayer.Center.Y < entranceArea.Y + 16)
+                float PlayerDistFromSpeaker = (entranceArea - closestPlayer.Center).Length();
+                if (PlayerDistFromSpeaker < 160f && closestPlayer.Center.Y < entranceArea.Y + 16)
                     State = SystemStates.Yap;
                 #endregion
 
@@ -810,15 +813,16 @@ public class LunarCultBaseSystem : ModSystem
 
                 #region Player Proximity
                 closestPlayer = Main.player[Player.FindClosest(new Vector2(ActivityCoords.X, ActivityCoords.Y), 300, 300)];
-                PlayerDistFromHideout = new Vector2(closestPlayer.Center.X - ActivityCoords.X, closestPlayer.Center.Y - ActivityCoords.Y).Length();
-                if (PlannedActivity == SystemStates.Meeting && PlayerDistFromHideout < 300f)
+                PlayerDistFromSpeaker = new Vector2(closestPlayer.Center.X - ActivityCoords.X, closestPlayer.Center.Y - ActivityCoords.Y).Length();
+                if (PlannedActivity == SystemStates.Meeting || PlannedActivity == SystemStates.FinalMeeting && PlayerDistFromSpeaker < 300f)
                 {
-                    State = SystemStates.Meeting;
+                    State = PlannedActivity;
                     Active = true;
                 }
                 #endregion
+                
                 #region Despawn  
-                else if (Main.dayTime && !Active && PlayerDistFromHideout > 4000f)
+                else if (Main.dayTime && !Active && PlayerDistFromSpeaker > 4000f)
                 {
                     ActivityCoords = new(-1, -1);
                     State = SystemStates.CheckReqs;
@@ -1163,16 +1167,21 @@ public class LunarCultBaseSystem : ModSystem
                     else
                         zoom = 0.4f;
                     CameraPanSystem.Zoom = zoom;
-                    CameraPanSystem.PanTowards(new Vector2(ActivityCoords.X, ActivityCoords.Y - 150), zoom);
+                    CameraPanSystem.PanTowards(new Vector2(ActivityCoords.X - 128 * (LunarCultBaseSystem.BaseFacingLeft ? 1 : -1), ActivityCoords.Y + 176), zoom * 2.5f);
                     #endregion
 
                     NPC orator = Main.npc[NPCIndexs[0]];
 
                     if (ActivityTimer == 30)
-                        ModContent.GetInstance<DialogueUISystem>().DisplayDialogueTree(Windfall.Instance, "Cutscenes/CultMeetings/Final", new(Name, [orator.whoAmI]));
+                    {
+                        ModContent.GetInstance<DialogueUISystem>().DisplayDialogueTree(Windfall.Instance, "Cutscenes/CultMeetings/FinalMeeting", new(Name, [orator.whoAmI]));
+                        ActivityTimer++;
+                    }
                     else if (ActivityTimer > 60 && !ModContent.GetInstance<DialogueUISystem>().isDialogueOpen)
                         Active = false;
-
+                    
+                    if(!ModContent.GetInstance<DialogueUISystem>().isDialogueOpen)
+                        ActivityTimer++;
                 }
                 else
                 {
@@ -1183,6 +1192,8 @@ public class LunarCultBaseSystem : ModSystem
                         Item item = Main.item[Item.NewItem(orator.GetSource_Loot(), orator.Center, new Vector2(8, 4), ModContent.ItemType<LunarCoin>())];
                         item.velocity = Vector2.UnitY.RotatedBy(Main.rand.NextFloat(-PiOver2, PiOver2)) * -4;
                     }
+
+                    orator.active = false;
 
                     State = SystemStates.End;
                     FinalMeetingSeen = true;
@@ -1249,7 +1260,7 @@ public class LunarCultBaseSystem : ModSystem
         if (DraconicBoneTimer == 60)
         {
             Point spawnPos = CultBaseWorldArea.Center().ToPoint() + new Point(-16, 891);
-            NPC.NewNPC(Entity.GetSource_None(), spawnPos.X, spawnPos.Y, ModContent.NPCType<OratorNPC>(), ai0: 4);
+            NPC.NewNPC(Entity.GetSource_None(), spawnPos.X, spawnPos.Y, ModContent.NPCType<OratorNPC>(), ai0: (int)OratorNPC.States.Cutscene);
         }
 
         DraconicBoneTimer++;
@@ -1499,7 +1510,7 @@ public class LunarCultBaseSystem : ModSystem
         if (Main.netMode == NetmodeID.MultiplayerClient)
             return;
 
-        for (int i = 0; i < 16; i++)
+        for (int i = 0; i < 8; i++)
         {
             Rectangle spawnArea = CultBaseTileArea;
             int checkPositionX = spawnArea.X + Main.rand.Next(spawnArea.Width);

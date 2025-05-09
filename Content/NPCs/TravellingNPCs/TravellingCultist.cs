@@ -163,17 +163,16 @@ public class TravellingCultist : ModNPC, ILocalizedModType
         new("TravellingCultist/Introductions/SelenicOrderTalk", (player) => CurrentDialogue == DialogueState.SelenicOrderTalk, (byte)PriorityTiers.QuestUpdate, false),
         new("TravellingCultist/Introductions/LightShardQuest", (player) => CurrentDialogue == DialogueState.RitualQuestRecruitmentAndShard, (byte)PriorityTiers.QuestUpdate, false),
         new("TravellingCultist/Introductions/RecruitmentComplete", (player) => QuestSystem.Quests["Recruitment"].Complete, (byte)PriorityTiers.QuestUpdate, false),
-        new("TravellingCultist/Introductions/BoneQuest", (player) => CurrentDialogue == DialogueState.RitualQuestBone, (byte)PriorityTiers.QuestUpdate, false),
+        new("TravellingCultist/Introductions/BoneQuest", (player) => CurrentDialogue == DialogueState.RitualQuestBone && LunarCultBaseSystem.FinalMeetingSeen, (byte)PriorityTiers.QuestUpdate, false),
         new("TravellingCultist/Introductions/RitualTalk", (player) => CurrentDialogue == DialogueState.RitualTalk, (byte)PriorityTiers.QuestUpdate, false),
     ]);
     internal bool introductionDone = false;
 
     public override void OnSpawn(IEntitySource source)
     {
-        Main.NewText(CurrentDialogue);
-
         if (NPC.ai[3] == 1)
         {
+            myBehavior = BehaviorState.StandStill;
             NPC.aiStyle = -1;
             NPC.direction = 1;
             return;
@@ -422,10 +421,11 @@ public class TravellingCultist : ModNPC, ILocalizedModType
             return;
 
         NPC cultist = Main.npc[(int)uiSystem.CurrentDialogueContext.Arguments[0]];
+        bool behaviorAltered = false;
 
         if (treeKey.Contains("Introductions"))
             cultist.As<TravellingCultist>().introductionDone = true;
-        //Main.NewText(QuestSystem.Quests["TabletFragment"].Progress = 0);
+        
         switch (treeKey)
         {
             #region Introductions
@@ -478,34 +478,35 @@ public class TravellingCultist : ModNPC, ILocalizedModType
                     QuestSystem.Quests["TabletFragment"].IncrementProgress();
                     CurrentDialogue = DialogueState.RitualQuestTablet;
                     cultist.As<TravellingCultist>().myBehavior = BehaviorState.FollowPlayer;
+                    behaviorAltered = true;
                 }
                 break;
             case "TravellingCultist/DraconicRuins":
                 if (dialogueID == 2)
-                {
                     QuestSystem.Quests["TabletFragment"].IncrementProgress();
-                    cultist.As<TravellingCultist>().myBehavior = BehaviorState.Wander;
-                }
                 break;
             case "TravellingCultist/QuestProgress/QuestLightShard":
                 if (dialogueID == 1)
                     QuestSystem.Quests["PrimordialLightShard"].IncrementProgress();
                 break;
             case "TravellingCultist/QuestProgress/QuestDragonBone":
-                if (dialogueID == 1)
+                if (dialogueID == 1 || dialogueID == 3)
                     QuestSystem.Quests["DraconicBone"].IncrementProgress();
                 break;
             #endregion
         }
+
+        if(!behaviorAltered)
+            cultist.As<TravellingCultist>().myBehavior = BehaviorState.Wander;
     }
 
     public override bool PreAI()
     {
-        if (myBehavior == BehaviorState.Wander && (!Main.dayTime || Main.time >= despawnTime) && !IsNpcOnscreen(NPC.Center)) // If it's past the despawn time and the NPC isn't onscreen
+        if (myBehavior == BehaviorState.Wander && (!Main.dayTime || Main.time >= despawnTime) && !IsNPCOnScreen(NPC.Center)) // If it's past the despawn time and the NPC isn't onscreen
         {
             // Here we despawn the NPC and send a message stating that the NPC has despawned
             if (NPC.active)
-                CalamityMod.CalamityUtils.DisplayLocalizedText("The " + DisplayName + " has departed!", new(50, 125, 255));
+                CalamityUtils.DisplayLocalizedText("The " + DisplayName + " has departed!", new(50, 125, 255));
             NPC.netSkip = -1;
             NPC.active = false;
             return false;
@@ -513,16 +514,7 @@ public class TravellingCultist : ModNPC, ILocalizedModType
 
         return true;
     }
-    private static bool IsNpcOnscreen(Vector2 center)
-    {
-        int w = NPC.sWidth + NPC.safeRangeX * 2;
-        int h = NPC.sHeight + NPC.safeRangeY * 2;
-        Rectangle npcScreenRect = new((int)center.X - w / 2, (int)center.Y - h / 2, w, h);
-        foreach (Player player in Main.player)
-            if (player.active && player.getRect().Intersects(npcScreenRect))
-                return true;
-        return false;
-    }
+
     public override bool CheckActive() => myBehavior == BehaviorState.Wander;
 
     private int Time = 0;

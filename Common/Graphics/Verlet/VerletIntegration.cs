@@ -181,6 +181,9 @@ public static class VerletIntegration
 
                 foreach (Projectile proj in Main.ActiveProjectiles)
                 {
+                    if (proj.velocity == Vector2.Zero)
+                        continue;
+
                     temp = MoveObjectBasedOnEntity(obj, proj, dampening, cap, isChain);
                     if (!notableMove && temp)
                         notableMove = true;
@@ -209,9 +212,12 @@ public static class VerletIntegration
                     if (obj[i].Connections[j].Length == -1)
                         continue;
 
+                    if (!obj.Positions.Any(p => e.Hitbox.Contains(p.ToPoint())))
+                        continue;
+
                     VerletPoint next = obj[i].Connections[j].Point;
                     float _ = 0f;
-                    if (Collision.CheckAABBvLineCollision(e.TopLeft, e.Size, segment.Position, next.Position, 20f, ref _))
+                    if (Collision.CheckAABBvLineCollision(e.TopLeft, e.Size, segment.Position, next.Position, 8f, ref _))
                     {
                         // Weigh the entity's distance between the two segments.
                         float distanceBetweenSegments = segment.Position.Distance(next.Position);
