@@ -1222,17 +1222,22 @@ public class LunarCultBaseSystem : ModSystem
                             5//"Jamie",
                         ];
 
+                        IDs.RemoveAll(i => Recruits.Contains(i));
+                        int availableRecruits = IDs.Count();
+
                         List<Vector2> AvailablePositions =
                         [
                             new((CultBaseTileArea.Center.X - 4) * 16, (CultBaseTileArea.Center.Y - 8) * 16),
                             new((CultBaseTileArea.Center.X - 4) * 16, (CultBaseTileArea.Center.Y - 8) * 16),
                             new((CultBaseTileArea.Center.X - 4) * 16, CultBaseTileArea.Center.Y * 16),
                             new((CultBaseTileArea.Center.X - 4) * 16, CultBaseTileArea.Center.Y * 16),
-                            Main.npc[NPC.FindFirstNPC(ModContent.NPCType<TheChef>())].Center + (Vector2.UnitX * 256),
-                            Main.npc[NPC.FindFirstNPC(ModContent.NPCType<TheChef>())].Center + (Vector2.UnitX * 256)
+                            Main.npc[NPC.FindFirstNPC(ModContent.NPCType<TheChef>())].Center + (Vector2.UnitX * (BaseFacingLeft ? -256 : 256)),
+                            Main.npc[NPC.FindFirstNPC(ModContent.NPCType<TheChef>())].Center + (Vector2.UnitX * (BaseFacingLeft ? -256 : 256))
                         ];
 
-                        for (int i = 0; i < 4 - currentRecruitCount; i++)
+                        int spawnCount = (int)Min(4 - currentRecruitCount, availableRecruits);
+
+                        for (int i = 0; i < spawnCount; i++)
                         {
                             NPC recruit = null;
                             int nameIndex = Main.rand.Next(IDs.Count);
