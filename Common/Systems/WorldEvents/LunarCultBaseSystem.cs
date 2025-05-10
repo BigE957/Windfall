@@ -1210,7 +1210,9 @@ public class LunarCultBaseSystem : ModSystem
                 if (!BetrayalActive)
                 {
                     int currentRecruitCount = Main.npc.Where(n => n.active && n.type == ModContent.NPCType<RecruitableLunarCultist>()).Count();
-                    if (currentRecruitCount < 4)
+                    const int RecruitCount = 3;
+
+                    if (currentRecruitCount < RecruitCount)
                     {
                         List<int> IDs =
                         [
@@ -1222,8 +1224,8 @@ public class LunarCultBaseSystem : ModSystem
                             5//"Jamie",
                         ];
 
-                        IDs.RemoveAll(i => Recruits.Contains(i));
-                        int availableRecruits = IDs.Count();
+                        IDs.RemoveAll(Recruits.Contains);
+                        int availableRecruits = IDs.Count;
 
                         List<Vector2> AvailablePositions =
                         [
@@ -1235,20 +1237,18 @@ public class LunarCultBaseSystem : ModSystem
                             Main.npc[NPC.FindFirstNPC(ModContent.NPCType<TheChef>())].Center + (Vector2.UnitX * (BaseFacingLeft ? -256 : 256))
                         ];
 
-                        int spawnCount = (int)Min(4 - currentRecruitCount, availableRecruits);
+                        int spawnCount = (int)Min(RecruitCount - currentRecruitCount, availableRecruits);
 
                         for (int i = 0; i < spawnCount; i++)
                         {
-                            NPC recruit = null;
                             int nameIndex = Main.rand.Next(IDs.Count);
                             int posIndex = Main.rand.Next(AvailablePositions.Count);
                             
-                            recruit = NPC.NewNPCDirect(NPC.GetSource_NaturalSpawn(), AvailablePositions[posIndex], ModContent.NPCType<RecruitableLunarCultist>());
+                            NPC recruit = NPC.NewNPCDirect(NPC.GetSource_NaturalSpawn(), AvailablePositions[posIndex], ModContent.NPCType<RecruitableLunarCultist>());
 
                             RecruitableLunarCultist Recruit = recruit.As<RecruitableLunarCultist>();
-                            Recruit.MyName = (RecruitableLunarCultist.RecruitNames)IDs[nameIndex];
-                            Recruit.Chattable = true;
-                            Recruit.canRecruit = true;
+                            Recruit.MyName = (RecruitNames)IDs[nameIndex];
+                            Recruit.Chattable = Recruit.canRecruit = true;
                             Recruit.OnSpawn(NPC.GetSource_NaturalSpawn());
 
                             IDs.RemoveAt(nameIndex);
