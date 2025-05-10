@@ -1,21 +1,21 @@
 {
   "Dialogues": [
     {
-      "DialogueText": [{ "Text": "An invitation into our order from our Master himself is a rare thing. You must indeed be something special. I am here to answer any inqueries you might have... I imagine this is a lot to take in." }],
+      "DialogueText": [ { "Text": "Our Master has taken a great interest in you, though after our run-in at those old ruins, I can't say I see why. Nevertheless, you have been invited into our Order, and I am here to answer any questions you may have." } ],
       "Responses":
         [
           {
-            "Title": "Knowledge?",
+            "Title": "Master?",
             "Heading": 1
           },
           {
-            "Title": "Balance?",
+            "Title": "Path?",
             "Heading": 2
           }
         ]
     },
     {
-      "DialogueText": [ { "Text": "You have been invited into our order, and as such, you will be allowed to partake in our ceremonies. It is in such places you will come to learn the wisdom we have gained, and see the path we now walk." } ],
+      "DialogueText": [ { "Text": "Our Master is known to many as simply The Orator for it is their words that we live by. It is they who guide us towards a brighter future, and it is they who has uplifted us all with this greater purpose. You should be honored to have been invited into our Order by them personally." } ],
       "Responses": [
         {
           "Title": "Why me?",
@@ -28,20 +28,20 @@
       ]
     },
     {
-      "DialogueText": [ { "Text": "Our order has, for a long time now, worked in the shadows; preparing for what is soon to transpire... While this balance we've held in place is begining to come undone, that matters little. Soon the world shall be born anew in a more perfect image." } ],
+      "DialogueText": [ { "Text": "Our order has, for a long time now, worked in the shadows; preparing for what is soon to transpire... Opening the path is our goal, and once we succeed, our world shall be repainted into a more perfect image. No longer will we live in fear of those who have held dominion over us for so long." } ],
       "Responses": [
         {
           "Title": "Why me?",
           "Heading": 3
         },
         {
-          "Title": "Your goal?",
+          "Title": "I don't understand...",
           "Heading": 4
         }
       ]
     },
     {
-      "DialogueText": [ { "Text": "Your actions have peaked the interest of our Master; he sees great promise in you. I just hope you don't disappoint..." } ],
+      "DialogueText": [ { "Text": "Your actions have peaked the interest of our Master; he sees great promise in you. There are few who could change our world in such a way as you. I just hope you see things as we do, and not dare to stand against us as you have before." } ],
       "Responses": [
         {
           "Title": "What's this?",
@@ -50,7 +50,7 @@
       ]
     },
     {
-      "DialogueText": [ { "Text": "You may come to learn our goals... if you are indeed truly devoted. If you are not, well... Our master will certainly not take kindly to it." } ],
+      "DialogueText": [ { "Text": "You may come to learn more of our Order in the coming days if you are truly devoted to our cause. If you are not, well... Our master will certainly not take kindly to it." } ],
       "Responses": [
         {
           "Title": "What's this?",
