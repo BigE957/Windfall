@@ -19,11 +19,11 @@
 			"DialogueText": [ { "Text": "Recruit4: And... how do we do that?" } ]
 		},
 		{
-			"DialogueText": [ { "Text": "It's actually quite simple! ...Just. ...Hold. ...Still." } ],
+			"DialogueText": [ { "Text": "It's actually quite simple! ...Just. ...Hold. ...Still. ..." } ],
 			"Skippable": false
 		},
 		{
-			"DialogueText": [ { "Text": "Perfect! You did a wonderful job, my friend. I mean, luring in vessels as expendable as these? A magnificent idea! We won't need to worry about them, and can simply complete the ritual here and now!" } ],
+			"DialogueText": [ { "Text": "Perfect! You did a wonderful job, my friend. I mean, luring in vessels as expendable as these? A magnificent idea! Without needing to worry about them, we can enact the ritual here and now!" } ],
 			"Responses": [
 				{
 					"Title": "No!",

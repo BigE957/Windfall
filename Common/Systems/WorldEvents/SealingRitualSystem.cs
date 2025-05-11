@@ -76,10 +76,12 @@ public class SealingRitualSystem : ModSystem
     public override void PreUpdateWorld()
     {
         #region Debugging Stuffs
-        //QuestSystem.Quests["SealingRitual"].ResetQuest();
-        //QuestSystem.Quests["SealingRitual"].Active = true;
-        //State = SystemState.CheckReqs;  
-        //RitualSequenceSeen = false;
+        /*
+        QuestSystem.Quests["SealingRitual"].ResetQuest();
+        QuestSystem.Quests["SealingRitual"].Active = true;
+        State = SystemState.CheckReqs;  
+        RitualSequenceSeen = false;
+        */
 
         //Recruits = [1, 2, 3, 4];
         //Recruits = [];
@@ -187,49 +189,49 @@ public class SealingRitualSystem : ModSystem
                                 StopTimer = true;
                                 break;
 
-                            case 120:
+                            case 160: 
                                 RecruitsHover[1] = 0;
                                 Recruit2.velocity.Y = -3;
                                 break;
 
-                            case 180:
+                            case 250:
                                 RecruitsHover[2] = 0;
                                 Recruit3.velocity.Y = -3;
                                 break;
 
-                            case 240:
+                            case 340:
                                 RecruitsHover[0] = 0;
                                 Recruit1.velocity.Y = -3;
                                 break;
 
-                            case 300:
+                            case 430:
                                 RecruitsHover[3] = 0;
                                 Recruit4.velocity.Y = -3;
                                 RitualTimer++;
                                 StopTimer = true;
                                 break;
 
-                            case 270:
+                            case 500:
                                 SoundEngine.PlaySound(SoundID.Item71, DungeonCoords);
                                 Projectile.NewProjectile(Entity.GetSource_NaturalSpawn(), DungeonCoords, new Vector2(0, -20), ModContent.ProjectileType<EmpyreanThorn>(), 200, 0f, ai0: -1);
                                 CultistDir = CultistFacing.UhmHeavenIg;
                                 LunaticCultist.noGravity = true;
-                                LunaticCultist.position.Y -= 64;
+                                LunaticCultist.position.Y -= 128;
                                 LunaticCultist.velocity = Vector2.Zero;
                                 LunaticCultist.rotation = -Pi / 2;
 
                                 RitualTimer++;
                                 StopTimer = true;
-                                break; //420
+                                break;
 
-                            case 390: //540
+                            case 680:
                                 NPC orator = NPC.NewNPCDirect(Entity.GetSource_NaturalSpawn(), (int)DungeonCoords.X, (int)DungeonCoords.Y - 8, ModContent.NPCType<OratorNPC>());
                                 SoundEngine.PlaySound(SoundID.DD2_EtherianPortalDryadTouch, orator.Center);
                                 for (int i = 0; i < 32; i++)
                                     EmpyreanMetaball.SpawnDefaultParticle(orator.Center + new Vector2(Main.rand.NextFloat(-64, 64), 64), Vector2.UnitY * Main.rand.NextFloat(4f, 24f) * -1, Main.rand.NextFloat(110f, 130f));
                                 break;
 
-                            case 420:
+                            case 710:
                                 if (Recruit1.ModNPC is RecruitableLunarCultist Recruitable1 && Recruit2.ModNPC is RecruitableLunarCultist Recruitable2 && Recruit3.ModNPC is RecruitableLunarCultist Recruitable3 && Recruit4.ModNPC is RecruitableLunarCultist Recruitable4)
                                 {
                                     Recruit1.velocity.Y = Recruit2.velocity.Y = Recruit3.velocity.Y = Recruit4.velocity.Y = -5;
@@ -246,9 +248,9 @@ public class SealingRitualSystem : ModSystem
                                     GetRecruitValues(Recruitable4.MyName.ToString(), out TextColor, out key);
                                     DisplayMessage(Recruit4.Hitbox, TextColor, "Emoticons.Shock");
                                 }
-                                break; //570
+                                break;
 
-                            case 510: //660
+                            case 800:
                                 uiSystem.DisplayDialogueTree(Windfall.Instance, "Cutscenes/SealingRitual/OratorIntro", new(Name, [NPC.FindFirstNPC(ModContent.NPCType<OratorNPC>())]));
                                 RitualTimer++;
                                 StopTimer = true;
@@ -299,9 +301,9 @@ public class SealingRitualSystem : ModSystem
                         #endregion
 
                         #region Orator Goop
-                        if (RitualTimer >= 152 && RitualTimer <= 390)
+                        if (RitualTimer >= 432 && RitualTimer <= 680)
                         {
-                            float ratio = Clamp((RitualTimer - 152) / 60f, 0f, 1f);
+                            float ratio = Clamp((RitualTimer - 332) / 60f, 0f, 1f);
                             //Main.NewText(ratio);
                             float width = 64f * ExpInEasing(ratio);
                             width = Clamp(width, 0f, 72f);
@@ -391,7 +393,7 @@ public class SealingRitualSystem : ModSystem
 
         uiSystem.CurrentTree.Dialogues[1].DialogueText[0].Text = GetWindfallTextValue($"Dialogue.LunarCult.Recruits.{(RecruitableLunarCultist.RecruitNames)Recruits[0]}.SealingRitual.0");
         uiSystem.CurrentTree.Dialogues[3].DialogueText[0].Text = GetWindfallTextValue($"Dialogue.LunarCult.Recruits.{(RecruitableLunarCultist.RecruitNames)Recruits[2]}.SealingRitual.1");
-        uiSystem.CurrentTree.Dialogues[4].DialogueText[0].Text = GetWindfallTextValue($"Dialogue.LunarCult.Recruits.{(RecruitableLunarCultist.RecruitNames)Recruits[3]}.SealingRitual.2");
+        uiSystem.CurrentTree.Dialogues[5].DialogueText[0].Text = GetWindfallTextValue($"Dialogue.LunarCult.Recruits.{(RecruitableLunarCultist.RecruitNames)Recruits[3]}.SealingRitual.2");
     }
 
     private static void ClickEffect(string treeKey, int dialogueID, int buttonID, bool swapped)
