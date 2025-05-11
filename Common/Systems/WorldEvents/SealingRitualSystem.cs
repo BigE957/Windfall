@@ -303,7 +303,7 @@ public class SealingRitualSystem : ModSystem
                         #region Orator Goop
                         if (RitualTimer >= 432 && RitualTimer <= 680)
                         {
-                            float ratio = Clamp((RitualTimer - 332) / 60f, 0f, 1f);
+                            float ratio = Clamp((RitualTimer - 432) / 60f, 0f, 1f);
                             //Main.NewText(ratio);
                             float width = 64f * ExpInEasing(ratio);
                             width = Clamp(width, 0f, 72f);
