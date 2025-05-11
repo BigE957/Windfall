@@ -22,7 +22,7 @@ public class WindfallGlobalProjectile : GlobalProjectile
             if(p.Center.DistanceSQ(projectile.Center) > 1440000)
                 projectile.active = false;
         }
-
+        
         if (LunarCultBaseSystem.CultBaseTileArea.Intersects(new((int)projectile.position.X / 16, (int)projectile.position.Y / 16, projectile.width, projectile.height)) || LunarCultBaseSystem.CultBaseBridgeArea.Intersects(new((int)projectile.position.X / 16, (int)projectile.position.Y / 16, projectile.width, projectile.height)))
         {
             if (projectile.type == ProjectileID.SandBallFalling || projectile.type == ProjectileID.SiltBall || projectile.type == ProjectileID.SlushBall)
@@ -31,6 +31,7 @@ public class WindfallGlobalProjectile : GlobalProjectile
                 return false;
             }
         }
+
         return base.PreAI(projectile);
     }
 }

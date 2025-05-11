@@ -164,7 +164,7 @@ public static class VerletIntegration
     public static bool AffectVerletObject(VerletObject obj, float dampening, float cap, bool isChain = true)
     {
         bool notableMove = false;
-
+        
         if (obj == null)
             return false;
 
@@ -178,7 +178,7 @@ public static class VerletIntegration
                     if(!notableMove && temp)
                         notableMove = true;
                 }
-
+                
                 foreach (Projectile proj in Main.ActiveProjectiles)
                 {
                     if (proj.velocity == Vector2.Zero)
@@ -188,6 +188,7 @@ public static class VerletIntegration
                     if (!notableMove && temp)
                         notableMove = true;
                 }
+                
             }
 
         return notableMove;
@@ -207,12 +208,13 @@ public static class VerletIntegration
             if (isChain)
             {
                 bool mainSegmentHit = false;
+
+                if (!obj.Positions.Any(p => e.Hitbox.Contains(p.ToPoint())))
+                    return false;
+
                 for (int j = 0; j < obj[i].Connections.Count; j++)
                 {
                     if (obj[i].Connections[j].Length == -1)
-                        continue;
-
-                    if (!obj.Positions.Any(p => e.Hitbox.Contains(p.ToPoint())))
                         continue;
 
                     VerletPoint next = obj[i].Connections[j].Point;
@@ -240,6 +242,9 @@ public static class VerletIntegration
             }
             else
             {
+                if (!obj.Positions.Any(p => e.Hitbox.Contains(p.ToPoint())))
+                    return false;
+
                 for (int j = 0; j < obj[i].Connections.Count; j++)
                 {
                     if (obj[i].Connections[j].Length == -1)

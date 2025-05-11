@@ -76,10 +76,10 @@ public class SealingRitualSystem : ModSystem
     public override void PreUpdateWorld()
     {
         #region Debugging Stuffs
-        QuestSystem.Quests["SealingRitual"].ResetQuest();
-        QuestSystem.Quests["SealingRitual"].Active = true;
-        State = SystemState.CheckReqs;  
-        RitualSequenceSeen = false;
+        //QuestSystem.Quests["SealingRitual"].ResetQuest();
+        //QuestSystem.Quests["SealingRitual"].Active = true;
+        //State = SystemState.CheckReqs;  
+        //RitualSequenceSeen = false;
 
         //Recruits = [1, 2, 3, 4];
         //Recruits = [];
@@ -187,22 +187,22 @@ public class SealingRitualSystem : ModSystem
                                 StopTimer = true;
                                 break;
 
-                            case 60:
+                            case 120:
                                 RecruitsHover[1] = 0;
                                 Recruit2.velocity.Y = -3;
                                 break;
 
-                            case 90:
+                            case 180:
                                 RecruitsHover[2] = 0;
                                 Recruit3.velocity.Y = -3;
                                 break;
 
-                            case 120:
+                            case 240:
                                 RecruitsHover[0] = 0;
                                 Recruit1.velocity.Y = -3;
                                 break;
 
-                            case 150:
+                            case 300:
                                 RecruitsHover[3] = 0;
                                 Recruit4.velocity.Y = -3;
                                 RitualTimer++;
@@ -220,9 +220,9 @@ public class SealingRitualSystem : ModSystem
 
                                 RitualTimer++;
                                 StopTimer = true;
-                                break;
+                                break; //420
 
-                            case 390:
+                            case 390: //540
                                 NPC orator = NPC.NewNPCDirect(Entity.GetSource_NaturalSpawn(), (int)DungeonCoords.X, (int)DungeonCoords.Y - 8, ModContent.NPCType<OratorNPC>());
                                 SoundEngine.PlaySound(SoundID.DD2_EtherianPortalDryadTouch, orator.Center);
                                 for (int i = 0; i < 32; i++)
@@ -246,9 +246,9 @@ public class SealingRitualSystem : ModSystem
                                     GetRecruitValues(Recruitable4.MyName.ToString(), out TextColor, out key);
                                     DisplayMessage(Recruit4.Hitbox, TextColor, "Emoticons.Shock");
                                 }
-                                break;
+                                break; //570
 
-                            case 510:
+                            case 510: //660
                                 uiSystem.DisplayDialogueTree(Windfall.Instance, "Cutscenes/SealingRitual/OratorIntro", new(Name, [NPC.FindFirstNPC(ModContent.NPCType<OratorNPC>())]));
                                 RitualTimer++;
                                 StopTimer = true;

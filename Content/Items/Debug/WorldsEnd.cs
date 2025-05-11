@@ -1,5 +1,5 @@
 ﻿using DialogueHelper.UI.Dialogue;
-using Windfall.Common.Systems;
+using Windfall.Content.Items.Quests.SealingRitual;
 
 namespace Windfall.Content.Items.Debug;
 
@@ -17,7 +17,8 @@ public class WorldsEnd : ModItem, ILocalizedModType
     }
     public override bool? UseItem(Player player)
     {
-        ModContent.GetInstance<DialogueUISystem>().DisplayDialogueTree(Windfall.Instance, "Cutscenes/DraconicRuins/Arrival", new(Name, [-1]), 3);
+        DialogueUISystem uiSystem = ModContent.GetInstance<DialogueUISystem>();
+        uiSystem.DisplayDialogueTree(Windfall.Instance, "TravellingCultist/QuestProgress/QuestLightShard", new(Name, [0]));
         return true;
     }
 }

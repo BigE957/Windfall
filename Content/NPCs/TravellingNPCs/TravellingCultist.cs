@@ -275,6 +275,7 @@ public class TravellingCultist : ModNPC, ILocalizedModType
     private static void ModifyTree(string treeKey, int dialogueID, int buttonID, bool swapped)
     {
         DialogueUISystem uiSystem = ModContent.GetInstance<DialogueUISystem>();
+
         if (uiSystem.CurrentDialogueContext.Catagory != "TravellingCultist")
             return;
 
@@ -504,7 +505,6 @@ public class TravellingCultist : ModNPC, ILocalizedModType
     {
         if (myBehavior == BehaviorState.Wander && (!Main.dayTime || Main.time >= despawnTime) && !IsNPCOnScreen(NPC.Center)) // If it's past the despawn time and the NPC isn't onscreen
         {
-            // Here we despawn the NPC and send a message stating that the NPC has despawned
             if (NPC.active)
                 CalamityUtils.DisplayLocalizedText("The " + DisplayName + " has departed!", new(50, 125, 255));
             NPC.netSkip = -1;

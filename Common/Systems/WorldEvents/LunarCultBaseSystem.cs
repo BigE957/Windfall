@@ -18,6 +18,7 @@ using Windfall.Content.Items.Placeables.Furnature.VerletHangers.Cords;
 using Windfall.Content.Items.Quests.SealingRitual;
 using Windfall.Content.Buffs.Inhibitors;
 using static Windfall.Content.NPCs.WorldEvents.LunarCult.RecruitableLunarCultist;
+using Terraria;
 
 namespace Windfall.Common.Systems.WorldEvents;
 
@@ -134,7 +135,7 @@ public class LunarCultBaseSystem : ModSystem
 
         CultBaseWorldArea = new(CultBaseTileArea.X * 16, CultBaseTileArea.Y * 16, CultBaseTileArea.Width * 16, CultBaseTileArea.Height * 16);
 
-        CultBaseBridgeArea = new(BaseFacingLeft ? CultBaseTileArea.Left - 90 : CultBaseTileArea.Right, CultBaseTileArea.Top + 4, 96, CultBaseTileArea.Height - 54);
+        CultBaseBridgeArea = new(BaseFacingLeft ? CultBaseTileArea.Left - 90 : CultBaseTileArea.Right, CultBaseTileArea.Top + 4, 99, CultBaseTileArea.Height - 54);
 
         Recruits = (List<int>)tag.GetList<int>("Recruits");
 
@@ -1274,6 +1275,9 @@ public class LunarCultBaseSystem : ModSystem
     public override void PreUpdateProjectiles()
     {
         if (LunarCultBaseLocation == new Point(-1, -1))
+            return;
+
+        if (Main.player[Player.FindClosest(CultBaseWorldArea.Bottom(), 1, 1)].Center.DistanceSQ(CultBaseWorldArea.Bottom()) > 1440000)
             return;
 
         // Handle Verlet Sims
