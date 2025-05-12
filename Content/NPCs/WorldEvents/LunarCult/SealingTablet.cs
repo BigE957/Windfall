@@ -1,5 +1,4 @@
 ﻿using Windfall.Common.Graphics.Metaballs;
-using Windfall.Common.Graphics.Verlet;
 using Windfall.Common.Systems.WorldEvents;
 using Windfall.Content.Items.Quests.SealingRitual;
 using Windfall.Content.NPCs.Bosses.Orator;

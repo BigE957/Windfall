@@ -1,5 +1,7 @@
 ﻿using CalamityMod.Items.Weapons.Ranged;
 using CalamityMod.Particles;
+using System.Runtime.CompilerServices;
+using System.Threading.Tasks;
 
 namespace Windfall.Common.Systems;
 public class PathfindingSystem : ModSystem
@@ -11,15 +13,79 @@ public class PathfindingSystem : ModSystem
 
 
     private static Node[][] NodeMap;
-    private static readonly int TileScalar = 2;
-    private static readonly Point[] Dirs =
+    public static readonly Point[] Dirs =
     [
-        new(0, TileScalar), new(-TileScalar, 0), new(0, -TileScalar), new(TileScalar, 0),
-        new(TileScalar, TileScalar), new(TileScalar, -TileScalar), new(-TileScalar, -TileScalar), new(-TileScalar, TileScalar)
+        new(0, 1), new(-1, 0), new(0, -1), new(1, 0),
+        new(1, 1), new(1, -1), new(-1, -1), new(-1, 1)
     ];
 
     public override void OnWorldLoad()
     {
+        int MaxX = Main.maxTilesX;
+        int MaxY = Main.maxTilesY;
+
+        NodeMap = new Node[MaxX][];
+        Parallel.For(0, MaxX, x => {
+            NodeMap[x] = new Node[MaxY];
+        });
+
+        int processorCount = Environment.ProcessorCount;
+
+        // Use square chunks for better cache efficiency
+        int chunkSize = (int)Math.Sqrt(MaxX * MaxY / (processorCount * 4));
+        chunkSize = Math.Max(16, chunkSize); // Ensure reasonable chunk size
+
+        // The number of chunks in each dimension
+        int numChunksX = (MaxX + chunkSize - 1) / chunkSize;
+        int numChunksY = (MaxY + chunkSize - 1) / chunkSize;
+        int totalChunks = numChunksX * numChunksY;
+
+        // Create nodes in chunks
+        Parallel.For(0, totalChunks, chunkIndex => {
+            // Calculate this chunk's bounds
+            int chunkX = chunkIndex % numChunksX;
+            int chunkY = chunkIndex / numChunksX;
+
+            int startX = chunkX * chunkSize;
+            int startY = chunkY * chunkSize;
+            int endX = Math.Min(startX + chunkSize, MaxX);
+            int endY = Math.Min(startY + chunkSize, MaxY);
+
+            // Process this chunk - good cache locality
+            for (int x = startX; x < endX; x++)
+            {
+                for (int y = startY; y < endY; y++)
+                {
+                    NodeMap[x][y] = new Node(new Point(x, y));
+                }
+            }
+        });
+
+        // Initialize neighbors with the same chunking strategy
+        Parallel.For(0, totalChunks, chunkIndex => {
+            // Calculate this chunk's bounds
+            int chunkX = chunkIndex % numChunksX;
+            int chunkY = chunkIndex / numChunksX;
+
+            int startX = chunkX * chunkSize;
+            int startY = chunkY * chunkSize;
+            int endX = Math.Min(startX + chunkSize, MaxX);
+            int endY = Math.Min(startY + chunkSize, MaxY);
+
+            // Process neighbor initialization in the same chunk
+            for (int x = startX; x < endX; x++)
+            {
+                for (int y = startY; y < endY; y++)
+                {
+                    // Use the faster neighbor initialization for a completely filled grid
+                    // This approach is much faster for a dense grid
+                    NodeMap[x][y].InitNeighborsFast();
+                }
+            }
+        });
+
+
+        /*
         NodeMap = new Node[Main.maxTilesX][];
         for (int x = 0; x < Main.maxTilesX; x += TileScalar)
         {
@@ -36,6 +102,7 @@ public class PathfindingSystem : ModSystem
                 NodeMap[x][y].InitNeighbors();
             }
         }
+        */
     }
 
     public override void OnWorldUnload()
@@ -43,7 +110,7 @@ public class PathfindingSystem : ModSystem
         NodeMap = null;
     }
 
-    public class Node(Point position) : IComparable
+    public class Node(Point position) : IComparable<Node>
     {
         public Point TilePosition { get; } = position;
         public Vector2 WorldPosition { get; } = position.ToWorldCoordinates();
@@ -60,10 +127,16 @@ public class PathfindingSystem : ModSystem
         [NonSerialized]
         public int QueueIndex = -1;
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public void SetConnection(Node node) => Connection = node;
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public void SetG(int g) => G = g;
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public void SetF(int f) => F = f;
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public int GetDistance(int targetX, int targetY)
         {
             int dx = Math.Abs(X - targetX);
@@ -88,6 +161,54 @@ public class PathfindingSystem : ModSystem
             Neighbors = [.. validNeighbors];
         }
 
+        public void InitNeighborsFast()
+        {
+            Neighbors = new Node[8];
+            int count = 0;
+
+            // Unroll the loop for maximum performance
+            // Check top-left
+            if (X > 0 && Y > 0)
+                Neighbors[count++] = NodeMap[X - 1][Y - 1];
+
+            // Check top
+            if (Y > 0)
+                Neighbors[count++] = NodeMap[X][Y - 1];
+
+            // Check top-right
+            if (X < Main.maxTilesX - 1 && Y > 0)
+                Neighbors[count++] = NodeMap[X + 1][Y - 1];
+
+            // Check left
+            if (X > 0)
+                Neighbors[count++] = NodeMap[X - 1][Y];
+
+            // Check right
+            if (X < Main.maxTilesX - 1)
+                Neighbors[count++] = NodeMap[X + 1][Y];
+
+            // Check bottom-left
+            if (X > 0 && Y < Main.maxTilesY - 1)
+                Neighbors[count++] = NodeMap[X - 1][Y + 1];
+
+            // Check bottom
+            if (Y < Main.maxTilesY - 1)
+                Neighbors[count++] = NodeMap[X][Y + 1];
+
+            // Check bottom-right
+            if (X < Main.maxTilesX - 1 && Y < Main.maxTilesY - 1)
+                Neighbors[count++] = NodeMap[X + 1][Y + 1];
+
+            // Resize array if needed (only for edge cases)
+            if (count < 8)
+            {
+                var resized = new Node[count];
+                Array.Copy(Neighbors, resized, count);
+                Neighbors = resized;
+            }
+        }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public void ResetState()
         {
             G = int.MaxValue;
@@ -95,15 +216,12 @@ public class PathfindingSystem : ModSystem
             Connection = null;
         }
 
-        public int CompareTo(object other)
+        public int CompareTo(Node other)
         {
-            if (other == null || other is not Node)
-                return 0;
-            Node node = (Node)other;
-            if (F != node.F)
-                return F.CompareTo(node.F);
+            if (other == null)
+                return 1;
 
-            return G.CompareTo(node.G);
+            return (F != other.F) ? F.CompareTo(other.F) : G.CompareTo(other.G);
         }
     }
 
@@ -250,56 +368,10 @@ public class PathfindingSystem : ModSystem
         private readonly HashSet<Point> ClosedSet = new(4096);
         private readonly HashSet<Node> ModifiedNodes = new(100);
 
-        public static Point FindNearestValidNode(Vector2 WorldPos, Func<Point, Point, bool> isWalkable)
+        public void FindPathInRadius(Vector2 startWorld, Vector2 targetWorld, Func<Point, Point, bool> isWalkable, Func<Point, int> costFunction = null, float searchRadius = 1225)
         {
-            Point NodePos = WorldPos.ToTileCoordinates();
-            NodePos.X += NodePos.X % 2;
-            NodePos.Y += NodePos.Y % 2;
-
-            //Dust.NewDustPerfect(NodePos.ToWorldCoordinates(), DustID.Shadowflame, Vector2.Zero);
-
-            Single dist = 999;
-            if (WorldGen.InWorld(NodePos.X, NodePos.Y, 20) && !Framing.GetTileSafely(NodePos.X, NodePos.Y).IsSolid())
-                Vector2.Distance(NodePos.ToWorldCoordinates(), WorldPos);
-
-            //Dust.NewDustPerfect(WorldPos, DustID.Electric, Vector2.Zero).noGravity = true;
-
-            for (int x = -1; x <= 1; x++)
-            {
-                for(int y = -1; y <= 1; y++)
-                {
-                    if (x == 0 && y == 0)
-                        continue;
-
-                    Point checkPoint = NodePos + new Point(x * TileScalar, y * TileScalar);
-                    //Dust.NewDustPerfect(checkPoint.ToWorldCoordinates(), DustID.LifeDrain, Vector2.Zero);
-                    if (WorldGen.InWorld(NodePos.X, NodePos.Y) && !Framing.GetTileSafely(checkPoint.X, checkPoint.Y).IsSolid() && Collision.CanHit(WorldPos, 1, 1, checkPoint.ToWorldCoordinates(), 1, 1))
-                    {
-                        Single newDist = Vector2.Distance(WorldPos, checkPoint.ToWorldCoordinates());
-                        if (newDist < dist)
-                        {
-                            dist = newDist;
-                            NodePos = checkPoint;
-                        }
-                    }
-                }
-            }
-
-            //Dust.NewDustPerfect(NodePos.ToWorldCoordinates(), DustID.Terra, Vector2.Zero);
-            if (dist == 999)
-                return new Point(-1, -1);
-            return NodePos; //Failed to find a Node, give up.
-        }
-
-        public void FindPath(Vector2 startWorld, Vector2 targetWorld, Func<Point, Point, bool> isWalkable, Func<Point, int> costFunction = null, float searchRadius = 1225)
-        {
-            ClearNodeStates(ModifiedNodes);
-            ModifiedNodes.Clear();
-            OpenSet.Clear();
-            ClosedSet.Clear();
-
-            Point StartPoint = FindNearestValidNode(startWorld, isWalkable);
-            Point TargetPoint = FindNearestValidNode(targetWorld, isWalkable);
+            Point StartPoint = startWorld.ToTileCoordinates();
+            Point TargetPoint = targetWorld.ToTileCoordinates();
 
             if (StartPoint == new Point(-1, -1) || TargetPoint == new Point(-1, -1))
             {
@@ -309,97 +381,25 @@ public class PathfindingSystem : ModSystem
 
             if (StartPoint == TargetPoint)
             {
-                MyPath = new FoundPath([TargetPoint]);
+                MyPath = new FoundPath([StartPoint, TargetPoint]);
                 return;
             }
 
             float radiusSquared = searchRadius * searchRadius;
-            float distSquared = TargetPoint.ToWorldCoordinates().Distance(StartPoint.ToWorldCoordinates());
 
-            if (distSquared > radiusSquared)
+            if (Vector2.DistanceSquared(targetWorld, startWorld) > radiusSquared)
             {
                 MyPath = null;
                 return;
             }
 
-            Node startNode = NodeMap[StartPoint.X + StartPoint.X % 2][StartPoint.Y + StartPoint.Y % 2];
-
-            int startToTarget = startNode.GetDistance(TargetPoint.X, TargetPoint.Y);           
-
-            startNode.ResetState();
-            startNode.SetG(0);
-            startNode.SetF(startToTarget);
-            ModifiedNodes.Add(startNode);
-
-            const int maxIterations = 5000;
-            int iterations = 0;
-
-            OpenSet.Enqueue(startNode, startNode.F);
-
-            while (OpenSet.Count > 0 && iterations < maxIterations)
-            {
-                Node current = OpenSet.Dequeue();
-
-                //Particle p = new GlowOrbParticle(current.TilePosition.ToWorldCoordinates(), Vector2.Zero, false, 2, 0.5f, Color.Red);
-                //GeneralParticleHandler.SpawnParticle(p);
-
-                int distanceToTarget = current.GetDistance(TargetPoint.X, TargetPoint.Y);
-                if (distanceToTarget <= 20 && (targetWorld - current.WorldPosition).LengthSquared() < 800)
-                {
-                    //Main.NewText("Iteration Count: " + iterations);
-                    MyPath = ReconstructPath(current, startNode);
-                    //Main.NewText("Path Length: " + MyPath.Points.Length);
-                    ClearNodeStates(ModifiedNodes);
-                    return;
-                }
-
-                ClosedSet.Add(current.TilePosition);
-
-                foreach (Node neighbor in current.Neighbors)
-                {
-                    if (ClosedSet.Contains(neighbor.TilePosition))
-                        continue;
-                    
-                    if (!isWalkable(current.TilePosition, neighbor.TilePosition))
-                        continue;
-
-                    if ((targetWorld - neighbor.WorldPosition).LengthSquared() > radiusSquared)
-                        continue;
-
-                    int tentativeG = current.G + current.GetDistance(neighbor.X, neighbor.Y) + (costFunction == null ? 0 : costFunction(neighbor.TilePosition));
-
-                    if (tentativeG < neighbor.G)
-                    {
-                        ModifiedNodes.Add(neighbor);
-                        neighbor.SetConnection(current);
-                        neighbor.SetG(tentativeG);
-
-                        int newF = tentativeG + neighbor.GetDistance(TargetPoint.X, TargetPoint.Y);
-                        neighbor.SetF(newF);
-
-                        if (OpenSet.Contains(neighbor))
-                            OpenSet.UpdatePriority(neighbor, newF);
-                        else
-                            OpenSet.Enqueue(neighbor, newF);
-                    }
-                }
-                iterations++;
-            }
-
-            ClearNodeStates(ModifiedNodes);
-            MyPath = null;
-            return;
+            FindPath(startWorld, targetWorld, isWalkable, new(p => Vector2.DistanceSquared(p.ToWorldCoordinates(), targetWorld) <= radiusSquared), costFunction);
         }
 
-        public void FindPath(Vector2 startWorld, Vector2 targetWorld, Func<Point, Point, bool> isWalkable, Rectangle searchArea, Func<Point, int> costFunction = null)
+        public void FindPathInArea(Vector2 startWorld, Vector2 targetWorld, Func<Point, Point, bool> isWalkable, Rectangle searchArea, Func<Point, int> costFunction = null)
         {
-            ClearNodeStates(ModifiedNodes);
-            ModifiedNodes.Clear();
-            OpenSet.Clear();
-            ClosedSet.Clear();
-
-            Point StartPoint = FindNearestValidNode(startWorld, isWalkable);
-            Point TargetPoint = FindNearestValidNode(targetWorld, isWalkable);
+            Point StartPoint = startWorld.ToTileCoordinates();
+            Point TargetPoint = targetWorld.ToTileCoordinates();
 
             if (StartPoint == new Point(-1, -1) || TargetPoint == new Point(-1, -1))
             {
@@ -409,17 +409,30 @@ public class PathfindingSystem : ModSystem
 
             if (StartPoint == TargetPoint)
             {
-                MyPath = new FoundPath([TargetPoint]);
+                MyPath = new FoundPath([StartPoint, TargetPoint]);
                 return;
             }
 
-            if (!searchArea.Contains(StartPoint) || !searchArea.Contains(TargetPoint))
+            if (!searchArea.Contains(startWorld.ToTileCoordinates()) || !searchArea.Contains(targetWorld.ToTileCoordinates()))
             {
                 MyPath = null;
                 return;
             }
 
-            Node startNode = NodeMap[StartPoint.X + StartPoint.X % 2][StartPoint.Y + StartPoint.Y % 2];
+            FindPath(startWorld, targetWorld, isWalkable, searchArea.Contains, costFunction);
+        }
+
+        public void FindPath(Vector2 startWorld, Vector2 targetWorld, Func<Point, Point, bool> isWalkable, Func<Point, bool> isValid, Func<Point, int> costFunction = null)
+        {
+            ClearNodeStates(ModifiedNodes);
+            ModifiedNodes.Clear();
+            OpenSet.Clear();
+            ClosedSet.Clear();
+
+            Point StartPoint = startWorld.ToTileCoordinates();
+            Point TargetPoint = targetWorld.ToTileCoordinates();
+
+            Node startNode = NodeMap[StartPoint.X][StartPoint.Y];
 
             int startToTarget = startNode.GetDistance(TargetPoint.X, TargetPoint.Y);
 
@@ -428,7 +441,7 @@ public class PathfindingSystem : ModSystem
             startNode.SetF(startToTarget);
             ModifiedNodes.Add(startNode);
 
-            const int maxIterations = 5000;
+            const int maxIterations = 4096;
             int iterations = 0;
 
             OpenSet.Enqueue(startNode, startNode.F);
@@ -443,7 +456,7 @@ public class PathfindingSystem : ModSystem
                 int distanceToTarget = current.GetDistance(TargetPoint.X, TargetPoint.Y);
                 if (distanceToTarget <= 20 && (targetWorld - current.WorldPosition).LengthSquared() < 800)
                 {
-                    //Main.NewText("Iteration Count: " + iterations);
+                    Main.NewText("Iteration Count: " + iterations);
                     MyPath = ReconstructPath(current, startNode);
                     //Main.NewText("Path Length: " + MyPath.Points.Length);
                     ClearNodeStates(ModifiedNodes);
@@ -460,7 +473,7 @@ public class PathfindingSystem : ModSystem
                     if (!isWalkable(current.TilePosition, neighbor.TilePosition))
                         continue;
 
-                    if (!searchArea.Contains(neighbor.TilePosition))
+                    if (!isValid.Invoke(neighbor.TilePosition))
                         continue;
 
                     int tentativeG = current.G + current.GetDistance(neighbor.X, neighbor.Y) + (costFunction == null ? 0 : costFunction(neighbor.TilePosition));
@@ -487,7 +500,6 @@ public class PathfindingSystem : ModSystem
             MyPath = null;
             return;
         }
-
 
         private static void ClearNodeStates(HashSet<Node> nodes)
         {

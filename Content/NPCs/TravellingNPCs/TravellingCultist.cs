@@ -590,9 +590,9 @@ public class TravellingCultist : ModNPC, ILocalizedModType
 
     private bool PathfindingMovement(Vector2 targetPos, float requiredDistSquared = 256)
     {
-        if (jumpTimer != 0 || Time % 10 == 0)
+        if (jumpTimer != 0 || CurrentWaypoint >= pathFinding.MyPath.Points.Length - 2 || Time % 120 == 0)
         {
-            pathFinding.FindPath(NPC.Center, targetPos, NPC.IsWalkableThroughDoors, NPC.noGravity ? null : GravityCostFunction, 1300);
+            pathFinding.FindPathInRadius(NPC.Center, targetPos, NPC.IsWalkableThroughDoors, NPC.noGravity ? null : GravityCostFunction, 1300);
 
             CurrentWaypoint = 1;
         }

@@ -351,9 +351,9 @@ public class LunarCultistDevotee : ModNPC
 
                 if (airTime < 76 && tripTime == 0)
                 {
-                    if (jumpTimer != 0 || Time % 10 == 0)
+                    if (jumpTimer != 0 || CurrentWaypoint >= pathFinding.MyPath.Points.Length - 2 || Time % 120 == 0)
                     {
-                        pathFinding.FindPath(NPC.Center, TargetPos, NPC.IsWalkableThroughDoors, DraconicRuinsSystem.DraconicRuinsArea, NPC.noGravity ? null : GravityCostFunction);
+                        pathFinding.FindPathInArea(NPC.Center, TargetPos, NPC.IsWalkableThroughDoors, DraconicRuinsSystem.DraconicRuinsArea, NPC.noGravity ? null : GravityCostFunction);
 
                         CurrentWaypoint = 1;
                     }
@@ -507,7 +507,7 @@ public class LunarCultistDevotee : ModNPC
                                 if (Math.Abs(NPC.velocity.X) < 1f)
                                 {
                                     Attack = AttackState.None;
-                                    pathFinding.FindPath(NPC.Center, target.Center, NPC.IsWalkableThroughDoors, NPC.noGravity ? null : GravityCostFunction, searchRadius: 800f);
+                                    pathFinding.FindPathInRadius(NPC.Center, target.Center, NPC.IsWalkableThroughDoors, NPC.noGravity ? null : GravityCostFunction, searchRadius: 800f);
                                 }
                             }
 
@@ -538,9 +538,9 @@ public class LunarCultistDevotee : ModNPC
                     if (jumpTimer != 0 || Time % 30 == 0)
                     {
                         if (NPC.ai[3] == 0)
-                            pathFinding.FindPath(NPC.Center, target.Center, NPC.IsWalkableThroughDoors, NPC.noGravity ? null : GravityCostFunction, searchRadius: 800f);
+                            pathFinding.FindPathInRadius(NPC.Center, target.Center, NPC.IsWalkableThroughDoors, NPC.noGravity ? null : GravityCostFunction, searchRadius: 800f);
                         else
-                            pathFinding.FindPath(NPC.Center, target.Center, NPC.IsWalkableThroughDoors, LunarCultBaseSystem.CultBaseTileArea, NPC.noGravity ? null : GravityCostFunction);
+                            pathFinding.FindPathInArea(NPC.Center, target.Center, NPC.IsWalkableThroughDoors, LunarCultBaseSystem.CultBaseTileArea, NPC.noGravity ? null : GravityCostFunction);
 
                         CurrentWaypoint = 1;
                     }
