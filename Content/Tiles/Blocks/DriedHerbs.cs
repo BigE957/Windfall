@@ -17,7 +17,7 @@ public class DriedHerbs : ModTile
         Main.tileFrameImportant[Type] = true;
         TileID.Sets.ReplaceTileBreakUp[Type] = true;
         TileID.Sets.SwaysInWindBasic[Type] = true;
-        TileObjectData.newTile.CopyFrom(TileObjectData.Style1x2);
+        TileObjectData.newTile.CopyFrom(TileObjectData.Style1xX);
         TileObjectData.newTile.StyleHorizontal = true;
         TileObjectData.addTile(Type);
         TileMaterials.SetForTileId(Type, TileMaterials._materialsByName["Plant"]);
@@ -35,7 +35,9 @@ public class DriedHerbs : ModTile
 
     public override void SetDrawPositions(int i, int j, ref int width, ref int offsetY, ref int height, ref short tileFrameX, ref short tileFrameY)
     {
-        offsetY = 6;
+        //offsetY = -16;
+        //height = 48;
+        //tileFrameY += 0;
     }
 
     public override IEnumerable<Item> GetItemDrops(int i, int j)

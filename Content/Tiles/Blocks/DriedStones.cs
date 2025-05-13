@@ -2,7 +2,7 @@
 using Windfall.Content.Items.Placeables;
 
 namespace Windfall.Content.Tiles.Blocks;
-public class DriedDebris : ModTile
+public class DriedStones : ModTile
 {
     public override void SetStaticDefaults()
     {
@@ -26,7 +26,7 @@ public class DriedDebris : ModTile
 
         AddMapEntry(new Color(127, 111, 144));
 
-        FlexibleTileWand.RubblePlacementSmall.AddVariations(ModContent.ItemType<DriedSeeds>(), Type, 0, 1, 2, 3);
+        FlexibleTileWand.RubblePlacementSmall.AddVariations(ModContent.ItemType<DriedSeeds>(), Type, 0, 1, 2);
 
         base.SetStaticDefaults();
     }
