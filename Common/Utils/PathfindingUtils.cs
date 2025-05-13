@@ -91,7 +91,7 @@ public static partial class WindfallUtils
         if (!UpdateWaypoint(pathFinding, ref currentWaypoint, npc.Center))
             return false;
 
-        Dust.NewDustPerfect(pathFinding.MyPath.Points[currentWaypoint].ToWorldCoordinates(), DustID.Terra).velocity /= 2f;
+        //Dust.NewDustPerfect(pathFinding.MyPath.Points[currentWaypoint].ToWorldCoordinates(), DustID.Terra).velocity /= 2f;
 
         // Get the direction to the next waypoint
         Vector2 waypointDirection = CalculateWaypointDirection(pathFinding, currentWaypoint, npc);
@@ -102,7 +102,7 @@ public static partial class WindfallUtils
         bool shouldJump = DetermineIfShouldJump(waypointDirection, standingTilePosition, velocity);
 
         // Handle advanced jump logic (when we might need to jump over obstacles)
-        if (canJump && shouldJump && !(waypointDirection.Y < -0.98f))
+        if (canJump && shouldJump && !(waypointDirection.Y < -0.94f))
         {
             ProcessJumpLogic(ref shouldJump, pathFinding, currentWaypoint, standingTilePosition,
                 velocity, jumpHeight, jumpLength, ref jumpStarted);
@@ -146,7 +146,7 @@ public static partial class WindfallUtils
     /// </summary>
     private static Vector2 CalculateWaypointDirection(PathFinding pathFinding, int currentWaypoint, NPC npc)
     {
-        // If we're heading to the last waypoint, aim directly at it
+        // If we're heading to the last waypoint, aim directly at it       
         if (currentWaypoint + 1 >= pathFinding.MyPath.Points.Length)
         {
             Vector2 targetPoint = pathFinding.MyPath.Points[currentWaypoint].ToWorldCoordinates();
@@ -170,9 +170,9 @@ public static partial class WindfallUtils
             return false;
 
         // Jump if we're trying to move sharply upward
-        if (waypointDirection.Y < -0.98f)
+        if (waypointDirection.Y < -0.94f)
             return true;
-
+        //Main.NewText(waypointDirection);
         // Jump if there's no solid ground ahead in our movement direction
         bool solidAhead = IsSolidOrPlatform(standingTilePosition + new Point(Math.Sign(velocity.X), 0));
         bool solidBelow = IsSolidOrPlatform(standingTilePosition);
@@ -271,9 +271,25 @@ public static partial class WindfallUtils
         if (currentWaypoint >= pathFinding.MyPath.Points.Length - 1)
             return false;
 
-        // Find the closest point in the path
-        int nextWaypoint = currentWaypoint;
-        float closestDistance = float.MaxValue;
+        // Direction of movement (positive X = right, negative X = left)
+        int direction = 0;
+
+        // Determine movement direction based on path points
+        if (currentWaypoint < pathFinding.MyPath.Points.Length - 1)
+        {
+            Vector2 current = pathFinding.MyPath.Points[currentWaypoint].ToWorldCoordinates();
+            Vector2 next = pathFinding.MyPath.Points[currentWaypoint + 1].ToWorldCoordinates();
+            direction = next.X > current.X ? 1 : (next.X < current.X ? -1 : 0);
+        }
+
+        // Initialize variables for finding the best waypoint
+        int bestWaypoint = currentWaypoint;
+        float bestScore = float.MaxValue;
+
+        // Calculate the target X position (ahead of the NPC in the movement direction)
+        float targetX = direction != 0 ?
+            npcPosition.X + (direction * 20) : // Look ahead in the direction of movement
+            npcPosition.X;                     // Or use current position if no clear direction
 
         // Search through all points in the path
         for (int i = 0; i < pathFinding.MyPath.Points.Length; i++)
@@ -281,19 +297,52 @@ public static partial class WindfallUtils
             // Convert path point to world coordinates
             Vector2 pointWorldPos = pathFinding.MyPath.Points[i].ToWorldCoordinates();
 
-            // Calculate distance to NPC
-            float distance = Vector2.Distance(pointWorldPos, npcPosition);
+            if (!Collision.CanHit(npcPosition, 4, 4, pointWorldPos, 4, 4))
+                continue;
 
-            // If this point is closer than our current closest
-            if (distance < closestDistance)
+            // Calculate horizontal distance component (more important)
+            float xDistance = Math.Abs(pointWorldPos.X - targetX);
+
+            // Calculate vertical distance component (less important)
+            float yDistance = Math.Abs(pointWorldPos.Y - npcPosition.Y);
+
+            // Weighted score - prioritize X progress heavily
+            float score = xDistance + (yDistance * 0.5f);
+
+            // Special case: favor points that continue horizontal progress
+            // This helps with gap crossing
+            if (direction != 0)
             {
-                closestDistance = distance;
-                nextWaypoint = i;
+                // If this point is in the direction we want to move
+                bool isInCorrectDirection = (direction > 0 && pointWorldPos.X > npcPosition.X) ||
+                                            (direction < 0 && pointWorldPos.X < npcPosition.X);
+
+                // Give bonus to points in the correct direction
+                if (isInCorrectDirection)
+                {
+                    score *= 0.8f;
+                }
+                else
+                {
+                    // Penalize backtracking severely
+                    score *= 1.5f;
+                }
+            }
+
+            // If this point has a better score than our current best
+            if (score < bestScore)
+            {
+                bestScore = score;
+                bestWaypoint = i;
             }
         }
 
         // Update the current waypoint
-        currentWaypoint = nextWaypoint;
+        currentWaypoint = bestWaypoint;
+
+        if (currentWaypoint >= pathFinding.MyPath.Points.Length - 1)
+            return false;
+
         return true;
     }
 
@@ -338,6 +387,9 @@ public static partial class WindfallUtils
                 break;
             }
         }
+
+        if (IsSolidNotDoor(p + new Point(0, -1)))
+            penalty += 9999;
 
         return penalty;
     }

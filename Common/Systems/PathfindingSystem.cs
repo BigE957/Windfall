@@ -441,7 +441,7 @@ public class PathfindingSystem : ModSystem
             startNode.SetF(startToTarget);
             ModifiedNodes.Add(startNode);
 
-            const int maxIterations = 4096;
+            const int maxIterations = 4096 * 2;
             int iterations = 0;
 
             OpenSet.Enqueue(startNode, startNode.F);

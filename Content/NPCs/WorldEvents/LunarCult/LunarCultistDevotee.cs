@@ -351,7 +351,7 @@ public class LunarCultistDevotee : ModNPC
 
                 if (airTime < 76 && tripTime == 0)
                 {
-                    if (jumpTimer != 0 || CurrentWaypoint >= pathFinding.MyPath.Points.Length - 2 || Time % 120 == 0)
+                    if ((NPC.velocity == Vector2.Zero && NPC.oldVelocity.Y == 0.3f) || (pathFinding.MyPath.Points.Length - CurrentWaypoint <= 3 && Vector2.DistanceSquared(TargetPos, pathFinding.MyPath.Points[^1].ToWorldCoordinates()) > 1600))
                     {
                         pathFinding.FindPathInArea(NPC.Center, TargetPos, NPC.IsWalkableThroughDoors, DraconicRuinsSystem.DraconicRuinsArea, NPC.noGravity ? null : GravityCostFunction);
 
@@ -535,7 +535,7 @@ public class LunarCultistDevotee : ModNPC
                         jumpTimer = 0;
                     }
 
-                    if (jumpTimer != 0 || Time % 30 == 0)
+                    if ((NPC.velocity == Vector2.Zero && NPC.oldVelocity.Y == 0.3f) || (pathFinding.MyPath.Points.Length - CurrentWaypoint <= 3 && Vector2.DistanceSquared(TargetPos, pathFinding.MyPath.Points[^1].ToWorldCoordinates()) > 1600))
                     {
                         if (NPC.ai[3] == 0)
                             pathFinding.FindPathInRadius(NPC.Center, target.Center, NPC.IsWalkableThroughDoors, NPC.noGravity ? null : GravityCostFunction, searchRadius: 800f);
