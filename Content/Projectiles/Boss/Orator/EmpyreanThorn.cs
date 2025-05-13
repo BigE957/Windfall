@@ -39,13 +39,15 @@ public class EmpyreanThorn : ModProjectile
     int aiCounter = 0;
     Vector2 initialPoint = Vector2.Zero;
     float trueRotation = 0f;
+    public bool canDespawn = false;
+
     public override void OnSpawn(IEntitySource source)
     {
         if (Projectile.ai[0] != -1)
         {
             trueRotation = Projectile.velocity.ToRotation();
             Projectile.timeLeft = (int)Projectile.ai[0] + 180;
-            if(!Main.dedServ)
+            if (!Main.dedServ)
                 Projectile.position.X -= Projectile.width / 2f * (InitialScale - 1);
 
             Projectile.height = (int)(Projectile.height * InitialScale);
@@ -53,7 +55,7 @@ public class EmpyreanThorn : ModProjectile
 
             initialPoint = Projectile.Center + (trueRotation.ToRotationVector2() * 64f * InitialScale);
             Projectile.velocity = Vector2.Zero;
-            
+
             //Projectile.netUpdate = true;
         }
     }
@@ -72,8 +74,13 @@ public class EmpyreanThorn : ModProjectile
 
             if (Projectile.timeLeft <= 60)
             {
-                Projectile.Opacity -= 0.1f;
-                Projectile.velocity -= Projectile.rotation.ToRotationVector2() * 4f;
+                if (!canDespawn)
+                    Projectile.timeLeft = 61;
+                else
+                {
+                    Projectile.Opacity -= 0.1f;
+                    Projectile.velocity -= Projectile.rotation.ToRotationVector2() * 4f;
+                }
             }
         }
         else

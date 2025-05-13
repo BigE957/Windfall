@@ -44,6 +44,8 @@ public class SealingRitualSystem : ModSystem
 
     public static bool RitualSequenceSeen = false;
 
+    public static int ThornIndex = -1;
+
     public override void OnModLoad()
     {
         ModContent.GetInstance<DialogueUISystem>().TreeInitialize += ModifyTree;
@@ -213,7 +215,7 @@ public class SealingRitualSystem : ModSystem
 
                             case 500:
                                 SoundEngine.PlaySound(SoundID.Item71, DungeonCoords);
-                                Projectile.NewProjectile(Entity.GetSource_NaturalSpawn(), DungeonCoords, new Vector2(0, -20), ModContent.ProjectileType<EmpyreanThorn>(), 200, 0f, ai0: -1);
+                                ThornIndex = Projectile.NewProjectile(Entity.GetSource_NaturalSpawn(), DungeonCoords, new Vector2(0, -20), ModContent.ProjectileType<EmpyreanThorn>(), 200, 0f, ai0: -1);
                                 CultistDir = CultistFacing.UhmHeavenIg;
                                 LunaticCultist.noGravity = true;
                                 LunaticCultist.position.Y -= 128;
@@ -436,6 +438,11 @@ public class SealingRitualSystem : ModSystem
                 LunaticCultist.immortal = false;
                 LunaticCultist.StrikeInstantKill();
                 NPCIndexs.RemoveAt(5);
+
+                if (ThornIndex == -1)
+                    ThornIndex = FindFirstProjectile(ModContent.ProjectileType<EmpyreanThorn>());
+
+                Main.projectile[ThornIndex].As<EmpyreanThorn>().canDespawn = true;
 
                 for(int i = 0; i < 4; i++)
                     RecruitsHover[i] = -1;
