@@ -1,13 +1,13 @@
 {
   "Dialogues": [
     {
-      "DialogueText": [ { "Text": "AH, why hello! Its good to see you made it! There is a very important meeting that's just about to begin!'" } ]
+      "DialogueText": [ { "Text": "Ah, why hello! Its good to see you made it! There is a very important meeting that's just about to begin!" } ]
     },
     {
-      "DialogueText": [ { "Text": "The Orator will be the one speaking tonight! Truly a rare moment to catch." } ]
+      "DialogueText": [ { "Text": "The Orator will be discussing what is next to come in our plans. You bets pay attention!" } ]
     },
     {
-      "DialogueText": [ { "Text": "It will be taking place in the Meeting Hall as usual, downstairs. Listen well, the Orator's words are full of wisdom!" } ]
+      "DialogueText": [ { "Text": "It will be taking place in the Meeting Hall as usual, downstairs. You best be off; wouldn't want to miss out!" } ]
     }
   ],
   "Characters": [

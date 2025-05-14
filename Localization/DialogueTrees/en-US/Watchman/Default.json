@@ -95,7 +95,7 @@
       ]
     },
     {
-      "DialogueText": [ { "Text": "Yup! Though we don't know much about the dragon itself, nor what actually happened to it. If there were anything here that'd hae told us, we'd know. The Orator was very thorough in searching through all the books that were first found here." } ],
+      "DialogueText": [ { "Text": "Yup! We believe the Dragon passed as a result of the Dragon Hunts; leaving this Library behind for us to eventually find. I've actually inquired with our Master about the topic, but they didn't find anything further about the Dragon itself from the Library's books." } ],
       "Responses": [
         {
           "Title": "I see.",
@@ -108,7 +108,7 @@
       ]
     },
     {
-      "DialogueText": [ { "Text": "It is quite a beautiful thing; isn't it? Well this is something I actually do know the story of! Some of the texts here told of the Dragon's journey down here, and in it we learned that this tree actually came from the Dragon's old home! It must hold some sort of magic; how else could it still be thriving in such a different environment?" } ],
+      "DialogueText": [ { "Text": "It is quite a beautiful thing, isn't it? Well this is something we do know the story of! Our Master found that the tree actually originates from the fabled home of the Dragons: the Dragons' Aerie! I believe it must hold some sort of magic... How else could it still be thriving in such a different environment?" } ],
       "Responses": [
         {
           "Title": "Wow!",

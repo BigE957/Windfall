@@ -1446,7 +1446,7 @@ Items: {
 		Vanity: {
 			FuriousCocktail: {
 				DisplayName: Furious Cocktail
-				Tooltip: "Wouldn't be wise to drink this..."
+				Tooltip: Wouldn't be wise to drink this...
 			}
 		}
 	}
