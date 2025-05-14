@@ -1441,6 +1441,15 @@ Items: {
 		DisplayName: Crescent Key
 		Tooltip: ""
 	}
+
+	Accessories: {
+		Vanity: {
+			FuriousCocktail: {
+				DisplayName: Furious Cocktail
+				Tooltip: "Wouldn't be wise to drink this..."
+			}
+		}
+	}
 }
 
 NPCs: {

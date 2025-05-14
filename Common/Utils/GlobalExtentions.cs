@@ -1,5 +1,6 @@
 ﻿using Windfall.Common.Players;
 using Windfall.Content.Items.GlobalItems;
+using Windfall.Content.Items.Vanity.DevVanities;
 using Windfall.Content.NPCs.GlobalNPCs;
 using Windfall.Content.Projectiles;
 
@@ -11,6 +12,7 @@ public static partial class WindfallUtils
     public static GodlyPlayer Godly(this Player player) => player.GetModPlayer<GodlyPlayer>();
     public static LunarCultPlayer LunarCult(this Player player) => player.GetModPlayer<LunarCultPlayer>();
     public static MonolithPlayer Monolith(this Player player) => player.GetModPlayer<MonolithPlayer>();
+    public static DevVanityPlayer DevVanity(this Player player) => player.GetModPlayer<DevVanityPlayer>();
     
     public static WindfallGlobalNPC Windfall(this NPC npc) => npc.GetGlobalNPC<WindfallGlobalNPC>();
     public static DebuffGlobalNPC Debuff(this NPC npc) => npc.GetGlobalNPC<DebuffGlobalNPC>();
