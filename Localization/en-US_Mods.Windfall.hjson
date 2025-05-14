@@ -1770,6 +1770,11 @@ ModCompat: {
 			DisplayName: Sand Fell Through My Fingers
 			Author: by Sidetracked
 		}
+
+		DragonRuinRace: {
+			DisplayName: A Race for the Past and Future!
+			Author: by Sidetracked
+		}
 	}
 
 	BossChecklist: {

@@ -11,9 +11,10 @@ public class DevVanityPlayer : ModPlayer
     {
         orig(self, itemSlot, item, modded);
 
-        if (item.ModItem is DevVanity)
+        if (item.ModItem is DevVanity devVanity)
         {
-            self.back = EquipLoader.GetEquipSlot(Mod, item.ModItem.Name, EquipType.Back);
+            if(devVanity.HasBack)
+                self.back = EquipLoader.GetEquipSlot(Mod, item.ModItem.Name, EquipType.Back);
             self.legs = EquipLoader.GetEquipSlot(Mod, item.ModItem.Name, EquipType.Legs);
             self.body = EquipLoader.GetEquipSlot(Mod, item.ModItem.Name, EquipType.Body);
             self.head = EquipLoader.GetEquipSlot(Mod, item.ModItem.Name, EquipType.Head);

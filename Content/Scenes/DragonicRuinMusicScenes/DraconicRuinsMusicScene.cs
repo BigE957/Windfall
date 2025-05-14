@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Windfall.Common.Systems.WorldEvents;
+﻿using Windfall.Common.Systems.WorldEvents;
 
 namespace Windfall.Content.Scenes.DragonicRuinMusicScenes;
 public class DraconicRuinsMusicScene : ModSceneEffect
@@ -14,7 +9,7 @@ public class DraconicRuinsMusicScene : ModSceneEffect
 
     private static int RuinsMusic()
     {
-        if (DraconicRuinsSystem.CutsceneTime >= 810 && DraconicRuinsSystem.State != DraconicRuinsSystem.CutsceneState.CultistEnd)
+        if (DraconicRuinsSystem.CutsceneTime >= 150 && DraconicRuinsSystem.State != DraconicRuinsSystem.CutsceneState.Arrival)
             return 0;
         return MusicLoader.GetMusicSlot(Windfall.Instance, "Assets/Music/DragonRuin");
     }
