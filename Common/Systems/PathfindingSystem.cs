@@ -74,30 +74,24 @@ public class PathfindingSystem : ModSystem
 
             // Process neighbor initialization in the same chunk
             for (int x = startX; x < endX; x++)
-            {
                 for (int y = startY; y < endY; y++)
-                {
-                    // Use the faster neighbor initialization for a completely filled grid
-                    // This approach is much faster for a dense grid
                     NodeMap[x][y].InitNeighborsFast();
-                }
-            }
         });
 
 
         /*
         NodeMap = new Node[Main.maxTilesX][];
-        for (int x = 0; x < Main.maxTilesX; x += TileScalar)
+        for (int x = 0; x < Main.maxTilesX; x++)
         {
             NodeMap[x] = new Node[Main.maxTilesY];
-            for (int y = 0; y < Main.maxTilesY; y += TileScalar)
+            for (int y = 0; y < Main.maxTilesY; y++)
             {
                 NodeMap[x][y] = new Node(new Point(x, y));
             }
         }
-        for (int x = 0; x < Main.maxTilesX; x += TileScalar)
+        for (int x = 0; x < Main.maxTilesX; x++)
         {
-            for (int y = 0; y < Main.maxTilesY; y += TileScalar)
+            for (int y = 0; y < Main.maxTilesY; y++)
             {
                 NodeMap[x][y].InitNeighbors();
             }

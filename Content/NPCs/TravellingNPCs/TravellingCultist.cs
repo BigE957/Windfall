@@ -168,6 +168,9 @@ public class TravellingCultist : ModNPC, ILocalizedModType
     ]);
     internal bool introductionDone = false;
 
+    int PlayerIndex = -1;
+    Player MyPlayer => PlayerIndex == -1 ? null : Main.player[PlayerIndex];
+
     public override void OnSpawn(IEntitySource source)
     {
         if (NPC.ai[3] == 1)
@@ -257,7 +260,8 @@ public class TravellingCultist : ModNPC, ILocalizedModType
         //    pool.CirculatingDialogues.Add(new("TravellingCultist/Introductions/BoneQuest", (player) => CurrentDialogue == DialogueState.RitualQuestBone, (byte)PriorityTiers.QuestUpdate));
 
         myBehavior = BehaviorState.StandStill;
-        if (NPC.Center.X < Main.LocalPlayer.Center.X)
+        PlayerIndex = Main.LocalPlayer.whoAmI;
+        if (NPC.Center.X < MyPlayer.Center.X)
             NPC.direction = -1;
         else
             NPC.direction = 1;
@@ -268,7 +272,7 @@ public class TravellingCultist : ModNPC, ILocalizedModType
         else if (introductionDone)
             ModContent.GetInstance<DialogueUISystem>().DisplayDialogueTree(Windfall.Instance, "TravellingCultist/Default", new(Name, [NPC.whoAmI]));
         else
-            ModContent.GetInstance<DialogueUISystem>().DisplayDialogueTree(Windfall.Instance, pool.GetTree(Main.LocalPlayer), new(Name, [NPC.whoAmI]));
+            ModContent.GetInstance<DialogueUISystem>().DisplayDialogueTree(Windfall.Instance, pool.GetTree(MyPlayer), new(Name, [NPC.whoAmI]));
 
         return "";
     }
@@ -478,6 +482,7 @@ public class TravellingCultist : ModNPC, ILocalizedModType
                 {
                     QuestSystem.Quests["TabletFragment"].IncrementProgress();
                     CurrentDialogue = DialogueState.RitualQuestTablet;
+                    cultist.As<TravellingCultist>().PlayerIndex = Main.LocalPlayer.whoAmI;
                     cultist.As<TravellingCultist>().myBehavior = BehaviorState.FollowPlayer;
                     behaviorAltered = true;
                 }
@@ -567,10 +572,13 @@ public class TravellingCultist : ModNPC, ILocalizedModType
                 NPC.noGravity = false;
                 break;
             case BehaviorState.FollowPlayer:
-                if (Vector2.DistanceSquared(Main.LocalPlayer.Center, NPC.Center) > 1690000) //1300^2
-                    NPC.Center = Main.LocalPlayer.Center;
+                if (PlayerIndex == -1)
+                    PlayerIndex = Player.FindClosest(NPC.position, NPC.width, NPC.height);
+
+                if (Vector2.DistanceSquared(MyPlayer.Center, NPC.Center) > 1690000) //1300^2
+                    NPC.Center = MyPlayer.Center;
                 else
-                    PathfindingMovement(Main.LocalPlayer.Center);
+                    PathfindingMovement(MyPlayer.Center);
                 break;
             case BehaviorState.MoveToTargetLocation:
                 PathfindingMovement(TargetLocation, 64);
