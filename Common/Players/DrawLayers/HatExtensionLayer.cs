@@ -45,7 +45,7 @@ public class HatExtensionLayer : PlayerDrawLayer
                 Texture2D extraPieceTexture = hatExtension.extensionTexture.Value;
 
                 //Get the frame of the extension based on the players body frame
-                Rectangle frame = extraPieceTexture.Frame(1, 20, 0, drawPlayer.bodyFrame.Y / drawPlayer.bodyFrame.Height);
+                Rectangle frame = extraPieceTexture.Frame((headItem is IAnimatedHead animated ? animated.AnimationLength : 1), 20, 0, drawPlayer.bodyFrame.Y / drawPlayer.bodyFrame.Height);
 
                 if (headItem is IAnimatedHead)
                     frame.X = drawPlayer.HeadAnimationPlayer().animationFrameNum * 40;

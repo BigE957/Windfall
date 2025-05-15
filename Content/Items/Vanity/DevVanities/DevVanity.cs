@@ -78,7 +78,11 @@ public class DevVanityPlayer : ModPlayer
             }
 
             ModItem headItem = EquipLoader.GetEquipTexture(EquipType.Head, self.head).Item;
-            self.DevVanity().currentDevVanity = headItem;
+
+            if (headItem is DevVanity)
+                self.DevVanity().currentDevVanity = headItem;
+            else
+                self.DevVanity().currentDevVanity = null;
         }
     }
 

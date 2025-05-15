@@ -10,10 +10,10 @@ public class FuriousCocktail : DevVanity, IHatExtension, IAnimatedHead
     public override string DevName => "Zarachard";
 
     public Asset<Texture2D> extensionTexture { get; set; }
-    public Vector2 ExtensionSpriteOffset(PlayerDrawSet drawInfo) => new(drawInfo.drawPlayer.direction == 1 ? -20 : 20, -22);
+    public Vector2 ExtensionSpriteOffset(PlayerDrawSet drawInfo) => new(drawInfo.drawPlayer.direction == 1 ? -16 : 16, -24);
 
-    public int AnimationLength => 4;
-    public int AnimationDelay => 10;
+    public int AnimationLength => 5;
+    public int AnimationDelay => 5;
 
     public Asset<Texture2D> headTexture { get; set; }
 
