@@ -1,6 +1,7 @@
 ﻿using CalamityMod.Items;
 using CalamityMod;
 using Windfall.Common.Players.DrawLayers;
+using CalamityMod.Particles;
 
 namespace Windfall.Content.Items.Vanity.DevVanities;
 public class FuriousCocktail : DevVanity, IHatExtension, IAnimatedHead
@@ -39,5 +40,20 @@ public class FuriousCocktail : DevVanity, IHatExtension, IAnimatedHead
     public override void ModifyDrawInfo(ref PlayerDrawSet drawInfo)
     {
         drawInfo.colorArmorHead = Color.White;
+    }
+
+    public override void UpdateVanity(Player player)
+    {
+        Vector2 headPos = player.Center - Vector2.UnitY * 8;
+        Lighting.AddLight(headPos + player.velocity * 6, new Color(255, 0, 72).ToVector3() * 0.75f);
+    }
+
+    public override void UpdateAccessory(Player player, bool hideVisual)
+    {
+        if (!hideVisual)
+        {
+            Vector2 headPos = player.Center - Vector2.UnitY * 8;
+            Lighting.AddLight(headPos + player.velocity * 6, new Color(255, 0, 72).ToVector3() * 0.75f);
+        }
     }
 }
