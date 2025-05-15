@@ -46,8 +46,9 @@ public class HatExtensionLayer : PlayerDrawLayer
 
                 //Get the frame of the extension based on the players body frame
                 Rectangle frame = extraPieceTexture.Frame(1, 20, 0, drawPlayer.bodyFrame.Y / drawPlayer.bodyFrame.Height);
+                frame.X = drawPlayer.bodyFrame.X;
 
-                DrawData pieceDrawData = new DrawData(extraPieceTexture, headDrawPosition, frame, drawInfo.colorArmorHead, drawPlayer.headRotation, drawInfo.headVect, 1f, drawInfo.playerEffect, 0)
+                DrawData pieceDrawData = new (extraPieceTexture, headDrawPosition, frame, drawInfo.colorArmorHead, drawPlayer.headRotation, drawInfo.headVect, 1f, drawInfo.playerEffect, 0)
                 {
                     shader = dyeShader
                 };
