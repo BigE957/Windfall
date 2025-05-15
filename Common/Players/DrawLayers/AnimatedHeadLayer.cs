@@ -1,28 +1,44 @@
-﻿namespace Windfall.Common.Players.DrawLayers;
-public class HatExtensionLayer : PlayerDrawLayer
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace Windfall.Common.Players.DrawLayers;
+public class AnimatedHeadLayer : PlayerDrawLayer
 {
     public override Position GetDefaultPosition() => new AfterParent(PlayerDrawLayers.Head);
 
-    public override bool GetDefaultVisibility(PlayerDrawSet drawInfo) => drawInfo.shadow == 0f || !drawInfo.drawPlayer.dead;
+    public override bool GetDefaultVisibility(PlayerDrawSet drawInfo)
+    {
+        if (drawInfo.drawPlayer.head == -1)
+            return false;
+
+        if (EquipLoader.GetEquipTexture(EquipType.Head, drawInfo.drawPlayer.head) == null)
+            return false;
+
+        ModItem headItem = EquipLoader.GetEquipTexture(EquipType.Head, drawInfo.drawPlayer.head).Item;
+
+        if (headItem is not IAnimatedHead)
+            return false;
+
+        return true;
+    }
+
+    public override bool IsHeadLayer => true;
 
     protected override void Draw(ref PlayerDrawSet drawInfo)
     {
         Player drawPlayer = drawInfo.drawPlayer;
 
-        if (drawPlayer.head == -1)
-            return;
+        ModItem headItem = EquipLoader.GetEquipTexture(EquipType.Head, drawInfo.drawPlayer.head).Item;
 
-        if (EquipLoader.GetEquipTexture(EquipType.Head, drawPlayer.head) == null)
-            return;
-
-        ModItem headItem = EquipLoader.GetEquipTexture(EquipType.Head, drawPlayer.head).Item;
-
-        if (headItem is IHatExtension hatExtension)
+        if (headItem is IAnimatedHead animatedHead)
         {
-            string equipSlotName = hatExtension.EquipSlotName(drawPlayer) != "" ? hatExtension.EquipSlotName(drawPlayer) : headItem.Name;
+            string equipSlotName = headItem.Name;
             int equipSlot = EquipLoader.GetEquipSlot(Mod, equipSlotName, EquipType.Head);
 
-            if (hatExtension.PreDrawExtension(drawInfo) && !drawInfo.drawPlayer.dead && equipSlot == drawPlayer.head)
+            if (animatedHead.PreDraw(drawInfo) && !drawInfo.drawPlayer.dead && equipSlot == drawPlayer.head)
             {
                 int dyeShader = drawPlayer.dye?[0].dye ?? 0;
 
@@ -38,22 +54,17 @@ public class HatExtensionLayer : PlayerDrawLayer
                 //Some dispalcements
                 headDrawPosition += drawPlayer.headPosition + drawInfo.headVect;
 
-                //Apply our custom head position offset
-                headDrawPosition += hatExtension.ExtensionSpriteOffset(drawInfo);
-
                 //Grab the extension texture
-                Texture2D extraPieceTexture = hatExtension.extensionTexture.Value;
+                Texture2D extraPieceTexture = animatedHead.headTexture.Value;
 
                 //Get the frame of the extension based on the players body frame
-                Rectangle frame = extraPieceTexture.Frame(1, 20, 0, drawPlayer.bodyFrame.Y / drawPlayer.bodyFrame.Height);
-
-                if (headItem is IAnimatedHead)
-                    frame.X = drawPlayer.HeadAnimationPlayer().animationFrameNum * 40;
-
+                Rectangle frame = extraPieceTexture.Frame(animatedHead.AnimationLength, 20, drawPlayer.HeadAnimationPlayer().animationFrameNum, drawPlayer.bodyFrame.Y / drawPlayer.bodyFrame.Height);
+                
                 DrawData pieceDrawData = new(extraPieceTexture, headDrawPosition, frame, drawInfo.colorArmorHead, drawPlayer.headRotation, drawInfo.headVect, 1f, drawInfo.playerEffect, 0)
                 {
-                    shader = dyeShader,
+                    shader = dyeShader
                 };
+
                 drawInfo.DrawDataCache.Add(pieceDrawData);
 
             }

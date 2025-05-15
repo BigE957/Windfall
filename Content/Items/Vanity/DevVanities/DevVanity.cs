@@ -1,11 +1,16 @@
-﻿namespace Windfall.Content.Items.Vanity.DevVanities;
+﻿using System.Xml.Schema;
+using Terraria;
+
+namespace Windfall.Content.Items.Vanity.DevVanities;
 public abstract class DevVanity : ModItem, ILocalizedModType
 {
     public new string LocalizationCategory => "Items.Accessories.Vanity";
 
     public virtual string DevName => "";
 
-    public virtual bool HasBack => false;    
+    public virtual bool HasBack => false;
+
+    public virtual void ModifyDrawInfo(ref PlayerDrawSet drawInfo) { }
 
     public override void Load()
     {
@@ -43,6 +48,8 @@ public class DevVanityPlayer : ModPlayer
         On_Player.UpdateVisibleAccessory += SetDevVanity;
     }
 
+    internal ModItem currentDevVanity = null;
+
     private void SetDevVanity(On_Player.orig_UpdateVisibleAccessory orig, Player self, int itemSlot, Item item, bool modded)
     {
         orig(self, itemSlot, item, modded);
@@ -55,5 +62,35 @@ public class DevVanityPlayer : ModPlayer
             self.body = EquipLoader.GetEquipSlot(Mod, item.ModItem.Name, EquipType.Body);
             self.head = EquipLoader.GetEquipSlot(Mod, item.ModItem.Name, EquipType.Head);
         }
+
+        if (itemSlot == 18)
+        {
+            if (self.head == -1)
+            {
+                self.DevVanity().currentDevVanity = null;
+                return;
+            }
+
+            if (EquipLoader.GetEquipTexture(EquipType.Head, self.head) == null)
+            {
+                self.DevVanity().currentDevVanity = null;
+                return;
+            }
+
+            ModItem headItem = EquipLoader.GetEquipTexture(EquipType.Head, self.head).Item;
+            self.DevVanity().currentDevVanity = headItem;
+        }
+    }
+
+    public override void UpdateAutopause()
+    {
+        if (currentDevVanity != null)
+            Player.head = EquipLoader.GetEquipSlot(Mod, currentDevVanity.Name, EquipType.Head);
+    }
+
+    public override void ModifyDrawInfo(ref PlayerDrawSet drawInfo)
+    {
+        if (currentDevVanity != null)
+            ((DevVanity)currentDevVanity).ModifyDrawInfo(ref drawInfo);
     }
 }

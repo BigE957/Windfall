@@ -13,6 +13,7 @@ public static partial class WindfallUtils
     public static LunarCultPlayer LunarCult(this Player player) => player.GetModPlayer<LunarCultPlayer>();
     public static MonolithPlayer Monolith(this Player player) => player.GetModPlayer<MonolithPlayer>();
     public static DevVanityPlayer DevVanity(this Player player) => player.GetModPlayer<DevVanityPlayer>();
+    public static HeadAnimationPlayer HeadAnimationPlayer(this Player player) => player.GetModPlayer<HeadAnimationPlayer>();
     
     public static WindfallGlobalNPC Windfall(this NPC npc) => npc.GetGlobalNPC<WindfallGlobalNPC>();
     public static DebuffGlobalNPC Debuff(this NPC npc) => npc.GetGlobalNPC<DebuffGlobalNPC>();

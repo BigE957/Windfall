@@ -1,19 +1,21 @@
-﻿using Windfall.Content.Items.Interfaces;
+﻿using Windfall.Common.Players.DrawLayers;
 
 namespace Windfall.Common.Players;
-public class AnimationPlayer : ModPlayer
+public class HeadAnimationPlayer : ModPlayer
 {
+    public int animationFrameNum = 0;
+
     public override void FrameEffects()
     {
         if (Player.head == -1)
         {
-            Player.bodyFrame.X = 0;
+            animationFrameNum = 0;
             return;
         }
 
         if (EquipLoader.GetEquipTexture(EquipType.Head, Player.head) == null)
         {
-            Player.bodyFrame.X = 0;
+            animationFrameNum = 0;
             return;
         }
 
@@ -23,12 +25,12 @@ public class AnimationPlayer : ModPlayer
         {
             if (Player.miscCounter % animated.AnimationDelay == 0)
             {
-                Player.bodyFrame.X += 40;
-                if (Player.bodyFrame.X >= 40 * animated.AnimationLength)
-                    Player.bodyFrame.X = 0;
+                animationFrameNum++;
+                if (animationFrameNum >= animated.AnimationLength)
+                    animationFrameNum = 0;
             }
         }
         else
-            Player.bodyFrame.X = 0;
+            animationFrameNum = 0;
     }
 }
