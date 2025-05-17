@@ -764,9 +764,6 @@ public class LunarCultistDevotee : ModNPC
 
     public override bool PreDraw(SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor)
     {
-        if (pathFinding.MyPath != null)
-            pathFinding.MyPath.DrawPath(spriteBatch);
-
         if (NPC.frame.Width > 200)
             FindFrame(NPC.frame.Height);
         Texture2D texture = TextureAssets.Npc[NPC.type].Value;

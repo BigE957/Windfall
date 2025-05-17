@@ -12,8 +12,9 @@ public class WorldSaveSystem : ModSystem
     public static bool MechanicCultistsEncountered = false;
     public static bool SelenicChestOpened = false;
 
-    public static List<string> CreditDataNames;
-    public static List<int> CreditDataCredits;
+    //public static List<string> CreditDataNames;
+    //public static List<int> CreditDataCredits;
+
     public override void ClearWorld()
     {
         ResetWorldData();

@@ -450,7 +450,7 @@ public class PathfindingSystem : ModSystem
                 int distanceToTarget = current.GetDistance(TargetPoint.X, TargetPoint.Y);
                 if (distanceToTarget <= 20 && (targetWorld - current.WorldPosition).LengthSquared() < 800)
                 {
-                    Main.NewText("Iteration Count: " + iterations);
+                    //Main.NewText("Iteration Count: " + iterations);
                     MyPath = ReconstructPath(current, startNode);
                     //Main.NewText("Path Length: " + MyPath.Points.Length);
                     ClearNodeStates(ModifiedNodes);

@@ -2,107 +2,109 @@
 using Windfall.Common.Systems;
 
 namespace Windfall.Content.UI.DraedonsDatabase;
+/*
 
 public class DraedonUISystem : ModSystem
 {
-    internal UserInterface DraedonUI;
-    internal Desktop DesktopState;
-    internal DraeDash DraeDashState;
-    internal PlutusVault PlutusVaultState;
-    internal OrderEnRoute OrderEnRouteState;
-    public static Dictionary<string, int> DraeDashOrder = [];
-    public static bool databaseOpen = false;
-    public override void PostSetupContent()
+internal UserInterface DraedonUI;
+internal Desktop DesktopState;
+internal DraeDash DraeDashState;
+internal PlutusVault PlutusVaultState;
+internal OrderEnRoute OrderEnRouteState;
+public static Dictionary<string, int> DraeDashOrder = [];
+public static bool databaseOpen = false;
+public override void PostSetupContent()
+{
+    if (!Main.dedServ)
     {
-        if (!Main.dedServ)
-        {
-            DraedonUI = new UserInterface();
+        DraedonUI = new UserInterface();
 
-            DesktopState = new Desktop();
-            DesktopState.Activate(); // Activate calls Initialize() on the UIState if not initialized and calls OnActivate, then calls Activate on every child element.
+        DesktopState = new Desktop();
+        DesktopState.Activate(); // Activate calls Initialize() on the UIState if not initialized and calls OnActivate, then calls Activate on every child element.
 
-            DraeDashState = new DraeDash();
-            DraeDashState.Activate();
+        DraeDashState = new DraeDash();
+        DraeDashState.Activate();
 
-            PlutusVaultState = new PlutusVault();
-            PlutusVaultState.Activate();
+        PlutusVaultState = new PlutusVault();
+        PlutusVaultState.Activate();
 
-            OrderEnRouteState = new OrderEnRoute();
-            OrderEnRouteState.Activate();
-        }
+        OrderEnRouteState = new OrderEnRoute();
+        OrderEnRouteState.Activate();
     }
-    public override void Unload()
+}
+public override void Unload()
+{
+    DesktopState = null;
+}
+internal void OpenDraedonDatabase()
+{
+    if (WorldSaveSystem.CreditDataNames != null)
     {
-        DesktopState = null;
-    }
-    internal void OpenDraedonDatabase()
-    {
-        if (WorldSaveSystem.CreditDataNames != null)
-        {
-            if (!WorldSaveSystem.CreditDataNames.Any(n => n == Main.LocalPlayer.name))
-            {
-                WorldSaveSystem.CreditDataNames.Add(Main.LocalPlayer.name);
-                WorldSaveSystem.CreditDataCredits.Add(0);
-            }
-        }
-        else
+        if (!WorldSaveSystem.CreditDataNames.Any(n => n == Main.LocalPlayer.name))
         {
             WorldSaveSystem.CreditDataNames.Add(Main.LocalPlayer.name);
             WorldSaveSystem.CreditDataCredits.Add(0);
         }
-        databaseOpen = true;
-        DraedonUI?.SetState(DesktopState);
     }
-
-    internal void CloseDraedonDatabase()
+    else
     {
-        databaseOpen = false;
-        DraedonUI?.SetState(null);
+        WorldSaveSystem.CreditDataNames.Add(Main.LocalPlayer.name);
+        WorldSaveSystem.CreditDataCredits.Add(0);
     }
+    databaseOpen = true;
+    DraedonUI?.SetState(DesktopState);
+}
 
-    internal void OpenDraedonApp(string app)
+internal void CloseDraedonDatabase()
+{
+    databaseOpen = false;
+    DraedonUI?.SetState(null);
+}
+
+internal void OpenDraedonApp(string app)
+{
+    if (app == "DraeDash")
     {
-        if (app == "DraeDash")
+        if (DraeDash.orderEnRoute)
         {
-            if (DraeDash.orderEnRoute)
-            {
-                DraedonUI?.SetState(OrderEnRouteState);
-            }
-            else
-            {
-                DraedonUI?.SetState(DraeDashState);
-            }
+            DraedonUI?.SetState(OrderEnRouteState);
         }
-        else if (app == "PlutusVault")
-            DraedonUI?.SetState(PlutusVaultState);
-    }
-
-    private GameTime _lastUpdateUiGameTime;
-
-    public override void UpdateUI(GameTime gameTime)
-    {
-        _lastUpdateUiGameTime = gameTime;
-        if (DraedonUI?.CurrentState != null)
+        else
         {
-            DraedonUI.Update(gameTime);
+            DraedonUI?.SetState(DraeDashState);
         }
     }
-    public override void ModifyInterfaceLayers(List<GameInterfaceLayer> layers)
+    else if (app == "PlutusVault")
+        DraedonUI?.SetState(PlutusVaultState);
+}
+
+private GameTime _lastUpdateUiGameTime;
+
+public override void UpdateUI(GameTime gameTime)
+{
+    _lastUpdateUiGameTime = gameTime;
+    if (DraedonUI?.CurrentState != null)
     {
-        int mouseTextIndex = layers.FindIndex(layer => layer.Name.Equals("Vanilla: Mouse Text"));
-        if (mouseTextIndex != -1)
-        {
-            layers.Insert(mouseTextIndex, new LegacyGameInterfaceLayer(
-                "MyMod: MyInterface",
-                delegate
-                {
-                    if (_lastUpdateUiGameTime != null && DraedonUI?.CurrentState != null)
-                    {
-                        DraedonUI.Draw(Main.spriteBatch, _lastUpdateUiGameTime);
-                    }
-                    return true;
-                },
-                InterfaceScaleType.UI));
-        }
+        DraedonUI.Update(gameTime);
     }
 }
+public override void ModifyInterfaceLayers(List<GameInterfaceLayer> layers)
+{
+    int mouseTextIndex = layers.FindIndex(layer => layer.Name.Equals("Vanilla: Mouse Text"));
+    if (mouseTextIndex != -1)
+    {
+        layers.Insert(mouseTextIndex, new LegacyGameInterfaceLayer(
+            "MyMod: MyInterface",
+            delegate
+            {
+                if (_lastUpdateUiGameTime != null && DraedonUI?.CurrentState != null)
+                {
+                    DraedonUI.Draw(Main.spriteBatch, _lastUpdateUiGameTime);
+                }
+                return true;
+            },
+            InterfaceScaleType.UI));
+    }
+}
+}
+*/

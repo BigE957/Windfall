@@ -540,7 +540,6 @@ public class TravellingCultist : ModNPC, ILocalizedModType
 
     public override void AI()
     {
-        //CurrentDialogue = DialogueState.RitualQuestWayfinder;
         switch(myBehavior)
         {
             case BehaviorState.Wander:
