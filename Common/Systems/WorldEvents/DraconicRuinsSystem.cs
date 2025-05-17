@@ -105,6 +105,8 @@ public class DraconicRuinsSystem : ModSystem
         AccessGranted = false;
         */
 
+        //Main.NewText(CutsceneTime);
+
         if (DraconicRuinsLocation == new Point(-1, -1))
             return;
 
@@ -139,7 +141,7 @@ public class DraconicRuinsSystem : ModSystem
                 switch (State)
                 {
                     case CutsceneState.Arrival:
-                        CameraPanSystem.PanTowards(RuinsEntrance.ToWorldCoordinates() + new Vector2(0, 20), CircOutEasing(CameraTime / 60f));
+                        CameraPanSystem.PanTowards(RuinsEntrance.ToWorldCoordinates() + new Vector2(0, 48), CircOutEasing(CameraTime / 60f));
 
                         CameraPanSystem.Zoom = CalamityMod.CalamityUtils.CircOutEasing(CameraTime / 60f, 1) / 2f;
 

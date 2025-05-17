@@ -753,16 +753,20 @@ public class LunarCultistDevotee : ModNPC
 
     public override bool? CanFallThroughPlatforms()
     {
-        if (pathFinding.MyPath == null || pathFinding.MyPath.Points.Length == 0 || pathFinding.MyPath.Points.Length <= CurrentWaypoint)
+        if (pathFinding.MyPath == null || pathFinding.MyPath.Points.Length == 0)
             return false;
-        int checkIndex = 3;
-        if (pathFinding.MyPath.Points.Length <= CurrentWaypoint + checkIndex)
+        int checkIndex = CurrentWaypoint + 4;
+        if (pathFinding.MyPath.Points.Length <= checkIndex)
             checkIndex = pathFinding.MyPath.Points.Length - 1;
-        return pathFinding.MyPath.Points[checkIndex].Y > pathFinding.MyPath.Points[CurrentWaypoint].Y;
+
+        return (pathFinding.MyPath.Points[checkIndex].Y > pathFinding.MyPath.Points[CurrentWaypoint].Y);
     }
 
     public override bool PreDraw(SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor)
     {
+        if (pathFinding.MyPath != null)
+            pathFinding.MyPath.DrawPath(spriteBatch);
+
         if (NPC.frame.Width > 200)
             FindFrame(NPC.frame.Height);
         Texture2D texture = TextureAssets.Npc[NPC.type].Value;

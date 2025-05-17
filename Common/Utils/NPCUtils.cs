@@ -179,10 +179,7 @@ public static partial class WindfallUtils
         return false;
     }
 
-    private static bool IsNPCGrounded(NPC npc, Point standingTilePosition, bool orInWater = false)
-    {
-        // NPC is on ground if velocity.Y is near-zero or if there's liquid beneath
-        return (npc.velocity.Y == 0 && npc.oldVelocity.Y == 0.3f) ||
-               (orInWater && Main.tile[standingTilePosition + new Point(0, -1)].LiquidAmount > 0.5f);
-    }
+    private static bool IsNPCGrounded(NPC npc, Point standingTilePosition, bool orInWater = false) => 
+        (npc.velocity.Y == 0 && npc.oldVelocity.Y == 0.3f) ||
+        (orInWater && Main.tile[standingTilePosition + new Point(0, -1)].LiquidAmount > 0.5f);
 }

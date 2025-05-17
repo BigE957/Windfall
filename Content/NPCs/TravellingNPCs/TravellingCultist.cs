@@ -203,6 +203,12 @@ public class TravellingCultist : ModNPC, ILocalizedModType
             case DialogueState.RitualQuestTablet:
                 if (QuestSystem.Quests["TabletFragment"].Complete)
                     MilestoneMet = true;
+                else
+                {
+                    CurrentDialogue = DialogueState.RitualQuestWayfinder;
+                    QuestSystem.Quests["TabletFragment"].ResetQuest();
+                    QuestSystem.Quests["TabletFragment"].Active = true;
+                }
                 break;
             case DialogueState.RitualQuestGap:
                 if (NPC.downedPlantBoss)
@@ -418,7 +424,6 @@ public class TravellingCultist : ModNPC, ILocalizedModType
     private static bool AnyQuestsInProgress() => (QuestSystem.Quests["TabletFragment"].InProgress && (CurrentDialogue == DialogueState.RitualQuestWayfinder || CurrentDialogue == DialogueState.RitualQuestTablet)) ||
                                                  (QuestSystem.Quests["PrimordialLightShard"].InProgress && (CurrentDialogue == DialogueState.RitualQuestRecruitmentAndShard || CurrentDialogue == DialogueState.RitualQuestRecruitmentFinished)) ||
                                                  (QuestSystem.Quests["DraconicBone"].InProgress && CurrentDialogue == DialogueState.RitualQuestBone);
-
     private static void CloseTree(string treeKey, int dialogueID, int buttonID, bool swapped)
     {
         DialogueUISystem uiSystem = ModContent.GetInstance<DialogueUISystem>();
@@ -531,9 +536,11 @@ public class TravellingCultist : ModNPC, ILocalizedModType
     public bool CanFly = true;
     public bool CanSpeedUp = true;
     public Vector2 TargetLocation = Vector2.Zero;
+    int movementTime = 0;
 
     public override void AI()
     {
+        //CurrentDialogue = DialogueState.RitualQuestWayfinder;
         switch(myBehavior)
         {
             case BehaviorState.Wander:
@@ -589,6 +596,8 @@ public class TravellingCultist : ModNPC, ILocalizedModType
                 break;
         }
 
+        movementTime++;
+
         //Debug
         //CurrentDialogue = DialogueState.RitualQuestTablet;
         //foreach(var item in pool.CirculatingDialogues)
@@ -598,12 +607,13 @@ public class TravellingCultist : ModNPC, ILocalizedModType
 
     private bool PathfindingMovement(Vector2 targetPos, float requiredDistSquared = 256)
     {
-        if ((NPC.velocity == Vector2.Zero && NPC.oldVelocity.Y == 0.3f) || (pathFinding.MyPath.Points.Length - CurrentWaypoint <= 3 && Vector2.DistanceSquared(targetPos, pathFinding.MyPath.Points[^1].ToWorldCoordinates()) > 1600))
+        if (pathFinding.MyPath == null || (NPC.velocity == Vector2.Zero && NPC.oldVelocity.Y == 0.3f) || (pathFinding.MyPath.Points.Length - CurrentWaypoint <= 3 && Vector2.DistanceSquared(targetPos, pathFinding.MyPath.Points[^1].ToWorldCoordinates()) > 1600) || movementTime % 120 == 0)
         {
             pathFinding.FindPathInRadius(NPC.Center, targetPos, NPC.IsWalkableThroughDoors, NPC.noGravity ? null : GravityCostFunction, 1300);
-
+            movementTime = 0;
             CurrentWaypoint = 1;
         }
+
         /*
         for (int i = 0; i < pathFinding.MyPath.Points.Length; i++)
         {
@@ -657,7 +667,7 @@ public class TravellingCultist : ModNPC, ILocalizedModType
             if (jumpStarted && CanFly)
                 NPC.noGravity = true;
             else if (distanceToTarget < requiredDistSquared)
-                NPC.velocity.X *= 0.8f;
+                NPC.velocity.X *= 0.5f;
         }
         else
         {
@@ -685,14 +695,22 @@ public class TravellingCultist : ModNPC, ILocalizedModType
         if (NPC.direction == -1)
         {
             Point p = NPC.Left.ToTileCoordinates();
-            p.X -= 1;
             bool opened = TryOpenDoor(p, -1);
+            if (!opened)
+            {
+                p.X -= 1;
+                TryOpenDoor(p, -1);
+            }
         }
         else
         {
             Point p = NPC.Right.ToTileCoordinates();
-            p.X += 1;
             bool opened = TryOpenDoor(p, -1);
+            if (!opened)
+            {
+                p.X += 1;
+                TryOpenDoor(p, -1);
+            }
 
         }
 

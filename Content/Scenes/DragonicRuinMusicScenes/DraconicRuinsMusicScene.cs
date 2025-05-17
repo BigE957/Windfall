@@ -9,7 +9,7 @@ public class DraconicRuinsMusicScene : ModSceneEffect
 
     private static int RuinsMusic()
     {
-        if (DraconicRuinsSystem.CutsceneTime >= 150 && DraconicRuinsSystem.State != DraconicRuinsSystem.CutsceneState.Arrival)
+        if (DraconicRuinsSystem.CutsceneTime >= 150 && DraconicRuinsSystem.State == DraconicRuinsSystem.CutsceneState.Arrival)
             return 0;
         return MusicLoader.GetMusicSlot(Windfall.Instance, "Assets/Music/DragonRuin");
     }

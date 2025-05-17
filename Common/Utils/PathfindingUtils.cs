@@ -98,11 +98,11 @@ public static partial class WindfallUtils
 
         // Check if we need to jump and can jump
         Point standingTilePosition = npc.Bottom.ToTileCoordinates();
-        bool canJump = IsNPCGrounded(npc, standingTilePosition);
-        bool shouldJump = DetermineIfShouldJump(waypointDirection, standingTilePosition, velocity);
-
+        bool canJump = IsNPCGrounded(npc, standingTilePosition, true);
+        bool shouldJump = DetermineIfShouldJump(waypointDirection, standingTilePosition, npc, out bool gapJump);
+        //Main.NewText(gapJump);
         // Handle advanced jump logic (when we might need to jump over obstacles)
-        if (canJump && shouldJump && !(waypointDirection.Y < -0.94f))
+        if (canJump && shouldJump && gapJump)
         {
             ProcessJumpLogic(ref shouldJump, pathFinding, currentWaypoint, standingTilePosition,
                 velocity, jumpHeight, jumpLength, ref jumpStarted);
@@ -111,13 +111,17 @@ public static partial class WindfallUtils
         // Perform the jump if needed
         if (canJump && shouldJump)
         {
+            Main.NewText(waypointDirection.X);
             velocity.X = maxXSpeed * waypointDirection.X;
             velocity.Y = -jumpForce;
             jumpStarted = true;
         }
 
         // Apply horizontal movement and limit speed
-        velocity.X += Math.Sign(waypointDirection.X) * xAccelMult;
+        Vector2 targetPoint = (currentWaypoint + 2 >= pathFinding.MyPath.Points.Length ? pathFinding.MyPath.Points[^1] : pathFinding.MyPath.Points[currentWaypoint + 2]).ToWorldCoordinates();
+        Vector2 toWaypoint = (targetPoint - npc.Center).SafeNormalize(npc.velocity.SafeNormalize(Vector2.Zero));
+        //Dust.NewDustPerfect(targetPoint, DustID.Terra, Vector2.Zero);
+        velocity.X += Math.Sign(toWaypoint.X) * xAccelMult;
         velocity.X = Clamp(velocity.X, -maxXSpeed, maxXSpeed);
 
         // Handle collision step-up (for small obstacles)
@@ -156,15 +160,17 @@ public static partial class WindfallUtils
         else
         {
             Vector2 targetPoint = pathFinding.MyPath.Points[currentWaypoint + 1].ToWorldCoordinates();
-            return (targetPoint - npc.Center).SafeNormalize(npc.velocity.SafeNormalize(Vector2.Zero));
+            return (targetPoint - pathFinding.MyPath.Points[currentWaypoint].ToWorldCoordinates()).SafeNormalize(npc.velocity.SafeNormalize(Vector2.Zero));
         }
     }
 
     /// <summary>
     /// Determines if the NPC should attempt to jump based on path direction and terrain.
     /// </summary>
-    private static bool DetermineIfShouldJump(Vector2 waypointDirection, Point standingTilePosition, Vector2 velocity)
+    private static bool DetermineIfShouldJump(Vector2 waypointDirection, Point standingTilePosition, NPC npc, out bool gapJump)
     {
+        gapJump = false;
+
         // Don't jump if we're explicitly trying to go downward
         if (waypointDirection.Y == 1)
             return false;
@@ -174,10 +180,24 @@ public static partial class WindfallUtils
             return true;
         //Main.NewText(waypointDirection);
         // Jump if there's no solid ground ahead in our movement direction
-        bool solidAhead = IsSolidOrPlatform(standingTilePosition + new Point(Math.Sign(velocity.X), 0));
+        bool solidAhead = IsSolidOrPlatform(standingTilePosition + new Point(npc.velocity.X == 0 ? npc.direction : Math.Sign(npc.velocity.X), 0));
         bool solidBelow = IsSolidOrPlatform(standingTilePosition);
+        bool solidInWay = false;
+        
+        for (int i = 1; i <= Math.Ceiling(npc.height / 16f); i++)
+        {
+            Point checkPos = (npc.direction == -1 ? npc.BottomLeft : npc.BottomRight).ToTileCoordinates() + new Point(0, -i);
+            //Dust.NewDustPerfect(checkPos.ToWorldCoordinates(), DustID.Terra, Vector2.Zero);
+            if (IsSolidNotDoor(checkPos))
+            {
+                solidInWay = true;
+                break;
+            }
+        }
+        //Main.NewText(solidInWay);
+        gapJump = !solidInWay;
 
-        return !solidAhead || !solidBelow;
+        return !solidAhead || !solidBelow || solidInWay;
     }
 
     /// <summary>
