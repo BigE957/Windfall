@@ -147,6 +147,7 @@ public class LunarCultistDevotee : ModNPC
 
     public override void AI()
     {
+        AIState = States.Enemy;
         switch (AIState)
         {
             #region Selenic Order Base
@@ -535,7 +536,7 @@ public class LunarCultistDevotee : ModNPC
                         jumpTimer = 0;
                     }
 
-                    if ((NPC.velocity == Vector2.Zero && NPC.oldVelocity.Y == 0.3f) || (pathFinding.MyPath.Points.Length - CurrentWaypoint <= 3 && Vector2.DistanceSquared(TargetPos, pathFinding.MyPath.Points[^1].ToWorldCoordinates()) > 1600))
+                    if (pathFinding.MyPath == null || (NPC.velocity == Vector2.Zero && NPC.oldVelocity.Y == 0.3f) || (pathFinding.MyPath.Points.Length - CurrentWaypoint <= 3 && Vector2.DistanceSquared(TargetPos, pathFinding.MyPath.Points[^1].ToWorldCoordinates()) > 1600))
                     {
                         if (NPC.ai[3] == 0)
                             pathFinding.FindPathInRadius(NPC.Center, target.Center, NPC.IsWalkableThroughDoors, NPC.noGravity ? null : GravityCostFunction, searchRadius: 800f);
@@ -676,7 +677,7 @@ public class LunarCultistDevotee : ModNPC
     {
         int frameWidth = TextureAssets.Npc[NPC.type].Value.Width / frameCountX;
         NPC.frame.Width = frameWidth;
-        NPC.frameCounter -= 1;
+
         switch (AIState)
         {
             case States.SlowToStop:
@@ -753,10 +754,10 @@ public class LunarCultistDevotee : ModNPC
 
     public override bool? CanFallThroughPlatforms()
     {
-        if (pathFinding.MyPath == null || pathFinding.MyPath.Points.Length == 0)
+        if (pathFinding.MyPath == null || pathFinding.MyPath.Points.Length == 0 || CurrentWaypoint >= pathFinding.MyPath.Points.Length)
             return false;
         int checkIndex = CurrentWaypoint + 4;
-        if (pathFinding.MyPath.Points.Length <= checkIndex)
+        if (checkIndex >= pathFinding.MyPath.Points.Length)
             checkIndex = pathFinding.MyPath.Points.Length - 1;
 
         return (pathFinding.MyPath.Points[checkIndex].Y > pathFinding.MyPath.Points[CurrentWaypoint].Y);
