@@ -358,30 +358,16 @@ public class SealingRitualSystem : ModSystem
     }
     private static void GetRecruitValues(string name, out Color TextColor, out string Key)
     {
-        switch (name)
+        TextColor = name switch
         {
-            case "Tirith":
-                TextColor = Color.Yellow;
-                break;
-            case "Vivian":
-                TextColor = Color.Red;
-                break;
-            case "Tania":
-                TextColor = Color.Green;
-                break;
-            case "Doro":
-                TextColor = Color.SandyBrown;
-                break;
-            case "Skylar":
-                TextColor = Color.Purple;
-                break;
-            case "Jamie":
-                TextColor = Color.Orange;
-                break;
-            default:
-                TextColor = Color.White;
-                break;
-        }
+            "Tirith" => Color.Yellow,
+            "Vivian" => Color.Red,
+            "Tania" => Color.Green,
+            "Doro" => Color.SandyBrown,
+            "Skylar" => Color.Purple,
+            "Jamie" => Color.Orange,
+            _ => Color.White,
+        };
         Key = $"LunarCult.Recruits.{name}.SealingRitual.";
 
     }

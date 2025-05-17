@@ -4,7 +4,7 @@ using CalamityMod.Projectiles.Summon;
 using Windfall.Content.UI.DraedonsDatabase;
 
 namespace Windfall.Content.Projectiles.Other;
-
+/*
 public class DraeDashDropPod : ModProjectile, ILocalizedModType
 {
     public override string Texture => "CalamityMod/Projectiles/Summon/AtlasMunitionsDropPod";
@@ -173,3 +173,4 @@ public class DraeDashDropPod : ModProjectile, ILocalizedModType
         return false;
     }
 }
+*/

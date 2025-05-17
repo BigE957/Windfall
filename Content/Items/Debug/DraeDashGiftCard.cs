@@ -2,7 +2,7 @@
 using Windfall.Content.Projectiles.Other;
 
 namespace Windfall.Content.Items.Debug;
-
+/*
 public class DraeDashGiftCard : ModItem, ILocalizedModType
 {
     public new string LocalizationCategory => "Items.Debug";
@@ -27,3 +27,4 @@ public class DraeDashGiftCard : ModItem, ILocalizedModType
         return false;
     }
 }
+*/

@@ -2,7 +2,7 @@
 using Windfall.Content.UI.DraedonsDatabase;
 
 namespace Windfall.Content.Tiles.Special;
-
+/*
 public class DatabaseTerminal : ModTile
 {
     public override string Texture => "Windfall/Assets/Tiles/Special/DatabaseTerminal";
@@ -72,3 +72,4 @@ public class DatabaseTerminal : ModTile
             spriteBatch.Draw(glowmask, drawPosition + new Vector2(0f, 8f), new Rectangle(xFrameOffset, yFrameOffset, 18, 8), drawColour, 0.0f, Vector2.Zero, 1f, SpriteEffects.None, 0.0f);
     }
 }
+*/

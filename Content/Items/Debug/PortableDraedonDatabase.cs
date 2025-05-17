@@ -2,7 +2,7 @@
 using Windfall.Content.UI.DraedonsDatabase;
 
 namespace Windfall.Content.Items.Debug;
-
+/*
 public class PortableDraedonDatabase : ModItem, ILocalizedModType
 {
     public new string LocalizationCategory => "Items.Debug";
@@ -21,3 +21,4 @@ public class PortableDraedonDatabase : ModItem, ILocalizedModType
         return true;
     }
 }
+*/

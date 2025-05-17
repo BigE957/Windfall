@@ -253,7 +253,7 @@ public static partial class WindfallUtils
             // Check if there's a platform to walk on
             for (int j = 1; j < jumpHeight; j++)
             {
-                Point checkPoint = new Point(checkX, standingTilePosition.Y + j);
+                Point checkPoint = new(checkX, standingTilePosition.Y + j);
                 if (IsSolidOrPlatform(checkPoint))
                     return true;
             }
@@ -273,7 +273,7 @@ public static partial class WindfallUtils
         for (int i = 0; i < jumpLength; i++)
         {
             int checkPointX = standingTilePosition.X + ((jumpLength - i) * movementDirection);
-            Point checkPoint = new Point(checkPointX, standingTilePosition.Y);
+            Point checkPoint = new(checkPointX, standingTilePosition.Y);
 
             if (IsSolidOrPlatform(checkPoint))
                 return true;

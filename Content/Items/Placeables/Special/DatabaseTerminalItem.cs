@@ -7,7 +7,7 @@ using CalamityMod.Rarities;
 using Windfall.Content.Tiles.Special;
 
 namespace Windfall.Content.Items.Placeables.Special;
-
+/*
 internal class DatabaseTerminalItem : ModItem, ILocalizedModType
 {
     public new string LocalizationCategory => "Items.Placeables";
@@ -44,3 +44,4 @@ internal class DatabaseTerminalItem : ModItem, ILocalizedModType
             .Register();
     }
 }
+*/
