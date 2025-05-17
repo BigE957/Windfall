@@ -2,12 +2,6 @@
 
 namespace Windfall.Common.Systems;
 
-public delegate void OnModUnload();
-public delegate void OnWorldLoad();
-public delegate void OnWorldUnload();
-public delegate void SaveWorldData(TagCompound tag);
-public delegate void LoadWorldData(TagCompound tag);
-
 public class Quest
 {
     #region Fields
@@ -76,47 +70,24 @@ public class Quest
         Progress = 0;
     }
 
-    internal Quest(string name, int amountToComplete, bool autoDeactivates, ref OnWorldLoad worldLoad, ref OnWorldUnload worldUnload, ref SaveWorldData saveWorld, ref LoadWorldData loadWorld)
+    internal Quest(string name, int amountToComplete, bool autoDeactivates)
     {
         Name = name;
         Active = false;
         Progress = 0;
         AmountToComplete = amountToComplete;
         AutoDeactivate = autoDeactivates;
-
-        worldLoad += ResetQuest;
-        worldUnload += ResetQuest;
-        saveWorld += SaveWorldData;
-        loadWorld += LoadWorldData;
-    }
-
-    private void SaveWorldData(TagCompound tag)
-    {
-        if (Active)
-            tag[Name + "/" + nameof(Active)] = true;
-        if (Progress != 0)
-            tag[Name + "/" + nameof(Progress)] = Progress;
-    }
-    private void LoadWorldData(TagCompound tag)
-    {
-        Active = tag.GetBool(Name + "/" + nameof(Active));
-        Progress = tag.GetInt(Name + "/" + nameof(Progress));
     }
 }
 
 public class QuestSystem : ModSystem
 {
-    public static OnWorldLoad WorldLoadEvent;
-    public static OnWorldUnload WorldUnloadEvent;
-    public static SaveWorldData SaveWorldDataEvent;
-    public static LoadWorldData LoadWorldDataEvent;
-
     public static readonly Dictionary<string, Quest> Quests = [];
 
     //Quest Initialization
     public override void OnModLoad()
     {
-        OnModUnload(); //Resets all data just in case
+        Quests.Clear(); //Resets all data just in case
 
         //Ilmeran Paladin Quests
         AddQuest("CnidrionHunt", 3);
@@ -140,34 +111,39 @@ public class QuestSystem : ModSystem
             Windfall.Instance.Logger.Warn("Already existing quest of name " + name + " was attempted to be added.");
             return;
         }
-        Quests.Add(name, new Quest(name, amountToComplete, autoDeactivate, ref WorldLoadEvent, ref WorldUnloadEvent, ref SaveWorldDataEvent, ref LoadWorldDataEvent));
+        Quests.Add(name, new Quest(name, amountToComplete, autoDeactivate));
     }
 
     #region Saving + Reseting
     public override void OnModUnload()
     {
-        WorldLoadEvent = null;
-        WorldUnloadEvent = null;
-        SaveWorldDataEvent = null;
-        LoadWorldDataEvent = null;
-
         Quests.Clear();
     }
-    public override void OnWorldLoad()
-    {
-        WorldLoadEvent.Invoke();
-    }
+
     public override void OnWorldUnload()
     {
-        WorldUnloadEvent.Invoke();
+        foreach (Quest quest in Quests.Values)
+            quest.ResetQuest();
     }
     public override void SaveWorldData(TagCompound tag)
     {
-        SaveWorldDataEvent.Invoke(tag);
+        foreach (Quest quest in Quests.Values)
+        {
+            if (quest.Active)
+                tag[quest.Name + "/Active"] = true;
+            if (quest.Progress != 0)
+                tag[quest.Name + "/Progress"] = quest.Progress;
+        }
     }
     public override void LoadWorldData(TagCompound tag)
     {
-        LoadWorldDataEvent.Invoke(tag);
+        foreach (Quest quest in Quests.Values)
+        {
+            if(tag.ContainsKey(quest.Name + "/Active"))
+                quest.Active = tag.GetBool(quest.Name + "/Active");
+            if (tag.ContainsKey(quest.Name + "/Progress"))
+                quest.Progress = tag.GetInt(quest.Name + "/Progress");
+        }
     }
     #endregion
 }
