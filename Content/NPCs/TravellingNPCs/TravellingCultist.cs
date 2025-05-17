@@ -805,12 +805,13 @@ public class TravellingCultist : ModNPC, ILocalizedModType
 
     public override bool? CanFallThroughPlatforms()
     {
-        if (pathFinding.MyPath == null || pathFinding.MyPath.Points.Length == 0 || pathFinding.MyPath.Points.Length <= CurrentWaypoint)
+        if (pathFinding.MyPath == null || pathFinding.MyPath.Points.Length == 0 || CurrentWaypoint >= pathFinding.MyPath.Points.Length)
             return false;
-        int checkIndex = 3;
-        if (pathFinding.MyPath.Points.Length <= CurrentWaypoint + checkIndex)
+        int checkIndex = CurrentWaypoint + 4;
+        if (checkIndex >= pathFinding.MyPath.Points.Length)
             checkIndex = pathFinding.MyPath.Points.Length - 1;
-        return pathFinding.MyPath.Points[checkIndex].Y > pathFinding.MyPath.Points[CurrentWaypoint].Y;
+
+        return (pathFinding.MyPath.Points[checkIndex].Y > pathFinding.MyPath.Points[CurrentWaypoint].Y);
     }
 
     #region Town NPC Stuff

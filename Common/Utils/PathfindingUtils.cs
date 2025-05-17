@@ -111,7 +111,7 @@ public static partial class WindfallUtils
         // Perform the jump if needed
         if (canJump && shouldJump)
         {
-            Main.NewText(waypointDirection.X);
+            //Main.NewText(waypointDirection.X);
             velocity.X = maxXSpeed * waypointDirection.X;
             velocity.Y = -jumpForce;
             jumpStarted = true;
@@ -184,9 +184,9 @@ public static partial class WindfallUtils
         bool solidBelow = IsSolidOrPlatform(standingTilePosition);
         bool solidInWay = false;
         
-        for (int i = 1; i <= Math.Ceiling(npc.height / 16f); i++)
+        for (int i = 2; i <= Math.Ceiling(npc.height / 16f); i++)
         {
-            Point checkPos = (npc.direction == -1 ? npc.BottomLeft : npc.BottomRight).ToTileCoordinates() + new Point(0, -i);
+            Point checkPos = (npc.direction == -1 ? npc.BottomLeft : npc.BottomRight).ToTileCoordinates() + new Point(npc.direction == -1 ? -1 : 0, -i);
             //Dust.NewDustPerfect(checkPos.ToWorldCoordinates(), DustID.Terra, Vector2.Zero);
             if (IsSolidNotDoor(checkPos))
             {
