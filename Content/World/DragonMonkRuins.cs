@@ -17,27 +17,18 @@ public static class DragonMonkRuins
         Tile tile = ParanoidTileRetrieval(placementPoint);
 
         if (tile.LiquidType == LiquidID.Shimmer)
-        {
-            Windfall.Instance.Logger.Debug("Draconic Ruins can't generate due to the Shimmer");
             return true;
-        }
 
         if (tile.TileType == TileID.WoodBlock ||
         tile.WallType == WallID.Planked ||
         tile.TileType == TileID.WoodenBeam)
-        {
-            Windfall.Instance.Logger.Debug("Draconic Ruins can't generate due to an Underground House");
             return true;
-        }
 
         if (tile.TileType == TileID.Crimstone ||
         tile.WallType == WallID.CrimstoneUnsafe ||
         tile.TileType == TileID.Ebonstone ||
         tile.WallType == WallID.EbonstoneUnsafe)
-        {
-            Windfall.Instance.Logger.Debug("Draconic Ruins can't generate due to an Evil Biome");
             return true;
-        }
 
         if (//tile.TileType == TileID.Mud ||
         tile.WallType == WallID.MudUnsafe ||
@@ -51,20 +42,14 @@ public static class DragonMonkRuins
         tile.WallType == WallID.HiveUnsafe ||
         tile.TileType == TileID.LihzahrdBrick ||
         tile.WallType == WallID.LihzahrdBrickUnsafe)
-        {
-            Windfall.Instance.Logger.Debug("Draconic Ruins can't generate due to the Jungle");
             return true;
-        }
 
         if (//tile.TileType == TileID.Sand ||
         tile.WallType == WallID.Sandstone ||
         tile.TileType == TileID.Sandstone ||
         tile.WallType == WallID.HardenedSand ||
         tile.TileType == TileID.HardenedSand)
-        {
-            Windfall.Instance.Logger.Debug("Draconic Ruins can't generate due to a Desert");
             return true;
-        }
 
         if (tile.TileType == ModContent.TileType<Navystone>() ||
         tile.WallType == ModContent.WallType<NavystoneWall>() ||
@@ -80,10 +65,7 @@ public static class DragonMonkRuins
         tile.TileType == ModContent.TileType<TubeCoral>() ||
         tile.TileType == ModContent.TileType<SeaPrism>() ||
         tile.TileType == ModContent.TileType<SeaPrismCrystals>())
-        {
-            Windfall.Instance.Logger.Debug("Draconic Ruins can't generate due to the Sunken Sea");
             return true;
-        }
 
         if (tile.TileType == ModContent.TileType<LaboratoryPlating>() ||
         tile.WallType == ModContent.WallType<LaboratoryPlatingWall>() ||
@@ -91,10 +73,7 @@ public static class DragonMonkRuins
         tile.WallType == ModContent.WallType<RustedPlatingWall>() ||
         tile.TileType == ModContent.TileType<LaboratoryPanels>() ||
         tile.WallType == ModContent.WallType<LaboratoryPanelWall>())
-        {
-            Windfall.Instance.Logger.Debug("Draconic Ruins can't generate due to a Lab");
             return true;
-        }
 
         if (careAboutMoss)
         {
@@ -104,10 +83,7 @@ public static class DragonMonkRuins
                 tile.TileType == TileID.XenonMoss ||
                 tile.TileType == TileID.VioletMoss ||
                 tile.TileType == TileID.MushroomGrass)
-            {
-                Windfall.Instance.Logger.Debug("Draconic Ruins can't generate due to Moss");
                 return true;
-            }
         }
         return false;
     }
@@ -154,12 +130,10 @@ public static class DragonMonkRuins
             {
                 tries++;
                 placementPoint = new(-1, -1);
-                if(canGenerateInLocation)
-                    Windfall.Instance.Logger.Debug("Draconic Ruins can't generate due to a Protected Structure or Non-standard tile");
+
             }
             else
             {
-                Windfall.Instance.Logger.Debug("Draconic Ruins successfully generated!");
                 SchematicAnchor anchorType = SchematicAnchor.TopLeft;
                 bool place = true;
                 WFSchematicManager.PlaceFlippableSchematic<Action<Chest>>(mapKey, placementPoint, anchorType, ref place, flipHorizontal: facingLeft);

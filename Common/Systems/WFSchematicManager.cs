@@ -24,6 +24,10 @@ public class WFSchematicManager : ModSystem
 
     internal static readonly MethodInfo ImportSchematicMethod = typeof(CalamitySchematicIO).GetMethod("ImportSchematic", Utilities.UniversalBindingFlags);
 
+    private static readonly int[] FlipIgnoreTiles = [
+        TileID.TallGateOpen,
+        TileID.TallGateClosed
+    ];
 
     public override void OnModLoad()
     {
@@ -151,7 +155,7 @@ public class WFSchematicManager : ModSystem
                 Tile worldTile = Main.tile[x + cornerX, y + cornerY];
 
                 //Handle any additional fixes that need to be made as a result of this structure being flipped horizontally
-                if (flipHorizontal && !smt.keepTile)
+                if (flipHorizontal && !smt.keepTile && !FlipIgnoreTiles.Contains(worldTile.TileType))
                 {
                     //Turns Left Slopes into Right Slopes and vice versa.
                     if(worldTile.Slope != SlopeType.Solid)

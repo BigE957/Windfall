@@ -3,6 +3,7 @@ using CalamityMod.Tiles.DraedonStructures;
 using CalamityMod.Tiles.SunkenSea;
 using CalamityMod.Walls;
 using CalamityMod.Walls.DraedonStructures;
+using Terraria;
 using Terraria.WorldBuilding;
 using Windfall.Common.Systems;
 using Windfall.Common.Systems.WorldEvents;
@@ -44,8 +45,7 @@ public static class LunarCultBase
             return true;
 
         // Avoid Deserts
-        if (tile.TileType == TileID.Sand ||
-        tile.WallType == WallID.Sandstone ||
+        if (tile.WallType == WallID.Sandstone ||
         tile.TileType == TileID.Sandstone ||
         tile.WallType == WallID.HardenedSand)
             return true;
@@ -59,8 +59,7 @@ public static class LunarCultBase
 
         if (careAboutMushroom)
         {
-            if (tile.TileType == TileID.Mud ||
-            tile.TileType == TileID.MushroomGrass)
+            if (tile.TileType == TileID.MushroomGrass)
                 return true;
         }
 
@@ -93,7 +92,7 @@ public static class LunarCultBase
         do
         {
             int placementPositionX = centerPlacementPositionX + (genRand.Next(0, Main.maxTilesX == 8400 ? 2800 : 2150) * (facingLeft ? 1 : -1));
-            int placementPositionY = genRand.Next(underworldTop - 820, underworldTop - 150);
+            int placementPositionY = genRand.Next(underworldTop - 820, underworldTop - (int)schematicSize.Y - 12);
 
             placementPoint = new Point(placementPositionX, placementPositionY);
 
@@ -106,10 +105,14 @@ public static class LunarCultBase
                 for (int y = placementPoint.Y - buffer; y < placementPoint.Y + schematicSize.Y + (buffer * 2); y++)
                 {
                     if (ShouldAvoidLocation(new Point(x, y), tries < 10000))
+                    {
                         canGenerateInLocation = false;
+                        break;
+                    }
                 }
+                if (!canGenerateInLocation)
+                    break;
             }
-
             if (!canGenerateInLocation || !structures.CanPlace(new Rectangle(placementPoint.X, placementPoint.Y, (int)schematicSize.X, (int)schematicSize.Y), buffer))
                 tries++;
             else
