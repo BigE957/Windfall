@@ -207,9 +207,7 @@ public class DraconicRuinsSystem : ModSystem
                                 case 490:
                                     DisplayMessage("Go! Claim everything for the cause!", Main.npc[BishopIndex], Color.LimeGreen, 110);
                                     foreach (NPC npc in Main.npc.Where(n => n.active && n.type == ModContent.NPCType<LunarCultistDevotee>()))
-                                    {
                                         npc.ai[2] = 5;
-                                    }
                                     break;
                                 case 520:
                                     DisplayMessage("Hurry!! We can't let them get the Tablet!", tc, Color.Orange, 110);

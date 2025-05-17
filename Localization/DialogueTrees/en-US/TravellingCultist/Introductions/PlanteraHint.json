@@ -1,0 +1,58 @@
+{
+  "Dialogues": [
+    {
+      "DialogueText": [ { "Text": "Greetings my friend! Tell me, are you familiar with a place called the Vernal Pass?" } ],
+      "Responses": [
+        {
+          "Title": "I am!",
+          "Heading": 1
+        },
+        {
+          "Title": "No...?",
+          "Heading": 2
+        }
+      ]
+    },
+    {
+      "DialogueText": [ { "Text": "It's a site that was once the home of some settlers who populated the Jungle some time ago. I've heard that they were exceptional botanists; masters of agriculture! There's some pretty strange rumors surrounding their fate..." } ],
+      "Responses": [
+        {
+          "Title": "What are they?",
+          "Heading": 3
+        }
+      ]
+    },
+    {
+      "DialogueText": [ { "Text": "I see! Then perhaps you're familiar with the rumors about what led to its inhabitants' disappearence?" } ],
+      "Responses": [
+        {
+          "Title": "Can't say I am.",
+          "Heading": 3
+        }
+      ]
+    },
+    {
+      "DialogueText": [ { "Text": "Rumor has it that in their quest to bring about a new age of prosperity, they began to tamper with the power of souls; infusing countless numbers of them into a young sprout. Its said that the sprout then bloomed into a terrifying monster, and devoured the inhabitant!" } ],
+      "Responses": [
+        {
+          "Title": "What?!",
+          "Heading": 4
+        }
+      ]
+    },
+
+    {
+      "DialogueText": [ { "Text": "A rather shocking conclusion, I know. If you ask me, I think the rumors don't have much a basis in reality. I think its more likely that they just came from old childrens' stories meant to teach kids about the folly of hubris. Though, if you're ever exploring the area, have a look around! Maybe you'll be able to prove me wrong, haha!" } ],
+      "Responses": [
+        {
+          "Title": "I'll see.",
+          "Heading": 0,
+          "SwapToTreeKey": "TravellingCultist/Default"
+        }
+      ]
+    }
+  ],
+  "Characters": [
+    "TheCalamity"
+  ]
+}

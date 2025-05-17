@@ -146,6 +146,9 @@ public class TravellingCultist : ModNPC, ILocalizedModType
         new("TravellingCultist/Introductions/Standard2", (player) => true, (byte)PriorityTiers.None, true),
         new("TravellingCultist/Introductions/Permafrost", (player) => DownedBossSystem.downedCryogen && NPC.AnyNPCs(ModContent.NPCType<DILF>()), (byte)PriorityTiers.None, true),
         new("TravellingCultist/Introductions/AstralInfection", (player) => Main.hardMode, (byte)PriorityTiers.None, false),
+
+        //Hints (No Priority)
+        new("TravellingCultist/Introductions/PlanteraHint", (player) => CurrentDialogue == DialogueState.RitualQuestGap && !NPC.downedPlantBoss, (byte)PriorityTiers.None, true),
         
         //Minor Events
         new("TravellingCultist/Introductions/CalamitasClone", (player) => !DownedBossSystem.downedCalamitasClone && NPC.downedMechBossAny, (byte)PriorityTiers.MinorEvent, false),
