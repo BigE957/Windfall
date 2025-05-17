@@ -168,6 +168,22 @@ public class TravellingCultist : ModNPC, ILocalizedModType
     ]);
     internal bool introductionDone = false;
 
+    // Used for Quest Introduction Safety Checks
+    /*
+    private readonly Dictionary<DialogueState, string> QuestIntroductions = new()
+    {
+        { DialogueState.SearchForHelp, "TravellingCultist/Introductions/SearchForHelp" },
+        { DialogueState.RitualDiscovered, "TravellingCultist/Introductions/RitualDiscovered" },
+        { DialogueState.RitualQuestWayfinder, "TravellingCultist/Introductions/WayfinderQuest" },
+        { DialogueState.RitualQuestGap, "TravellingCultist/Introductions/TabletInterference" },
+        { DialogueState.SelenicOrderTalk, "TravellingCultist/Introductions/SelenicOrderTalk" },
+        { DialogueState.RitualQuestRecruitmentAndShard, "TravellingCultist/Introductions/LightShardQuest" },
+        { DialogueState.RitualQuestRecruitmentFinished, "TravellingCultist/Introductions/RecruitmentComplete" },
+        { DialogueState.RitualQuestBone, "TravellingCultist/Introductions/BoneQuest" },
+        { DialogueState.RitualTalk, "TravellingCultist/Introductions/RitualTalk" },
+    };
+    */
+
     int PlayerIndex = -1;
     Player MyPlayer => PlayerIndex == -1 ? null : Main.player[PlayerIndex];
 
@@ -252,6 +268,17 @@ public class TravellingCultist : ModNPC, ILocalizedModType
 
         if (MilestoneMet)
             CurrentDialogue++;
+        // Introduction Safety Check (Might not actually need, but will keep on hand incase)
+        /*
+        var list = QuestIntroductions.ToList();
+        int index = list.IndexOf(new(CurrentDialogue, QuestIntroductions[CurrentDialogue]));
+        for(int i = index + 1; i < list.Count; i++)
+            if(!pool.CirculatingDialogues.Any(d => d.TreeKey == list[i].Value))
+            {
+                var (TreeKey, Requirement, Priority, Repeatable) = pool.Dialogues.First(d => d.TreeKey == list[i].Value);
+                pool.CirculatingDialogues.Add(new(TreeKey, Requirement, Priority));
+            }
+        */
 
         //CurrentDialogue = DialogueState.RitualQuestWayfinder;
         //Main.NewText(CurrentDialogue);

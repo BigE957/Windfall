@@ -34,7 +34,7 @@ public class WorldSaveSystem : ModSystem
         {
             TravellingCultist.pool.CirculatingDialogues.Clear();
             List<string> circulatingTrees = (List<string>)tag.GetList<string>("CirculatingDialogue");
-            for (int i = 0; i < TravellingCultist.pool.CirculatingDialogues.Count; i++)
+            for (int i = 0; i < circulatingTrees.Count; i++)
             {
                 var (TreeKey, Requirement, Priority, Repeatable) = TravellingCultist.pool.Dialogues.First(d => d.TreeKey == circulatingTrees[i]);
                 TravellingCultist.pool.CirculatingDialogues.Add(new(TreeKey, Requirement, Priority));
