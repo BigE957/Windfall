@@ -1751,9 +1751,9 @@ ModCompat: {
 			Author: by Toby Fox
 		}
 
-		LunarCultBase: {
-			DisplayName: It's Raining Somewhere Else
-			Author: by Toby Fox
+		OrderBase: {
+			DisplayName: Warm Side of the Moon
+			Author: by Sidetracked
 		}
 
 		Ritual: {

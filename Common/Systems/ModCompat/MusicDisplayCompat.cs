@@ -20,7 +20,7 @@ public class MusicDisplayCompat : ModSystem
         AddMusic("Assets/Music/Orator", "Orator");
         AddMusic("Assets/Music/DeathByGlamor", "Tailor");
         AddMusic("Assets/Music/CanYouReallyCallThisAHotelIDidntReceiveAMintOnMyPillowOrAnything", "Cafeteria");
-        AddMusic("Assets/Music/ItsRainingSomewhereElse", "LunarCultBase");
+        AddMusic("Assets/Music/OrderBase", "OrderBase");
         AddMusic("Assets/Music/Amalgam", "Ritual");
         AddMusic("Assets/Music/Premonition", "EmptyBase");
         AddMusic("Assets/Music/DragonRuin", "DragonRuin");
