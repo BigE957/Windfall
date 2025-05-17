@@ -630,7 +630,7 @@ public class TravellingCultist : ModNPC, ILocalizedModType
         //Debug
         //CurrentDialogue = DialogueState.RitualQuestTablet;
         //foreach(var item in pool.CirculatingDialogues)
-        //Main.NewText(QuestSystem.Quests["SealingRitual"].Progress);
+        //Main.NewText(CurrentDialogue);
         //CurrentDialogue = DialogueState.RitualQuestWayfinder;
     }
 

@@ -7,6 +7,14 @@
           "TextEffect": "DialogueHelper.UI.Dialogue.TextEffects.WavyText"
         }
       ]
+    },
+    {
+      "DialogueText": [ { "Text": "Oh shoot! Did I fall asleep?" } ],
+      "Responses": [
+        {
+          "Title": "Yeah."
+        }
+      ]
     }
   ],
   "Characters": [

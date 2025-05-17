@@ -32,7 +32,7 @@
       ]
     },
     {
-      "DialogueText": [ { "Text": "Help them? Hmm... That might actually be a good idea! Try talking to the members of the cult when you have the chance. Its possible you might find some who are doubting their faith, and you may be able to convince them to join our cause!" } ],
+      "DialogueText": [ { "Text": "Help those ensnared by the Selenic Order? Hmm... That might actually be a good idea! Try talking to the members of the cult when you have the chance. Its possible you might find some who are doubting their faith, and you may be able to convince them to join our cause!" } ],
       "Responses": [
         {
           "Title": "How would I do that?",

@@ -476,7 +476,7 @@ public class LunarCultBaseSystem : ModSystem
                     if (PlannedActivity != SystemStates.Tailor)
                     {
                         Vector2 seamstressCenter = Main.npc[NPC.FindFirstNPC(ModContent.NPCType<Seamstress>())].Center;
-                        NPC dripped = NPC.NewNPCDirect(Entity.GetSource_None(), (int)seamstressCenter.X - 400, (int)seamstressCenter.Y, ModContent.NPCType<LunarCultistDevotee>(), ai2: 4);
+                        NPC dripped = NPC.NewNPCDirect(Entity.GetSource_None(), (int)seamstressCenter.X + (BaseFacingLeft ? 400 : -400), (int)seamstressCenter.Y, ModContent.NPCType<LunarCultistDevotee>(), ai2: 4);
                         dripped.As<LunarCultistDevotee>().myCharacter = LunarCultistDevotee.Character.NewClothes;
                     }
                     if (PlannedActivity != SystemStates.OratorVisit)

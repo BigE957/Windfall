@@ -147,7 +147,6 @@ public class LunarCultistDevotee : ModNPC
 
     public override void AI()
     {
-        AIState = States.Enemy;
         switch (AIState)
         {
             #region Selenic Order Base
