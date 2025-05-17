@@ -173,26 +173,36 @@ public class DraconicRuinsSystem : ModSystem
                                     spawnPos = RuinsEntrance.ToWorldCoordinates() + Vector2.UnitX * (FacingLeft ? -(56 + offset) : (56 + offset)) - Vector2.UnitY * 16;
                                     NPC cultist = NPC.NewNPCDirect(NPC.GetSource_NaturalSpawn(), (int)spawnPos.X, (int)spawnPos.Y, ModContent.NPCType<LunarCultistDevotee>(), ai2: 7);
                                     cultist.As<LunarCultistDevotee>().TargetPos = TabletRoom.ToWorldCoordinates();
+                                    if (!FacingLeft)
+                                        cultist.direction *= -1;
                                     break;
                                 case 240:
                                     spawnPos = RuinsEntrance.ToWorldCoordinates() + Vector2.UnitX * (FacingLeft ? -(112 + offset) : (112 + offset)) - Vector2.UnitY * 16;
                                     cultist = NPC.NewNPCDirect(NPC.GetSource_NaturalSpawn(), (int)spawnPos.X, (int)spawnPos.Y, ModContent.NPCType<LunarCultistDevotee>(), ai2: 7);
                                     cultist.As<LunarCultistDevotee>().TargetPos = LeftSideRoom.ToWorldCoordinates();
+                                    if (!FacingLeft)
+                                        cultist.direction *= -1;
                                     break;
                                 case 270:
                                     spawnPos = RuinsEntrance.ToWorldCoordinates() + Vector2.UnitX * (FacingLeft ? -(12 + offset) : (12 + offset)) - Vector2.UnitY * 16;
                                     cultist = NPC.NewNPCDirect(NPC.GetSource_NaturalSpawn(), (int)spawnPos.X, (int)spawnPos.Y, ModContent.NPCType<LunarCultistDevotee>(), ai2: 7);
                                     cultist.As<LunarCultistDevotee>().TargetPos = TabletRoom.ToWorldCoordinates();
+                                    if (!FacingLeft)
+                                        cultist.direction *= -1;
                                     break;
                                 case 300:
                                     spawnPos = RuinsEntrance.ToWorldCoordinates() + Vector2.UnitX * (FacingLeft ? -(156 + offset) : (156 + offset)) - Vector2.UnitY * 16;
                                     cultist = NPC.NewNPCDirect(NPC.GetSource_NaturalSpawn(), (int)spawnPos.X, (int)spawnPos.Y, ModContent.NPCType<LunarCultistDevotee>(), ai2: 7);
                                     cultist.As<LunarCultistDevotee>().TargetPos = MiddleSideRoom.ToWorldCoordinates();
+                                    if (!FacingLeft)
+                                        cultist.direction *= -1;
                                     break;
                                 case 330:
                                     spawnPos = RuinsEntrance.ToWorldCoordinates() + Vector2.UnitX * (FacingLeft ? -(34 + offset) : (34 + offset)) - Vector2.UnitY * 16;
                                     cultist = NPC.NewNPCDirect(NPC.GetSource_NaturalSpawn(), (int)spawnPos.X, (int)spawnPos.Y, ModContent.NPCType<LunarCultistDevotee>(), ai2: 7);
                                     cultist.As<LunarCultistDevotee>().TargetPos = UpperSideRoom.ToWorldCoordinates();
+                                    if (!FacingLeft)
+                                        cultist.direction *= -1;
                                     break;
                                 case 490:
                                     DisplayMessage("Go! Claim everything for the cause!", Main.npc[BishopIndex], Color.LimeGreen, 110);
