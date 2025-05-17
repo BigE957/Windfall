@@ -17,20 +17,29 @@ public static class DragonMonkRuins
         Tile tile = ParanoidTileRetrieval(placementPoint);
 
         if (tile.LiquidType == LiquidID.Shimmer)
+        {
+            Windfall.Instance.Logger.Debug("Draconic Ruins can't generate due to the Shimmer");
             return true;
+        }
 
-        if (tile.TileType == TileID.BlueDungeonBrick ||
-        tile.TileType == TileID.GreenDungeonBrick ||
-        tile.TileType == TileID.PinkDungeonBrick)
+        if (tile.TileType == TileID.WoodBlock ||
+        tile.WallType == WallID.Planked ||
+        tile.TileType == TileID.WoodenBeam)
+        {
+            Windfall.Instance.Logger.Debug("Draconic Ruins can't generate due to an Underground House");
             return true;
+        }
 
         if (tile.TileType == TileID.Crimstone ||
         tile.WallType == WallID.CrimstoneUnsafe ||
         tile.TileType == TileID.Ebonstone ||
         tile.WallType == WallID.EbonstoneUnsafe)
+        {
+            Windfall.Instance.Logger.Debug("Draconic Ruins can't generate due to an Evil Biome");
             return true;
+        }
 
-        if (tile.TileType == TileID.Mud ||
+        if (//tile.TileType == TileID.Mud ||
         tile.WallType == WallID.MudUnsafe ||
         tile.TileType == TileID.JungleGrass ||
         tile.WallType == WallID.Jungle ||
@@ -41,16 +50,21 @@ public static class DragonMonkRuins
         tile.TileType == TileID.Hive ||
         tile.WallType == WallID.HiveUnsafe ||
         tile.TileType == TileID.LihzahrdBrick ||
-        tile.WallType == WallID.LihzahrdBrickUnsafe ||
-        tile.TileType == TileID.MushroomGrass)
+        tile.WallType == WallID.LihzahrdBrickUnsafe)
+        {
+            Windfall.Instance.Logger.Debug("Draconic Ruins can't generate due to the Jungle");
             return true;
+        }
 
-        if (tile.TileType == TileID.Sand ||
+        if (//tile.TileType == TileID.Sand ||
         tile.WallType == WallID.Sandstone ||
         tile.TileType == TileID.Sandstone ||
         tile.WallType == WallID.HardenedSand ||
         tile.TileType == TileID.HardenedSand)
+        {
+            Windfall.Instance.Logger.Debug("Draconic Ruins can't generate due to a Desert");
             return true;
+        }
 
         if (tile.TileType == ModContent.TileType<Navystone>() ||
         tile.WallType == ModContent.WallType<NavystoneWall>() ||
@@ -66,7 +80,10 @@ public static class DragonMonkRuins
         tile.TileType == ModContent.TileType<TubeCoral>() ||
         tile.TileType == ModContent.TileType<SeaPrism>() ||
         tile.TileType == ModContent.TileType<SeaPrismCrystals>())
+        {
+            Windfall.Instance.Logger.Debug("Draconic Ruins can't generate due to the Sunken Sea");
             return true;
+        }
 
         if (tile.TileType == ModContent.TileType<LaboratoryPlating>() ||
         tile.WallType == ModContent.WallType<LaboratoryPlatingWall>() ||
@@ -74,7 +91,10 @@ public static class DragonMonkRuins
         tile.WallType == ModContent.WallType<RustedPlatingWall>() ||
         tile.TileType == ModContent.TileType<LaboratoryPanels>() ||
         tile.WallType == ModContent.WallType<LaboratoryPanelWall>())
+        {
+            Windfall.Instance.Logger.Debug("Draconic Ruins can't generate due to a Lab");
             return true;
+        }
 
         if (careAboutMoss)
         {
@@ -82,23 +102,24 @@ public static class DragonMonkRuins
                 tile.TileType == TileID.KryptonMoss ||
                 tile.TileType == TileID.LavaMoss ||
                 tile.TileType == TileID.XenonMoss ||
-                tile.TileType == TileID.VioletMoss)
+                tile.TileType == TileID.VioletMoss ||
+                tile.TileType == TileID.MushroomGrass)
+            {
+                Windfall.Instance.Logger.Debug("Draconic Ruins can't generate due to Moss");
                 return true;
+            }
         }
-
         return false;
     }
 
     public static void PlaceDraconicRuins(StructureMap structures)
     {
         string mapKey = "Draconic Ruins";
-        int centerPlacementPositionX;
+        
         bool facingLeft = Main.dungeonX < Main.maxTilesX / 2;
 
-        if (Main.maxTilesX == 8400) //Large World
-            centerPlacementPositionX = facingLeft ? Main.spawnTileX + 800 : Main.spawnTileX - 800;
-        else
-            centerPlacementPositionX = facingLeft ? Main.spawnTileX + 500 : Main.spawnTileX - 500;
+        int startPositionX = facingLeft ? Main.maxTilesX - 48 : 48;
+
         SchematicMetaTile[,] schematic = WFSchematicManager.TileMaps[mapKey];
         Point placementPoint;
         Vector2 schematicSize = new(WFSchematicManager.TileMaps[mapKey].GetLength(0), WFSchematicManager.TileMaps[mapKey].GetLength(1));
@@ -106,35 +127,47 @@ public static class DragonMonkRuins
         int tries = 0;
         do
         {
-            int placementPositionX = centerPlacementPositionX + (genRand.Next(0, 2200) * (facingLeft ? 1 : -1));
-            int placementPositionY = genRand.Next(underworldTop - 800, underworldTop - 175);
+            int placementPositionX = startPositionX + (genRand.Next(0, Main.maxTilesX == 8400 ? 3000 : 2500) * (facingLeft ? -1 : 1));
+
+            int placementPositionY = genRand.Next(underworldTop - 820, underworldTop - 100);
 
             placementPoint = new Point(placementPositionX, placementPositionY);
 
             bool canGenerateInLocation = true;
 
-            for (int x = placementPoint.X - 4; x < placementPoint.X + schematicSize.X + 4; x++)
+            int buffer = 2;
+            for (int x = placementPoint.X - buffer; x < placementPoint.X + schematicSize.X + (buffer * 2); x++)
             {
-                for (int y = placementPoint.Y - 4; y < placementPoint.Y + schematicSize.Y + 4; y++)
+                for (int y = placementPoint.Y - buffer; y < placementPoint.Y + schematicSize.Y + (buffer * 2); y++)
                 {
-                    if (ShouldAvoidLocation(new Point(x, y), tries < 80000))
+                    if (ShouldAvoidLocation(new Point(x, y), tries < 2000))
+                    {
                         canGenerateInLocation = false;
+                        break;
+                    }
                 }
+                if (!canGenerateInLocation)
+                    break;
             }
 
-            if (!canGenerateInLocation && !structures.CanPlace(new Rectangle(placementPoint.X, placementPoint.Y, (int)schematicSize.X, (int)schematicSize.Y), 20))
+            if (!canGenerateInLocation || !structures.CanPlace(new Rectangle(placementPoint.X, placementPoint.Y, (int)schematicSize.X, (int)schematicSize.Y), buffer))
+            {
                 tries++;
+                placementPoint = new(-1, -1);
+                if(canGenerateInLocation)
+                    Windfall.Instance.Logger.Debug("Draconic Ruins can't generate due to a Protected Structure or Non-standard tile");
+            }
             else
             {
+                Windfall.Instance.Logger.Debug("Draconic Ruins successfully generated!");
                 SchematicAnchor anchorType = SchematicAnchor.TopLeft;
                 bool place = true;
                 WFSchematicManager.PlaceFlippableSchematic<Action<Chest>>(mapKey, placementPoint, anchorType, ref place, flipHorizontal: facingLeft);
                 CalamityMod.CalamityUtils.AddProtectedStructure(new Rectangle(placementPoint.X, placementPoint.Y, (int)schematicSize.X, (int)schematicSize.Y), 20);
                 break;
             }
-            placementPoint = new(-1, -1);
 
-        } while (tries <= 10000);
+        } while (tries <= 20000);
 
         DraconicRuinsSystem.DraconicRuinsLocation = placementPoint + (schematicSize / 2f).ToPoint();
         DraconicRuinsSystem.FacingLeft = facingLeft;
