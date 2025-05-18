@@ -98,7 +98,17 @@ public class SealingRitualSystem : ModSystem
             else if (Main.projectile.First(p => p.active && p.type == ModContent.ProjectileType<BurningAltar>()).ai[0] == 0)
                 Main.projectile.First(p => p.active && p.type == ModContent.ProjectileType<BurningAltar>()).ai[0] = 1;
             if (!NPC.AnyNPCs(ModContent.NPCType<SealingTablet>()))
-                NPC.NewNPC(Entity.GetSource_None(), (int)RitualWorld.X, (int)RitualWorld.Y - 128, ModContent.NPCType<SealingTablet>(), Start: 150, ai0: 2);
+            {
+                float y;
+                for (y = 1; y < 32; y++)
+                {
+                    if (IsSolidNotDoor(RitualTile - new Point(0, (int)y)))
+                        break;
+                }
+                y -= 0.5f;
+
+                NPC.NewNPC(Entity.GetSource_None(), (int)RitualWorld.X, (int)RitualWorld.Y - (int)(y * 16), ModContent.NPCType<SealingTablet>(), 150, ai1: ((y - 7) * 3.25f) + 8, ai0: 2);
+            }
             else if (Main.npc[NPC.FindFirstNPC(ModContent.NPCType<SealingTablet>())].ai[0] != 2)
                 Main.npc[NPC.FindFirstNPC(ModContent.NPCType<SealingTablet>())].ai[0] = 2;
             
@@ -137,7 +147,7 @@ public class SealingRitualSystem : ModSystem
                         NPC.NewNPC(Entity.GetSource_None(), (int)(RitualWorld.X - 150), (int)RitualWorld.Y - 8, ModContent.NPCType<RecruitableLunarCultist>()),
                         NPC.NewNPC(Entity.GetSource_None(), (int)(RitualWorld.X + 150), (int)RitualWorld.Y - 8, ModContent.NPCType<RecruitableLunarCultist>()),
                         NPC.NewNPC(Entity.GetSource_None(), (int)(RitualWorld.X + 220), (int)RitualWorld.Y - 8, ModContent.NPCType<RecruitableLunarCultist>()),
-                        NPC.NewNPC(Entity.GetSource_None(), (int)RitualWorld.X, (int)RitualWorld.Y - (int)(y * 16), ModContent.NPCType<SealingTablet>(), ai1: ((y - 7) * 3.25f) + 8),
+                        NPC.NewNPC(Entity.GetSource_None(), (int)RitualWorld.X, (int)RitualWorld.Y - (int)(y * 16), ModContent.NPCType<SealingTablet>(), 150, ai1: ((y - 7) * 3.25f) + 8),
                         NPC.NewNPC(Entity.GetSource_None(), (int)RitualWorld.X, (int)RitualWorld.Y - 8, ModContent.NPCType<TravellingCultist>(), ai3: 1),
                         
                     ];
@@ -341,6 +351,7 @@ public class SealingRitualSystem : ModSystem
                 Active = false;
                 if (!RitualSequenceSeen)
                 {
+                    Main.npc[NPCIndexs[4]].ai[0] = 2;
                     RitualSequenceSeen = true;
                     QuestSystem.Quests["SealingRitual"].IncrementProgress();
                     foreach (int i in NPCIndexs)

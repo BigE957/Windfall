@@ -67,29 +67,30 @@ public class SealingTablet : ModNPC
             else if (summonRatio > 0f)
                 summonRatio -= 0.001f;
             else
-            {
                 summonRatio = 0;
-                return;
-            }
-            Vector2 spawnOffset = Vector2.One * Main.rand.NextFloat(-16f, 24f);
-            Vector2 DungeonCoords = new Vector2(Main.dungeonX - 4, Main.dungeonY).ToWorldCoordinates();
-            if (Main.rand.NextBool(summonRatio))
-                EmpyreanMetaball.SpawnDefaultParticle(NPC.Center + spawnOffset, spawnOffset.RotatedBy((Main.rand.NextBool() ? PiOver2 : -PiOver2) + Main.rand.NextFloat(-PiOver4, PiOver4)).SafeNormalize(Vector2.Zero) * Main.rand.NextFloat(0f, 4f), Main.rand.NextFloat(10, 20));
-            if (summonRatio > 0.75f)
-            {                    
-                float width = 124f * ExpInEasing((summonRatio - 0.75f) / 0.25f);
-                width = Clamp(width, 0f, 96f);
-                //Main.NewText(width);
-                for (int i = 0; i < 18; i++)
-                    EmpyreanMetaball.SpawnDefaultParticle(new Vector2(DungeonCoords.X + Main.rand.NextFloat(-width, width), DungeonCoords.Y + Main.rand.NextFloat(0, 24f)), new Vector2(Main.rand.Next(-2, 2), Main.rand.Next(-5, -1) * SineInEasing((summonRatio - 0.75f) / 0.25f)), Main.rand.NextFloat(15f, 25f) * ((summonRatio - 0.75f) / 0.25f) * 2f);
-            }
-            if (summonRatio >= 1f && !NPC.AnyNPCs(ModContent.NPCType<TheOrator>()))
+
+            if (summonRatio != 0)
             {
-                SoundEngine.PlaySound(SoundID.DD2_EtherianPortalDryadTouch, NPC.Center);
-                Vector2 spawnPos = new(DungeonCoords.X, DungeonCoords.Y - 8);                    
-                NPC boss = NPC.NewNPCDirect(NPC.GetSource_NaturalSpawn(), (int)spawnPos.X, (int)spawnPos.Y, ModContent.NPCType<TheOrator>());
-                for (int i = 0; i < 32; i++)
-                    EmpyreanMetaball.SpawnDefaultParticle(boss.Center + new Vector2(Main.rand.NextFloat(-64, 64), 64), Vector2.UnitY * Main.rand.NextFloat(4f, 24f) * -1, Main.rand.NextFloat(110f, 130f));
+                Vector2 spawnOffset = Vector2.One * Main.rand.NextFloat(-16f, 24f);
+                Vector2 DungeonCoords = new Vector2(Main.dungeonX + (Main.dungeonX > Main.spawnTileX ? 4 : -4), Main.dungeonY).ToWorldCoordinates();
+                if (Main.rand.NextBool(summonRatio))
+                    EmpyreanMetaball.SpawnDefaultParticle(NPC.Center + spawnOffset, spawnOffset.RotatedBy((Main.rand.NextBool() ? PiOver2 : -PiOver2) + Main.rand.NextFloat(-PiOver4, PiOver4)).SafeNormalize(Vector2.Zero) * Main.rand.NextFloat(0f, 4f), Main.rand.NextFloat(10, 20));
+                if (summonRatio > 0.75f)
+                {
+                    float width = 124f * ExpInEasing((summonRatio - 0.75f) / 0.25f);
+                    width = Clamp(width, 0f, 96f);
+                    //Main.NewText(width);
+                    for (int i = 0; i < 18; i++)
+                        EmpyreanMetaball.SpawnDefaultParticle(new Vector2(DungeonCoords.X + Main.rand.NextFloat(-width, width), DungeonCoords.Y + Main.rand.NextFloat(0, 24f)), new Vector2(Main.rand.Next(-2, 2), Main.rand.Next(-5, -1) * SineInEasing((summonRatio - 0.75f) / 0.25f)), Main.rand.NextFloat(15f, 25f) * ((summonRatio - 0.75f) / 0.25f) * 2f);
+                }
+                if (summonRatio >= 1f && !NPC.AnyNPCs(ModContent.NPCType<TheOrator>()))
+                {
+                    SoundEngine.PlaySound(SoundID.DD2_EtherianPortalDryadTouch, NPC.Center);
+                    Vector2 spawnPos = new(DungeonCoords.X, DungeonCoords.Y - 8);
+                    NPC boss = NPC.NewNPCDirect(NPC.GetSource_NaturalSpawn(), (int)spawnPos.X, (int)spawnPos.Y, ModContent.NPCType<TheOrator>());
+                    for (int i = 0; i < 32; i++)
+                        EmpyreanMetaball.SpawnDefaultParticle(boss.Center + new Vector2(Main.rand.NextFloat(-64, 64), 64), Vector2.UnitY * Main.rand.NextFloat(4f, 24f) * -1, Main.rand.NextFloat(110f, 130f));
+                }
             }
         }
 
@@ -219,7 +220,7 @@ public class SealingTablet : ModNPC
             Vector2 drawPosition = NPC.Center - screenPos + (Vector2.UnitY * NPC.gfxOffY);
             drawPosition.Y -= 4;
             Vector2 origin = texture.Size() * 0.5f;
-            spriteBatch.Draw(texture, drawPosition, NPC.frame, NPC.GetAlpha(drawColor), NPC.rotation, origin, NPC.scale, SpriteEffects.None, 0f);
+            spriteBatch.Draw(texture, drawPosition, null, NPC.GetAlpha(drawColor), NPC.rotation, origin, 1f, SpriteEffects.None, 0f);
             return;
         }
         if (DraconicRuinsSystem.State == DraconicRuinsSystem.CutsceneState.CultistFumble && NPC.ai[0] == 0 && isHovered)

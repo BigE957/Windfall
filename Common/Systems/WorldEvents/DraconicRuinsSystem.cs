@@ -105,7 +105,6 @@ public class DraconicRuinsSystem : ModSystem
         */
 
         //Main.NewText(CutsceneTime);
-
         if (DraconicRuinsLocation == new Point(-1, -1))
             return;
 
