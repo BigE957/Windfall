@@ -74,6 +74,8 @@ public class OratorNPC : ModNPC
                     NPC.position.Y = altY;
             }
         }
+
+        NPC.spriteDirection = NPC.direction;
     }
     public override void AI()
     {
@@ -126,6 +128,8 @@ public class OratorNPC : ModNPC
                 NPC.direction = nearest.Center.X > NPC.Center.X ? 1 : -1;
             }
         }
+        
+        NPC.spriteDirection = NPC.direction;
     }
 
     public override bool CanChat() => !QuestSystem.Quests["DraconicBone"].Complete && !ModContent.GetInstance<DialogueUISystem>().isDialogueOpen && !LunarCultBaseSystem.IsRitualActivityActive() && AIState != States.DraconicBoneSequence && AIState != States.Cutscene;
@@ -167,7 +171,10 @@ public class OratorNPC : ModNPC
                 uiSystem.CurrentTree.Dialogues[0].Responses[0].SwapToTreeKey = "TheOrator/LunarCoins";
                 uiSystem.CurrentTree.Dialogues[0].Responses[0].Heading = 0;
             }
-            switch(Main.LocalPlayer.LunarCult().apostleQuestTracker)
+            else
+                uiSystem.CurrentTree.Dialogues[0].Responses[0].Title = "Lunar Coins";
+
+            switch (Main.LocalPlayer.LunarCult().apostleQuestTracker)
             {
                 case 5:
                     uiSystem.CurrentTree.Dialogues[0].Responses[1].Requirement = true;
