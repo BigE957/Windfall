@@ -223,7 +223,7 @@ public class SelenicDialogueStyle : DialogueStyle
 
                             if (ButtonCounters[i] < 18)
                             {
-                                float value = Lerp(ButtonSize.Y, ButtonSize.Y * 1.25f, SineInEasing(ButtonCounters[i] / 18f));
+                                float value = Lerp(ButtonSize.Y, ButtonSize.Y * 1.1f, SineInEasing(ButtonCounters[i] / 18f));
                                 button.Width.Pixels = value * 3;
                                 button.Height.Pixels = value;
                                 ButtonCounters[i]++;
@@ -231,8 +231,8 @@ public class SelenicDialogueStyle : DialogueStyle
                             else
                             {
                                 ButtonCounters[i] = 18;
-                                button.Width.Pixels = ButtonSize.X * 1.25f;
-                                button.Height.Pixels = ButtonSize.Y * 1.25f;
+                                button.Width.Pixels = ButtonSize.X * 1.1f;
+                                button.Height.Pixels = ButtonSize.Y * 1.1f;
                             }
                         }
                         else
@@ -241,7 +241,7 @@ public class SelenicDialogueStyle : DialogueStyle
 
                             if (ButtonCounters[i] > 0)
                             {
-                                float value = Lerp(ButtonSize.Y * 1.25f, ButtonSize.Y, SineOutEasing(1 - (ButtonCounters[i] / 18f)));
+                                float value = Lerp(ButtonSize.Y * 1.1f, ButtonSize.Y, SineOutEasing(1 - (ButtonCounters[i] / 18f)));
                                 button.Width.Pixels = value * 3;
                                 button.Height.Pixels = value;
                                 ButtonCounters[i]--;
