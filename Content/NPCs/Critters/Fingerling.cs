@@ -71,6 +71,7 @@ public class Fingerling : ModNPC
             }
             return;
         }
+
         #region Block Ahead Checks
         Vector2 heading = new(NPC.direction, NPC.directionY);
         Point tileCheck = (NPC.Center + (heading.RotatedBy(PiOver2 * NPC.spriteDirection) * 5f) + new Vector2(NPC.width / 1.66f * NPC.direction, NPC.width / 1.66f * NPC.directionY)).ToBoundTileCoordinates();
@@ -345,7 +346,7 @@ public class Fingerling : ModNPC
 
             //d = Dust.NewDustPerfect(tileCheck.ToWorldCoordinates(), DustID.AncientLight, Vector2.Zero, newColor: Color.Yellow);
             //d.noGravity = true;
-                if (Main.tile[tileCheck] != null && !belowTile.IsHalfBlock && (!belowTile.HasTile || !belowTile.IsSolid()))
+            if (Main.tile[tileCheck] != null && !belowTile.IsHalfBlock && (!belowTile.HasTile || !belowTile.IsSolid()))
             {
                 if (SlopeOn != SlopeType.Solid)
                 {
@@ -357,6 +358,7 @@ public class Fingerling : ModNPC
                         NPC.directionY = (int)heading.Y;
                     }
                     falling = true;
+                    NPC.noGravity = false;
                 }
                 else
                 {                           
@@ -395,10 +397,10 @@ public class Fingerling : ModNPC
                     falling = true;
                     NPC.noGravity = false;
                 }
-                /*
+                
                 else if (NPC.direction == 0 && (
-                    (NPC.spriteDirection == 1 && belowTile.RightSlope) || 
-                    (NPC.spriteDirection == -1 && belowTile.LeftSlope)
+                    (NPC.spriteDirection == -1 && belowTile.RightSlope) || 
+                    (NPC.spriteDirection == 1 && belowTile.LeftSlope)
                     )
                 )
                 {
@@ -415,7 +417,7 @@ public class Fingerling : ModNPC
                         NPC.noGravity = false;
                     }
                 }
-                */
+                
                 else
                 {
                     rotateCooldown = 30;
