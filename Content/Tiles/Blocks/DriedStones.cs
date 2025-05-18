@@ -27,8 +27,6 @@ public class DriedStones : ModTile
         AddMapEntry(new Color(127, 111, 144));
 
         FlexibleTileWand.RubblePlacementSmall.AddVariations(ModContent.ItemType<DriedSeeds>(), Type, 0, 1, 2);
-
-        base.SetStaticDefaults();
     }
 
     public override void SetDrawPositions(int i, int j, ref int width, ref int offsetY, ref int height, ref short tileFrameX, ref short tileFrameY)

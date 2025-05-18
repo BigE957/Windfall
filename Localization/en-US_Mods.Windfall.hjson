@@ -1315,14 +1315,14 @@ Items: {
 			Tooltip: ""
 		}
 
-		UnchargedWayfinder: {
-			DisplayName: Uncharged Wayfinder
-			Tooltip: ""
+		WitheredWayfinder: {
+			DisplayName: Withered Wayfinder
+			Tooltip: Wilted away after years of neglect, it yearns to bloom once more...
 		}
 
-		Wayfinder: {
-			DisplayName: Wayfinder
-			Tooltip: ""
+		BlossomedWayfinder: {
+			DisplayName: Blossomed Wayfinder
+			Tooltip: Blooming in cyan splendor, it now yearns for its home...
 		}
 	}
 

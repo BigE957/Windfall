@@ -3,10 +3,10 @@ using CalamityMod.Tiles.Ores;
 
 namespace Windfall.Content.Items.Quests.SealingRitual;
 
-public class UnchargedWayfinder : ModItem, ILocalizedModType
+public class WitheredWayfinder : ModItem, ILocalizedModType
 {
     public new string LocalizationCategory => "Items.Quest";
-    public override string Texture => "CalamityMod/Items/Accessories/AscendantInsignia";
+    public override string Texture => "WIndfall/Assets/Items/Quest/WitheredWayfinder";
     public override void SetDefaults()
     {
         Item.width = 22;
@@ -51,7 +51,7 @@ public class UnchargedWayfinder : ModItem, ILocalizedModType
                 for (int i = 0; i < 12; i++)
                     Dust.NewDustPerfect(player.Calamity().mouseWorld, DustID.BlueFairy);
                 if (charge >= 10)
-                    Item.ChangeItemType(ModContent.ItemType<Wayfinder>());
+                    Item.ChangeItemType(ModContent.ItemType<BlossomedWayfinder>());
                 return true;
             }
             if ((int)(Main.GlobalTimeWrappedHourly * 60) % 2 == 0)

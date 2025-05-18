@@ -447,7 +447,7 @@ public class TravellingCultist : ModNPC, ILocalizedModType
                 AttachCostToResponse(ref uiSystem, new Tuple<int, int>(ModContent.ItemType<DraconicBone>(), 1), 0, 0);
                 break;
             case "TravellingCultist/QuestProgress/QuestWayfinder":
-                uiSystem.CurrentTree.Dialogues[0].Responses[0].Requirement = Main.LocalPlayer.inventory.Where(i => i.type == ModContent.ItemType<Wayfinder>()).Any();
+                uiSystem.CurrentTree.Dialogues[0].Responses[0].Requirement = Main.LocalPlayer.inventory.Where(i => i.type == ModContent.ItemType<BlossomedWayfinder>()).Any();
                 break;
         }
     }
@@ -486,7 +486,7 @@ public class TravellingCultist : ModNPC, ILocalizedModType
             case "TravellingCultist/Introductions/WayfinderQuest":
                 QuestSystem.Quests["TabletFragment"].ResetQuest();
                 QuestSystem.Quests["TabletFragment"].Active = true;
-                Main.item[Item.NewItem(cultist.GetSource_Loot(), cultist.Hitbox, ModContent.ItemType<UnchargedWayfinder>())].velocity = Vector2.UnitX * cultist.direction * -3f;
+                Main.item[Item.NewItem(cultist.GetSource_Loot(), cultist.Hitbox, ModContent.ItemType<WitheredWayfinder>())].velocity = Vector2.UnitX * cultist.direction * -3f;
                 break;
             case "TravellingCultist/Introductions/LightShardQuest":
                 CurrentDialogue = DialogueState.RitualQuestRecruitmentAndShard;

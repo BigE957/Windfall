@@ -5,10 +5,10 @@ using CalamityMod.Particles;
 
 namespace Windfall.Content.Items.Quests.SealingRitual;
 
-public class Wayfinder : ModItem, ILocalizedModType
+public class BlossomedWayfinder : ModItem, ILocalizedModType
 {
     public new string LocalizationCategory => "Items.Quest";
-    public override string Texture => "CalamityMod/Items/Accessories/AscendantInsignia";
+    public override string Texture => "Windfall/Assets/Items/Quest/BlossomedWayfinder";
     public override void SetDefaults()
     {
         Item.width = 22;
