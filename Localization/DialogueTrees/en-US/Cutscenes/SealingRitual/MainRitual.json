@@ -4,19 +4,22 @@
 			"DialogueText": [ { "Text": "Ah! You're here! Let's hurry and get this started. We haven't a moment to waste!" } ]
 		},
 		{
-			"DialogueText": [ { "Text": "Recruit1: So this thing will stop the apocalypse?" } ]
+			"DialogueText": [ { "Text": "Recruit1: So this thing will stop the apocalypse?" } ],
+			"CharacterIndex": 1
 		},
 		{
 			"DialogueText": [ { "Text": "That's quite right. With this ritual, the Selenic Order's plans will be stopped in their tracks! Whatever despicable future they wished to bring about will not come to pass!" } ]
 		},
 		{
-			"DialogueText": [ { "Text": "Recruit3: To think we were helping such a villainous group..." } ]
+			"DialogueText": [ { "Text": "Recruit3: To think we were helping such a villainous group..." } ],
+			"CharacterIndex": 3
 		},
 		{
 			"DialogueText": [ { "Text": "Yes, yes, I'm well aware of how regretful you all are. It is quite alright, however we really must get started with this. There's no teeling how long we have until the we draw the Order's attention!" } ]
 		},
 		{
-			"DialogueText": [ { "Text": "Recruit4: And... how do we do that?" } ]
+			"DialogueText": [ { "Text": "Recruit4: And... how do we do that?" } ],
+			"CharacterIndex": 4
 		},
 		{
 			"DialogueText": [ { "Text": "It's actually quite simple! ...Just. ...Hold. ...Still. ..." } ],
@@ -53,7 +56,11 @@
 			"DialogueText": [ { "Text": ". . . f o o l . . . ?" } ]
 		}
 	],
-  "Characters": [
-    "TheCalamity"
-  ]
+	"Characters": [
+		"TheCalamity",
+		"Recruit1",
+		"Recruit2",
+		"Recruit3",
+		"Recruit4"
+	]
 }
