@@ -4,7 +4,7 @@ namespace Windfall.Content.Scenes.DragonicRuinMusicScenes;
 public class DraconicRuinsMusicScene : ModSceneEffect
 {
     public override int Music => RuinsMusic();
-    public override bool IsSceneEffectActive(Player player) => DraconicRuinsSystem.DraconicRuinsArea.Contains(player.Center.ToTileCoordinates());
+    public override bool IsSceneEffectActive(Player player) => DraconicRuinsSystem.DraconicRuinsArea.Expand(84).Contains(player.Center.ToTileCoordinates());
     public override SceneEffectPriority Priority => SceneEffectPriority.Event;
 
     private static int RuinsMusic()

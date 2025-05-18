@@ -34,8 +34,8 @@ public static partial class WindfallUtils
     public static Rectangle Expand(this Rectangle rect, int amt)
     {
         Rectangle newRect = rect;
-        newRect.Width += (int)Math.Ceiling(amt / 2f);
-        newRect.Height += (int)Math.Ceiling(amt / 2f);
+        newRect.Width += amt;
+        newRect.Height += amt;
         newRect.X -= amt / 2;
         newRect.Y -= amt / 2;
         return newRect;
@@ -43,8 +43,8 @@ public static partial class WindfallUtils
     public static Rectangle Expand(this Rectangle rect, int width, int height)
     {
         Rectangle newRect = rect;
-        newRect.Width += (int)Math.Ceiling(width / 2f);
-        newRect.Height += (int)Math.Ceiling(height / 2f);
+        newRect.Width += width;
+        newRect.Height += height;
         newRect.X -= width / 2;
         newRect.Y -= height / 2;
         return newRect;
