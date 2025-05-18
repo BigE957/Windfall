@@ -41,7 +41,7 @@ public class SealingTablet : ModNPC
 
     public override void OnSpawn(IEntitySource source)
     {
-        int verletCount = 22;
+        int verletCount = (int)(NPC.ai[1] == 0 ? 22 : NPC.ai[1]);
 
         box = CreateVerletBox(new((int)NPC.position.X, (int)NPC.position.Y, 18, 18));
 

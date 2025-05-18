@@ -26,7 +26,9 @@ public class SealingRitualSystem : ModSystem
     private static int RitualTimer = -1;
     private static List<int> NPCIndexs = [];
     private static float zoom = 0;
-    private static Vector2 DungeonCoords = new Vector2(Main.dungeonX - 4, Main.dungeonY).ToWorldCoordinates();
+    private static Point RitualTile;
+    private static Vector2 RitualWorld => RitualTile.ToWorldCoordinates();
+
 
 
     private enum CultistFacing
@@ -67,7 +69,7 @@ public class SealingRitualSystem : ModSystem
     }
     public override void OnWorldLoad()
     {
-        DungeonCoords = new Vector2(Main.dungeonX + Main.dungeonX > Main.spawnTileX ? 4 : -4, Main.dungeonY).ToWorldCoordinates();
+        RitualTile = new Point(Main.dungeonX + (Main.dungeonX > Main.spawnTileX ? 4 : -4), Main.dungeonY);
     }
     public override void OnWorldUnload()
     {
@@ -86,18 +88,18 @@ public class SealingRitualSystem : ModSystem
         State = SystemState.CheckReqs; RitualTimer = -2; RitualSequenceSeen = false; Active = false;
         */
         //Recruits = [];
-        //Main.NewText($"{RitualTimer}, {State}, {(DungeonCoords - Main.LocalPlayer.Center).Length()}, {RitualSequenceSeen}");
+        //Main.NewText($"{RitualTimer}, {State}, {(RitualTile - new Point(Main.dungeonX, Main.dungeonY))}, {RitualSequenceSeen}");
         Dust.NewDustPerfect(new Point(Main.dungeonX, Main.dungeonY).ToWorldCoordinates(), DustID.Terra, Vector2.Zero);
         #endregion
 
         if (RitualSequenceSeen)
         {
             if (!Main.projectile.Any(p => p.active && p.type == ModContent.ProjectileType<BurningAltar>()))
-                Projectile.NewProjectile(Projectile.GetSource_NaturalSpawn(), new Vector2(DungeonCoords.X, DungeonCoords.Y - 52), Vector2.Zero, ModContent.ProjectileType<BurningAltar>(), 0, 0f, ai0: 1);
+                Projectile.NewProjectile(Projectile.GetSource_NaturalSpawn(), new Vector2(RitualWorld.X, RitualWorld.Y - 52), Vector2.Zero, ModContent.ProjectileType<BurningAltar>(), 0, 0f, ai0: 1);
             else if (Main.projectile.First(p => p.active && p.type == ModContent.ProjectileType<BurningAltar>()).ai[0] == 0)
                 Main.projectile.First(p => p.active && p.type == ModContent.ProjectileType<BurningAltar>()).ai[0] = 1;
             if (!NPC.AnyNPCs(ModContent.NPCType<SealingTablet>()))
-                NPC.NewNPC(Entity.GetSource_None(), (int)DungeonCoords.X, (int)DungeonCoords.Y - 128, ModContent.NPCType<SealingTablet>(), Start: 150, ai0: 2);
+                NPC.NewNPC(Entity.GetSource_None(), (int)RitualWorld.X, (int)RitualWorld.Y - 128, ModContent.NPCType<SealingTablet>(), Start: 150, ai0: 2);
             else if (Main.npc[NPC.FindFirstNPC(ModContent.NPCType<SealingTablet>())].ai[0] != 2)
                 Main.npc[NPC.FindFirstNPC(ModContent.NPCType<SealingTablet>())].ai[0] = 2;
             
@@ -121,25 +123,34 @@ public class SealingRitualSystem : ModSystem
                     RecruitsHover[1] = -1;
                     RecruitsHover[2] = -1;
                     RecruitsHover[3] = -1;
+
+                    float y;
+                    for (y = 1; y < 32; y++)
+                    {
+                        if (IsSolidNotDoor(RitualTile - new Point(0, (int)y)))
+                            break;
+                    }
+                    y -= 0.5f;
+                    Main.NewText(y);
                     NPCIndexs =
                     [
-                        NPC.NewNPC(Entity.GetSource_None(), (int)(DungeonCoords.X - 220), (int)DungeonCoords.Y - 8, ModContent.NPCType<RecruitableLunarCultist>()),
-                        NPC.NewNPC(Entity.GetSource_None(), (int)(DungeonCoords.X - 150), (int)DungeonCoords.Y - 8, ModContent.NPCType<RecruitableLunarCultist>()),
-                        NPC.NewNPC(Entity.GetSource_None(), (int)(DungeonCoords.X + 150), (int)DungeonCoords.Y - 8, ModContent.NPCType<RecruitableLunarCultist>()),
-                        NPC.NewNPC(Entity.GetSource_None(), (int)(DungeonCoords.X + 220), (int)DungeonCoords.Y - 8, ModContent.NPCType<RecruitableLunarCultist>()),
-                        NPC.NewNPC(Entity.GetSource_None(), (int)DungeonCoords.X, (int)DungeonCoords.Y - 216, ModContent.NPCType<SealingTablet>()),
-                        NPC.NewNPC(Entity.GetSource_None(), (int)DungeonCoords.X, (int)DungeonCoords.Y - 8, ModContent.NPCType<TravellingCultist>(), ai3: 1),
+                        NPC.NewNPC(Entity.GetSource_None(), (int)(RitualWorld.X - 220), (int)RitualWorld.Y - 8, ModContent.NPCType<RecruitableLunarCultist>()),
+                        NPC.NewNPC(Entity.GetSource_None(), (int)(RitualWorld.X - 150), (int)RitualWorld.Y - 8, ModContent.NPCType<RecruitableLunarCultist>()),
+                        NPC.NewNPC(Entity.GetSource_None(), (int)(RitualWorld.X + 150), (int)RitualWorld.Y - 8, ModContent.NPCType<RecruitableLunarCultist>()),
+                        NPC.NewNPC(Entity.GetSource_None(), (int)(RitualWorld.X + 220), (int)RitualWorld.Y - 8, ModContent.NPCType<RecruitableLunarCultist>()),
+                        NPC.NewNPC(Entity.GetSource_None(), (int)RitualWorld.X, (int)RitualWorld.Y - (int)(y * 16), ModContent.NPCType<SealingTablet>(), ai1: ((y - 7) * 3.25f) + 8),
+                        NPC.NewNPC(Entity.GetSource_None(), (int)RitualWorld.X, (int)RitualWorld.Y - 8, ModContent.NPCType<TravellingCultist>(), ai3: 1),
                         
                     ];
-                    Projectile.NewProjectile(Projectile.GetSource_NaturalSpawn(), new Vector2(DungeonCoords.X, DungeonCoords.Y - 52), Vector2.Zero, ModContent.ProjectileType<BurningAltar>(), 0, 0f, ai0: 0);
-                    Projectile.NewProjectile(Projectile.GetSource_NaturalSpawn(), new Vector2(DungeonCoords.X + 64, DungeonCoords.Y - 32), Vector2.Zero, ModContent.ProjectileType<RitualTorch>(), 0, 0f);
-                    Projectile.NewProjectile(Projectile.GetSource_NaturalSpawn(), new Vector2(DungeonCoords.X - 64, DungeonCoords.Y - 32), Vector2.Zero, ModContent.ProjectileType<RitualTorch>(), 0, 0f);
-                    Projectile.NewProjectile(Projectile.GetSource_NaturalSpawn(), new Vector2(DungeonCoords.X + 185, DungeonCoords.Y - 16), Vector2.Zero, ModContent.ProjectileType<BookPile>(), 0, 0f, ai0: 1);
-                    Projectile.NewProjectile(Projectile.GetSource_NaturalSpawn(), new Vector2(DungeonCoords.X - 185, DungeonCoords.Y - 16), Vector2.Zero, ModContent.ProjectileType<BookPile>(), 0, 0f);
-                    Projectile.NewProjectile(Projectile.GetSource_NaturalSpawn(), new Vector2(DungeonCoords.X + 255, DungeonCoords.Y - 16), Vector2.Zero, ModContent.ProjectileType<BookPile>(), 0, 0f);
-                    Projectile.NewProjectile(Projectile.GetSource_NaturalSpawn(), new Vector2(DungeonCoords.X - 255, DungeonCoords.Y - 16), Vector2.Zero, ModContent.ProjectileType<BookPile>(), 0, 0f, ai0: 1);
-                    Projectile.NewProjectile(Projectile.GetSource_NaturalSpawn(), new Vector2(DungeonCoords.X + 115, DungeonCoords.Y - 16), Vector2.Zero, ModContent.ProjectileType<BookPile>(), 0, 0f);
-                    Projectile.NewProjectile(Projectile.GetSource_NaturalSpawn(), new Vector2(DungeonCoords.X - 115, DungeonCoords.Y - 16), Vector2.Zero, ModContent.ProjectileType<BookPile>(), 0, 0f, ai0: 1);
+                    Projectile.NewProjectile(Projectile.GetSource_NaturalSpawn(), new Vector2(RitualWorld.X, RitualWorld.Y - 52), Vector2.Zero, ModContent.ProjectileType<BurningAltar>(), 0, 0f, ai0: 0);
+                    Projectile.NewProjectile(Projectile.GetSource_NaturalSpawn(), new Vector2(RitualWorld.X + 64, RitualWorld.Y - 32), Vector2.Zero, ModContent.ProjectileType<RitualTorch>(), 0, 0f);
+                    Projectile.NewProjectile(Projectile.GetSource_NaturalSpawn(), new Vector2(RitualWorld.X - 64, RitualWorld.Y - 32), Vector2.Zero, ModContent.ProjectileType<RitualTorch>(), 0, 0f);
+                    Projectile.NewProjectile(Projectile.GetSource_NaturalSpawn(), new Vector2(RitualWorld.X + 185, RitualWorld.Y - 16), Vector2.Zero, ModContent.ProjectileType<BookPile>(), 0, 0f, ai0: 1);
+                    Projectile.NewProjectile(Projectile.GetSource_NaturalSpawn(), new Vector2(RitualWorld.X - 185, RitualWorld.Y - 16), Vector2.Zero, ModContent.ProjectileType<BookPile>(), 0, 0f);
+                    Projectile.NewProjectile(Projectile.GetSource_NaturalSpawn(), new Vector2(RitualWorld.X + 255, RitualWorld.Y - 16), Vector2.Zero, ModContent.ProjectileType<BookPile>(), 0, 0f);
+                    Projectile.NewProjectile(Projectile.GetSource_NaturalSpawn(), new Vector2(RitualWorld.X - 255, RitualWorld.Y - 16), Vector2.Zero, ModContent.ProjectileType<BookPile>(), 0, 0f, ai0: 1);
+                    Projectile.NewProjectile(Projectile.GetSource_NaturalSpawn(), new Vector2(RitualWorld.X + 115, RitualWorld.Y - 16), Vector2.Zero, ModContent.ProjectileType<BookPile>(), 0, 0f);
+                    Projectile.NewProjectile(Projectile.GetSource_NaturalSpawn(), new Vector2(RitualWorld.X - 115, RitualWorld.Y - 16), Vector2.Zero, ModContent.ProjectileType<BookPile>(), 0, 0f, ai0: 1);
 
                     #region Character Setup
                     for (int k = 0; k < 4; k++)
@@ -150,10 +161,7 @@ public class SealingRitualSystem : ModSystem
                             Recruit.MyName = (RecruitableLunarCultist.RecruitNames)Recruits[k];
                             npc.GivenName = ((RecruitableLunarCultist.RecruitNames)Recruits[k]).ToString();
                         }
-                        if (Main.dungeonX > Main.spawnTileX)
-                            npc.direction = -1;
-                        else
-                            npc.direction = 1;
+                        npc.direction = 1;
                         if (k > 1)
                             npc.direction *= -1;
                     }
@@ -162,7 +170,7 @@ public class SealingRitualSystem : ModSystem
                 }
                 else
                 {
-                    if ((DungeonCoords - Main.player[Player.FindClosest(DungeonCoords, 16, 16)].Center).Length() < 150f && !Active)
+                    if ((RitualWorld - Main.player[Player.FindClosest(RitualWorld, 16, 16)].Center).Length() < 150f && !Active)
                     {
                         Active = true;
                         RitualTimer = 0;
@@ -211,8 +219,8 @@ public class SealingRitualSystem : ModSystem
                                 break;
 
                             case 500:
-                                SoundEngine.PlaySound(SoundID.Item71, DungeonCoords);
-                                ThornIndex = Projectile.NewProjectile(Entity.GetSource_NaturalSpawn(), DungeonCoords, new Vector2(0, -20), ModContent.ProjectileType<EmpyreanThorn>(), 200, 0f, ai0: -1);
+                                SoundEngine.PlaySound(SoundID.Item71, RitualWorld);
+                                ThornIndex = Projectile.NewProjectile(Entity.GetSource_NaturalSpawn(), RitualWorld, new Vector2(0, -20), ModContent.ProjectileType<EmpyreanThorn>(), 200, 0f, ai0: -1);
                                 CultistDir = CultistFacing.UhmHeavenIg;
                                 LunaticCultist.noGravity = true;
                                 LunaticCultist.position.Y -= 128;
@@ -224,7 +232,7 @@ public class SealingRitualSystem : ModSystem
                                 break;
 
                             case 680:
-                                NPC orator = NPC.NewNPCDirect(Entity.GetSource_NaturalSpawn(), (int)DungeonCoords.X, (int)DungeonCoords.Y - 8, ModContent.NPCType<OratorNPC>());
+                                NPC orator = NPC.NewNPCDirect(Entity.GetSource_NaturalSpawn(), (int)RitualWorld.X, (int)RitualWorld.Y - 8, ModContent.NPCType<OratorNPC>());
                                 SoundEngine.PlaySound(SoundID.DD2_EtherianPortalDryadTouch, orator.Center);
                                 for (int i = 0; i < 32; i++)
                                     EmpyreanMetaball.SpawnDefaultParticle(orator.Center + new Vector2(Main.rand.NextFloat(-64, 64), 64), Vector2.UnitY * Main.rand.NextFloat(4f, 24f) * -1, Main.rand.NextFloat(110f, 130f));
@@ -264,7 +272,7 @@ public class SealingRitualSystem : ModSystem
                         else
                             zoom = 0.4f;
                         CameraPanSystem.Zoom = zoom;
-                        CameraPanSystem.PanTowards(new Vector2(DungeonCoords.X + 120, DungeonCoords.Y), zoom * 2.5f);
+                        CameraPanSystem.PanTowards(new Vector2(RitualWorld.X + 120, RitualWorld.Y), zoom * 2.5f);
                         
                         #region Additional Visuals 
 
@@ -307,7 +315,7 @@ public class SealingRitualSystem : ModSystem
                             float width = 64f * ExpInEasing(ratio);
                             width = Clamp(width, 0f, 72f);
                             for (int i = 0; i < 18; i++)
-                                EmpyreanMetaball.SpawnDefaultParticle(new Vector2(DungeonCoords.X + Main.rand.NextFloat(-width, width), DungeonCoords.Y + Main.rand.NextFloat(0, 24f)), new Vector2(Main.rand.Next(-2, 2), Main.rand.Next(-3, -1) * SineInEasing(ratio)), Main.rand.NextFloat(14f, 28f) * ratio);
+                                EmpyreanMetaball.SpawnDefaultParticle(new Vector2(RitualWorld.X + Main.rand.NextFloat(-width, width), RitualWorld.Y + Main.rand.NextFloat(0, 24f)), new Vector2(Main.rand.Next(-2, 2), Main.rand.Next(-3, -1) * SineInEasing(ratio)), Main.rand.NextFloat(14f, 28f) * ratio);
                         }
 
                         if (Recruit1.Center.Y <= SealingTablet.Center.Y)
