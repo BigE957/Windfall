@@ -21,7 +21,6 @@ public class OratorNPC : ModNPC
         DraconicBoneSequence,
         Cutscene
     }
-
     private States AIState
     {
         get => (States)NPC.ai[0];
