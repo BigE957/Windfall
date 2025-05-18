@@ -77,6 +77,22 @@ public class DraconicRuinsSystem : ModSystem
     {
         //Debug Dust
         /*
+        for (int i = 0; i < 6; i++)
+        {
+            Dust.NewDustPerfect(Vector2.Lerp(safeZone4.TopLeft(), safeZone4.TopRight(), i / 5f).ToWorldCoordinates(), DustID.LifeDrain, Vector2.Zero);
+            Dust.NewDustPerfect(Vector2.Lerp(safeZone4.TopLeft(), safeZone4.BottomLeft(), i / 5f).ToWorldCoordinates(), DustID.LifeDrain, Vector2.Zero);
+            Dust.NewDustPerfect(Vector2.Lerp(safeZone4.TopRight(), safeZone4.BottomRight(), i / 5f).ToWorldCoordinates(), DustID.LifeDrain, Vector2.Zero);
+            Dust.NewDustPerfect(Vector2.Lerp(safeZone4.BottomLeft(), safeZone4.BottomRight(), i / 5f).ToWorldCoordinates(), DustID.LifeDrain, Vector2.Zero);
+        }
+
+        for (int i = 0; i < 6; i++)
+        {
+            Dust.NewDustPerfect(Vector2.Lerp(safeZone2.TopLeft(), safeZone2.TopRight(), i / 5f).ToWorldCoordinates(), DustID.LifeDrain, Vector2.Zero);
+            Dust.NewDustPerfect(Vector2.Lerp(safeZone2.TopLeft(), safeZone2.BottomLeft(), i / 5f).ToWorldCoordinates(), DustID.LifeDrain, Vector2.Zero);
+            Dust.NewDustPerfect(Vector2.Lerp(safeZone2.TopRight(), safeZone2.BottomRight(), i / 5f).ToWorldCoordinates(), DustID.LifeDrain, Vector2.Zero);
+            Dust.NewDustPerfect(Vector2.Lerp(safeZone2.BottomLeft(), safeZone2.BottomRight(), i / 5f).ToWorldCoordinates(), DustID.LifeDrain, Vector2.Zero);
+        }
+
         Dust.NewDustPerfect(RuinsEntrance.ToWorldCoordinates(), DustID.Terra, Vector2.Zero);
         Dust.NewDustPerfect(TabletRoom.ToWorldCoordinates(), DustID.Terra, Vector2.Zero);
         Dust.NewDustPerfect(TabletNeighbor.ToWorldCoordinates(), DustID.LifeDrain, Vector2.Zero);
@@ -108,25 +124,59 @@ public class DraconicRuinsSystem : ModSystem
         if (DraconicRuinsLocation == new Point(-1, -1))
             return;
 
-        if (State == CutsceneState.Arrival && !NPC.AnyNPCs(ModContent.NPCType<SealingTablet>()))
-            NPC.NewNPC(Entity.GetSource_None(), TabletRoom.X * 16 + 8, TabletRoom.Y * 16 - 160, ModContent.NPCType<SealingTablet>());
+        Vector2 entranceTop = DraconicRuinsArea.Top() + new Vector2(FacingLeft ? -37 : 9, -1);
+        Rectangle safeZone1 = new((int)entranceTop.X, (int)entranceTop.Y, 28, 24);
 
-        if(State == CutsceneState.CultistFumble)
+        Vector2 safeZone2Start = DraconicRuinsArea.Top() + new Vector2(FacingLeft ? -10 : 0, -1);
+        Rectangle safeZone2 = new((int)safeZone2Start.X, (int)safeZone2Start.Y, 10, 6);
+
+        Vector2 safeZone3Start = DraconicRuinsArea.TopLeft();
+        if (FacingLeft)
+            safeZone3Start = DraconicRuinsArea.TopRight();
+        Rectangle safeZone3 = new((int)safeZone3Start.X, (int)safeZone3Start.Y, 10, 21);
+
+        Vector2 safeZone4Start = DraconicRuinsArea.TopLeft() + new Vector2(10, 0);
+        if (FacingLeft)
+            safeZone4Start = DraconicRuinsArea.TopRight() - new Vector2(10, 0);
+        Rectangle safeZone4 = new((int)safeZone4Start.X, (int)safeZone4Start.Y, 10, 4);
+
+        
+
+        foreach (Player player in Main.ActivePlayers)
         {
-            foreach(Player player in Main.ActivePlayers)
+            if (player.dead)
+                continue;
+            if (!AccessGranted)
             {
-                if (player.dead)
-                    continue;
-
-                Rectangle inflatedArea = DraconicRuinsArea;
-                inflatedArea.X += 32;
-                inflatedArea.Y += 32;
-                inflatedArea.Width += 64;
-                inflatedArea.Height += 64;
-                if (inflatedArea.Contains(player.Center.ToTileCoordinates()))
+                Point playerLoc = player.Center.ToTileCoordinates();
+                if (DraconicRuinsArea.Contains(playerLoc) && (!(safeZone1.Contains(playerLoc) || safeZone2.Contains(playerLoc) || safeZone3.Contains(playerLoc) || safeZone4.Contains(playerLoc)) || Main.tile[playerLoc].IsSolid()))
+                {
+                    player.moonLordMonolithShader = true;
+                    player.AddBuff(BuffID.TheTongue, 2);
                     player.AddBuff(ModContent.BuffType<SpacialLock>(), 2);
+                    player.cursed = true;
+                    float distFromCenter = (player.Center - DraconicRuinsArea.Center().ToWorldCoordinates()).Length();
+                    player.velocity = (player.Center - DraconicRuinsArea.Center().ToWorldCoordinates()).SafeNormalize(-Vector2.UnitY) * 2400f / distFromCenter;
+                    player.velocity.Y *= 1.25f;
+                }
+
+                if (State == CutsceneState.CultistFumble)
+                {
+                    Rectangle inflatedArea = DraconicRuinsArea;
+                    inflatedArea.X += 32;
+                    inflatedArea.Y += 32;
+                    inflatedArea.Width += 64;
+                    inflatedArea.Height += 64;
+                    if (inflatedArea.Contains(player.Center.ToTileCoordinates()))
+                        player.AddBuff(ModContent.BuffType<SpacialLock>(), 2);
+                }
             }
         }
+
+        
+
+        if (State == CutsceneState.Arrival && !NPC.AnyNPCs(ModContent.NPCType<SealingTablet>()))
+            NPC.NewNPC(Entity.GetSource_None(), TabletRoom.X * 16 + 8, TabletRoom.Y * 16 - 160, ModContent.NPCType<SealingTablet>());
 
         if (ZoomActive)
         {
