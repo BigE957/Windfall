@@ -67,7 +67,7 @@ public class SealingRitualSystem : ModSystem
     }
     public override void OnWorldLoad()
     {
-        DungeonCoords = new Vector2(Main.dungeonX - 4, Main.dungeonY).ToWorldCoordinates();
+        DungeonCoords = new Vector2(Main.dungeonX + Main.dungeonX > Main.spawnTileX ? 4 : -4, Main.dungeonY).ToWorldCoordinates();
     }
     public override void OnWorldUnload()
     {
@@ -81,16 +81,13 @@ public class SealingRitualSystem : ModSystem
         /*
         QuestSystem.Quests["SealingRitual"].ResetQuest();
         QuestSystem.Quests["SealingRitual"].Active = true;
-        State = SystemState.CheckReqs;  
-        RitualSequenceSeen = false;
+        Recruits = [1, 2, 3, 4];
+        QuestSystem.Quests["Recruitment"].Progress = 4;
+        State = SystemState.CheckReqs; RitualTimer = -2; RitualSequenceSeen = false; Active = false;
         */
-
-        //Recruits = [1, 2, 3, 4];
         //Recruits = [];
-        //QuestSystem.Quests["Recruitment"].Progress = 4;
-        //State = SystemState.CheckReqs; RitualTimer = -2; RitualSequenceSeen = false; Active = false;
         //Main.NewText($"{RitualTimer}, {State}, {(DungeonCoords - Main.LocalPlayer.Center).Length()}, {RitualSequenceSeen}");
-        //TravellingCultist.RitualQuestProgress = 4;
+        Dust.NewDustPerfect(new Point(Main.dungeonX, Main.dungeonY).ToWorldCoordinates(), DustID.Terra, Vector2.Zero);
         #endregion
 
         if (RitualSequenceSeen)
