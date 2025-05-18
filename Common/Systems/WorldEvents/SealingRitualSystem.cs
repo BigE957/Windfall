@@ -89,7 +89,6 @@ public class SealingRitualSystem : ModSystem
         */
         //Recruits = [];
         //Main.NewText($"{RitualTimer}, {State}, {(RitualTile - new Point(Main.dungeonX, Main.dungeonY))}, {RitualSequenceSeen}");
-        Dust.NewDustPerfect(new Point(Main.dungeonX, Main.dungeonY).ToWorldCoordinates(), DustID.Terra, Vector2.Zero);
         #endregion
 
         if (RitualSequenceSeen)
@@ -131,7 +130,7 @@ public class SealingRitualSystem : ModSystem
                             break;
                     }
                     y -= 0.5f;
-                    Main.NewText(y);
+
                     NPCIndexs =
                     [
                         NPC.NewNPC(Entity.GetSource_None(), (int)(RitualWorld.X - 220), (int)RitualWorld.Y - 8, ModContent.NPCType<RecruitableLunarCultist>()),
