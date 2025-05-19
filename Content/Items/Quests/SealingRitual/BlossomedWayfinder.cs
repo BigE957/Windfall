@@ -16,7 +16,7 @@ public class BlossomedWayfinder : ModItem, ILocalizedModType
         Item.useAnimation = 12;
         Item.useTime = 12;
         Item.autoReuse = false;
-        Item.useStyle = ItemUseStyleID.HoldUp;
+        Item.useStyle = ItemUseStyleID.RaiseLamp;
         Item.channel = false;
         Item.rare = ItemRarityID.Quest;
         Item.maxStack = 1;
@@ -33,8 +33,11 @@ public class BlossomedWayfinder : ModItem, ILocalizedModType
         else
         {
             Vector2 toRuins = (DraconicRuinsSystem.RuinsEntrance.ToWorldCoordinates() - player.Center).SafeNormalize(Vector2.Zero);
-            Particle particle = new DirectionalPulseRing(player.Center, toRuins * 7f, Color.Cyan, new(1, 0.66f), toRuins.ToRotation(), 0f, 1.5f, 24);
-            GeneralParticleHandler.SpawnParticle(particle);
+            for (int i = 1; i < 8; i++)
+            {
+                Particle particle = new DirectionalPulseRing(player.Center + (toRuins * i * 32), toRuins * 4f, Color.Cyan, new Vector2(0.5f, 1f) * (1 - (float)(i / 8f)), toRuins.ToRotation(), 0f, 1.5f, 12 * (i+1));
+                GeneralParticleHandler.SpawnParticle(particle);
+            }
         }
 
         return false;
