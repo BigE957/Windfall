@@ -1,6 +1,5 @@
 using Terraria.GameContent.UI;
 using Windfall.Common.Netcode;
-using Windfall.Content.Items.GlobalItems;
 
 namespace Windfall;
 

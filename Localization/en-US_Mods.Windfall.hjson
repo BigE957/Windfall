@@ -1605,6 +1605,8 @@ Buffs: {
 }
 
 Status: {
+	Hey: Hey!
+
 	Death: {
 		Orator: {
 			1: "{0} was no match for the Selenic Order's master."
@@ -1634,6 +1636,12 @@ Status: {
 			1: "{0} was crushed by the Orator's finest creations."
 			2: Nothing, not even {0}, can escape the Orator's grasp.
 			3: The Orator finished messing around with {0}.
+		}
+
+		DraconicBarrier: {
+			1: "{0} was vaporized by a protective spell."
+			2: "{0} fell victim to what remains of the Dragon Monks' efforts."
+			3: "{0} really can't take a hint."
 		}
 	}
 }

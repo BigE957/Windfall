@@ -43,6 +43,22 @@ public static partial class WindfallUtils
         return false;
     }
 
+    public static bool TryCloseDoor(Point p)
+    {
+        Tile tile = Framing.GetTileSafely(p.X, p.Y);
+        if (!tile.IsSolid())
+        {
+            if (Main.netMode != NetmodeID.MultiplayerClient)
+            {
+                if (tile.TileType == TileID.OpenDoor)
+                    return WorldGen.CloseDoor(p.X, p.Y);
+                else if (tile.TileType == TileID.TallGateOpen)
+                    return WorldGen.ShiftTallGate(p.X, p.Y, true);
+            }
+        }
+        return false;
+    }
+
     public static Point FindSurfaceBelow(Point p)
     {
         

@@ -45,9 +45,17 @@ public class SealingTablet : ModNPC
 
         box = CreateVerletBox(new((int)NPC.position.X, (int)NPC.position.Y, 18, 18));
 
-        LeftChain = CreateVerletChain(NPC.Bottom + new Vector2(-48, 0), box[0].Position, verletCount, 4);
-        RightChain = CreateVerletChain(NPC.Bottom + new Vector2(48, 0), box[2].Position, verletCount, 4);
 
+        if (DraconicRuinsSystem.DraconicRuinsArea.Contains(NPC.Center.ToTileCoordinates()))
+        {
+            LeftChain = CreateVerletChain(NPC.Bottom + new Vector2(-40, 6), box[0].Position, verletCount, 4);
+            RightChain = CreateVerletChain(NPC.Bottom + new Vector2(40, 6), box[2].Position, verletCount, 4);
+        }
+        else
+        {
+            LeftChain = CreateVerletChain(NPC.Bottom + new Vector2(-48, 0), box[0].Position, verletCount, 4);
+            RightChain = CreateVerletChain(NPC.Bottom + new Vector2(48, 0), box[2].Position, verletCount, 4);
+        }
         ConnectVerlets(LeftChain[^1], box[0], 4);
         ConnectVerlets(RightChain[^1], box[2], 4);
     }

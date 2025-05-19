@@ -23,9 +23,9 @@ public class WindfallGlobalProjectile : GlobalProjectile
                 projectile.active = false;
         }
         
-        if (LunarCultBaseSystem.CultBaseTileArea.Intersects(new((int)projectile.position.X / 16, (int)projectile.position.Y / 16, projectile.width, projectile.height)) || LunarCultBaseSystem.CultBaseBridgeArea.Intersects(new((int)projectile.position.X / 16, (int)projectile.position.Y / 16, projectile.width, projectile.height)))
+        if (LunarCultBaseSystem.CultBaseTileArea.Intersects(new((int)projectile.position.X / 16, (int)projectile.position.Y / 16, projectile.width / 16, projectile.height / 16)) || LunarCultBaseSystem.CultBaseBridgeArea.Intersects(new((int)projectile.position.X / 16, (int)projectile.position.Y / 16, projectile.width / 16, projectile.height / 16)) || DraconicRuinsSystem.DraconicRuinsArea.Intersects(new((int)projectile.position.X / 16, (int)projectile.position.Y / 16, projectile.width / 16, projectile.height / 16)))
         {
-            if (projectile.type == ProjectileID.SandBallFalling || projectile.type == ProjectileID.SiltBall || projectile.type == ProjectileID.SlushBall)
+            if (projectile.type == ProjectileID.SandBallFalling || projectile.type == ProjectileID.SiltBall || projectile.type == ProjectileID.SlushBall || ProjectileID.Sets.IsAGravestone[projectile.type])
             {
                 projectile.active = false;
                 return false;

@@ -1,4 +1,5 @@
 ﻿using DialogueHelper.UI.Dialogue;
+using Humanizer;
 using Luminance.Core.Graphics;
 using Terraria.ModLoader.IO;
 using Windfall.Content.Buffs.Inhibitors;
@@ -12,19 +13,22 @@ public class DraconicRuinsSystem : ModSystem
     public static Point DraconicRuinsLocation = new(-1,-1);
     public static bool FacingLeft = false;
 
-    public static Point RuinsEntrance => new(DraconicRuinsLocation.X + (FacingLeft ? -14 : 14), DraconicRuinsLocation.Y - 20);
+    public static Point RuinsEntrance => new(DraconicRuinsLocation.X + (FacingLeft ? -17 : 17), DraconicRuinsLocation.Y - 20);
 
-    public static Point TabletRoom => new(DraconicRuinsLocation.X + (FacingLeft ? 9 : -9), DraconicRuinsLocation.Y + 46);
+    public static Point TabletRoom => new(DraconicRuinsLocation.X + (FacingLeft ? 7 : -7), DraconicRuinsLocation.Y + 46);
 
-    public static Point TabletNeighbor => new(DraconicRuinsLocation.X + (FacingLeft ? -26 : 26), DraconicRuinsLocation.Y + 43);
+    public static Point TabletNeighbor => new(DraconicRuinsLocation.X + (FacingLeft ? -32 : 32), DraconicRuinsLocation.Y + 37);
 
-    public static Point MiddleSideRoom => new(DraconicRuinsLocation.X + (FacingLeft ? -1 : 1), DraconicRuinsLocation.Y + 30);
+    public static Point MiddleSideRoom => new(DraconicRuinsLocation.X + (FacingLeft ? -5 : 5), DraconicRuinsLocation.Y + 30);
 
-    public static Point LeftSideRoom => new(DraconicRuinsLocation.X + (FacingLeft ? 29 : -29), DraconicRuinsLocation.Y + 18);
+    public static Point LeftSideRoom => new(DraconicRuinsLocation.X + (FacingLeft ? 28 : -28), DraconicRuinsLocation.Y + 18);
 
-    public static Point UpperSideRoom => new(DraconicRuinsLocation.X + (FacingLeft ? 26 : -26), DraconicRuinsLocation.Y + 1);
+    public static Point UpperSideRoom => new(DraconicRuinsLocation.X + (FacingLeft ? 19 : -19), DraconicRuinsLocation.Y);
 
-    public static Rectangle DraconicRuinsArea => new(DraconicRuinsLocation.X - 36, DraconicRuinsLocation.Y - 38, 72, 88);
+    public static Point Door => new(DraconicRuinsLocation.X + (FacingLeft ? -12 : 12), DraconicRuinsLocation.Y - 20);
+
+
+    public static Rectangle DraconicRuinsArea => new(DraconicRuinsLocation.X - 33, DraconicRuinsLocation.Y - 38, 72, 88);
 
     public enum CutsceneState
     {
@@ -49,6 +53,8 @@ public class DraconicRuinsSystem : ModSystem
 
     public static VerletObject LeftChain = null;
     public static VerletObject RightChain = null;
+
+    private static int EmptyTimer = 0;
 
     public override void OnModLoad()
     {
@@ -75,14 +81,44 @@ public class DraconicRuinsSystem : ModSystem
 
     public override void PreUpdateWorld()
     {
-        //Debug Dust
+        //Reset State
+        /*
+        State = CutsceneState.Arrival;
+        ZoomActive = false;
+        CutsceneActive = false;
+        CutsceneTime = 0;
+        CameraTime = 0;
+        AccessGranted = false;
+        */
+
+        //Main.NewText(CutsceneTime);
+        if (DraconicRuinsLocation == new Point(-1, -1))
+            return;
+
+        Vector2 entranceTop = DraconicRuinsArea.Top() + new Vector2(FacingLeft ? -38 : 8, -1);
+        Rectangle safeZone1 = new((int)entranceTop.X, (int)entranceTop.Y, 29, 24);
+
+        Vector2 safeZone2Start = DraconicRuinsArea.Top() + new Vector2(FacingLeft ? -10 : 0, -1);
+        Rectangle safeZone2 = new((int)safeZone2Start.X, (int)safeZone2Start.Y, 10, 6);
+
+        Vector2 safeZone3Start = DraconicRuinsArea.TopLeft();
+        if (FacingLeft)
+            safeZone3Start = DraconicRuinsArea.TopRight();
+        Rectangle safeZone3 = new((int)safeZone3Start.X, (int)safeZone3Start.Y, 10, 21);
+
+        Vector2 safeZone4Start = DraconicRuinsArea.TopLeft() + new Vector2(10, 0);
+        if (FacingLeft)
+            safeZone4Start = DraconicRuinsArea.TopRight() - new Vector2(10, 0);
+        Rectangle safeZone4 = new((int)safeZone4Start.X, (int)safeZone4Start.Y, 8, 5);
+
+        #region Debug Dust
         /*
         for (int i = 0; i < 6; i++)
         {
-            Dust.NewDustPerfect(Vector2.Lerp(safeZone4.TopLeft(), safeZone4.TopRight(), i / 5f).ToWorldCoordinates(), DustID.LifeDrain, Vector2.Zero);
-            Dust.NewDustPerfect(Vector2.Lerp(safeZone4.TopLeft(), safeZone4.BottomLeft(), i / 5f).ToWorldCoordinates(), DustID.LifeDrain, Vector2.Zero);
-            Dust.NewDustPerfect(Vector2.Lerp(safeZone4.TopRight(), safeZone4.BottomRight(), i / 5f).ToWorldCoordinates(), DustID.LifeDrain, Vector2.Zero);
-            Dust.NewDustPerfect(Vector2.Lerp(safeZone4.BottomLeft(), safeZone4.BottomRight(), i / 5f).ToWorldCoordinates(), DustID.LifeDrain, Vector2.Zero);
+            Dust.NewDustPerfect(Vector2.Lerp(safeZone1.TopLeft(), safeZone1.TopRight(), i / 5f).ToWorldCoordinates(), DustID.LifeDrain, Vector2.Zero);
+            Dust.NewDustPerfect(Vector2.Lerp(safeZone1.TopLeft(), safeZone1.BottomLeft(), i / 5f).ToWorldCoordinates(), DustID.LifeDrain, Vector2.Zero);
+            Dust.NewDustPerfect(Vector2.Lerp(safeZone1.TopRight(), safeZone1.BottomRight(), i / 5f).ToWorldCoordinates(), DustID.LifeDrain, Vector2.Zero);
+            Dust.NewDustPerfect(Vector2.Lerp(safeZone1.BottomLeft(), safeZone1.BottomRight(), i / 5f).ToWorldCoordinates(), DustID.LifeDrain, Vector2.Zero);
         }
 
         for (int i = 0; i < 6; i++)
@@ -91,6 +127,22 @@ public class DraconicRuinsSystem : ModSystem
             Dust.NewDustPerfect(Vector2.Lerp(safeZone2.TopLeft(), safeZone2.BottomLeft(), i / 5f).ToWorldCoordinates(), DustID.LifeDrain, Vector2.Zero);
             Dust.NewDustPerfect(Vector2.Lerp(safeZone2.TopRight(), safeZone2.BottomRight(), i / 5f).ToWorldCoordinates(), DustID.LifeDrain, Vector2.Zero);
             Dust.NewDustPerfect(Vector2.Lerp(safeZone2.BottomLeft(), safeZone2.BottomRight(), i / 5f).ToWorldCoordinates(), DustID.LifeDrain, Vector2.Zero);
+        }
+
+        for (int i = 0; i < 6; i++)
+        {
+            Dust.NewDustPerfect(Vector2.Lerp(safeZone3.TopLeft(), safeZone3.TopRight(), i / 5f).ToWorldCoordinates(), DustID.LifeDrain, Vector2.Zero);
+            Dust.NewDustPerfect(Vector2.Lerp(safeZone3.TopLeft(), safeZone3.BottomLeft(), i / 5f).ToWorldCoordinates(), DustID.LifeDrain, Vector2.Zero);
+            Dust.NewDustPerfect(Vector2.Lerp(safeZone3.TopRight(), safeZone3.BottomRight(), i / 5f).ToWorldCoordinates(), DustID.LifeDrain, Vector2.Zero);
+            Dust.NewDustPerfect(Vector2.Lerp(safeZone3.BottomLeft(), safeZone3.BottomRight(), i / 5f).ToWorldCoordinates(), DustID.LifeDrain, Vector2.Zero);
+        }
+
+        for (int i = 0; i < 6; i++)
+        {
+            Dust.NewDustPerfect(Vector2.Lerp(safeZone4.TopLeft(), safeZone4.TopRight(), i / 5f).ToWorldCoordinates(), DustID.LifeDrain, Vector2.Zero);
+            Dust.NewDustPerfect(Vector2.Lerp(safeZone4.TopLeft(), safeZone4.BottomLeft(), i / 5f).ToWorldCoordinates(), DustID.LifeDrain, Vector2.Zero);
+            Dust.NewDustPerfect(Vector2.Lerp(safeZone4.TopRight(), safeZone4.BottomRight(), i / 5f).ToWorldCoordinates(), DustID.LifeDrain, Vector2.Zero);
+            Dust.NewDustPerfect(Vector2.Lerp(safeZone4.BottomLeft(), safeZone4.BottomRight(), i / 5f).ToWorldCoordinates(), DustID.LifeDrain, Vector2.Zero);
         }
 
         Dust.NewDustPerfect(RuinsEntrance.ToWorldCoordinates(), DustID.Terra, Vector2.Zero);
@@ -109,38 +161,11 @@ public class DraconicRuinsSystem : ModSystem
         Dust.NewDustPerfect(DraconicRuinsArea.Bottom().ToWorldCoordinates(), DustID.Shadowflame, Vector2.Zero);
         Dust.NewDustPerfect(DraconicRuinsArea.BottomRight().ToWorldCoordinates(), DustID.Shadowflame, Vector2.Zero);
         */
+        #endregion
 
-        //Reset State
-        /*
-        State = CutsceneState.Arrival;
-        ZoomActive = false;
-        CutsceneActive = false;
-        CutsceneTime = 0;
-        CameraTime = 0;
-        AccessGranted = false;
-        */
+        //Dust.NewDustPerfect(Door.ToWorldCoordinates(), DustID.Terra, Vector2.Zero);
 
-        //Main.NewText(CutsceneTime);
-        if (DraconicRuinsLocation == new Point(-1, -1))
-            return;
-
-        Vector2 entranceTop = DraconicRuinsArea.Top() + new Vector2(FacingLeft ? -37 : 9, -1);
-        Rectangle safeZone1 = new((int)entranceTop.X, (int)entranceTop.Y, 28, 24);
-
-        Vector2 safeZone2Start = DraconicRuinsArea.Top() + new Vector2(FacingLeft ? -10 : 0, -1);
-        Rectangle safeZone2 = new((int)safeZone2Start.X, (int)safeZone2Start.Y, 10, 6);
-
-        Vector2 safeZone3Start = DraconicRuinsArea.TopLeft();
-        if (FacingLeft)
-            safeZone3Start = DraconicRuinsArea.TopRight();
-        Rectangle safeZone3 = new((int)safeZone3Start.X, (int)safeZone3Start.Y, 10, 21);
-
-        Vector2 safeZone4Start = DraconicRuinsArea.TopLeft() + new Vector2(10, 0);
-        if (FacingLeft)
-            safeZone4Start = DraconicRuinsArea.TopRight() - new Vector2(10, 0);
-        Rectangle safeZone4 = new((int)safeZone4Start.X, (int)safeZone4Start.Y, 10, 4);
-
-        
+        bool anyPlayersInside = false;
 
         foreach (Player player in Main.ActivePlayers)
         {
@@ -151,13 +176,25 @@ public class DraconicRuinsSystem : ModSystem
                 Point playerLoc = player.Center.ToTileCoordinates();
                 if (DraconicRuinsArea.Contains(playerLoc) && (!(safeZone1.Contains(playerLoc) || safeZone2.Contains(playerLoc) || safeZone3.Contains(playerLoc) || safeZone4.Contains(playerLoc)) || Main.tile[playerLoc].IsSolid()))
                 {
+                    anyPlayersInside = true;
+
                     player.moonLordMonolithShader = true;
                     player.AddBuff(BuffID.TheTongue, 2);
                     player.AddBuff(ModContent.BuffType<SpacialLock>(), 2);
                     player.cursed = true;
-                    float distFromCenter = (player.Center - DraconicRuinsArea.Center().ToWorldCoordinates()).Length();
-                    player.velocity = (player.Center - DraconicRuinsArea.Center().ToWorldCoordinates()).SafeNormalize(-Vector2.UnitY) * 2400f / distFromCenter;
-                    player.velocity.Y *= 1.25f;
+
+                    if (playerLoc.Y - DraconicRuinsArea.Center.Y == -26)
+                    {
+                        player.velocity = Vector2.UnitX * (FacingLeft ? -14 : 14);
+                        player.Hurt(PlayerDeathReason.ByCustomReason(GetWindfallLocalText("Status.Death.DraconicBarrier." + Main.rand.Next(1, 3 + 1)).ToNetworkText(player.name)), 100, FacingLeft ? -1 : 1, dodgeable: false, knockback: 0f);
+                        TryOpenDoor(Door, FacingLeft ? -1 : 1);
+                    }
+                    else
+                    {
+                        float distFromCenter = (player.Center - DraconicRuinsArea.Bottom().ToWorldCoordinates()).Length();
+                        player.velocity = Vector2.UnitY * -2400f / distFromCenter;
+                        player.velocity.Y *= 1.25f;
+                    }
                 }
 
                 if (State == CutsceneState.CultistFumble)
@@ -173,10 +210,18 @@ public class DraconicRuinsSystem : ModSystem
             }
         }
 
-        
+        if (!anyPlayersInside)
+        {
+            if (EmptyTimer < 45)
+                EmptyTimer++;
+            else
+                TryCloseDoor(Door);
+        }
+        else
+            EmptyTimer = 0;
 
         if (State == CutsceneState.Arrival && !NPC.AnyNPCs(ModContent.NPCType<SealingTablet>()))
-            NPC.NewNPC(Entity.GetSource_None(), TabletRoom.X * 16 + 8, TabletRoom.Y * 16 - 160, ModContent.NPCType<SealingTablet>());
+            NPC.NewNPC(Entity.GetSource_None(), TabletRoom.X * 16 + (FacingLeft ? -16 : 16), TabletRoom.Y * 16 - 160, ModContent.NPCType<SealingTablet>());
 
         if (ZoomActive)
         {
