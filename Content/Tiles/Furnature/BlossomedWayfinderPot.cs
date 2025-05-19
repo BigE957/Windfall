@@ -1,4 +1,5 @@
-﻿using Windfall.Content.Items.Quests.SealingRitual;
+﻿using Windfall.Content.Items.Placeables.Furnature.Plaques;
+using Windfall.Content.Items.Quests.SealingRitual;
 
 namespace Windfall.Content.Tiles.Furnature;
 public class BlossomedWayfinderPot : ModTile
@@ -20,6 +21,22 @@ public class BlossomedWayfinderPot : ModTile
         HitSound = SoundID.Dig;
 
         AddMapEntry(new Color(127, 111, 144));
+    }
+
+    public override void MouseOver(int i, int j)
+    {
+        Tile tile = Main.tile[i, j];
+        if (tile.TileFrameX != 0)
+            return;
+
+        Tile aboveTile = Main.tile[i, j - 1];
+        if (aboveTile.TileType == ModContent.TileType<BlossomedWayfinderPot>())
+        { 
+            Player player = Main.LocalPlayer;
+            player.noThrow = 2;
+            player.cursorItemIconEnabled = true;
+            player.cursorItemIconID = ModContent.ItemType<BlossomedWayfinder>();
+        }
     }
 
     public override bool RightClick(int i, int j)

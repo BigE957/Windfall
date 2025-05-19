@@ -13,8 +13,8 @@ public class BlossomedWayfinder : ModItem, ILocalizedModType
     {
         Item.width = 22;
         Item.height = 24;
-        Item.useAnimation = 12;
-        Item.useTime = 12;
+        Item.useAnimation = 32;
+        Item.useTime = 32;
         Item.autoReuse = false;
         Item.useStyle = ItemUseStyleID.RaiseLamp;
         Item.channel = false;
