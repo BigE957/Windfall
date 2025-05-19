@@ -1,5 +1,5 @@
-﻿using DialogueHelper.UI.Dialogue;
-using Humanizer;
+﻿using CalamityMod.Particles;
+using DialogueHelper.UI.Dialogue;
 using Luminance.Core.Graphics;
 using Terraria.ModLoader.IO;
 using Windfall.Content.Buffs.Inhibitors;
@@ -185,15 +185,32 @@ public class DraconicRuinsSystem : ModSystem
 
                     if (playerLoc.Y - DraconicRuinsArea.Center.Y == -26)
                     {
-                        player.velocity = Vector2.UnitX * (FacingLeft ? -14 : 14);
-                        player.Hurt(PlayerDeathReason.ByCustomReason(GetWindfallLocalText("Status.Death.DraconicBarrier." + Main.rand.Next(1, 3 + 1)).ToNetworkText(player.name)), 100, FacingLeft ? -1 : 1, dodgeable: false, knockback: 0f);
+                        if (Math.Abs(player.velocity.X) != 14)
+                        {
+                            player.Hurt(PlayerDeathReason.ByCustomReason(GetWindfallLocalText("Status.Death.DraconicBarrier." + Main.rand.Next(1, 3 + 1)).ToNetworkText(player.name)), 100, FacingLeft ? -1 : 1, dodgeable: false, knockback: 0f);
+                            for (int i = 0; i < 4; i++)
+                            {
+                                CalamityMod.Particles.Particle particle = new DirectionalPulseRing(player.Center, Vector2.UnitX * (FacingLeft ? -2 : 2) * i, new(25, 255, 140), new Vector2(0.5f, 1f), 0f, 0f, (i + 1) * 0.4f, 30);
+                                GeneralParticleHandler.SpawnParticle(particle);
+                            }
+                        }
+                        
                         TryOpenDoor(Door, FacingLeft ? -1 : 1);
+                        player.velocity = Vector2.UnitX * (FacingLeft ? -14 : 14);
+                        
                     }
                     else
                     {
                         float distFromCenter = (player.Center - DraconicRuinsArea.Bottom().ToWorldCoordinates()).Length();
                         player.velocity = Vector2.UnitY * -2400f / distFromCenter;
                         player.velocity.Y *= 1.25f;
+                    }
+
+                    if (Main.rand.NextBool())
+                    {
+                        Vector2 speed = Main.rand.NextVector2Circular(1.5f, 2f) * 2f;
+                        Dust d = Dust.NewDustPerfect(player.position + new Vector2(Main.rand.Next(0, player.width), Main.rand.Next(0, player.height)), DustID.GoldFlame, speed, Scale: Main.rand.NextFloat(1f, 1.5f));
+                        d.noGravity = true;
                     }
                 }
 
