@@ -394,10 +394,10 @@ public class SealingRitualSystem : ModSystem
 
         DialogueUISystem uiSystem = ModContent.GetInstance<DialogueUISystem>();
 
-        uiSystem.CurrentTree.Characters[1] = ((RecruitableLunarCultist.RecruitNames)Recruits[0]).ToString();
-        uiSystem.CurrentTree.Characters[2] = ((RecruitableLunarCultist.RecruitNames)Recruits[1]).ToString();
-        uiSystem.CurrentTree.Characters[3] = ((RecruitableLunarCultist.RecruitNames)Recruits[2]).ToString();
-        uiSystem.CurrentTree.Characters[4] = ((RecruitableLunarCultist.RecruitNames)Recruits[3]).ToString();
+        uiSystem.CurrentTree.Characters[1] = "Recruits/" + ((RecruitableLunarCultist.RecruitNames)Recruits[0]).ToString();
+        uiSystem.CurrentTree.Characters[2] = "Recruits/" + ((RecruitableLunarCultist.RecruitNames)Recruits[1]).ToString();
+        uiSystem.CurrentTree.Characters[3] = "Recruits/" + ((RecruitableLunarCultist.RecruitNames)Recruits[2]).ToString();
+        uiSystem.CurrentTree.Characters[4] = "Recruits/" + ((RecruitableLunarCultist.RecruitNames)Recruits[3]).ToString();
 
         uiSystem.CurrentTree.Dialogues[1].DialogueText[0].Text = GetWindfallTextValue($"Dialogue.LunarCult.Recruits.{(RecruitableLunarCultist.RecruitNames)Recruits[0]}.SealingRitual.0");
         uiSystem.CurrentTree.Dialogues[3].DialogueText[0].Text = GetWindfallTextValue($"Dialogue.LunarCult.Recruits.{(RecruitableLunarCultist.RecruitNames)Recruits[2]}.SealingRitual.1");
