@@ -21,98 +21,71 @@ public class PathfindingSystem : ModSystem
 
     public override void OnWorldLoad()
     {
-        int MaxX = Main.maxTilesX;
-        int MaxY = Main.maxTilesY;
-
+        int MaxX = Main.maxTilesX; // 6400 or 8400
+        int MaxY = Main.maxTilesY; // 1800 or 2400
         NodeMap = new Node[MaxX][];
-        Parallel.For(0, MaxX, x => {
-            NodeMap[x] = new Node[MaxY];
-        });
 
+        // Configuration for optimal parallelism with large grids
         int processorCount = Environment.ProcessorCount;
 
-        // Use square chunks for better cache efficiency
-        int chunkSize = (int)Math.Sqrt(MaxX * MaxY / (processorCount * 4));
-        chunkSize = Math.Max(16, chunkSize); // Ensure reasonable chunk size
-
-        // The number of chunks in each dimension
-        int numChunksX = (MaxX + chunkSize - 1) / chunkSize;
-        int numChunksY = (MaxY + chunkSize - 1) / chunkSize;
-        int totalChunks = numChunksX * numChunksY;
-
-        // Create nodes in chunks
-        Parallel.For(0, totalChunks, chunkIndex => {
-            // Calculate this chunk's bounds
-            int chunkX = chunkIndex % numChunksX;
-            int chunkY = chunkIndex / numChunksX;
-
-            int startX = chunkX * chunkSize;
-            int startY = chunkY * chunkSize;
-            int endX = Math.Min(startX + chunkSize, MaxX);
-            int endY = Math.Min(startY + chunkSize, MaxY);
-
-            // Process this chunk - good cache locality
-            for (int x = startX; x < endX; x++)
+        // Step 1: Initialize the arrays in parallel with custom partitioning
+        // Store the task for proper synchronization
+        Task initNodesTask = Task.Run(() =>
+        {
+            Parallel.For(0, MaxX, new ParallelOptions { MaxDegreeOfParallelism = processorCount }, x =>
             {
-                for (int y = startY; y < endY; y++)
-                {
-                    NodeMap[x][y] = new Node(new Point(x, y));
-                }
-            }
+                NodeMap[x] = new Node[MaxY];
+
+                // Create nodes in bulk for each column
+                for (int y = 0; y < MaxY; y++)
+                    NodeMap[x][y] = new Node(x, y);
+            });
         });
 
-        // Initialize neighbors with the same chunking strategy
-        Parallel.For(0, totalChunks, chunkIndex => {
-            // Calculate this chunk's bounds
-            int chunkX = chunkIndex % numChunksX;
-            int chunkY = chunkIndex / numChunksX;
+        // Ensure the first step completes before proceeding
+        // This only waits for our specific task
+        initNodesTask.Wait();
 
-            int startX = chunkX * chunkSize;
-            int startY = chunkY * chunkSize;
-            int endX = Math.Min(startX + chunkSize, MaxX);
-            int endY = Math.Min(startY + chunkSize, MaxY);
+        // Step 2: Initialize neighbors in parallel with improved partitioning
+        Parallel.For(0, MaxX, new ParallelOptions { MaxDegreeOfParallelism = processorCount }, x =>
+        {
+            // Cache the column to improve memory access patterns
+            Node[] column = NodeMap[x];
 
-            // Process neighbor initialization in the same chunk
-            for (int x = startX; x < endX; x++)
-                for (int y = startY; y < endY; y++)
-                    NodeMap[x][y].InitNeighborsFast();
+            // Pre-calculate frequently accessed values
+            int maxXIdx = MaxX - 1;
+            int maxYIdx = MaxY - 1;
+
+            for (int y = 0; y < MaxY; y++)
+                column[y].InitNeighbors(maxXIdx, maxYIdx);
         });
-
-
-        /*
-        NodeMap = new Node[Main.maxTilesX][];
-        for (int x = 0; x < Main.maxTilesX; x++)
-        {
-            NodeMap[x] = new Node[Main.maxTilesY];
-            for (int y = 0; y < Main.maxTilesY; y++)
-            {
-                NodeMap[x][y] = new Node(new Point(x, y));
-            }
-        }
-        for (int x = 0; x < Main.maxTilesX; x++)
-        {
-            for (int y = 0; y < Main.maxTilesY; y++)
-            {
-                NodeMap[x][y].InitNeighbors();
-            }
-        }
-        */
     }
 
     public override void OnWorldUnload()
     {
+        for (int i = 0; i < NodeMap.Length; i++)
+            NodeMap[i] = null;
         NodeMap = null;
     }
 
-    public class Node(Point position) : IComparable<Node>
+    public class Node : IComparable<Node>
     {
-        public Point TilePosition { get; } = position;
-        public Vector2 WorldPosition { get; } = position.ToWorldCoordinates();
+        public readonly int X;
+        public readonly int Y;
 
-        public int X => TilePosition.X;
-        public int Y => TilePosition.Y;
+        public Node(int x, int y)
+        {
+            X = x;
+            Y = y;
+
+            Neighbors = new Node[8];
+            NeighborCount = 0;
+        }
+
+        public Point TilePosition => new(X, Y);
 
         public Node[] Neighbors;
+        public byte NeighborCount;
         public Node Connection;
 
         public int G = int.MaxValue;
@@ -136,70 +109,52 @@ public class PathfindingSystem : ModSystem
             int dx = Math.Abs(X - targetX);
             int dy = Math.Abs(Y - targetY);
             int min = Math.Min(dx, dy);
-            return 14 * min + 10 * (dx + dy - 2 * min);
+            // For 10*x and 14*y, use optimized multiplications
+            // 10*x = 8*x + 2*x = x<<3 + x<<1
+            // 14*y = 16*y - 2*y = y<<4 - y<<1
+            return (min << 4) - (min << 1) + ((dx + dy - 2 * min) << 3) + ((dx + dy - 2 * min) << 1);
         }
 
-        public void InitNeighbors()
+        public void InitNeighbors(int maxX, int maxY)
         {
-            List<Node> validNeighbors = new(8);
+            NeighborCount = 0;
 
-            foreach (Point p in Dirs)
-            {
-                int nx = TilePosition.X + p.X;
-                int ny = TilePosition.Y + p.Y;
+            // Boundary checks using pre-calculated values passed into the method
+            bool hasLeft = X > 0;
+            bool hasRight = X < maxX;
+            bool hasTop = Y > 0;
+            bool hasBottom = Y < maxY;
 
-                if (WorldGen.InWorld(nx, ny))
-                    validNeighbors.Add(NodeMap[nx][ny]);
-            }
+            // Add neighbors without resizing the array
+            // Cache the NodeMap access for edge nodes
+            Node[] leftColumn = hasLeft ? NodeMap[X - 1] : null;
+            Node[] rightColumn = hasRight ? NodeMap[X + 1] : null;
+            Node[] currentColumn = NodeMap[X];
 
-            Neighbors = [.. validNeighbors];
-        }
-
-        public void InitNeighborsFast()
-        {
-            Neighbors = new Node[8];
-            int count = 0;
-
-            // Unroll the loop for maximum performance
-            // Check top-left
-            if (X > 0 && Y > 0)
-                Neighbors[count++] = NodeMap[X - 1][Y - 1];
-
-            // Check top
-            if (Y > 0)
-                Neighbors[count++] = NodeMap[X][Y - 1];
-
-            // Check top-right
-            if (X < Main.maxTilesX - 1 && Y > 0)
-                Neighbors[count++] = NodeMap[X + 1][Y - 1];
-
-            // Check left
-            if (X > 0)
-                Neighbors[count++] = NodeMap[X - 1][Y];
-
-            // Check right
-            if (X < Main.maxTilesX - 1)
-                Neighbors[count++] = NodeMap[X + 1][Y];
-
-            // Check bottom-left
-            if (X > 0 && Y < Main.maxTilesY - 1)
-                Neighbors[count++] = NodeMap[X - 1][Y + 1];
-
-            // Check bottom
-            if (Y < Main.maxTilesY - 1)
-                Neighbors[count++] = NodeMap[X][Y + 1];
-
-            // Check bottom-right
-            if (X < Main.maxTilesX - 1 && Y < Main.maxTilesY - 1)
-                Neighbors[count++] = NodeMap[X + 1][Y + 1];
-
-            // Resize array if needed (only for edge cases)
-            if (count < 8)
-            {
-                var resized = new Node[count];
-                Array.Copy(Neighbors, resized, count);
-                Neighbors = resized;
-            }
+            // Top-left
+            if (hasLeft && hasTop)
+                Neighbors[NeighborCount++] = leftColumn[Y - 1];
+            // Top
+            if (hasTop)
+                Neighbors[NeighborCount++] = currentColumn[Y - 1];
+            // Top-right
+            if (hasRight && hasTop)
+                Neighbors[NeighborCount++] = rightColumn[Y - 1];
+            // Left
+            if (hasLeft)
+                Neighbors[NeighborCount++] = leftColumn[Y];
+            // Right
+            if (hasRight)
+                Neighbors[NeighborCount++] = rightColumn[Y];
+            // Bottom-left
+            if (hasLeft && hasBottom)
+                Neighbors[NeighborCount++] = leftColumn[Y + 1];
+            // Bottom
+            if (hasBottom)
+                Neighbors[NeighborCount++] = currentColumn[Y + 1];
+            // Bottom-right
+            if (hasRight && hasBottom)
+                Neighbors[NeighborCount++] = rightColumn[Y + 1];
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -448,7 +403,7 @@ public class PathfindingSystem : ModSystem
                 //GeneralParticleHandler.SpawnParticle(p);
 
                 int distanceToTarget = current.GetDistance(TargetPoint.X, TargetPoint.Y);
-                if (distanceToTarget <= 20 && (targetWorld - current.WorldPosition).LengthSquared() < 800)
+                if (distanceToTarget <= 20 && (targetWorld - current.TilePosition.ToWorldCoordinates()).LengthSquared() < 800)
                 {
                     //Main.NewText("Iteration Count: " + iterations);
                     MyPath = ReconstructPath(current, startNode);
