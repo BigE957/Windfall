@@ -48,7 +48,7 @@
             #endregion
 
             #region Moon
-            Vector2 position = new(Main.screenWidth / 2f, Main.screenHeight / 1.8f);
+            Vector2 position = new(Main.screenWidth / 2f, Main.screenHeight / 1.66f);
             Texture2D bloomCircle = ModContent.Request<Texture2D>("CalamityMod/Particles/LargeBloom", AssetRequestMode.ImmediateLoad).Value;
             
             spriteBatch.End();
@@ -63,7 +63,7 @@
 
             Texture2D moon = ModContent.Request<Texture2D>("Windfall/Assets/Skies/OratorMoon", AssetRequestMode.ImmediateLoad).Value;
             halfSizeTexture = new(moon.Width / 2, moon.Height / 2);
-            spriteBatch.Draw(moon, position, null, Color.White, 0f, halfSizeTexture, 1.4f * resolutionScale.X, SpriteEffects.None, 0f);
+            spriteBatch.Draw(moon, position, null, Color.White, 0f, halfSizeTexture, 0.625f * resolutionScale.X, SpriteEffects.None, 0f);
             #endregion
 
             #region Front Clouds       

@@ -64,7 +64,6 @@
     <None Remove="Assets\Projectiles\Boss\OratorJavelinWhiteOut.png" />
     <None Remove="Assets\Projectiles\Boss\TideNoise1.png" />
     <None Remove="Assets\Projectiles\Boss\TideNoise2.png" />
-    <None Remove="Assets\Skies\OratorMoon.png" />
     <None Remove="Assets\UI\CharacterAssets\DragonArcher\Default.png" />
     <None Remove="Assets\UI\CharacterAssets\LunaticCultist\Default.png" />
     <None Remove="Assets\UI\CharacterAssets\Seamstress\Default.png" />

@@ -77,7 +77,7 @@ public class OratorSky : CustomSky
 
             Texture2D moon = ModContent.Request<Texture2D>("Windfall/Assets/Skies/OratorMoon", AssetRequestMode.ImmediateLoad).Value;
             Vector2 halfSizeTexture = new(moon.Width / 2, moon.Height / 2);
-            spriteBatch.Draw(moon, position, null, Color.White * opacity, 0f, halfSizeTexture, 1.4f * resolutionScale.X, SpriteEffects.None, 0f);
+            spriteBatch.Draw(moon, position, null, Color.White * opacity, 0f, halfSizeTexture, 0.625f * resolutionScale.X, SpriteEffects.None, 0f);
             #endregion
 
             #region Front Clouds       
