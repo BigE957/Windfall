@@ -555,6 +555,7 @@ Dialogue: {
 					12: I got removed.
 					14: I got removed.
 				}
+
 				Goals: {
 					2: I got removed.
 					4: I got removed.
@@ -1131,6 +1132,16 @@ Items: {
 
 		Nectarbrick: {
 			DisplayName: Nectarbrick
+			Tooltip: ""
+		}
+
+		CordedChains: {
+			DisplayName: Corded Chains
+			Tooltip: ""
+		}
+
+		CordedBigChains: {
+			DisplayName: Corded Big Chains
 			Tooltip: ""
 		}
 	}

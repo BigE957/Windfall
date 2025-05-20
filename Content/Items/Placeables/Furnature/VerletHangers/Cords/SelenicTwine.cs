@@ -5,6 +5,14 @@ public class SelenicTwine : Cord, ILocalizedModType
 {
     public new string LocalizationCategory => "Items.Placeables";
 
+    public static Asset<Texture2D> cordTexture;
+
+    public override void SetStaticDefaults()
+    {
+        if (!Main.dedServ)
+            cordTexture = ModContent.Request<Texture2D>("Windfall/Content/Items/Placeables/Furnature/VerletHangers/Cords/SelenicTwineAtlas");
+    }
+
     public override void SetDefaults()
     {
         Item.width = 32;
@@ -19,8 +27,6 @@ public class SelenicTwine : Cord, ILocalizedModType
     }
 
     public override int cordID => CordID.SelenicTwine;
-
-    public override string cordTexturePath => "Windfall/Content/Items/Placeables/Furnature/VerletHangers/Cords/SelenicTwineAtlas";
 
     public override void DrawRopeSegment(SpriteBatch spriteBatch, List<VerletPoint> points, int index)
     {

@@ -5,6 +5,14 @@ public class CordedVines : Cord, ILocalizedModType
 {
     public new string LocalizationCategory => "Items.Placeables";
 
+    public static Asset<Texture2D> cordTexture;
+
+    public override void SetStaticDefaults()
+    {
+        if (!Main.dedServ)
+            cordTexture = ModContent.Request<Texture2D>("Windfall/Content/Items/Placeables/Furnature/VerletHangers/Cords/CordedVinesAtlas");
+    }
+
     public override void SetDefaults()
     {
         Item.width = 22;
@@ -19,8 +27,6 @@ public class CordedVines : Cord, ILocalizedModType
     }
 
     public override int cordID => CordID.CordedVines;
-
-    public override string cordTexturePath => "Windfall/Content/Items/Placeables/Furnature/VerletHangers/Cords/CordedVinesAtlas";
 
     public override void DrawRopeSegment(SpriteBatch spriteBatch, List<VerletPoint> points, int index)
     {

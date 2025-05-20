@@ -5,6 +5,14 @@ public class CordedRope : Cord, ILocalizedModType
 {
     public new string LocalizationCategory => "Items.Placeables";
 
+    public static Asset<Texture2D> cordTexture;
+
+    public override void SetStaticDefaults()
+    {
+        if (!Main.dedServ)
+            cordTexture = ModContent.Request<Texture2D>("Windfall/Content/Items/Placeables/Furnature/VerletHangers/Cords/CordedRopeAtlas");
+    }
+
     public override void SetDefaults()
     {
         Item.width = 22;
@@ -19,8 +27,6 @@ public class CordedRope : Cord, ILocalizedModType
     }
 
     public override int cordID => CordID.CordedRope;
-
-    public override string cordTexturePath => "Windfall/Content/Items/Placeables/Furnature/VerletHangers/Cords/CordedRopeAtlas";
 
     public override void DrawRopeSegment(SpriteBatch spriteBatch, List<VerletPoint> points, int index)
     {
@@ -44,11 +50,10 @@ public class CordedRope : Cord, ILocalizedModType
 
     public override void DrawOnRopeEnds(SpriteBatch spriteBatch, Vector2 position, float rotation)
     {
-        Texture2D tex = ModContent.Request<Texture2D>("Windfall/Content/Items/Placeables/Furnature/VerletHangers/Cords/CordedRopeAtlas").Value;
-        Rectangle frame = tex.Frame(1, 2, frameY: 1);
+        Rectangle frame = cordTexture.Frame(1, 2, frameY: 1);
         Color lighting = Lighting.GetColor(position.ToTileCoordinates());
 
-        spriteBatch.Draw(tex, position - Main.screenPosition, frame, lighting, rotation + PiOver2, frame.Size() * 0.5f, 1f, 0, 0);
+        spriteBatch.Draw(cordTexture.Value, position - Main.screenPosition, frame, lighting, rotation + PiOver2, frame.Size() * 0.5f, 1f, 0, 0);
     }
 
     public override void AddRecipes()

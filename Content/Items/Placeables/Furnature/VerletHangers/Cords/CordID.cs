@@ -14,6 +14,8 @@ public class CordID : ModSystem
         CordTypes.Add(ModContent.ItemType<CordedSilk>());
         CordTypes.Add(ModContent.ItemType<CordedVines>());
         CordTypes.Add(ModContent.ItemType<CordedWebs>());
+        CordTypes.Add(ModContent.ItemType<CordedChains>());
+        CordTypes.Add(ModContent.ItemType<CordedBigChains>());
     }
 
     public const byte None = 0;
@@ -22,17 +24,18 @@ public class CordID : ModSystem
     public const byte CordedSilk = 3;
     public const byte CordedVines = 4;
     public const byte CordedWebs = 5;
+    public const byte CordedChains = 6;
+    public const byte CordedBigChains = 7;
 
-    public static Cord GetTwine(int type)
+    public static Cord GetTwine(int type) => type switch
     {
-        switch (type)
-        {
-            case SelenicTwine: return new SelenicTwine();
-            case CordedRope: return new CordedRope();
-            case CordedSilk: return new CordedSilk();
-            case CordedVines: return new CordedVines();
-            case CordedWebs: return new CordedWebs();
-            default: return null;
-        };
-    }
+        SelenicTwine => new SelenicTwine(),
+        CordedRope => new CordedRope(),
+        CordedSilk => new CordedSilk(),
+        CordedVines => new CordedVines(),
+        CordedWebs => new CordedWebs(),
+        CordedChains => new CordedChains(),
+        CordedBigChains => new CordedBigChains(),
+        _ => null,
+    };
 }
