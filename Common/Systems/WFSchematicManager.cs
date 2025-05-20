@@ -2,7 +2,9 @@
 using CalamityMod.TileEntities;
 using CalamityMod.Tiles.DraedonStructures;
 using System.Reflection;
+using Windfall.Content.Tiles.TileEntities;
 using static CalamityMod.Schematics.SchematicManager;
+using static Windfall.Common.Graphics.Verlet.VerletIntegration;
 
 namespace Windfall.Common.Systems;
 
@@ -437,7 +439,6 @@ public class WFSchematicManager : ModSystem
                     TileEntity.PlaceEntityNet(x, y, ModContent.TileEntityType<TEHostileLabTurret>());
                     break;
                 case 2:
-                    Windfall.Instance.Logger.Debug($"Attempting to place Projector with frame data: {t.TileFrameX}, {t.TileFrameY}");
                     TileEntity.PlaceEntityNet(x, y, ModContent.TileEntityType<TELabHologramProjector>());                    
                     break;
                 case 3:
@@ -459,6 +460,70 @@ public class WFSchematicManager : ModSystem
                     TileEntity.PlaceEntityNet(x, y, ModContent.TileEntityType<TEHostileWaterTurret>());
                     break;
             }
+        }
+    }
+
+    public class HangerEntityData
+    {
+        public byte State { get; set; }
+
+        public int X { get; set; }
+
+        public int Y { get; set; }
+
+        public int PartnerX { get; set; } = -1;
+
+        public int PartnerY { get; set; } = -1;
+
+        public byte CordID { get; set; }
+
+        public int SegmentCount { get; set; }
+
+        public int[] DecorationSlots { get; set; }
+
+        public int[] DecorationIDs { get; set; }
+
+        public int[] DecorationSegmentCounts { get; set; }
+
+        public HangerEntityData(byte state, Point16 location, Point16? partnerLocation, byte cordID, int segmentCount, Dictionary<int, (VerletObject chain, int decorationID, int segmentCount)> decorationVerlets)
+        {
+            State = state;
+
+            X = location.X;
+            Y = location.Y;
+
+            if (partnerLocation != null)
+            {
+                PartnerX = partnerLocation.Value.X;
+                PartnerY = partnerLocation.Value.Y;
+            }
+
+            CordID = cordID;
+            SegmentCount = segmentCount;
+            DecorationSlots = [.. decorationVerlets.Keys];
+            DecorationIDs = new int[DecorationSlots.Length];
+            DecorationSegmentCounts = new int[DecorationSlots.Length];
+            for (int i = 0; i < DecorationSlots.Length; i++)
+            {
+                DecorationIDs[i] = decorationVerlets.Values.ToArray()[i].decorationID;
+                DecorationSegmentCounts[i] = decorationVerlets.Values.ToArray()[i].segmentCount;
+            }
+        }
+    }
+
+    public static void PlaceVerletHangerTileEntities(Rectangle area, HangerEntityData[] dataArray)
+    {
+        Point16 start = area.TopLeft().ToPoint16();
+
+        foreach(HangerEntityData data in dataArray)
+        {
+            Point16 location = start + new Point16(data.X, data.Y);
+
+            TileEntity.PlaceEntityNet(location.X, location.Y, ModContent.TileEntityType<HangerEntity>());
+
+            TileEntity.TryGet(location.X, location.Y, out HangerEntity entity);
+
+            entity.LoadHangerData(data, start);
         }
     }
 }

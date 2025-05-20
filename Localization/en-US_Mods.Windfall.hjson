@@ -961,6 +961,19 @@ Items: {
 			DisplayName: Quest Tester
 			Tooltip: ""
 		}
+
+		HangerExporter: {
+			DisplayName: Hanger Exporter
+			Tooltip:
+				'''
+				Will export Hanger Data for use in schematic placement.
+				The first use of this item will select the first point that will be used to determine the export area.
+				After this, a rectangle will be shown that outlines the export area based on your mouse position as the second point.
+				The second click will determine the second point, and export the area.
+				The export area highlighted should match the area of the structure exactly, otherwise the data won't be accurate.
+				If you misclick on your first click, Right Clicking will reset the placement.
+				'''
+		}
 	}
 
 	Utility: {

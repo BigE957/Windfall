@@ -2,7 +2,8 @@
 using Windfall.Content.Tiles.Furnature.VerletHangers.Hangers;
 using static Windfall.Common.Netcode.WindfallNetcode;
 using static Windfall.Common.Graphics.Verlet.VerletIntegration;
-using System;
+using static Windfall.Common.Systems.WFSchematicManager;
+using Terraria;
 
 namespace Windfall.Content.Tiles.TileEntities;
 public class HangerEntity : ModTileEntity
@@ -241,5 +242,24 @@ public class HangerEntity : ModTileEntity
         }
 
         return false;
+    }
+
+    public HangerEntityData GetHangerEntityData(Point16 startPoint) => new(State, Position - startPoint, partnerLocation - startPoint, cordID, segmentCount, DecorationVerlets);
+
+    public void LoadHangerData(HangerEntityData data, Point16 start)
+    {
+        state = (PairedState)data.State;
+        cordID = data.CordID;
+        segmentCount = data.SegmentCount;
+
+        Dictionary<int, (VerletObject chain, int decorationID, int segmentCount)> decorationVerlets = [];
+
+        for (int i = 0; i < data.DecorationSlots.Length; i++)
+            decorationVerlets.Add(data.DecorationSlots[i], (null, data.DecorationIDs[i], data.DecorationSegmentCounts[i]));
+
+        DecorationVerlets = decorationVerlets;
+        partnerLocation = start + new Point16(data.PartnerX, data.PartnerX);
+
+        SendSyncPacket();
     }
 }
