@@ -668,19 +668,19 @@ public class LunarCultBaseSystem : ModSystem
                                             switch (y)
                                             {
                                                 case 1:
-                                                    Recruit.MyName = RecruitableLunarCultist.RecruitNames.Tirith;
+                                                    Recruit.MyName = RecruitNames.Tirith;
                                                     Recruit.canRecruit = true;
                                                     break;
                                                 case 2:
-                                                    Recruit.MyName = RecruitableLunarCultist.RecruitNames.Vivian;
+                                                    Recruit.MyName = RecruitNames.Vivian;
                                                     Recruit.canRecruit = false;
                                                     break;
                                                 case 3:
-                                                    Recruit.MyName = RecruitableLunarCultist.RecruitNames.Doro;
+                                                    Recruit.MyName = RecruitNames.Doro;
                                                     Recruit.canRecruit = true;
                                                     break;
                                                 case 4:
-                                                    Recruit.MyName = RecruitableLunarCultist.RecruitNames.Jamie;
+                                                    Recruit.MyName = RecruitNames.Jamie;
                                                     Recruit.canRecruit = false;
                                                     break;
                                             }
@@ -689,19 +689,19 @@ public class LunarCultBaseSystem : ModSystem
                                             switch (y)
                                             {
                                                 case 1:
-                                                    Recruit.MyName = RecruitableLunarCultist.RecruitNames.Vivian;
+                                                    Recruit.MyName = RecruitNames.Vivian;
                                                     Recruit.canRecruit = true;
                                                     break;
                                                 case 2:
-                                                    Recruit.MyName = RecruitableLunarCultist.RecruitNames.Tania;
+                                                    Recruit.MyName = RecruitNames.Tania;
                                                     Recruit.canRecruit = true;
                                                     break;
                                                 case 3:
-                                                    Recruit.MyName = RecruitableLunarCultist.RecruitNames.Skylar;
+                                                    Recruit.MyName = RecruitNames.Skylar;
                                                     Recruit.canRecruit = false;
                                                     break;
                                                 case 4:
-                                                    Recruit.MyName = RecruitableLunarCultist.RecruitNames.Tirith;
+                                                    Recruit.MyName = RecruitNames.Tirith;
                                                     Recruit.canRecruit = false;
                                                     break;
                                             }
@@ -711,24 +711,32 @@ public class LunarCultBaseSystem : ModSystem
                                             switch (y)
                                             {
                                                 case 1:
-                                                    Recruit.MyName = RecruitableLunarCultist.RecruitNames.Doro;
+                                                    Recruit.MyName = RecruitNames.Doro;
                                                     Recruit.canRecruit = false; // Accepts the idea that the Dragon Cult is no good pretty easilly
                                                     break;
                                                 case 2:
-                                                    Recruit.MyName = RecruitableLunarCultist.RecruitNames.Skylar;
+                                                    Recruit.MyName = RecruitNames.Skylar;
                                                     Recruit.canRecruit = true; // Is shocked by how genuine the hate for the Dragon Cult feels
                                                     break;
                                                 case 3:
-                                                    Recruit.MyName = RecruitableLunarCultist.RecruitNames.Tania;
+                                                    Recruit.MyName = RecruitNames.Tania;
                                                     Recruit.canRecruit = false; // Already dislikes the Dragon Cult for their association with Yharim
                                                     break;
                                                 case 4:
-                                                    Recruit.MyName = RecruitableLunarCultist.RecruitNames.Jamie;
+                                                    Recruit.MyName = RecruitNames.Jamie;
                                                     Recruit.canRecruit = true; // Is upset of the Order's disregard for the historical significant of Dragons and the history held by the Dragon Cult
                                                     break;
                                             }
                                             break;
                                     }
+
+                                    if (Recruits.Contains((int)Recruit.MyName))
+                                    {
+                                        for (int i = 0; i < 4; i++)
+                                            Recruit.NPC.ai[i] = 0f;
+                                        Recruit.NPC.Transform(ModContent.NPCType<LunarCultistDevotee>());
+                                    }
+                                    
                                     Recruit.OnSpawn(NPC.GetSource_NaturalSpawn());
                                 }
                                 y++;
