@@ -112,7 +112,7 @@ public class DraconicRuinsSystem : ModSystem
         Rectangle safeZone4 = new((int)safeZone4Start.X, (int)safeZone4Start.Y, 8, 5);
 
         #region Debug Dust
-        
+        /*
         for (int i = 0; i < 6; i++)
         {
             Dust.NewDustPerfect(Vector2.Lerp(safeZone1.TopLeft(), safeZone1.TopRight(), i / 5f).ToWorldCoordinates(), DustID.LifeDrain, Vector2.Zero);
@@ -161,7 +161,7 @@ public class DraconicRuinsSystem : ModSystem
         Dust.NewDustPerfect(DraconicRuinsArea.BottomLeft().ToWorldCoordinates(), DustID.Shadowflame, Vector2.Zero);
         Dust.NewDustPerfect(DraconicRuinsArea.Bottom().ToWorldCoordinates(), DustID.Shadowflame, Vector2.Zero);
         Dust.NewDustPerfect(DraconicRuinsArea.BottomRight().ToWorldCoordinates(), DustID.Shadowflame, Vector2.Zero);
-        
+        */
         #endregion
 
         //Dust.NewDustPerfect(Door.ToWorldCoordinates(), DustID.Terra, Vector2.Zero);
@@ -172,7 +172,7 @@ public class DraconicRuinsSystem : ModSystem
         {
             if (player.dead)
                 continue;
-            if (false)//!AccessGranted)
+            if (!AccessGranted)
             {
                 Point playerLoc = player.Center.ToTileCoordinates();
                 if (DraconicRuinsArea.Contains(playerLoc) && (!(safeZone1.Contains(playerLoc) || safeZone2.Contains(playerLoc) || safeZone3.Contains(playerLoc) || safeZone4.Contains(playerLoc)) || Main.tile[playerLoc].IsSolid()))
