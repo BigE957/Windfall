@@ -74,6 +74,8 @@ public class LunarCultBaseSystem : ModSystem
     {
         On_Main.DrawProjectiles += DrawHangingSkeleton;
 
+        ModContent.GetInstance<DialogueUISystem>().TreeInitialize += ModifyTree;
+
         if (!Main.dedServ)
         {
             SkeletonAssets.Add("BackWing", ModContent.Request<Texture2D>("Windfall/Assets/NPCs/DragonSkeleton/DragonBackWing", AssetRequestMode.AsyncLoad));
@@ -1490,6 +1492,111 @@ public class LunarCultBaseSystem : ModSystem
         Main.spriteBatch.End();
 
         orig(self);
+    }
+
+    private static void ModifyTree(string treeKey, int dialogueID, int buttonID, bool swapped)
+    {
+        //Handles swapping out recruited characters' dialogue for generic dialogue
+        if (!treeKey.Contains("Cutscenes/CultMeetings") || treeKey == "Cutscenes/CultMeetings/FinalMeeting")
+            return;
+
+        DialogueUISystem uISystem = ModContent.GetInstance<DialogueUISystem>();
+        RecruitNames[] characters = [];
+
+        switch (treeKey)
+        {
+            case "Cutscenes/CultMeetings/CurrentEvents":
+                characters = [
+                    RecruitNames.Tirith,
+                    RecruitNames.Vivian,
+                    RecruitNames.Doro,
+                    RecruitNames.Jamie,
+                ];
+                break;
+            case "Cutscenes/CultMeetings/DragonCult":
+                characters = [
+                    RecruitNames.Doro,
+                    RecruitNames.Skylar,
+                    RecruitNames.Tania,
+                    RecruitNames.Jamie,
+                ];
+                break;
+            case "Cutscenes/CultMeetings/Goals":
+                characters = [
+                    RecruitNames.Vivian,
+                    RecruitNames.Tania,
+                    RecruitNames.Skylar,
+                    RecruitNames.Tirith,
+                ];
+                break;
+        }
+
+        for (int i = 0; i < 4; i++)
+            if (Recruits.Contains((int)characters[i]))
+                uISystem.CurrentTree.Characters[i + 1] = "Recruits/Cultist";
+
+        // Recruit Dialogue Replacements
+        for (int i = 0; i < uISystem.CurrentTree.Dialogues.Length; i++)
+        {
+            Dialogue d = uISystem.CurrentTree.Dialogues[i];
+            
+            if (uISystem.CurrentTree.Characters[d.CharacterIndex] == "Recruits/Cultist")
+            {
+                d.DialogueText = [new()];
+                d.DialogueText[0].Text = GetWindfallTextValue($"Dialogue.LunarCult.Recruits.Cultist.{treeKey.Replace("Cutscenes/CultMeetings/", "")}.{i}");
+            }
+        }
+
+        // Dialogue Modifications
+        List<int> indexesToRemove = [];
+        switch (treeKey)
+        {
+            case "Cutscenes/CultMeetings/CurrentEvents":
+                //No Jamie
+                if (uISystem.CurrentTree.Characters[4] == "Recruits/Cultist")
+                {
+                    uISystem.CurrentTree.Dialogues[15].DialogueText = uISystem.CurrentTree.Dialogues[11].DialogueText;
+                    indexesToRemove.Add(11); indexesToRemove.Add(12); indexesToRemove.Add(13); indexesToRemove.Add(14); indexesToRemove.Add(14);
+                }
+
+                //No Vivian, Yes Doro
+                if (uISystem.CurrentTree.Characters[2] == "Recruits/Cultist" && uISystem.CurrentTree.Characters[3] != "Recruits/Cultist")
+                    uISystem.CurrentTree.Dialogues[6].DialogueText[0].Text = GetWindfallTextValue($"Dialogue.LunarCult.Recruits.Doro.CurrentEventsAlt.6");
+
+                //Yes Vivian, No Doro
+                if (uISystem.CurrentTree.Characters[2] != "Recruits/Cultist" && uISystem.CurrentTree.Characters[3] == "Recruits/Cultist")
+                    uISystem.CurrentTree.Dialogues[7].DialogueText[0].Text = GetWindfallTextValue($"Dialogue.LunarCult.Recruits.Vivian.CurrentEventsAlt.7");
+
+                break;
+            
+            case "Cutscenes/CultMeetings/Goals":
+                //No Vivian
+                if (uISystem.CurrentTree.Characters[1] == "Recruits/Cultist")
+                {
+                    uISystem.CurrentTree.Dialogues[5].DialogueText[0].Text = GetWindfallTextValue($"Dialogue.LunarCult.LunarBishop.CultMeetingAltText.Goals.5");
+                    indexesToRemove.Add(2); indexesToRemove.Add(3); indexesToRemove.Add(4);
+                }
+
+                //No Tania
+                if (uISystem.CurrentTree.Characters[2] == "Recruits/Cultist")
+                    uISystem.CurrentTree.Dialogues[13].DialogueText[0].Text = GetWindfallTextValue($"Dialogue.LunarCult.LunarBishop.CultMeetingAltText.Goals.13");
+
+                //No Skylar
+                if(uISystem.CurrentTree.Characters[3] == "Recruits/Cultist")
+                    indexesToRemove.Add(10);
+                break;
+
+            case "Cutscenes/CultMeetings/DragonCult":
+                break;
+        }
+
+        if (indexesToRemove.Count > 0)
+        {
+            List<Dialogue> list = [.. uISystem.CurrentTree.Dialogues];
+            foreach (int index in indexesToRemove)
+                list.RemoveAt(index);
+            uISystem.CurrentTree.Dialogues = [.. list];
+        }
     }
 
     internal static CombatText DisplayMessage(Rectangle location, Color color, string text)

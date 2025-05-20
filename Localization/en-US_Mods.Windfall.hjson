@@ -285,6 +285,13 @@ Dialogue: {
 					26: "[i/p72:3999]"
 				}
 			}
+
+			CultMeetingAltText: {
+				Goals: {
+					5: Our goal is to bring about a bright new future. One free from the mighty tyrants who have, for so long now, dominated our world. The Auric Dragons, the Gods, and the Godseeker... All of these individuals have ruled over the weak through power and fear. We seek to cleanse the world of these tyrants, and usher in a bright future for all!
+					14: That is an understandable concern, but you needn't worry. Our Master has poured over a great many ancient texts pertaining to this being, and have ensured that it is indeed benevolent. Though even in the event the Great One were to turn out malicious, our Master has prepared percautions to ensure there is no threat.
+				}
+			}
 		}
 
 		TheOrator: {
@@ -500,6 +507,8 @@ Dialogue: {
 					1: Yeah... I guess they were kinda messed up.
 					2: How exactly do we do that?
 				}
+
+				CurrentEventsAlt.7: What?! No way! I'm certainly not doing that. You wouldn't catch me anywhere near that gross god stuff!
 			}
 
 			Tania: {
@@ -516,6 +525,8 @@ Dialogue: {
 					1: Right... That was bad.
 					2: Uhm... How do we do that, again?
 				}
+
+				CurrentEventsAlt.6: Why don't we just go and stop them ourselves? We've got skilled fighters, and powerful mages! I bet we could put a stop to their evil-doing no problem!
 			}
 
 			Skylar: {
@@ -533,11 +544,31 @@ Dialogue: {
 					2: And... how do we do that?
 				}
 			}
+
+			Cultist: {
+				CurrentEvents: {
+					2: It certainly does. It feels as though our world grows more dangerous with every passing day. I've even heard some frightening screams echoing from the Dungeon! Do you know what's causing this?
+					6: Surely we could put a stop to this ourselves?
+					7: Yeah! We'll show those stupid Dragon fanatics what we're made of!
+					9: I see... That does seem like a smarter way of going about it.
+					10: Aww... Alright.
+					12: I got removed.
+					14: I got removed.
+				}
+				Goals: {
+					2: I got removed.
+					4: I got removed.
+					10: I also got removed.
+					11: It has been so long since this world has known peace... Let us work hard to ensure a brighter future for all!
+					13: Apologies if this is... a rude question, but are we really sure we can trust this 'Great One' that you speak of?
+					15: Ah, I see! That's a relief to hear. Thank you!
+				}
+			}
 		}
 	}
 
 	Others: {
-		Merchant.PotionSeller: I don't know who that weirdo outside is, but I don't trust them! You should probably just stick to buying your potions from me.
+		Merchant.PotionSeller: I don't know who that weirdo outside is, but I wouldn't trust her if I were you! You should probably just stick to buying your potions from me.
 		PartyGirl.PotionSeller: Hope that potion seller decides to stick around; her potions are some of the best I've had in ages...
 		WitchDoctor.PotionSeller: I really must ask that potion seller how she does it... I might stand to learn a thing or two from here!
 		Truffle.PotionSeller: I hear there's some alchemist in town... Please tell me she won't be trying to turn me into a potion. I deal with enough as is...
