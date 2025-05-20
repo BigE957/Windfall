@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using static Windfall.Common.Graphics.Verlet.VerletIntegration;
+﻿using static Windfall.Common.Graphics.Verlet.VerletIntegration;
 
 namespace Windfall.Content.Items.Placeables.Furnature.VerletHangers.Cords;
 public class CordedBigChains : Cord, ILocalizedModType

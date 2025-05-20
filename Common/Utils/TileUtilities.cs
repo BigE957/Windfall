@@ -1,7 +1,4 @@
-﻿using Terraria;
-using Terraria.ID;
-
-namespace Windfall.Common.Utils;
+﻿namespace Windfall.Common.Utils;
 
 public static partial class WindfallUtils
 {

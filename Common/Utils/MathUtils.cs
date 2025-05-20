@@ -49,4 +49,16 @@ public static partial class WindfallUtils
         newRect.Y -= height / 2;
         return newRect;
     }
+
+    public static Rectangle RectFromPoints(Point a, Point b)
+    {
+        int x = Math.Min(a.X, b.X);
+        int y = Math.Min(a.Y, b.Y);
+
+        int width = Math.Abs(a.X - b.X);
+        int height = Math.Abs(a.Y - b.Y);
+
+
+        return new Rectangle(x, y, width, height);
+    }
 }

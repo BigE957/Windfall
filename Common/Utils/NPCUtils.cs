@@ -1,12 +1,6 @@
 ﻿using CalamityMod.NPCs.NormalNPCs;
 using CalamityMod.NPCs.SlimeGod;
 using CalamityMod.Projectiles.Boss;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Terraria.ID;
 
 namespace Windfall.Common.Utils;
 
