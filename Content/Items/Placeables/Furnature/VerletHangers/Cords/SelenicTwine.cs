@@ -20,11 +20,11 @@ public class SelenicTwine : Cord, ILocalizedModType
 
     public override int cordID => CordID.SelenicTwine;
 
+    public override string cordTexturePath => "Windfall/Content/Items/Placeables/Furnature/VerletHangers/Cords/SelenicTwineAtlas";
+
     public override void DrawRopeSegment(SpriteBatch spriteBatch, List<VerletPoint> points, int index)
     {
         VerletPoint p = points[index];
-
-        Texture2D tex = ModContent.Request<Texture2D>("Windfall/Content/Items/Placeables/Furnature/VerletHangers/Cords/SelenicTwineAtlas").Value;
 
         foreach ((VerletPoint p2, float l) in p.Connections)
         {
@@ -35,9 +35,9 @@ public class SelenicTwine : Cord, ILocalizedModType
             Vector2 midPoint = (p.Position + p2.Position) / 2f;
 
             Color lighting = Lighting.GetColor(midPoint.ToTileCoordinates());
-            Vector2 origin = new(0, tex.Size().Y * 0.5f);
+            Vector2 origin = new(0, cordTexture.Size().Y * 0.5f);
 
-            spriteBatch.Draw(tex, p.Position - Main.screenPosition, null, lighting, rot, origin, 1f, 0, 0);
+            spriteBatch.Draw(cordTexture.Value, p.Position - Main.screenPosition, null, lighting, rot, origin, 1f, 0, 0);
         }
     }
 }

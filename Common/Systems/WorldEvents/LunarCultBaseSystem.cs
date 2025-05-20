@@ -18,7 +18,6 @@ using Windfall.Content.Items.Placeables.Furnature.VerletHangers.Cords;
 using Windfall.Content.Items.Quests.SealingRitual;
 using Windfall.Content.Buffs.Inhibitors;
 using static Windfall.Content.NPCs.WorldEvents.LunarCult.RecruitableLunarCultist;
-using Terraria;
 
 namespace Windfall.Common.Systems.WorldEvents;
 
@@ -274,8 +273,6 @@ public class LunarCultBaseSystem : ModSystem
             }
 
             #endregion
-
-            //Main.NewText(LunarCultBaseLocation.ToWorldCoordinates() - Main.LocalPlayer.Center);
 
             Player closestPlayer = Main.player[Player.FindClosest(CultBaseWorldArea.TopLeft(), CultBaseWorldArea.Width, CultBaseWorldArea.Height)];
             float PlayerDistFromHideout = (closestPlayer.Center - CultBaseWorldArea.Center()).Length();
@@ -631,6 +628,7 @@ public class LunarCultBaseSystem : ModSystem
                             #endregion
                             break;
                         case SystemStates.Meeting:
+
                             #region Location Selection
                             ActivityCoords = new Point(LunarCultBaseLocation.X + (BaseFacingLeft ? -23 : 23), LunarCultBaseLocation.Y + 18);
                             ActivityCoords.X *= 16;
@@ -742,6 +740,7 @@ public class LunarCultBaseSystem : ModSystem
                                 y++;
                             }
                             #endregion
+                            
                             break;
                         case SystemStates.Tailor:
                             #region Location Selection
@@ -812,9 +811,9 @@ public class LunarCultBaseSystem : ModSystem
                             break;
                     }
                     #endregion                        
+                    
                     ActivityTimer = 0;
                     zoom = 0;
-
 
                     foreach (Player player in Main.player.Where(p => p.active))
                     {
@@ -822,7 +821,6 @@ public class LunarCultBaseSystem : ModSystem
                         if (player.LunarCult().apostleQuestTracker == 2 || player.LunarCult().apostleQuestTracker == 6 || player.LunarCult().apostleQuestTracker == 10)
                             player.LunarCult().apostleQuestTracker++;
                     }
-                    
                 }
 
                 #region Player Proximity

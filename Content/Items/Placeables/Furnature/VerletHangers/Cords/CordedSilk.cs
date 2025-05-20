@@ -20,11 +20,11 @@ public class CordedSilk : Cord, ILocalizedModType
 
     public override int cordID => CordID.CordedSilk;
 
+    public override string cordTexturePath => "Windfall/Content/Items/Placeables/Furnature/VerletHangers/Cords/CordedSilkAtlas";
+
     public override void DrawRopeSegment(SpriteBatch spriteBatch, List<VerletPoint> points, int index)
     {
         VerletPoint p = points[index];
-
-        Texture2D tex = ModContent.Request<Texture2D>("Windfall/Content/Items/Placeables/Furnature/VerletHangers/Cords/CordedSilkAtlas").Value;
 
         foreach ((VerletPoint p2, float l) in p.Connections)
         {
@@ -35,20 +35,19 @@ public class CordedSilk : Cord, ILocalizedModType
             Vector2 midPoint = (p.Position + p2.Position) / 2f;
 
             Color lighting = Lighting.GetColor(midPoint.ToTileCoordinates());
-            Rectangle frame = tex.Frame(1, 2);
+            Rectangle frame = cordTexture.Frame(1, 2);
             Vector2 origin = new(0, frame.Size().Y * 0.5f);
 
-            spriteBatch.Draw(tex, p.Position - Main.screenPosition, frame, lighting, rot, origin, 1f, 0, 0);
+            spriteBatch.Draw(cordTexture.Value, p.Position - Main.screenPosition, frame, lighting, rot, origin, 1f, 0, 0);
         }
     }
 
     public override void DrawOnRopeEnds(SpriteBatch spriteBatch, Vector2 position, float rotation)
     {
-        Texture2D tex = ModContent.Request<Texture2D>("Windfall/Content/Items/Placeables/Furnature/VerletHangers/Cords/CordedSilkAtlas").Value;
-        Rectangle frame = tex.Frame(1, 2, frameY: 1);
+        Rectangle frame = cordTexture.Frame(1, 2, frameY: 1);
         Color lighting = Lighting.GetColor(position.ToTileCoordinates());
 
-        spriteBatch.Draw(tex, position - Main.screenPosition, frame, lighting, rotation + PiOver2, frame.Size() * 0.5f, 1f, 0, 0);
+        spriteBatch.Draw(cordTexture.Value, position - Main.screenPosition, frame, lighting, rotation + PiOver2, frame.Size() * 0.5f, 1f, 0, 0);
     }
 
     public override void AddRecipes()

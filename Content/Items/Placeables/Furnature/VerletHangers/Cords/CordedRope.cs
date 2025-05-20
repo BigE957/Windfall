@@ -20,11 +20,11 @@ public class CordedRope : Cord, ILocalizedModType
 
     public override int cordID => CordID.CordedRope;
 
+    public override string cordTexturePath => "Windfall/Content/Items/Placeables/Furnature/VerletHangers/Cords/CordedRopeAtlas";
+
     public override void DrawRopeSegment(SpriteBatch spriteBatch, List<VerletPoint> points, int index)
     {
         VerletPoint p = points[index];
-
-        Texture2D tex = ModContent.Request<Texture2D>("Windfall/Content/Items/Placeables/Furnature/VerletHangers/Cords/CordedRopeAtlas").Value;
 
         foreach ((VerletPoint p2, float l) in p.Connections)
         {
@@ -35,10 +35,10 @@ public class CordedRope : Cord, ILocalizedModType
             Vector2 midPoint = (p.Position + p2.Position) / 2f;
 
             Color lighting = Lighting.GetColor(midPoint.ToTileCoordinates());
-            Rectangle frame = tex.Frame(1, 2);
+            Rectangle frame = cordTexture.Frame(1, 2);
             Vector2 origin = new(0, frame.Size().Y * 0.5f);
 
-            spriteBatch.Draw(tex, p.Position - Main.screenPosition, frame, lighting, rot, origin, 1f, 0, 0);
+            spriteBatch.Draw(cordTexture.Value, p.Position - Main.screenPosition, frame, lighting, rot, origin, 1f, 0, 0);
         }
     }
 

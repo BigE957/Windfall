@@ -8,6 +8,10 @@ public abstract class Cord : ModItem
 {
     public virtual int cordID => 0;
 
+    public virtual string cordTexturePath => "";
+
+    public static Asset<Texture2D> cordTexture;
+
     public virtual void DrawRopeSegment(SpriteBatch spriteBatch, List<VerletPoint> points, int index) { }
 
     public virtual void DrawDecorationSegment(SpriteBatch spriteBatch, List<VerletPoint> points, int index) { DrawRopeSegment(spriteBatch, points, index); }
@@ -16,6 +20,12 @@ public abstract class Cord : ModItem
 
     public bool PlacingInProgress = false;
     public HangerEntity StartingEntity = null;
+
+    public override void SetStaticDefaults()
+    {
+        if(!Main.dedServ)
+            cordTexture = ModContent.Request<Texture2D>(cordTexturePath);
+    }
 
     public override bool AltFunctionUse(Player player) => true;
 

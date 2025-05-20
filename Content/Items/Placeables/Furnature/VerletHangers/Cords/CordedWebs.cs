@@ -20,11 +20,11 @@ public class CordedWebs : Cord, ILocalizedModType
 
     public override int cordID => CordID.CordedWebs;
 
+    public override string cordTexturePath => "Windfall/Content/Items/Placeables/Furnature/VerletHangers/Cords/CordedWebsAtlas";
+
     public override void DrawRopeSegment(SpriteBatch spriteBatch, List<VerletPoint> points, int index)
     {
         VerletPoint p = points[index];
-
-        Texture2D tex = ModContent.Request<Texture2D>("Windfall/Content/Items/Placeables/Furnature/VerletHangers/Cords/CordedWebsAtlas").Value;
 
         foreach ((VerletPoint p2, float l) in p.Connections)
         {
@@ -35,28 +35,27 @@ public class CordedWebs : Cord, ILocalizedModType
             Vector2 midPoint = (p.Position + p2.Position) / 2f;
 
             Color lighting = Lighting.GetColor(midPoint.ToTileCoordinates());
-            Rectangle frame = tex.Frame(1, 6);
+            Rectangle frame = cordTexture.Frame(1, 6);
             Vector2 origin = new(0, frame.Size().Y * 0.5f);
 
-            spriteBatch.Draw(tex, p.Position - Main.screenPosition, frame, lighting, rot, origin, 1f, 0, 0);
+            spriteBatch.Draw(cordTexture.Value, p.Position - Main.screenPosition, frame, lighting, rot, origin, 1f, 0, 0);
             if (index != 0 && index != points.Count - 1)
             {
-                frame = tex.Frame(1, 6, 0, 2 + (index % 4));
+                frame = cordTexture.Frame(1, 6, 0, 2 + (index % 4));
                 origin = frame.Size() * 0.5f;
                 float rotation = rot + (index % 2 == 0 ? PiOver2 : -PiOver2);
                 Vector2 drawPos = p.Position + (rotation.ToRotationVector2() * 4f) + rot.ToRotationVector2() * (index % 9 - 4);
-                spriteBatch.Draw(tex, drawPos - Main.screenPosition, frame, lighting, rotation, origin, 1f, 0, 0);
+                spriteBatch.Draw(cordTexture.Value, drawPos - Main.screenPosition, frame, lighting, rotation, origin, 1f, 0, 0);
             }
         }
     }
 
     public override void DrawOnRopeEnds(SpriteBatch spriteBatch, Vector2 position, float rotation)
     {
-        Texture2D tex = ModContent.Request<Texture2D>("Windfall/Content/Items/Placeables/Furnature/VerletHangers/Cords/CordedWebsAtlas").Value;
-        Rectangle frame = tex.Frame(1, 6, frameY: 1);
+        Rectangle frame = cordTexture.Frame(1, 6, frameY: 1);
         Color lighting = Lighting.GetColor(position.ToTileCoordinates());
 
-        spriteBatch.Draw(tex, position - Main.screenPosition, frame, lighting, rotation + PiOver2, frame.Size() * 0.5f, 1f, 0, 0);
+        spriteBatch.Draw(cordTexture.Value, position - Main.screenPosition, frame, lighting, rotation + PiOver2, frame.Size() * 0.5f, 1f, 0, 0);
     }
 
     public override void AddRecipes()
