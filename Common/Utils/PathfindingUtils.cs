@@ -393,7 +393,13 @@ public static partial class WindfallUtils
         Vector2 ground = FindSurfaceBelow(p).ToWorldCoordinates();
         int penalty = (int)Vector2.Distance(p.ToWorldCoordinates(), ground) * 12;
 
-        for(int i = -1; i < 1; i++)
+        if (TileID.Sets.Platforms[Main.tile[p].TileType])
+            penalty += 100;
+        
+        if (TileID.Sets.Platforms[Main.tile[p + new Point(0,1)].TileType])
+            penalty -= 100;
+
+        for (int i = -1; i < 1; i++)
         {
             if (IsSolidNotDoor(p + new Point(-1, i)))
             {
