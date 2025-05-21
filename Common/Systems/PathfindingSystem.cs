@@ -14,8 +14,14 @@ public class PathfindingSystem : ModSystem
     private static Node[][] NodeMap;
     public static readonly Point16[] Dirs =
     [
-        new(0, 1), new(-1, 0), new(0, -1), new(1, 0),
-        new(1, 1), new(1, -1), new(-1, -1), new(-1, 1)
+        new(-1, -1), // 0: Top-left
+        new(0, -1),  // 1: Top
+        new(1, -1),  // 2: Top-right
+        new(-1, 0),  // 3: Left
+        new(1, 0),   // 4: Right
+        new(-1, 1),  // 5: Bottom-left
+        new(0, 1),   // 6: Bottom
+        new(1, 1)    // 7: Bottom-right
     ];
 
     public override void OnWorldLoad()
@@ -91,7 +97,7 @@ public class PathfindingSystem : ModSystem
 
         public Point TilePosition => new(X, Y);
 
-        public Point16[] NeighborLocations = new Point16[8];
+        public byte[] NeighborLocations = new byte[8];
         public byte NeighborCount;
         public Point16 ConnectionLocation;
 
@@ -134,28 +140,28 @@ public class PathfindingSystem : ModSystem
 
             // Top-left
             if (hasLeft && hasTop)
-                NeighborLocations[NeighborCount++] = new(X - 1, Y - 1);
+                NeighborLocations[NeighborCount++] = 0;
             // Top
             if (hasTop)
-                NeighborLocations[NeighborCount++] = new(X, Y - 1);
+                NeighborLocations[NeighborCount++] = 1;
             // Top-right
             if (hasRight && hasTop)
-                NeighborLocations[NeighborCount++] = new(X + 1, Y - 1);
+                NeighborLocations[NeighborCount++] = 2;
             // Left
             if (hasLeft)
-                NeighborLocations[NeighborCount++] = new(X - 1, Y);
+                NeighborLocations[NeighborCount++] = 3;
             // Right
             if (hasRight)
-                NeighborLocations[NeighborCount++] = new(X + 1, Y);
+                NeighborLocations[NeighborCount++] = 4;
             // Bottom-left
             if (hasLeft && hasBottom)
-                NeighborLocations[NeighborCount++] = new(X - 1, Y + 1);
+                NeighborLocations[NeighborCount++] = 5;
             // Bottom
             if (hasBottom)
-                NeighborLocations[NeighborCount++] = new(X, Y + 1);
+                NeighborLocations[NeighborCount++] = 6;
             // Bottom-right
             if (hasRight && hasBottom)
-                NeighborLocations[NeighborCount++] = new(X + 1, Y + 1);
+                NeighborLocations[NeighborCount++] = 7;
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -415,8 +421,11 @@ public class PathfindingSystem : ModSystem
 
                 ClosedSet.Add(new Point16(current.X, current.Y));
 
-                foreach (Point16 neighborLoc in current.NeighborLocations)
+                foreach (byte dirIndex in current.NeighborLocations)
                 {
+                    Point16 dir = Dirs[dirIndex];
+                    Point16 neighborLoc = new(current.X + dir.X, current.Y + dir.Y);
+
                     if (ClosedSet.Contains(neighborLoc))
                         continue;
 
