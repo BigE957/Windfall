@@ -122,12 +122,12 @@ public class PathfindingSystem : ModSystem
         public void SetF(int f) => F = f;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public int GetDistance(int targetX, int targetY)
+        public readonly int GetDistance(int targetX, int targetY)
         {
             int dx = Math.Abs(X - targetX);
             int dy = Math.Abs(Y - targetY);
             int min = Math.Min(dx, dy);
-            // For 10*x and 14*y, use optimized multiplications
+            // For 10*x and 14*y, we use optimized multiplications
             // 10*x = 8*x + 2*x = x<<3 + x<<1
             // 14*y = 16*y - 2*y = y<<4 - y<<1
             return (min << 4) - (min << 1) + ((dx + dy - 2 * min) << 3) + ((dx + dy - 2 * min) << 1);
@@ -177,7 +177,7 @@ public class PathfindingSystem : ModSystem
             ConnectionLocation = new(-1, -1);
         }
 
-        public int CompareTo(Node other) => (F != other.F) ? F.CompareTo(other.F) : G.CompareTo(other.G);
+        public readonly int CompareTo(Node other) => (F != other.F) ? F.CompareTo(other.F) : G.CompareTo(other.G);
     }
 
     public class FoundPath(Point[] nodes)
@@ -382,28 +382,36 @@ public class PathfindingSystem : ModSystem
 
         public void FindPath(Vector2 startWorld, Vector2 targetWorld, Func<Point, Point, bool> isWalkable, Func<Point, bool> isValid, Func<Point, int> costFunction = null)
         {
-            ClearNodeStates(ModifiedNodesLocations);
-            ModifiedNodesLocations.Clear();
+            if (ModifiedNodesLocations.Count > 0)
+                ClearNodeStates(ModifiedNodesLocations);
+
             OpenSet.Clear();
             ClosedSet.Clear();
 
-            Point StartPoint = startWorld.ToTileCoordinates();
-            Point TargetPoint = targetWorld.ToTileCoordinates();
+            Point startPoint = startWorld.ToTileCoordinates();
+            Point targetPoint = targetWorld.ToTileCoordinates();
+            int targetX = targetPoint.X;
+            int targetY = targetPoint.Y;
 
-            Node startNode = NodeMap[StartPoint.X][StartPoint.Y];
-
-            int startToTarget = startNode.GetDistance(TargetPoint.X, TargetPoint.Y);
+            ref Node startNode = ref NodeMap[startPoint.X][startPoint.Y];
 
             startNode.ResetState();
             startNode.SetG(0);
-            startNode.SetF(startToTarget);
-            NodeMap[StartPoint.X][StartPoint.Y] = startNode;
+            startNode.SetF(startNode.GetDistance(targetPoint.X, targetPoint.Y));
+
+            //NodeMap[startPoint.X][startPoint.Y] = startNode;
+            
             ModifiedNodesLocations.Add(new(startNode.X, startNode.Y));
 
             const int maxIterations = 4096 * 2;
             int iterations = 0;
 
+            Func<Point, int> cachedCostFunction = costFunction ?? (_ => 0);
+
             OpenSet.Enqueue(startNode, startNode.F);
+
+            Point16 neighborLoc = new();
+            Point neighborPoint = new();
 
             while (OpenSet.Count > 0 && iterations < maxIterations)
             {
@@ -412,45 +420,55 @@ public class PathfindingSystem : ModSystem
                 //Particle p = new GlowOrbParticle(current.TilePosition.ToWorldCoordinates(), Vector2.Zero, false, 2, 0.5f, Color.Red);
                 //GeneralParticleHandler.SpawnParticle(p);
 
-                if (current.TilePosition == TargetPoint)
+                if (current.X == targetX && current.Y == targetY)
                 {
-                    //Main.NewText("Iteration Count: " + iterations);
+                    Main.NewText("Iteration Count: " + iterations);
                     MyPath = ReconstructPath(current, startNode);
                     //Main.NewText("Path Length: " + MyPath.Points.Length);
                     ClearNodeStates(ModifiedNodesLocations);
                     return;
                 }
 
-                ClosedSet.Add(new Point16(current.X, current.Y));
+                ClosedSet.Add(new(current.X, current.Y));
 
-                foreach (byte dirIndex in current.NeighborLocations.Take(current.NeighborCount))
+                for (int i = 0; i < current.NeighborCount; i++)
                 {
-                    Point16 dir = Dirs[dirIndex];
-                    Point16 neighborLoc = new(current.X + dir.X, current.Y + dir.Y);
+                    byte dirIndex = current.NeighborLocations[i];
+                    ref readonly Point16 dir = ref Dirs[dirIndex];
+
+                    neighborLoc = new((short)(current.X + dir.X), (short)(current.Y + dir.Y));
 
                     if (ClosedSet.Contains(neighborLoc))
                         continue;
 
-                    if (!isWalkable(current.TilePosition, neighborLoc.ToPoint()))
+                    neighborPoint.X = neighborLoc.X;
+                    neighborPoint.Y = neighborLoc.Y;
+
+                    if (!isValid(neighborPoint))
                         continue;
 
-                    if (!isValid.Invoke(neighborLoc.ToPoint()))
+                    if (!isWalkable(current.TilePosition, neighborPoint))
                         continue;
 
-                    int tentativeG = current.G + current.GetDistance(neighborLoc.X, neighborLoc.Y) + (costFunction == null ? 0 : costFunction(neighborLoc.ToPoint()));
-
-                    Node neighbor = NodeMap[neighborLoc.X][neighborLoc.Y];
+                    ref Node neighbor = ref NodeMap[neighborLoc.X][neighborLoc.Y];
+                    /*
+                    int moveCost = current.GetDistance(neighborLoc.X, neighborLoc.Y);
+                    int additionalCost = cachedCostFunction(neighborPoint);
+                    int tentativeG = current.G + moveCost + additionalCost;
+                    */
+                    int tentativeG = current.G + current.GetDistance(neighborLoc.X, neighborLoc.Y) + cachedCostFunction(neighborPoint);
 
                     if (tentativeG < neighbor.G)
                     {
                         ModifiedNodesLocations.Add(neighborLoc);
+                        
                         neighbor.SetConnection(new Point16(current.X, current.Y));
                         neighbor.SetG(tentativeG);
 
-                        int newF = tentativeG + neighbor.GetDistance(TargetPoint.X, TargetPoint.Y);
+                        int newF = tentativeG + neighbor.GetDistance(targetPoint.X, targetPoint.Y);
                         neighbor.SetF(newF);
 
-                        NodeMap[neighborLoc.X][neighborLoc.Y] = neighbor;
+                        //NodeMap[neighborLoc.X][neighborLoc.Y] = neighbor;
 
                         if (OpenSet.Contains(neighbor))
                             OpenSet.UpdatePriority(neighbor, newF);
@@ -463,17 +481,13 @@ public class PathfindingSystem : ModSystem
 
             ClearNodeStates(ModifiedNodesLocations);
             MyPath = null;
-            return;
         }
 
         private static void ClearNodeStates(HashSet<Point16> locations)
         {
             foreach (Point16 pos in locations)
-            {
-                Node node = NodeMap[pos.X][pos.Y];
-                node.ResetState();
-                NodeMap[pos.X][pos.Y] = node;
-            }
+                NodeMap[pos.X][pos.Y].ResetState();
+            
             locations.Clear();
         }
 
