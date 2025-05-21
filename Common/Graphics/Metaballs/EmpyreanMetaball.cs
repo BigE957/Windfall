@@ -91,7 +91,9 @@ public class EmpyreanMetaball : Metaball
 
     public static float BorderLerpValue => (float)(Math.Sin(Main.GlobalTimeWrappedHourly * 1f) / 0.5f) + 0.5f;
 
-    public override Color EdgeColor => Color.Lerp(new Color(117, 255, 159), new Color(255, 180, 80), BorderLerpValue);
+    public static Color BorderColor => Color.Lerp(new Color(117, 255, 159), new Color(255, 180, 80), BorderLerpValue);
+
+    public override Color EdgeColor => BorderColor;
 
     public override void Load()
     {

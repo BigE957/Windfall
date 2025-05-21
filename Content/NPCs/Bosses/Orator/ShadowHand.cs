@@ -10,9 +10,12 @@ namespace Windfall.Content.NPCs.Bosses.Orator;
 public class ShadowHand : ModNPC
 {
     public override string Texture => "Windfall/Assets/NPCs/Enemies/ShadowHand";
+
+    public static Asset<Texture2D> Details;
+
     public override void SetStaticDefaults()
     {
-        Main.npcFrameCount[Type] = 6;
+        Main.npcFrameCount[Type] = 9;
 
         NPCID.Sets.NPCBestiaryDrawModifiers drawModifiers = new()
         {
@@ -20,6 +23,9 @@ public class ShadowHand : ModNPC
             Direction = 1
         };
         NPCID.Sets.NPCBestiaryDrawOffset.Add(Type, drawModifiers);
+
+        if (!Main.dedServ)
+            Details = ModContent.Request<Texture2D>(Texture + "Details");
     }
     public override void SetBestiary(BestiaryDatabase database, BestiaryEntry bestiaryEntry)
     {
@@ -76,8 +82,10 @@ public class ShadowHand : ModNPC
     private enum Pose
     {
         Default,
-        FingerGun,
         Fist,
+        Flat,
+        FingerGun,
+        OK,
         Palm
     }
     private Pose CurrentPose
@@ -116,7 +124,7 @@ public class ShadowHand : ModNPC
             NPC.damage = StatCorrections.ScaleContactDamage(Main.masterMode ? 500 : CalamityWorld.death ? 420 : CalamityWorld.revenge ? 350 : Main.expertMode ? 240 : 180);
         }            
         #region Despawning
-
+        
         if (Orator == null)
         {
             toTarget = target.Center - NPC.Center;
@@ -133,10 +141,10 @@ public class ShadowHand : ModNPC
                 aiCounter = 0;
             CurrentAI = AIState.Sacrifice;
         }
-
+        
         //testing code :P
         //if (CurrentAI == AIState.OnBoss || CurrentAI == AIState.Spawning)
-        //CurrentAI = AIState.Hunting;
+        //    CurrentAI = AIState.Hunting;
         #endregion
 
         switch (CurrentAI)
@@ -276,11 +284,6 @@ public class ShadowHand : ModNPC
                     NPC.velocity = NPC.velocity.RotateTowards((target.Center - NPC.Center).ToRotation(), 0.02f);
                     NPC.rotation = NPC.velocity.ToRotation();
 
-                    dust = Dust.NewDustPerfect(NPC.Center + Vector2.UnitY * Main.rand.NextFloat(-16, 16) + new Vector2(-54, 0).RotatedBy(NPC.rotation), DustID.RainbowTorch);
-                    dust.scale = Main.rand.NextFloat(1.5f, 2.3f);
-                    dust.noGravity = true;
-                    dust.color = Color.Lerp(new Color(117, 255, 159), new Color(255, 180, 80), (float)(Math.Sin(Main.GlobalTimeWrappedHourly * 1.25f) / 0.5f) + 0.5f);
-
                     if (NPC.velocity.LengthSquared() < 64f)
                     {
                         CurrentAI = AIState.Hunting;
@@ -306,7 +309,7 @@ public class ShadowHand : ModNPC
                 }
                 if (aiCounter >= 0)
                 {
-                    CurrentPose = Pose.Palm;
+                    CurrentPose = Pose.Flat;
                     if (aiCounter > 0 && aiCounter % 5 == 0 && aiCounter <= 35)
                     {
                         SoundEngine.PlaySound(SoundID.DD2_LightningBugZap, NPC.Center);
@@ -497,24 +500,13 @@ public class ShadowHand : ModNPC
 
     public override void FindFrame(int frameHeight)
     {
-        NPC.frame.Width = ModContent.Request<Texture2D>(this.Texture).Width() / 4;
-        switch (CurrentPose)
+        NPC.frame.Width = TextureAssets.Npc[Type].Width() / 6;
+
+        NPC.frame.X = NPC.frame.Width * (int)CurrentPose;
+        if (CurrentPose != 0)
         {
-            case Pose.FingerGun:
-                NPC.frame.X = NPC.frame.Width;
-                NPC.frame.Y = 0;
-                return;
-            case Pose.Fist:
-                NPC.frame.X = NPC.frame.Width * 2;
-                NPC.frame.Y = 0;
-                return;
-            case Pose.Palm:
-                NPC.frame.X = NPC.frame.Width * 3;
-                NPC.frame.Y = 0;
-                return;
-            default:
-                NPC.frame.X = 0;
-                break;
+            NPC.frame.Y = 0;
+            return;
         }
 
         NPC.frameCounter++;
@@ -527,7 +519,9 @@ public class ShadowHand : ModNPC
         }
     }
     public override bool CheckActive() => false;
+
     public override bool PreDraw(SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor) => false;
+
     public void DrawSelf(Vector2 drawPosition, Color color, float rotation)
     {
         Texture2D texture = TextureAssets.Npc[NPC.type].Value;
@@ -537,6 +531,20 @@ public class ShadowHand : ModNPC
             spriteEffects = SpriteEffects.FlipVertically;
 
         Main.EntitySpriteDraw(texture, drawPosition, NPC.frame, color, rotation, NPC.frame.Size() * 0.5f, NPC.scale, spriteEffects, 0);
+    }
+
+    public override void PostDraw(SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor)
+    {
+        if (drawColor != EmpyreanMetaball.BorderColor)
+            return;
+
+        Texture2D texture = Details.Value;
+
+        SpriteEffects spriteEffects = SpriteEffects.None;
+        if (NPC.direction == -1)
+            spriteEffects = SpriteEffects.FlipVertically;
+
+        spriteBatch.Draw(texture, NPC.Center - Main.screenPosition, NPC.frame, EmpyreanMetaball.BorderColor, NPC.rotation, NPC.frame.Size() * 0.5f, NPC.scale, spriteEffects, 0);
     }
 
     public override void SendExtraAI(BinaryWriter writer)
