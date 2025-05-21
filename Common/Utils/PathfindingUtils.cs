@@ -124,7 +124,7 @@ public static partial class WindfallUtils
         velocity.X += Math.Sign(toWaypoint.X) * xAccelMult;
         velocity.X = Clamp(velocity.X, -maxXSpeed, maxXSpeed);
 
-        // Handle collision step-up (for small obstacles)
+        // Handle collision step-up
         if (velocity.Y <= 0)
             Collision.StepUp(ref npc.position, ref velocity, npc.width, npc.height, ref npc.stepSpeed, ref npc.gfxOffY);
 
@@ -239,19 +239,16 @@ public static partial class WindfallUtils
     /// </summary>
     private static bool CanWalkAroundObstacle(Point standingTilePosition, Vector2 velocity, int jumpHeight, int jumpLength)
     {
-        // Check if there's a horizontal path that doesn't require jumping
+        // Dont care about one tile gaps
+        if (IsSolidOrPlatform(standingTilePosition + new Point(Math.Sign(velocity.X) * 2, 0)))
+            return true;
+
+        // Check if there's any easy way to simply climb up instead of needing to jump the gap
         for (int i = jumpLength / 2; i > 1; i--)
         {
             int checkX = standingTilePosition.X + ((i - 1) * Math.Sign(velocity.X));
-            Vector2 startPos = new Vector2(standingTilePosition.X, standingTilePosition.Y).ToWorldCoordinates();
-            Vector2 endPos = new Vector2(checkX, standingTilePosition.Y).ToWorldCoordinates();
 
-            // Check if there's a clear line of sight
-            if (!Collision.CanHit(startPos, 1, 1, endPos, 1, 1))
-                return true;
-
-            // Check if there's a platform to walk on
-            for (int j = 1; j < jumpHeight; j++)
+            for (int j = 1; j < 4; j++)
             {
                 Point checkPoint = new(checkX, standingTilePosition.Y + j);
                 if (IsSolidOrPlatform(checkPoint))
