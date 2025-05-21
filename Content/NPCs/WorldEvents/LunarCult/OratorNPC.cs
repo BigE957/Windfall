@@ -7,6 +7,7 @@ using Windfall.Content.Items.Tools;
 using Windfall.Content.Items.Placeables.Furnature.Plaques;
 using Windfall.Content.Buffs.DoT;
 using Windfall.Common.Systems;
+using Windfall.Content.NPCs.WorldEvents.DragonCult;
 
 namespace Windfall.Content.NPCs.WorldEvents.LunarCult;
 
@@ -206,7 +207,11 @@ public class OratorNPC : ModNPC
 
     private static void CloseEffect(string treeKey, int dialogueID, int buttonID, bool swapped)
     {
-        if(treeKey.Contains("TheOrator/"))
+        DialogueUISystem uiSystem = ModContent.GetInstance<DialogueUISystem>();
+        if (uiSystem.CurrentDialogueContext.Catagory != nameof(OratorNPC))
+            return;
+
+        if (treeKey.Contains("TheOrator/"))
         {
             NPC orator = Main.npc[(int)ModContent.GetInstance<DialogueUISystem>().CurrentDialogueContext.Arguments[0]];
 

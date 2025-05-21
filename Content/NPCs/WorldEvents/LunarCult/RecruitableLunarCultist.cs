@@ -4,6 +4,7 @@ using DialogueHelper.UI.Dialogue;
 using Windfall.Common.Systems;
 using Windfall.Common.Systems.WorldEvents;
 using Windfall.Content.NPCs.Bosses.Orator;
+using Windfall.Content.NPCs.WorldEvents.DragonCult;
 
 namespace Windfall.Content.NPCs.WorldEvents.LunarCult;
 
@@ -139,11 +140,15 @@ public class RecruitableLunarCultist : ModNPC
     }
     private static void CloseEffect(string treeKey, int dialogueID, int buttonID, bool swapped)
     {
+        DialogueUISystem uiSystem = ModContent.GetInstance<DialogueUISystem>();
+        if (uiSystem.CurrentDialogueContext.Catagory != nameof(RecruitableLunarCultist))
+            return;
+
         if (!treeKey.Contains("Recruits") || !treeKey.Contains(((RecruitNames)TalkingTo).ToString()))
             return;
         if (treeKey.Contains("Recruited") || treeKey.Contains("Unrecruited"))
             return;
-        DialogueUISystem uiSystem = ModContent.GetInstance<DialogueUISystem>();
+
         NPC me = Main.npc[(int)uiSystem.CurrentDialogueContext.Arguments[0]];
         
         if (treeKey.Contains("Recruitable") && dialogueID == 1)

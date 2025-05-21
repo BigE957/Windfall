@@ -3,6 +3,7 @@ using DialogueHelper.UI.Dialogue;
 using static Windfall.Common.Systems.WorldEvents.LunarCultBaseSystem;
 using Windfall.Content.Items.Quests.Cafeteria;
 using Windfall.Common.Systems;
+using Windfall.Content.NPCs.WorldEvents.DragonCult;
 
 namespace Windfall.Content.NPCs.WorldEvents.LunarCult;
 
@@ -223,8 +224,13 @@ public class TheChef : ModNPC
     }
     private static void ClickEffect(string treeKey, int dialogueID, int buttonID, bool swapped)
     {
+        DialogueUISystem uiSystem = ModContent.GetInstance<DialogueUISystem>();
+        if (uiSystem.CurrentDialogueContext.Catagory != nameof(TheChef))
+            return;
+
         if (!treeKey.Contains("TheChef"))
             return;
+
         NPC chef = Main.npc[(int)ModContent.GetInstance<DialogueUISystem>().CurrentDialogueContext.Arguments[0]];
         if (treeKey == "TheChef/FoodSelection" && dialogueID == 0)
             chef.ai[3] = MenuFoodIDs[buttonID];
@@ -248,6 +254,10 @@ public class TheChef : ModNPC
 
     private static void CloseEffect(string treeKey, int dialogueID, int buttonID, bool swapped)
     {
+        DialogueUISystem uiSystem = ModContent.GetInstance<DialogueUISystem>();
+        if (uiSystem.CurrentDialogueContext.Catagory != nameof(TheChef))
+            return;
+
         if (treeKey == "TheChef/Abandoned")
             Main.LocalPlayer.LunarCult().spokeToAbandonedChef = true;
         else if (treeKey == "TheChef/CafeteriaActivityStart" && dialogueID == 1)

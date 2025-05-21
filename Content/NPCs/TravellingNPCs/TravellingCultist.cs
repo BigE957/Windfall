@@ -318,8 +318,6 @@ public class TravellingCultist : ModNPC, ILocalizedModType
 
         if (uiSystem.CurrentDialogueContext.Catagory != "TravellingCultist")
             return;
-
-        NPC cultist = Main.npc[(int)uiSystem.CurrentDialogueContext.Arguments[0]];
         
         if (QuestItem == null)
         {
@@ -457,7 +455,7 @@ public class TravellingCultist : ModNPC, ILocalizedModType
     private static void CloseTree(string treeKey, int dialogueID, int buttonID, bool swapped)
     {
         DialogueUISystem uiSystem = ModContent.GetInstance<DialogueUISystem>();
-        if (uiSystem.CurrentDialogueContext.Catagory != "TravellingCultist")
+        if (uiSystem.CurrentDialogueContext.Catagory != nameof(TravellingCultist))
             return;
 
         NPC cultist = Main.npc[(int)uiSystem.CurrentDialogueContext.Arguments[0]];

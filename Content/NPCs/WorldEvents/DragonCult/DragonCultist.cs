@@ -45,6 +45,10 @@ public class DragonCultist : ModNPC
     }
     private static void CloseEffect(string treeKey, int dialogueID, int buttonID, bool swapped)
     {
+        DialogueUISystem uiSystem = ModContent.GetInstance<DialogueUISystem>();
+        if (uiSystem.CurrentDialogueContext.Catagory != nameof(DragonCultist))
+            return;
+
         if (treeKey == "SkeletronDefeat")
         {
             NPC me = Main.npc[(int)ModContent.GetInstance<DialogueUISystem>().CurrentDialogueContext.Arguments[0]];

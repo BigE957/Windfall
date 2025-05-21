@@ -8,6 +8,7 @@ using static Windfall.Common.Systems.WorldEvents.LunarCultBaseSystem;
 using Windfall.Content.Items.Quests.Cafeteria;
 using CalamityMod;
 using Windfall.Common.Systems;
+using Windfall.Content.NPCs.WorldEvents.DragonCult;
 
 namespace Windfall.Content.NPCs.WorldEvents.LunarCult;
 
@@ -461,7 +462,11 @@ public class Seamstress : ModNPC
     }
     private static void CloseEffect(string treeKey, int dialogueID, int buttonID, bool swapped)
     {
-        if(treeKey.Contains("TheSeamstress/"))
+        DialogueUISystem uiSystem = ModContent.GetInstance<DialogueUISystem>();
+        if (uiSystem.CurrentDialogueContext.Catagory != nameof(Seamstress))
+            return;
+
+        if (treeKey.Contains("TheSeamstress/"))
         {
             NPC me = Main.npc[(int)ModContent.GetInstance<DialogueUISystem>().CurrentDialogueContext.Arguments[0]];
 

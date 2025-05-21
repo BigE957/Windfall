@@ -1,6 +1,7 @@
 ﻿using Windfall.Common.Systems.WorldEvents;
 using Windfall.Content.Projectiles.Other;
 using DialogueHelper.UI.Dialogue;
+using Windfall.Content.NPCs.WorldEvents.DragonCult;
 
 namespace Windfall.Content.NPCs.WorldEvents.LunarCult;
 
@@ -228,6 +229,10 @@ public class LunarBishop : ModNPC
     public override bool CheckActive() => false;
     private static void CloseEffect(string treeKey, int dialogueID, int buttonID, bool swapped)
     {
+        DialogueUISystem uiSystem = ModContent.GetInstance<DialogueUISystem>();
+        if (uiSystem.CurrentDialogueContext.Catagory != nameof(LunarBishop))
+            return;
+
         if (treeKey == States.SelenicChat.ToString())
         {
             NPC me = Main.npc[(int)ModContent.GetInstance<DialogueUISystem>().CurrentDialogueContext.Arguments[0]];

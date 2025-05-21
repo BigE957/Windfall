@@ -1,4 +1,5 @@
 ﻿using DialogueHelper.UI.Dialogue;
+using Windfall.Content.NPCs.WorldEvents.DragonCult;
 using Windfall.Content.Projectiles.Props;
 
 namespace Windfall.Content.NPCs.WorldEvents.LunarCult;
@@ -64,6 +65,10 @@ public class DisgracedApostleNPC : ModNPC
 
     private static void CloseEffect(string treeKey, int dialogueID, int buttonID, bool swapped)
     {
+        DialogueUISystem uiSystem = ModContent.GetInstance<DialogueUISystem>();
+        if (uiSystem.CurrentDialogueContext.Catagory != nameof(DisgracedApostleNPC))
+            return;
+
         if (treeKey.Contains("Apostle/"))
         {
             NPC apostle = Main.npc[(int)ModContent.GetInstance<DialogueUISystem>().CurrentDialogueContext.Arguments[0]];

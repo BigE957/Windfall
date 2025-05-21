@@ -2,6 +2,7 @@
 using MonoMod.Core.Platforms;
 using Windfall.Common.Systems;
 using Windfall.Common.Systems.WorldEvents;
+using Windfall.Content.NPCs.WorldEvents.DragonCult;
 
 namespace Windfall.Content.NPCs.WorldEvents.LunarCult;
 public class Watchman : ModNPC
@@ -101,7 +102,11 @@ public class Watchman : ModNPC
     }
     private static void ClickEffect(string treeKey, int dialogueID, int buttonID, bool swapped)
     {
-        if(treeKey == "Watchman/Default" && dialogueID == 11)
+        DialogueUISystem uiSystem = ModContent.GetInstance<DialogueUISystem>();
+        if (uiSystem.CurrentDialogueContext.Catagory != nameof(Watchman))
+            return;
+
+        if (treeKey == "Watchman/Default" && dialogueID == 11)
             Main.LocalPlayer.LunarCult().askedWatchmanAboutOrator = true;
 
     }

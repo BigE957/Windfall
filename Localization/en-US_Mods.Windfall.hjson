@@ -974,6 +974,11 @@ Items: {
 				If you misclick on your first click, Right Clicking will reset the placement.
 				'''
 		}
+
+		DialogueViewer: {
+			DisplayName: Dialogue Viewer
+			Tooltip: ""
+		}
 	}
 
 	Utility: {

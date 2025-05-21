@@ -94,6 +94,6 @@ public class DarkStonePlaqueTile : ModTile
     private static void ModifyTree(string treeKey, int dialogueID, int buttonID, bool swapped)
     {
         if (treeKey == "DarkStonePlaqueText")
-            ModContent.GetInstance<DialogueUISystem>().CurrentTree.Dialogues[0].DialogueText[0].Text = DialogueTileEntity.PlaqueText;
+            ModContent.GetInstance<DialogueUISystem>().CurrentTree.Dialogues[0].DialogueText[0].Text = DialogueTileEntity == null ? "I am a stone plaque" : DialogueTileEntity.PlaqueText;
     }
 }
