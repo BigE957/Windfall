@@ -1,5 +1,4 @@
-﻿using CalamityMod.Items.Weapons.Ranged;
-using CalamityMod.Particles;
+﻿using CalamityMod.Particles;
 using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 
@@ -13,7 +12,7 @@ public class PathfindingSystem : ModSystem
 
 
     private static Node[][] NodeMap;
-    public static readonly Point[] Dirs =
+    public static readonly Point16[] Dirs =
     [
         new(0, 1), new(-1, 0), new(0, -1), new(1, 0),
         new(1, 1), new(1, -1), new(-1, -1), new(-1, 1)
@@ -21,12 +20,18 @@ public class PathfindingSystem : ModSystem
 
     public override void OnWorldLoad()
     {
-        int MaxX = Main.maxTilesX; // 6400 or 8400
-        int MaxY = Main.maxTilesY; // 1800 or 2400
+        Windfall.Instance.Logger.Debug("Beginning Pathfinding Initialization.");
+        ushort MaxX = (ushort)Main.maxTilesX; // 6400 or 8400
+        ushort MaxY = (ushort)Main.maxTilesY; // 1800 or 2400
         NodeMap = new Node[MaxX][];
 
         // Configuration for optimal parallelism with large grids
         int processorCount = Environment.ProcessorCount;
+
+        Windfall.Instance.Logger.Debug("System processor count: " + processorCount);
+
+        Windfall.Instance.Logger.Debug("Beginning NodeMap array initialization.");
+        var watch = System.Diagnostics.Stopwatch.StartNew();
 
         // Step 1: Initialize the arrays in parallel with custom partitioning
         // Store the task for proper synchronization
@@ -37,28 +42,39 @@ public class PathfindingSystem : ModSystem
                 NodeMap[x] = new Node[MaxY];
 
                 // Create nodes in bulk for each column
-                for (int y = 0; y < MaxY; y++)
-                    NodeMap[x][y] = new Node(x, y);
+                for (ushort y = 0; y < MaxY; y++)
+                    NodeMap[x][y] = new Node((ushort)x, y);
             });
         });
 
         // Ensure the first step completes before proceeding
-        // This only waits for our specific task
         initNodesTask.Wait();
+        watch.Stop();
+        Windfall.Instance.Logger.Debug("NodeMap array initialized in " + watch.ElapsedMilliseconds + "ms");
+
+        Windfall.Instance.Logger.Debug("Beginning Neighbor initialization.");
+        watch = System.Diagnostics.Stopwatch.StartNew();
 
         // Step 2: Initialize neighbors in parallel with improved partitioning
-        Parallel.For(0, MaxX, new ParallelOptions { MaxDegreeOfParallelism = processorCount }, x =>
+        Task initNeighborsTask = Task.Run(() =>
         {
-            // Cache the column to improve memory access patterns
-            Node[] column = NodeMap[x];
+            Parallel.For(0, MaxX, new ParallelOptions { MaxDegreeOfParallelism = processorCount }, x =>
+            {
+                // Cache the column to improve memory access patterns
+                Node[] column = NodeMap[x];
 
-            // Pre-calculate frequently accessed values
-            int maxXIdx = MaxX - 1;
-            int maxYIdx = MaxY - 1;
+                // Pre-calculate frequently accessed values
+                int maxXIdx = MaxX - 1;
+                int maxYIdx = MaxY - 1;
 
-            for (int y = 0; y < MaxY; y++)
-                column[y].InitNeighbors(maxXIdx, maxYIdx);
+                for (int y = 0; y < MaxY; y++)
+                    column[y].InitNeighbors(maxXIdx, maxYIdx);
+            });
         });
+
+        initNeighborsTask.Wait();
+        watch.Stop();
+        Windfall.Instance.Logger.Debug("Neighbors initialized in" + watch.ElapsedMilliseconds + "ms");
     }
 
     public override void OnWorldUnload()
@@ -68,25 +84,16 @@ public class PathfindingSystem : ModSystem
         NodeMap = null;
     }
 
-    public class Node : IComparable<Node>
+    public class Node(ushort x, ushort y) : IComparable<Node>
     {
-        public readonly int X;
-        public readonly int Y;
-
-        public Node(int x, int y)
-        {
-            X = x;
-            Y = y;
-
-            Neighbors = new Node[8];
-            NeighborCount = 0;
-        }
+        public readonly ushort X = x;
+        public readonly ushort Y = y;
 
         public Point TilePosition => new(X, Y);
 
-        public Node[] Neighbors;
+        public Point16[] NeighborLocations = new Point16[8];
         public byte NeighborCount;
-        public Node Connection;
+        public Point16 ConnectionLocation;
 
         public int G = int.MaxValue;
         public int F = int.MaxValue;
@@ -95,7 +102,7 @@ public class PathfindingSystem : ModSystem
         public int QueueIndex = -1;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public void SetConnection(Node node) => Connection = node;
+        public void SetConnection(Point16 p) => ConnectionLocation = p;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public void SetG(int g) => G = g;
@@ -125,36 +132,30 @@ public class PathfindingSystem : ModSystem
             bool hasTop = Y > 0;
             bool hasBottom = Y < maxY;
 
-            // Add neighbors without resizing the array
-            // Cache the NodeMap access for edge nodes
-            Node[] leftColumn = hasLeft ? NodeMap[X - 1] : null;
-            Node[] rightColumn = hasRight ? NodeMap[X + 1] : null;
-            Node[] currentColumn = NodeMap[X];
-
             // Top-left
             if (hasLeft && hasTop)
-                Neighbors[NeighborCount++] = leftColumn[Y - 1];
+                NeighborLocations[NeighborCount++] = new(X - 1, Y - 1);
             // Top
             if (hasTop)
-                Neighbors[NeighborCount++] = currentColumn[Y - 1];
+                NeighborLocations[NeighborCount++] = new(X, Y - 1);
             // Top-right
             if (hasRight && hasTop)
-                Neighbors[NeighborCount++] = rightColumn[Y - 1];
+                NeighborLocations[NeighborCount++] = new(X + 1, Y - 1);
             // Left
             if (hasLeft)
-                Neighbors[NeighborCount++] = leftColumn[Y];
+                NeighborLocations[NeighborCount++] = new(X - 1, Y);
             // Right
             if (hasRight)
-                Neighbors[NeighborCount++] = rightColumn[Y];
+                NeighborLocations[NeighborCount++] = new(X + 1, Y);
             // Bottom-left
             if (hasLeft && hasBottom)
-                Neighbors[NeighborCount++] = leftColumn[Y + 1];
+                NeighborLocations[NeighborCount++] = new(X - 1, Y + 1);
             // Bottom
             if (hasBottom)
-                Neighbors[NeighborCount++] = currentColumn[Y + 1];
+                NeighborLocations[NeighborCount++] = new(X, Y + 1);
             // Bottom-right
             if (hasRight && hasBottom)
-                Neighbors[NeighborCount++] = rightColumn[Y + 1];
+                NeighborLocations[NeighborCount++] = new(X + 1, Y + 1);
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -162,7 +163,7 @@ public class PathfindingSystem : ModSystem
         {
             G = int.MaxValue;
             F = int.MaxValue;
-            Connection = null;
+            ConnectionLocation = new(-1, -1);
         }
 
         public int CompareTo(Node other)
@@ -314,7 +315,7 @@ public class PathfindingSystem : ModSystem
         public FoundPath MyPath { get; private set; } = null;
 
         private readonly PriorityQueue OpenSet = new(4096);
-        private readonly HashSet<Point> ClosedSet = new(4096);
+        private readonly HashSet<Point16> ClosedSet = new(4096);
         private readonly HashSet<Node> ModifiedNodes = new(100);
 
         public void FindPathInRadius(Vector2 startWorld, Vector2 targetWorld, Func<Point, Point, bool> isWalkable, Func<Point, int> costFunction = null, float searchRadius = 1225)
@@ -412,25 +413,27 @@ public class PathfindingSystem : ModSystem
                     return;
                 }
 
-                ClosedSet.Add(current.TilePosition);
+                ClosedSet.Add(new Point16(current.X, current.Y));
 
-                foreach (Node neighbor in current.Neighbors)
+                foreach (Point16 neighborLoc in current.NeighborLocations)
                 {
-                    if (ClosedSet.Contains(neighbor.TilePosition))
+                    if (ClosedSet.Contains(neighborLoc))
                         continue;
 
-                    if (!isWalkable(current.TilePosition, neighbor.TilePosition))
+                    if (!isWalkable(current.TilePosition, neighborLoc.ToPoint()))
                         continue;
 
-                    if (!isValid.Invoke(neighbor.TilePosition))
+                    if (!isValid.Invoke(neighborLoc.ToPoint()))
                         continue;
 
-                    int tentativeG = current.G + current.GetDistance(neighbor.X, neighbor.Y) + (costFunction == null ? 0 : costFunction(neighbor.TilePosition));
+                    int tentativeG = current.G + current.GetDistance(neighborLoc.X, neighborLoc.Y) + (costFunction == null ? 0 : costFunction(neighborLoc.ToPoint()));
+
+                    Node neighbor = NodeMap[neighborLoc.X][neighborLoc.Y];
 
                     if (tentativeG < neighbor.G)
                     {
                         ModifiedNodes.Add(neighbor);
-                        neighbor.SetConnection(current);
+                        neighbor.SetConnection(new Point16(current.X, current.Y));
                         neighbor.SetG(tentativeG);
 
                         int newF = tentativeG + neighbor.GetDistance(TargetPoint.X, TargetPoint.Y);
@@ -470,7 +473,7 @@ public class PathfindingSystem : ModSystem
             while (current != null && current != startNode)
             {
                 path.Add(current.TilePosition);
-                current = current.Connection;
+                current = NodeMap[current.ConnectionLocation.X][current.ConnectionLocation.Y];
             }
             path.Add(current.TilePosition);
 
