@@ -141,11 +141,6 @@ public class DialogueSelectionUI : UIState
     }
 }
 
-public class DialogueViewerUI : UIState
-{
-
-}
-
 public class DialogueViewerUISystem : ModSystem
 {
     internal DialogueSelectionUI selectionUI;
