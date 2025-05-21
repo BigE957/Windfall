@@ -172,13 +172,7 @@ public class PathfindingSystem : ModSystem
             ConnectionLocation = new(-1, -1);
         }
 
-        public int CompareTo(Node other)
-        {
-            if (other == null)
-                return 1;
-
-            return (F != other.F) ? F.CompareTo(other.F) : G.CompareTo(other.G);
-        }
+        public int CompareTo(Node other) => (F != other.F) ? F.CompareTo(other.F) : G.CompareTo(other.G);
     }
 
     public class FoundPath(Point[] nodes)
@@ -409,8 +403,7 @@ public class PathfindingSystem : ModSystem
                 //Particle p = new GlowOrbParticle(current.TilePosition.ToWorldCoordinates(), Vector2.Zero, false, 2, 0.5f, Color.Red);
                 //GeneralParticleHandler.SpawnParticle(p);
 
-                int distanceToTarget = current.GetDistance(TargetPoint.X, TargetPoint.Y);
-                if (distanceToTarget <= 20 && (targetWorld - current.TilePosition.ToWorldCoordinates()).LengthSquared() < 800)
+                if (current.TilePosition == TargetPoint)
                 {
                     //Main.NewText("Iteration Count: " + iterations);
                     MyPath = ReconstructPath(current, startNode);
@@ -479,7 +472,7 @@ public class PathfindingSystem : ModSystem
             List<Point> path = new(estimatedLength);
             Node current = endNode;
 
-            while (current != null && current != startNode)
+            while (current.TilePosition != startNode.TilePosition)
             {
                 path.Add(current.TilePosition);
                 current = NodeMap[current.ConnectionLocation.X][current.ConnectionLocation.Y];
