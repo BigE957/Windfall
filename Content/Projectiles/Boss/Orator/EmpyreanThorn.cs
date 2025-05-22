@@ -20,15 +20,15 @@ public class EmpyreanThorn : ModProjectile
     public override void SetDefaults()
     {
         Main.projFrames[Projectile.type] = 6;
-        Projectile.width = 200;
-        Projectile.height = 32;
+        Projectile.width = 388;
+        Projectile.height = 56;
         Projectile.scale = 1f;
         Projectile.hostile = true;
         Projectile.tileCollide = false;
         Projectile.ignoreWater = true;
         Projectile.hide = true;
         CooldownSlot = ImmunityCooldownID.Bosses;
-        Projectile.frame = Main.rand.Next(5);
+        Projectile.frame = Main.rand.Next(6);
         Projectile.usesLocalNPCImmunity = true;
         Projectile.localNPCHitCooldown = -1;
         Projectile.timeLeft = 420;
@@ -48,12 +48,12 @@ public class EmpyreanThorn : ModProjectile
             trueRotation = Projectile.velocity.ToRotation();
             Projectile.timeLeft = (int)Projectile.ai[0] + 180;
             if (!Main.dedServ)
-                Projectile.position.X -= Projectile.width / 2f * (InitialScale - 1);
+                Projectile.position.X -= Projectile.width / 2f * ((InitialScale / 2f) - 1);
 
-            Projectile.height = (int)(Projectile.height * InitialScale);
-            Projectile.width = (int)(Projectile.width * InitialScale);
+            Projectile.height = (int)(Projectile.height * (InitialScale / 2f));
+            Projectile.width = (int)(Projectile.width * (InitialScale / 2f));
 
-            initialPoint = Projectile.Center + (trueRotation.ToRotationVector2() * 64f * InitialScale);
+            initialPoint = Projectile.Center + (trueRotation.ToRotationVector2() * 64f * (InitialScale / 2f));
             Projectile.velocity = Vector2.Zero;
 
             //Projectile.netUpdate = true;
@@ -87,7 +87,7 @@ public class EmpyreanThorn : ModProjectile
         {
             int delay = (int)Projectile.ai[0];
             Projectile.rotation = trueRotation;
-            Projectile.scale = InitialScale;
+            Projectile.scale = (InitialScale / 2f);
 
             if (aiCounter < delay + 30)
                 EmpyreanMetaball.SpawnDefaultParticle(initialPoint, Projectile.rotation.ToRotationVector2().RotatedBy(Main.rand.NextFloat(-0.15f, 0.15f)) * Main.rand.NextFloat(16f, 18f), 40f);
