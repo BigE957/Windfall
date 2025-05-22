@@ -1,6 +1,7 @@
 ﻿using CalamityMod;
 using CalamityMod.NPCs.TownNPCs;
 using CalamityMod.World;
+using System.Diagnostics.Metrics;
 using Windfall.Common.Graphics.Metaballs;
 using Windfall.Content.NPCs.Bosses.Orator;
 
@@ -144,8 +145,12 @@ public class OratorScythe : ModProjectile
                         Projectile.Center = border.Center - toBorder * (radius - 64);
                        
                         EmpyreanMetaball.SpawnDefaultParticle(Projectile.Center + (Projectile.Center - border.Center).SafeNormalize(Vector2.Zero) * 48f + toBorder.RotatedBy(PiOver2) * Main.rand.NextFloat(-48f, 48f), toBorder.RotatedBy(Main.rand.NextFloat(-PiOver4 / 2f, PiOver4 / 2f)) * Main.rand.NextFloat(4, 10), Main.rand.NextFloat(30f, 60f));
-                        if (Main.netMode != NetmodeID.MultiplayerClient && Time % 6 == 0)
-                            Projectile.NewProjectileDirect(Terraria.Entity.GetSource_NaturalSpawn(), Projectile.Center + (Projectile.Center - border.Center).SafeNormalize(Vector2.Zero) * 72f, (border.Center - Projectile.Center).SafeNormalize(Vector2.UnitX).RotatedBy(Main.rand.NextFloat(-PiOver2, PiOver2)) * 6f, ModContent.ProjectileType<DarkGlob>(), TheOrator.GlobDamage, 0f, -1, 2, 0.5f);
+                        if (Time % 6 == 0)
+                        {
+                            SoundEngine.PlaySound(SoundID.DD2_LightningBugZap, Projectile.Center);
+                            if(Main.netMode != NetmodeID.MultiplayerClient)
+                                Projectile.NewProjectileDirect(Terraria.Entity.GetSource_NaturalSpawn(), Projectile.Center + (Projectile.Center - border.Center).SafeNormalize(Vector2.Zero) * 72f, (border.Center - Projectile.Center).SafeNormalize(Vector2.UnitX).RotatedBy(Main.rand.NextFloat(-PiOver2, PiOver2)) * 6f, ModContent.ProjectileType<DarkGlob>(), TheOrator.GlobDamage, 0f, -1, 2, 0.5f);
+                        }
                     }
 
                 }

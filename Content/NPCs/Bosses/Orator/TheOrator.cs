@@ -1185,6 +1185,7 @@ public class TheOrator : ModNPC
                             else if (NPC.velocity.LengthSquared() <= 64 && NPC.position.Y < wallTop - 300 && NPC.oldPosition.Y < wallTop - 300)
                             {
                                 dashing = false;
+                                NPC.damage = 0;
                                 target = Main.player[Player.FindClosest(NPC.Center, NPC.width, NPC.height)];
                                 attackCounter++;
                                 aiCounter = 750;

@@ -99,7 +99,7 @@ public class DarkTide : ModProjectile
                         for (int i = 0; i < 16; i++)
                         {
                             Vector2 position = Projectile.Center + (trueRotation.ToRotationVector2() * (Projectile.width / 2.75f)) + (trueRotation.ToRotationVector2().RotatedBy(PiOver2) * Main.rand.NextFloat(-Projectile.width / 2, Projectile.width / 2));
-                            Projectile.NewProjectile(Terraria.Entity.GetSource_NaturalSpawn(), position, trueRotation.ToRotationVector2().RotatedBy(Main.rand.NextFloat(-0.5f, 0.5f)), ModContent.ProjectileType<EmpyreanThorn>(), TheOrator.BoltDamage, 0f, ai0: 90, ai1: 36f, ai2: 3f);
+                            Projectile.NewProjectile(Terraria.Entity.GetSource_NaturalSpawn(), position, trueRotation.ToRotationVector2().RotatedBy(Main.rand.NextFloat(-0.5f, 0.5f)), ModContent.ProjectileType<EmpyreanThorn>(), TheOrator.BoltDamage, 0f, ai0: 90, ai1: 48f, ai2: 3f);
                         }
                     }
                 }

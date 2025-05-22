@@ -172,6 +172,7 @@ public class DraconicRuinsSystem : ModSystem
         {
             if (player.dead)
                 continue;
+
             if (!AccessGranted)
             {
                 Point playerLoc = player.Center.ToTileCoordinates();
@@ -214,17 +215,14 @@ public class DraconicRuinsSystem : ModSystem
                         d.noGravity = true;
                     }
                 }
+            }
 
-                if (State == CutsceneState.CultistFumble)
-                {
-                    Rectangle inflatedArea = DraconicRuinsArea;
-                    inflatedArea.X += 32;
-                    inflatedArea.Y += 32;
-                    inflatedArea.Width += 64;
-                    inflatedArea.Height += 64;
-                    if (inflatedArea.Contains(player.Center.ToTileCoordinates()))
-                        player.AddBuff(ModContent.BuffType<SpacialLock>(), 2);
-                }
+            if (State == CutsceneState.CultistFumble)
+            {
+                Rectangle inflatedArea = DraconicRuinsArea.Expand(64);
+
+                if (inflatedArea.Contains(player.Center.ToTileCoordinates()))
+                    player.AddBuff(ModContent.BuffType<SpacialLock>(), 2);
             }
         }
 
