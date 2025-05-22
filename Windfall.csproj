@@ -9,7 +9,6 @@
 		<NoWarn>MSB3270</NoWarn>
     </PropertyGroup>
   <ItemGroup>
-    <None Remove="Assets\AutoloadedEffects\Filters\ChromaticAberrationShader.fx" />
     <None Remove="Assets\AutoloadedEffects\Shaders\GenericFlameTrail.fx" />
     <None Remove="Assets\Buffs\Wildfire.png" />
     <None Remove="Assets\Graphics\Extra\InvertedSwordSmear.png" />
@@ -51,18 +50,6 @@
     <None Remove="Assets\NPCs\Enemies\Orator_Hand.png" />
     <None Remove="Assets\NPCs\Enemies\Orator_Hand_Cuffs.png" />
     <None Remove="Assets\NPCs\WorldEvents\SelenicCultistDevotee.png" />
-    <None Remove="Assets\Projectiles\Boss\BorderAura1.png" />
-    <None Remove="Assets\Projectiles\Boss\BorderAura2.png" />
-    <None Remove="Assets\Projectiles\Boss\FadingStar.png" />
-    <None Remove="Assets\Projectiles\Boss\GoldenMoon.png" />
-    <None Remove="Assets\Projectiles\Boss\HandRings.png" />
-    <None Remove="Assets\Projectiles\Boss\HandRingsWhiteOut0.png" />
-    <None Remove="Assets\Projectiles\Boss\HandRingsWhiteOut1.png" />
-    <None Remove="Assets\Projectiles\Boss\MagicShot.png" />
-    <None Remove="Assets\Projectiles\Boss\OratorJavelin.png" />
-    <None Remove="Assets\Projectiles\Boss\OratorJavelinWhiteOut.png" />
-    <None Remove="Assets\Projectiles\Boss\TideNoise1.png" />
-    <None Remove="Assets\Projectiles\Boss\TideNoise2.png" />
     <None Remove="Assets\UI\CharacterAssets\DragonArcher\Default.png" />
     <None Remove="Assets\UI\CharacterAssets\LunaticCultist\Default.png" />
     <None Remove="Assets\UI\CharacterAssets\Seamstress\Default.png" />

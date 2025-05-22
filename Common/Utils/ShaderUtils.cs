@@ -24,4 +24,22 @@ public static partial class WindfallUtils
 
         return shader;
     }
+
+    public static Color FromHexToColor(string hex)
+    {
+        System.Drawing.Color color = System.Drawing.ColorTranslator.FromHtml(hex);
+        int r = Convert.ToInt16(color.R);
+        int g = Convert.ToInt16(color.G);
+        int b = Convert.ToInt16(color.B);
+        return new Color(r, g, b);
+    }
+
+    public static Vector3 FromHexToVec3(string hex)
+    {
+        System.Drawing.Color color = System.Drawing.ColorTranslator.FromHtml(hex);
+        int r = Convert.ToInt16(color.R);
+        int g = Convert.ToInt16(color.G);
+        int b = Convert.ToInt16(color.B);
+        return new Color(r, g, b).ToVector3();
+    }
 }
