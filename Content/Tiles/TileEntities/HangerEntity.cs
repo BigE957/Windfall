@@ -4,6 +4,8 @@ using static Windfall.Common.Netcode.WindfallNetcode;
 using static Windfall.Common.Graphics.Verlet.VerletIntegration;
 using static Windfall.Common.Systems.WFSchematicManager;
 using Terraria;
+using Windfall.Common.Systems;
+using Microsoft.CodeAnalysis;
 
 namespace Windfall.Content.Tiles.TileEntities;
 public class HangerEntity : ModTileEntity
@@ -244,9 +246,9 @@ public class HangerEntity : ModTileEntity
         return false;
     }
 
-    public HangerEntityData GetHangerEntityData(Point16 startPoint) => new(State, Position - startPoint, partnerLocation - startPoint, cordID, segmentCount, DecorationVerlets);
+    public HangerEntityData GetHangerEntityData(Point16 startPoint) => DataFromTE(State, Position - startPoint, partnerLocation - startPoint, cordID, segmentCount, DecorationVerlets);
 
-    public void LoadHangerData(HangerEntityData data, Point16 start)
+    public void LoadHangerData(HangerEntityData data, Point16 start, bool flipped, int offset)
     {
         state = (PairedState)data.State;
         cordID = data.CordID;
@@ -258,8 +260,31 @@ public class HangerEntity : ModTileEntity
             decorationVerlets.Add(data.DecorationSlots[i], (null, data.DecorationIDs[i], data.DecorationSegmentCounts[i]));
 
         DecorationVerlets = decorationVerlets;
-        partnerLocation = start + new Point16(data.PartnerX, data.PartnerX);
+        Point partnerLoc = start.ToPoint() + new Point((flipped ? -data.PartnerX : data.PartnerX) + offset, data.PartnerY);
+        if (Main.tile[partnerLoc].TileType != ModContent.TileType<HangerTile>())
+        {
+            List<int> offsets = [-1, 0, 1];
+            offsets.Remove(offset);
+            partnerLoc.X -= offset;
+            bool foundOffset = false;
 
+            for(int i = 0; i < offsets.Count; i++)
+            {
+                partnerLoc.X += offsets[i];
+                if (Main.tile[partnerLoc].TileType == ModContent.TileType<HangerTile>())
+                {
+                    foundOffset = true;
+                    break;
+                }
+
+                partnerLoc.X -= offsets[i];
+            }
+
+            if (!foundOffset)
+                Windfall.Instance.Logger.Debug("Unable to match up Partner Location with an existing Hanger.");
+        }
+
+        partnerLocation = new Point16(partnerLoc.X, partnerLoc.Y);
         SendSyncPacket();
     }
 }

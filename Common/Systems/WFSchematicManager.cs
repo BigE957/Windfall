@@ -1,7 +1,12 @@
 ﻿using CalamityMod.Schematics;
 using CalamityMod.TileEntities;
 using CalamityMod.Tiles.DraedonStructures;
+using DialogueHelper.UI.Dialogue;
+using System.IO;
 using System.Reflection;
+using System.Text.Json;
+using Windfall.Content.Items.Placeables.Furnature.VerletHangers.Cords;
+using Windfall.Content.Items.Placeables.Furnature.VerletHangers.Decorations;
 using Windfall.Content.Tiles.TileEntities;
 using static CalamityMod.Schematics.SchematicManager;
 using static Windfall.Common.Graphics.Verlet.VerletIntegration;
@@ -484,46 +489,86 @@ public class WFSchematicManager : ModSystem
         public int[] DecorationIDs { get; set; }
 
         public int[] DecorationSegmentCounts { get; set; }
-
-        public HangerEntityData(byte state, Point16 location, Point16? partnerLocation, byte cordID, int segmentCount, Dictionary<int, (VerletObject chain, int decorationID, int segmentCount)> decorationVerlets)
-        {
-            State = state;
-
-            X = location.X;
-            Y = location.Y;
-
-            if (partnerLocation != null)
-            {
-                PartnerX = partnerLocation.Value.X;
-                PartnerY = partnerLocation.Value.Y;
-            }
-
-            CordID = cordID;
-            SegmentCount = segmentCount;
-            DecorationSlots = [.. decorationVerlets.Keys];
-            DecorationIDs = new int[DecorationSlots.Length];
-            DecorationSegmentCounts = new int[DecorationSlots.Length];
-            for (int i = 0; i < DecorationSlots.Length; i++)
-            {
-                DecorationIDs[i] = decorationVerlets.Values.ToArray()[i].decorationID;
-                DecorationSegmentCounts[i] = decorationVerlets.Values.ToArray()[i].segmentCount;
-            }
-        }
     }
 
-    public static void PlaceVerletHangerTileEntities(Rectangle area, HangerEntityData[] dataArray)
+    public static HangerEntityData DataFromTE(byte state, Point16 location, Point16? partnerLocation, byte cordID, int segmentCount, Dictionary<int, (VerletObject chain, int decorationID, int segmentCount)> decorationVerlets)
+    {
+        HangerEntityData data = new()
+        {
+            State = state,
+
+            X = location.X,
+            Y = location.Y,
+
+            CordID = cordID,
+            SegmentCount = segmentCount,
+            DecorationSlots = [.. decorationVerlets.Keys],
+            DecorationIDs = new int[decorationVerlets.Keys.Count],
+            DecorationSegmentCounts = new int[decorationVerlets.Keys.Count],
+        };
+
+        if (partnerLocation != null)
+        {
+            data.PartnerX = partnerLocation.Value.X;
+            data.PartnerY = partnerLocation.Value.Y;
+        }
+        
+        for (int i = 0; i < data.DecorationSlots.Length; i++)
+        {
+            data.DecorationIDs[i] = decorationVerlets.Values.ToArray()[i].decorationID;
+            data.DecorationSegmentCounts[i] = decorationVerlets.Values.ToArray()[i].segmentCount;
+        }
+
+        return data;
+    }
+
+
+    public static void PlaceVerletHangerTileEntities(Rectangle area, string dataPath, bool flipped)
     {
         Point16 start = area.TopLeft().ToPoint16();
 
-        foreach(HangerEntityData data in dataArray)
-        {
-            Point16 location = start + new Point16(data.X, data.Y);
+        if (!Windfall.Instance.FileExists(dataPath))
+            throw new FileNotFoundException($"Could not find the Hanger Data file {dataPath}.");
 
+        Stream stream = Windfall.Instance.GetFileStream(dataPath);
+
+        HangerEntityData[] dataArray = JsonSerializer.Deserialize<HangerEntityData[]>(stream);
+
+        stream.Close();
+
+        int count = 0;
+
+        foreach (HangerEntityData data in dataArray)
+        {
+            count++;
+
+            Point16 location;
+            if(!flipped)
+                location = start + new Point16(data.X, data.Y);
+            else
+                location = area.TopRight().ToPoint16() + new Point16(-data.X, data.Y);
+
+            int offset = 0;
             TileEntity.PlaceEntityNet(location.X, location.Y, ModContent.TileEntityType<HangerEntity>());
 
-            TileEntity.TryGet(location.X, location.Y, out HangerEntity entity);
-
-            entity.LoadHangerData(data, start);
+            if (!TileEntity.TryGet(location.X, location.Y, out HangerEntity entity))
+            {
+                offset = -1;
+                TileEntity.PlaceEntityNet(location.X - 1, location.Y, ModContent.TileEntityType<HangerEntity>());
+                if (!TileEntity.TryGet(location.X - 1, location.Y, out entity))
+                {
+                    offset = 1;
+                    TileEntity.PlaceEntityNet(location.X + 1, location.Y, ModContent.TileEntityType<HangerEntity>());
+                    if (!TileEntity.TryGet(location.X + 1, location.Y, out entity))
+                    {
+                        Windfall.Instance.Logger.Debug("Entity #" + count + " failed to place at " + location + ". Tile at locations was " + TextureAssets.Tile[Main.tile[location].TileType].Name);
+                        continue;
+                    }
+                }
+                entity.LoadHangerData(data, flipped ? area.TopRight().ToPoint16() : start, flipped, offset);
+            }
+            else
+                entity.LoadHangerData(data, flipped ? area.TopRight().ToPoint16() : start, flipped, offset);
         }
     }
 }

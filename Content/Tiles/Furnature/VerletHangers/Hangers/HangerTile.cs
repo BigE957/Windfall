@@ -30,6 +30,7 @@ public class HangerTile : ModTile
         TileObjectData.newTile.StyleMultiplier = 4;
 
         TileObjectData.newAlternate.CopyFrom(TileObjectData.newTile);
+        TileObjectData.newTile.Direction = TileObjectDirection.PlaceRight;
         TileObjectData.newAlternate.AnchorRight = new AnchorData(AnchorType.SolidTile | AnchorType.SolidSide | AnchorType.Tree | AnchorType.AlternateTile, TileObjectData.newTile.Height, 0);
         TileObjectData.newAlternate.AnchorAlternateTiles = [
             TileID.WoodenBeam,
@@ -43,6 +44,7 @@ public class HangerTile : ModTile
         TileObjectData.addAlternate(2);
 
         TileObjectData.newAlternate.CopyFrom(TileObjectData.newTile);
+        TileObjectData.newTile.Direction = TileObjectDirection.PlaceLeft;
         TileObjectData.newAlternate.AnchorLeft = new AnchorData(AnchorType.SolidTile | AnchorType.SolidSide | AnchorType.Tree | AnchorType.AlternateTile, TileObjectData.newTile.Height, 0);
         TileObjectData.newAlternate.AnchorAlternateTiles = [
             TileID.WoodenBeam,
@@ -54,7 +56,7 @@ public class HangerTile : ModTile
 			578
 
         ];
-    TileObjectData.addAlternate(3);
+        TileObjectData.addAlternate(3);
 
         TileObjectData.newAlternate.CopyFrom(TileObjectData.newTile);
         TileObjectData.newAlternate.AnchorTop = new AnchorData(AnchorType.SolidTile | AnchorType.SolidSide, TileObjectData.newTile.Width, 0);

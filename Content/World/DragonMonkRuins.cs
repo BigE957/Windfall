@@ -136,8 +136,12 @@ public static class DragonMonkRuins
             {
                 SchematicAnchor anchorType = SchematicAnchor.TopLeft;
                 bool place = true;
+                Rectangle schematicArea = new (placementPoint.X, placementPoint.Y, (int)schematicSize.X, (int)schematicSize.Y);
+
                 WFSchematicManager.PlaceFlippableSchematic<Action<Chest>>(mapKey, placementPoint, anchorType, ref place, flipHorizontal: facingLeft);
-                CalamityMod.CalamityUtils.AddProtectedStructure(new Rectangle(placementPoint.X, placementPoint.Y, (int)schematicSize.X, (int)schematicSize.Y), 20);
+                CalamityMod.CalamityUtils.AddProtectedStructure(schematicArea, 20);
+
+                WFSchematicManager.PlaceVerletHangerTileEntities(schematicArea, "Content/World/Schematics/DragonMonkRuinsHangerData.json", facingLeft);              
                 break;
             }
 
