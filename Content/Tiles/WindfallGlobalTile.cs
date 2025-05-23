@@ -1,4 +1,5 @@
 ﻿using Windfall.Common.Systems;
+using Windfall.Common.Systems.WorldEvents;
 using Windfall.Content.NPCs.WorldEvents.DragonCult;
 using static Windfall.Common.Systems.WorldEvents.LunarCultBaseSystem;
 
@@ -71,14 +72,16 @@ public class WindfallGlobalTile : GlobalTile
     }
     public override bool CanExplode(int i, int j, int type)
     {
-        if (CultBaseTileArea.Intersects(new(i, j, 1, 1)) || CultBaseBridgeArea.Intersects(new(i, j, 1, 1)))
+        Point p = new(i, j);
+        if (CultBaseTileArea.Contains(p) || CultBaseBridgeArea.Contains(p) || DraconicRuinsSystem.DraconicRuinsArea.Contains(p))
             return false;
         return base.CanExplode(i, j, type);
     }
 
     public override bool CanKillTile(int i, int j, int type, ref bool blockDamaged)
     {
-        if (CultBaseTileArea.Intersects(new(i, j, 1, 1)) || CultBaseBridgeArea.Intersects(new(i, j, 1, 1)))
+        Point p = new(i, j);
+        if (CultBaseTileArea.Contains(p) || CultBaseBridgeArea.Contains(p) || DraconicRuinsSystem.DraconicRuinsArea.Contains(p))
             return false;
 
         return base.CanKillTile(i, j, type, ref blockDamaged);
@@ -86,14 +89,16 @@ public class WindfallGlobalTile : GlobalTile
 
     public override bool CanReplace(int i, int j, int type, int tileTypeBeingPlaced)
     {
-        if (CultBaseTileArea.Intersects(new(i, j, 1, 1)) || CultBaseBridgeArea.Intersects(new(i, j, 1, 1)))
+        Point p = new(i, j);
+        if (CultBaseTileArea.Contains(p) || CultBaseBridgeArea.Contains(p) || DraconicRuinsSystem.DraconicRuinsArea.Contains(p))
             return false;
 
         return base.CanPlace(i, j, type);
     }
     public override void NearbyEffects(int i, int j, int type, bool closer)
     {
-        bool tombstonesShouldSpontaneouslyCombust = CultBaseTileArea.Intersects(new(i, j, 16, 16)) || CultBaseBridgeArea.Intersects(new(i, j, 16, 16));
+        Point p = new(i, j);
+        bool tombstonesShouldSpontaneouslyCombust = CultBaseTileArea.Contains(p) || CultBaseBridgeArea.Contains(p) || DraconicRuinsSystem.DraconicRuinsArea.Contains(p);
         if (tombstonesShouldSpontaneouslyCombust && type is TileID.Tombstones)
             WorldGen.KillTile(i, j);
     }
