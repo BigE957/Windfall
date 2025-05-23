@@ -1,5 +1,6 @@
 ﻿using Windfall.Common.Graphics.Metaballs;
 using Windfall.Common.Systems.WorldEvents;
+using Windfall.Content.Items.Placeables.Furnature.VerletHangers.Cords;
 using Windfall.Content.Items.Quests.SealingRitual;
 using Windfall.Content.NPCs.Bosses.Orator;
 using static Windfall.Common.Graphics.Verlet.VerletIntegration;
@@ -31,6 +32,7 @@ public class SealingTablet : ModNPC
         NPC.dontTakeDamage = true;
         NPC.netAlways = true;
         NPC.chaseable = false;
+        NPC.hide = true;
     }
     private float summonRatio = 0f;
     private bool isHovered = false;
@@ -41,20 +43,20 @@ public class SealingTablet : ModNPC
 
     public override void OnSpawn(IEntitySource source)
     {
-        int verletCount = (int)(NPC.ai[1] == 0 ? 22 : NPC.ai[1]);
+        int verletCount = (int)(NPC.ai[1] == 0 ? 8 : NPC.ai[1]);
 
         box = CreateVerletBox(new((int)NPC.position.X, (int)NPC.position.Y, 18, 18));
 
 
         if (DraconicRuinsSystem.DraconicRuinsArea.Contains(NPC.Center.ToTileCoordinates()))
         {
-            LeftChain = CreateVerletChain(NPC.Bottom + new Vector2(-40, 6), box[0].Position, verletCount, 4);
-            RightChain = CreateVerletChain(NPC.Bottom + new Vector2(40, 6), box[2].Position, verletCount, 4);
+            LeftChain = CreateVerletChain(NPC.Bottom + new Vector2(-40, 6), box[0].Position, verletCount, 15);
+            RightChain = CreateVerletChain(NPC.Bottom + new Vector2(40, 6), box[2].Position, verletCount, 15);
         }
         else
         {
-            LeftChain = CreateVerletChain(NPC.Bottom + new Vector2(-48, 0), box[0].Position, verletCount, 4);
-            RightChain = CreateVerletChain(NPC.Bottom + new Vector2(48, 0), box[2].Position, verletCount, 4);
+            LeftChain = CreateVerletChain(NPC.Bottom + new Vector2(-48, 0), box[0].Position, verletCount, 15);
+            RightChain = CreateVerletChain(NPC.Bottom + new Vector2(48, 0), box[2].Position, verletCount, 15);
         }
         ConnectVerlets(LeftChain[^1], box[0], 4);
         ConnectVerlets(RightChain[^1], box[2], 4);
@@ -102,9 +104,9 @@ public class SealingTablet : ModNPC
             }
         }
 
-        AffectVerletObject(box, 0.125f, 0.8f);
-        AffectVerletObject(LeftChain, 0.125f, 0.8f);
-        AffectVerletObject(RightChain, 0.125f, 0.8f);
+        AffectVerletObject(box, 1f, 5f);
+        AffectVerletObject(LeftChain, 1f, 5f);
+        AffectVerletObject(RightChain, 1f, 5f);
 
         //float chainDistance = Vector2.Distance(LeftChain[^1].Position, RightChain[^1].Position);
         //Vector2 chainToChain = (RightChain[^1].Position - LeftChain[^1].Position).SafeNormalize(Vector2.UnitX);
@@ -192,25 +194,21 @@ public class SealingTablet : ModNPC
         else
             NPC.frame.Y = 0;
     }
+
+    public override void DrawBehind(int index)
+    {
+        Main.instance.DrawCacheNPCsOverPlayers.Add(index);
+    }
+
     public override bool PreDraw(SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor)
     {
         if(LeftChain != null)
             for (int k = 0; k < LeftChain.Count - 1; k++)
-            {
-                Vector2 line = LeftChain[k].Position - LeftChain[k + 1].Position;
-                Color lighting = Lighting.GetColor((LeftChain[k + 1].Position + (line / 2f)).ToTileCoordinates());
-
-                Main.spriteBatch.DrawLineBetween(LeftChain[k].Position, LeftChain[k + 1].Position, Color.White.MultiplyRGB(lighting), 3);
-            }
+                new CordedBigChains().DrawDecorationSegment(Main.spriteBatch, LeftChain.Points, k);
 
         if (RightChain != null)
             for (int k = 0; k < RightChain.Count - 1; k++)
-            {
-                Vector2 line = RightChain[k].Position - RightChain[k + 1].Position;
-                Color lighting = Lighting.GetColor((RightChain[k + 1].Position + (line / 2f)).ToTileCoordinates());
-
-                Main.spriteBatch.DrawLineBetween(RightChain[k].Position, RightChain[k + 1].Position, Color.White.MultiplyRGB(lighting), 3);
-            }
+                new CordedBigChains().DrawDecorationSegment(Main.spriteBatch, RightChain.Points, k);
 
         Texture2D texture = TextureAssets.Npc[NPC.type].Value;
         Vector2 halfSizeTexture = new(texture.Width / 2, texture.Height / Main.npcFrameCount[NPC.type] / 2);

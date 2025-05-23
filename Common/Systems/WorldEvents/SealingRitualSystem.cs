@@ -107,7 +107,7 @@ public class SealingRitualSystem : ModSystem
                 }
                 y -= 0.5f;
 
-                NPC.NewNPC(Entity.GetSource_None(), (int)RitualWorld.X, (int)RitualWorld.Y - (int)(y * 16), ModContent.NPCType<SealingTablet>(), 150, ai1: ((y - 7) * 3.25f) + 8, ai0: 2);
+                NPC.NewNPC(Entity.GetSource_None(), (int)RitualWorld.X, (int)RitualWorld.Y - (int)(y * 16), ModContent.NPCType<SealingTablet>(), 150, ai1: ((y - 7) * 1.1f) + 8, ai0: 2);
             }
             else if (Main.npc[NPC.FindFirstNPC(ModContent.NPCType<SealingTablet>())].ai[0] != 2)
                 Main.npc[NPC.FindFirstNPC(ModContent.NPCType<SealingTablet>())].ai[0] = 2;

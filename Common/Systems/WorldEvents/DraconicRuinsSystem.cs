@@ -529,13 +529,13 @@ public class DraconicRuinsSystem : ModSystem
 
         if (LeftChain != null)
         {
-            AffectVerletObject(LeftChain, 0.125f, 0.8f);
+            AffectVerletObject(LeftChain, 1f, 5f);
             VerletSimulation(LeftChain, 30, gravity: 0.5f, windAffected: false);
         }
 
         if (RightChain != null)
         {
-            AffectVerletObject(RightChain, 0.125f, 0.8f);
+            AffectVerletObject(RightChain, 1f, 5f);
             VerletSimulation(RightChain, 30, gravity: 0.5f, windAffected: false);
         }
     }

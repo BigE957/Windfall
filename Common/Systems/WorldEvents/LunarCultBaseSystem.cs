@@ -1432,7 +1432,7 @@ public class LunarCultBaseSystem : ModSystem
             for (int j = 0; j < pair.Value.Count; j++)
             {
                 VerletObject obj = pair.Value[j];
-                bool temp = AffectVerletObject(obj, 0.005f, 0.1f, j != 0);
+                bool temp = AffectVerletObject(obj, 0.1f, 1f, j != 0);
                 if (itemDropped)
                     continue;
 

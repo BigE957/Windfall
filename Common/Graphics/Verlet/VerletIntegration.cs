@@ -168,29 +168,24 @@ public static class VerletIntegration
         if (obj == null)
             return false;
 
-        for (int k = 0; k < obj.Points.Count; k++)
-            if (!obj[k].Locked)
-            {
-                bool temp = false;
-                foreach (Player p in Main.ActivePlayers)
-                {
-                    temp = MoveObjectBasedOnEntity(obj, p, dampening / 2f, cap / 2f, isChain);
-                    if(!notableMove && temp)
-                        notableMove = true;
-                }
+        bool temp = false;
+        foreach (Player p in Main.ActivePlayers)
+        {
+            temp = MoveObjectBasedOnEntity(obj, p, dampening / 2f, cap / 2f, isChain);
+            if(!notableMove && temp)
+                notableMove = true;
+        }
                 
-                foreach (Projectile proj in Main.ActiveProjectiles)
-                {
-                    if (proj.velocity == Vector2.Zero)
-                        continue;
+        foreach (Projectile proj in Main.ActiveProjectiles)
+        {
+            if (proj.velocity == Vector2.Zero)
+                continue;
 
-                    temp = MoveObjectBasedOnEntity(obj, proj, dampening, cap, isChain);
-                    if (!notableMove && temp)
-                        notableMove = true;
-                }
+            temp = MoveObjectBasedOnEntity(obj, proj, dampening, cap, isChain);
+            if (!notableMove && temp)
+                notableMove = true;
+        }
                 
-            }
-
         return notableMove;
     }
 
@@ -198,6 +193,9 @@ public static class VerletIntegration
     {
         Vector2 entityVelocity = (e.velocity * dampening).ClampMagnitude(0f, cap);
         bool notableMove = false;
+
+        if (isChain && !obj.Positions.Any(p => e.Hitbox.Contains(p.ToPoint())))
+            return false;
 
         for (int i = 0; i < obj.Points.Count; i++)
         {
@@ -208,9 +206,6 @@ public static class VerletIntegration
             if (isChain)
             {
                 bool mainSegmentHit = false;
-
-                if (!obj.Positions.Any(p => e.Hitbox.Contains(p.ToPoint())))
-                    return false;
 
                 for (int j = 0; j < obj[i].Connections.Count; j++)
                 {

@@ -96,7 +96,7 @@ public class HangerEntity : ModTileEntity
 
     public override void Update()
     {
-        if (partnerLocation != Point16.NegativeOne)
+        if (partnerLocation.X >= 0 && partnerLocation.Y >= 0)
         {
             if (FindTileEntity<HangerEntity>(partnerLocation.X, partnerLocation.Y, 1, 1) == null)
             {

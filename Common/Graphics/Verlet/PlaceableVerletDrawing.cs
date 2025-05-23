@@ -73,7 +73,7 @@ public class PlaceableVerletDrawing : ModSystem
                 te.MainVerlet[0].Position = StringStart;
                 te.MainVerlet[^1].Position = StringEnd;
 
-                AffectVerletObject(te.MainVerlet, 1f, 0.425f);
+                AffectVerletObject(te.MainVerlet, 1f, 5f);
 
                 for (int k = 0; k < te.MainVerlet.Count; k++)
                     if (k % 5 == 2)
@@ -155,7 +155,7 @@ public class PlaceableVerletDrawing : ModSystem
 
                 DecorationID.GetDecoration(te.DecorationVerlets[index].decorationID).UpdateDecoration(subVerlet.Positions);
                 
-                AffectVerletObject(subVerlet, 0.125f, 0.8f);
+                AffectVerletObject(subVerlet, 1f, 5f);
 
                 VerletSimulation(subVerlet, 10, 0.8f, te.Position.Y < Main.worldSurface || (te.PartnerLocation.HasValue && te.PartnerLocation.Value.Y < Main.worldSurface));
             }
