@@ -132,7 +132,7 @@ public class PlaceableVerletDrawing : ModSystem
                             GeneralParticleHandler.SpawnParticle(particle);
                     }
 
-                VerletSimulation(te.MainVerlet, 30);
+                VerletSimulation(te.MainVerlet, 30, windAffected: te.Position.Y < Main.worldSurface || (te.PartnerLocation.HasValue && te.PartnerLocation.Value.Y < Main.worldSurface));
             }
             
             for (int i = 0; i < te.DecorationVerlets.Count; i++)
@@ -157,7 +157,7 @@ public class PlaceableVerletDrawing : ModSystem
                 
                 AffectVerletObject(subVerlet, 0.125f, 0.8f);
 
-                VerletSimulation(subVerlet, 10, 0.8f);
+                VerletSimulation(subVerlet, 10, 0.8f, te.Position.Y < Main.worldSurface || (te.PartnerLocation.HasValue && te.PartnerLocation.Value.Y < Main.worldSurface));
             }
         }
     }
