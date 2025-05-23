@@ -8,7 +8,6 @@ using static Windfall.Common.Systems.WorldEvents.LunarCultBaseSystem;
 using Windfall.Content.Items.Quests.Cafeteria;
 using CalamityMod;
 using Windfall.Common.Systems;
-using Windfall.Content.NPCs.WorldEvents.DragonCult;
 
 namespace Windfall.Content.NPCs.WorldEvents.LunarCult;
 
@@ -109,17 +108,6 @@ public class Seamstress : ModNPC
     int Time = 0;
     public override void AI()
     {
-        if (CurrentAnimation == Animation.Idle)
-        {
-            if (Time == 90)
-            {
-                CurrentAnimation = Main.rand.NextBool() ? Animation.Shock : Animation.Clap;
-                Time = 0;
-            }
-            else
-                Time++;
-        }  
-
         if (TalkDelay > 0)
             TalkDelay--;
         if (BeginActivity)
@@ -184,6 +172,7 @@ public class Seamstress : ModNPC
                     case 540:
                         Item i = Main.item[Item.NewItem(NPC.GetSource_Loot(), NPC.Center, new Vector2(8, 4), ModContent.ItemType<LunarCoin>())];
                         i.velocity = (Main.player[Main.myPlayer].Center - NPC.Center).SafeNormalize(Vector2.Zero).RotatedBy(Main.rand.NextFloat(-0.5f, 0.5f)) * 4;
+                        CurrentAnimation = Animation.Clap;
                         break;
                     case 600:
                         CombatText.NewText(location, Color.LimeGreen, GetWindfallTextValue(seamstressPath + "Activity.GoodEnd.5"), true);
@@ -257,6 +246,7 @@ public class Seamstress : ModNPC
                     string name = item.Name;
 
                     CombatText.NewText(location, Color.LimeGreen, GetWindfallTextValue(seamstressPath + "Activity.Request." + Main.rand.Next(3)).FormatWith(name), true);
+                    CurrentAnimation = Animation.Shock;
 
                     #region Item Dispensing
                     switch (item.ModItem)
@@ -339,6 +329,8 @@ public class Seamstress : ModNPC
                         AssignedClothing[Main.myPlayer] = 0;
                         ModContent.GetInstance<TimerUISystem>().EventTimer.timer += 30 * 60;
                         CompletedClothesCount++;
+
+                        CurrentAnimation = Animation.Clap;
                     }
                     else
                     {
@@ -352,6 +344,8 @@ public class Seamstress : ModNPC
                             CombatText.NewText(location, Color.LimeGreen, GetWindfallTextValue(seamstressPath + "Activity.Garbage." + Main.rand.Next(3)).FormatWith(name), true);
                         else
                             CombatText.NewText(location, Color.LimeGreen, GetWindfallTextValue(seamstressPath + "Activity.Repeat." + Main.rand.Next(3)).FormatWith(name), true);
+
+                        CurrentAnimation = Animation.Shock;
                     }
                 }
             }

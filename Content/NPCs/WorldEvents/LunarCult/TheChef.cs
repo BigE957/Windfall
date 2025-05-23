@@ -3,7 +3,6 @@ using DialogueHelper.UI.Dialogue;
 using static Windfall.Common.Systems.WorldEvents.LunarCultBaseSystem;
 using Windfall.Content.Items.Quests.Cafeteria;
 using Windfall.Common.Systems;
-using Windfall.Content.NPCs.WorldEvents.DragonCult;
 
 namespace Windfall.Content.NPCs.WorldEvents.LunarCult;
 
@@ -24,11 +23,25 @@ public class TheChef : ModNPC
         get => NPC.ai[3];
         set => NPC.ai[3] = value;
     }
+
+    private enum Animation
+    {
+        IdleNoTongue,
+        IdleTongue,
+        Cooking,
+        Laugh
+    }
+    private Animation CurrentAnimation
+    {
+        get => (Animation)NPC.ai[1];
+        set => NPC.ai[1] = (int)value;
+    }
+
     public override void SetStaticDefaults()
     {
         this.HideBestiaryEntry();
         NPCID.Sets.ActsLikeTownNPC[Type] = true;
-        Main.npcFrameCount[Type] = 1;
+        Main.npcFrameCount[Type] = 23;
         NPCID.Sets.NoTownNPCHappiness[Type] = true;
         ModContent.GetInstance<DialogueUISystem>().TreeInitialize += ModifyTree;
         ModContent.GetInstance<DialogueUISystem>().ButtonClick += ClickEffect;
@@ -39,7 +52,7 @@ public class TheChef : ModNPC
     {
         NPC.friendly = true;
         NPC.width = 36;
-        NPC.height = 58;
+        NPC.height = 80;
         NPC.damage = 45;
         NPC.defense = 14;
         NPC.lifeMax = 210;
@@ -47,12 +60,12 @@ public class TheChef : ModNPC
         NPC.DeathSound = SoundID.NPCDeath1;
         NPC.knockBackResist = 0f;
         NPC.immortal = true;           
-
-        AnimationType = NPCID.BartenderUnconscious;
     }
+
     public override void OnSpawn(IEntitySource source)
     {
         NPC.GivenName = "The Chef";
+        CurrentAnimation = Animation.IdleTongue;
 
         NPC.alpha = 255;
         Vector2 oldPos = NPC.position;
@@ -111,14 +124,15 @@ public class TheChef : ModNPC
                 }
 
             }
-            
+
             if (ItemCooking != -1)
             {
                 if (!dozedOff && interuptedTimer == 0)
                 {
+                    CurrentAnimation = Animation.Cooking;
                     TimeCooking++;
 
-                    if(TimeCooking == CookTime / 2 && Main.rand.NextBool(3))
+                    if (TimeCooking == CookTime / 2 && Main.rand.NextBool(3))
                         dozedOff = true;
 
                     if (TimeCooking >= CookTime)
@@ -134,20 +148,28 @@ public class TheChef : ModNPC
                     }
                 }
                 else if (interuptedTimer > 0)
+                {
+                    CurrentAnimation = Animation.IdleTongue;
                     interuptedTimer--;
+                }
                 NPC.direction = interuptedTimer == 0 ? -1 : 1;
             }
             else
+            {
+                CurrentAnimation = Animation.IdleTongue;
                 NPC.direction = 1;
-
+            }
             if (dozedOff && (Main.GlobalTimeWrappedHourly - (int)Main.GlobalTimeWrappedHourly) < 0.015)
             {
                 CombatText z = Main.combatText[CombatText.NewText(new((int)NPC.Center.X, (int)NPC.Bottom.Y, 1, 1), Color.LimeGreen, "Z", true)];
                 z.lifeTime /= 2;
             }
         }
-        NPC.spriteDirection = NPC.direction;
+        
+        NPC.spriteDirection = -NPC.direction;
     }
+    public override bool CheckActive() => !NPC.downedAncientCultist;
+
     public override bool CanChat() => !QuestSystem.Quests["DraconicBone"].Complete && !ModContent.GetInstance<DialogueUISystem>().isDialogueOpen && interuptedTimer == 0;
     public override string GetChat()
     {
@@ -177,27 +199,6 @@ public class TheChef : ModNPC
         else
             ModContent.GetInstance<DialogueUISystem>().DisplayDialogueTree(Windfall.Instance, "TheChef/Default", new(Name, [NPC.whoAmI]));                
         return "Hey chat!";
-    }
-    public override bool CheckActive() => !NPC.downedAncientCultist;
-    public override void PostDraw(SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor)
-    {
-        if (ItemCooking == -1)
-            return;
-        float barScale = 1.34f;
-
-        var barBG = ModContent.Request<Texture2D>("CalamityMod/UI/MiscTextures/GenericBarBack").Value;
-        var barFG = ModContent.Request<Texture2D>("CalamityMod/UI/MiscTextures/GenericBarFront").Value;
-
-        Vector2 barOrigin = barBG.Size() * 0.5f;
-        float yOffset = 23f;
-        Vector2 drawPos = (NPC.Center - screenPos) + Vector2.UnitY * barScale * (NPC.frame.Height - yOffset);
-        Rectangle frameCrop = new(0, 0, (int)(TimeCooking / CookTime * barFG.Width), barFG.Height);
-
-        Color bgColor = Color.DarkGray * 0.5f;
-        bgColor.A = 255;
-
-        spriteBatch.Draw(barBG, drawPos, null, bgColor, 0f, barOrigin, barScale, 0f, 0f);
-        spriteBatch.Draw(barFG, drawPos, frameCrop, Color.Lerp(Color.Yellow, Color.LimeGreen, TimeCooking / CookTime), 0f, barOrigin, barScale, 0f, 0f);
     }
     private static void ModifyTree(string treeKey, int dialogueID, int buttonID, bool swapped)
     {
@@ -251,7 +252,6 @@ public class TheChef : ModNPC
                 Main.LocalPlayer.LunarCult().apostleQuestTracker++;
         }
     }
-
     private static void CloseEffect(string treeKey, int dialogueID, int buttonID, bool swapped)
     {
         DialogueUISystem uiSystem = ModContent.GetInstance<DialogueUISystem>();
@@ -268,5 +268,80 @@ public class TheChef : ModNPC
             State = SystemStates.Cafeteria;
             Active = true;
         }
+        else if (treeKey == "TheChef/Default")
+            Main.npc[(int)uiSystem.CurrentDialogueContext.Arguments[0]].As<TheChef>().CurrentAnimation = Animation.Laugh;
     }
+
+    public override void FindFrame(int frameHeight)
+    {
+        int frameWidth = TextureAssets.Npc[Type].Width() / 5;
+        NPC.frame.Width = frameWidth;
+
+        switch (CurrentAnimation)
+        {
+            case Animation.IdleNoTongue:
+            case Animation.IdleTongue:
+                NPC.frame.X = CurrentAnimation == Animation.IdleNoTongue ? 0 : frameWidth;
+                NPC.frame.Y = 0;
+                NPC.frameCounter = 0;
+                break;
+            case Animation.Cooking:
+                NPC.frame.X = frameWidth * 2;
+                NPC.frame.Y = frameHeight * ((int)NPC.frameCounter % Main.npcFrameCount[NPC.type]);
+
+                NPC.frameCounter += 0.2f;
+                break;
+            case Animation.Laugh:
+                NPC.frame.X = frameWidth * 3;
+
+                if (NPC.frameCounter + 0.2f >= 13f)
+                {
+                    CurrentAnimation = Animation.IdleTongue;
+                    break;
+                }
+                NPC.frame.Y = frameHeight * ((int)NPC.frameCounter % 4);
+
+                NPC.frameCounter += 0.2f;
+                break;
+        }       
+    }
+    public override bool PreDraw(SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor)
+    {
+        Texture2D texture = TextureAssets.Npc[Type].Value;
+
+        spriteBatch.Draw(texture, NPC.Center - screenPos, NPC.frame, drawColor, 0f, NPC.frame.Size() * 0.5f, NPC.scale, NPC.spriteDirection == -1 ? SpriteEffects.FlipHorizontally : 0, 0f);
+
+        return false;
+    }
+    public override void PostDraw(SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor)
+    {
+        if (CurrentAnimation != Animation.Cooking)
+        {
+            Texture2D texture = TextureAssets.Npc[Type].Value;
+            Rectangle frame = texture.Frame(5, Main.npcFrameCount[Type], 4, 0);
+            frame.Y = (int)(NPC.frameCounter % Main.npcFrameCount[Type]);
+            Vector2 offset = new(0, 0);
+
+            spriteBatch.Draw(texture, NPC.Center - screenPos + offset, frame, drawColor, 0f, frame.Size() * 0.5f, NPC.scale, 0f, 0f);
+        }
+
+        if (ItemCooking == -1)
+            return;
+        float barScale = 1.34f;
+
+        var barBG = ModContent.Request<Texture2D>("CalamityMod/UI/MiscTextures/GenericBarBack").Value;
+        var barFG = ModContent.Request<Texture2D>("CalamityMod/UI/MiscTextures/GenericBarFront").Value;
+
+        Vector2 barOrigin = barBG.Size() * 0.5f;
+        float yOffset = 23f;
+        Vector2 drawPos = (NPC.Center - screenPos) + Vector2.UnitY * barScale * (NPC.frame.Height - yOffset);
+        Rectangle frameCrop = new(0, 0, (int)(TimeCooking / CookTime * barFG.Width), barFG.Height);
+
+        Color bgColor = Color.DarkGray * 0.5f;
+        bgColor.A = 255;
+
+        spriteBatch.Draw(barBG, drawPos, null, bgColor, 0f, barOrigin, barScale, 0f, 0f);
+        spriteBatch.Draw(barFG, drawPos, frameCrop, Color.Lerp(Color.Yellow, Color.LimeGreen, TimeCooking / CookTime), 0f, barOrigin, barScale, 0f, 0f);
+    }
+
 }

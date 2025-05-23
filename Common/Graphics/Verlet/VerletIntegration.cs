@@ -195,29 +195,31 @@ public static class VerletIntegration
         bool velocityAtCap = entityVelocity.Length() >= cap;
         bool notableMove = false;
 
-        if (isChain && !obj.Positions.Any(p => e.Hitbox.Contains(p.ToPoint())))
+        if (!obj.Positions.Any(p => e.Hitbox.Contains(p.ToPoint())))
             return false;
+
 
         for (int i = 0; i < obj.Points.Count; i++)
         {
-            if (obj[i].Locked)
+            VerletPoint segment = obj[i];
+
+            if (segment.Locked)
                 continue;
 
-            VerletPoint segment = obj[i];
             if (isChain)
             {
                 bool mainSegmentHit = false;
 
-                for (int j = 0; j < obj[i].Connections.Count; j++)
+                for (int j = 0; j < segment.Connections.Count; j++)
                 {
-                    if (obj[i].Connections[j].Length == -1)
+                    if (segment.Connections[j].Length == -1)
                         continue;
 
                     float distanceToEntity = e.Distance(segment.Position);
                     if (distanceToEntity > 48f) // Adjust threshold as needed
                         continue;
 
-                    VerletPoint next = obj[i].Connections[j].Point;
+                    VerletPoint next = segment.Connections[j].Point;
                     float _ = 0f;
                     if (Collision.CheckAABBvLineCollision(e.TopLeft, e.Size, segment.Position, next.Position, 8f, ref _))
                     {
@@ -241,23 +243,24 @@ public static class VerletIntegration
             }
             else
             {
-                if (!obj.Positions.Any(p => e.Hitbox.Contains(p.ToPoint())))
-                    return false;
-
-                for (int j = 0; j < obj[i].Connections.Count; j++)
+                for (int j = 0; j < segment.Connections.Count; j++)
                 {
-                    if (obj[i].Connections[j].Length == -1)
+                    if (segment.Connections[j].Length == -1)
                         continue;
 
-                    VerletPoint next = obj[i].Connections[j].Point;
+                    VerletPoint next = segment.Connections[j].Point;
+
                     float _ = 0f;
                     if (Collision.CheckAABBvLineCollision(e.TopLeft, e.Size, segment.Position, next.Position, 20f, ref _))
                     {
                         segment.Position += entityVelocity;
+
                         if (velocityAtCap)
                             notableMove = true;
-                        foreach (var conn in obj[i].Connections)
+
+                        foreach (var conn in segment.Connections)
                             conn.Point.Position += entityVelocity;
+
                         return notableMove;
                     }
                 }

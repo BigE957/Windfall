@@ -1,7 +1,4 @@
-﻿using CalamityMod.Items.Weapons.Melee;
-using CalamityMod.Particles;
-using DialogueHelper.UI.Dialogue;
-using Terraria;
+﻿using DialogueHelper.UI.Dialogue;
 using Windfall.Common.Systems.WorldEvents;
 using Windfall.Content.Projectiles.Other;
 using static Windfall.Common.Systems.PathfindingSystem;

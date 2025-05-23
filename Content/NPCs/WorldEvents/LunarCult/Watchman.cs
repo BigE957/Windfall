@@ -21,12 +21,12 @@ public class Watchman : ModNPC
 
     private bool spokenTo = false;
 
-    public override string Texture => "Windfall/Assets/NPCs/WorldEvents/LunarBishop";
+    public override string Texture => "Windfall/Assets/NPCs/WorldEvents/Watchman";
     internal static SoundStyle SpawnSound => new("CalamityMod/Sounds/Custom/SCalSounds/BrimstoneHellblastSound");
     public override void SetStaticDefaults()
     {
         this.HideBestiaryEntry();
-        Main.npcFrameCount[Type] = 1;
+        Main.npcFrameCount[Type] = 6;
         NPCID.Sets.NoTownNPCHappiness[Type] = true;
         ModContent.GetInstance<DialogueUISystem>().TreeInitialize += ModifyTree;
         ModContent.GetInstance<DialogueUISystem>().ButtonClick += ClickEffect;
@@ -35,7 +35,7 @@ public class Watchman : ModNPC
     {
         NPC.friendly = true; // NPC Will not attack player
         NPC.width = 36;
-        NPC.height = 58;
+        NPC.height = 120;
         NPC.aiStyle = 0;
         NPC.damage = 0;
         NPC.defense = 0;
@@ -45,6 +45,7 @@ public class Watchman : ModNPC
         NPC.knockBackResist = 0f;
         NPC.immortal = true;
     }
+
     public override void OnSpawn(IEntitySource source)
     {
         /*
@@ -61,7 +62,10 @@ public class Watchman : ModNPC
                 spokenTo = false;
                 break;
         }
+
+        NPC.spriteDirection = -NPC.direction;
     }
+
     public override bool CanChat() => !QuestSystem.Quests["DraconicBone"].Complete && !ModContent.GetInstance<DialogueUISystem>().isDialogueOpen && AIState != States.Greeting;
     public override string GetChat()
     {
@@ -109,5 +113,21 @@ public class Watchman : ModNPC
         if (treeKey == "Watchman/Default" && dialogueID == 11)
             Main.LocalPlayer.LunarCult().askedWatchmanAboutOrator = true;
 
+    }
+
+
+    public override void FindFrame(int frameHeight)
+    {
+        NPC.frameCounter += 0.2f;
+        NPC.frame.X = 0;
+        NPC.frame.Y = frameHeight * ((int)NPC.frameCounter % Main.npcFrameCount[NPC.type]);
+    }
+    public override bool PreDraw(SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor)
+    {
+        Texture2D texture = TextureAssets.Npc[Type].Value;
+
+        spriteBatch.Draw(texture, NPC.Center - screenPos, NPC.frame, drawColor, 0f, NPC.frame.Size() * 0.5f, NPC.scale, NPC.spriteDirection == -1 ? SpriteEffects.FlipHorizontally : 0, 0f);
+
+        return false;
     }
 }
