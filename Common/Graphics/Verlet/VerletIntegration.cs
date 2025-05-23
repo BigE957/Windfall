@@ -163,16 +163,16 @@ public static class VerletIntegration
 
     public static bool AffectVerletObject(VerletObject obj, float dampening, float cap, bool isChain = true)
     {
-        bool notableMove = false;
         
         if (obj == null)
             return false;
 
-        bool temp = false;
+        bool notableMove = false;
+
         foreach (Player p in Main.ActivePlayers)
         {
-            temp = MoveObjectBasedOnEntity(obj, p, dampening / 2f, cap / 2f, isChain);
-            if(!notableMove && temp)
+            bool temp = MoveObjectBasedOnEntity(obj, p, dampening / 2f, cap / 2f, isChain);
+            if(temp)
                 notableMove = true;
         }
                 
@@ -181,8 +181,8 @@ public static class VerletIntegration
             if (proj.velocity == Vector2.Zero)
                 continue;
 
-            temp = MoveObjectBasedOnEntity(obj, proj, dampening, cap, isChain);
-            if (!notableMove && temp)
+            bool temp = MoveObjectBasedOnEntity(obj, proj, dampening, cap, isChain);
+            if (temp)
                 notableMove = true;
         }
                 
@@ -192,6 +192,7 @@ public static class VerletIntegration
     public static bool MoveObjectBasedOnEntity(VerletObject obj, Entity e, float dampening = 0.425f, float cap = 5f, bool isChain = true)
     {
         Vector2 entityVelocity = (e.velocity * dampening).ClampMagnitude(0f, cap);
+        bool velocityAtCap = entityVelocity.Length() >= cap;
         bool notableMove = false;
 
         if (isChain && !obj.Positions.Any(p => e.Hitbox.Contains(p.ToPoint())))
@@ -212,14 +213,17 @@ public static class VerletIntegration
                     if (obj[i].Connections[j].Length == -1)
                         continue;
 
+                    float distanceToEntity = e.Distance(segment.Position);
+                    if (distanceToEntity > 48f) // Adjust threshold as needed
+                        continue;
+
                     VerletPoint next = obj[i].Connections[j].Point;
                     float _ = 0f;
                     if (Collision.CheckAABBvLineCollision(e.TopLeft, e.Size, segment.Position, next.Position, 8f, ref _))
                     {
                         // Weigh the entity's distance between the two segments.
                         float distanceBetweenSegments = segment.Position.Distance(next.Position);
-                        float distanceToChains = e.Distance(segment.Position);
-                        float currentMovementOffsetInterpolant = Utilities.InverseLerp(distanceToChains, distanceBetweenSegments, distanceBetweenSegments * 0.2f);
+                        float currentMovementOffsetInterpolant = Utilities.InverseLerp(distanceToEntity, distanceBetweenSegments, distanceBetweenSegments * 0.2f);
                         float nextMovementOffsetInterpolant = 1f - currentMovementOffsetInterpolant;
 
                         // Move the segments based on the weight values.
@@ -227,7 +231,7 @@ public static class VerletIntegration
                         {
                             segment.Position += entityVelocity * currentMovementOffsetInterpolant;
                             mainSegmentHit = true;
-                            if(entityVelocity.Length() >= cap)
+                            if(velocityAtCap)
                                 notableMove = true;
                         }
                         if (!next.Locked)
@@ -250,7 +254,7 @@ public static class VerletIntegration
                     if (Collision.CheckAABBvLineCollision(e.TopLeft, e.Size, segment.Position, next.Position, 20f, ref _))
                     {
                         segment.Position += entityVelocity;
-                        if (entityVelocity.Length() >= cap)
+                        if (velocityAtCap)
                             notableMove = true;
                         foreach (var conn in obj[i].Connections)
                             conn.Point.Position += entityVelocity;
