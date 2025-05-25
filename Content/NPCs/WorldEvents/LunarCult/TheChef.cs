@@ -37,6 +37,8 @@ public class TheChef : ModNPC
         set => NPC.ai[1] = (int)value;
     }
 
+    public static Asset<Texture2D> PotTexture;
+
     public override void SetStaticDefaults()
     {
         this.HideBestiaryEntry();
@@ -46,6 +48,9 @@ public class TheChef : ModNPC
         ModContent.GetInstance<DialogueUISystem>().TreeInitialize += ModifyTree;
         ModContent.GetInstance<DialogueUISystem>().ButtonClick += ClickEffect;
         ModContent.GetInstance<DialogueUISystem>().TreeClose += CloseEffect;
+
+        if (!Main.dedServ)
+            PotTexture = ModContent.Request<Texture2D>("Windfall/Assets/NPCs/WorldEvents/ChefPot");
 
     }
     public override void SetDefaults()
@@ -94,79 +99,79 @@ public class TheChef : ModNPC
     public override void AI()
     {
         if (State == SystemStates.Cafeteria)
-        {
-            if (AtMaxTimer >= 10 * 60)
             {
-                ItemCooking = -1;
-                interuptedTimer = 0;
-                dozedOff = false;
-                int shutdownTimer = AtMaxTimer - (10 * 60);
-                switch (shutdownTimer)
+                if (AtMaxTimer >= 10 * 60)
                 {
-                    case 0:
-                        CombatText.NewText(NPC.Hitbox, Color.LimeGreen, GetWindfallTextValue(chefPath + "Activity.Failed.0"), true);
-                        break;
-                    case 120:
-                        CombatText.NewText(NPC.Hitbox, Color.LimeGreen, GetWindfallTextValue(chefPath + "Activity.Failed.1"), true);
-                        break;
-                    case 240:
-                        CombatText.NewText(NPC.Hitbox, Color.LimeGreen, GetWindfallTextValue(chefPath + "Activity.Failed.2"), true);
-                        break;
-                    case 360:
-                        CombatText.NewText(NPC.Hitbox, Color.LimeGreen, GetWindfallTextValue(chefPath + "Activity.Failed.3"), true);
-                        break;
-                    case 480:
-                        CombatText.NewText(NPC.Hitbox, Color.LimeGreen, GetWindfallTextValue(chefPath + "Activity.Failed.4"), true);
-                        break;
-                    case 600:
-                        Active = false;
-                        break;
-                }
-
-            }
-
-            if (ItemCooking != -1)
-            {
-                if (!dozedOff && interuptedTimer == 0)
-                {
-                    CurrentAnimation = Animation.Cooking;
-                    TimeCooking++;
-
-                    if (TimeCooking == CookTime / 2 && Main.rand.NextBool(3))
-                        dozedOff = true;
-
-                    if (TimeCooking >= CookTime)
+                    ItemCooking = -1;
+                    interuptedTimer = 0;
+                    dozedOff = false;
+                    int shutdownTimer = AtMaxTimer - (10 * 60);
+                    switch (shutdownTimer)
                     {
-                        CombatText.NewText(NPC.Hitbox, Color.LimeGreen, GetWindfallTextValue(chefPath + "Activity.Completed." + Main.rand.Next(3)), true);
-
-                        Item item = Main.item[Item.NewItem(Item.GetSource_NaturalSpawn(), NPC.Center, Vector2.Zero, (int)ItemCooking)];
-                        item.maxStack = 1;
-                        item.velocity = new Vector2(1.75f, Main.rand.NextFloat(-3, 0));
-                        item.LunarCult().madeDuringCafeteriaActivity = true;
-                        ItemCooking = -1;
-                        TimeCooking = 0;
+                        case 0:
+                            CombatText.NewText(NPC.Hitbox, Color.LimeGreen, GetWindfallTextValue(chefPath + "Activity.Failed.0"), true);
+                            break;
+                        case 120:
+                            CombatText.NewText(NPC.Hitbox, Color.LimeGreen, GetWindfallTextValue(chefPath + "Activity.Failed.1"), true);
+                            break;
+                        case 240:
+                            CombatText.NewText(NPC.Hitbox, Color.LimeGreen, GetWindfallTextValue(chefPath + "Activity.Failed.2"), true);
+                            break;
+                        case 360:
+                            CombatText.NewText(NPC.Hitbox, Color.LimeGreen, GetWindfallTextValue(chefPath + "Activity.Failed.3"), true);
+                            break;
+                        case 480:
+                            CombatText.NewText(NPC.Hitbox, Color.LimeGreen, GetWindfallTextValue(chefPath + "Activity.Failed.4"), true);
+                            break;
+                        case 600:
+                            Active = false;
+                            break;
                     }
+
                 }
-                else if (interuptedTimer > 0)
+
+                if (ItemCooking != -1)
+                {
+                    if (!dozedOff && interuptedTimer == 0)
+                    {
+                        CurrentAnimation = Animation.Cooking;
+                        TimeCooking++;
+
+                        if (TimeCooking == CookTime / 2 && Main.rand.NextBool(3))
+                            dozedOff = true;
+
+                        if (TimeCooking >= CookTime)
+                        {
+                            CombatText.NewText(NPC.Hitbox, Color.LimeGreen, GetWindfallTextValue(chefPath + "Activity.Completed." + Main.rand.Next(3)), true);
+
+                            Item item = Main.item[Item.NewItem(Item.GetSource_NaturalSpawn(), NPC.Center, Vector2.Zero, (int)ItemCooking)];
+                            item.maxStack = 1;
+                            item.velocity = new Vector2(1.75f, Main.rand.NextFloat(-3, 0));
+                            item.LunarCult().madeDuringCafeteriaActivity = true;
+                            ItemCooking = -1;
+                            TimeCooking = 0;
+                        }
+                    }
+                    else if (interuptedTimer > 0)
+                    {
+                        CurrentAnimation = Animation.IdleTongue;
+                        interuptedTimer--;
+                    }
+                    NPC.direction = interuptedTimer == 0 ? -1 : 1;
+                }
+                else
                 {
                     CurrentAnimation = Animation.IdleTongue;
-                    interuptedTimer--;
+                    NPC.direction = 1;
                 }
-                NPC.direction = interuptedTimer == 0 ? -1 : 1;
+                if (dozedOff && (Main.GlobalTimeWrappedHourly - (int)Main.GlobalTimeWrappedHourly) < 0.015)
+                {
+                    CombatText z = Main.combatText[CombatText.NewText(new((int)NPC.Center.X, (int)NPC.Bottom.Y, 1, 1), Color.LimeGreen, "Z", true)];
+                    z.lifeTime /= 2;
+                }
             }
-            else
-            {
-                CurrentAnimation = Animation.IdleTongue;
-                NPC.direction = 1;
-            }
-            if (dozedOff && (Main.GlobalTimeWrappedHourly - (int)Main.GlobalTimeWrappedHourly) < 0.015)
-            {
-                CombatText z = Main.combatText[CombatText.NewText(new((int)NPC.Center.X, (int)NPC.Bottom.Y, 1, 1), Color.LimeGreen, "Z", true)];
-                z.lifeTime /= 2;
-            }
-        }
         
-        NPC.spriteDirection = -NPC.direction;
+        NPC.spriteDirection = NPC.direction;
     }
     public override bool CheckActive() => !NPC.downedAncientCultist;
 
@@ -209,7 +214,7 @@ public class TheChef : ModNPC
                 uiSystem.CurrentTree.Dialogues[0].Responses = GetMenuResponses();
                 break;
             case "TheChef/Default":
-                List<Response> response = new(uiSystem.CurrentTree.Dialogues[0].Responses);
+                List<Response> response = [.. uiSystem.CurrentTree.Dialogues[0].Responses];
                 if (Main.LocalPlayer.LunarCult().hasRecievedChefMeal)
                 {
                     response[1].Requirement = false;
@@ -274,7 +279,7 @@ public class TheChef : ModNPC
 
     public override void FindFrame(int frameHeight)
     {
-        int frameWidth = TextureAssets.Npc[Type].Width() / 5;
+        int frameWidth = TextureAssets.Npc[Type].Width() / 4;
         NPC.frame.Width = frameWidth;
 
         switch (CurrentAnimation)
@@ -315,14 +320,13 @@ public class TheChef : ModNPC
     }
     public override void PostDraw(SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor)
     {
-        if (CurrentAnimation != Animation.Cooking)
+        //if (CurrentAnimation != Animation.Cooking)
         {
-            Texture2D texture = TextureAssets.Npc[Type].Value;
-            Rectangle frame = texture.Frame(5, Main.npcFrameCount[Type], 4, 0);
-            frame.Y = (int)(NPC.frameCounter % Main.npcFrameCount[Type]);
-            Vector2 offset = new(0, 0);
+            Texture2D texture = PotTexture.Value;
+            Rectangle frame = texture.Frame(1, Main.npcFrameCount[Type], 0, (int)((Main.GlobalTimeWrappedHourly * 12) % Main.npcFrameCount[Type]));
+            Vector2 offset = new(BaseFacingLeft ? 17 : -17, 0);
 
-            spriteBatch.Draw(texture, NPC.Center - screenPos + offset, frame, drawColor, 0f, frame.Size() * 0.5f, NPC.scale, 0f, 0f);
+            spriteBatch.Draw(texture, NPC.Center - screenPos + offset, frame, drawColor, 0f, frame.Size() * 0.5f, 2, 0f, 0f);
         }
 
         if (ItemCooking == -1)

@@ -253,7 +253,7 @@ public class LunarCultBaseSystem : ModSystem
             if (!NPC.AnyNPCs(ModContent.NPCType<Seamstress>()))
                 NPC.NewNPC(Entity.GetSource_None(), LunarCultBaseLocation.X * 16 + (BaseFacingLeft ? -1400 : 1400), (LunarCultBaseLocation.Y * 16) + 480, ModContent.NPCType<Seamstress>());
             if (!NPC.AnyNPCs(ModContent.NPCType<TheChef>()))
-                NPC.NewNPC(Entity.GetSource_None(), LunarCultBaseLocation.X * 16 + (BaseFacingLeft ? -168 : 168), (LunarCultBaseLocation.Y * 16), ModContent.NPCType<TheChef>());
+                NPC.NewNPC(Entity.GetSource_None(), LunarCultBaseLocation.X * 16 + (BaseFacingLeft ? -200 : 200), (LunarCultBaseLocation.Y * 16), ModContent.NPCType<TheChef>());
             if (!Main.npc.Any(n => n.active && n.type == ModContent.NPCType<Watchman>()))
                 NPC.NewNPC(Entity.GetSource_None(), LunarCultBaseLocation.X * 16 + (BaseFacingLeft ? -2100 : 2100), (LunarCultBaseLocation.Y - 6) * 16 - 5, ModContent.NPCType<Watchman>());
             if (SealingRitualSystem.RitualSequenceSeen)
