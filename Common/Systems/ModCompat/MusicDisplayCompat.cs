@@ -18,7 +18,7 @@ public class MusicDisplayCompat : ModSystem
         }
 
         AddMusic("Assets/Music/Orator", "Orator");
-        AddMusic("Assets/Music/DeathByGlamor", "Tailor");
+        AddMusic("Assets/Music/CraftingMinigame", "Tailor");
         AddMusic("Assets/Music/CanYouReallyCallThisAHotelIDidntReceiveAMintOnMyPillowOrAnything", "Cafeteria");
         AddMusic("Assets/Music/OrderBase", "OrderBase");
         AddMusic("Assets/Music/Amalgam", "Ritual");
