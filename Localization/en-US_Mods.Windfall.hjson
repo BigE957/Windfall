@@ -114,7 +114,7 @@ Dialogue: {
 			Initial: {
 				Well: Well...
 				0: TOO BAD!
-				1: The only thing you’re getting from me is PAIN… and DEATH!
+				1: The only thing you’re getting from me is PAIN... and DEATH!
 				2: Cause I’m taking over this town! Then all your friends are gonna be MY FRIENDS!
 				3: MWAHAHAHAHA!!!
 			}
@@ -162,7 +162,7 @@ Dialogue: {
 
 		Conversation: {
 			JustMet: {
-				Initial1: A traveler? In these parts? You are brave, that’s for sure. Beware. Beasts prowl this land, as I’m sure you’re aware, but some are far larger and stronger than others…
+				Initial1: A traveler? In these parts? You are brave, that’s for sure. Beware. Beasts prowl this land, as I’m sure you’re aware, but some are far larger and stronger than others...
 				WhatUDoin: I'm working to undo the harm our war has brought upon the world. Stains such as these, no matter how imposing, can indeed be cleansed! It's just going to take some time... A lot... of time...
 				WhoAreU: Hah! Do you truly not recognize this armor; this gleaming insignia? I am a member of the illustrious Godseeker Knights! Though the Godseeker himself has taken his leave from command, I have resolved to carry on his crusade until the last speck of divine tyranny is scrubbed from the world.
 				Gods: Oh my! It seems our efforts are beginning to bear fruit! There was once a time where the Gods' fell touch was felt in every corner of the world. You have use to thank for being so blissfully unaware of their influence. Influence such as this horrid mire we find ourselves in...
@@ -184,8 +184,8 @@ Dialogue: {
 				None: Do you feel that? The air feels... lighter, as of late. It's almost as if our efforts are finally paying off... Splendid... The Godseeker would be proud of us; I'm sure.
 				BoC: Perhaps you have seen it on your travels. This land spreads and evolves like a cancer, subsuming and devouring anything in its way. Fitting, for the Gods who fell here valued nothing they had. Until their dying breaths, they reached for more, and more, and more. Remnants of their greed still linger in the depths of this place.
 				EoW: If there is anything pests excel at, it is coordination. The Gods that fell here kept their people under uncompromising control, and these insects are no different. When many of them band together, you will find them much harder to stamp out than usual. Draw one of these groups out by destroying storehouses of deific energy.
-				HiveMind: Amidst the grime and gore of this place lie certain… growths. You will recognize them when you see them. They are blemishes even upon the disfigured face of this land. Each one is a storehouse of lingering divine power. Destroy one, and whatever is left of the gods that haunt this place would be sure to retaliate.
-				Perforators: Amidst the grime and gore of this place lie certain… growths. You will recognize them when you see them. They are blemishes even upon the disfigured face of this land. Each one is a storehouse of lingering divine power. Destroy one, and whatever is left of the gods that haunt this place would be sure to retaliate.
+				HiveMind: Amidst the grime and gore of this place lie certain... growths. You will recognize them when you see them. They are blemishes even upon the disfigured face of this land. Each one is a storehouse of lingering divine power. Destroy one, and whatever is left of the gods that haunt this place would be sure to retaliate.
+				Perforators: Amidst the grime and gore of this place lie certain... growths. You will recognize them when you see them. They are blemishes even upon the disfigured face of this land. Each one is a storehouse of lingering divine power. Destroy one, and whatever is left of the gods that haunt this place would be sure to retaliate.
 				SlimeGod: The God of Slimes has been lurking about in this foul muck. A fittingly squalid home. Alas, the time it spends here is not wasted. Its plans are still in motion, its power still growing. Perhaps it can be lured out of secrecy...
 				WallOfFlesh: Though Azafure lies in ruins, one of its grandest marvels remains. A biological prison, to house the festering essences of Gods. Though rudimentary compared to the work of the Devourer, it is quite ingenious. Be extremely careful if you do explore the ruins, though. If you loose it, dying may be preferable to unleashing all the essence within at once...
 				QueenSlime: Well... things sure are different. This much essence spilling into the world... the Wall must have been destroyed. Few good things could possibly come of this, but I think I know one. If there's anything I've learned about the God of Slimes, it's that it has a particular affinity for leeching the power from its fallen brethren. I'm sure tracking it down would be simple now.
@@ -630,21 +630,21 @@ UI: {
 			'''
 				With haste to escape those lands most foul, I next headed somewhere far greener. I had heard much of the beauty the Jungles held from explorers and adventurers, but to see the colourful menagary of fauna in person was a completely different experience. Their words had failed to describe the beauty of such a place, and I doubt mine will either.
 
-				It was here that I encountered one who had only been described in myth previously: a living Dryad, quite possibly the last of her kind. When I first spotted her, she stood still, a hand placed upon a tree. The breaking of branch under foot disturbed her from her… communion? Her turn was swift, and I could see the glow of magic from her fingertips. For a brief moment, the look in her eyes was fierce; I was frozen in place by it alone.
+				It was here that I encountered one who had only been described in myth previously: a living Dryad, quite possibly the last of her kind. When I first spotted her, she stood still, a hand placed upon a tree. The breaking of branch under foot disturbed her from her... communion? Her turn was swift, and I could see the glow of magic from her fingertips. For a brief moment, the look in her eyes was fierce; I was frozen in place by it alone.
 
-				However, she quickly realised I was no threat, and eased herself, much to my relief. We soon introduced ourselves, and quickly got to talking. I’ve been so lucky to meet so many interesting people on my journeys, and this Dryad was of course no different. Such a storied past I’ve heard of the dryads, and she was able to confirm most of what I had heard over the years, and correct the many errors. I’m unsure I have the arm-strength to recount the tale here… Perhaps a future novel I shall write once this journey of mine is over.
+				However, she quickly realised I was no threat, and eased herself, much to my relief. We soon introduced ourselves, and quickly got to talking. I’ve been so lucky to meet so many interesting people on my journeys, and this Dryad was of course no different. Such a storied past I’ve heard of the dryads, and she was able to confirm most of what I had heard over the years, and correct the many errors. I’m unsure I have the arm-strength to recount the tale here... Perhaps a future novel I shall write once this journey of mine is over.
 			'''
 		Ocean:
 			'''
 				An old friend of mine was a sailor. He travelled the seas, carrying shipments across perilous waters and passengers to new, brighter lives. It is no secret that the stories he’d return with were part of what has inspired me to undergo this journey. These waters are as marvellous as he described, and yet this moment can’t help but feel bittersweet. My dearest friend, I had hoped to share this view with you, that together we might stare out towards the horizon.
 
-				I still think of you often. I wonder, do you see me now, from wherever it is that you rest? Have you followed me on this journey? I hold it in my heart that you have. I hope you are proud of how far I’ve come. I hope you’ll follow me to this journey’s end… Ah… I mustn’t dwell too long. Farewell, till we meet again, my friend.
+				I still think of you often. I wonder, do you see me now, from wherever it is that you rest? Have you followed me on this journey? I hold it in my heart that you have. I hope you are proud of how far I’ve come. I hope you’ll follow me to this journey’s end... Ah... I mustn’t dwell too long. Farewell, till we meet again, my friend.
 			'''
-		Dungeon: I’ve stumbled upon a strange structure in the midst of my travels. It is quite unlike anything I’ve ever seen. It gives off a most foul odour, the scent of death. I warrilly approached its entrance, tall pillars lined my path. Strangely, I found an old man wandering about its entrance. I called out to him, but as he turned to face me, I could tell something was off. The way he walked towards me, even for an elder, was strange, almost… puppet-like? As he finally reached speaking distance, he froze, then suddenly began shouting, demanding I flee. Now let me tell you, fleeing is exactly what I did. I ran like my life depended on it! I’m actually still quite sure it did.
+		Dungeon: I’ve stumbled upon a strange structure in the midst of my travels. It is quite unlike anything I’ve ever seen. It gives off a most foul odour, the scent of death. I warrilly approached its entrance, tall pillars lined my path. Strangely, I found an old man wandering about its entrance. I called out to him, but as he turned to face me, I could tell something was off. The way he walked towards me, even for an elder, was strange, almost... puppet-like? As he finally reached speaking distance, he froze, then suddenly began shouting, demanding I flee. Now let me tell you, fleeing is exactly what I did. I ran like my life depended on it! I’m actually still quite sure it did.
 		Sulphur: What a strange place. I suppose it is true that often the most tragic of things can still often be the most beautiful. While I cannot deny the horror of what has taken place here, there is still something gorgeous here. These noxious, teal waters still glimmer the same as any other, possibly even more so. The steam and gases which on a rarity burst from the depths are a wonder. Truly there is no place in this world quite like this one. Were its denizens not so dangerous, I’d have liked to spend some more time here.
-		Aerie1: When I set forth on this journey, oh so long ago, there was one place, above all others, that I desired to step foot in: the Dragon’s Aerie. What a storied place indeed! The long abandoned home of the Dragons! To think, such mythical beasts once roamed this place, and so commonly at that! To at last step foot here is indeed a dream come true. The air here is quite thin, but I’ll gladly put up with it. The landscape is painted a golden orange, and the tree pierce the heavens! It's as if I’m standing within a piece of art! This place is covered head to toe in ruins older than Ilmeris, probably some of the oldest still standing! These ancient carvings… They depict humans and dragons alike. Was there once a time where the two of our species coexisted? I have oh, so many questions!
-		Aerie2: Today I stumbled upon my greatest discovery yet, some sort of mausoleum. However, these graves… They’re massive! They must indeed belong to the dragons! There are so many… Further in I more carvings, and what they depicted was most fascinating. They depicted a grand battle among the stars in which a mighty dragon battled against… the Moon? What a strange story. It seems this mausoleum holds those who died in that battle. I could likely spend an eternity exploring just these vast halls. Perhaps one day I might document each dragon who lays here. However, I see no sign of the dragon depicted in the mural… It doesn’t show his death either… Perhaps I might find more about this legend if I continue my exploration.
-		Aerie3: I have climbed the great mountain which lies at the Aerie’s centre, and it is here I find what I can only describe as a marvel. It is a skeleton, the fossils of an ancient dragon preserved to perfection. Judging by its shape, this is the dragon I saw depicted in the mausoleum’s mural… the Dragon King… I cannot help but wonder what must’ve transpired here… The land here seems almost scorched, burnt by... something. A battle perhaps? Though this skeleton positioning makes that seem unlikely… Every discovery I’ve made here seems only to raise more questions…
+		Aerie1: When I set forth on this journey, oh so long ago, there was one place, above all others, that I desired to step foot in: the Dragon’s Aerie. What a storied place indeed! The long abandoned home of the Dragons! To think, such mythical beasts once roamed this place, and so commonly at that! To at last step foot here is indeed a dream come true. The air here is quite thin, but I’ll gladly put up with it. The landscape is painted a golden orange, and the tree pierce the heavens! It's as if I’m standing within a piece of art! This place is covered head to toe in ruins older than Ilmeris, probably some of the oldest still standing! These ancient carvings... They depict humans and dragons alike. Was there once a time where the two of our species coexisted? I have oh, so many questions!
+		Aerie2: Today I stumbled upon my greatest discovery yet, some sort of mausoleum. However, these graves... They’re massive! They must indeed belong to the dragons! There are so many... Further in I more carvings, and what they depicted was most fascinating. They depicted a grand battle among the stars in which a mighty dragon battled against... the Moon? What a strange story. It seems this mausoleum holds those who died in that battle. I could likely spend an eternity exploring just these vast halls. Perhaps one day I might document each dragon who lays here. However, I see no sign of the dragon depicted in the mural... It doesn’t show his death either... Perhaps I might find more about this legend if I continue my exploration.
+		Aerie3: I have climbed the great mountain which lies at the Aerie’s centre, and it is here I find what I can only describe as a marvel. It is a skeleton, the fossils of an ancient dragon preserved to perfection. Judging by its shape, this is the dragon I saw depicted in the mausoleum’s mural... the Dragon King... I cannot help but wonder what must’ve transpired here... The land here seems almost scorched, burnt by... something. A battle perhaps? Though this skeleton positioning makes that seem unlikely... Every discovery I’ve made here seems only to raise more questions...
 		Aerie4: (Last Part TBA)
 	}
 }
@@ -795,13 +795,13 @@ Items: {
 					'''
 				Lore:
 					'''
-					[c/03fc84:At long last, I hear it! I call out to the stars and now they sing in return. What a wonderful melody…]
-					[c/03fc84:These riddles and rhymes, what they paint is… familiar. The sky cracks open wide, and death descends upon the land.]
-					[c/03fc84:An entire species brought to the brink of demise, but… What is this?]
-					[c/03fc84:As the Dragons fall, one after another, their domain is turned against the rest?]
-					[c/03fc84:The aberrant takes as it pleases, and wields its stolen powers freely and in purest form…]
-					[c/03fc84:Why? Why is this what they sing of? Could it be…?]
-					[c/03fc84:With the behemoth sundered and sealed, could its power be seized by another?]
+					[c/03fc84:I had only heard stories, but now I bear witness.]
+					[c/03fc84:The sky torn to sunders; as it descended from the stars.]
+					[c/03fc84:It took and it took and it took, and it could wield that which it took.]
+					[c/03fc84:Flames and lightning roared. Its power dominated all others.]
+					[c/03fc84:This, this is what it is that I seek. A power which dominates all others.]
+					[c/03fc84:That which even the fortitude of the spiritual would bend before.]
+					[c/03fc84:This is what I seek, I am certain of it.]
 					'''
 			}
 		}
@@ -828,13 +828,13 @@ Items: {
 					'''
 				Lore:
 					'''
-					[c/03fc84:Oh, how things have changed…]
-					[c/03fc84:An era ended not with disaster or great victory, but silence.]
-					[c/03fc84:The Godseeker has vanished with his Crusade just short of complete, and none could fill the vacuum left in his wake…]
-					[c/ffed4d:None, but I.]
-					[c/03fc84:The people of this world are aimless as lambs. They have no purpose; no hope, but I can become their shepherd.]
-					[c/03fc84:I will gather my flock, and fill them with new purpose. In return, they shall bring me closer to my destiny.]
-					[c/03fc84:The power I seek will not come without cost, and I shall have offerings in spades.]
+					[c/03fc84:To think this is how our age would end; not in disaster or celebration.]
+					[c/03fc84:Naught but cold, shivering silence acts as our curtain call.]
+					[c/03fc84:An unfinished work, an empty throne. All are aimless, all are broken.]
+					[c/03fc84:They cry out for salvation, for rights to the wrongs, for but a glimmer of hope.]
+					[c/03fc84:Come then, little lambs left without a shepherd's hand.]
+					[c/03fc84:In my stables you will find all that you seek.]
+					[c/03fc84:Justice for your suffering, safety from your fears, and new shining purpose.]
 					'''
 			}
 		}
@@ -849,12 +849,14 @@ Items: {
 					'''
 				Lore:
 					'''
-					[c/03fc84:Such progress… I could not ask for better results!]
-					[c/03fc84:With each passing day my control over this magic grows stronger, and more possibilities become opened unto me.]
-					[c/03fc84:My destiny feels so close, and soon I shall hear the melody of heaven once again…]
-					[c/03fc84:All I need do is ensure that our benefactor not become too privy.]
-					[c/03fc84:At current our goals align, but should it learn too much… It could destroy everything I’ve worked towards.]
-					[c/03fc84:I shall balance along this edge of annihilation for the time, but soon, very soon, my efforts shall at last bear fruit.]
+					[c/03fc84:A glorious revolution surpasses its climax.]
+					[c/03fc84:A new future after an age of stagnation may at last commence.]
+					[c/03fc84:To our people, we are heroes. We are saviors. We are Gods.]
+					[c/03fc84:Through worship and reverence, we shall reshape this world into something better.]
+					[c/03fc84:At last, our dream may be achieved.]
+					[c/03fc84:I shall create a land of milk and honey, where none suffer as we did.]
+					[c/03fc84:This is what you would want... I know it.]
+					[c/03fc84:Though perhaps, with this power I now hold, I needn’t only guess...]
 					'''
 			}
 		}
@@ -874,8 +876,14 @@ Items: {
 					'''
 				Lore:
 					'''
-					[c/03fc84:Crazy insane unheard of Lore.]
-					[c/03fc84:Truly some insane stuff.]
+					[c/03fc84:I cannot see. I cannot hear. I cannot feel.]
+					[c/03fc84:Falling, falling, falling... I’m falling. Or have I already fallen?]
+					[c/03fc84:The world is so small, and I within it.]
+					[c/03fc84:What have they done? Why have they done this?]
+					[c/03fc84:Who... Who are they? Who am I?]
+					[c/03fc84:I cannot think; not as I could. I am lost.]
+					[c/03fc84:I must remember... Please, I must remember.]
+					[c/03fc84:Remember, remember, remember.]
 					'''
 			}
 		}
@@ -890,11 +898,15 @@ Items: {
 					'''
 				Lore:
 					'''
-					[c/03fc84:One after another, each of my kin prove to be more blind than the last; their fear keeps them from seeing what we could attain.]
-					[c/03fc84:Some dare not disturb the slumbering titan: utter fools, but others… Others fear what one might do with its power should it be turned against them.]
-					[c/03fc84:That I cannot blame them for. If it could dominate the souls of dragons, I am certain we would be helpless against it.]
-					[c/03fc84:But can’t they see? This all the more reason we must lay claim to it! Lest it be claimed by another, who might seek to destroy us.]
-					[c/03fc84:Alas, it seems I will be alone once again in my endeavours.]
+					[c/03fc84:How long has it been, since the Light first showed what we could reach?]
+					[c/03fc84:Change shakes at the foundations of old, and a new future forms around us.]
+					[c/03fc84:They call me God, and yet... you still lie out of my reach.]
+					[c/03fc84:This power... I thought with it I could change fate, but still... I have not the strength.]
+					[c/03fc84:I’ve grown comfortable, complacent. Glory and worship gnaw upon my purpose.]
+					[c/03fc84:I must move forward. I refuse to look back. I’ve come too far to falter here.]
+					[c/03fc84:Though perhaps... Perhaps it is back where I must go. To where this all began.]
+					[c/03fc84:To the stories that have been forgotten; stories like ours, and many more.]
+					[c/03fc84:To that which took everything from us. Perhaps it is what holds the key.]
 					'''
 			}
 		}
@@ -1743,7 +1755,7 @@ LoreItems: {
 		It would seem your actions have stirred the Profaned Goddess out of hiding and into action. 
 		With her pantheon and kingdoms demolished, she’s resorted to burning away everything, and starting anew with an empty, 
 		‘pure’ world. Whilst she has always preached purity through eradication, only now, 
-		backed into a corner, does she begin acting on such gospel. What the Archon’s preach often differs from their actions… 
+		backed into a corner, does she begin acting on such gospel. What the Archon’s preach often differs from their actions... 
 		Hypocrites, all of them. This unholy battlefield is but the beginning of her conquest, and if not stopped, 
 		this whole world shall be wreathed in her unholy flames.
 		'''
@@ -1754,7 +1766,7 @@ LoreItems: {
 		in a constant battle for absolute dominance. Should one ever overtake the other, this world may find itself in peril once more.
 		Let not these lands’ facade fool you, the deities whose essence now forms it were just as cruel and vile as the others, 
 		I assure you. This surge of power across the world will no doubt have grave consequences. New vacuums of power have been opened, 
-		and there are always those eager to seize such opportunities. Perhaps even you may hope to take advantage of these new circumstances…
+		and there are always those eager to seize such opportunities. Perhaps even you may hope to take advantage of these new circumstances...
 		'''
 	LoreStatis:
 		'''
@@ -1772,7 +1784,7 @@ LoreItems: {
 		I knew this kingdom would be far too great of a threat if not dealt with.
 		Its submarine nature proved to make it one of the toughest kingdoms I would ever wage war against, 
 		as my legions were ill prepared for aquatic warfare. Meanwhile, the opposite was true for the Ilmerans, 
-		who outmanoeuvred my forces with ease. Victory would have taken far longer had I not resorted to… desperate measures. 
+		who outmanoeuvred my forces with ease. Victory would have taken far longer had I not resorted to... desperate measures. 
 		Brimstone flames razed the entire kingdom, boiled its people within waters they once called home, 
 		and left nothing but a scorched desert in their wake. I wish it had not come to this, 
 		but such is the price that must be paid to rid the world of Archons. Whilst one such fool met their end that day, 
@@ -1780,12 +1792,12 @@ LoreItems: {
 		'''
 	LoreDragonsAerie:
 		'''
-		Ah… The Aerie… It brings me as much sorrow as it does joy each time I see it. 
+		Ah... The Aerie... It brings me as much sorrow as it does joy each time I see it. 
 		This place was once the home of the majestic Dragons, but now it stands empty, filled only by the Grave of Light. 
 		It had long been my hope that one day this place might flourish with new life, 
 		had we found a way to revitalise the near extinct Dragons. However, we never did find a way to achieve that goal. 
 		Without a way to purify the corrupted Auric Souls of the Archons, Yharon’s powers of rebirth could never take effect, 
-		and I could feel his loyal embers fade with my growing despondence… It seems the time for our battle draws near, 
+		and I could feel his loyal embers fade with my growing despondence... It seems the time for our battle draws near, 
 		and it shall be from atop this mountain that we together witness the end of a cruel world.
 		'''
 }
@@ -1810,7 +1822,7 @@ ModCompat: {
 		}
 
 		Tailor: {
-			DisplayName: I Didn’t Know I Wasn’t Supposed to Use Hot Water— Oh, It Was On the Tag, Wasn’t It…?
+			DisplayName: I Didn’t Know I Wasn’t Supposed to Use Hot Water— Oh, It Was On the Tag, Wasn’t It...?
 			Author: by Sidetracked
 		}
 
