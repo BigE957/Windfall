@@ -9,6 +9,7 @@ using System.Diagnostics.Metrics;
 using Windfall.Common.Graphics.Metaballs;
 using Windfall.Common.Players;
 using Windfall.Common.Systems;
+using Windfall.Content.Buffs.StatBuffs;
 using Windfall.Content.Buffs.Weapons.Minions;
 using Windfall.Content.NPCs.Bosses.Orator;
 using Windfall.Content.Projectiles.Boss.Orator;
@@ -561,7 +562,7 @@ public class OratorHandMinion : ModProjectile
                             //grazeTime = 4;
                         }
 
-                        Owner.AddBuff(BuffID.Endurance, 2);
+                        Owner.AddBuff(ModContent.BuffType<ApotropaicEmbrace>(), 2);
                     }
 
                     if (grazeTime > 0)

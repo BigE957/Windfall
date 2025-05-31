@@ -11,6 +11,7 @@ public class BuffPlayer : ModPlayer
     public bool Entropy = false;
     public bool Wildfire = false;
     public bool SpacialLock = false;
+    public bool ApotropaicEmbrace = false;
 
     public override void ResetEffects()
     {
@@ -29,11 +30,15 @@ public class BuffPlayer : ModPlayer
         Entropy = false;
         Wildfire = false;
         SpacialLock = false;
+        ApotropaicEmbrace = false;
     }
     public override void PostUpdateMiscEffects()
     {
         if (WretchedHarvest)
             Player.statDefense += 10;
+
+        if(ApotropaicEmbrace)
+            Player.statDefense += 20;
     }
     public override void UpdateLifeRegen()
     {

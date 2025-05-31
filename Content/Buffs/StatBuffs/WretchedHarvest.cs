@@ -5,8 +5,6 @@ public class WretchedHarvest : ModBuff
     public override string Texture => "CalamityMod/Buffs/Pets/MiniMindBuff";
     public override void SetStaticDefaults()
     {
-        Main.debuff[Type] = true;
-        Main.pvpBuff[Type] = true;
         Main.buffNoSave[Type] = true;
     }
 
