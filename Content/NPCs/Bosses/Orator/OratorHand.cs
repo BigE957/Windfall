@@ -58,9 +58,14 @@ public class OratorHand : ModNPC
     private Rectangle cuffFrame = new(0, 0, 150, 114);
     private int cuffCounter = 0;
 
+    public static Asset<Texture2D> Cuffs;
+
     public override void SetStaticDefaults()
     {
         Main.npcFrameCount[Type] = 9;
+
+        if (!Main.dedServ)
+            Cuffs = ModContent.Request<Texture2D>("Windfall/Assets/NPCs/Enemies/Orator_Hand_Cuffs");
 
         NPCID.Sets.NPCBestiaryDrawModifiers drawModifiers = new()
         {
@@ -1108,7 +1113,7 @@ public class OratorHand : ModNPC
     
     public override void PostDraw(SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor)
     {            
-        Texture2D texture = ModContent.Request<Texture2D>("Windfall/Assets/NPCs/Enemies/Orator_Hand_Cuffs").Value;
+        Texture2D texture = Cuffs.Value;
         cuffFrame.Width = texture.Width;
         cuffFrame.Height = texture.Height / 9;       
 

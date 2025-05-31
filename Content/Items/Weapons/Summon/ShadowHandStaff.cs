@@ -771,7 +771,7 @@ public class OratorHandMinion : ModProjectile
 
     public override void PostDraw(Color lightColor)
     {
-        Texture2D texture = ModContent.Request<Texture2D>("Windfall/Assets/NPCs/Enemies/Orator_Hand_Cuffs").Value;
+        Texture2D texture = OratorHand.Cuffs.Value;
 
         cuffFrame.Width = texture.Width;
         cuffFrame.Height = texture.Height / 9;
