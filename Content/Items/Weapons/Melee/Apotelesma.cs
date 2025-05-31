@@ -249,8 +249,6 @@ public class Apotelesma : ModItem, ILocalizedModType
 
         spriteBatch.End();
         Main.spriteBatch.Begin(SpriteSortMode.Deferred, null, null, null, null, null, Main.UIScaleMatrix);
-
-        base.PostDrawInInventory(spriteBatch, position, frame, drawColor, itemColor, origin, scale);
     }
 
     internal static void ShatterGem(Vector2 position)

@@ -797,10 +797,10 @@ Items: {
 					'''
 					[c/03fc84:I had only heard stories, but now I bear witness.]
 					[c/03fc84:The sky torn to sunders; as it descended from the stars.]
-					[c/03fc84:It took and it took and it took, and it could wield that which it took.]
+					[c/03fc84:It took and it took and it took, and it could wield all that it stole.]
 					[c/03fc84:Flames and lightning roared. Its power dominated all others.]
-					[c/03fc84:This, this is what it is that I seek. A power which dominates all others.]
-					[c/03fc84:That which even the fortitude of the spiritual would bend before.]
+					[c/03fc84:This, this is what I seek. A power which dominates all others.]
+					[c/03fc84:That which even the fortitude of the soul bends before.]
 					[c/03fc84:This is what I seek, I am certain of it.]
 					'''
 			}
@@ -1644,6 +1644,7 @@ Projectiles: {
 	}
 
 	OratorHandMinion.DisplayName: Orator Hand Minion
+	MinionHandRing.DisplayName: Minion Hand Ring
 }
 
 Buffs: {

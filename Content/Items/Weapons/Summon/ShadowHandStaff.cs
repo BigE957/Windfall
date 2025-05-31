@@ -1,15 +1,17 @@
 ﻿using CalamityMod;
 using CalamityMod.Items;
-using CalamityMod.Items.Weapons.Rogue;
 using CalamityMod.Particles;
+using CalamityMod.World;
 using Luminance.Core.Graphics;
 using Microsoft.Xna.Framework.Input;
 using System.Collections.ObjectModel;
 using System.Diagnostics.Metrics;
 using Windfall.Common.Graphics.Metaballs;
 using Windfall.Common.Players;
+using Windfall.Common.Systems;
 using Windfall.Content.Buffs.Weapons.Minions;
-using Windfall.Content.Items.Lore;
+using Windfall.Content.NPCs.Bosses.Orator;
+using Windfall.Content.Projectiles.Boss.Orator;
 
 namespace Windfall.Content.Items.Weapons.Summon;
 
@@ -17,13 +19,14 @@ public class ShadowHandStaff : ModItem, ILocalizedModType
 {
     public new string LocalizationCategory => "Items.Weapons.Summon";
     public override string Texture => "Windfall/Assets/Items/Weapons/Summon/ShadowHandStaff";
+
     public override void SetDefaults()
     {
         Item.width = 28;
         Item.height = 30;
         Item.damage = 470;
         Item.mana = 10;
-        Item.useTime = Item.useAnimation = 34;
+        Item.useTime = Item.useAnimation = 24;
         Item.useStyle = ItemUseStyleID.Swing;
         Item.noMelee = true;
         Item.knockBack = 0.5f;
@@ -34,7 +37,15 @@ public class ShadowHandStaff : ModItem, ILocalizedModType
         Item.shoot = ModContent.ProjectileType<OratorHandMinion>();
         Item.shootSpeed = 10f;
         Item.DamageType = DamageClass.Summon;
+        Item.channel = true;
+        Item.autoReuse = true;
     }
+
+    public int GrazePoints = 0;
+    private static readonly int GrazeMax = 100;
+    float MaxGraze = 100f;
+
+    public override bool AltFunctionUse(Player player) => GrazePoints > 0;
 
     public override bool PreDrawTooltip(ReadOnlyCollection<TooltipLine> lines, ref int x, ref int y)
     {
@@ -128,7 +139,11 @@ public class ShadowHandStaff : ModItem, ILocalizedModType
     public override void HoldItem(Player player)
     {
         player.Calamity().rightClickListener = true;
-        player.Calamity().mouseWorldListener = true;
+    }
+
+    public override bool? UseItem(Player player)
+    {
+        return base.UseItem(player);
     }
 
     public override bool Shoot(Player player, EntitySource_ItemUse_WithAmmo source, Vector2 position, Vector2 velocity, int type, int damage, float knockback)
@@ -139,7 +154,8 @@ public class ShadowHandStaff : ModItem, ILocalizedModType
                 return false;
 
             position = Main.MouseWorld;
-            int mainHand = Projectile.NewProjectile(source, position, velocity, type, Item.damage, knockback, player.whoAmI,-1);
+
+            int mainHand = Projectile.NewProjectile(source, position, velocity, type, Item.damage, knockback, player.whoAmI, -1);
 
             for (int i = 0; i <= 20; i++)
                 EmpyreanMetaball.SpawnDefaultParticle(position, Main.rand.NextVector2Circular(5f, 5f), 20 * Main.rand.NextFloat(1.5f, 2.3f));
@@ -152,9 +168,47 @@ public class ShadowHandStaff : ModItem, ILocalizedModType
 
             for (int i = 0; i <= 20; i++)
                 EmpyreanMetaball.SpawnDefaultParticle(position, Main.rand.NextVector2Circular(5f, 5f), 20 * Main.rand.NextFloat(1.5f, 2.3f));
+
+            if ((position - player.Center).X < 0)
+            {
+                (Main.projectile[subHand].position, Main.projectile[mainHand].position) = (Main.projectile[mainHand].position, Main.projectile[subHand].position);
+            }
         }
 
         return false;
+    }
+
+    public override void PostDrawInInventory(SpriteBatch spriteBatch, Vector2 position, Rectangle frame, Color drawColor, Color itemColor, Vector2 origin, float scale)
+    {
+        Player myPlayer = Main.LocalPlayer;
+
+        if (GrazePoints == 0 || !myPlayer.Calamity().mouseRight)
+            return;
+
+
+        if (myPlayer.HeldItem() != Item || !myPlayer.active || myPlayer.dead)
+            return;
+
+        spriteBatch.End();
+        Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, null, null, null, null, Main.GameViewMatrix.TransformationMatrix);
+
+        float barScale = 1f;
+
+        var barBG = ModContent.Request<Texture2D>("CalamityMod/UI/MiscTextures/GenericBarBack").Value;
+        var barFG = ModContent.Request<Texture2D>("CalamityMod/UI/MiscTextures/GenericBarFront").Value;
+
+        Vector2 barOrigin = barBG.Size() * 0.5f;
+        Vector2 drawPos = (myPlayer.Center - Main.screenPosition) + Vector2.UnitY * barScale * myPlayer.height;
+        Rectangle frameCrop = new(0, 0, (int)(GrazePoints / 100f * barFG.Width), barFG.Height);
+
+        Color bgColor = Color.DarkGray * 0.5f;
+        bgColor.A = 255;
+
+        spriteBatch.Draw(barBG, drawPos, null, bgColor, 0f, barOrigin, barScale, 0f, 0f);
+        spriteBatch.Draw(barFG, drawPos, frameCrop, Color.Lerp(Color.Yellow, Color.LimeGreen, GrazePoints / 100f), 0f, barOrigin, barScale, 0f, 0f);
+
+        spriteBatch.End();
+        Main.spriteBatch.Begin(SpriteSortMode.Deferred, null, null, null, null, null, Main.UIScaleMatrix);
     }
 }
 
@@ -215,14 +269,12 @@ public class OratorHandMinion : ModProjectile
     public static float AggroRange => 2000f;
     public NPC CheckNPCTargetValidity(NPC potentialTarget)
     {
-        if (potentialTarget.CanBeChasedBy(this, false))
+        if (potentialTarget.CanBeChasedBy(this))
         {
             float targetDist = Vector2.Distance(potentialTarget.Center, Projectile.Center);
 
-            if ((targetDist < AggroRange) && Collision.CanHitLine(Projectile.position, Projectile.width, Projectile.height, potentialTarget.position, potentialTarget.width, potentialTarget.height))
-            {
+            if (targetDist < AggroRange)
                 return potentialTarget;
-            }
         }
 
         return null;
@@ -236,6 +288,7 @@ public class OratorHandMinion : ModProjectile
     {
         NoTarget,
         Punch,
+        Protect,
         Orbit,
         Conjure
     }
@@ -282,6 +335,11 @@ public class OratorHandMinion : ModProjectile
     bool LocalAttackBool = false;
     int LocalTime = 0;
 
+    PulseRing grazeArea;
+    int grazeTime = 0;
+    int consumedGraze = 0;
+    public Vector2 attackVec;
+
     public override void AI()
     {
         #region Frames
@@ -325,7 +383,46 @@ public class OratorHandMinion : ModProjectile
             Projectile.timeLeft = 2;
 
         NPC target = Target;
-        if (target == null)
+        if(CurrentAI <= AIState.Protect)
+        {
+            if (CurrentAI == AIState.Protect)
+            {
+                if (player.HeldItem().type != ModContent.ItemType<ShadowHandStaff>() || !player.Calamity().mouseRight)
+                {
+                    CurrentAI = AIState.NoTarget;
+                    grazeTime = 0;
+                }
+            }
+            else if (player.HeldItem().type == ModContent.ItemType<ShadowHandStaff>() && player.Calamity().mouseRight)
+            {
+                consumedGraze = ((ShadowHandStaff)Owner.ActiveItem().ModItem).GrazePoints;
+                if (consumedGraze == 0)
+                {
+                    CurrentAI = AIState.Protect;
+                    if (HandSide == 1)
+                    {
+                        grazeArea = new(Owner.Center, Vector2.Zero, Color.LimeGreen, 0f, 1f, 20);
+                        GeneralParticleHandler.SpawnParticle(grazeArea);
+                    }
+                }
+                else if (consumedGraze == 100)
+                {
+                    CurrentAI = AIState.Conjure;
+                }
+                else
+                {
+                    LocalTime = 0;
+                    attackVec = Vector2.UnitX;
+                    CurrentAI = AIState.Orbit;
+                }
+
+                if (HandSide == 1)
+                    ((ShadowHandStaff)Owner.ActiveItem().ModItem).GrazePoints = 0;
+                SharedTime = 0;
+            }
+        }
+
+        if (target == null && CurrentAI != AIState.Protect)
             CurrentAI = AIState.NoTarget;
         else if (CurrentAI == AIState.NoTarget)
         {
@@ -341,7 +438,7 @@ public class OratorHandMinion : ModProjectile
             case AIState.NoTarget:
                 Pose = Poses.Default;
 
-                Vector2 goalPos = player.Center + player.velocity + new Vector2(124 * HandSide, +75);
+                Vector2 goalPos = player.Center + player.velocity + new Vector2(128 * HandSide, +75);
                 goalPos.Y += (float)Math.Sin(SharedTime / 20f) * 16f;
 
                 #region Movement
@@ -352,20 +449,23 @@ public class OratorHandMinion : ModProjectile
                 break;
             case AIState.Punch:
                 Pose = Poses.Fist;
-                Vector2 toTarget;
+
                 Vector2 targetHeading = target.Center + target.velocity;
+                Vector2 toTarget = (targetHeading - Projectile.Center).SafeNormalize(Vector2.Zero);
+                float toTargetRot = toTarget.ToRotation();
 
                 if (!LocalAttackBool)
                 {
-                    toTarget = (targetHeading - Owner.Center).SafeNormalize(Vector2.Zero);
-                    goalPos = targetHeading - (toTarget.RotatedBy(HandSide == 1 ? PiOver4 : -PiOver4) * (180 + Max(target.width, target.height) / 2f));
+                    Vector2 fromPlayer = (targetHeading - Owner.Center).SafeNormalize(Vector2.Zero);
+                    goalPos = targetHeading - (fromPlayer.RotatedBy(HandSide == 1 ? PiOver4 : -PiOver4) * (180 + Max(target.width, target.height) / 2f));
 
                     goalPos.Y += (float)Math.Sin(SharedTime / 15f) * 56f * HandSide;
 
                     #region Movement
                     Projectile.velocity = (goalPos - Projectile.Center).SafeNormalize(Vector2.Zero) * ((goalPos - Projectile.Center).Length() / 10f);
-                    Projectile.rotation = toTarget.ToRotation() + (PiOver2 * Math.Sign(-toTarget.X));
-                    Projectile.direction = Math.Sign(-toTarget.X);
+                   
+                    Projectile.rotation = toTargetRot;
+                    Projectile.direction = Math.Sign(toTarget.X);
                     #endregion
 
                     int attackDelay = 45;
@@ -382,7 +482,6 @@ public class OratorHandMinion : ModProjectile
                 }
                 else
                 {
-                    toTarget = (targetHeading - Projectile.Center).SafeNormalize(Vector2.Zero);
 
                     if (LocalTime < 0)
                     {
@@ -410,15 +509,18 @@ public class OratorHandMinion : ModProjectile
                         Projectile.velocity = toTarget * 64f;
                     else
                     {
-                        Projectile.velocity.RotateTowards(toTarget.ToRotation(), 0.05f);
+                        Projectile.velocity.RotateTowards(toTargetRot, 0.05f);
                         Projectile.velocity *= 0.9f;
                     }
 
-                    Projectile.rotation = Projectile.velocity.ToRotation();
                     if (LocalTime < 10)
                     {
-                        Projectile.rotation += Pi;
+                        Projectile.rotation = toTargetRot;
                         Projectile.direction = Math.Sign(toTarget.X);
+                    }
+                    else
+                    {
+                        Projectile.rotation = Projectile.velocity.ToRotation();
                     }
                     Projectile.scale = 1.5f;
 
@@ -431,11 +533,179 @@ public class OratorHandMinion : ModProjectile
                         LocalTime++;
                 }
                 break;
+            case AIState.Protect:
+                Pose = Poses.Palm;
+
+                goalPos = player.Center + player.velocity + new Vector2(64 * HandSide, 0);
+                goalPos.Y += (float)Math.Sin(SharedTime / 20f) * 16f * HandSide;
+
+                #region Movement
+                Projectile.velocity = (goalPos - Projectile.Center).SafeNormalize(Vector2.Zero) * ((goalPos - Projectile.Center).Length() / 10f);
+                Projectile.rotation = -PiOver2;
+                Projectile.direction = -HandSide;
+                #endregion
+
+                int grazeRadius = 76;
+
+                if (HandSide == 1)
+                {
+                    if (SharedTime >= 10)
+                    {
+                        GeneralParticleHandler.RemoveParticle(grazeArea);
+                        grazeArea = new(Owner.Center, Vector2.Zero, Color.LimeGreen, 1f, 1f, 24);
+                        GeneralParticleHandler.SpawnParticle(grazeArea);
+
+                        if (((ShadowHandStaff)Owner.ActiveItem().ModItem).GrazePoints < 100 && grazeTime == 0 && Owner.immuneTime == 0 && !Owner.immune && Main.projectile.Any(p => p.active && p.hostile && !Owner.Hitbox.Intersects(p.Hitbox) && (p.Center - Owner.Center).Length() < grazeRadius))
+                        {
+                            ((ShadowHandStaff)Owner.ActiveItem().ModItem).GrazePoints++;
+                            //grazeTime = 4;
+                        }
+
+                        Owner.AddBuff(BuffID.Endurance, 2);
+                    }
+
+                    if (grazeTime > 0)
+                        grazeTime--;
+                }
+                break;
             case AIState.Orbit:
+                Projectile.netUpdate = true;
+                Pose = Poses.Fist;
+
+                if (HandSide == -1)
+                {
+                    if (SharedTime < 90)
+                    {
+                        attackVec = attackVec.RotatedBy(Lerp(0.15f, 0.025f, SharedTime / 90f));
+                        attackVec.Normalize();
+                        //direction *= WhatHand;
+                        goalPos = Target.Center + (attackVec * 500);
+
+                        #region Movement
+                        Projectile.velocity = (goalPos - Projectile.Center).SafeNormalize(Vector2.Zero) * ((goalPos - Projectile.Center).Length() / 10f);
+                        Projectile.rotation = Projectile.DirectionTo(Target.Center).ToRotation();
+                        if (Projectile.Center.X > Target.Center.X)
+                            Projectile.direction = -1;
+                        else
+                            Projectile.direction = 1;
+                        #endregion
+                    }
+                    else
+                    {
+                        if (SharedTime < 110)
+                        {
+                            if (SharedTime == 90)
+                            {
+                                attackVec = (Target.Center - Projectile.Center).SafeNormalize(Vector2.UnitX * Projectile.direction);
+                                LocalAttackBool = false;
+                            }
+                            float reelBackSpeedExponent = 2.6f;
+                            float reelBackCompletion = Utils.GetLerpValue(0f, 20, SharedTime - 90, true);
+                            float reelBackSpeed = Lerp(2.5f, 16f, MathF.Pow(reelBackCompletion, reelBackSpeedExponent));
+                            Vector2 reelBackVelocity = attackVec * -reelBackSpeed;
+                            Projectile.velocity = Vector2.Lerp(Projectile.velocity, reelBackVelocity, 0.25f);
+                        }
+                        else
+                        {
+                            if (SharedTime == 110)
+                                Projectile.velocity = attackVec * 75;
+                            Projectile.velocity *= 0.93f;
+                            Projectile subHand = Main.projectile[OtherHand];
+                            if (Projectile.Hitbox.Intersects(subHand.Hitbox) && !LocalAttackBool)
+                            {
+                                Vector2 midPoint = Projectile.Center + ((subHand.Center - Projectile.Center) / 2);
+
+                                Projectile.Center = midPoint - (Projectile.rotation.ToRotationVector2() * (Projectile.width / 3f));
+                                subHand.Center = midPoint - (subHand.rotation.ToRotationVector2() * (subHand.width / 3f));
+
+
+                                ScreenShakeSystem.StartShake(9f);
+                                SoundEngine.PlaySound(SoundID.DD2_MonkStaffGroundImpact, midPoint);
+                                if (Main.netMode != NetmodeID.MultiplayerClient)
+                                {
+                                    int projCount = consumedGraze / 6;
+                                    Main.NewText(projCount);
+                                    for (int i = 0; i < projCount; i++)
+                                    {
+                                        Vector2 velocity = (Vector2.UnitY * -1).RotatedBy(Main.rand.NextFloat(-PiOver2, PiOver2)) * Main.rand.NextFloat(4f, 8f);
+                                        velocity.Y *= 2;
+                                        Projectile.NewProjectile(Terraria.Entity.GetSource_NaturalSpawn(), midPoint, velocity, ModContent.ProjectileType<MinionHandRing>(), Projectile.damage / 2, 0f, Owner.whoAmI, ai2: Target.whoAmI);
+                                    }
+                                }
+                                PulseRing pulse = new(midPoint, Vector2.Zero, new(253, 189, 53), 0f, 3f, 16);
+                                GeneralParticleHandler.SpawnParticle(pulse);
+                                DetailedExplosion explosion = new(midPoint, Vector2.Zero, new(255, 133, 187), new Vector2(1f, 1f), 0f, 0f, 1f, 16);
+                                GeneralParticleHandler.SpawnParticle(explosion);
+
+                                Projectile.velocity = Vector2.Zero;
+                                subHand.velocity = Vector2.Zero;
+
+                                LocalAttackBool = true;
+                                return;
+                            }
+                            else if (LocalAttackBool)
+                            {
+                                Projectile.velocity = Vector2.Zero;
+
+                                if (LocalTime >= 60)
+                                    CurrentAI = AIState.Punch;
+                                LocalTime++;
+                            }
+                        }
+                    }
+                }
+                else
+                {
+                    if (SharedTime >= 0)
+                    {
+                        Projectile mainHand = Main.projectile[OtherHand];
+                        attackVec = ((OratorHandMinion)mainHand.ModProjectile).attackVec;
+                        if (SharedTime < 90)
+                        {
+                            //direction *= WhatHand;
+                            goalPos = Target.Center + (attackVec * -500);
+
+                            #region Movement
+                            Projectile.velocity = (goalPos - Projectile.Center).SafeNormalize(Vector2.Zero) * ((goalPos - Projectile.Center).Length() / 10f);
+                            Projectile.rotation = mainHand.rotation + Pi;
+                            Projectile.direction = mainHand.direction * -1;
+                            #endregion
+                        }
+                        else
+                        {
+                            if (SharedTime < 110)
+                            {
+                                float reelBackSpeedExponent = 2.6f;
+                                float reelBackCompletion = Utils.GetLerpValue(0f, 20, SharedTime - 90, true);
+                                float reelBackSpeed = Lerp(2.5f, 16f, MathF.Pow(reelBackCompletion, reelBackSpeedExponent));
+                                Vector2 reelBackVelocity = attackVec * reelBackSpeed;
+                                Projectile.velocity = Vector2.Lerp(Projectile.velocity, reelBackVelocity, 0.25f);
+                            }
+                            else if (!((OratorHandMinion)mainHand.ModProjectile).LocalAttackBool)
+                            {
+                                if (SharedTime == 110)
+                                    Projectile.velocity = attackVec * -75;
+                                Projectile.velocity *= 0.93f;
+                                Projectile.velocity = Projectile.velocity.RotateTowards((mainHand.Center - Projectile.Center).ToRotation(), PiOver4);
+                            }
+                            else
+                            {
+                                Projectile.velocity = Vector2.Zero;
+
+                                if (LocalTime >= 60)
+                                    CurrentAI = AIState.Punch;
+                                LocalTime++;
+                            }
+                        }
+                    }
+                }
                 break;
             case AIState.Conjure:
                 break;
         }
+
+        if(grazeArea != null)
+            grazeArea.Position = Owner.Center;
 
         Vector2 rotVec = Projectile.rotation.ToRotationVector2();
         EmpyreanMetaball.SpawnDefaultParticle(Projectile.Center - (rotVec * (Projectile.width / (Main.rand.NextFloat(1.5f, 1.75f)))) + rotVec.RotatedBy(-PiOver2 * Projectile.direction) * Main.rand.NextFloat(0f, 48f), (rotVec.RotatedBy(Pi + Main.rand.NextFloat(-PiOver4, PiOver4)) * Main.rand.NextFloat(1f, 5f)), Main.rand.NextFloat(20f, 30f));
@@ -444,6 +714,8 @@ public class OratorHandMinion : ModProjectile
             SharedTime++;
     }
 
+    public override bool? CanHitNPC(NPC target) => Pose == Poses.Fist && LocalAttackBool;
+
     public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
     {
         if(CurrentAI == AIState.Punch && LocalAttackBool)
@@ -451,7 +723,7 @@ public class OratorHandMinion : ModProjectile
             int timeSaved = 30 - LocalTime;
             SharedTime += timeSaved;
 
-            LocalTime = -10;
+            LocalTime = -1;
             Projectile.velocity = -Projectile.velocity * 0.2f;
 
             Vector2 toProjectile = (Projectile.Center - target.Center).SafeNormalize(Vector2.Zero);
@@ -515,6 +787,154 @@ public class OratorHandMinion : ModProjectile
             origin.Y += 2;
         }
         Main.EntitySpriteDraw(texture, drawPosition, cuffFrame, Color.White, Projectile.rotation, origin, Projectile.scale, spriteEffects, 0f);
+    }
+}
+
+public class MinionHandRing : ModProjectile
+{
+    public new static string LocalizationCategory => "Projectiles.Boss";
+    public override string Texture => "Windfall/Assets/Projectiles/Boss/HandRings";
+    public override void SetStaticDefaults()
+    {
+        ProjectileID.Sets.TrailCacheLength[Projectile.type] = 6;
+        ProjectileID.Sets.TrailingMode[Projectile.type] = 2;
+    }
+
+    public override void SetDefaults()
+    {
+        Projectile.width = 4;
+        Projectile.height = 4;
+        Projectile.friendly = true;
+        Projectile.tileCollide = false;
+        Projectile.ignoreWater = true;
+        Projectile.usesLocalNPCImmunity = true;
+        Projectile.localNPCHitCooldown = 12;
+        Projectile.timeLeft = 300;
+        Projectile.penetrate = -1;
+    }
+
+    public ref float Time => ref Projectile.ai[0];
+
+    public ref float AfterImageOpacity => ref Projectile.ai[1];
+
+    private bool spinDir = false;
+
+    private Vector2 truePosition = Vector2.Zero;
+
+    public override void OnSpawn(IEntitySource source)
+    {
+        spinDir = Main.rand.NextBool();
+        Projectile.localAI[0] = Main.rand.Next(3);
+        Projectile.localAI[1] = Main.rand.Next(4);
+        Projectile.netUpdate = true;
+    }
+
+    public override void AI()
+    {
+        //Projectile.velocity *= 0.9925f;
+        if (spinDir)
+            Projectile.rotation += 0.01f * Projectile.velocity.Length();
+        else
+            Projectile.rotation -= 0.01f * Projectile.velocity.Length();
+
+        NPC target = Main.npc[(int)Projectile.ai[2]];
+
+        if (Time < 60)
+        {
+            Projectile.velocity.Y += 0.25f;
+            Projectile.velocity *= (1 - AfterImageOpacity);
+
+            if (Time > 30 && Time < 60)
+                AfterImageOpacity = (Time - 30) / 30f;
+        }
+        else if (Time < 210)
+        {
+            if (Time == 60)
+                Projectile.velocity = (target.Center - Projectile.Center).SafeNormalize(Vector2.UnitX);
+
+            if(target != null && target.active)
+                Projectile.velocity = Projectile.velocity.RotateTowards((target.Center - Projectile.Center).ToRotation(), 0.33f);
+            float maxSpeed = 18f;
+            Projectile.velocity = Projectile.velocity.SafeNormalize(Vector2.Zero) * Clamp(Lerp(0.01f, maxSpeed, CircOutEasing((Time - 60) / 120)), 0.01f, maxSpeed);
+
+            AfterImageOpacity = 1f;
+        }
+        else
+        {
+            Projectile.velocity *= 0.97f;
+        }
+
+        Lighting.AddLight(Projectile.Center, EmpyreanMetaball.BorderColor.ToVector3());
+        Time++;
+    }
+    public override bool PreDraw(ref Color lightColor)
+    {
+        Texture2D WhiteOutTexture = (Projectile.localAI[1] == 0 ? HandRing.WhiteOut0 : HandRing.WhiteOut1).Value; 
+        Color color = Color.Black;
+        switch (Projectile.localAI[0])
+        {
+            case 0:
+                color = new(255, 133, 187);
+                break;
+            case 1:
+                color = new(253, 189, 53);
+                break;
+            case 2:
+                color = new(220, 216, 155);
+                break;
+        }
+        if (Projectile.timeLeft <= 90)
+            color = Color.Lerp(color, EmpyreanMetaball.BorderColor, (90 - Projectile.timeLeft) / 60f);
+        DrawCenteredAfterimages(Projectile, ProjectileID.Sets.TrailingMode[Projectile.type], color * AfterImageOpacity, 2, texture: WhiteOutTexture);
+
+        Vector2 drawPosition = Projectile.Center - Main.screenPosition;
+
+        Main.EntitySpriteDraw(WhiteOutTexture, drawPosition, null, color * Projectile.Opacity, Projectile.rotation, WhiteOutTexture.Size() * 0.5f, Projectile.scale * 1.25f * CircOutEasing(AfterImageOpacity), SpriteEffects.None);
+
+        Texture2D tex = ModContent.Request<Texture2D>(Texture).Value;
+        Rectangle frame = tex.Frame(3, 4, (int)Projectile.ai[1], (int)Projectile.localAI[1]);
+
+        Main.EntitySpriteDraw(tex, drawPosition, frame, Color.White * Projectile.Opacity, Projectile.rotation, frame.Size() * 0.5f, Projectile.scale, SpriteEffects.None);
+
+        return false;
+    }
+
+    public override void PostDraw(Color lightColor)
+    {
+        if (Projectile.timeLeft > 90)
+            return;
+
+        Texture2D WhiteOutTexture = ModContent.Request<Texture2D>("Windfall/Assets/Projectiles/Boss/HandRingsWhiteOut" + (Projectile.localAI[1] == 0 ? 0 : 1)).Value;
+
+        Vector2 drawPosition = Projectile.Center - Main.screenPosition;
+        float ratio = 0f;
+        if (Projectile.timeLeft <= 90)
+            ratio = (90 - Projectile.timeLeft) / 60f;
+        ratio = Clamp(ratio, 0f, 1f);
+        Main.EntitySpriteDraw(WhiteOutTexture, drawPosition, WhiteOutTexture.Frame(), Color.White * AfterImageOpacity, Projectile.rotation, WhiteOutTexture.Frame().Size() * 0.5f, Projectile.scale * ratio, SpriteEffects.None);
+    }
+
+    public override void OnKill(int timeLeft)
+    {
+        for (int i = 0; i <= 10; i++)
+        {
+            EmpyreanMetaball.SpawnDefaultParticle(Projectile.Center, Main.rand.NextVector2Circular(4f, 4f), Main.rand.NextFloat(10f, 20f));
+        }
+    }
+
+    public override void SendExtraAI(BinaryWriter writer)
+    {
+        writer.Write(spinDir);
+
+        writer.Write(truePosition.X);
+        writer.Write(truePosition.Y);
+    }
+
+    public override void ReceiveExtraAI(BinaryReader reader)
+    {
+        spinDir = reader.ReadBoolean();
+
+        truePosition = reader.ReadVector2();
     }
 }
 

@@ -7,10 +7,19 @@ public class HandRing : ModProjectile
 {
     public new static string LocalizationCategory => "Projectiles.Boss";
     public override string Texture => "Windfall/Assets/Projectiles/Boss/HandRings";
+
+    public static Asset<Texture2D> WhiteOut0;
+    public static Asset<Texture2D> WhiteOut1;
+
     public override void SetStaticDefaults()
     {
         ProjectileID.Sets.TrailCacheLength[Projectile.type] = 6;
         ProjectileID.Sets.TrailingMode[Projectile.type] = 2;
+        if (!Main.dedServ)
+        {
+            WhiteOut0 = ModContent.Request<Texture2D>("Windfall/Assets/Projectiles/Boss/HandRingsWhiteOut0");
+            WhiteOut1 = ModContent.Request<Texture2D>("Windfall/Assets/Projectiles/Boss/HandRingsWhiteOut1");
+        }
     }
 
     public override void SetDefaults()
@@ -21,8 +30,6 @@ public class HandRing : ModProjectile
         Projectile.tileCollide = false;
         Projectile.ignoreWater = true;
         CooldownSlot = ImmunityCooldownID.Bosses;
-        Projectile.usesLocalNPCImmunity = true;
-        Projectile.localNPCHitCooldown = -1;
         Projectile.timeLeft = 300;
         Projectile.penetrate = -1;
     }
@@ -33,7 +40,6 @@ public class HandRing : ModProjectile
 
     private bool spinDir = false;
 
-    private static Color selenicColor => Color.Lerp(new Color(117, 255, 159), new Color(255, 180, 80), EmpyreanMetaball.BorderLerpValue);
     private Vector2 truePosition = Vector2.Zero;
 
     public override void OnSpawn(IEntitySource source)
@@ -96,7 +102,7 @@ public class HandRing : ModProjectile
         }
         */
 
-        Lighting.AddLight(Projectile.Center, selenicColor.ToVector3());
+        Lighting.AddLight(Projectile.Center, EmpyreanMetaball.BorderColor.ToVector3());
         Time++;
     }
     public override bool PreDraw(ref Color lightColor)
@@ -116,7 +122,7 @@ public class HandRing : ModProjectile
                 break;
         }
         if(Projectile.timeLeft <= 90)
-            color = Color.Lerp(color, selenicColor, (90 - Projectile.timeLeft) / 60f);
+            color = Color.Lerp(color, EmpyreanMetaball.BorderColor, (90 - Projectile.timeLeft) / 60f);
         DrawCenteredAfterimages(Projectile, ProjectileID.Sets.TrailingMode[Projectile.type], color * AfterImageOpacity, 2, texture: WhiteOutTexture);
 
         Vector2 drawPosition = Projectile.Center - Main.screenPosition;
@@ -136,7 +142,7 @@ public class HandRing : ModProjectile
         if (Projectile.timeLeft > 90)
             return;
 
-        Texture2D WhiteOutTexture = ModContent.Request<Texture2D>("Windfall/Assets/Projectiles/Boss/HandRingsWhiteOut" + (Projectile.localAI[1] == 0 ? 0 : 1)).Value;
+        Texture2D WhiteOutTexture = (Projectile.localAI[1] == 0 ? WhiteOut0 : WhiteOut1).Value;
 
         Vector2 drawPosition = Projectile.Center - Main.screenPosition;
         float ratio = 0f;
