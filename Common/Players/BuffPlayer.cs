@@ -6,7 +6,7 @@ namespace Windfall.Common.Players;
 public class BuffPlayer : ModPlayer
 {
     public bool PerfectFlow = false;
-    public bool DeepSeeker = false;
+    public bool OratorMinions = false;
     public bool WretchedHarvest = false;
     public bool Entropy = false;
     public bool Wildfire = false;
@@ -15,7 +15,7 @@ public class BuffPlayer : ModPlayer
     public override void ResetEffects()
     {
         PerfectFlow = false;
-        DeepSeeker = false;
+        OratorMinions = false;
         WretchedHarvest = false;
         Entropy = false;
         Wildfire = false;
@@ -24,7 +24,7 @@ public class BuffPlayer : ModPlayer
     public override void UpdateDead()
     {
         PerfectFlow = false;
-        DeepSeeker = false;
+        OratorMinions = false;
         WretchedHarvest = false;
         Entropy = false;
         Wildfire = false;

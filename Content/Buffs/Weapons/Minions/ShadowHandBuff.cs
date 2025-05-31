@@ -15,18 +15,15 @@ public class ShadowHandBuff : ModBuff
     public override void Update(Player player, ref int buffIndex)
     {           
         BuffPlayer buffPlayer = player.Buff();
-        if (player.ownedProjectileCounts[ModContent.ProjectileType<ShadowHand_Minion>()] > 0)
-        {
-            buffPlayer.DeepSeeker = true;
-        }
-        if (!buffPlayer.DeepSeeker)
+        if (player.ownedProjectileCounts[ModContent.ProjectileType<OratorHandMinion>()] > 0)
+            buffPlayer.OratorMinions = true;
+
+        if (!buffPlayer.OratorMinions)
         {
             player.DelBuff(buffIndex);
             buffIndex--;
         }
         else
-        {
             player.buffTime[buffIndex] = 18000;
-        }
     }
 }

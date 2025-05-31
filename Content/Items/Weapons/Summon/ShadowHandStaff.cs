@@ -1,11 +1,15 @@
 ﻿using CalamityMod;
 using CalamityMod.Items;
+using CalamityMod.Items.Weapons.Rogue;
+using CalamityMod.Particles;
+using Luminance.Core.Graphics;
 using Microsoft.Xna.Framework.Input;
 using System.Collections.ObjectModel;
+using System.Diagnostics.Metrics;
 using Windfall.Common.Graphics.Metaballs;
 using Windfall.Common.Players;
 using Windfall.Content.Buffs.Weapons.Minions;
-using Windfall.Content.Projectiles.Boss.Orator;
+using Windfall.Content.Items.Lore;
 
 namespace Windfall.Content.Items.Weapons.Summon;
 
@@ -27,7 +31,7 @@ public class ShadowHandStaff : ModItem, ILocalizedModType
         Item.rare = ItemRarityID.Red;
         Item.UseSound = SoundID.Item103;
         Item.autoReuse = true;
-        Item.shoot = ModContent.ProjectileType<ShadowHand_Minion>();
+        Item.shoot = ModContent.ProjectileType<OratorHandMinion>();
         Item.shootSpeed = 10f;
         Item.DamageType = DamageClass.Summon;
     }
@@ -131,32 +135,41 @@ public class ShadowHandStaff : ModItem, ILocalizedModType
     {
         if (player.altFunctionUse != 2)
         {
+            if (player.slotsMinions + 4 > player.maxMinions)
+                return false;
+
             position = Main.MouseWorld;
-            int seeker = Projectile.NewProjectile(source, position, velocity, type, damage, knockback, player.whoAmI, 0f, 1f);
-            if (Main.projectile.IndexInRange(seeker))
-                Main.projectile[seeker].originalDamage = Item.damage;
+            int mainHand = Projectile.NewProjectile(source, position, velocity, type, Item.damage, knockback, player.whoAmI,-1);
+
             for (int i = 0; i <= 20; i++)
-            {
                 EmpyreanMetaball.SpawnDefaultParticle(position, Main.rand.NextVector2Circular(5f, 5f), 20 * Main.rand.NextFloat(1.5f, 2.3f));
-            }
+
+            float xOff = (player.Center.X - position.X) * 2;
+            position.X += xOff;
+            int subHand = Projectile.NewProjectile(source, position, velocity, type, Item.damage, knockback, player.whoAmI, mainHand);
+
+            Main.projectile[mainHand].ai[0] = subHand;
+
+            for (int i = 0; i <= 20; i++)
+                EmpyreanMetaball.SpawnDefaultParticle(position, Main.rand.NextVector2Circular(5f, 5f), 20 * Main.rand.NextFloat(1.5f, 2.3f));
         }
+
         return false;
     }
 }
 
-public class ShadowHand_Minion : ModProjectile
+public class OratorHandMinion : ModProjectile
 {
-    public override string Texture => "Windfall/Assets/NPCs/Enemies/ShadowHand";
+    public override string Texture => "Windfall/Assets/NPCs/Enemies/Orator_Hand";
+
     public override void SetStaticDefaults()
     {
-        Main.projFrames[Projectile.type] = 6;
-        ProjectileID.Sets.MinionSacrificable[Projectile.type] = true;
-        ProjectileID.Sets.MinionTargettingFeature[Projectile.type] = true;
+        Main.projFrames[Type] = 9;
     }
+
     public override void SetDefaults()
     {
-        Projectile.width = 78;
-        Projectile.height = 50;
+        Projectile.width = Projectile.height = 75;
         Projectile.netImportant = true;
         Projectile.friendly = true;
         Projectile.ignoreWater = true;
@@ -164,35 +177,15 @@ public class ShadowHand_Minion : ModProjectile
         Projectile.timeLeft = 18000;
         Projectile.penetrate = -1;
         Projectile.tileCollide = false;
-        Projectile.timeLeft *= 5;
         Projectile.minion = true;
         Projectile.DamageType = DamageClass.Summon;
         Projectile.manualDirectionChange = true;
         Projectile.scale = 1.25f;
         Projectile.usesLocalNPCImmunity = true;
-        Projectile.localNPCHitCooldown = 60;
+        Projectile.localNPCHitCooldown = 24;
+        Projectile.hide = true;
     }
-    internal enum AIState
-    {
-        Spawning,
-        NoTarget,
-        Hunting,
-        Recoil,
-        Dashing,
-        Globbing,
-        Sacrifice,
-    }
-    internal AIState CurrentAI
-    {
-        get => (AIState)Projectile.ai[0];
-        set => Projectile.ai[0] = (int)value;
-    }
-    private int aiCounter
-    {
-        get => (int)Projectile.ai[1];
-        set => Projectile.ai[1] = value;
-    }
-    private bool attackBool = false;
+
     public Player Owner => Main.player[Projectile.owner];
     public NPC Target
     {
@@ -219,7 +212,7 @@ public class ShadowHand_Minion : ModProjectile
             return null;
         }
     }
-    public static float AggroRange = 1600f;
+    public static float AggroRange => 2000f;
     public NPC CheckNPCTargetValidity(NPC potentialTarget)
     {
         if (potentialTarget.CanBeChasedBy(this, false))
@@ -235,226 +228,293 @@ public class ShadowHand_Minion : ModProjectile
         return null;
     }
 
-    public override void OnSpawn(IEntitySource source)
-    {
-        CurrentAI = AIState.Spawning;
-        Projectile.velocity = Main.rand.NextFloat(0, TwoPi).ToRotationVector2() * Main.rand.Next(10, 15);
-        Projectile.rotation = Projectile.velocity.ToRotation() + Pi;
+    public int OtherHand => (int)Projectile.ai[0];
+    
+    public int HandSide => Projectile.whoAmI < OtherHand ? -1 : 1;
 
+    public enum AIState
+    {
+        NoTarget,
+        Punch,
+        Orbit,
+        Conjure
     }
+    AIState CurrentAI = AIState.NoTarget;
+
+    public enum Poses
+    {
+        Default,
+        Fist,
+        Palm,
+        Gun
+    }
+    Poses Pose = Poses.Default;
+
+    Rectangle cuffFrame = new();
+    int cuffCounter = 0;
+
+    public int SharedTime
+    {
+        get => (int)(HandSide == 1 ? Projectile.ai[1] : Main.projectile[OtherHand].ai[1]); 
+        
+        set
+        {
+            if (HandSide == 1)
+                Projectile.ai[1] = value;
+            else
+                Main.projectile[OtherHand].ai[1] = value;
+        }
+    }
+
+    public bool SharedAttackBool
+    {
+        get => (HandSide == 1 ? Projectile.ai[2] : Main.projectile[OtherHand].ai[2]) != 0;
+
+        set
+        {
+            if (HandSide == 1)
+                Projectile.ai[2] = value ? 1 : 0;
+            else
+                Main.projectile[OtherHand].ai[2] = value ? 1 : 0;
+        }
+    }
+
+    bool LocalAttackBool = false;
+    int LocalTime = 0;
+
     public override void AI()
     {
-        AggroRange = 2000f;
         #region Frames
-        Projectile.frameCounter++;
-        if (Projectile.frameCounter >= Main.projFrames[Projectile.type])
+        int frameWidth = TextureAssets.Projectile[Type].Width() / 4;
+
+        if (Pose != Poses.Default)
+            Projectile.frame = 0;
+        else
         {
-            Projectile.frameCounter = 0;
-            Projectile.frame = ++Projectile.frame % Main.projFrames[Projectile.type];
+            Projectile.frameCounter++;
+
+            if (Projectile.frameCounter >= 6)
+            {
+                Projectile.frameCounter = 0;
+                Projectile.frame++;
+                if (Projectile.frame >= 9)
+                    Projectile.frame = 0;
+            }
+        }
+        cuffCounter++;
+        if (cuffCounter >= 16)
+        {
+            cuffCounter = 0;
+            cuffFrame.Y += cuffFrame.Height;
+            if (cuffFrame.Y >= cuffFrame.Height * 6)
+                cuffFrame.Y = 0;
         }
         #endregion           
 
         Player player = Main.player[Projectile.owner];
-        BuffPlayer buffPlayer = player.Buff();
 
         #region Buff
+        BuffPlayer buffPlayer = player.Buff();
+
         player.AddBuff(ModContent.BuffType<ShadowHandBuff>(), 3600);
         if (player.dead)
-            buffPlayer.DeepSeeker = false;
-        if (buffPlayer.DeepSeeker)
-            Projectile.timeLeft = 2;
-        Projectile.MinionAntiClump();
+            buffPlayer.OratorMinions = false;
         #endregion
+
+        if (buffPlayer.OratorMinions)
+            Projectile.timeLeft = 2;
 
         NPC target = Target;
         if (target == null)
             CurrentAI = AIState.NoTarget;
         else if (CurrentAI == AIState.NoTarget)
-            CurrentAI = AIState.Hunting;
-        switch (CurrentAI)
         {
-            case AIState.Spawning:
-                Projectile.velocity += Projectile.velocity.SafeNormalize(Vector2.UnitX) / -2;
-                int dustStyle = Main.rand.NextBool() ? 66 : 263;
-                Dust dust = Dust.NewDustPerfect(Projectile.Center + (Vector2.UnitY * Main.rand.NextFloat(-16, 16)) + new Vector2(-54, 0).RotatedBy(Projectile.rotation), Main.rand.NextBool(3) ? 191 : dustStyle);
-                dust.scale = Main.rand.NextFloat(1.5f, 2.3f);
-                dust.noGravity = true;
-                dust.color = dust.type == dustStyle ? Color.LightGreen : default;
-                if (Projectile.velocity.Length() < 2)
-                {
-                    CurrentAI = AIState.NoTarget;
-                    aiCounter = 0;
-                    Projectile.velocity = (target.Center - Projectile.Center).SafeNormalize(Vector2.Zero);
-                }
-                break;
-            case AIState.NoTarget:
-                Projectile.velocity += (player.Center - Projectile.Center).SafeNormalize(Vector2.Zero) * 0.5f;
-                if (Projectile.velocity.Length() > 10)
-                    Projectile.velocity = Projectile.velocity.SafeNormalize(Vector2.Zero) * 10;
-                Projectile.rotation = Projectile.velocity.ToRotation();
-                if (Projectile.rotation + Pi > Pi / 2 && Projectile.rotation + Pi < 3 * Pi / 2)
-                    Projectile.rotation = 0 + (PiOver4 * (Projectile.velocity.Length() / 10));
-                else
-                    Projectile.rotation = Pi - (PiOver4 * (Projectile.velocity.Length() / 10));
+            SharedTime = 1;
+            SharedAttackBool = false;
+            LocalAttackBool = false;
+            LocalTime = 0;
+            CurrentAI = AIState.Punch;
+        }
 
-                aiCounter = 0;
-                break;
-            case AIState.Hunting:
+        switch(CurrentAI)
+        {
+            case AIState.NoTarget:
+                Pose = Poses.Default;
+
+                Vector2 goalPos = player.Center + player.velocity + new Vector2(124 * HandSide, +75);
+                goalPos.Y += (float)Math.Sin(SharedTime / 20f) * 16f;
 
                 #region Movement
-                Vector2 homeInVector = target.Center - Projectile.Center;
-                float targetDist = homeInVector.Length();
-                homeInVector.Normalize();
-                if (targetDist > 250f)
-                {
-                    float velocity = 30f;
-                    Projectile.velocity = (Projectile.velocity * 40f + homeInVector * velocity) / 41f;
-                }
-                else
-                {
-                    if (targetDist < 200f)
-                    {
-                        float velocity = -30f;
-                        Projectile.velocity = (Projectile.velocity * 40f + homeInVector * velocity) / 41f;
-                    }
-                    else
-                        Projectile.velocity *= 0.97f;
-                }
-                Projectile.rotation = (target.Center - Projectile.Center).ToRotation();
-                if (Projectile.rotation + Pi > Pi / 2 && Projectile.rotation + Pi < 3 * Pi / 2)
-                    Projectile.rotation = 0 + (PiOver4 * (Projectile.velocity.Length() / 10));
-                else
-                    Projectile.rotation = Pi - (PiOver4 * (Projectile.velocity.Length() / 10));
+                Projectile.velocity = (goalPos - Projectile.Center).SafeNormalize(Vector2.Zero) * ((goalPos - Projectile.Center).Length() / 10f);
+                Projectile.rotation = (-3 * Pi / 2) - (Pi / 8 * HandSide);
+                Projectile.direction = HandSide;
                 #endregion
+                break;
+            case AIState.Punch:
+                Pose = Poses.Fist;
+                Vector2 toTarget;
+                Vector2 targetHeading = target.Center + target.velocity;
 
-                #region Attack
-                Vector2 toTarget = (target.Center - Projectile.Center);
-                if (targetDist < 350f)
+                if (!LocalAttackBool)
                 {
-                    if (aiCounter % 45 == 0 && aiCounter <= 140)
+                    toTarget = (targetHeading - Owner.Center).SafeNormalize(Vector2.Zero);
+                    goalPos = targetHeading - (toTarget.RotatedBy(HandSide == 1 ? PiOver4 : -PiOver4) * (180 + Max(target.width, target.height) / 2f));
+
+                    goalPos.Y += (float)Math.Sin(SharedTime / 15f) * 56f * HandSide;
+
+                    #region Movement
+                    Projectile.velocity = (goalPos - Projectile.Center).SafeNormalize(Vector2.Zero) * ((goalPos - Projectile.Center).Length() / 10f);
+                    Projectile.rotation = toTarget.ToRotation() + (PiOver2 * Math.Sign(-toTarget.X));
+                    Projectile.direction = Math.Sign(-toTarget.X);
+                    #endregion
+
+                    int attackDelay = 45;
+
+                    if(SharedTime % attackDelay == 0)
                     {
-                        SoundEngine.PlaySound(SoundID.DD2_OgreSpit, Projectile.Center);
-                        Projectile.velocity = toTarget.SafeNormalize(Vector2.Zero) * -10;
-                        Projectile.rotation = Projectile.velocity.ToRotation() + Pi;
-                        Projectile Bolt = Projectile.NewProjectileDirect(Terraria.Entity.GetSource_NaturalSpawn(), Projectile.Center, toTarget.SafeNormalize(Vector2.UnitX), ModContent.ProjectileType<DarkBolt>(), Projectile.damage, 0f, -1, 0, 15);
-                        Bolt.hostile = false;
-                        Bolt.friendly = true;
-                        Bolt = Projectile.NewProjectileDirect(Terraria.Entity.GetSource_NaturalSpawn(), Projectile.Center, toTarget.SafeNormalize(Vector2.UnitX).RotatedBy(Pi / 8), ModContent.ProjectileType<DarkBolt>(), Projectile.damage, 0f, -1, 0, 15);
-                        Bolt.hostile = false;
-                        Bolt.friendly = true;
-                        Bolt = Projectile.NewProjectileDirect(Terraria.Entity.GetSource_NaturalSpawn(), Projectile.Center, toTarget.SafeNormalize(Vector2.UnitX).RotatedBy(-Pi / 8), ModContent.ProjectileType<DarkBolt>(), Projectile.damage, 0f, -1, 0, 15);
-                        Bolt.hostile = false;
-                        Bolt.friendly = true;
-                        CurrentAI = AIState.Recoil;
+                        if (SharedAttackBool && HandSide == 1)
+                            LocalAttackBool = true;
+                        else if (!SharedAttackBool && HandSide == -1)
+                            LocalAttackBool = true;
                     }
-                    else if (aiCounter >= 180)
+                    if(SharedTime % attackDelay == 1)
+                        SharedAttackBool = !SharedAttackBool;
+                }
+                else
+                {
+                    toTarget = (targetHeading - Projectile.Center).SafeNormalize(Vector2.Zero);
+
+                    if (LocalTime < 0)
                     {
-                        Projectile.rotation = toTarget.ToRotation();
-                        if (Main.rand.NextBool() || toTarget.Length() > 600f)
+                        Projectile.velocity *= 0.9f;
+
+                        if (LocalTime == -1)
                         {
-                            attackBool = Projectile.position.X > target.position.X;
-                            Projectile.velocity = toTarget.SafeNormalize(Vector2.Zero) * -5;
-                            CurrentAI = AIState.Dashing;
+                            LocalAttackBool = false;
+                            LocalTime = 0;
                         }
                         else
-                        {
-                            Projectile.velocity = Vector2.Zero;
-                            CurrentAI = AIState.Globbing;
-                        }
-                        aiCounter = 0;
+                            LocalTime++;
+                        return;
+                    }
+
+                    if (LocalTime < 10)
+                    {
+                        float reelBackSpeedExponent = 2.6f;
+                        float reelBackCompletion = Utils.GetLerpValue(0f, 10, LocalTime, true);
+                        float reelBackSpeed = Lerp(2.5f, 16f, MathF.Pow(reelBackCompletion, reelBackSpeedExponent));
+                        Vector2 reelBackVelocity = toTarget * -reelBackSpeed;
+                        Projectile.velocity = Vector2.Lerp(Projectile.velocity, reelBackVelocity, 0.25f);
+                    }
+                    else if (LocalTime == 10)
+                        Projectile.velocity = toTarget * 64f;
+                    else
+                    {
+                        Projectile.velocity.RotateTowards(toTarget.ToRotation(), 0.05f);
+                        Projectile.velocity *= 0.9f;
+                    }
+
+                    Projectile.rotation = Projectile.velocity.ToRotation();
+                    if (LocalTime < 10)
+                    {
+                        Projectile.rotation += Pi;
+                        Projectile.direction = Math.Sign(toTarget.X);
+                    }
+                    Projectile.scale = 1.5f;
+
+                    if (LocalTime >= 30)
+                    {
+                        LocalAttackBool = false;
+                        LocalTime = 0;
                     }
                     else
-                        attackBool = false;
-                }
-                #endregion
-
-                break;
-            case AIState.Dashing:
-                Projectile.velocity.RotateTowards((target.Center - Projectile.Center).ToRotation(), Pi / 10);
-                Projectile.velocity += Projectile.velocity.SafeNormalize(Vector2.UnitX) / -2;
-                Projectile.rotation = (target.Center - Projectile.Center).ToRotation();
-                if (Projectile.velocity.Length() < 2)
-                {
-                    SoundEngine.PlaySound(SoundID.DD2_GoblinBomberThrow, Projectile.Center);
-                    Projectile.velocity = Projectile.velocity.SafeNormalize(Vector2.Zero) * -30;
-                    attackBool = true;
-                    CurrentAI = AIState.Recoil;
+                        LocalTime++;
                 }
                 break;
-            case AIState.Globbing:
-                Vector2 baseAngle;
-                float rotation;
-                if (attackBool)
-                {
-                    baseAngle = 0f.ToRotationVector2();
-                    rotation = -Pi / 8;
-                }
-                else
-                {
-                    baseAngle = Pi.ToRotationVector2();
-                    rotation = Pi / 8;
-                }
-                if (aiCounter % 5 == 0)
-                {
-                    SoundEngine.PlaySound(SoundID.DD2_LightningBugZap, Projectile.Center);
-                    Vector2 myAngle = baseAngle.SafeNormalize(Vector2.UnitX).RotatedBy(rotation * Math.Ceiling((double)aiCounter / 5));
-                    for (int i = 0; i < 10; i++)
-                        EmpyreanMetaball.SpawnDefaultParticle(Projectile.Center + (myAngle * 40), myAngle.RotatedByRandom(Pi / 6) * Main.rand.NextFloat(0f, 15f), 20 * Main.rand.NextFloat(1f, 2f));
-                    Projectile Glob = Projectile.NewProjectileDirect(Terraria.Entity.GetSource_NaturalSpawn(), Projectile.Center, myAngle * 15, ModContent.ProjectileType<DarkGlob>(), Projectile.damage, 0f, -1, 1, 0.5f);
-                    Glob.hostile = false;
-                    Glob.friendly = true;
-                }
-                Projectile.rotation = baseAngle.SafeNormalize(Vector2.UnitX).RotatedBy(rotation * ((float)aiCounter / 5)).ToRotation();
-                if (aiCounter % 30 == 0)
-                {
-                    aiCounter = -30;
-                    CurrentAI = AIState.Hunting;
-                }
+            case AIState.Orbit:
                 break;
-            case AIState.Recoil:
-                if (attackBool)
-                {
-                    Projectile.velocity = Projectile.velocity.RotateTowards((target.Center - Projectile.Center).ToRotation(), 0.05f);
-                    Projectile.rotation = Projectile.velocity.ToRotation();
-                    dustStyle = Main.rand.NextBool() ? 66 : 263;
-                    dust = Dust.NewDustPerfect(Projectile.Center + (Vector2.UnitY * Main.rand.NextFloat(-16, 16)) + new Vector2(-54, 0).RotatedBy(Projectile.rotation), Main.rand.NextBool(3) ? 191 : dustStyle);
-                    dust.scale = Main.rand.NextFloat(1.5f, 2.3f);
-                    dust.noGravity = true;
-                    dust.color = dust.type == dustStyle ? Color.LightGreen : default;
-                }
-                else
-                    Projectile.rotation = (target.Center - Projectile.Center).ToRotation();
-                Projectile.velocity += Projectile.velocity.SafeNormalize(Vector2.UnitX) / -2;
-                if (Projectile.velocity.Length() < 2)
-                {
-                    CurrentAI = AIState.Hunting;
-                    attackBool = false;
-                    Projectile.velocity = Vector2.Zero;
-                }
+            case AIState.Conjure:
                 break;
         }
-        aiCounter++;
 
-        EmpyreanMetaball.SpawnDefaultParticle(Projectile.Center + new Vector2(-32, 0).RotatedBy(Projectile.rotation), Vector2.UnitX.RotatedBy(Projectile.rotation) * -8, Projectile.scale * 34);
-        if (Main.rand.NextBool(3))
-            EmpyreanMetaball.SpawnDefaultParticle(Projectile.Center + Main.rand.NextVector2Circular(2, 2) + new Vector2(-32, 0).RotatedBy(Projectile.rotation), Vector2.UnitX.RotatedBy(Projectile.rotation + Main.rand.NextFloat(-0.5f, 0.5f)) * -Main.rand.NextFloat(6f, 8f), Projectile.scale * Main.rand.NextFloat(30f, 40f));
-        Lighting.AddLight(Projectile.Center, new Vector3(0.32f, 0.92f, 0.71f));
+        Vector2 rotVec = Projectile.rotation.ToRotationVector2();
+        EmpyreanMetaball.SpawnDefaultParticle(Projectile.Center - (rotVec * (Projectile.width / (Main.rand.NextFloat(1.5f, 1.75f)))) + rotVec.RotatedBy(-PiOver2 * Projectile.direction) * Main.rand.NextFloat(0f, 48f), (rotVec.RotatedBy(Pi + Main.rand.NextFloat(-PiOver4, PiOver4)) * Main.rand.NextFloat(1f, 5f)), Main.rand.NextFloat(20f, 30f));
+        
+        if(HandSide == 1)
+            SharedTime++;
     }
-    public override bool PreDraw(ref Color lightColor) => false;
-    public void DrawSelf(Vector2 drawPosition, Color color, float rotation)
-    {
-        Texture2D texture = TextureAssets.Projectile[Projectile.type].Value;
 
-        Rectangle frame = texture.Frame(4, Main.projFrames[Projectile.type], 0, Projectile.frame);
+    public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
+    {
+        if(CurrentAI == AIState.Punch && LocalAttackBool)
+        {
+            int timeSaved = 30 - LocalTime;
+            SharedTime += timeSaved;
+
+            LocalTime = -10;
+            Projectile.velocity = -Projectile.velocity * 0.2f;
+
+            Vector2 toProjectile = (Projectile.Center - target.Center).SafeNormalize(Vector2.Zero);
+            float size = (target.width + target.height) / 2f;
+
+            for (int i = 0; i < 16; i++)
+            {
+                float rot = Main.rand.NextFloat(-1f, 1f);
+                Vector2 dir = toProjectile.RotatedBy(rot);
+                float scale = 1f - Math.Abs(rot);
+                Vector2 hitLocation = target.Center + dir * size / 2f;
+                SparkParticle particle = new(hitLocation, dir * Main.rand.NextFloat(2f, 12f), false, 24, scale * Main.rand.NextFloat(0.8f, 1.6f), Main.rand.NextBool() ? Color.Orange : Color.LimeGreen);
+                GeneralParticleHandler.SpawnParticle(particle);
+            }
+            //DirectionalPulseRing ring = new(target.Center, Vector2.Zero, Main.rand.NextBool() ? Color.Orange : Color.LimeGreen, 0f, size / 64f, 12);
+            //GeneralParticleHandler.SpawnParticle(ring);
+
+        }
+    }
+
+    public override void DrawBehind(int index, List<int> behindNPCsAndTiles, List<int> behindNPCs, List<int> behindProjectiles, List<int> overPlayers, List<int> overWiresUI)
+    {
+        if (Projectile.Center.Y > Main.projectile[OtherHand].Center.Y)
+            behindNPCs.Add(index);
+        else
+            behindProjectiles.Add(index);
+    }
+
+    public override bool PreDraw(ref Color lightColor)
+    {
+        Texture2D texture = TextureAssets.Projectile[Type].Value;
+        Vector2 drawPosition = Projectile.Center - Main.screenPosition;
+
+        Rectangle frame = texture.Frame(4, Main.projFrames[Type], (int)Pose, Projectile.frame);
+
+        Vector2 origin = frame.Size() * 0.5f;
+        origin.X *= 0.75f;
 
         SpriteEffects spriteEffects = SpriteEffects.None;
-        if (!(Projectile.rotation + Pi > Pi / 2 && Projectile.rotation + Pi < 3 * Pi / 2) && CurrentAI != AIState.Globbing)
+        if (Projectile.direction == -1)
             spriteEffects = SpriteEffects.FlipVertically;
-        if (attackBool && CurrentAI == AIState.Globbing)
-            spriteEffects = SpriteEffects.FlipVertically;
+        Main.EntitySpriteDraw(texture, drawPosition, frame, Projectile.GetAlpha(lightColor), Projectile.rotation, origin, Projectile.scale, spriteEffects, 0f);
+        return false;
+    }
 
-        Main.EntitySpriteDraw(texture, drawPosition, frame, color, rotation, frame.Size() * 0.5f, Projectile.scale, spriteEffects, 0);
+    public override void PostDraw(Color lightColor)
+    {
+        Texture2D texture = ModContent.Request<Texture2D>("Windfall/Assets/NPCs/Enemies/Orator_Hand_Cuffs").Value;
+
+        cuffFrame.Width = texture.Width;
+        cuffFrame.Height = texture.Height / 9;
+
+        Vector2 drawPosition = Projectile.Center - Main.screenPosition;
+        Vector2 origin = cuffFrame.Size() * 0.5f;
+        origin.X *= 0.8f;
+        origin.Y -= 1;
+        SpriteEffects spriteEffects = SpriteEffects.None;
+        if (Projectile.direction == -1)
+        {
+            spriteEffects = SpriteEffects.FlipVertically;
+            origin.Y += 2;
+        }
+        Main.EntitySpriteDraw(texture, drawPosition, cuffFrame, Color.White, Projectile.rotation, origin, Projectile.scale, spriteEffects, 0f);
     }
 }
-
 

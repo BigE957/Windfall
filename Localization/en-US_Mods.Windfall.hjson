@@ -1642,6 +1642,8 @@ Projectiles: {
 		KaimosHoldout.DisplayName: Kaimos Holdout
 		PotGlob.DisplayName: Pot Glob
 	}
+
+	OratorHandMinion.DisplayName: Orator Hand Minion
 }
 
 Buffs: {

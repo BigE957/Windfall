@@ -31,7 +31,7 @@ public class ResistancesGlobalNPC : GlobalNPC
 
         if(npc.type == ModContent.NPCType<AstrumDeusBody>() || npc.type == ModContent.NPCType<AstrumDeusHead>() || npc.type == ModContent.NPCType<AstrumDeusTail>())
         {
-            if (projectile.type == ModContent.ProjectileType<ShadowHand_Minion>())
+            if (projectile.type == ModContent.ProjectileType<OratorHandMinion>())
                 modifiers.SourceDamage *= 0.2f;
         }
     }

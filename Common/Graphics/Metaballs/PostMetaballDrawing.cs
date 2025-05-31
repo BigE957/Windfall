@@ -20,10 +20,6 @@ public class PostMetaballDrawing : ModSystem
             if (npc.ModNPC != null && npc.ModNPC is ShadowHand hand)
                 hand.PostDraw(Main.spriteBatch, Main.screenPosition, EmpyreanMetaball.BorderColor);
 
-        foreach (Projectile proj in Main.ActiveProjectiles)
-            if (proj.ModProjectile != null && proj.ModProjectile is ShadowHand_Minion hand)
-                hand.PostDraw(EmpyreanMetaball.BorderColor);
-
         Main.spriteBatch.End();
 
         orig(self);

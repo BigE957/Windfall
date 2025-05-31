@@ -1067,7 +1067,7 @@ public class OratorHand : ModNPC
         #endregion
 
         #region Hand Frame
-        NPC.frame.Width = ModContent.Request<Texture2D>(Texture).Width() / 4;
+        NPC.frame.Width = TextureAssets.Npc[Type].Width() / 4;
 
         NPC.frame.X = NPC.frame.Width * (int)CurrentPose;
         if (CurrentPose != Pose.Default)
@@ -1122,7 +1122,7 @@ public class OratorHand : ModNPC
             spriteEffects = SpriteEffects.FlipVertically;
             origin.Y += 2;
         }
-        spriteBatch.Draw(texture, drawPosition, cuffFrame, NPC.GetAlpha(drawColor), NPC.rotation, origin, NPC.scale, spriteEffects, 0f);
+        spriteBatch.Draw(texture, drawPosition, cuffFrame, Color.White, NPC.rotation, origin, NPC.scale, spriteEffects, 0f);
     }
 
     public override void SendExtraAI(BinaryWriter writer)
