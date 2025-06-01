@@ -127,7 +127,6 @@ public class TheOrator : ModNPC
         //AIState = States.Testing;
     }
 
-
     public override bool PreAI()
     {
         foreach (Player p in Main.ActivePlayers)
@@ -366,7 +365,7 @@ public class TheOrator : ModNPC
                             NPC.velocity *= 0.975f;
                     }
 
-                    EmpyreanMetaball.SpawnDefaultParticle(NPC.Center + (target.Center - NPC.Center).SafeNormalize(Vector2.Zero) * 150f, Main.rand.NextVector2Circular(5f, 5f), 1.5f * ((aiCounter - 1100) / 2));
+                    EmpyreanMetaball.SpawnDefaultParticle(NPC.Center + homeIn * 150f, Main.rand.NextVector2Circular(5f, 5f), 1.5f * ((aiCounter - 1100) / 2));
                     if (aiCounter > 1300 || !NPC.AnyNPCs(ModContent.NPCType<OratorHand>()))
                     {
                         aiCounter = 0;
@@ -378,7 +377,7 @@ public class TheOrator : ModNPC
                         else
                         {
                             AIState = States.IdolEnactment;
-                            Particle pulse = new DirectionalPulseRing(NPC.Center, (target.Center - NPC.Center).SafeNormalize(Vector2.Zero) * 8f, new(117, 255, 159), new Vector2(0.5f, 1f), (target.Center - NPC.Center).ToRotation(), 0f, 3f, 32);
+                            Particle pulse = new DirectionalPulseRing(NPC.Center, homeIn * 8f, new(117, 255, 159), new Vector2(0.5f, 1f), homeIn.ToRotation(), 0f, 3f, 32);
                             GeneralParticleHandler.SpawnParticle(pulse);
                         }
                     }

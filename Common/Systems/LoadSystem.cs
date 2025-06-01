@@ -11,8 +11,13 @@ using Windfall.Content.UI.Events;
 
 namespace Windfall.Common.Systems;
 
-public class Loading : ModSystem
+public class LoadSystem : ModSystem
 {
+    #region VFX Textures
+    public static Asset<Texture2D> Circle;
+    public static Asset<Texture2D> SwordSlash;
+    #endregion
+
     public override void Load()
     {
         DialogueUISystem.SubmodulePath = "Windfall/SubModules/";
@@ -28,6 +33,11 @@ public class Loading : ModSystem
 
         Filters.Scene["Windfall:SlimyCommunion"] = new Filter(new SlimyCommunionScreenShaderData("FilterMiniTower").UseColor(0.4f, 0.4f, 0.6f).UseOpacity(0.5f), EffectPriority.VeryHigh);
         SkyManager.Instance["Windfall:SlimyCommunion"] = new SlimyCommunionSky();
+        #endregion
+
+        #region Assets
+        Circle = ModContent.Request<Texture2D>("Windfall/Assets/Graphics/Metaballs/BasicCircle");
+        SwordSlash = ModContent.Request<Texture2D>("CalamityMod/ExtraTextures/Trails/SwordSlashTexture");
         #endregion
     }
     public override void PostSetupContent()

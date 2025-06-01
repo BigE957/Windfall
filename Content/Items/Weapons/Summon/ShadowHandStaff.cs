@@ -1,18 +1,21 @@
 ﻿using CalamityMod;
 using CalamityMod.Items;
 using CalamityMod.Particles;
-using CalamityMod.World;
 using Luminance.Core.Graphics;
 using Microsoft.Xna.Framework.Input;
+using ReLogic.Utilities;
 using System.Collections.ObjectModel;
-using System.Diagnostics.Metrics;
+using Terraria.Graphics.Shaders;
 using Windfall.Common.Graphics.Metaballs;
 using Windfall.Common.Players;
 using Windfall.Common.Systems;
 using Windfall.Content.Buffs.StatBuffs;
 using Windfall.Content.Buffs.Weapons.Minions;
+using Windfall.Content.Items.Weapons.Magic;
+using Windfall.Content.Items.Weapons.Melee;
 using Windfall.Content.NPCs.Bosses.Orator;
 using Windfall.Content.Projectiles.Boss.Orator;
+using Windfall.Content.Skies;
 
 namespace Windfall.Content.Items.Weapons.Summon;
 
@@ -183,7 +186,7 @@ public class ShadowHandStaff : ModItem, ILocalizedModType
     {
         Player myPlayer = Main.LocalPlayer;
 
-        if (GrazePoints == 0 || !myPlayer.Calamity().mouseRight)
+        if (GrazePoints == 0 && !myPlayer.Calamity().mouseRight)
             return;
 
 
@@ -556,10 +559,16 @@ public class OratorHandMinion : ModProjectile
                         grazeArea = new(Owner.Center, Vector2.Zero, Color.LimeGreen, 1f, 1f, 24);
                         GeneralParticleHandler.SpawnParticle(grazeArea);
 
-                        if (((ShadowHandStaff)Owner.ActiveItem().ModItem).GrazePoints < 100 && grazeTime == 0 && Owner.immuneTime == 0 && !Owner.immune && Main.projectile.Any(p => p.active && p.hostile && !Owner.Hitbox.Intersects(p.Hitbox) && (p.Center - Owner.Center).Length() < grazeRadius))
+                        if (((ShadowHandStaff)Owner.ActiveItem().ModItem).GrazePoints < 100 && grazeTime == 0 && Owner.immuneTime == 0 && !Owner.immune)
                         {
-                            ((ShadowHandStaff)Owner.ActiveItem().ModItem).GrazePoints++;
-                            //grazeTime = 4;
+                            int projectilesInGraze = Main.projectile.Count(p => p.active && p.hostile && !Owner.Hitbox.Intersects(p.Hitbox) && (p.Center - Owner.Center).Length() < grazeRadius);
+                            if (projectilesInGraze > 0)
+                            {
+                                ((ShadowHandStaff)Owner.ActiveItem().ModItem).GrazePoints += projectilesInGraze;
+                                if (((ShadowHandStaff)Owner.ActiveItem().ModItem).GrazePoints > 100)
+                                    ((ShadowHandStaff)Owner.ActiveItem().ModItem).GrazePoints = 100;
+                                grazeTime = 4;
+                            }
                         }
 
                         Owner.AddBuff(ModContent.BuffType<ApotropaicEmbrace>(), 2);
@@ -625,7 +634,6 @@ public class OratorHandMinion : ModProjectile
                                 if (Main.netMode != NetmodeID.MultiplayerClient)
                                 {
                                     int projCount = consumedGraze / 6;
-                                    Main.NewText(projCount);
                                     for (int i = 0; i < projCount; i++)
                                     {
                                         Vector2 velocity = (Vector2.UnitY * -1).RotatedBy(Main.rand.NextFloat(-PiOver2, PiOver2)) * Main.rand.NextFloat(4f, 8f);
@@ -702,6 +710,40 @@ public class OratorHandMinion : ModProjectile
                 }
                 break;
             case AIState.Conjure:
+                Pose = Poses.Palm;
+
+                Vector2 goalDirection = (Target.Center - Owner.Center).SafeNormalize(Vector2.Zero);
+                goalPos = Owner.Center + goalDirection * 175f;
+                Projectile.direction = -HandSide;
+                if (HandSide == 1)
+                {
+                    Vector2 rotation = goalDirection.RotatedBy(-PiOver2);
+                    goalPos -= rotation * Lerp(32, 150, SharedTime / 200f);
+                    Projectile.rotation = rotation.ToRotation();
+
+                    EmpyreanMetaball.SpawnDefaultParticle(Owner.Center + goalDirection * 150f, Main.rand.NextVector2Circular(5f, 5f), 1.5f * (SharedTime / 2));
+                }
+                else
+                {
+                    Vector2 rotation = goalDirection.RotatedBy(PiOver2);
+                    goalPos -= rotation * Lerp(80, 160, SharedTime / 200f);
+                    Projectile.rotation = rotation.ToRotation();
+                }
+                Projectile.velocity = (goalPos - Projectile.Center).SafeNormalize(Vector2.Zero) * ((goalPos - Projectile.Center).Length() / 10f);
+                Projectile.rotation += PiOver2 * HandSide;
+
+                if (SharedTime > 200)
+                {
+                    CurrentAI = AIState.Punch;
+                    if (HandSide == 1)
+                    {
+                        DirectionalPulseRing pulse = new(Owner.Center, goalDirection * 8f, new(117, 255, 159), new Vector2(0.5f, 1f), goalDirection.ToRotation(), 0f, 3f, 32);
+                        GeneralParticleHandler.SpawnParticle(pulse);
+
+                        if (Main.netMode != NetmodeID.MultiplayerClient)
+                            Projectile.NewProjectile(Terraria.Entity.GetSource_NaturalSpawn(), Owner.Center + goalDirection * 150f, goalDirection * 40, ModContent.ProjectileType<SelenicIdolMinion>(), (int)(Projectile.damage * 1.5f), 0f, Owner.whoAmI);
+                    }
+                }
                 break;
         }
 
@@ -936,6 +978,229 @@ public class MinionHandRing : ModProjectile
         spinDir = reader.ReadBoolean();
 
         truePosition = reader.ReadVector2();
+    }
+}
+
+public class SelenicIdolMinion : ModProjectile, ILocalizedModType
+{
+    public new static string LocalizationCategory => "Projectiles.Summon";
+    public override string Texture => "Windfall/Assets/Projectiles/Boss/GoldenMoon";
+
+    SlotId loopingSoundSlot;
+
+    private static float Acceleration = 0.5f;
+    private static int MaxSpeed = 12;
+
+    public override void SetStaticDefaults()
+    {
+        ProjectileID.Sets.TrailCacheLength[Projectile.type] = 40;
+        ProjectileID.Sets.TrailingMode[Projectile.type] = 2;
+    }
+
+    public override void SetDefaults()
+    {
+        Projectile.width = 320;
+        Projectile.height = 320;
+        Projectile.friendly = true;
+        Projectile.ignoreWater = true;
+        Projectile.tileCollide = false;
+        Projectile.penetrate = -1;
+        Projectile.timeLeft = 36000;
+        Projectile.scale = 1f;
+        Projectile.alpha = 0;
+        Projectile.Calamity().DealsDefenseDamage = true;
+        Projectile.netImportant = true;
+    }
+
+    private int Time
+    {
+        get => (int)Projectile.ai[1];
+        set => Projectile.ai[1] = value;
+    }
+
+    private enum States
+    {
+        Chasing,
+        Dying,
+        Exploding,
+    }
+    private States AIState = States.Chasing;
+
+    private ref float GoopScale => ref Projectile.ai[2];
+
+    int deathCounter = 0;
+    float rotationCounter = 0;
+
+    public override void OnSpawn(IEntitySource source)
+    {
+        Projectile.scale = 0;
+        SoundEngine.PlaySound(SoundID.DD2_EtherianPortalOpen, Projectile.Center);
+        ScreenShakeSystem.StartShake(5f);
+        for (int i = 0; i <= 50; i++)
+        {
+            Vector2 spawnPos = Projectile.Center + Main.rand.NextVector2Circular(10f, 10f) * 10;
+            EmpyreanMetaball.SpawnDefaultParticle(spawnPos, (Projectile.Center - spawnPos).SafeNormalize(Vector2.Zero) * 4, 40 * Main.rand.NextFloat(3f, 5f));
+        }
+    }
+
+    public override void AI()
+    {
+        switch (AIState)
+        {
+            case States.Chasing:
+                if (Time <= 60)
+                {
+                    float lerp = Time / 60f;
+                    Projectile.scale = CircOutEasing(lerp);
+                    GoopScale = 1 - SineInEasing(lerp);
+                    EmpyreanMetaball.SpawnDefaultParticle(Projectile.Center + (Main.rand.NextVector2Circular(48f, 48f) * Projectile.scale), Main.rand.NextVector2Circular(18, 18) + Projectile.velocity, 200 * Main.rand.NextFloat(0.75f, 0.9f) * (1 - lerp));
+                }
+
+                if (Projectile.owner == Main.myPlayer)
+                    Projectile.velocity += (Main.MouseWorld - Projectile.Center).SafeNormalize(Vector2.Zero) * Acceleration;
+
+                if (Projectile.velocity.Length() > MaxSpeed)
+                    Projectile.velocity = Projectile.velocity.SafeNormalize(Vector2.Zero) * (Projectile.velocity.Length() * 0.95f);
+
+                #region Looping Sound
+                if (!SoundEngine.TryGetActiveSound(loopingSoundSlot, out var activeSound))
+                {
+                    // if it isn't, play the sound and remember the SlotId
+                    var tracker = new ProjectileAudioTracker(Projectile);
+                    loopingSoundSlot = SoundEngine.PlaySound(SoundID.DD2_EtherianPortalIdleLoop, Projectile.position, soundInstance => {
+                        // This example is inlined, see ActiveSoundShowcaseProjectile.cs for other approaches
+                        soundInstance.Position = Projectile.position;
+                        return tracker.IsActiveAndInGame();
+                    });
+                }
+                #endregion
+
+                if (Time > 900)
+                {
+                    AIState = States.Dying;
+                    Time = 0;
+                }
+                break;
+            case States.Dying:
+                float lerpValue = deathCounter / 180f;
+
+                Projectile.scale = Lerp(1f, 0.5f, lerpValue);
+                GoopScale = lerpValue;
+
+                if (lerpValue >= 1f)
+                    Projectile.ai[0] = 2;
+                if (Projectile.velocity.Length() > 0f)
+                {
+                    if (Projectile.owner == Main.myPlayer)
+                        Projectile.velocity += (Main.MouseWorld - Projectile.Center).SafeNormalize(Vector2.Zero) * Acceleration;
+
+                    if (Projectile.velocity.Length() > (MaxSpeed * Projectile.scale))
+                        Projectile.velocity = Projectile.velocity.SafeNormalize(Vector2.Zero) * (MaxSpeed * Projectile.scale);
+                }
+                if (deathCounter > 120)
+                {
+                    Projectile.velocity = Vector2.Zero;
+                    AIState = States.Exploding;
+                }
+
+                #region Death Shake
+                float ShakeBy = Lerp(0f, 18f, lerpValue);
+                Vector2 shakeOffset = new(Main.rand.NextFloat(-ShakeBy, ShakeBy) / (Projectile.scale * 2), Main.rand.NextFloat(-ShakeBy, ShakeBy) / (Projectile.scale * 2));
+                Projectile.position += shakeOffset;
+                for (int i = 0; i < Projectile.oldPos.Length; i++)
+                    Projectile.oldPos[i] += shakeOffset;
+                #endregion
+
+                EmpyreanMetaball.SpawnDefaultParticle(Projectile.Center + (Main.rand.NextVector2Circular(25f, 25f) * Projectile.scale), Main.rand.NextVector2Circular(12, 12) * (lerpValue + 0.5f), 180 * (Main.rand.NextFloat(0.75f, 0.9f)));
+                EmpyreanMetaball.SpawnDefaultParticle(Projectile.Center + (Main.rand.NextVector2Circular(25f, 25f) * Projectile.scale), Main.rand.NextVector2Circular(18, 18) * (lerpValue + 0.5f), 90 * (Main.rand.NextFloat(0.75f, 0.9f)));
+
+                deathCounter++;
+                break;
+            case States.Exploding:
+                SoundEngine.PlaySound(SoundID.DD2_EtherianPortalDryadTouch, Projectile.Center);
+                ScreenShakeSystem.StartShake(7.5f);
+                for (int i = 0; i <= 50; i++)
+                    EmpyreanMetaball.SpawnDefaultParticle(Projectile.Center, Main.rand.NextVector2Circular(10f, 10f) * Main.rand.NextFloat(1f, 2f), 40 * Main.rand.NextFloat(3f, 5f));
+
+                if (Main.netMode != NetmodeID.MultiplayerClient)
+                {
+                    for (int i = 0; i < 24; i++)
+                        Projectile.NewProjectile(Terraria.Entity.GetSource_NaturalSpawn(), Projectile.Center, (TwoPi / 24 * i).ToRotationVector2(), ModContent.ProjectileType<RushBolt>(), (int)(Projectile.damage / 2f), 0f, -1, 0, i % 2 == 0 ? -10 : 0, i % 2 == 0 ? 1 : 0);
+                }
+
+                PulseRing pulse = new(Projectile.Center, Vector2.Zero, Color.Teal, 0f, 2.5f, 16);
+                GeneralParticleHandler.SpawnParticle(pulse);
+                DetailedExplosion explosion = new(Projectile.Center, Vector2.Zero, new(117, 255, 159), new Vector2(1f, 1f), 0f, 0f, 1f, 16);
+                GeneralParticleHandler.SpawnParticle(explosion);
+
+                Projectile.active = false;
+                Projectile.netUpdate = true;
+                break;
+        }
+        Time++;
+        Projectile.rotation = Projectile.velocity.ToRotation();
+        rotationCounter += 0.01f;
+    }
+
+    public override bool? Colliding(Rectangle projHitbox, Rectangle targetHitbox)
+    {
+        if (CircularHitboxCollision(Projectile.Center, projHitbox.Width / 2, targetHitbox))
+            return true;
+        return false;
+    }
+
+    public override bool PreDraw(ref Color lightColor)
+    {
+        GameShaders.Misc["CalamityMod:PhaseslayerRipEffect"].SetTexture(LoadSystem.SwordSlash);
+
+        CalamityMod.Graphics.Primitives.PrimitiveRenderer.RenderTrail(Projectile.oldPos, new(WidthFunction, ColorFunction, (_) => Projectile.Size * 0.5f, shader: GameShaders.Misc["CalamityMod:PhaseslayerRipEffect"]), 40);
+
+        Main.spriteBatch.UseBlendState(BlendState.Additive);
+
+        Texture2D tex = OratorSky.MoonBloom.Value;
+
+        Color[] colors = [
+            Color.Gold,
+            Color.Goldenrod,
+            Color.DarkGoldenrod,
+            Color.Goldenrod,
+        ];
+
+        Main.EntitySpriteDraw(tex, Projectile.Center - Main.screenPosition, null, LerpColors(Main.GlobalTimeWrappedHourly * 0.25f, colors), Main.GlobalTimeWrappedHourly * 0.25f, tex.Size() * 0.5f, ((Projectile.scale * 0.825f) + (float)(Math.Sin(Main.GlobalTimeWrappedHourly * 4) * 0.025f)) * (1 - GoopScale), 0);
+
+        Main.spriteBatch.UseBlendState(BlendState.AlphaBlend);
+
+        tex = TextureAssets.Projectile[Type].Value;
+
+        Main.EntitySpriteDraw(tex, Projectile.Center - Main.screenPosition, null, Color.White, rotationCounter, tex.Size() * 0.5f, Projectile.scale, 0);
+
+        return false;
+    }
+
+    internal Color ColorFunction(float completionRatio)
+    {
+        float opacity = Projectile.Opacity;
+        opacity *= (float)Math.Pow(Utils.GetLerpValue(1f, 0.45f, completionRatio, true), 4D);
+
+        if (deathCounter > 0)
+            opacity = Clamp(Lerp(opacity, -0.5f, deathCounter / 90f), 0f, 1f);
+
+        return Color.Lerp(Color.Gold, new(170, 100, 30), (completionRatio) * 3f) * opacity * (Projectile.velocity.Length() / MaxSpeed);
+    }
+
+    internal float WidthFunction(float completionRatio) => 200f * (1f - completionRatio) * 0.8f * Projectile.scale;
+
+    public override void PostDraw(Color lightColor)
+    {
+        if (GoopScale != 0)
+        {
+            Texture2D tex = LoadSystem.Circle.Value;
+
+            Vector2[] offsets = [new(70, -35), new(-78, 48), new(-0, 80), new(78, 0), new(34, 70), new(-44, -70)];
+
+            for (int i = 0; i < offsets.Length; i++)
+                Main.EntitySpriteDraw(tex, Projectile.Center - Main.screenPosition + offsets[i].RotatedBy(rotationCounter) * Projectile.scale, null, Color.White, rotationCounter, tex.Size() * 0.5f, Projectile.scale * 4f * GoopScale, 0);
+        }
     }
 }
 

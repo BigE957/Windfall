@@ -1645,6 +1645,7 @@ Projectiles: {
 
 	OratorHandMinion.DisplayName: Orator Hand Minion
 	MinionHandRing.DisplayName: Minion Hand Ring
+	SelenicIdolMinion.DisplayName: Selenic Idol Minion
 }
 
 Buffs: {
@@ -1676,6 +1677,11 @@ Buffs: {
 	SpacialLock: {
 		DisplayName: Spacial Lock
 		Description: All forms of Teleportation are disabled.
+	}
+
+	ApotropaicEmbrace: {
+		DisplayName: Apotropaic Embrace
+		Description: Mods.Windfall.Buffs.ApotropaicEmbrace.Description
 	}
 }
 

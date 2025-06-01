@@ -6,6 +6,7 @@ using ReLogic.Utilities;
 using Terraria.Graphics.Shaders;
 using Windfall.Common.Systems;
 using Windfall.Content.NPCs.Bosses.Orator;
+using Windfall.Content.Skies;
 using static Windfall.Common.Graphics.Metaballs.EmpyreanMetaball;
 
 namespace Windfall.Content.Projectiles.Boss.Orator;
@@ -48,7 +49,7 @@ public class SelenicIdol : ModProjectile
         Projectile.netImportant = true;
     }        
 
-    private int aiCounter
+    private int Time
     {
         get => (int)Projectile.ai[1];
         set => Projectile.ai[1] = value;
@@ -85,39 +86,25 @@ public class SelenicIdol : ModProjectile
     
     public override void AI()
     {
-        if (aiCounter == 0 && Main.netMode == NetmodeID.MultiplayerClient)
-        {
-            for (int i = 0; i < 30; i++)
-            {
-                SpawnBorderParticle(Projectile, Vector2.Zero, 0f, 5, 50, TwoPi / 30 * i, false);
-            }
-            const int pCount = 20;
-            for (int i = 0; i <= 20; i++)
-            {
-                SpawnBorderParticle(Projectile, Vector2.Zero, 1f * i, 20, Main.rand.NextFloat(80, 110), TwoPi / pCount * i);
-                //SpawnBorderParticle(Projectile, Vector2.Zero, 0.5f * i, 15, Main.rand.NextFloat(60, 80), TwoPi / pCount * -i - TwoPi / (pCount / 2));
-            }
-        }
-
         Player target;
         if (NPC.AnyNPCs(ModContent.NPCType<TheOrator>()))
             target = Main.npc[NPC.FindFirstNPC(ModContent.NPCType<TheOrator>())].As<TheOrator>().target;                           
         else
         {
             target = Main.player[Player.FindClosest(Projectile.Center, Projectile.width, Projectile.height)];
-            //if (AIState == States.Chasing && Projectile.scale > 0.9f)
-            //    AIState = States.Dying;
+            if (AIState == States.Chasing && Projectile.scale > 0.9f)
+                AIState = States.Dying;
         }
-        //if(!NPC.AnyNPCs(ModContent.NPCType<OratorHand>()) || NPC.FindFirstNPC(ModContent.NPCType<TheOrator>()) == -1 || Main.npc[NPC.FindFirstNPC(ModContent.NPCType<TheOrator>())].ai[0] == (int)TheOrator.States.PhaseChange)
-        //    if (AIState == States.Chasing && Projectile.scale > 0.9f)
-        //       AIState = States.Dying;
+        if(!NPC.AnyNPCs(ModContent.NPCType<OratorHand>()) || NPC.FindFirstNPC(ModContent.NPCType<TheOrator>()) == -1 || Main.npc[NPC.FindFirstNPC(ModContent.NPCType<TheOrator>())].ai[0] == (int)TheOrator.States.PhaseChange)
+            if (AIState == States.Chasing && Projectile.scale > 0.9f)
+               AIState = States.Dying;
         
         switch (AIState)
         {
             case States.Chasing:
-                if (aiCounter <= 60)
+                if (Time <= 60)
                 {
-                    float lerp = aiCounter / 60f;
+                    float lerp = Time / 60f;
                     Projectile.scale = CircOutEasing(lerp);
                     GoopScale = 1 - SineInEasing(lerp);
                     SpawnDefaultParticle(Projectile.Center + (Main.rand.NextVector2Circular(48f, 48f) * Projectile.scale), Main.rand.NextVector2Circular(18, 18) + Projectile.velocity, 200 * Main.rand.NextFloat(0.75f, 0.9f) * (1 - lerp));
@@ -139,6 +126,7 @@ public class SelenicIdol : ModProjectile
                     });
                 }
                 #endregion
+
                 break;
             case States.Dying:
                 float lerpValue = deathCounter / 180f;
@@ -195,11 +183,10 @@ public class SelenicIdol : ModProjectile
                 Particle explosion = new DetailedExplosion(Projectile.Center, Vector2.Zero, new(117, 255, 159), new Vector2(1f, 1f), 0f, 0f, 1f, 16);
                 GeneralParticleHandler.SpawnParticle(explosion);
                 Projectile.active = false;
-                EmpyreanStickyParticles.RemoveAll(p => p.ProjectileIndex == Projectile.whoAmI);
                 Projectile.netUpdate = true;
                 break;
         }
-        aiCounter++;
+        Time++;
         Projectile.rotation = Projectile.velocity.ToRotation();
         rotationCounter += 0.01f;
     }
@@ -213,13 +200,13 @@ public class SelenicIdol : ModProjectile
     
     public override bool PreDraw(ref Color lightColor)
     {
-        GameShaders.Misc["CalamityMod:PhaseslayerRipEffect"].SetTexture(ModContent.Request<Texture2D>("CalamityMod/ExtraTextures/Trails/SwordSlashTexture"));
+        GameShaders.Misc["CalamityMod:PhaseslayerRipEffect"].SetTexture(LoadSystem.SwordSlash);
 
         PrimitiveRenderer.RenderTrail(Projectile.oldPos, new(WidthFunction, ColorFunction, (_) => Projectile.Size * 0.5f, shader: GameShaders.Misc["CalamityMod:PhaseslayerRipEffect"]), 40);
 
         Main.spriteBatch.UseBlendState(BlendState.Additive);
 
-        Texture2D tex = ModContent.Request<Texture2D>("Windfall/Assets/Skies/OratorMoonBloom2").Value;
+        Texture2D tex = OratorSky.MoonBloom.Value;
 
         Color[] colors = [
             Color.Gold,
@@ -256,7 +243,7 @@ public class SelenicIdol : ModProjectile
     {
         if (GoopScale != 0)
         {
-            Texture2D tex = ModContent.Request<Texture2D>("Windfall/Assets/Graphics/Metaballs/BasicCircle").Value;
+            Texture2D tex = LoadSystem.Circle.Value;
 
             Vector2[] offsets = [new(70, -35), new(-78, 48), new(-0, 80), new(78, 0), new(34, 70), new(-44, -70)];
 
