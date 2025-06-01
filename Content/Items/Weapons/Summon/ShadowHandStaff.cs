@@ -12,7 +12,6 @@ using Windfall.Common.Players;
 using Windfall.Common.Systems;
 using Windfall.Content.Buffs.StatBuffs;
 using Windfall.Content.Buffs.Weapons.Minions;
-using Windfall.Content.Items.Weapons.Magic;
 using Windfall.Content.Items.Weapons.Melee;
 using Windfall.Content.NPCs.Bosses.Orator;
 using Windfall.Content.Projectiles.Boss.Orator;
@@ -352,6 +351,9 @@ public class OratorHandMinion : ModProjectile
 
     public override void AI()
     {
+        if (!Main.projectile[OtherHand].active)
+            Projectile.active = false;
+
         #region Frames
         int frameWidth = TextureAssets.Projectile[Type].Width() / 4;
 
