@@ -154,7 +154,6 @@ public class FingerBolt : ModProjectile, ILocalizedModType
     {
         Projectile.width = 12;
         Projectile.height = 12;
-        //Projectile.damage = 100;
         Projectile.friendly = true;
         Projectile.penetrate = 20;
         Projectile.timeLeft = 200;

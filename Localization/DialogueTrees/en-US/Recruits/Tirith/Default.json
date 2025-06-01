@@ -1,23 +1,79 @@
 {
   "Dialogues": [
     {
-      "DialogueText": [ { "Text": "I'm not so sure how I feel about the Selenic Order... Should I stay?" } ],
+      "DialogueText": [ { "Text": "Why, good evening! All done with your task for tonight as well?" } ],
       "Responses": [
         {
-          "Title": "Fuck no!",
-          "Heading": 1
-        },
-        {
-          "Title": "Yeah, you should.",
-          "Heading":  2
+          "Title": "Yup!",
+          "Heading": -2
         }
       ]
     },
     {
-      "DialogueText": [ { "Text": "Alright! Goodbye Selenic Order!" } ],
+      "DialogueText": [ { "Text": "Well done! It feels nice to be able to help contribute to something like this. Really changing the world for the better, y'know? Before joining the Order, life felt somewhat... Aimless; I suppose. Here that's not a worry! I'm given a job to do, and I just gotta do it. Its simple, but relieving." } ],
       "Responses": [
         {
-          "Title": "Bye!"
+          "Title": "Agreed.",
+          "Heading": 9
+        },
+        {
+          "Title": "Boring?",
+          "Heading": 3
+        }
+      ]
+    },
+    {
+      "DialogueText": [ { "Text": "I suppose it can become a little monotonous, but the work that we do. It's important. We're going to create a better future for everyone. With that in mind, how could I possibly become bored with what I do?" } ],
+      "Responses": [
+        {
+          "Title": "That's fair.",
+          "Heading": 9
+        },
+        {
+          "Title": "How so?",
+          "Heading": 5
+        }
+      ]
+    },
+    {
+      "DialogueText": [ { "Text": "How? Well, we help the Seamstress make clothes, we help the Chef serve food... Uhm... We attend meetings... Now that you mention it. I'm not entirely certain how we're contributing. I've heard that those the Orator trusts aid them in performing certain rituals, but I haven't yet reached such status." } ]
+    },
+    {
+      "DialogueText": [ { "Text": "When you lay it all out like that... I don't really know how what I'm doing contributes to the bright future the Orator tells us of. Though, if they say what I do helps, then I'll just have to trust in their words." } ],
+      "Responses": [
+        {
+          "Title": "Can you trust them?",
+          "Heading": -2
+        }
+      ]
+    },
+    {
+      "DialogueText": [ { "Text": "I... Of course we can trust the Orator! Sure they might be somewhat mysterious, but... this Order, they saved me at my lowest. I owe them my life! How could I not put my trust in them?" } ],
+      "Responses": [
+        {
+          "Title": "Using you.",
+          "Heading": -2
+        },
+        {
+          "Title": "Ultierior motives",
+          "Heading": -2
+        }
+      ]
+    },
+    {
+      "DialogueText": [ { "Text": "What...? You think... You think they saved me, recruited me, because I was vulnerable? Able to be exploited? That... That just can't be... Everything I've done here, for this Order... You're telling me it's been for nothing? That's just... Just awful..." } ],
+      "Responses": [
+        {
+          "Title": "It'll be okay.",
+          "Heading": -2
+        }
+      ]
+    },
+    {
+      "DialogueText": [ { "Text": "I just... Can't believe I had been so blind to this for so long. Thank you for this talk. I'm not sure I could have figured this out on my own. I'll... Be leaving now. For good." } ],
+      "Responses": [
+        {
+          "Title": "I'm glad to hear."
         },
         {
           "Title": "I need to tell you something...",
@@ -27,10 +83,13 @@
       ]
     },
     {
-      "DialogueText": [ { "Text": "Yeah, you're probably right." } ],
+      "DialogueText": [ { "Text": "Well, its getting quite late. I really should get going and get some sleep. Its been nice talking to you!" } ],
       "Responses": [
         {
-          "Title": "Your Welcome."
+          "Title": "Bye!"
+        },
+        {
+          "Title": "Have a good night."
         }
       ]
     }

@@ -51,8 +51,7 @@ public class ShadowHandStaff : ModItem, ILocalizedModType
     }
 
     public int GrazePoints = 0;
-    private static readonly int GrazeMax = 100;
-    float MaxGraze = 100f;
+    internal const float MaxGraze = 100f;
 
 
     public override bool PreDrawTooltip(ReadOnlyCollection<TooltipLine> lines, ref int x, ref int y)
@@ -208,13 +207,13 @@ public class ShadowHandStaff : ModItem, ILocalizedModType
 
         Vector2 barOrigin = barBG.Size() * 0.5f;
         Vector2 drawPos = (myPlayer.Center - Main.screenPosition) + Vector2.UnitY * barScale * myPlayer.height;
-        Rectangle frameCrop = new(0, 0, (int)(GrazePoints / 100f * barFG.Width), barFG.Height);
+        Rectangle frameCrop = new(0, 0, (int)(GrazePoints / MaxGraze * barFG.Width), barFG.Height);
 
         Color bgColor = Color.DarkGray * 0.5f;
         bgColor.A = 255;
 
         spriteBatch.Draw(barBG, drawPos, null, bgColor, 0f, barOrigin, barScale, 0f, 0f);
-        spriteBatch.Draw(barFG, drawPos, frameCrop, Color.Lerp(Color.Yellow, Color.LimeGreen, GrazePoints / 100f), 0f, barOrigin, barScale, 0f, 0f);
+        spriteBatch.Draw(barFG, drawPos, frameCrop, Color.Lerp(Color.Yellow, Color.LimeGreen, GrazePoints / MaxGraze), 0f, barOrigin, barScale, 0f, 0f);
 
         spriteBatch.End();
         Main.spriteBatch.Begin(SpriteSortMode.Deferred, null, null, null, null, null, Main.UIScaleMatrix);
@@ -417,7 +416,7 @@ public class OratorHandMinion : ModProjectile
                         GeneralParticleHandler.SpawnParticle(grazeArea);
                     }
                 }
-                else if (consumedGraze == 100)
+                else if (consumedGraze == ShadowHandStaff.MaxGraze)
                 {
                     CurrentAI = AIState.Conjure;
                 }
@@ -564,14 +563,14 @@ public class OratorHandMinion : ModProjectile
                         grazeArea = new(Owner.Center, Vector2.Zero, Color.LimeGreen, 1f, 1f, 24);
                         GeneralParticleHandler.SpawnParticle(grazeArea);
 
-                        if (((ShadowHandStaff)Owner.ActiveItem().ModItem).GrazePoints < 100 && grazeTime == 0 && Owner.immuneTime == 0 && !Owner.immune)
+                        if (((ShadowHandStaff)Owner.ActiveItem().ModItem).GrazePoints < ShadowHandStaff.MaxGraze && grazeTime == 0 && Owner.immuneTime == 0 && !Owner.immune)
                         {
                             int projectilesInGraze = Main.projectile.Count(p => p.active && p.hostile && !Owner.Hitbox.Intersects(p.Hitbox) && (p.Center - Owner.Center).Length() < grazeRadius);
                             if (projectilesInGraze > 0)
                             {
                                 ((ShadowHandStaff)Owner.ActiveItem().ModItem).GrazePoints += projectilesInGraze;
-                                if (((ShadowHandStaff)Owner.ActiveItem().ModItem).GrazePoints > 100)
-                                    ((ShadowHandStaff)Owner.ActiveItem().ModItem).GrazePoints = 100;
+                                if (((ShadowHandStaff)Owner.ActiveItem().ModItem).GrazePoints > ShadowHandStaff.MaxGraze)
+                                    ((ShadowHandStaff)Owner.ActiveItem().ModItem).GrazePoints = (int)ShadowHandStaff.MaxGraze;
                                 grazeTime = 4;
                             }
                         }
