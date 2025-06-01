@@ -159,7 +159,7 @@
   </ItemGroup>
   <ItemGroup>
     <Reference Include="CalamityMod">
-      <HintPath>..\ModAssemblies\CalamityMod.dll</HintPath>
+      <HintPath>..\..\ModReader\CalamityMod\CalamityMod.dll</HintPath>
     </Reference>
     <Reference Include="Luminance">
       <HintPath>..\..\ModReader\Luminance\Luminance.dll</HintPath>

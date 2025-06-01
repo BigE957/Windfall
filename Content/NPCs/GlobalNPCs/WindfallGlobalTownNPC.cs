@@ -15,17 +15,12 @@ public class WindfallGlobalTownNPC : GlobalNPC
         bool DrugDealer = NPC.FindFirstNPC(NPCType<WanderingPotionSeller>()) != -1;
         bool Calculus = NPC.FindFirstNPC(NPCType<WanderingCalClone>()) != -1;
 
-        bool fapsol = NPC.FindFirstNPC(NPCType<FAP>()) != -1;
         bool permadong = NPC.FindFirstNPC(NPCType<DILF>()) != -1;
         bool seahorse = NPC.FindFirstNPC(NPCType<SEAHOE>()) != -1;
         bool thief = NPC.FindFirstNPC(NPCType<THIEF>()) != -1;
 
         bool angelstatue = NPC.FindFirstNPC(NPCID.Merchant) != -1;
 
-        if(npc.type == NPCType<FAP>())
-        {
-
-        }
         if (npc.type == NPCType<DILF>())
         {
             if (Main.rand.NextBool(2) && Calculus)
