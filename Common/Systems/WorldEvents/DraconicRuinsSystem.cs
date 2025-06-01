@@ -576,6 +576,8 @@ public class DraconicRuinsSystem : ModSystem
         CameraTime = 0;
     }
 
+    public static bool ShouldBlockTerrainModification(Point p) => DraconicRuinsArea.Contains(p) && State != CutsceneState.Finished;
+
     private static void DisplayMessage(string key, NPC NPC, Color color, int upTime)
     {
         Rectangle location = new((int)NPC.position.X, (int)NPC.position.Y, NPC.width, NPC.width);

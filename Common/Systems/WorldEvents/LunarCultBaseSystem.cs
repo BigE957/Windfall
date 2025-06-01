@@ -1660,4 +1660,6 @@ public class LunarCultBaseSystem : ModSystem
             return;
         }
     }
+
+    public static bool ShouldBlockTerrainModification(Point p) => (CultBaseTileArea.Contains(p) || CultBaseBridgeArea.Contains(p)) && !DownedNPCSystem.downedOrator;
 }

@@ -1,7 +1,6 @@
 ﻿using Windfall.Common.Systems;
 using Windfall.Common.Systems.WorldEvents;
 using Windfall.Content.NPCs.WorldEvents.DragonCult;
-using static Windfall.Common.Systems.WorldEvents.LunarCultBaseSystem;
 
 namespace Windfall.Content.Tiles;
 
@@ -73,7 +72,7 @@ public class WindfallGlobalTile : GlobalTile
     public override bool CanExplode(int i, int j, int type)
     {
         Point p = new(i, j);
-        if (CultBaseTileArea.Contains(p) || CultBaseBridgeArea.Contains(p) || DraconicRuinsSystem.DraconicRuinsArea.Contains(p))
+        if (LunarCultBaseSystem.ShouldBlockTerrainModification(p) || DraconicRuinsSystem.ShouldBlockTerrainModification(p))
             return false;
         return base.CanExplode(i, j, type);
     }
@@ -81,7 +80,7 @@ public class WindfallGlobalTile : GlobalTile
     public override bool CanKillTile(int i, int j, int type, ref bool blockDamaged)
     {
         Point p = new(i, j);
-        if (CultBaseTileArea.Contains(p) || CultBaseBridgeArea.Contains(p) || DraconicRuinsSystem.DraconicRuinsArea.Contains(p))
+        if (LunarCultBaseSystem.ShouldBlockTerrainModification(p) || DraconicRuinsSystem.ShouldBlockTerrainModification(p))
             return false;
 
         return base.CanKillTile(i, j, type, ref blockDamaged);
@@ -90,7 +89,7 @@ public class WindfallGlobalTile : GlobalTile
     public override bool CanReplace(int i, int j, int type, int tileTypeBeingPlaced)
     {
         Point p = new(i, j);
-        if (CultBaseTileArea.Contains(p) || CultBaseBridgeArea.Contains(p) || DraconicRuinsSystem.DraconicRuinsArea.Contains(p))
+        if (LunarCultBaseSystem.ShouldBlockTerrainModification(p) || DraconicRuinsSystem.ShouldBlockTerrainModification(p))
             return false;
 
         return base.CanPlace(i, j, type);
@@ -98,8 +97,8 @@ public class WindfallGlobalTile : GlobalTile
     public override void NearbyEffects(int i, int j, int type, bool closer)
     {
         Point p = new(i, j);
-        bool tombstonesShouldSpontaneouslyCombust = CultBaseTileArea.Contains(p) || CultBaseBridgeArea.Contains(p) || DraconicRuinsSystem.DraconicRuinsArea.Contains(p);
-        if (tombstonesShouldSpontaneouslyCombust && type is TileID.Tombstones)
+        bool shouldPurgeGraves = LunarCultBaseSystem.ShouldBlockTerrainModification(p) || DraconicRuinsSystem.ShouldBlockTerrainModification(p);
+        if (shouldPurgeGraves && type is TileID.Tombstones)
             WorldGen.KillTile(i, j);
     }
 }
