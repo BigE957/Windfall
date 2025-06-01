@@ -531,10 +531,7 @@ public class OratorHandMinion : ModProjectile
                         Projectile.direction = Math.Sign(toTarget.X);
                     }
                     else
-                    {
                         Projectile.rotation = Projectile.velocity.ToRotation();
-                    }
-                    Projectile.scale = 1.5f;
 
                     if (LocalTime >= 30)
                     {
