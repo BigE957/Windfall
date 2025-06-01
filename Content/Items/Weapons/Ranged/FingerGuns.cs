@@ -280,7 +280,7 @@ public class FingerBolt : ModProjectile, ILocalizedModType
     public override bool PreDraw(ref Color lightColor)
     {
         ManagedShader shader = ShaderManager.GetShader("Windfall.GenericFlameTrail");
-        shader.SetTexture(ModContent.Request<Texture2D>("CalamityMod/ExtraTextures/Trails/" + (MyColor == myColor.Green ? "ScarletDevilStreak" : "FabstaffStreak")), 1, SamplerState.LinearWrap);
+        shader.SetTexture(ModContent.Request<Texture2D>("CalamityMod/ExtraTextures/Trails/" + (MyColor == myColor.Green ? "ScarletDevilStreak" : "SylvestaffStreak")), 1, SamplerState.LinearWrap);
         PrimitiveSettings settings = new(WidthFunction, ColorFunction, (_) => Projectile.Size * 0.5f, Shader: shader);
         PrimitiveRenderer.RenderTrail(Projectile.oldPos, settings, 30);
         /*
