@@ -1,6 +1,7 @@
 ﻿using CalamityMod;
 using CalamityMod.Items;
 using CalamityMod.Particles;
+using CalamityMod.Projectiles.Summon;
 using Luminance.Core.Graphics;
 using Microsoft.Xna.Framework.Input;
 using ReLogic.Utilities;
@@ -23,6 +24,11 @@ public class ShadowHandStaff : ModItem, ILocalizedModType
 {
     public new string LocalizationCategory => "Items.Weapons.Summon";
     public override string Texture => "Windfall/Assets/Items/Weapons/Summon/ShadowHandStaff";
+
+    public override void SetStaticDefaults()
+    {
+        ItemID.Sets.StaffMinionSlotsRequired[Item.type] = 4;
+    }
 
     public override void SetDefaults()
     {
@@ -49,7 +55,6 @@ public class ShadowHandStaff : ModItem, ILocalizedModType
     private static readonly int GrazeMax = 100;
     float MaxGraze = 100f;
 
-    public override bool AltFunctionUse(Player player) => GrazePoints > 0;
 
     public override bool PreDrawTooltip(ReadOnlyCollection<TooltipLine> lines, ref int x, ref int y)
     {
@@ -145,10 +150,9 @@ public class ShadowHandStaff : ModItem, ILocalizedModType
         player.Calamity().rightClickListener = true;
     }
 
-    public override bool? UseItem(Player player)
-    {
-        return base.UseItem(player);
-    }
+    public override bool AltFunctionUse(Player player) => GrazePoints > 0;
+
+    public override bool CanUseItem(Player player) => player.ownedProjectileCounts[Item.shoot] <= 0;
 
     public override bool Shoot(Player player, EntitySource_ItemUse_WithAmmo source, Vector2 position, Vector2 velocity, int type, int damage, float knockback)
     {
@@ -156,6 +160,8 @@ public class ShadowHandStaff : ModItem, ILocalizedModType
         {
             if (player.slotsMinions + 4 > player.maxMinions)
                 return false;
+
+            CalamityUtils.KillShootProjectiles(true, type, player);
 
             position = Main.MouseWorld;
 
