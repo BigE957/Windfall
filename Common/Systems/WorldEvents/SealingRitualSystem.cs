@@ -22,7 +22,7 @@ public class SealingRitualSystem : ModSystem
     }
     private static SystemState State = SystemState.CheckReqs;
 
-    private static bool Active = false;
+    public static bool Active = false;
     private static int RitualTimer = -1;
     private static List<int> NPCIndexs = [];
     private static float zoom = 0;
@@ -107,7 +107,7 @@ public class SealingRitualSystem : ModSystem
                 }
                 y -= 0.5f;
 
-                NPC.NewNPC(Entity.GetSource_None(), (int)RitualWorld.X, (int)RitualWorld.Y - (int)(y * 16), ModContent.NPCType<SealingTablet>(), 150, ai1: ((y - 7) * 1.1f) + 8, ai0: 2);
+                NPC.NewNPC(Entity.GetSource_None(), (int)RitualWorld.X, (int)RitualWorld.Y - (int)(y * 16), ModContent.NPCType<SealingTablet>(), 150, ai1: ((y - 7) * 1.1f) + 2, ai0: 2);
             }
             else if (Main.npc[NPC.FindFirstNPC(ModContent.NPCType<SealingTablet>())].ai[0] != 2)
                 Main.npc[NPC.FindFirstNPC(ModContent.NPCType<SealingTablet>())].ai[0] = 2;
@@ -139,7 +139,6 @@ public class SealingRitualSystem : ModSystem
                         if (IsSolidNotDoor(RitualTile - new Point(0, (int)y)))
                             break;
                     }
-                    y -= 0.5f;
 
                     NPCIndexs =
                     [
@@ -147,7 +146,7 @@ public class SealingRitualSystem : ModSystem
                         NPC.NewNPC(Entity.GetSource_None(), (int)(RitualWorld.X - 150), (int)RitualWorld.Y - 8, ModContent.NPCType<RecruitableLunarCultist>()),
                         NPC.NewNPC(Entity.GetSource_None(), (int)(RitualWorld.X + 150), (int)RitualWorld.Y - 8, ModContent.NPCType<RecruitableLunarCultist>()),
                         NPC.NewNPC(Entity.GetSource_None(), (int)(RitualWorld.X + 220), (int)RitualWorld.Y - 8, ModContent.NPCType<RecruitableLunarCultist>()),
-                        NPC.NewNPC(Entity.GetSource_None(), (int)RitualWorld.X, (int)RitualWorld.Y - (int)(y * 16), ModContent.NPCType<SealingTablet>(), 150, ai1: ((y - 7) * 3.25f) + 8),
+                        NPC.NewNPC(Entity.GetSource_None(), (int)RitualWorld.X, (int)RitualWorld.Y - (int)(y * 16), ModContent.NPCType<SealingTablet>(), 150, ai1: ((y - 7) * 1.1f) + 2),
                         NPC.NewNPC(Entity.GetSource_None(), (int)RitualWorld.X, (int)RitualWorld.Y - 8, ModContent.NPCType<TravellingCultist>(), ai3: 1),
                         
                     ];
@@ -197,6 +196,7 @@ public class SealingRitualSystem : ModSystem
                             LunaticCultist = Main.npc[NPCIndexs[5]];
 
                         DialogueUISystem uiSystem = ModContent.GetInstance<DialogueUISystem>();
+
                         switch (RitualTimer)
                         {
                             case 30:
@@ -232,7 +232,7 @@ public class SealingRitualSystem : ModSystem
                                 ThornIndex = Projectile.NewProjectile(Entity.GetSource_NaturalSpawn(), RitualWorld, new Vector2(0, -20), ModContent.ProjectileType<EmpyreanThorn>(), 200, 0f, ai0: -1);
                                 CultistDir = CultistFacing.UhmHeavenIg;
                                 LunaticCultist.noGravity = true;
-                                LunaticCultist.position.Y -= 128;
+                                LunaticCultist.position.Y -= 32;
                                 LunaticCultist.velocity = Vector2.Zero;
                                 LunaticCultist.rotation = -Pi / 2;
 
@@ -242,6 +242,7 @@ public class SealingRitualSystem : ModSystem
 
                             case 680:
                                 NPC orator = NPC.NewNPCDirect(Entity.GetSource_NaturalSpawn(), (int)RitualWorld.X, (int)RitualWorld.Y - 8, ModContent.NPCType<OratorNPC>());
+                                orator.direction = Math.Sign(Main.player[0].Center.X - orator.Center.X);
                                 SoundEngine.PlaySound(SoundID.DD2_EtherianPortalDryadTouch, orator.Center);
                                 for (int i = 0; i < 32; i++)
                                     EmpyreanMetaball.SpawnDefaultParticle(orator.Center + new Vector2(Main.rand.NextFloat(-64, 64), 64), Vector2.UnitY * Main.rand.NextFloat(4f, 24f) * -1, Main.rand.NextFloat(110f, 130f));

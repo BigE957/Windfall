@@ -1,6 +1,4 @@
-﻿using Terraria.Chat;
-using Windfall.Common.Graphics.Metaballs;
-using Windfall.Content.NPCs.Bosses.Orator;
+﻿using Windfall.Common.Graphics.Metaballs;
 
 namespace Windfall.Content.Projectiles.Boss.Orator;
 
@@ -57,6 +55,11 @@ public class EmpyreanThorn : ModProjectile
             Projectile.velocity = Vector2.Zero;
 
             //Projectile.netUpdate = true;
+        }
+        else
+        {
+            Projectile.scale = 0.5f;
+            Projectile.hostile = false;
         }
     }
 

@@ -619,7 +619,8 @@ public class TravellingCultist : ModNPC, ILocalizedModType
                 break;
             case BehaviorState.StandStill:
                 NPC.velocity.X *= 0.8f;
-                NPC.noGravity = false;
+                if(!SealingRitualSystem.Active)
+                    NPC.noGravity = false;
                 break;
         }
 

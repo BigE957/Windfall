@@ -47,7 +47,6 @@ public class SealingTablet : ModNPC
 
         box = CreateVerletBox(new((int)NPC.position.X, (int)NPC.position.Y, 18, 18));
 
-
         if (DraconicRuinsSystem.DraconicRuinsArea.Contains(NPC.Center.ToTileCoordinates()))
         {
             LeftChain = CreateVerletChain(NPC.Bottom + new Vector2(-40, 6), box[0].Position, verletCount, 15);
@@ -60,6 +59,9 @@ public class SealingTablet : ModNPC
         }
         ConnectVerlets(LeftChain[^1], box[0], 4);
         ConnectVerlets(RightChain[^1], box[2], 4);
+
+        if (NPC.ai[2] == 2)
+            NPC.hide = false;
     }
 
     public override void AI()
@@ -197,7 +199,8 @@ public class SealingTablet : ModNPC
 
     public override void DrawBehind(int index)
     {
-        Main.instance.DrawCacheNPCsOverPlayers.Add(index);
+        if (NPC.hide)
+            Main.instance.DrawCacheNPCsOverPlayers.Add(index);
     }
 
     public override bool PreDraw(SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor)

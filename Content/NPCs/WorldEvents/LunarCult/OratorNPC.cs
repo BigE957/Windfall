@@ -131,6 +131,7 @@ public class OratorNPC : ModNPC
         
         NPC.spriteDirection = NPC.direction;
     }
+    public override bool CheckActive() => false;
 
     public override bool CanChat() => !QuestSystem.Quests["DraconicBone"].Complete && !ModContent.GetInstance<DialogueUISystem>().isDialogueOpen && !LunarCultBaseSystem.IsRitualActivityActive() && AIState != States.DraconicBoneSequence && AIState != States.Cutscene;
     public override string GetChat()
