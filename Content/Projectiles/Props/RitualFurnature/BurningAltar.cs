@@ -44,7 +44,7 @@ public class BurningAltar : ModProjectile
 
     public override bool PreDraw(ref Color lightColor)
     {
-        Texture2D texture = ModContent.Request<Texture2D>(Texture).Value;
+        Texture2D texture = TextureAssets.Projectile[Type].Value;
         Rectangle frame = texture.Frame(1, Main.projFrames[Type], 0, Projectile.frame);
         Vector2 drawPosition = Projectile.Center - Main.screenPosition;
         Vector2 origin = frame.Size() * 0.5f;

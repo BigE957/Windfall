@@ -242,7 +242,7 @@ public class SelenicSiphon : ModNPC
 
     public override bool PreDraw(SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor)
     {
-        Texture2D texture = ModContent.Request<Texture2D>(Texture).Value;
+        Texture2D texture = TextureAssets.Projectile[Type].Value;
         Vector2 drawCenter = NPC.Center - screenPos;
 
         int width = 8;

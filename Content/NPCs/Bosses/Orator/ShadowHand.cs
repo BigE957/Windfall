@@ -102,6 +102,7 @@ public class ShadowHand : ModNPC
         CurrentAI = AIState.Spawning;
         NPC.velocity = Main.rand.NextFloat(0, TwoPi).ToRotationVector2() * Main.rand.Next(10, 15);
         NPC.rotation = NPC.velocity.ToRotation();
+        NPC.FindFrame();
         for (int i = 0; i <= 20; i++)
             EmpyreanMetaball.SpawnDefaultParticle(NPC.Center, Main.rand.NextVector2Circular(7f, 7f), 40 * Main.rand.NextFloat(1.5f, 2.3f));
     }

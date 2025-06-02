@@ -2,6 +2,7 @@
 using CalamityMod.Items;
 using CalamityMod.Particles;
 using CalamityMod.Projectiles.Summon;
+using Luminance.Assets;
 using Luminance.Core.Graphics;
 using Microsoft.Xna.Framework.Input;
 using ReLogic.Utilities;
@@ -1030,7 +1031,7 @@ public class SelenicIdolMinion : ModProjectile, ILocalizedModType
     }
     private States AIState = States.Chasing;
 
-    private ref float GoopScale => ref Projectile.ai[2];
+    private ref float Dissolve => ref Projectile.ai[2];
 
     int deathCounter = 0;
     float rotationCounter = 0;
@@ -1056,7 +1057,7 @@ public class SelenicIdolMinion : ModProjectile, ILocalizedModType
                 {
                     float lerp = Time / 60f;
                     Projectile.scale = CircOutEasing(lerp);
-                    GoopScale = 1 - SineInEasing(lerp);
+                    Dissolve = 1 - SineInEasing(lerp);
                     EmpyreanMetaball.SpawnDefaultParticle(Projectile.Center + (Main.rand.NextVector2Circular(48f, 48f) * Projectile.scale), Main.rand.NextVector2Circular(18, 18) + Projectile.velocity, 200 * Main.rand.NextFloat(0.75f, 0.9f) * (1 - lerp));
                 }
 
@@ -1086,13 +1087,14 @@ public class SelenicIdolMinion : ModProjectile, ILocalizedModType
                 }
                 break;
             case States.Dying:
-                float lerpValue = deathCounter / 180f;
+                float lerpValue = Clamp(deathCounter / 150f, 0f, 1f);
 
                 Projectile.scale = Lerp(1f, 0.5f, lerpValue);
-                GoopScale = lerpValue;
+                Dissolve = Clamp(lerpValue * 1.5f, 0f, 1f);
 
                 if (lerpValue >= 1f)
-                    Projectile.ai[0] = 2;
+                    AIState = States.Exploding;
+
                 if (Projectile.velocity.Length() > 0f)
                 {
                     if (Projectile.owner == Main.myPlayer)
@@ -1115,9 +1117,11 @@ public class SelenicIdolMinion : ModProjectile, ILocalizedModType
                     Projectile.oldPos[i] += shakeOffset;
                 #endregion
 
-                EmpyreanMetaball.SpawnDefaultParticle(Projectile.Center + (Main.rand.NextVector2Circular(25f, 25f) * Projectile.scale), Main.rand.NextVector2Circular(12, 12) * (lerpValue + 0.5f), 180 * (Main.rand.NextFloat(0.75f, 0.9f)));
-                EmpyreanMetaball.SpawnDefaultParticle(Projectile.Center + (Main.rand.NextVector2Circular(25f, 25f) * Projectile.scale), Main.rand.NextVector2Circular(18, 18) * (lerpValue + 0.5f), 90 * (Main.rand.NextFloat(0.75f, 0.9f)));
-
+                if (Dissolve >= 0.75f)
+                {
+                    EmpyreanMetaball.SpawnDefaultParticle(Projectile.Center + (Main.rand.NextVector2Circular(25f, 25f) * Projectile.scale), Main.rand.NextVector2Circular(12, 12) * (lerpValue + 0.5f), 180 * (Main.rand.NextFloat(0.75f, 0.9f)));
+                    EmpyreanMetaball.SpawnDefaultParticle(Projectile.Center + (Main.rand.NextVector2Circular(25f, 25f) * Projectile.scale), Main.rand.NextVector2Circular(18, 18) * (lerpValue + 0.5f), 90 * (Main.rand.NextFloat(0.75f, 0.9f)));
+                }
                 deathCounter++;
                 break;
             case States.Exploding:
@@ -1170,7 +1174,7 @@ public class SelenicIdolMinion : ModProjectile, ILocalizedModType
             Color.Goldenrod,
         ];
 
-        Main.EntitySpriteDraw(tex, Projectile.Center - Main.screenPosition, null, LerpColors(Main.GlobalTimeWrappedHourly * 0.25f, colors), Main.GlobalTimeWrappedHourly * 0.25f, tex.Size() * 0.5f, ((Projectile.scale * 0.825f) + (float)(Math.Sin(Main.GlobalTimeWrappedHourly * 4) * 0.025f)) * (1 - GoopScale), 0);
+        Main.EntitySpriteDraw(tex, Projectile.Center - Main.screenPosition, null, LerpColors(Main.GlobalTimeWrappedHourly * 0.25f, colors), Main.GlobalTimeWrappedHourly * 0.25f, tex.Size() * 0.5f, ((Projectile.scale * 0.825f) + (float)(Math.Sin(Main.GlobalTimeWrappedHourly * 4) * 0.025f)) * (1 - Dissolve), 0);
 
         Main.spriteBatch.UseBlendState(BlendState.AlphaBlend);
 
@@ -1196,14 +1200,21 @@ public class SelenicIdolMinion : ModProjectile, ILocalizedModType
 
     public override void PostDraw(Color lightColor)
     {
-        if (GoopScale != 0)
+        if (Dissolve != 0)
         {
             Texture2D tex = LoadSystem.Circle.Value;
 
-            Vector2[] offsets = [new(70, -35), new(-78, 48), new(-0, 80), new(78, 0), new(34, 70), new(-44, -70)];
+            Main.spriteBatch.PrepareForShaders(BlendState.NonPremultiplied);
 
-            for (int i = 0; i < offsets.Length; i++)
-                Main.EntitySpriteDraw(tex, Projectile.Center - Main.screenPosition + offsets[i].RotatedBy(rotationCounter) * Projectile.scale, null, Color.White, rotationCounter, tex.Size() * 0.5f, Projectile.scale * 4f * GoopScale, 0);
+            ManagedShader dissolveShader = ShaderManager.GetShader("Windfall.Dissolve");
+
+            dissolveShader.TrySetParameter("dissolveIntensity", 1 - Dissolve);
+            dissolveShader.SetTexture(MiscTexturesRegistry.TurbulentNoise.Value, 1, SamplerState.LinearWrap);
+            dissolveShader.Apply();
+
+            Main.spriteBatch.Draw(tex, Projectile.Center - Main.screenPosition, null, Color.White, rotationCounter, tex.Size() * 0.5f, Projectile.scale * 5f, 0, 0);
+
+            Main.spriteBatch.PrepareForShaders();
         }
     }
 }

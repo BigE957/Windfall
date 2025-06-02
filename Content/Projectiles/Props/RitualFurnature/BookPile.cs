@@ -42,7 +42,7 @@ public class BookPile : ModProjectile
 
     public override bool PreDraw(ref Color lightColor)
     {
-        Texture2D texture = ModContent.Request<Texture2D>(Texture).Value;
+        Texture2D texture = TextureAssets.Projectile[Type].Value;
         Rectangle frame = Projectile.ai[0] == 0 ? new(38, 36, 48, 19) : new(92, 40, 40, 15);
         Vector2 drawPosition = Projectile.Center - Main.screenPosition;
         Vector2 origin = frame.Size() * 0.5f;

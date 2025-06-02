@@ -43,7 +43,7 @@ public class RitualTorch : ModProjectile
 
     public override bool PreDraw(ref Color lightColor)
     {
-        Texture2D texture = ModContent.Request<Texture2D>(Texture).Value;
+        Texture2D texture = TextureAssets.Projectile[Type].Value;
         Rectangle frame = new(20, 0, 10, 55);
         Vector2 drawPosition = Projectile.Center - Main.screenPosition;
         Vector2 origin = frame.Size() * 0.5f;

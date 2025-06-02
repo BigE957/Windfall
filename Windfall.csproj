@@ -9,7 +9,6 @@
 		<NoWarn>MSB3270</NoWarn>
     </PropertyGroup>
   <ItemGroup>
-    <None Remove="Assets\AutoloadedEffects\Shaders\GenericFlameTrail.fx" />
     <None Remove="Assets\Buffs\Wildfire.png" />
     <None Remove="Assets\Graphics\Extra\InvertedSwordSmear.png" />
     <None Remove="Assets\Graphics\Extra\PaintSmear.png" />
@@ -150,6 +149,7 @@
     <None Remove="icon_small.png" />
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="Assets\AutoloadedEffects\Shaders\" />
     <Folder Include="Content\Items\Armor\Selenic\" />
     <Folder Include="Localization\DialogueTrees\en-US\Apostle\" />
     <Folder Include="Localization\DialogueTrees\en-US\Cutscenes\SealingRitual\" />

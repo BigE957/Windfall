@@ -5,6 +5,7 @@ using Windfall.Content.Items.Weapons.Summon;
 using Windfall.Content.NPCs.Bosses.Orator;
 using Windfall.Content.NPCs.WorldEvents.LunarCult;
 using Windfall.Content.Projectiles.Boss.Orator;
+using Windfall.Content.Projectiles.Debug;
 
 namespace Windfall.Common.Graphics.Metaballs;
 
@@ -75,10 +76,11 @@ public class EmpyreanMetaball : Metaball
         AnyProjectiles(ModContent.ProjectileType<PotGlob>()) ||
         AnyProjectiles(ModContent.ProjectileType<MinionHandRing>()) ||
         AnyProjectiles(ModContent.ProjectileType<SelenicIdolMinion>()) ||
+        AnyProjectiles(ModContent.ProjectileType<Dissolver>()) ||
         NPC.AnyNPCs(ModContent.NPCType<ShadowHand>()) ||
         NPC.AnyNPCs(ModContent.NPCType<OratorHand>()) ||
-        NPC.AnyNPCs(ModContent.NPCType<SealingTablet>())
-    ;
+        NPC.AnyNPCs(ModContent.NPCType<SealingTablet>()
+    );
 
     public override IEnumerable<Texture2D> Layers
     {
@@ -215,10 +217,11 @@ public class EmpyreanMetaball : Metaball
             p.type == ModContent.ProjectileType<FingerlingGun>() ||
             p.type == ModContent.ProjectileType<PotGlob>() ||
             p.type == ModContent.ProjectileType<MinionHandRing>() ||
-            p.type == ModContent.ProjectileType<SelenicIdolMinion>()
+            p.type == ModContent.ProjectileType<SelenicIdolMinion>() ||
+            p.type == ModContent.ProjectileType<Dissolver>()
         )))
         {
-            if(p.type == ModContent.ProjectileType<SelenicIdolMinion>() || p.type == ModContent.ProjectileType<OratorHandMinion>() || p.type == ModContent.ProjectileType<MinionHandRing>() ||  p.type == ModContent.ProjectileType<HandRing>() || p.type == ModContent.ProjectileType<DarkGlob>() || p.type == ModContent.ProjectileType<OratorBorder>() || p.type == ModContent.ProjectileType<DarkTide>() || p.type == ModContent.ProjectileType<SelenicIdol>() || p.type == ModContent.ProjectileType<FingerlingGun>() || p.type == ModContent.ProjectileType<PotGlob>())
+            if(p.type == ModContent.ProjectileType<Dissolver>() || p.type == ModContent.ProjectileType<SelenicIdolMinion>() || p.type == ModContent.ProjectileType<OratorHandMinion>() || p.type == ModContent.ProjectileType<MinionHandRing>() ||  p.type == ModContent.ProjectileType<HandRing>() || p.type == ModContent.ProjectileType<DarkGlob>() || p.type == ModContent.ProjectileType<OratorBorder>() || p.type == ModContent.ProjectileType<DarkTide>() || p.type == ModContent.ProjectileType<SelenicIdol>() || p.type == ModContent.ProjectileType<FingerlingGun>() || p.type == ModContent.ProjectileType<PotGlob>())
             {
                 Color c = Color.White;
                 c.A = 0;
