@@ -31,7 +31,7 @@ public class BlackSlash : ModProjectile, IPixelatedPrimitiveRenderer
     private int Time = 0;
     private float widthScale = 2f;
 
-    float length => 1800;
+    float length => 2400;
     float rotateDuration => 60f;
 
     int[] slashTimes;
@@ -74,7 +74,7 @@ public class BlackSlash : ModProjectile, IPixelatedPrimitiveRenderer
                         slashTimes[i]++;
                     continue;
                 }
-                if (!enabledSlash && Time % 2 == 0)
+                if (!enabledSlash && Time % 3 == 0)
                 {
                     enabledSlash = true;
                     slashTimes[i] = 0;
@@ -194,28 +194,28 @@ public class BlackSlash : ModProjectile, IPixelatedPrimitiveRenderer
 
             for (int i = 0; i < slashCount; i++)
             {
+                if (slashTimes[i] == -1 || slashTimes[i] > 12)
+                    continue;
+                  
                 float myRotation = Projectile.rotation + (i * (Pi / slashCount));
-                float lengthScale = Lerp(1f, 0.25f, slashTimes[i] / 12f);
+                float lengthScale = Lerp(1f, 0f, slashTimes[i] / 12f);
+                slashWidth = Clamp(Lerp(1.5f, 0f, SineOutEasing(slashTimes[i] / 12f)), 0f, 1f);
                 Vector2 start = Projectile.Center + myRotation.ToRotationVector2() * (length * Projectile.scale / 1.5f) * lengthScale;
                 Vector2 end = Projectile.Center + myRotation.ToRotationVector2() * (length * -Projectile.scale / 1.5f) * lengthScale;
 
-                if (slashTimes[i] != -1 && slashTimes[i] <= 12)
-                {
-                    for (int j = 0; j < posCount; j++)
-                        positions[j] = Vector2.Lerp(start, end, j / posCount);
-                    slashWidth = Clamp(Lerp(1.5f, 0f, SineOutEasing(slashTimes[i] / 12f)), 0f, 1f);
-                    Color color = Color.Red;
-                    if (slashTimes[i] > 2)
-                        color = Color.Lerp(Color.Red, Color.White, (slashTimes[i] - 2) / 10f);
-                    PrimitiveRenderer.RenderTrail(positions, new(OuterWidthFunction, (_) => color, (_) => Vector2.Zero, true, true, null));
+                for (int j = 0; j < posCount; j++)
+                    positions[j] = Vector2.Lerp(start, end, j / posCount);
+                Color color = Color.Red;
+                if (slashTimes[i] > 2)
+                    color = Color.Lerp(Color.Red, Color.White, (slashTimes[i] - 2) / 10f);
+                PrimitiveRenderer.RenderTrail(positions, new(OuterWidthFunction, (_) => color, (_) => Vector2.Zero, true, true, null));
 
-                    start = Projectile.Center + myRotation.ToRotationVector2() * (length * Projectile.scale / 1.5f) * 0.75f * lengthScale;
-                    end = Projectile.Center + myRotation.ToRotationVector2() * (length * -Projectile.scale / 1.5f) * 0.75f * lengthScale;
+                start = Projectile.Center + myRotation.ToRotationVector2() * (length * Projectile.scale / 1.5f) * 0.75f * lengthScale;
+                end = Projectile.Center + myRotation.ToRotationVector2() * (length * -Projectile.scale / 1.5f) * 0.75f * lengthScale;
 
-                    for (int j = 0; j < posCount; j++)
-                        positions[j] = Vector2.Lerp(start, end, j / posCount);
-                    PrimitiveRenderer.RenderTrail(positions, new(InnerWidthFunction, (_) => Color.Black, (_) => Vector2.Zero, true, true, null));
-                }
+                for (int j = 0; j < posCount; j++)
+                    positions[j] = Vector2.Lerp(start, end, j / posCount);
+                PrimitiveRenderer.RenderTrail(positions, new(InnerWidthFunction, (_) => Color.Black, (_) => Vector2.Zero, true, true, null));
             }
         }
     }

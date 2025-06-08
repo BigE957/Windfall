@@ -43,6 +43,7 @@ public abstract class ProjectileNPC : ModProjectile
             if (altY < Projectile.position.Y)
                 Projectile.position.Y = altY;
         }
+        CurrentAI = AIState.SpawnDelay;
     }
     int finalDelay = 0;
     float zoom = 0;

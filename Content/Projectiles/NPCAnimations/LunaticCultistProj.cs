@@ -1,5 +1,4 @@
 ﻿using Windfall.Content.NPCs.WorldEvents.DragonCult;
-using Windfall.Content.NPCs.WorldEvents.LunarCult;
 
 namespace Windfall.Content.Projectiles.NPCAnimations;
 

@@ -22,12 +22,12 @@ public class DungeonLocationChecker : ModItem, ILocalizedModType
     public override void HoldItem(Player player)
     {
         //Shader Playground
-        ManagedScreenFilter testFilter = ShaderManager.GetFilter("Windfall.TestFilter");
+        //ManagedScreenFilter testFilter = ShaderManager.GetFilter("Windfall.TestFilter");
 
         Vector3[] colors =
         [
             #region Soft Sunset
-            
+            /*
             FromHexToVec3("#020105"),
             FromHexToVec3("#260434"),
             FromHexToVec3("#66055C"),
@@ -38,7 +38,7 @@ public class DungeonLocationChecker : ModItem, ILocalizedModType
             FromHexToVec3("#FFFF6B"),
             FromHexToVec3("#DAFF9E"),
             FromHexToVec3("#DCFFD1")
-            
+            */
             #endregion
 
             #region Soft Sunset
@@ -89,8 +89,7 @@ public class DungeonLocationChecker : ModItem, ILocalizedModType
     public override bool? UseItem(Player player)
     {
         //NPC.NewNPCDirect(Entity.GetSource_FromAI(), new Vector2(Main.dungeonX, Main.dungeonY).ToWorldCoordinates(), NPCID.Zombie);
-        if(Main.netMode != NetmodeID.MultiplayerClient)
-            Projectile.NewProjectile(null, Main.MouseWorld, Vector2.UnitX, ModContent.ProjectileType<EmpyreanThorn>(), 100, 0, ai0: 60, ai1: 16, ai2: 3);
+        NPC.downedBoss3 = false;
         return true;
     }
 }
