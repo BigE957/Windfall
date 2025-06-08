@@ -1647,6 +1647,7 @@ Projectiles: {
 	MinionHandRing.DisplayName: Minion Hand Ring
 	SelenicIdolMinion.DisplayName: Selenic Idol Minion
 	Dissolver.DisplayName: Dissolver
+	BlackSlash.DisplayName: Black Slash
 }
 
 Buffs: {
