@@ -137,20 +137,6 @@ public class BlackSlash : ModProjectile, IPixelatedPrimitiveRenderer
 
                 DrawLineWith(Main.spriteBatch, start, end, color, 48 * widthScale, ModContent.Request<Texture2D>("Windfall/Assets/Graphics/Extra/BloomLine").Value);
             }
-            else if (slashTimes[i] != -1)
-            {
-                /*
-                Texture2D slash = ModContent.Request<Texture2D>("Windfall/Assets/Graphics/Extra/Diamond").Value;
-                float time = slashTimes[i] / 12f;
-                float xEasing = Clamp(Lerp(1.5f, 0f, SineOutEasing(time)), 0f, 1f);
-                float yEasing = Clamp(Lerp(1.5f, 0.25f, SineOutEasing(time)), 0f, 1f);
-                Vector2 scale = new(10 * xEasing, length / (slash.Height / 2f) * yEasing);
-                Color color = Color.Red;
-                if(slashTimes[i] > 2)
-                    color = Color.Lerp(Color.Red, Color.White, (slashTimes[i] - 2) / 10f);
-                Main.spriteBatch.Draw(slash, Projectile.Center - Main.screenPosition, null, color, myRotation + PiOver2, slash.Size() * 0.5f, scale, 0, 0f);
-                */
-            }
         }
 
         if (Time < rotateDuration)
@@ -164,16 +150,6 @@ public class BlackSlash : ModProjectile, IPixelatedPrimitiveRenderer
 
             if (Time < rotateDuration)
                 DrawLineWith(Main.spriteBatch, start, end, Color.Black, 12f * widthScale, ModContent.Request<Texture2D>("CalamityMod/ExtraTextures/Line").Value);
-            else if (slashTimes[i] != -1)
-            {
-                /*
-                Texture2D slash = ModContent.Request<Texture2D>("Windfall/Assets/Graphics/Extra/Diamond").Value;
-                float xEasing = Clamp(Lerp(1.5f, 0f, SineOutEasing(slashTimes[i] / 12f)), 0f, 1f);
-                float yEasing = Clamp(Lerp(1.5f, 0.25f, SineOutEasing(slashTimes[i] / 12f)), 0f, 1f);
-                Vector2 scale = new(5 * xEasing, length / 2f / (slash.Height / 2f) * yEasing);
-                Main.spriteBatch.Draw(slash, Projectile.Center - Main.screenPosition, null, Color.Black, myRotation + PiOver2, slash.Size() * 0.5f, scale, 0, 0f);
-                */
-            }
         }
         
         
