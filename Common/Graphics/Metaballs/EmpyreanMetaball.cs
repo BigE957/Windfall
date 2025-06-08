@@ -1,4 +1,8 @@
 ﻿using CalamityMod.Graphics.Metaballs;
+using CalamityMod.Projectiles.Magic;
+using Luminance.Assets;
+using Luminance.Core.Graphics;
+using Windfall.Common.Interfaces;
 using Windfall.Content.Items.Weapons.Magic;
 using Windfall.Content.Items.Weapons.Ranged;
 using Windfall.Content.Items.Weapons.Summon;
@@ -6,6 +10,7 @@ using Windfall.Content.NPCs.Bosses.Orator;
 using Windfall.Content.NPCs.WorldEvents.LunarCult;
 using Windfall.Content.Projectiles.Boss.Orator;
 using Windfall.Content.Projectiles.Debug;
+using static Windfall.Common.Graphics.Metaballs.EmpyreanMetaball;
 
 namespace Windfall.Common.Graphics.Metaballs;
 
@@ -21,9 +26,9 @@ public class EmpyreanMetaball : Metaball
 
         public void Update()
         {
-            Size *= 0.94f;
+            Velocity *= 0.99f;
+            Size *= 0.9f;
             Center += Velocity;
-            Velocity *= 0.96f;
         }
     }
     
@@ -44,7 +49,100 @@ public class EmpyreanMetaball : Metaball
         public Vector2 Center;
 
         public bool spin = spin;
+
+        public void Update()
+        {
+            Projectile myProj = Main.projectile[ProjectileIndex];
+
+            if (spin)
+                if (Rotation > 0)
+                    Rotation += 0.0175f / Math.Abs(Interpolant / 4);
+                else
+                    Rotation -= 0.0175f / Math.Abs(Interpolant / 4);
+
+            Center = myProj.Center + Offset + (new Vector2(myProj.width / 2 * (myProj.scale / 5f) * 1.05f, 0).RotatedBy(Rotation + myProj.rotation));
+            Center += (myProj.Center + Offset - Center).SafeNormalize(Vector2.Zero) * SumofSines(this, 1.5f, 2f);
+            if (!spin)
+                Center -= myProj.velocity / 2;
+        }
     }
+
+    public class OpulentFlake(Vector2 relativePosition, Vector2 velocity, float spin, float scale, float idealDir, bool isFront)
+    {
+        internal Vector2 Position = relativePosition;
+        internal Vector2 Velocity = velocity;
+        internal float Scale = scale;
+        internal float Rotation;
+        internal int Time = 0;
+        internal float Opacity = 0f;
+        internal bool Front = isFront;
+        internal float Dissolve = 1f;
+        internal Vector2 sampleOffset = Main.rand.NextVector2Circular(240, 240);
+        internal int SineOffset = Main.rand.Next(100);
+
+        private readonly float Spin = spin;
+        private readonly float IdealAngle = idealDir;
+        private readonly int Shade = isFront ? Main.rand.Next(2) : Main.rand.Next(2) + 1;
+        private readonly int Variant = Main.rand.Next(6);
+
+        internal static Asset<Texture2D> Atlas;
+        internal static Asset<Texture2D> overlay;
+
+        public void Update()
+        {
+            if (Time < 8)
+                Opacity += 1 / 8f;
+            else
+            {
+                Opacity = 1f;
+                if (Time > 8)
+                    Velocity = Velocity.RotateTowards(IdealAngle, 0.01f);
+
+                if (Time > 45)
+                {
+                    Scale *= 0.985f;
+
+                    if (Time > 50 && Dissolve > 0f)
+                        Dissolve -= 1 / 30f;
+                }
+            }
+
+            if(Time == 90)
+                for (int i = 0; i <= 10; i++)
+                    SpawnDefaultParticle(Position, Main.rand.NextVector2Circular(3f, 3f) * Main.rand.NextFloat(1f, 2f) * Scale, 8 * Main.rand.NextFloat(3f, 5f) * Scale);
+
+            Position += Velocity;
+            Rotation += Spin * ((Velocity.X > 0) ? 1f : -1f);
+
+            Velocity.Y *= 0.975f;
+            Velocity.X += (float)(Math.Sin(Time + SineOffset) / 2f + 0.5f) * 0.2f * Main.windSpeedCurrent;
+
+            Time++;
+        }
+
+        public void Draw(SpriteBatch spriteBatch)
+        {
+            Texture2D texture = Atlas.Value;
+
+            Rectangle frame = texture.Frame(3, 6, Shade, Variant);
+
+            spriteBatch.Draw(texture, Position - Main.screenPosition, frame, Color.White * Opacity, Rotation, frame.Size() * 0.5f, Scale, 0, 0f);
+        }
+
+        public void PostDraw(SpriteBatch spriteBatch)
+        {
+            Texture2D texture = overlay.Value;
+
+            Rectangle frame = texture.Frame(1, 6, 0, Variant);
+
+            Vector2 offset = Velocity;
+            if (Main.gamePaused)
+                offset = Vector2.Zero;
+
+            spriteBatch.Draw(texture, Position - Main.screenPosition + offset, frame, Color.White, Rotation, frame.Size() * 0.5f, Scale, 0, 0f);
+        }
+    }
+
 
     private static List<Asset<Texture2D>> layerAssets;
 
@@ -60,9 +158,23 @@ public class EmpyreanMetaball : Metaball
         private set;
     } = [];
 
+    public static List<OpulentFlake> OpulentFlakeFrontParticles
+    {
+        get;
+        private set;
+    } = [];
+
+    public static List<OpulentFlake> OpulentFlakeBackParticles
+    {
+        get;
+        private set;
+    } = [];
+
     public override bool AnythingToDraw =>
         EmpyreanParticles.Count != 0 ||
         EmpyreanStickyParticles.Count != 0 ||
+        OpulentFlakeFrontParticles.Count != 0 ||
+        OpulentFlakeBackParticles.Count != 0 ||
         AnyProjectiles(ModContent.ProjectileType<DarkGlob>()) ||
         AnyProjectiles(ModContent.ProjectileType<SelenicIdol>()) ||
         AnyProjectiles(ModContent.ProjectileType<EmpyreanThorn>()) ||
@@ -79,8 +191,8 @@ public class EmpyreanMetaball : Metaball
         AnyProjectiles(ModContent.ProjectileType<Dissolver>()) ||
         NPC.AnyNPCs(ModContent.NPCType<ShadowHand>()) ||
         NPC.AnyNPCs(ModContent.NPCType<OratorHand>()) ||
-        NPC.AnyNPCs(ModContent.NPCType<SealingTablet>()
-    );
+        NPC.AnyNPCs(ModContent.NPCType<SealingTablet>())
+    ;
 
     public override IEnumerable<Texture2D> Layers
     {
@@ -104,6 +216,9 @@ public class EmpyreanMetaball : Metaball
         if (Main.netMode == NetmodeID.Server)
             return;
 
+        OpulentFlake.Atlas = ModContent.Request<Texture2D>("Windfall/Assets/Graphics/Particles/OpulentFlakesAtlas");
+        OpulentFlake.overlay = ModContent.Request<Texture2D>("Windfall/Assets/Graphics/Particles/OpulentFlakesOverlay");
+
         // Load layer assets.
         layerAssets = [];
 
@@ -123,35 +238,37 @@ public class EmpyreanMetaball : Metaball
     public static void SpawnBorderParticle(Projectile projectile, Vector2 offset, float sineOffset, float interpolant, float size, float rotation, bool spin = true) =>
        EmpyreanStickyParticles.Add(new(projectile, offset, sineOffset, interpolant, size, rotation, spin));
    
+    public static void SpawnFlakeParticle(Vector2 position, Vector2 velocity, float spin, float scale, float idealDir)
+    {
+        if (Main.rand.NextBool())
+            OpulentFlakeBackParticles.Add(new(position, velocity, spin, scale, idealDir, false));
+        else
+            OpulentFlakeFrontParticles.Add(new(position, velocity, spin, scale, idealDir, true));
+    }
+
     public override void Update()
     {
         // Update all particle instances.
         // Once sufficiently small, they vanish.
         foreach (EmpyreanParticle particle in EmpyreanParticles)
-        {
-            particle.Velocity *= 0.99f;
-            particle.Size *= 0.9f;
-            particle.Center += particle.Velocity;
-        }
-        EmpyreanParticles.RemoveAll(p => p.Size <= 2.5f);
+            particle.Update();      
+        if (EmpyreanParticles.Count != 0)
+            EmpyreanParticles.RemoveAll(p => p.Size <= 2.5f);
         
         foreach (EmpyreanBorderParticle particle in EmpyreanStickyParticles)
-        {
-            Projectile myProj = Main.projectile[particle.ProjectileIndex];
-            
-            if(particle.spin)
-                if (particle.Rotation > 0)
-                    particle.Rotation += 0.0175f / Math.Abs(particle.Interpolant / 4);
-                else
-                    particle.Rotation -= 0.0175f / Math.Abs(particle.Interpolant / 4);
-            
-            particle.Center = myProj.Center + particle.Offset + (new Vector2(myProj.width / 2 * (myProj.scale / 5f) * 1.05f, 0).RotatedBy(particle.Rotation + myProj.rotation));
-            particle.Center += (myProj.Center + particle.Offset - particle.Center).SafeNormalize(Vector2.Zero) * SumofSines(particle, 1.5f, 2f);
-            if (!particle.spin)
-                particle.Center -= myProj.velocity / 2;  
-        }
+            particle.Update(); 
         if(EmpyreanStickyParticles.Count != 0)
             EmpyreanStickyParticles.RemoveAll(p => !Main.projectile.IndexInRange(p.ProjectileIndex) || !Main.projectile[p.ProjectileIndex].active);
+
+        foreach (OpulentFlake flake in OpulentFlakeFrontParticles)
+            flake.Update();
+        if (OpulentFlakeFrontParticles.Count != 0)
+            OpulentFlakeFrontParticles.RemoveAll(p => p.Time > 90);
+
+        foreach (OpulentFlake flake in OpulentFlakeBackParticles)
+            flake.Update();
+        if (OpulentFlakeBackParticles.Count != 0)
+            OpulentFlakeBackParticles.RemoveAll(p => p.Time > 90);
     }
 
     public override void PrepareSpriteBatch(SpriteBatch spriteBatch)
@@ -204,6 +321,7 @@ public class EmpyreanMetaball : Metaball
             Vector2 scale = Vector2.One * particle.Size / tex.Size();
             Main.spriteBatch.Draw(tex, drawPosition, null, Color.White, 0f, origin, scale, 0, 0f);
         }
+        
         foreach (Projectile p in Main.projectile.Where(p => p.active && (
             p.type == ModContent.ProjectileType<DarkGlob>() || 
             p.type == ModContent.ProjectileType<SelenicIdol>() || 
@@ -248,9 +366,11 @@ public class EmpyreanMetaball : Metaball
             else if (n.ai[0] == 2)
                 n.As<SealingTablet>().PostDraw(Main.spriteBatch, Main.screenPosition, n.GetAlpha(Color.White));
         }
+
+        EmpyreanMetaballSystem.DrawDissolves(Main.spriteBatch);
     }
 
-    private static float SumofSines(EmpyreanBorderParticle particle, float wavelength, float speed)
+    public static float SumofSines(EmpyreanBorderParticle particle, float wavelength, float speed)
     {
         float time = Main.GlobalTimeWrappedHourly;
         float x = particle.SineOffset;
@@ -258,5 +378,98 @@ public class EmpyreanMetaball : Metaball
         float w = 2 / wavelength;
         float s = speed * w;
         return (a * 2f) * (float)Math.Sin(x * w + time * (s * 0.25f)) + a * (float)Math.Sin(x * (w * 0.75f) + time * (s * 2f)) + (a * 0.5f) * (float)Math.Sin(x * (w * 1.5f) + time * s);
+    }
+}
+
+public class EmpyreanMetaballSystem : ModSystem
+{
+    public override void OnModLoad()
+    {
+        RenderTargetManager.RenderTargetUpdateLoopEvent += UpdateDissolveTargets;
+        On_Main.DrawProjectiles += DrawFrontFlakes;
+        On_Main.DoDraw_DrawNPCsOverTiles += DrawBackFlakes;
+    }
+
+    private void DrawBackFlakes(On_Main.orig_DoDraw_DrawNPCsOverTiles orig, Main self)
+    {
+        Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.PointWrap, DepthStencilState.None, Main.Rasterizer, null, Main.GameViewMatrix.TransformationMatrix);
+
+        foreach (OpulentFlake flake in OpulentFlakeBackParticles)
+            flake.Draw(Main.spriteBatch);
+
+        Main.spriteBatch.End();
+
+        orig(self);
+    }
+
+    private void DrawFrontFlakes(On_Main.orig_DrawProjectiles orig, Main self)
+    {
+        Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.PointWrap, DepthStencilState.None, Main.Rasterizer, null, Main.GameViewMatrix.TransformationMatrix);
+
+        foreach (OpulentFlake flake in OpulentFlakeFrontParticles)
+            flake.Draw(Main.spriteBatch);
+
+        Main.spriteBatch.End();
+
+        orig(self);
+    }
+
+    public static CalamityMod.Graphics.ManagedRenderTarget dissolveTarget = null;
+
+    private void UpdateDissolveTargets()
+    {
+        if (!ShaderManager.TryGetShader("Windfall.Dissolve", out ManagedShader dissolveShader))
+            return;
+
+        dissolveTarget ??= new(true, ManagedRenderTarget.CreateScreenSizedTarget);
+
+        var gd = Main.instance.GraphicsDevice;
+        gd.SetRenderTarget(dissolveTarget);
+        gd.Clear(Color.Transparent);
+
+        Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.NonPremultiplied, Main.DefaultSamplerState, DepthStencilState.None, RasterizerState.CullNone, null, Matrix.Identity);
+
+        dissolveShader.SetTexture(MiscTexturesRegistry.TurbulentNoise.Value, 1, SamplerState.LinearWrap);
+
+        foreach (Projectile p in Main.projectile.Where(p => p.active && p.ModProjectile is IEmpyreanDissolve))
+        {
+            IEmpyreanDissolve diss = p.ModProjectile as IEmpyreanDissolve;
+            
+            if (diss.DissolveIntensity == 1)
+                continue;
+
+            dissolveShader.TrySetParameter("dissolveIntensity", diss.DissolveIntensity);
+            dissolveShader.TrySetParameter("sampleOffset", diss.sampleOffset);
+            dissolveShader.Apply();
+
+            diss.DrawOverlay(Main.spriteBatch);
+        }
+
+        foreach (OpulentFlake flake in OpulentFlakeBackParticles)
+        {
+            if (flake.Dissolve == 1)
+                continue;
+            dissolveShader.TrySetParameter("dissolveIntensity", flake.Dissolve);
+            dissolveShader.TrySetParameter("sampleOffset", flake.sampleOffset);
+            dissolveShader.Apply();
+            flake.PostDraw(Main.spriteBatch);
+        }
+        foreach (OpulentFlake flake in OpulentFlakeFrontParticles)
+        {
+            if (flake.Dissolve == 1)
+                continue;
+            dissolveShader.TrySetParameter("dissolveIntensity", flake.Dissolve);
+            dissolveShader.TrySetParameter("sampleOffset", flake.sampleOffset);
+            dissolveShader.Apply();
+            flake.PostDraw(Main.spriteBatch);
+        }
+
+        gd.SetRenderTarget(null);
+        Main.spriteBatch.End();
+    }
+
+    internal static void DrawDissolves(SpriteBatch sb)
+    {
+        sb.Draw(dissolveTarget, Main.screenLastPosition - Main.screenPosition, Color.White);
     }
 }

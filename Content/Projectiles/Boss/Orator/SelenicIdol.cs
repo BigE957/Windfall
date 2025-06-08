@@ -1,11 +1,10 @@
 ﻿using CalamityMod;
-using CalamityMod.Graphics.Primitives;
 using CalamityMod.Particles;
 using CalamityMod.World;
-using Luminance.Assets;
 using Luminance.Core.Graphics;
 using ReLogic.Utilities;
 using Terraria.Graphics.Shaders;
+using Windfall.Common.Interfaces;
 using Windfall.Common.Systems;
 using Windfall.Content.NPCs.Bosses.Orator;
 using Windfall.Content.Skies;
@@ -13,7 +12,7 @@ using static Windfall.Common.Graphics.Metaballs.EmpyreanMetaball;
 
 namespace Windfall.Content.Projectiles.Boss.Orator;
 
-public class SelenicIdol : ModProjectile
+public class SelenicIdol : ModProjectile, IEmpyreanDissolve
 {
     public new static string LocalizationCategory => "Projectiles.Boss";
     public override string Texture => "Windfall/Assets/Projectiles/Boss/GoldenMoon";
@@ -49,6 +48,9 @@ public class SelenicIdol : ModProjectile
         CooldownSlot = ImmunityCooldownID.Bosses;
         Projectile.Calamity().DealsDefenseDamage = true;
         Projectile.netImportant = true;
+        Projectile.hide = true;
+
+        sampleOffset = Main.rand.NextVector2Circular(240, 240);
     }        
 
     private int Time
@@ -68,8 +70,9 @@ public class SelenicIdol : ModProjectile
         get => (States)Projectile.ai[0];
         set => Projectile.ai[0] = (float)value;
     }
-
-    private ref float Dissolve => ref Projectile.ai[2];
+    Vector2 offset = Vector2.Zero;
+    public float DissolveIntensity { get => Projectile.ai[2]; set => Projectile.ai[2] = value; }
+    public Vector2 sampleOffset { get => offset; set => offset = value; }
 
     int deathCounter = 0;
     float rotationCounter = 0;
@@ -78,17 +81,19 @@ public class SelenicIdol : ModProjectile
     {        
         Projectile.scale = 0;
         SoundEngine.PlaySound(SoundID.DD2_EtherianPortalOpen, Projectile.Center);
-        Luminance.Core.Graphics.ScreenShakeSystem.StartShake(5f);
+        ScreenShakeSystem.StartShake(5f);
         for (int i = 0; i <= 50; i++)
         {
             Vector2 spawnPos = Projectile.Center + Main.rand.NextVector2Circular(10f, 10f) * 10;
             SpawnDefaultParticle(spawnPos, (Projectile.Center - spawnPos).SafeNormalize(Vector2.Zero) * 4, 40 * Main.rand.NextFloat(3f, 5f));
         }
+        DissolveIntensity = 1;
     }
     
     public override void AI()
     {
-        Player target;
+        Player target = Main.LocalPlayer;
+        /*
         if (NPC.AnyNPCs(ModContent.NPCType<TheOrator>()))
             target = Main.npc[NPC.FindFirstNPC(ModContent.NPCType<TheOrator>())].As<TheOrator>().target;                           
         else
@@ -97,10 +102,11 @@ public class SelenicIdol : ModProjectile
             if (AIState == States.Chasing && Projectile.scale > 0.9f)
                 AIState = States.Dying;
         }
+        
         if(!NPC.AnyNPCs(ModContent.NPCType<OratorHand>()) || NPC.FindFirstNPC(ModContent.NPCType<TheOrator>()) == -1 || Main.npc[NPC.FindFirstNPC(ModContent.NPCType<TheOrator>())].ai[0] == (int)TheOrator.States.PhaseChange)
             if (AIState == States.Chasing && Projectile.scale > 0.9f)
                AIState = States.Dying;
-        
+        */
         switch (AIState)
         {
             case States.Chasing:
@@ -108,7 +114,7 @@ public class SelenicIdol : ModProjectile
                 {
                     float lerp = Clamp(Time / 60f, 0f, 1f);
                     Projectile.scale = CircOutEasing(lerp);
-                    Dissolve = 1 - SineInEasing(lerp);
+                    DissolveIntensity = SineInEasing(lerp);
                     SpawnDefaultParticle(Projectile.Center + (Main.rand.NextVector2Circular(48f, 48f) * Projectile.scale), Main.rand.NextVector2Circular(18, 18) + Projectile.velocity, 200 * Main.rand.NextFloat(0.75f, 0.9f) * (1 - lerp));
                 }
                 
@@ -129,12 +135,21 @@ public class SelenicIdol : ModProjectile
                 }
                 #endregion
 
+                if(DissolveIntensity >= 0.75f && Main.rand.NextBool(3))
+                {
+                    Vector2 flakeDir = (-Projectile.velocity).SafeNormalize(Vector2.UnitX);
+                    Vector2 spawnPos = Projectile.Center + (Main.rand.NextVector2Circular(Projectile.width / 2f, Projectile.height / 2f) * Projectile.scale);
+                    SpawnFlakeParticle(spawnPos, flakeDir * Main.rand.NextFloat(2f, 4f), Main.rand.NextFloat(0.01f, 0.1f), Main.rand.NextFloat(0.66f, 1f), flakeDir.ToRotation());
+                }
+
                 break;
             case States.Dying:
+                if(deathCounter == 0)
+                    sampleOffset = Main.rand.NextVector2Circular(240, 240);
                 float lerpValue = Clamp(deathCounter / 150f, 0f, 1f);
 
                 Projectile.scale = Lerp(1f, 0.5f, lerpValue);
-                Dissolve = Clamp(lerpValue * 1.5f, 0f, 1f);
+                DissolveIntensity = Clamp(lerpValue * 1.5f, 0f, 1f);
 
                 if (lerpValue >= 1f)
                     AIState = States.Exploding;
@@ -156,13 +171,19 @@ public class SelenicIdol : ModProjectile
                     Projectile.oldPos[i] += shakeOffset;
                 #endregion
 
-                if (Dissolve >= 0.75f)
+                if (DissolveIntensity < 0.75f)
                 {
                     SpawnDefaultParticle(Projectile.Center + (Main.rand.NextVector2Circular(25f, 25f) * Projectile.scale), Main.rand.NextVector2Circular(12, 12) * (lerpValue + 0.5f), 180 * (Main.rand.NextFloat(0.75f, 0.9f)));
                     SpawnDefaultParticle(Projectile.Center + (Main.rand.NextVector2Circular(25f, 25f) * Projectile.scale), Main.rand.NextVector2Circular(18, 18) * (lerpValue + 0.5f), 90 * (Main.rand.NextFloat(0.75f, 0.9f)));
-                }                    
+                }
+                else if(Main.rand.NextBool(4))
+                {
+                    Vector2 flakeDir = (-Projectile.velocity).SafeNormalize(Vector2.UnitX);
+                    Vector2 spawnPos = Projectile.Center + (Main.rand.NextVector2Circular(Projectile.width / 2f, Projectile.height / 2f) * Projectile.scale);
+                    SpawnFlakeParticle(spawnPos, (Projectile.Center + (flakeDir * 72) - spawnPos).SafeNormalize(Vector2.UnitX) * Main.rand.NextFloat(0.25f, 1f), Main.rand.NextFloat(0.01f, 0.1f), Main.rand.NextFloat(0.5f, 2f), flakeDir.ToRotation());
+                }
 
-                deathCounter++;
+                    deathCounter++;
                 break;
             case States.Exploding:
                 SoundEngine.PlaySound(SoundID.DD2_EtherianPortalDryadTouch, Projectile.Center);
@@ -203,7 +224,12 @@ public class SelenicIdol : ModProjectile
             return true;
         return false;
     }
-    
+
+    public override void DrawBehind(int index, List<int> behindNPCsAndTiles, List<int> behindNPCs, List<int> behindProjectiles, List<int> overPlayers, List<int> overWiresUI)
+    {
+        behindProjectiles.Add(index);
+    }
+
     public override bool PreDraw(ref Color lightColor)
     {
         GameShaders.Misc["CalamityMod:PhaseslayerRipEffect"].SetTexture(LoadSystem.SwordSlash);
@@ -221,7 +247,7 @@ public class SelenicIdol : ModProjectile
             Color.Goldenrod,
         ];
 
-        Main.EntitySpriteDraw(tex, Projectile.Center - Main.screenPosition, null, LerpColors(Main.GlobalTimeWrappedHourly * 0.25f, colors), Main.GlobalTimeWrappedHourly * 0.25f, tex.Size() * 0.5f, ((Projectile.scale * 0.825f) + (float)(Math.Sin(Main.GlobalTimeWrappedHourly * 4) * 0.025f)) * (1 - Dissolve), 0);
+        Main.EntitySpriteDraw(tex, Projectile.Center - Main.screenPosition, null, LerpColors(Main.GlobalTimeWrappedHourly * 0.25f, colors), Main.GlobalTimeWrappedHourly * 0.25f, tex.Size() * 0.5f, ((Projectile.scale * 0.825f) + (float)(Math.Sin(Main.GlobalTimeWrappedHourly * 4) * 0.025f)) * DissolveIntensity, 0);
 
         Main.spriteBatch.UseBlendState(BlendState.AlphaBlend);
 
@@ -235,9 +261,13 @@ public class SelenicIdol : ModProjectile
     internal Color ColorFunction(float completionRatio)
     {
         float opacity = Projectile.Opacity;
+        bool dying = deathCounter > 0;
+        if (!dying)
+            opacity -= 1 - DissolveIntensity;
+
         opacity *= (float)Math.Pow(Utils.GetLerpValue(1f, 0.45f, completionRatio, true), 4D);
 
-        if (deathCounter > 0)
+        if (dying)
             opacity = Clamp(Lerp(opacity, -0.5f, deathCounter / 90f), 0f, 1f);
 
         return Color.Lerp(Color.Gold, new(170, 100, 30), (completionRatio ) * 3f) * opacity * (Projectile.velocity.Length() / MaxSpeed);
@@ -245,23 +275,12 @@ public class SelenicIdol : ModProjectile
 
     internal float WidthFunction(float completionRatio) => 200f * (1f - completionRatio) * 0.8f * Projectile.scale;
 
-    public override void PostDraw(Color lightColor)
+    public void DrawOverlay(SpriteBatch sb)
     {
-        if (Dissolve != 0)
-        {
-            Texture2D tex = LoadSystem.Circle.Value;
-
-            Main.spriteBatch.PrepareForShaders(BlendState.NonPremultiplied);
-
-            ManagedShader dissolveShader = ShaderManager.GetShader("Windfall.Dissolve");
-
-            dissolveShader.TrySetParameter("dissolveIntensity", 1 - Dissolve);
-            dissolveShader.SetTexture(MiscTexturesRegistry.TurbulentNoise.Value, 1, SamplerState.LinearWrap);
-            dissolveShader.Apply();
-
-            Main.spriteBatch.Draw(tex, Projectile.Center - Main.screenPosition, null, Color.White, rotationCounter, tex.Size() * 0.5f, Projectile.scale * 5f, 0, 0);
-
-            Main.spriteBatch.PrepareForShaders();
-        }
+        Texture2D tex = LoadSystem.Circle.Value;
+        Vector2 offset = Projectile.velocity;
+        if (Main.gamePaused)
+            offset = Vector2.Zero;
+        Main.spriteBatch.Draw(tex, Projectile.Center - Main.screenPosition + offset, null, Color.White, rotationCounter, tex.Size() * 0.5f, Projectile.scale * 5.05f, 0, 0);
     }
 }
