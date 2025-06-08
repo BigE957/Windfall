@@ -30,6 +30,7 @@ public class BlackSlash : ModProjectile, IPixelatedPrimitiveRenderer
 
     private int Time = 0;
     private float widthScale = 2f;
+
     float length => 1800;
     float rotateDuration => 60f;
 
@@ -194,8 +195,9 @@ public class BlackSlash : ModProjectile, IPixelatedPrimitiveRenderer
             for (int i = 0; i < slashCount; i++)
             {
                 float myRotation = Projectile.rotation + (i * (Pi / slashCount));
-                Vector2 start = Projectile.Center + myRotation.ToRotationVector2() * (length * Projectile.scale / 1.5f);
-                Vector2 end = Projectile.Center + myRotation.ToRotationVector2() * (length * -Projectile.scale / 1.5f);
+                float lengthScale = Lerp(1f, 0.25f, slashTimes[i] / 12f);
+                Vector2 start = Projectile.Center + myRotation.ToRotationVector2() * (length * Projectile.scale / 1.5f) * lengthScale;
+                Vector2 end = Projectile.Center + myRotation.ToRotationVector2() * (length * -Projectile.scale / 1.5f) * lengthScale;
 
                 if (slashTimes[i] != -1 && slashTimes[i] <= 12)
                 {
@@ -207,8 +209,8 @@ public class BlackSlash : ModProjectile, IPixelatedPrimitiveRenderer
                         color = Color.Lerp(Color.Red, Color.White, (slashTimes[i] - 2) / 10f);
                     PrimitiveRenderer.RenderTrail(positions, new(OuterWidthFunction, (_) => color, (_) => Vector2.Zero, true, true, null));
 
-                    start = Projectile.Center + myRotation.ToRotationVector2() * (length * Projectile.scale / 1.5f) * 0.75f;
-                    end = Projectile.Center + myRotation.ToRotationVector2() * (length * -Projectile.scale / 1.5f) * 0.75f;
+                    start = Projectile.Center + myRotation.ToRotationVector2() * (length * Projectile.scale / 1.5f) * 0.75f * lengthScale;
+                    end = Projectile.Center + myRotation.ToRotationVector2() * (length * -Projectile.scale / 1.5f) * 0.75f * lengthScale;
 
                     for (int j = 0; j < posCount; j++)
                         positions[j] = Vector2.Lerp(start, end, j / posCount);
