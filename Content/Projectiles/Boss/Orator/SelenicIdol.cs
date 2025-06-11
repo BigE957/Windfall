@@ -93,7 +93,6 @@ public class SelenicIdol : ModProjectile, IEmpyreanDissolve
     public override void AI()
     {
         Player target = Main.LocalPlayer;
-        /*
         if (NPC.AnyNPCs(ModContent.NPCType<TheOrator>()))
             target = Main.npc[NPC.FindFirstNPC(ModContent.NPCType<TheOrator>())].As<TheOrator>().target;                           
         else
@@ -106,7 +105,7 @@ public class SelenicIdol : ModProjectile, IEmpyreanDissolve
         if(!NPC.AnyNPCs(ModContent.NPCType<OratorHand>()) || NPC.FindFirstNPC(ModContent.NPCType<TheOrator>()) == -1 || Main.npc[NPC.FindFirstNPC(ModContent.NPCType<TheOrator>())].ai[0] == (int)TheOrator.States.PhaseChange)
             if (AIState == States.Chasing && Projectile.scale > 0.9f)
                AIState = States.Dying;
-        */
+        
         switch (AIState)
         {
             case States.Chasing:
@@ -149,7 +148,7 @@ public class SelenicIdol : ModProjectile, IEmpyreanDissolve
                 float lerpValue = Clamp(deathCounter / 150f, 0f, 1f);
 
                 Projectile.scale = Lerp(1f, 0.5f, lerpValue);
-                DissolveIntensity = Clamp(lerpValue * 1.5f, 0f, 1f);
+                DissolveIntensity = 1 - Clamp(lerpValue * 1.5f, 0f, 1f);
 
                 if (lerpValue >= 1f)
                     AIState = States.Exploding;
@@ -171,7 +170,7 @@ public class SelenicIdol : ModProjectile, IEmpyreanDissolve
                     Projectile.oldPos[i] += shakeOffset;
                 #endregion
 
-                if (DissolveIntensity < 0.75f)
+                if (DissolveIntensity < 0.5f)
                 {
                     SpawnDefaultParticle(Projectile.Center + (Main.rand.NextVector2Circular(25f, 25f) * Projectile.scale), Main.rand.NextVector2Circular(12, 12) * (lerpValue + 0.5f), 180 * (Main.rand.NextFloat(0.75f, 0.9f)));
                     SpawnDefaultParticle(Projectile.Center + (Main.rand.NextVector2Circular(25f, 25f) * Projectile.scale), Main.rand.NextVector2Circular(18, 18) * (lerpValue + 0.5f), 90 * (Main.rand.NextFloat(0.75f, 0.9f)));
@@ -195,8 +194,8 @@ public class SelenicIdol : ModProjectile, IEmpyreanDissolve
                     Orator = Main.npc[NPC.FindFirstNPC(ModContent.NPCType<TheOrator>())];
                 if (Main.netMode != NetmodeID.MultiplayerClient && Orator != null && Orator.ai[0] == 2 && (float)Orator.life / (float)Orator.lifeMax > 0.1f)
                 {
-                    for (int i = 0; i < (CalamityWorld.death ? 10 : CalamityWorld.revenge ? 8 : Main.expertMode ? 7 : 6); i++)
-                        NPC.NewNPC(Terraria.Entity.GetSource_NaturalSpawn(), (int)Projectile.Center.X, (int)Projectile.Center.Y, ModContent.NPCType<ShadowHand>());
+                    for (int i = 0; i < ShadowGrasp.MaxHands; i++)
+                        Projectile.NewProjectile(Terraria.Entity.GetSource_NaturalSpawn(), Projectile.Center, Vector2.Zero, ModContent.ProjectileType<ShadowGrasp>(), 0, 0);
 
                     for (int i = 0; i < 24; i++)
                     {

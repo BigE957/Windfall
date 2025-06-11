@@ -1,5 +1,6 @@
 ﻿using Windfall.Content.Items.Weapons.Summon;
 using Windfall.Content.NPCs.Bosses.Orator;
+using Windfall.Content.Projectiles.Boss.Orator;
 
 namespace Windfall.Common.Graphics.Metaballs;
 public class PostMetaballDrawing : ModSystem
@@ -19,6 +20,10 @@ public class PostMetaballDrawing : ModSystem
         foreach (NPC npc in Main.ActiveNPCs)
             if (npc.ModNPC != null && npc.ModNPC is ShadowHand hand)
                 hand.PostDraw(Main.spriteBatch, Main.screenPosition, EmpyreanMetaball.BorderColor);
+
+        foreach (Projectile proj in Main.ActiveProjectiles)
+            if (proj.ModProjectile != null && proj.ModProjectile is ShadowGrasp hand)
+                hand.PostDraw(EmpyreanMetaball.BorderColor);
 
         Main.spriteBatch.End();
 

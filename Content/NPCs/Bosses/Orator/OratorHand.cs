@@ -1024,6 +1024,19 @@ public class OratorHand : ModNPC
                     }
                     NPC.velocity = (goalPos - NPC.Center).SafeNormalize(Vector2.Zero) * ((goalPos - NPC.Center).Length() / 3f);
                     break;
+                case TheOrator.States.DarkSpawn:
+                    CurrentPose = Pose.Palm;
+
+                    NPC.damage = 0;
+                    goal = new(orator.Center.X + (240 * WhatHand), orator.Center.Y);
+                    goal.X += (float)Math.Sin(aiCounter / 20f) * 12f * WhatHand;
+
+                    #region Movement
+                    NPC.velocity = (goal - NPC.Center).SafeNormalize(Vector2.Zero) * ((goal - NPC.Center).Length() / 10f);
+                    NPC.rotation = Pi + PiOver2;
+                    NPC.direction = -WhatHand;
+                    #endregion
+                    break;
                 default:
                     CurrentPose = Pose.Default;
 

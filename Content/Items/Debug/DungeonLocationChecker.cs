@@ -1,6 +1,7 @@
 ﻿using Luminance;
 using Luminance.Assets;
 using Luminance.Core.Graphics;
+using Windfall.Content.NPCs.Bosses.Orator;
 using Windfall.Content.Projectiles.Boss.Orator;
 using Windfall.Content.Projectiles.NPCAnimations;
 
@@ -89,7 +90,7 @@ public class DungeonLocationChecker : ModItem, ILocalizedModType
     public override bool? UseItem(Player player)
     {
         //NPC.NewNPCDirect(Entity.GetSource_FromAI(), new Vector2(Main.dungeonX, Main.dungeonY).ToWorldCoordinates(), NPCID.Zombie);
-        NPC.downedBoss3 = false;
+        
         return true;
     }
 }
