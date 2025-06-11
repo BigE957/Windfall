@@ -56,7 +56,7 @@ public static partial class WindfallUtils
         return false;
     }
 
-    public static Point FindSurfaceBelow(Point p)
+    public static Point FindSurfaceBelow(Point p, bool ignorePlatforms = false)
     {
         
         if (WorldGen.SolidTile(p))
@@ -65,9 +65,9 @@ public static partial class WindfallUtils
         else
         {
             
-            while (!WorldGen.SolidTile(p.X, p.Y + 1) && !TileID.Sets.Platforms[Framing.GetTileSafely(p.X, p.Y).TileType] && p.Y < Main.maxTilesY)
+            while (!WorldGen.SolidTile(p.X, p.Y + 1) && (ignorePlatforms || !TileID.Sets.Platforms[Framing.GetTileSafely(p.X, p.Y).TileType]) && p.Y < Main.maxTilesY)
                 p.Y++;
-            if (!TileID.Sets.Platforms[Framing.GetTileSafely(p.X, p.Y).TileType] && !Main.tile[p.X, p.Y].IsHalfBlock)
+            if ((ignorePlatforms || !TileID.Sets.Platforms[Framing.GetTileSafely(p.X, p.Y).TileType]) && !Main.tile[p.X, p.Y].IsHalfBlock)
                 p.Y++;               
         }
 

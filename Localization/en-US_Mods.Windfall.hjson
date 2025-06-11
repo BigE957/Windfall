@@ -1648,6 +1648,8 @@ Projectiles: {
 	SelenicIdolMinion.DisplayName: Selenic Idol Minion
 	Dissolver.DisplayName: Dissolver
 	BlackSlash.DisplayName: Black Slash
+	WretchedFountain.DisplayName: Wretched Fountain
+	ShadowGrasp.DisplayName: Shadow Grasp
 }
 
 Buffs: {

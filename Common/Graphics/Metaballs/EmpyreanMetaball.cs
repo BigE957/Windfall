@@ -1,5 +1,4 @@
 ﻿using CalamityMod.Graphics.Metaballs;
-using CalamityMod.Projectiles.Magic;
 using Luminance.Assets;
 using Luminance.Core.Graphics;
 using Windfall.Common.Interfaces;
@@ -76,8 +75,6 @@ public class EmpyreanMetaball : Metaball
         internal int Time = 0;
         internal float Opacity = 0f;
         internal bool Front = isFront;
-        internal float Dissolve = 1f;
-        internal Vector2 sampleOffset = Main.rand.NextVector2Circular(240, 240);
         internal int SineOffset = Main.rand.Next(100);
 
         private readonly float Spin = spin;
@@ -94,22 +91,19 @@ public class EmpyreanMetaball : Metaball
                 Opacity += 1 / 8f;
             else
             {
-                Opacity = 1f;
+                if(Time == 8)
+                    Opacity = 1f;
+
                 if (Time > 8)
                     Velocity = Velocity.RotateTowards(IdealAngle, 0.01f);
 
                 if (Time > 45)
                 {
                     Scale *= 0.985f;
-
-                    if (Time > 50 && Dissolve > 0f)
-                        Dissolve -= 1 / 30f;
+                    if (Time > 75)
+                        Opacity -= 1 / 15f;
                 }
             }
-
-            if(Time == 90)
-                for (int i = 0; i <= 10; i++)
-                    SpawnDefaultParticle(Position, Main.rand.NextVector2Circular(3f, 3f) * Main.rand.NextFloat(1f, 2f) * Scale, 8 * Main.rand.NextFloat(3f, 5f) * Scale);
 
             Position += Velocity;
             Rotation += Spin * ((Velocity.X > 0) ? 1f : -1f);
@@ -126,20 +120,7 @@ public class EmpyreanMetaball : Metaball
 
             Rectangle frame = texture.Frame(3, 6, Shade, Variant);
 
-            spriteBatch.Draw(texture, Position - Main.screenPosition, frame, Color.White * Opacity, Rotation, frame.Size() * 0.5f, Scale, 0, 0f);
-        }
-
-        public void PostDraw(SpriteBatch spriteBatch)
-        {
-            Texture2D texture = overlay.Value;
-
-            Rectangle frame = texture.Frame(1, 6, 0, Variant);
-
-            Vector2 offset = Velocity;
-            if (Main.gamePaused)
-                offset = Vector2.Zero;
-
-            spriteBatch.Draw(texture, Position - Main.screenPosition + offset, frame, Color.White, Rotation, frame.Size() * 0.5f, Scale, 0, 0f);
+            spriteBatch.Draw(texture, Position - Main.screenPosition, frame, Color.Lerp(Color.White, Lighting.GetColor(Position.ToTileCoordinates()), Time / 45f) * Opacity, Rotation, frame.Size() * 0.5f, Scale, 0, 0f);
         }
     }
 
@@ -189,6 +170,8 @@ public class EmpyreanMetaball : Metaball
         AnyProjectiles(ModContent.ProjectileType<MinionHandRing>()) ||
         AnyProjectiles(ModContent.ProjectileType<SelenicIdolMinion>()) ||
         AnyProjectiles(ModContent.ProjectileType<Dissolver>()) ||
+        AnyProjectiles(ModContent.ProjectileType<WretchedFountain>()) ||
+        AnyProjectiles(ModContent.ProjectileType<ShadowGrasp>()) ||
         NPC.AnyNPCs(ModContent.NPCType<ShadowHand>()) ||
         NPC.AnyNPCs(ModContent.NPCType<OratorHand>()) ||
         NPC.AnyNPCs(ModContent.NPCType<SealingTablet>())
@@ -336,7 +319,9 @@ public class EmpyreanMetaball : Metaball
             p.type == ModContent.ProjectileType<PotGlob>() ||
             p.type == ModContent.ProjectileType<MinionHandRing>() ||
             p.type == ModContent.ProjectileType<SelenicIdolMinion>() ||
-            p.type == ModContent.ProjectileType<Dissolver>()
+            p.type == ModContent.ProjectileType<Dissolver>() ||
+            p.type == ModContent.ProjectileType<WretchedFountain>() ||
+            p.type == ModContent.ProjectileType<ShadowGrasp>()
         )))
         {
             if(p.type == ModContent.ProjectileType<Dissolver>() || p.type == ModContent.ProjectileType<SelenicIdolMinion>() || p.type == ModContent.ProjectileType<OratorHandMinion>() || p.type == ModContent.ProjectileType<MinionHandRing>() ||  p.type == ModContent.ProjectileType<HandRing>() || p.type == ModContent.ProjectileType<DarkGlob>() || p.type == ModContent.ProjectileType<OratorBorder>() || p.type == ModContent.ProjectileType<DarkTide>() || p.type == ModContent.ProjectileType<SelenicIdol>() || p.type == ModContent.ProjectileType<FingerlingGun>() || p.type == ModContent.ProjectileType<PotGlob>())
@@ -345,6 +330,8 @@ public class EmpyreanMetaball : Metaball
                 c.A = 0;
                 p.ModProjectile.PostDraw(c);
             }
+            else if (p.type == ModContent.ProjectileType<ShadowGrasp>())
+                ShadowGrasp.DrawSelf(p);
             else
             {
                 Color c = Color.White;
@@ -443,25 +430,6 @@ public class EmpyreanMetaballSystem : ModSystem
             dissolveShader.Apply();
 
             diss.DrawOverlay(Main.spriteBatch);
-        }
-
-        foreach (OpulentFlake flake in OpulentFlakeBackParticles)
-        {
-            if (flake.Dissolve == 1)
-                continue;
-            dissolveShader.TrySetParameter("dissolveIntensity", flake.Dissolve);
-            dissolveShader.TrySetParameter("sampleOffset", flake.sampleOffset);
-            dissolveShader.Apply();
-            flake.PostDraw(Main.spriteBatch);
-        }
-        foreach (OpulentFlake flake in OpulentFlakeFrontParticles)
-        {
-            if (flake.Dissolve == 1)
-                continue;
-            dissolveShader.TrySetParameter("dissolveIntensity", flake.Dissolve);
-            dissolveShader.TrySetParameter("sampleOffset", flake.sampleOffset);
-            dissolveShader.Apply();
-            flake.PostDraw(Main.spriteBatch);
         }
 
         gd.SetRenderTarget(null);

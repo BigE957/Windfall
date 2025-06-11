@@ -170,40 +170,51 @@ public class TheOrator : ModNPC
             // Phase 1               
             case States.IdolEnactment:
                 if (aiCounter == 1 && Main.netMode != NetmodeID.MultiplayerClient)
-                    Projectile.NewProjectile(Terraria.Entity.GetSource_NaturalSpawn(), NPC.Center, (target.Center - NPC.Center).SafeNormalize(Vector2.Zero) * 40, ModContent.ProjectileType<SelenicIdol>(), MonsterDamage, 0f);
+                {
+                    Vector2 vec = (target.Center - NPC.Center).SafeNormalize(Vector2.Zero);
+                    NPC.velocity = vec * -18f;
+                    Projectile.NewProjectile(Terraria.Entity.GetSource_NaturalSpawn(), NPC.Center, vec * 40, ModContent.ProjectileType<SelenicIdol>(), MonsterDamage, 0f);
+                }
                 if (aiCounter < 1200)
                 {
                     #region Movement 
-                    NPC.velocity = target.velocity;
-                    VectorToTarget = target.Center - NPC.Center;
-
-                    float rotationRate = 0.03f;
-                    if (target.velocity.Length() > 0.1f)
-                        rotationRate *= Math.Abs(Utilities.AngleBetween(target.velocity, VectorToTarget) - Pi);
-                    else
+                    if (aiCounter <= 30)
                     {
-                        if (target.direction == 1)
-                            rotationRate *= Math.Abs(Utilities.AngleBetween(VectorToTarget, 0f.ToRotationVector2()) - Pi);
-                        else
-                            rotationRate *= Math.Abs(Utilities.AngleBetween(VectorToTarget, Pi.ToRotationVector2()) - Pi);
+                        NPC.velocity *= 0.98f;
                     }
-
-                    float circleDistance = 450;
-                    float currentDistance = VectorToTarget.Length();
-                    int approachRate = 10;
-                    if (currentDistance > circleDistance + approachRate)
-                        currentDistance -= approachRate;
-                    else if (currentDistance < circleDistance - approachRate)
-                        currentDistance += approachRate;
-
-                    if (target.velocity != Vector2.Zero)
-                        NPC.Center = target.Center - VectorToTarget.SafeNormalize(Vector2.Zero).RotateTowards(target.velocity.ToRotation() + Pi, rotationRate) * currentDistance;
                     else
                     {
-                        if (target.direction == 1)
-                            NPC.Center = target.Center - VectorToTarget.SafeNormalize(Vector2.Zero).RotateTowards(Pi, rotationRate) * currentDistance;
+                        NPC.velocity = target.velocity;
+                        VectorToTarget = target.Center - NPC.Center;
+
+                        float rotationRate = 0.03f;
+                        if (target.velocity.Length() > 0.1f)
+                            rotationRate *= Math.Abs(Utilities.AngleBetween(target.velocity, VectorToTarget) - Pi);
                         else
-                            NPC.Center = target.Center - VectorToTarget.SafeNormalize(Vector2.Zero).RotateTowards(0f, rotationRate) * currentDistance;
+                        {
+                            if (target.direction == 1)
+                                rotationRate *= Math.Abs(Utilities.AngleBetween(VectorToTarget, 0f.ToRotationVector2()) - Pi);
+                            else
+                                rotationRate *= Math.Abs(Utilities.AngleBetween(VectorToTarget, Pi.ToRotationVector2()) - Pi);
+                        }
+
+                        float circleDistance = 450;
+                        float currentDistance = VectorToTarget.Length();
+                        int approachRate = 10;
+                        if (currentDistance > circleDistance + approachRate)
+                            currentDistance -= approachRate;
+                        else if (currentDistance < circleDistance - approachRate)
+                            currentDistance += approachRate;
+
+                        if (target.velocity != Vector2.Zero)
+                            NPC.Center = target.Center - VectorToTarget.SafeNormalize(Vector2.Zero).RotateTowards(target.velocity.ToRotation() + Pi, rotationRate) * currentDistance;
+                        else
+                        {
+                            if (target.direction == 1)
+                                NPC.Center = target.Center - VectorToTarget.SafeNormalize(Vector2.Zero).RotateTowards(Pi, rotationRate) * currentDistance;
+                            else
+                                NPC.Center = target.Center - VectorToTarget.SafeNormalize(Vector2.Zero).RotateTowards(0f, rotationRate) * currentDistance;
+                        }
                     }
                     #endregion
                     #region Projectiles
@@ -246,80 +257,29 @@ public class TheOrator : ModNPC
                 break;
             case States.DarkSpawn:
                 #region Movement
-                Vector2 homeInV = target.Center + Vector2.UnitY * -300;               
-                NPC.velocity = (homeInV - NPC.Center).SafeNormalize(Vector2.Zero) * ((homeInV - NPC.Center).Length() / 10f);
+                Vector2 homeInVec = target.Center - NPC.Center;
+                float distance = homeInVec.Length();
+                homeInVec.Normalize();
+                if (distance > 350)
+                    NPC.velocity = (NPC.velocity * 40f + homeInVec * 18f) / 41f;
+                else
+                {
+                    if (distance < 300)
+                        NPC.velocity = (NPC.velocity * 40f + homeInVec * -18f) / 41f;
+                    else
+                        NPC.velocity *= 0.975f;
+                }
                 #endregion
                 const int EndTime = 1500;
 
                 if (Main.projectile.Any(p => p.active && p.type == ModContent.ProjectileType<SelenicIdol>()))
                     aiCounter = 0;
-
+                /*
                 if (aiCounter > 150 && aiCounter < EndTime - 100 && aiCounter % 90 == 0 && Main.netMode != NetmodeID.MultiplayerClient)
                     Projectile.NewProjectile(Terraria.Entity.GetSource_NaturalSpawn(), NPC.Center, Vector2.Zero, ModContent.ProjectileType<OratorJavelin>(), BoltDamage, 0f, -1, 120, 2);
-
+                */
                 NPC.damage = 0;
-                int SpawnCount = CalamityWorld.death ? 3 : CalamityWorld.revenge || Main.expertMode ? 2 : 1;
-                if (!CalamityWorld.death && Main.npc.Where(n => n.type == ModContent.NPCType<ShadowHand>() && n.active).Count() <= SpawnCount + 1)
-                    SpawnCount++;
-                if (NPC.AnyNPCs(ModContent.NPCType<ShadowHand>()))
-                {
-                    if (aiCounter > EndTime)
-                    {
-                        foreach (NPC spawn in Main.npc.Where(n => n.type == ModContent.NPCType<ShadowHand>() && n.active))
-                        {
-                            if (spawn.ModNPC is ShadowHand darkSpawn)
-                                darkSpawn.CurrentAI = ShadowHand.AIState.Sacrifice;
-                        }
-                        attackCounter = -1;
-                    }
-                    else if (aiCounter > 150)
-                    {
-                        attackCounter = 0;
-                        foreach (NPC spawn in Main.npc.Where(n => n.type == ModContent.NPCType<ShadowHand>() && n.active))
-                        {
-                            if (spawn.ModNPC is ShadowHand darkSpawn && darkSpawn.CurrentAI != ShadowHand.AIState.OnBoss)
-                                attackCounter++;
-                        }
-                        if (attackCounter < SpawnCount && Main.npc.Any(n => n.type == ModContent.NPCType<ShadowHand>() && n.active && n.ai[0] == (int)ShadowHand.AIState.OnBoss))
-                        {
-                            if (attackCounter >= SpawnCount)
-                                break;
-                            NPC spawn = Main.npc.Last(n => n.type == ModContent.NPCType<ShadowHand>() && n.active && n.ai[0] == (int)ShadowHand.AIState.OnBoss);
-                            if (spawn.ModNPC is ShadowHand darkSpawn)
-                            {
-                                Vector2 ToTarget = target.Center - spawn.Center;
-                                spawn.velocity = ToTarget.SafeNormalize(Vector2.Zero) * -10;
-                                darkSpawn.CurrentAI = ShadowHand.AIState.Dashing;
-                                spawn.rotation = ToTarget.ToRotation();
-                                attackCounter++;
-                            }
-                        }
-                    }
-                }
-                else if (aiCounter > 150 && aiCounter < EndTime)
-                    aiCounter = EndTime;
-                else if (aiCounter >= EndTime + 90)
-                {
-                    aiCounter = 0;
-                    target = Main.player[Player.FindClosest(NPC.Center, NPC.width, NPC.height)];
-                    if (!NPC.AnyNPCs(ModContent.NPCType<OratorHand>()))
-                        AIState = States.PhaseChange;
-                    else
-                    {
-                        NPC.DR_NERD(0.1f);
-                        if (attackCounter != -1)
-                            AIState = States.DarkCollision;
-                        else
-                        {
-                            aiCounter = -30;
-                            SoundEngine.PlaySound(DashWarn);
-                            NPC.velocity = (target.Center - NPC.Center).SafeNormalize(Vector2.UnitY) * -5;
-                            AIState = States.DarkSlice;
-                        }
-                    }
-                    attackCounter = 0;
-                    return;
-                }
+
                 break;
             case States.DarkBarrage:
                 if (aiCounter <= 1100)
@@ -330,20 +290,10 @@ public class TheOrator : ModNPC
                     #endregion
 
                     #region Projectiles
-                    if (Main.expertMode && aiCounter > 0 && aiCounter < 900 && aiCounter % (CalamityWorld.death ? 100 : 120) == 0 && Main.netMode != NetmodeID.MultiplayerClient)
+                    if (Main.expertMode && aiCounter > 0 && aiCounter < 900 && aiCounter % (CalamityWorld.death ? 240 : 300) == 90 && Main.netMode != NetmodeID.MultiplayerClient)
                     {
                         Vector2 spawnPos = NPC.Center + NPC.velocity;
-                        Projectile.NewProjectileDirect(Terraria.Entity.GetSource_NaturalSpawn(), spawnPos, Vector2.UnitY * -7.5f, ModContent.ProjectileType<DarkGlob>(), GlobDamage, 0f, -1, 1, 0.75f);
-                        if(CalamityWorld.revenge)
-                        {
-                            Projectile.NewProjectileDirect(Terraria.Entity.GetSource_NaturalSpawn(), spawnPos, new(4, -7.5f), ModContent.ProjectileType<DarkGlob>(), GlobDamage, 0f, -1, 1, 0.75f);
-                            Projectile.NewProjectileDirect(Terraria.Entity.GetSource_NaturalSpawn(), spawnPos, new(-4, -7.5f), ModContent.ProjectileType<DarkGlob>(), GlobDamage, 0f, -1, 1, 0.75f);
-                        }
-                        if (CalamityWorld.death)
-                        {
-                            Projectile.NewProjectileDirect(Terraria.Entity.GetSource_NaturalSpawn(), spawnPos, new(8, -7.5f), ModContent.ProjectileType<DarkGlob>(), GlobDamage, 0f, -1, 1, 0.75f);
-                            Projectile.NewProjectileDirect(Terraria.Entity.GetSource_NaturalSpawn(), spawnPos, new(-8, -7.5f), ModContent.ProjectileType<DarkGlob>(), GlobDamage, 0f, -1, 1, 0.75f);
-                        }
+                        Projectile.NewProjectile(NPC.GetSource_FromThis(), spawnPos, Vector2.Zero, ModContent.ProjectileType<WretchedFountain>(), 0, 0);
                     }
                     #endregion
                 }
@@ -558,8 +508,8 @@ public class TheOrator : ModNPC
                 break;
             case States.DarkCollision:
                 #region Movement
-                Vector2 homeInVec = target.Center - NPC.Center;
-                float distance = homeInVec.Length();
+                homeInVec = target.Center - NPC.Center;
+                distance = homeInVec.Length();
                 homeInVec.Normalize();
                 if (distance > 350)
                     NPC.velocity = (NPC.velocity * 40f + homeInVec * 18f) / 41f;
@@ -696,10 +646,10 @@ public class TheOrator : ModNPC
                 }
                 else
                 {
-                    homeInV = border.Center + Vector2.UnitY * -700 - NPC.Center;
+                    homeInVec = border.Center + Vector2.UnitY * -700 - NPC.Center;
                     velo = 60;
-                    homeInV.Normalize();
-                    NPC.velocity = (NPC.velocity * velo + homeInV * 18f) / (velo + 1f);
+                    homeInVec.Normalize();
+                    NPC.velocity = (NPC.velocity * velo + homeInVec * 18f) / (velo + 1f);
                 }
                 break;
             case States.DarkCrush:                    
@@ -891,10 +841,10 @@ public class TheOrator : ModNPC
 
                     #region Movement
                     Vector2 targetPosition = border.Center + attackCounter.ToRotationVector2() * (aiCounter % attackFrequency < attackGap ? 600 : -600);
-                    homeInV = targetPosition - NPC.Center;
+                    homeInVec = targetPosition - NPC.Center;
                     velo = 60;
-                    homeInV.Normalize();
-                    NPC.velocity = (NPC.velocity * velo + homeInV * 18f) / (velo + 1f);
+                    homeInVec.Normalize();
+                    NPC.velocity = (NPC.velocity * velo + homeInVec * 18f) / (velo + 1f);
                     #endregion
                 }
                 else
@@ -1026,10 +976,10 @@ public class TheOrator : ModNPC
                     }
                     if (aiCounter - 750 < 120)
                     {
-                        homeInV = new Vector2(target.Center.X, border.Center.Y - 600) - NPC.Center;
+                        homeInVec = new Vector2(target.Center.X, border.Center.Y - 600) - NPC.Center;
                         velo = 20;
-                        homeInV.Normalize();
-                        NPC.velocity = (NPC.velocity * velo + homeInV * 18f) / (velo + 1f);
+                        homeInVec.Normalize();
+                        NPC.velocity = (NPC.velocity * velo + homeInVec * 18f) / (velo + 1f);
                         if (Math.Abs(NPC.velocity.Y) > 15)
                         {
                             if (NPC.velocity.Y >= 0)
