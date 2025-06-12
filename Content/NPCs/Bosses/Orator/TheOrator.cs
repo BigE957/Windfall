@@ -270,15 +270,44 @@ public class TheOrator : ModNPC
                         NPC.velocity *= 0.975f;
                 }
                 #endregion
-                const int EndTime = 1500;
+                const int EndTime = 720;
 
                 if (Main.projectile.Any(p => p.active && p.type == ModContent.ProjectileType<SelenicIdol>()))
                     aiCounter = 0;
-                /*
-                if (aiCounter > 150 && aiCounter < EndTime - 100 && aiCounter % 90 == 0 && Main.netMode != NetmodeID.MultiplayerClient)
-                    Projectile.NewProjectile(Terraria.Entity.GetSource_NaturalSpawn(), NPC.Center, Vector2.Zero, ModContent.ProjectileType<OratorJavelin>(), BoltDamage, 0f, -1, 120, 2);
-                */
+
                 NPC.damage = 0;
+                if (aiCounter > 120)
+                {
+                    /*
+                    if (aiCounter < EndTime - 100 && aiCounter % 90 == 0 && Main.netMode != NetmodeID.MultiplayerClient)
+                        Projectile.NewProjectile(Terraria.Entity.GetSource_NaturalSpawn(), NPC.Center, Vector2.Zero, ModContent.ProjectileType<OratorJavelin>(), BoltDamage, 0f, -1, 120, 2);
+                    */
+
+                    if(ShadowGrasp.hands.Count > 0 && aiCounter % 60 == 0)
+                    {
+                        int index = -1;
+                        if (ShadowGrasp.hands.Count <= 4)
+                            index = Main.rand.Next(2);
+                        else
+                            index = Main.rand.Next((ShadowGrasp.hands.Count - 4) / 2);
+
+                        ShadowGrasp.hands[index].ai[0] = 2;
+                    }
+                    else if(aiCounter > EndTime)
+                    {
+                        aiCounter = 0;
+                        target = Main.player[Player.FindClosest(NPC.Center, NPC.width, NPC.height)];
+                        if (!NPC.AnyNPCs(ModContent.NPCType<OratorHand>()))
+                            AIState = States.PhaseChange;
+                        else
+                        {
+                            NPC.DR_NERD(0.1f);
+                            AIState = States.DarkCollision;
+                        }
+                        attackCounter = 0;
+                        return;
+                    }
+                }
 
                 break;
             case States.DarkBarrage:
@@ -286,7 +315,7 @@ public class TheOrator : ModNPC
                 {
                     #region Movement
                     Vector2 goal = target.Center + Vector2.UnitY * -300;
-                    NPC.velocity = (goal - NPC.Center).SafeNormalize(Vector2.Zero) * ((goal - NPC.Center).Length() / 10f);
+                    NPC.velocity = (goal - NPC.Center) / 10f;
                     #endregion
 
                     #region Projectiles
@@ -445,7 +474,7 @@ public class TheOrator : ModNPC
                 int AttackFrequency = CalamityWorld.death ? 10 : CalamityWorld.revenge ? 12 : Main.expertMode ? 14 : 16;
                 #region Movement
                 Vector2 goalPosition = target.Center + Vector2.UnitY * -300;
-                NPC.velocity = (goalPosition - NPC.Center).SafeNormalize(Vector2.Zero) * ((goalPosition - NPC.Center).Length() / 10f);
+                NPC.velocity = (goalPosition - NPC.Center) / 10f;
                 #endregion
                 #region Projectiles
                 if (aiCounter > 120 && NPC.Center.Y < target.Center.Y - 50)

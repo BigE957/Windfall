@@ -73,6 +73,7 @@ public class DarkCoalescence : ModProjectile
             for (int i = 0; i <= 50; i++)
                 SpawnDefaultParticle(Projectile.Center, Main.rand.NextVector2Circular(10f, 10f), 40 * Main.rand.NextFloat(1.5f, 2.3f));
             Projectile.active = false;
+            return;
         }
         
         Player target = Orator.As<TheOrator>().target;

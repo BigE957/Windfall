@@ -1,5 +1,8 @@
 ﻿using CalamityMod;
+using CalamityMod.Particles;
 using CalamityMod.World;
+using Luminance.Core.Graphics;
+using System.Diagnostics.Metrics;
 using Windfall.Common.Graphics.Metaballs;
 using Windfall.Content.NPCs.Bosses.Orator;
 
@@ -20,13 +23,13 @@ public class ShadowGrasp : ModProjectile
 
     public override void SetDefaults()
     {
-        Projectile.width = Projectile.height = 64;
+        Projectile.width = Projectile.height = 72;
         Projectile.damage = 100;
         Projectile.hostile = true;
         Projectile.penetrate = 2;
         Projectile.timeLeft = 2500;
         Projectile.tileCollide = false;
-
+        Projectile.scale = 1.25f;
 
         Projectile.Calamity().DealsDefenseDamage = true;
     }
@@ -37,7 +40,11 @@ public class ShadowGrasp : ModProjectile
         OnBoss,
         Attacking,
     }
-    internal AIState CurrentAI = AIState.Spawning;
+    internal AIState CurrentAI
+    {
+        get => (AIState)Projectile.ai[0];
+        set => Projectile.ai[0] = (int)value;
+    }
 
     private enum Poses
     {
@@ -52,6 +59,28 @@ public class ShadowGrasp : ModProjectile
 
     private int Time = 0;
 
+    private static TheOrator Orator
+    {
+        get
+        {
+            int oratorIndex = NPC.FindFirstNPC(ModContent.NPCType<TheOrator>());
+            if (oratorIndex == -1)
+                return null;
+            return Main.npc[oratorIndex].As<TheOrator>();
+        }
+    }
+
+    public static List<Projectile> hands => [.. Main.projectile.Where(p => p.active && p.type == ModContent.ProjectileType<ShadowGrasp>())];
+
+    public static int MaxHands => (CalamityWorld.death ? 7 : CalamityWorld.revenge ? 5 : Main.expertMode ? 3 : 2) * 2 + 4;
+
+    private int handID = -1;
+    private int partnerIndex = -1;
+    private bool MainHand => Projectile.whoAmI < partnerIndex;
+    private int HandSide => MainHand ? 1 : -1;
+    private Vector2 storedPos = Vector2.Zero;
+    private Vector2 attackDir = Vector2.Zero;
+
     public override void OnSpawn(IEntitySource source)
     {
         Projectile.velocity = Main.rand.NextFloat(0, TwoPi).ToRotationVector2() * Main.rand.Next(10, 15);
@@ -62,26 +91,28 @@ public class ShadowGrasp : ModProjectile
             EmpyreanMetaball.SpawnDefaultParticle(Projectile.Center, Main.rand.NextVector2Circular(7f, 7f), 40 * Main.rand.NextFloat(1.5f, 2.3f));
     }
 
-    private static TheOrator Orator { 
-        get {
-            int oratorIndex = NPC.FindFirstNPC(ModContent.NPCType<TheOrator>());
-            if (oratorIndex == -1)
-                return null;
-            return Main.npc[oratorIndex].As<TheOrator>();
-        } 
+    public override bool PreAI()
+    {
+        if (CurrentAI == AIState.Attacking)
+        {
+            if (Main.projectile[partnerIndex].As<ShadowGrasp>().CurrentAI != AIState.Attacking)
+            {
+                Main.projectile[partnerIndex].As<ShadowGrasp>().CurrentAI = AIState.Attacking;
+                Time = 0;
+                Main.projectile[partnerIndex].As<ShadowGrasp>().Time = 0;
+            }
+        }
+
+        return true;
     }
-
-    private static List<Projectile> hands => [.. Main.projectile.Where(p => p.active && p.type == ModContent.ProjectileType<ShadowGrasp>())];
-
-    public static int MaxHands => (CalamityWorld.death ? 7 : CalamityWorld.revenge ? 5 : Main.expertMode ? 3 : 2) * 2 + 4;
-
-    private int handID = -1;
-    private Vector2 storedPos = Vector2.Zero;
 
     public override void AI()
     {
-        if(Time == 0)
-            handID = hands.IndexOf(Projectile);
+        if(Orator == null)
+        {
+            Projectile.active = false;
+            return;
+        }
 
         switch (CurrentAI)
         {
@@ -94,22 +125,48 @@ public class ShadowGrasp : ModProjectile
                 dust.noGravity = true;
                 dust.color = Color.Lerp(new Color(117, 255, 159), new Color(255, 180, 80), (float)(Math.Sin(Main.GlobalTimeWrappedHourly * 1.25f) / 0.5f) + 0.5f);
 
+                if (Time == 0)
+                {
+                    handID = hands.IndexOf(Projectile);
+                }
+                if (Time == 1)
+                {
+                    if (handID >= MaxHands - 4)
+                    {
+                        switch (handID - (MaxHands - 4))
+                        {
+                            case 0:
+                            case 1:
+                                partnerIndex = hands[handID + 2].whoAmI;
+                                break;
+                            case 2:
+                            case 3:
+                                partnerIndex = hands[handID - 2].whoAmI;
+                                break;
+                        }
+                    }
+                    else
+                    {
+                        bool frontHalf = handID < (MaxHands - 4) / 2;
+                        partnerIndex = hands[handID + ((MaxHands - 4) / (frontHalf ? 2 : -2))].whoAmI;
+                    }
+                }
+
                 if (Time > 120)
                 {
                     CurrentAI = AIState.OnBoss;
                     storedPos = Projectile.Center;
-                    Time = 0;
+                    Time = -1;
                 }
                 break;
             case AIState.OnBoss:
-                Projectile.timeLeft = 2500;
-
+                Projectile.timeLeft = 240;
                 Vector2 goalPosition = Projectile.Center;
 
                 if (handID >= MaxHands - 4)
                 {
                     Pose = Poses.OK;
-                    float dist = 172;
+                    float dist = 196;
                     float circleTransform = (float)Math.Sin(Time / 64f);
                     Vector2 circling = new((float)Math.Sin(Time / 16f) * (16 - (circleTransform * 12f)), (float)Math.Cos(Time / 16f) * (16 + (circleTransform * 12f)));
                     switch(handID - (MaxHands - 4))
@@ -141,7 +198,7 @@ public class ShadowGrasp : ModProjectile
                     Pose = handID % 2 == 0 ? Poses.Palm : Poses.Flat;
                     float dir = (TwoPi / (MaxHands - 4) * (handID - 4)) + Time / 24f;
                     Vector2 dirVec = dir.ToRotationVector2();
-                    goalPosition = Orator.NPC.Center + dirVec * (136 + ((float)Math.Cos(Time / 24f + (handID % 2 == 0 ? Pi : 0)) * 32f));
+                    goalPosition = Orator.NPC.Center + dirVec * (160 + ((float)Math.Cos(Time / 24f + (handID % 2 == 0 ? Pi : 0)) * 32f));
                     Projectile.rotation = dir;
                     //Projectile.direction = Math.Sign(dirVec.X);
                 }
@@ -153,6 +210,46 @@ public class ShadowGrasp : ModProjectile
 
                 break;
             case AIState.Attacking:
+                Pose = Poses.Fist; 
+
+                goalPosition = (Orator.target.Center + Orator.target.velocity * 3f) + (Orator.target.velocity.SafeNormalize(Vector2.UnitX * Orator.target.direction) * 240 * HandSide);
+
+                if (Time < 30)
+                {
+                    attackDir = Projectile.DirectionTo(Orator.target.Center);
+                    Projectile.rotation = attackDir.ToRotation();
+                    Vector2 toGoal = (goalPosition - Projectile.Center);
+                    Projectile.velocity = toGoal / 10f;
+                }
+                else
+                {
+                    //Dash
+                    int reelbackTIme = 24;
+                    if (Time < 30 + reelbackTIme)
+                    {
+                        float reelBackSpeedExponent = 2.6f;
+                        float reelBackCompletion = Utils.GetLerpValue(0f, reelbackTIme, Time - 60, true);
+                        float reelBackSpeed = Lerp(2.5f, 16f, MathF.Pow(reelBackCompletion, reelBackSpeedExponent));
+                        Vector2 reelBackVelocity = attackDir * -reelBackSpeed;
+                        Projectile.velocity = Vector2.Lerp(Projectile.velocity, reelBackVelocity, 0.25f);
+                    }
+                    else
+                    {
+                        if (Time == 30 + reelbackTIme)
+                            Projectile.velocity = attackDir * 64f;
+                        if (Time > 60 || MainHand && Projectile.Hitbox.Intersects(Main.projectile[partnerIndex].Hitbox))
+                        {
+                            Projectile.velocity = Vector2.Zero;
+                            Projectile.active = false;
+
+                            Main.projectile[partnerIndex].velocity = Vector2.Zero;
+                            Main.projectile[partnerIndex].active = false;
+
+                            Explode();
+                        }
+                    }
+                }
+
                 break;
         }
 
@@ -161,6 +258,23 @@ public class ShadowGrasp : ModProjectile
         Projectile.spriteDirection = Projectile.direction;
 
         Time++;
+    }
+
+    private void Explode()
+    {
+        SoundEngine.PlaySound(SoundID.DD2_EtherianPortalDryadTouch, Projectile.Center);
+        ScreenShakeSystem.StartShake(7.5f);
+        for (int i = 0; i <= 50; i++)
+            EmpyreanMetaball.SpawnDefaultParticle(Projectile.Center, Main.rand.NextVector2Circular(10f, 10f) * Main.rand.NextFloat(1f, 2f), 40 * Main.rand.NextFloat(3f, 5f));
+
+        if (Main.netMode != NetmodeID.MultiplayerClient && Orator != null && (float)Orator.NPC.life / (float)Orator.NPC.lifeMax > 0.1f)
+            for (int i = 0; i < 24; i++)
+                Projectile.NewProjectile(Terraria.Entity.GetSource_NaturalSpawn(), Projectile.Center + Main.rand.NextVector2Circular(64f, 64f), Main.rand.NextVector2Circular(4f, 4f), ModContent.ProjectileType<DarkGlob>(), TheOrator.GlobDamage, 0f, -1, 0, Main.rand.NextFloat(0.5f, 0.75f));
+        
+        CalamityMod.Particles.Particle pulse = new PulseRing(Projectile.Center, Vector2.Zero, Color.Teal, 0f, 2.5f, 16);
+        GeneralParticleHandler.SpawnParticle(pulse);
+        CalamityMod.Particles.Particle explosion = new DetailedExplosion(Projectile.Center, Vector2.Zero, new(117, 255, 159), new Vector2(1f, 1f), 0f, 0f, 1f, 16);
+        GeneralParticleHandler.SpawnParticle(explosion);
     }
 
     internal int frameX = 0;
