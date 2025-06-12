@@ -279,9 +279,9 @@ public class ShadowGrasp : ModProjectile
             for (int i = 0; i < 24; i++)
                 Projectile.NewProjectile(Terraria.Entity.GetSource_NaturalSpawn(), Projectile.Center + Main.rand.NextVector2Circular(64f, 64f), Main.rand.NextVector2Circular(4f, 4f), ModContent.ProjectileType<DarkGlob>(), TheOrator.GlobDamage, 0f, -1, 0, Main.rand.NextFloat(0.5f, 0.75f));
 
-            bool color = Main.rand.NextBool();
-            for(int i = 0; i < 4; i++)
-                Projectile.NewProjectile(Terraria.Entity.GetSource_NaturalSpawn(), Projectile.Center, (TwoPi / 4 * i + (Orator.target.Center - Projectile.Center).ToRotation()).ToRotationVector2(), ModContent.ProjectileType<DarkBolt>(), TheOrator.BoltDamage, 0f, -1, 0, 10, color ? 1 : 0);
+            //bool color = Main.rand.NextBool();
+            //for(int i = 0; i < 4; i++)
+            //    Projectile.NewProjectile(Terraria.Entity.GetSource_NaturalSpawn(), Projectile.Center, (TwoPi / 4 * i + (Orator.target.Center - Projectile.Center).ToRotation()).ToRotationVector2(), ModContent.ProjectileType<DarkBolt>(), TheOrator.BoltDamage, 0f, -1, 0, 10, color ? 1 : 0);
         }
 
         CalamityMod.Particles.Particle pulse = new PulseRing(Projectile.Center, Vector2.Zero, Color.Teal, 0f, 2.5f, 16);

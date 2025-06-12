@@ -61,7 +61,7 @@ namespace Windfall.Content.UI.MenuThemes.Selenic;
             Vector2 halfSizeTexture = new(bloomRing.Width / 2, bloomRing.Height / 2);
             spriteBatch.Draw(bloomRing, position, null, Color.DarkOliveGreen, counter / 100f, halfSizeTexture, 1.4375f * resolutionScale.X, SpriteEffects.None, 0f);
             spriteBatch.End();
-            spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.LinearClamp, DepthStencilState.None, Main.Rasterizer, null, Main.UIScaleMatrix);
+            spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.NonPremultiplied, SamplerState.LinearClamp, DepthStencilState.None, Main.Rasterizer, null, Main.UIScaleMatrix);
 
             Texture2D moon = OratorSky.Moon.Value;
             halfSizeTexture = new(moon.Width / 2, moon.Height / 2);
@@ -78,7 +78,7 @@ namespace Windfall.Content.UI.MenuThemes.Selenic;
             */
             Texture2D CloudFront = OratorSky.FrontClouds.Value;
             backgroundOffset = GetBackgroundOffset(0.3f);
-            cloudHeight = Main.screenHeight / -3.5f + (Main.screenHeight * 1.25f);
+            cloudHeight = Main.screenHeight - 70;
             spriteBatch.Draw(CloudFront, new Vector2(GetBoundedX(backgroundOffset,                                   CloudFront.Width * cloudScale), cloudHeight - (250 * cloudScale)), CloudFront.Frame(), Color.Gray, 0f, new Vector2(CloudFront.Width / 2, CloudFront.Height / 2), cloudScale, SpriteEffects.None, 0f);
             spriteBatch.Draw(CloudFront, new Vector2(GetBoundedX(backgroundOffset - (CloudFront.Width * cloudScale), CloudFront.Width * cloudScale), cloudHeight - (250 * cloudScale)), CloudFront.Frame(), Color.Gray, 0f, new Vector2(CloudFront.Width / 2, CloudFront.Height / 2), cloudScale, SpriteEffects.None, 0f);
             spriteBatch.Draw(CloudFront, new Vector2(GetBoundedX(backgroundOffset + (CloudFront.Width * cloudScale), CloudFront.Width * cloudScale), cloudHeight - (250 * cloudScale)), CloudFront.Frame(), Color.Gray, 0f, new Vector2(CloudFront.Width / 2, CloudFront.Height / 2), cloudScale, SpriteEffects.None, 0f);
