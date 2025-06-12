@@ -213,9 +213,11 @@ public class ShadowGrasp : ModProjectile
 
                 break;
             case AIState.Attacking:
-                Pose = Poses.Fist; 
+                Pose = Poses.Fist;
+                if (Time == 0)
+                    storedPos = Orator.target.velocity.SafeNormalize(Vector2.UnitX * Orator.target.direction);
 
-                goalPosition = (Orator.target.Center + Orator.target.velocity * 3f) + (Orator.target.velocity.SafeNormalize(Vector2.UnitX * Orator.target.direction) * 240 * HandSide);
+                goalPosition = (Orator.target.Center + Orator.target.velocity * 3f) + (storedPos * 240 * HandSide);
 
                 if (Time < 30)
                 {
@@ -266,15 +268,22 @@ public class ShadowGrasp : ModProjectile
 
     private void Explode()
     {
-        SoundEngine.PlaySound(SoundID.DD2_EtherianPortalDryadTouch, Projectile.Center);
-        ScreenShakeSystem.StartShake(7.5f);
+        SoundEngine.PlaySound(SoundID.DD2_EtherianPortalDryadTouch with { Volume = 0.5f }, Projectile.Center);
+        ScreenShakeSystem.StartShake(2.5f);
+
         for (int i = 0; i <= 50; i++)
             EmpyreanMetaball.SpawnDefaultParticle(Projectile.Center, Main.rand.NextVector2Circular(10f, 10f) * Main.rand.NextFloat(1f, 2f), 40 * Main.rand.NextFloat(3f, 5f));
 
         if (Main.netMode != NetmodeID.MultiplayerClient && Orator != null && (float)Orator.NPC.life / (float)Orator.NPC.lifeMax > 0.1f)
+        {
             for (int i = 0; i < 24; i++)
                 Projectile.NewProjectile(Terraria.Entity.GetSource_NaturalSpawn(), Projectile.Center + Main.rand.NextVector2Circular(64f, 64f), Main.rand.NextVector2Circular(4f, 4f), ModContent.ProjectileType<DarkGlob>(), TheOrator.GlobDamage, 0f, -1, 0, Main.rand.NextFloat(0.5f, 0.75f));
-        
+
+            bool color = Main.rand.NextBool();
+            for(int i = 0; i < 4; i++)
+                Projectile.NewProjectile(Terraria.Entity.GetSource_NaturalSpawn(), Projectile.Center, (TwoPi / 4 * i + (Orator.target.Center - Projectile.Center).ToRotation()).ToRotationVector2(), ModContent.ProjectileType<DarkBolt>(), TheOrator.BoltDamage, 0f, -1, 0, 10, color ? 1 : 0);
+        }
+
         CalamityMod.Particles.Particle pulse = new PulseRing(Projectile.Center, Vector2.Zero, Color.Teal, 0f, 2.5f, 16);
         GeneralParticleHandler.SpawnParticle(pulse);
         CalamityMod.Particles.Particle explosion = new DetailedExplosion(Projectile.Center, Vector2.Zero, new(117, 255, 159), new Vector2(1f, 1f), 0f, 0f, 1f, 16);

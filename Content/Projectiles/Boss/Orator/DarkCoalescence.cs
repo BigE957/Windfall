@@ -84,14 +84,11 @@ public class DarkCoalescence : ModProjectile
             if (Main.netMode == NetmodeID.MultiplayerClient)
             {
                 for (int i = 0; i < 30; i++)
-                {
                     SpawnBorderParticle(Projectile, Vector2.Zero, 0f, 5, 50, TwoPi / 30 * i, false);
-                }
+
                 const int pCount = 20;
                 for (int i = 0; i <= pCount; i++)
-                {
                     SpawnBorderParticle(Projectile, Vector2.Zero, 1f * i, 20, Main.rand.NextFloat(80, 110), TwoPi / pCount * i);
-                }
             }
             for (int i = 0; i <= 50; i++)
             {
