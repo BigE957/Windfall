@@ -24,7 +24,6 @@ public class ShadowGrasp : ModProjectile
     public override void SetDefaults()
     {
         Projectile.width = Projectile.height = 72;
-        Projectile.damage = 100;
         Projectile.hostile = true;
         Projectile.penetrate = 2;
         Projectile.timeLeft = 2500;
@@ -33,6 +32,8 @@ public class ShadowGrasp : ModProjectile
 
         Projectile.Calamity().DealsDefenseDamage = true;
     }
+
+    int Damage = 0;
 
     internal enum AIState
     {
@@ -83,6 +84,8 @@ public class ShadowGrasp : ModProjectile
 
     public override void OnSpawn(IEntitySource source)
     {
+        Damage = Projectile.damage;
+        Projectile.damage = 0;
         Projectile.velocity = Main.rand.NextFloat(0, TwoPi).ToRotationVector2() * Main.rand.Next(10, 15);
         Projectile.rotation = Projectile.velocity.ToRotation();
         Projectile.direction = 1;// Math.Sign(Projectile.velocity.X);
@@ -224,6 +227,7 @@ public class ShadowGrasp : ModProjectile
                 else
                 {
                     //Dash
+                    Projectile.damage = Damage;
                     int reelbackTIme = 24;
                     if (Time < 30 + reelbackTIme)
                     {
