@@ -5,6 +5,8 @@ namespace Windfall.Content.UI.Dialogue.Emoticons;
 
 public class Confused : Emoticon
 {
+    public override string[] TexturePaths => ["WindFall/Content/UI/Dialogue/Emoticons/Confused_Emote"];
+
     public override void Update(GameTime gameTime)
     {
         if (Counter < 0)
@@ -39,7 +41,7 @@ public class Confused : Emoticon
     protected override void DrawSelf(SpriteBatch spriteBatch)
     {
         CalculatedStyle dimensions = GetDimensions();
-        Texture2D texture = ModContent.Request<Texture2D>("WindFall/Content/UI/Dialogue/Emoticons/Confused_Emote", AssetRequestMode.ImmediateLoad).Value;
+        Texture2D texture = Assets[0].Value;
         
         Vector2 origin = texture.Size() * 0.5f;
 

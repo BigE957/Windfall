@@ -1,10 +1,14 @@
 ﻿using DialogueHelper.UI.Dialogue.Emoticons;
-using System.ComponentModel.Design.Serialization;
 using Terraria.UI;
 
 namespace Windfall.Content.UI.Dialogue.Emoticons;
 public class Angry : Emoticon
 {
+    public override string[] TexturePaths => [
+        "WindFall/Content/UI/Dialogue/Emoticons/Angry_Emote_Bottom",
+        "WindFall/Content/UI/Dialogue/Emoticons/Angry_Emote_Top",
+    ];
+
     public override void Update(GameTime gameTime)
     {
         if (Counter < 0)
@@ -28,6 +32,7 @@ public class Angry : Emoticon
 
     public override int TimeToAppear => 90;
 
+
     public override Vector2 OffsetPosition()
     {
         if (Counter >= 60 || Fading)
@@ -45,7 +50,7 @@ public class Angry : Emoticon
         for (int i = 0; i < count; i++)
         {
             bool isBottom = i == count - 1;
-            Texture2D texture = isBottom ? ModContent.Request<Texture2D>("WindFall/Content/UI/Dialogue/Emoticons/Angry_Emote_Bottom", AssetRequestMode.ImmediateLoad).Value : ModContent.Request<Texture2D>("WindFall/Content/UI/Dialogue/Emoticons/Angry_Emote_Top", AssetRequestMode.ImmediateLoad).Value;
+            Texture2D texture = isBottom ? Assets[0].Value : Assets[1].Value;
 
             Vector2 origin = texture.Size() * 0.5f;
 

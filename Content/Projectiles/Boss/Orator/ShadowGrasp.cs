@@ -2,7 +2,6 @@
 using CalamityMod.Particles;
 using CalamityMod.World;
 using Luminance.Core.Graphics;
-using System.Diagnostics.Metrics;
 using Windfall.Common.Graphics.Metaballs;
 using Windfall.Content.NPCs.Bosses.Orator;
 

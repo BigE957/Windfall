@@ -48,9 +48,7 @@ public class TheOrator : ModNPC
     public override void SetDefaults()
     {
         NPC.boss = true;
-        NPC.width = NPC.height = 44;
-        NPC.Size = new Vector2(150, 150);
-        //Values gotten from Lunatic Cultist. Subject to change.
+        NPC.width = NPC.height = 150;
         NPC.DR_NERD(0.10f);
         NPC.LifeMaxNERB(Main.masterMode ? 330000 : Main.expertMode ? 240000 : 180000, 300000);
         NPC.BossBar = ModContent.GetInstance<OratorBossBar>();
