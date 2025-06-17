@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Windfall.Content.Items.Food;
+﻿namespace Windfall.Content.Items.Food;
 
 public class AbyssalInkPasta : ModItem
 {
@@ -29,11 +23,11 @@ public class AbyssalInkPasta : ModItem
         // Depending on if you are making solid or liquid food switch out FoodParticleColors
         // with DrinkParticleColors. The difference is that food particles fly outwards
         // whereas drink particles fall straight down and are slightly transparent
-        ItemID.Sets.FoodParticleColors[Item.type] = new Color[3] {
+        ItemID.Sets.FoodParticleColors[Item.type] = [
             new Color(249, 230, 136),
             new Color(152, 93, 95),
             new Color(174, 192, 192)
-        };
+        ];
 
         //ItemID.Sets.IsFood[Type] = true; //This allows it to be placed on a plate and held correctly
     }
@@ -54,15 +48,4 @@ public class AbyssalInkPasta : ModItem
     {
         player.AddBuff(BuffID.Gills, 57600);
     }
-
-    /*
-    public override void AddRecipes()
-    {
-        CreateRecipe()
-            .AddIngredient<ExampleItem>()
-            .AddIngredient(ItemID.Apple, 3)
-            .AddTile<Tiles.Furniture.ExampleWorkbench>()
-            .Register();
-    }
-    */
 }

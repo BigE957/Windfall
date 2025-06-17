@@ -239,7 +239,7 @@ public class TheChef : ModNPC
 
         NPC chef = Main.npc[(int)ModContent.GetInstance<DialogueUISystem>().CurrentDialogueContext.Arguments[0]];
         if (treeKey == "TheChef/FoodSelection" && dialogueID == 0)
-            chef.ai[3] = MenuFoodIDs[buttonID];
+            chef.ai[3] = MenuIDs[buttonID];
         else if (treeKey == "TheChef/CafeteriaActivityStart" && dialogueID == 0 && buttonID == 1)
         {
             Item i = Main.item[Item.NewItem(chef.GetSource_Loot(), chef.Center, new Vector2(8, 4), ModContent.ItemType<ChefMenu>())];
@@ -250,7 +250,7 @@ public class TheChef : ModNPC
             if (dialogueID == 1)
             {
                 Main.LocalPlayer.LunarCult().hasRecievedChefMeal = true;
-                Item item = Main.item[Item.NewItem(Item.GetSource_NaturalSpawn(), chef.Center, Vector2.Zero, MenuFoodIDs[buttonID])];
+                Item item = Main.item[Item.NewItem(Item.GetSource_NaturalSpawn(), chef.Center, Vector2.Zero, MenuIDs[buttonID])];
                 item.velocity = new Vector2(1.75f, Main.rand.NextFloat(-3, 0));
             }
             else if (Main.LocalPlayer.LunarCult().apostleQuestTracker == 0 && dialogueID == 7)
@@ -268,7 +268,7 @@ public class TheChef : ModNPC
         else if (treeKey == "TheChef/CafeteriaActivityStart" && dialogueID == 1)
         {
             SatisfiedCustomers = 0;
-            CustomerQueue = [];
+            QueuedTables = [];
 
             State = SystemStates.Cafeteria;
             Active = true;

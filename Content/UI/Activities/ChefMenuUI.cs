@@ -23,9 +23,9 @@ internal class ChefMenuUIState : UIState
         SetRectangle(page, left: -55f, top: -25f, width: 400f, height: 518f);
         UIPanel.Append(page);
 
-        for(int i = 0; i < LunarCultBaseSystem.MenuFoodIDs.Count; i++)
+        for(int i = 0; i < LunarCultBaseSystem.MenuIDs.Count; i++)
         {
-            UIItem foodIcon = new(LunarCultBaseSystem.MenuFoodIDs[i]);
+            UIItem foodIcon = new(LunarCultBaseSystem.MenuIDs[i]);
             SetRectangle(foodIcon, left: 40f - (foodIcon.Width.Pixels / 2f), top: 45f * (i + 2), width: foodIcon.Width.Pixels, height: foodIcon.Height.Pixels);
             UIPanel.Append(foodIcon);
 

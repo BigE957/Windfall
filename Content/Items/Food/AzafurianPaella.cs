@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 
 namespace Windfall.Content.Items.Food;
 
-public class AzafurianPallela : ModItem
+public class AzafurianPaella : ModItem
 {
-    public override string Texture => $"Windfall/Assets/Items/Food/{nameof(AzafurianPallela)}";
+    public override string Texture => $"Windfall/Assets/Items/Food/{nameof(AzafurianPaella)}";
     public override void SetStaticDefaults()
     {
         Item.ResearchUnlockCount = 5;

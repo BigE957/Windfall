@@ -61,4 +61,6 @@ public static partial class WindfallUtils
 
         return new Rectangle(x, y, width, height);
     }
+
+    public static int RandFromRange((int start, int end) range) => Main.rand.Next(range.start, range.end + 1);
 }

@@ -112,7 +112,9 @@ public class LunarCultBaseSystem : ModSystem
 
         AvailableTopics = [];
 
-        CustomerQueue = [];
+        QueuedTables = [];
+        for(int i = 0; i< SeatedTables.Length; i++)
+            SeatedTables[i] = null;
 
         TutorialComplete = false;
 
@@ -208,27 +210,40 @@ public class LunarCultBaseSystem : ModSystem
     public static int ClothesGoal = 3;
     #endregion
     #region Cafeteria Variables
-    public struct Customer(NPC npc, int orderIDs)
-    { 
-        public NPC NPC = npc;
-        public int OrderID = orderIDs;
+    public struct Table(int id, int[] order)
+    {
+        public int TableID = id;
+        public int[] Order = order;
     }
-    public static List<Customer?> CustomerQueue = [];
-    public static readonly List<int> FoodIDs =
+
+    public static Table?[] SeatedTables = new Table?[2];
+    public static List<Table?> QueuedTables = [];
+
+    public static readonly List<int> MenuIDs =
     [
-        ModContent.ItemType<AbyssalInkPasta>(),
-        ModContent.ItemType<AzafurianPallela>(),
-        ModContent.ItemType<EbonianCheddarBoard>(),
-        ModContent.ItemType<EutrophicClamChowder>(),
+        //Entrees
+        ModContent.ItemType<AbyssalInkPasta>(),                
         ModContent.ItemType<FriedToxicatfishSandwich>(),
         ModContent.ItemType<GlimmeringNigiri>(),
         ModContent.ItemType<LemonButterHermititanLegs>(),
+        ModContent.ItemType<AzafurianPaella>(),
+        //Appetizers
+        ModContent.ItemType<EbonianCheddarBoard>(),
+        ModContent.ItemType<EutrophicClamChowder>(),
+        //Drinks
+        ModContent.ItemType<BeetleJuice>(),
     ];
-    public static List<int> MenuFoodIDs = [];
+
+    private static (int start, int end) EntreeRange => new(0, 4);
+    private static (int start, int end) AppetizerRange => new(5, 6);
+    private static (int start, int end) DrinkRange => new(7, 7);
+
+
     public static int SatisfiedCustomers = 0;
-    public static int CustomerGoal = 8;
-    public static readonly int CustomerLimit = 12;
+    public static int CustomerGoal = 12;
+    public static readonly int QueueLimit = 12;
     public static int AtMaxTimer = 0;
+    private static int TableIDCounter = 0;
     #endregion
     #region Ritual Variables
     public static int RemainingCultists = 6;
@@ -756,11 +771,13 @@ public class LunarCultBaseSystem : ModSystem
                             Vector2 chefCenter = Main.npc[NPC.FindFirstNPC(ModContent.NPCType<TheChef>())].Center;
                             ActivityCoords = new((int)chefCenter.X, (int)chefCenter.Y);
 
-                            MenuFoodIDs = FoodIDs;
-                            while (MenuFoodIDs.Count > 5)
-                                MenuFoodIDs.RemoveAt(Main.rand.Next(MenuFoodIDs.Count));
+                            while (MenuIDs.Count > 5)
+                                MenuIDs.RemoveAt(Main.rand.Next(MenuIDs.Count));
 
-                            CustomerQueue = [];
+                            QueuedTables = [];
+                            for (int i = 0; i < SeatedTables.Length; i++)
+                                SeatedTables[i] = null;
+
                             SatisfiedCustomers = 0;
                             break;
                         case SystemStates.OratorVisit:
@@ -953,14 +970,22 @@ public class LunarCultBaseSystem : ModSystem
             case SystemStates.Cafeteria:
                 if (Active)
                 {
-                    if (CustomerQueue.Where(c => c.HasValue).Count() >= CustomerLimit || AtMaxTimer >= 10 * 60)
+                    if (QueuedTables.Count >= QueueLimit)
                         AtMaxTimer++;
-                    else
+                    else if(AtMaxTimer < 600)
                         AtMaxTimer = 0;
-                    if (AtMaxTimer < 10 * 60)
+                    if (AtMaxTimer < 600)
                     {
-                        if (SatisfiedCustomers < CustomerGoal && CustomerQueue.Count < CustomerLimit && ActivityTimer >= 360 && Main.rand.NextBool(120)) //Spawn New Customer
+                        for (int i = 0; i < SeatedTables.Length; i++)
+                            if (SeatedTables[i] == null)
+                            {
+                                SeatedTables[i] = QueuedTables[0];
+                                QueuedTables.RemoveAt(0);
+                            }
+
+                        if (SatisfiedCustomers < CustomerGoal && QueuedTables.Count < QueueLimit && ActivityTimer >= 360 && Main.rand.NextBool(120)) //Spawn New Customer
                         {
+                            int count = Main.rand.NextBool(3) ? 2 : 1;
                             WeightedRandom<int> customerType = new();
                             customerType.Add(ModContent.NPCType<LunarCultistDevotee>(), 5);
                             customerType.Add(ModContent.NPCType<LunarCultistArcher>(), 3);
@@ -968,13 +993,39 @@ public class LunarCultBaseSystem : ModSystem
 
                             Vector2 chefCenter = Main.npc[NPC.FindFirstNPC(ModContent.NPCType<TheChef>())].Center;
                             ActivityCoords = new((int)chefCenter.X, (int)chefCenter.Y);
+                            NPC[] customers = new NPC[count];
+                            List<int> order = [];
 
-                            Point spawnLocation = new(ActivityCoords.X + 1100, ActivityCoords.Y);
-                            NPC.NewNPC(NPC.GetSource_NaturalSpawn(), spawnLocation.X, spawnLocation.Y, customerType, ai2: 2);
+                            for (int i = 0; i < count; i++)
+                            {
+                                Point spawnLocation = new(ActivityCoords.X + 1100, ActivityCoords.Y);
+                                NPC npc = NPC.NewNPCDirect(NPC.GetSource_NaturalSpawn(), spawnLocation.X, spawnLocation.Y, customerType, ai2: 2, ai3: TableIDCounter + (count == 1 ? 0 : (i / 10)));
+                                customers[i] = npc;
+                                order.Add(RandFromRange(EntreeRange));
+                                order.Add(RandFromRange(DrinkRange));
+
+                            }
+                            if (count == 2)
+                                order.Add(RandFromRange(AppetizerRange));
+
+                            Table table = new(TableIDCounter, [.. order]);
+
+                            bool openTable = false;
+                            for (int i = 0; i < SeatedTables.Length; i++)
+                                if(SeatedTables[i] == null)
+                                {
+                                    SeatedTables[i] = table;
+                                    openTable = true;
+                                    break;
+                                }
+
+                            if(!openTable)
+                                QueuedTables.Add(table);
 
                             ActivityTimer = 0;
+                            TableIDCounter++;
                         }
-                        else if (SatisfiedCustomers >= CustomerGoal && CustomerQueue.Count == 0)
+                        else if (SatisfiedCustomers >= CustomerGoal && QueuedTables.Count == 0)
                         {
                             NPC chef = Main.npc[NPC.FindFirstNPC(ModContent.NPCType<TheChef>())];
                             DisplayMessage(chef.Hitbox, Color.LimeGreen, "Dialogue.LunarCult.TheChef.Activity.Finished");
@@ -988,14 +1039,10 @@ public class LunarCultBaseSystem : ModSystem
                 }
                 else
                 {
-                    MenuFoodIDs = [];
                     foreach(Player player in Main.ActivePlayers)
-                    {
                         foreach (Item item in player.inventory.Where(i => i.type == ModContent.ItemType<ChefMenu>()))
-                        {
                             item.stack = 0;
-                        }
-                    }
+
                     State = SystemStates.End;
                 }
                 break;
@@ -1615,16 +1662,15 @@ public class LunarCultBaseSystem : ModSystem
     public static bool IsRitualActivityActive() => Active && State == SystemStates.Ritual;
     public static Response[] GetMenuResponses()
     {           
-        if(MenuFoodIDs.Count == 0)
+        if(MenuIDs.Count == 0)
         {
-            MenuFoodIDs = FoodIDs;
-            while (MenuFoodIDs.Count > 5)
-                MenuFoodIDs.RemoveAt(Main.rand.Next(MenuFoodIDs.Count));
+            while (MenuIDs.Count > 5)
+                MenuIDs.RemoveAt(Main.rand.Next(MenuIDs.Count));
         }
-        Response[] Responses = new Response[MenuFoodIDs.Count];
-        for (int i = 0; i < MenuFoodIDs.Count; i++)
+        Response[] Responses = new Response[MenuIDs.Count];
+        for (int i = 0; i < MenuIDs.Count; i++)
         {
-            Item item = new(MenuFoodIDs[i]);
+            Item item = new(MenuIDs[i]);
             Responses[i] = new Response{Title = item.Name};
         }
         return Responses;

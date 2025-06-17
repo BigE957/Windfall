@@ -81,8 +81,6 @@ public class LunarCultistArcher : ModNPC
                 SoundEngine.PlaySound(SpawnSound, NPC.Center);
                 break;
             case States.CafeteriaEvent:
-                NPC.ai[3] = LunarCultBaseSystem.CustomerQueue.Count;
-                LunarCultBaseSystem.CustomerQueue.Add(new LunarCultBaseSystem.Customer(NPC, LunarCultBaseSystem.MenuFoodIDs[Main.rand.Next(LunarCultBaseSystem.MenuFoodIDs.Count)]));
                 NPC.aiStyle = -1;
                 NPC.direction = -1;
                 NPC.noGravity = true;
@@ -100,9 +98,8 @@ public class LunarCultistArcher : ModNPC
         switch (AIState)
         {
             case States.CafeteriaEvent:
-                const int queueGap = 50;
-                int queueIndex = (int)NPC.ai[3];
-                if (queueIndex == -1 || !LunarCultBaseSystem.Active)
+                const int queueGap = 64;
+                if ((int)NPC.ai[3] == -1 || !LunarCultBaseSystem.Active)
                 {
                     if (NPC.velocity.X < 1.5f)
                         NPC.velocity.X += 0.05f;
@@ -136,48 +133,62 @@ public class LunarCultistArcher : ModNPC
                 }
                 else
                 {
-                    Vector2 goalPosition = new(LunarCultBaseSystem.LunarCultBaseLocation.X * 16 - (320 * (LunarCultBaseSystem.BaseFacingLeft ? 1 : -1)) + queueGap * queueIndex, LunarCultBaseSystem.LunarCultBaseLocation.Y * 16 - 96);
-                    float angerRatio = (LunarCultBaseSystem.CustomerQueue.Where(c => c.HasValue).Count() - 4) / ((float)LunarCultBaseSystem.CustomerLimit - 4);
-                    if (LunarCultBaseSystem.CustomerQueue.Where(c => c.HasValue).Count() <= 4)
-                        angerRatio = 0f;
-                    if (NPC.velocity.Y >= 0 && NPC.position.Y >= goalPosition.Y - NPC.height)
+                    if (LunarCultBaseSystem.SeatedTables.Any(t => t.HasValue && t.Value.TableID == (int)NPC.ai[3])) //Should Be Seated
                     {
-                        NPC.position.Y = goalPosition.Y - NPC.height;
-                        if (NPC.velocity.Y != 0)
-                            NPC.velocity.Y = 0;
+
                     }
-                    if (NPC.velocity.Y == 0 && NPC.position.Y == goalPosition.Y - NPC.height && Main.rand.NextBool(angerRatio))
+                    else //Within Queue
                     {
-                        if (Main.rand.NextBool(5))
-                            CombatText.NewText(NPC.Hitbox, Color.Lerp(Color.White, Color.Red, angerRatio), GetWindfallTextValue("Dialogue.LunarCult.LunarBishop.Cafeteria.Madge." + Main.rand.Next(6)));
-                        if (Main.rand.NextBool())
-                            NPC.velocity.Y = -4;
-                    }
-                    if (NPC.position.Y < goalPosition.Y - NPC.height)
-                        NPC.velocity.Y += 0.5f;
-                    if (queueIndex != 0 && !LunarCultBaseSystem.CustomerQueue[queueIndex - 1].HasValue)
-                    {
-                        goalPosition.X -= queueGap;
-                        if (NPC.Center.X - goalPosition.X < queueGap / 2)
+                        int queueIndex = LunarCultBaseSystem.QueuedTables.FindIndex(t => t.HasValue && t.Value.TableID == (int)NPC.ai[3]);
+                        if (queueIndex == -1)
+                            Main.NewText("HEY SOMETHINGS GONE HORRIBLY WRONG BRO I CANT FIND MY QUEUE INDEX YOU MOTHERFUCKER!!!");
+
+                        LunarCultBaseSystem.Table myTable = LunarCultBaseSystem.QueuedTables[queueIndex].Value;
+                        int subID = (int)(NPC.ai[3] - Math.Floor(NPC.ai[3])) * 10;
+                        float goalOffset = 0f;
+                        if (subID != 0)
+                            goalOffset = queueGap / 3f * (LunarCultBaseSystem.BaseFacingLeft ? 1 : -1) * (subID == 1 ? 1 : -1);
+                        Vector2 goalPosition = new(LunarCultBaseSystem.LunarCultBaseLocation.X * 16 - (320 * (LunarCultBaseSystem.BaseFacingLeft ? 1 : -1)) + queueGap * queueIndex + goalOffset, LunarCultBaseSystem.LunarCultBaseLocation.Y * 16 - 96);
+                        float angerRatio = (LunarCultBaseSystem.QueuedTables.Count - 4) / ((float)LunarCultBaseSystem.QueueLimit - 4);
+                        if (LunarCultBaseSystem.QueuedTables.Count <= 4)
+                            angerRatio = 0f;
+                        if (NPC.velocity.Y >= 0 && NPC.position.Y >= goalPosition.Y - NPC.height)
                         {
-                            LunarCultBaseSystem.CustomerQueue[queueIndex - 1] = LunarCultBaseSystem.CustomerQueue[queueIndex];
-                            if (queueIndex + 1 == LunarCultBaseSystem.CustomerQueue.Count)
-                                LunarCultBaseSystem.CustomerQueue.RemoveAt(queueIndex);
-                            else
-                                LunarCultBaseSystem.CustomerQueue[queueIndex] = null;
-                            NPC.ai[3] -= 1;
+                            NPC.position.Y = goalPosition.Y - NPC.height;
+                            if (NPC.velocity.Y != 0)
+                                NPC.velocity.Y = 0;
                         }
-                    }
-                    if (goalPosition.X < NPC.Center.X)
-                        if (NPC.velocity.X > -1.5f)
-                            NPC.velocity.X -= 0.05f;
+                        if (NPC.velocity.Y == 0 && NPC.position.Y == goalPosition.Y - NPC.height && Main.rand.NextBool(angerRatio))
+                        {
+                            if (Main.rand.NextBool(5))
+                                CombatText.NewText(NPC.Hitbox, Color.Lerp(Color.White, Color.Red, angerRatio), GetWindfallTextValue("Dialogue.LunarCult.LunarBishop.Cafeteria.Madge." + Main.rand.Next(6)));
+                            if (Main.rand.NextBool())
+                                NPC.velocity.Y = -4;
+                        }
+                        if (NPC.position.Y < goalPosition.Y - NPC.height)
+                            NPC.velocity.Y += 0.5f;
+                        if (queueIndex != 0 && !LunarCultBaseSystem.QueuedTables[queueIndex - 1].HasValue)
+                        {
+                            goalPosition.X -= queueGap;
+                            if (NPC.Center.X - goalPosition.X < queueGap / 2 && subID != 2)
+                            {
+                                LunarCultBaseSystem.QueuedTables[queueIndex - 1] = LunarCultBaseSystem.QueuedTables[queueIndex];
+                                if (queueIndex + 1 == LunarCultBaseSystem.QueuedTables.Count)
+                                    LunarCultBaseSystem.QueuedTables.RemoveAt(queueIndex);
+                                else
+                                    LunarCultBaseSystem.QueuedTables[queueIndex] = null;
+                                int currentID = (int)NPC.ai[3];
+                                foreach (NPC npc in Main.npc.Where(n => n.active && n.type == Type && ((int)n.ai[3]) == currentID))
+                                    NPC.ai[3] -= 1;
+                            }
+                        }
+                        if (goalPosition.X < NPC.Center.X)
+                            if (NPC.velocity.X > -1.5f)
+                                NPC.velocity.X -= 0.05f;
+                            else
+                                NPC.velocity.X = -1.5f;
                         else
-                            NPC.velocity.X = -1.5f;
-                    else
-                    {
-                        NPC.velocity.X = 0;
-                        if (queueIndex == 0 && !Main.projectile.Any(p => p.active && p.type == ModContent.ProjectileType<FoodAlert>() && p.ai[2] == NPC.whoAmI))
-                            Projectile.NewProjectile(Terraria.Entity.GetSource_NaturalSpawn(), NPC.Center, new Vector2(Main.rand.NextFloat(0f, 2f), -2.5f), ModContent.ProjectileType<FoodAlert>(), 0, 0f, ai0: LunarCultBaseSystem.CustomerQueue[queueIndex].Value.OrderID, ai1: Main.rand.Next(3), ai2: NPC.whoAmI);
+                            NPC.velocity.X = 0;
                     }
                 }
                 break;
@@ -196,29 +207,6 @@ public class LunarCultistArcher : ModNPC
             case States.StaticCharacter:
                 ModContent.GetInstance<DialogueUISystem>().DisplayDialogueTree(Windfall.Instance, $"SelenicCultists/{myCharacter}", new(Name, [NPC.whoAmI]), characterSpokenTo ? 1 : 0);
                 characterSpokenTo = true;
-                break;
-            case States.CafeteriaEvent:
-                if (Main.player[Main.myPlayer].HeldItem.type == LunarCultBaseSystem.CustomerQueue[0].Value.OrderID)
-                {
-                    Main.player[Main.myPlayer].HeldItem.stack--;
-
-                    if (LunarCultBaseSystem.CustomerQueue.Count == 1)
-                        LunarCultBaseSystem.CustomerQueue = [];
-                    else
-                        LunarCultBaseSystem.CustomerQueue[0] = null;
-                    if (Main.projectile.Any(p => p.active && p.type == ModContent.ProjectileType<FoodAlert>() && p.ai[2] == NPC.whoAmI))
-                        Main.projectile.First(p => p.active && p.type == ModContent.ProjectileType<FoodAlert>() && p.ai[2] == NPC.whoAmI).ai[2] = -1;
-                    NPC.ai[3] = -1;
-                    CombatText.NewText(NPC.Hitbox, Color.White, GetWindfallTextValue("Dialogue.LunarCult.LunarBishop.Cafeteria.Thanks." + Main.rand.Next(3)));
-                    LunarCultBaseSystem.SatisfiedCustomers++;
-                    if (LunarCultBaseSystem.SatisfiedCustomers == LunarCultBaseSystem.CustomerGoal)
-                    {
-                        NPC chef = Main.npc[NPC.FindFirstNPC(ModContent.NPCType<TheChef>())];
-                        CombatText.NewText(chef.Hitbox, Color.LimeGreen, GetWindfallTextValue("Dialogue.LunarCult.TheChef.Activity.AlmostDone"), true);
-                    }
-                }
-                else
-                    CombatText.NewText(NPC.Hitbox, Color.White, GetWindfallTextValue("Dialogue.LunarCult.LunarBishop.Cafeteria.Where." + Main.rand.Next(3)));
                 break;
         }
         return "Rizz"; //Won't actually be seen.
