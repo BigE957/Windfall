@@ -216,7 +216,7 @@ public class LunarCultBaseSystem : ModSystem
         public int[] Order = order;
     }
 
-    public static Table?[] SeatedTables = new Table?[2];
+    public static Table?[] SeatedTables = new Table?[3];
     public static List<Table?> QueuedTables = [];
 
     public static readonly List<int> MenuIDs =
@@ -238,6 +238,12 @@ public class LunarCultBaseSystem : ModSystem
     private static (int start, int end) AppetizerRange => new(5, 6);
     private static (int start, int end) DrinkRange => new(7, 7);
 
+    public static Point[] CafeteriaTables =>
+    [
+        LunarCultBaseLocation,
+        LunarCultBaseLocation,
+        LunarCultBaseLocation,
+    ];
 
     public static int SatisfiedCustomers = 0;
     public static int CustomerGoal = 12;
@@ -998,7 +1004,7 @@ public class LunarCultBaseSystem : ModSystem
 
                             for (int i = 0; i < count; i++)
                             {
-                                Point spawnLocation = new(ActivityCoords.X + 1100, ActivityCoords.Y);
+                                Point spawnLocation = new(ActivityCoords.X + (1100 + (i == 1 ? 32 : 0)) * (BaseFacingLeft ? -1 : 1) , ActivityCoords.Y);
                                 NPC npc = NPC.NewNPCDirect(NPC.GetSource_NaturalSpawn(), spawnLocation.X, spawnLocation.Y, customerType, ai2: 2, ai3: TableIDCounter + (count == 1 ? 0 : (i / 10)));
                                 customers[i] = npc;
                                 order.Add(RandFromRange(EntreeRange));

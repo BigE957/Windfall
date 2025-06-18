@@ -97,7 +97,8 @@ public class LunarBishop : ModNPC
         {
             case States.CafeteriaEvent:
                 const int queueGap = 64;
-                if ((int)NPC.ai[3] == -1 || !LunarCultBaseSystem.Active)
+                int queueID = (int)NPC.ai[3];
+                if (queueID == -1 || !LunarCultBaseSystem.Active)
                 {
                     if (NPC.velocity.X < 1.5f)
                         NPC.velocity.X += 0.05f;
@@ -131,18 +132,48 @@ public class LunarBishop : ModNPC
                 }
                 else
                 {
-                    if (LunarCultBaseSystem.SeatedTables.Any(t => t.HasValue && t.Value.TableID == (int)NPC.ai[3])) //Should Be Seated
-                    {
+                    int subID = (int)(NPC.ai[3] - Math.Floor(NPC.ai[3])) * 10;
 
+                    if (LunarCultBaseSystem.SeatedTables.Any(t => t.HasValue && t.Value.TableID == queueID)) //Should Be Seated
+                    {
+                        int tableIndex = LunarCultBaseSystem.SeatedTables.ToList().FindIndex(t => t.HasValue && t.Value.TableID == queueID);
+                        Vector2 goalLocation = LunarCultBaseSystem.CafeteriaTables[tableIndex].ToWorldCoordinates();
+                        if (subID == 0)
+                            goalLocation.X += 32 * (queueID % 2 == 0 ? -1 : 1);
+                        else
+                            goalLocation.X += 32 * (subID == 2 ? -1 : 1);
+
+                        if (NPC.Center.DistanceSQ(goalLocation) < 256)
+                        {
+                            NPC.velocity.X = 0;
+
+                            //seated dialogue could be put here, or a seated bool could be used so we arent distance checking all the ding dang time :P
+                        }
+                        else
+                        {
+                            if (NPC.Center.X < goalLocation.X)
+                            {
+                                if (Math.Abs(NPC.velocity.X) < 1.5f)
+                                    NPC.velocity.X += 0.05f;
+                                else
+                                    NPC.velocity.X = 1.5f;
+                            }
+                            else
+                            {
+                                if (Math.Abs(NPC.velocity.X) > -1.5f)
+                                    NPC.velocity.X -= 0.05f;
+                                else
+                                    NPC.velocity.X = -1.5f;
+                            }
+                        }
                     }
                     else //Within Queue
                     {
-                        int queueIndex = LunarCultBaseSystem.QueuedTables.FindIndex(t => t.HasValue && t.Value.TableID == (int)NPC.ai[3]);
+                        int queueIndex = LunarCultBaseSystem.QueuedTables.FindIndex(t => t.HasValue && t.Value.TableID == queueID);
                         if (queueIndex == -1)
                             Main.NewText("HEY SOMETHINGS GONE HORRIBLY WRONG BRO I CANT FIND MY QUEUE INDEX YOU MOTHERFUCKER!!!");
 
                         LunarCultBaseSystem.Table myTable = LunarCultBaseSystem.QueuedTables[queueIndex].Value;
-                        int subID = (int)(NPC.ai[3] - Math.Floor(NPC.ai[3])) * 10;
                         float goalOffset = 0f;
                         if (subID != 0)
                             goalOffset = queueGap / 3f * (LunarCultBaseSystem.BaseFacingLeft ? 1 : -1) * (subID == 1 ? 1 : -1);
@@ -175,7 +206,7 @@ public class LunarBishop : ModNPC
                                     LunarCultBaseSystem.QueuedTables.RemoveAt(queueIndex);
                                 else
                                     LunarCultBaseSystem.QueuedTables[queueIndex] = null;
-                                int currentID = (int)NPC.ai[3];
+                                int currentID = queueID;
                                 foreach (NPC npc in Main.npc.Where(n => n.active && n.type == Type && ((int)n.ai[3]) == currentID))
                                     NPC.ai[3] -= 1;
                             }
