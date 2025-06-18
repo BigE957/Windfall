@@ -91,7 +91,7 @@ public static class LunarCultBase
         int tries = 0;
         do
         {
-            int placementPositionX = centerPlacementPositionX + (genRand.Next(0, Main.maxTilesX == 8400 ? 2800 : 2150) * (facingLeft ? 1 : -1));
+            int placementPositionX = centerPlacementPositionX + (genRand.Next(0, Main.maxTilesX == 8400 ? 2700 : 2150) * (facingLeft ? 1 : -1));
             int placementPositionY = genRand.Next(underworldTop - 820, underworldTop - (int)schematicSize.Y - 12);
 
             placementPoint = new Point(placementPositionX, placementPositionY);
