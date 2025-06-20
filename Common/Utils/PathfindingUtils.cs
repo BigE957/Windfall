@@ -98,7 +98,7 @@ public static partial class WindfallUtils
 
         // Check if we need to jump and can jump
         Point standingTilePosition = npc.Bottom.ToTileCoordinates();
-        bool canJump = IsNPCGrounded(npc, standingTilePosition, true);
+        bool canJump = npc.IsGrounded(standingTilePosition, true);
         bool shouldJump = DetermineIfShouldJump(waypointDirection, standingTilePosition, npc, out bool gapJump);
         //Main.NewText(gapJump);
         // Handle advanced jump logic (when we might need to jump over obstacles)

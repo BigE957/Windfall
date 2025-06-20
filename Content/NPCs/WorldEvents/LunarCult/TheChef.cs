@@ -173,7 +173,7 @@ public class TheChef : ModNPC
         
         NPC.spriteDirection = NPC.direction;
     }
-    public override bool CheckActive() => !NPC.downedAncientCultist;
+    public override bool CheckActive() => NPC.downedAncientCultist;
 
     public override bool CanChat() => !QuestSystem.Quests["DraconicBone"].Complete && !ModContent.GetInstance<DialogueUISystem>().isDialogueOpen && interuptedTimer == 0;
     public override string GetChat()

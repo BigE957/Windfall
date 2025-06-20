@@ -371,7 +371,7 @@ public class Seamstress : ModNPC
             
         return "";
     }
-    public override bool CheckActive() => !NPC.downedAncientCultist;
+    public override bool CheckActive() => NPC.downedAncientCultist;
 
 
     public override void FindFrame(int frameHeight)

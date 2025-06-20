@@ -12,6 +12,7 @@ internal class UIItem : UIElement
     public bool RemoveFloatingPointsFromDrawPosition;
     public SpriteEffects spriteEffects;
     public Item Item = null;
+    public Func<bool> shouldDisplay = () => true;
 
     private Asset<Texture2D> texture;
     private Texture2D nonReloadingTexture;
@@ -77,7 +78,7 @@ internal class UIItem : UIElement
 
         spriteBatch.Draw(texture2D, vector2, null, Color, Rotation, vector * NormalizedOrigin, ImageScale, spriteEffects, 0f);
 
-        if (isHovered && !Item.IsAir)
+        if (isHovered && !Item.IsAir && shouldDisplay.Invoke())
         {
             Main.HoverItem = Item.Clone();
 

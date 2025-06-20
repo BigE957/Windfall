@@ -136,9 +136,9 @@ public class LunarCultistArcher : ModNPC
                 {
                     int subID = (int)(NPC.ai[3] - Math.Floor(NPC.ai[3])) * 10;
 
-                    if (LunarCultBaseSystem.SeatedTables.Any(t => t.HasValue && t.Value.TableID == queueID)) //Should Be Seated
+                    if (LunarCultBaseSystem.SeatedTables.Any(t => t.HasValue && t.Value.PartyID == queueID)) //Should Be Seated
                     {
-                        int tableIndex = LunarCultBaseSystem.SeatedTables.ToList().FindIndex(t => t.HasValue && t.Value.TableID == queueID);
+                        int tableIndex = LunarCultBaseSystem.SeatedTables.ToList().FindIndex(t => t.HasValue && t.Value.PartyID == queueID);
                         Vector2 goalLocation = LunarCultBaseSystem.CafeteriaTables[tableIndex].ToWorldCoordinates();
                         if (subID == 0)
                             goalLocation.X += 32 * (queueID % 2 == 0 ? -1 : 1);
@@ -171,7 +171,7 @@ public class LunarCultistArcher : ModNPC
                     }
                     else //Within Queue
                     {
-                        int queueIndex = LunarCultBaseSystem.QueuedTables.FindIndex(t => t.HasValue && t.Value.TableID == queueID);
+                        int queueIndex = LunarCultBaseSystem.QueuedTables.FindIndex(t => t.HasValue && t.Value.PartyID == queueID);
                         if (queueIndex == -1)
                             Main.NewText("HEY SOMETHINGS GONE HORRIBLY WRONG BRO I CANT FIND MY QUEUE INDEX YOU MOTHERFUCKER!!!");
 

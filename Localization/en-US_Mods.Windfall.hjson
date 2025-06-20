@@ -1522,6 +1522,16 @@ Items: {
 			}
 		}
 	}
+
+	AzafurianPaella: {
+		DisplayName: Azafurian Paella
+		Tooltip: ""
+	}
+
+	BeetleJuice: {
+		DisplayName: Beetle Juice
+		Tooltip: ""
+	}
 }
 
 NPCs: {

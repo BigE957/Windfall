@@ -1,4 +1,6 @@
-﻿namespace Windfall.Common.Utils;
+﻿using Terraria.UI;
+
+namespace Windfall.Common.Utils;
 
 public static partial class WindfallUtils
 {
@@ -32,4 +34,14 @@ public static partial class WindfallUtils
 
         return flipped;
     }
+
+    public static void SetRectangle(this UIElement uiElement, float left, float top, float width, float height)
+    {
+        uiElement.Left.Set(left, 0f);
+        uiElement.Top.Set(top, 0f);
+        uiElement.Width.Set(width, 0f);
+        uiElement.Height.Set(height, 0f);
+    }
+
+    public static Vector2 Center(this UIElement uIElement) => new(uIElement.Left.Pixels + (uIElement.Width.Pixels / 2f), uIElement.Top.Pixels + (uIElement.Height.Pixels / 2f));
 }

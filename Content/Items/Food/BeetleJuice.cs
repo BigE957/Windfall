@@ -3,6 +3,8 @@
 namespace Windfall.Content.Items.Food;
 public class BeetleJuice : ModItem
 {
+    public override string Texture => $"Windfall/Assets/Items/Food/{nameof(BeetleJuice)}";
+
     public override void SetStaticDefaults()
     {
         Item.ResearchUnlockCount = 5;

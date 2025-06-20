@@ -26,6 +26,7 @@ public class LunarCultistDevotee : ModNPC
         get => (States)NPC.ai[2];
         set => NPC.ai[2] = (float)value;
     }
+
     public enum Character
     {
         NewClothes,
@@ -34,9 +35,38 @@ public class LunarCultistDevotee : ModNPC
     public Character myCharacter;
     public bool characterSpokenTo = false;
 
+    private int Time = 0;
+
+    #region Enemy/Pathfinding Variables
+    private PathFinding pathFinding = new();
+    private int CurrentWaypoint = 0;
+    private int jumpTimer = 0;
+    private int airTime = 0;
+    private int tripTime = 0;
+    public Vector2 TargetPos = Vector2.Zero;
+    private int playerAgro
+    {
+        get => (int)NPC.ai[1];
+        set => NPC.ai[1] = value;
+    }
+    private enum AttackState
+    {
+        None,
+        Ranged,
+        Melee
+    }
+    private AttackState Attack
+    {
+        get => (AttackState)NPC.ai[0];
+        set => NPC.ai[0] = (float)value;
+    }
     public Vector2 goalPosition = Vector2.Zero;
+    #endregion
+
+
     public override string Texture => "Windfall/Assets/NPCs/WorldEvents/SelenicCultistDevotee";
     internal static SoundStyle SpawnSound => new("CalamityMod/Sounds/Custom/SCalSounds/BrimstoneHellblastSound");
+    
     public override void SetStaticDefaults()
     {
         this.HideBestiaryEntry();
@@ -115,31 +145,6 @@ public class LunarCultistDevotee : ModNPC
         }
     }
 
-    private int Time = 0;
-    private PathFinding pathFinding = new();
-    private int CurrentWaypoint = 0;
-    private int jumpTimer = 0;
-    private int airTime = 0;
-    private int tripTime = 0;
-    public Vector2 TargetPos = Vector2.Zero;
-
-    private int playerAgro
-    {
-        get => (int)NPC.ai[1];
-        set => NPC.ai[1] = value;
-    }
-    private enum AttackState
-    {
-        None,
-        Ranged,
-        Melee
-    }
-    private AttackState Attack
-    {
-        get => (AttackState)NPC.ai[0];
-        set => NPC.ai[0] = (float)value;
-    }
-
     public override void AI()
     {
         switch (AIState)
@@ -195,16 +200,16 @@ public class LunarCultistDevotee : ModNPC
                 {
                     int subID = (int)(NPC.ai[3] - Math.Floor(NPC.ai[3])) * 10;
 
-                    if (LunarCultBaseSystem.SeatedTables.Any(t => t.HasValue && t.Value.TableID == queueID)) //Should Be Seated
+                    if (LunarCultBaseSystem.SeatedTables.Any(t => t.HasValue && t.Value.PartyID == queueID)) //Should Be Seated
                     {
-                        int tableIndex = LunarCultBaseSystem.SeatedTables.ToList().FindIndex(t => t.HasValue && t.Value.TableID == queueID);
+                        int tableIndex = LunarCultBaseSystem.SeatedTables.ToList().FindIndex(t => t.HasValue && t.Value.PartyID == queueID);
                         Vector2 goalLocation = LunarCultBaseSystem.CafeteriaTables[tableIndex].ToWorldCoordinates();
                         if(subID == 0)
                             goalLocation.X += 32 * (queueID % 2 == 0 ? -1 : 1);
                         else
                             goalLocation.X += 32 * (subID == 2 ? -1 : 1);
 
-                        if (NPC.Center.DistanceSQ(goalLocation) < 256)
+                        if (Math.Abs(NPC.Center.X - goalLocation.X) < 256)
                         {
                             NPC.velocity.X = 0;
 
@@ -230,7 +235,7 @@ public class LunarCultistDevotee : ModNPC
                     }
                     else //Within Queue
                     {
-                        int queueIndex = LunarCultBaseSystem.QueuedTables.FindIndex(t => t.HasValue && t.Value.TableID == queueID);
+                        int queueIndex = LunarCultBaseSystem.QueuedTables.FindIndex(t => t.HasValue && t.Value.PartyID == queueID);
                         if(queueIndex == -1)
                             Main.NewText("HEY SOMETHINGS GONE HORRIBLY WRONG BRO I CANT FIND MY QUEUE INDEX YOU MOTHERFUCKER!!!");
 
@@ -679,32 +684,6 @@ public class LunarCultistDevotee : ModNPC
                 ModContent.GetInstance<DialogueUISystem>().DisplayDialogueTree(Windfall.Instance, $"SelenicCultists/{myCharacter}", new(Name, [NPC.whoAmI]), characterSpokenTo ? 1 : 0);
                 characterSpokenTo = true;
                 break;
-            /*
-            Should be moved to wherever we handle interactions with an entire table
-            case States.CafeteriaEvent:
-                if (Main.player[Main.myPlayer].HeldItem.type == LunarCultBaseSystem.QueuedTables[0].Value.OrderID)
-                {
-                    Main.player[Main.myPlayer].HeldItem.stack--;
-
-                    if (LunarCultBaseSystem.QueuedTables.Count == 1)
-                        LunarCultBaseSystem.QueuedTables = [];
-                    else
-                        LunarCultBaseSystem.QueuedTables[0] = null;
-                    if (Main.projectile.Any(p => p.active && p.type == ModContent.ProjectileType<FoodAlert>() && p.ai[2] == NPC.whoAmI))
-                        Main.projectile.First(p => p.active && p.type == ModContent.ProjectileType<FoodAlert>() && p.ai[2] == NPC.whoAmI).ai[2] = -1;
-                    NPC.ai[3] = -1;
-                    CombatText.NewText(NPC.Hitbox, Color.White, GetWindfallTextValue("Dialogue.LunarCult.LunarBishop.Cafeteria.Thanks." + Main.rand.Next(3)));
-                    LunarCultBaseSystem.SatisfiedCustomers++;
-                    if (LunarCultBaseSystem.SatisfiedCustomers == LunarCultBaseSystem.CustomerGoal)
-                    {
-                        NPC chef = Main.npc[NPC.FindFirstNPC(ModContent.NPCType<TheChef>())];
-                        CombatText.NewText(chef.Hitbox, Color.LimeGreen, GetWindfallTextValue("Dialogue.LunarCult.TheChef.Activity.AlmostDone"), true);
-                    }
-                }
-                else
-                    CombatText.NewText(NPC.Hitbox, Color.White, GetWindfallTextValue("Dialogue.LunarCult.LunarBishop.Cafeteria.Where." + Main.rand.Next(3)));
-                break;
-            */
         }
 
         return "Rizz"; //Won't actually be seen.

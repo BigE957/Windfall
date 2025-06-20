@@ -1,9 +1,13 @@
 ﻿using Luminance;
 using Luminance.Assets;
 using Luminance.Core.Graphics;
+using Windfall.Common.Systems;
+using Windfall.Common.Systems.WorldEvents;
+using Windfall.Content.Items.Food;
 using Windfall.Content.NPCs.Bosses.Orator;
 using Windfall.Content.Projectiles.Boss.Orator;
 using Windfall.Content.Projectiles.NPCAnimations;
+using Windfall.Content.UI.Activities;
 
 namespace Windfall.Content.Items.Debug;
 
@@ -90,7 +94,8 @@ public class DungeonLocationChecker : ModItem, ILocalizedModType
     public override bool? UseItem(Player player)
     {
         //NPC.NewNPCDirect(Entity.GetSource_FromAI(), new Vector2(Main.dungeonX, Main.dungeonY).ToWorldCoordinates(), NPCID.Zombie);
-        
+        DownedNPCSystem.downedOrator = false;
+        SealingRitualSystem.RitualSequenceSeen = false;
         return true;
     }
 }

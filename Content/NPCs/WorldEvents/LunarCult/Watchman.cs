@@ -36,7 +36,7 @@ public class Watchman : ModNPC
         NPC.friendly = true; // NPC Will not attack player
         NPC.width = 36;
         NPC.height = 120;
-        NPC.aiStyle = 0;
+        NPC.aiStyle = -1;
         NPC.damage = 0;
         NPC.defense = 0;
         NPC.lifeMax = 500;
@@ -62,6 +62,8 @@ public class Watchman : ModNPC
                 spokenTo = false;
                 break;
         }
+
+        NPC.direction = LunarCultBaseSystem.BaseFacingLeft ? -1 : 1;
 
         NPC.spriteDirection = -NPC.direction;
     }

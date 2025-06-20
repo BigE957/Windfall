@@ -212,7 +212,7 @@ public class LunarCultBaseSystem : ModSystem
     #region Cafeteria Variables
     public struct Table(int id, int[] order)
     {
-        public int TableID = id;
+        public int PartyID = id;
         public int[] Order = order;
     }
 
@@ -240,16 +240,16 @@ public class LunarCultBaseSystem : ModSystem
 
     public static Point[] CafeteriaTables =>
     [
-        LunarCultBaseLocation,
-        LunarCultBaseLocation,
-        LunarCultBaseLocation,
+        LunarCultBaseLocation + new Point(28, -11),
+        LunarCultBaseLocation + new Point(35, -11),
+        LunarCultBaseLocation + new Point(42, -11),
     ];
 
     public static int SatisfiedCustomers = 0;
     public static int CustomerGoal = 12;
     public static readonly int QueueLimit = 12;
     public static int AtMaxTimer = 0;
-    private static int TableIDCounter = 0;
+    private static int PartyIDCounter = 0;
     #endregion
     #region Ritual Variables
     public static int RemainingCultists = 6;
@@ -335,7 +335,7 @@ public class LunarCultBaseSystem : ModSystem
                 {
                     for (int i = 0; i <= 20; i++)
                         EmpyreanMetaball.SpawnDefaultParticle(player.Center, Main.rand.NextVector2Circular(5f, 5f), 30 * Main.rand.NextFloat(1.5f, 2.3f));
-                    player.Teleport(new Vector2((LunarCultBaseLocation.X - 106) * 16, (CultBaseTileArea.Top + 27) * 16), TeleportationStyleID.DebugTeleport);
+                    player.Teleport(new Vector2((LunarCultBaseLocation.X + (BaseFacingLeft ? -106 : 106)) * 16, (CultBaseTileArea.Top + 27) * 16), TeleportationStyleID.DebugTeleport);
                     SoundEngine.PlaySound(SoundID.Item8, player.Center);
                     for (int i = 0; i <= 20; i++)
                         EmpyreanMetaball.SpawnDefaultParticle(player.Center, Main.rand.NextVector2Circular(5f, 5f), 30 * Main.rand.NextFloat(1.5f, 2.3f));
@@ -516,7 +516,7 @@ public class LunarCultBaseSystem : ModSystem
                 Vector2 entranceArea = Main.npc[NPC.FindFirstNPC(ModContent.NPCType<Watchman>())].Center;
                 Player closestPlayer = Main.player[Player.FindClosest(entranceArea, 1, 1)];
                 float PlayerDistFromSpeaker = (entranceArea - closestPlayer.Center).Length();
-                if (PlayerDistFromSpeaker < 160f && closestPlayer.Center.Y < entranceArea.Y + 16)
+                if (PlayerDistFromSpeaker < 160f && closestPlayer.Center.Y < entranceArea.Y + 48)
                     State = SystemStates.Yap;
                 #endregion
 
@@ -1005,7 +1005,7 @@ public class LunarCultBaseSystem : ModSystem
                             for (int i = 0; i < count; i++)
                             {
                                 Point spawnLocation = new(ActivityCoords.X + (1100 + (i == 1 ? 32 : 0)) * (BaseFacingLeft ? -1 : 1) , ActivityCoords.Y);
-                                NPC npc = NPC.NewNPCDirect(NPC.GetSource_NaturalSpawn(), spawnLocation.X, spawnLocation.Y, customerType, ai2: 2, ai3: TableIDCounter + (count == 1 ? 0 : (i / 10)));
+                                NPC npc = NPC.NewNPCDirect(NPC.GetSource_NaturalSpawn(), spawnLocation.X, spawnLocation.Y, customerType, ai2: 2, ai3: PartyIDCounter + (count == 1 ? 0 : (i / 10)));
                                 customers[i] = npc;
                                 order.Add(RandFromRange(EntreeRange));
                                 order.Add(RandFromRange(DrinkRange));
@@ -1014,7 +1014,7 @@ public class LunarCultBaseSystem : ModSystem
                             if (count == 2)
                                 order.Add(RandFromRange(AppetizerRange));
 
-                            Table table = new(TableIDCounter, [.. order]);
+                            Table table = new(PartyIDCounter, [.. order]);
 
                             bool openTable = false;
                             for (int i = 0; i < SeatedTables.Length; i++)
@@ -1029,7 +1029,7 @@ public class LunarCultBaseSystem : ModSystem
                                 QueuedTables.Add(table);
 
                             ActivityTimer = 0;
-                            TableIDCounter++;
+                            PartyIDCounter++;
                         }
                         else if (SatisfiedCustomers >= CustomerGoal && QueuedTables.Count == 0)
                         {

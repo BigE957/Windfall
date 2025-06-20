@@ -1,6 +1,7 @@
 ﻿using CalamityMod.NPCs.NormalNPCs;
 using CalamityMod.NPCs.SlimeGod;
 using CalamityMod.Projectiles.Boss;
+using Windfall.Content.NPCs.WorldEvents.LunarCult;
 
 namespace Windfall.Common.Utils;
 
@@ -173,7 +174,9 @@ public static partial class WindfallUtils
         return false;
     }
 
-    private static bool IsNPCGrounded(NPC npc, Point standingTilePosition, bool orInWater = false) => 
+    public static bool IsGrounded(this NPC npc, Point standingTilePosition, bool orInWater = false) => 
         (npc.velocity.Y == 0 && npc.oldVelocity.Y == 0.3f) ||
         (orInWater && Main.tile[standingTilePosition + new Point(0, -1)].LiquidAmount > 0.5f);
+
+    public static bool IsSelenicCultist(this NPC npc) => npc.type == ModContent.NPCType<LunarCultistArcher>() || npc.type == ModContent.NPCType<LunarCultistDevotee>() || npc.type == ModContent.NPCType<LunarBishop>();
 }
