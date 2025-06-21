@@ -210,28 +210,13 @@ public class LunarCultistDevotee : ModNPC
 
                         if (Math.Abs(NPC.Center.X - goalLocation.X) < 8)
                         {
-                            TableOrderUISystem system = ModContent.GetInstance<TableOrderUISystem>();
                             NPC.velocity.X = 0;
                             NPC.direction = -chairSide;
 
-                            if (system.TableOrderUIs[tableIndex].Order == null)
+                            if (ModContent.GetInstance<TableOrderUISystem>().TableOrderUIs[tableIndex].Order == null)
                             {
                                 //seated dialogue could be put here
-                                Dictionary<int, int> order = [];
-                                int count = LunarCultBaseSystem.SeatedTables[tableIndex].Value.PartySize;
-                                for (int i = 0; i < count; i++)
-                                {
-                                    int entree = LunarCultBaseSystem.MenuIDs[RandFromRange(LunarCultBaseSystem.EntreeRange)];
-                                    if (!order.TryAdd(entree, 1))
-                                        order[entree]++;
-                                    int drink = LunarCultBaseSystem.MenuIDs[RandFromRange(LunarCultBaseSystem.DrinkRange)];
-                                    if (!order.TryAdd(drink, 1))
-                                        order[drink]++;
-
-                                }
-                                if (count == 2)
-                                    order.Add(LunarCultBaseSystem.MenuIDs[RandFromRange(LunarCultBaseSystem.AppetizerRange)], 1);
-                                system.ActivateTableOrderUI(tableIndex, order);
+                                CreateOrder(tableIndex);
                             }
                         }
                         else
@@ -717,6 +702,37 @@ public class LunarCultistDevotee : ModNPC
 
         Time++;
     }
+
+    public static void CreateOrder(int tableIndex)
+    {
+        Dictionary<int, int> order = [];
+        int count = LunarCultBaseSystem.SeatedTables[tableIndex].Value.PartySize;
+        //Uses two seperate loops to ensure items are added in a reliable order
+        int entreeCount = 0;
+        for (int i = 0; i < count; i++)
+        {
+            int entree = LunarCultBaseSystem.MenuIDs[RandFromRange(LunarCultBaseSystem.EntreeRange)];
+            if (!order.TryAdd(entree, 1))
+                order[entree]++;
+            else
+                entreeCount++;
+        }
+        if (count == 2)
+            order.Add(LunarCultBaseSystem.MenuIDs[RandFromRange(LunarCultBaseSystem.AppetizerRange)], 1);
+
+        int drinkCount = 0;
+        for (int i = 0; i < count; ++i)
+        {
+            int drink = LunarCultBaseSystem.MenuIDs[RandFromRange(LunarCultBaseSystem.DrinkRange)];
+            if (!order.TryAdd(drink, 1))
+                order[drink]++;
+            else
+                drinkCount++;
+        }
+        int[] typeCounts = [entreeCount, (count == 2 ? 1 : 0), drinkCount];
+        ModContent.GetInstance<TableOrderUISystem>().ActivateTableOrderUI(tableIndex, order, typeCounts);
+    }
+
     public override bool CanChat() => AIState == States.StaticCharacter;
     public override string GetChat()
     {

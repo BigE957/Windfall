@@ -250,6 +250,7 @@ public class LunarCultBaseSystem : ModSystem
     public static readonly int QueueLimit = 12;
     public static int AtMaxTimer = 0;
     private static int PartyIDCounter = 0;
+    private static int CustomerTimer = 0;
     #endregion
     #region Ritual Variables
     public static int RemainingCultists = 6;
@@ -986,12 +987,20 @@ public class LunarCultBaseSystem : ModSystem
                                 {
                                     SeatedTables[i] = new(QueuedTables[0].Value.PartyID, QueuedTables[0].Value.PartySize);
                                     QueuedTables.RemoveAt(0);
+                                    if (QueuedTables.Count == 0 && SatisfiedCustomers >= CustomerGoal)
+                                    {
+                                        CombatText.NewText(Main.npc[NPC.FindFirstNPC(ModContent.NPCType<TheChef>())].Hitbox, Color.LimeGreen, GetWindfallTextValue("Dialogue.LunarCult.TheChef.Activity.AlmostDone"), true);
+                                    }
                                 }
                         }
 
-                        if (SatisfiedCustomers < CustomerGoal && QueuedTables.Count < QueueLimit && ActivityTimer >= 360 && Main.rand.NextBool(120)) //Spawn New Customer
+                        float intensity = Terraria.Utils.GetLerpValue(0, 10800, ActivityTimer, true);
+                        // Gap between customers goes from 12 Seconds to 6 Seconds based on the Intensity, which reaches its peak 3 minutes into the activity
+                        float CustomerGap = Lerp(720, 360, intensity);
+
+                        if (SatisfiedCustomers < CustomerGoal && QueuedTables.Count < QueueLimit && CustomerTimer >= CustomerGap && Main.rand.NextBool(120)) //Spawn New Customer
                         {
-                            int count = Main.rand.NextBool(3) ? 2 : 1;
+                            int count = intensity < 0.25f ? 1 : (Main.rand.NextBool(3) ? 2 : 1);
                             WeightedRandom<int> customerType = new();
                             customerType.Add(ModContent.NPCType<LunarCultistDevotee>(), 5);
                             customerType.Add(ModContent.NPCType<LunarCultistArcher>(), 3);
@@ -1019,7 +1028,8 @@ public class LunarCultBaseSystem : ModSystem
                             if(!openTable)
                                 QueuedTables.Add(table);
 
-                            ActivityTimer = 0;
+                            //Gives an extra 3 seconds of downtime between customers for a party of 2
+                            CustomerTimer = count == 2 ? -180 : 0;
                             PartyIDCounter++;
                         }
                         else if (SatisfiedCustomers >= CustomerGoal && QueuedTables.Count == 0 && !SeatedTables.Any(t => t.HasValue))
@@ -1033,6 +1043,7 @@ public class LunarCultBaseSystem : ModSystem
                         }
                     }
                     ActivityTimer++;
+                    CustomerTimer++;
                 }
                 else
                 {
@@ -1657,13 +1668,33 @@ public class LunarCultBaseSystem : ModSystem
     public static bool IsTailorActivityActive() => Active && State == SystemStates.Tailor;
     public static bool IsCafeteriaActivityActive() => Active && State == SystemStates.Cafeteria;
     public static bool IsRitualActivityActive() => Active && State == SystemStates.Ritual;
-    public static Response[] GetMenuResponses()
-    {           
-        Response[] Responses = new Response[MenuIDs.Count];
-        for (int i = 0; i < MenuIDs.Count; i++)
+    public static Response[] GetMenuResponses(int type)
+    {
+        Response[] Responses;
+        int offset = 0;
+        switch (type)
         {
-            Item item = new(MenuIDs[i]);
-            Responses[i] = new Response{Title = item.Name};
+            case 0:
+                Responses = new Response[EntreeRange.end + 1];
+                offset = 0;
+                break;
+            case 1:
+                Responses = new Response[AppetizerRange.end - AppetizerRange.start + 1];
+                offset = AppetizerRange.start;
+                break;
+            case 2:
+                Responses = new Response[DrinkRange.end - DrinkRange.start + 1];
+                offset = DrinkRange.start;
+                break;
+            default:
+                Responses = [];
+                break;
+                
+        }
+        for (int i = 0; i < Responses.Length; i++)
+        {
+            Item item = new(MenuIDs[i + offset]);
+            Responses[i] = new Response { Title = item.Name };
         }
         return Responses;
     }

@@ -9,6 +9,7 @@ internal class TableOrderUI(Dictionary<int, int> order, int tableID) : UIState
     UIPanel OrderPanel;
     UIPanel Hitbox;
     internal Dictionary<int, int> Order = order;
+    internal int[] TypeCounts = new int[3];
     private readonly List<(UIItem Icon, UIText Amt)> OrderDisplay = [];
     private readonly int TableID = tableID;
     float Opacity = 0f;
@@ -23,7 +24,7 @@ internal class TableOrderUI(Dictionary<int, int> order, int tableID) : UIState
         OrderPanel = new UIPanel
         {
             HAlign = 0.5f,
-            VAlign = 0.25f
+            VAlign = 0f
         };
         OrderPanel.SetRectangle(0, 0, 90, 64);
         OrderPanel.BackgroundColor = Color.Transparent;
@@ -35,32 +36,52 @@ internal class TableOrderUI(Dictionary<int, int> order, int tableID) : UIState
 
     public override void OnActivate()
     {
-        int count = 0;
+        OrderPanel.BackgroundColor = Color.Transparent;
+        OrderPanel.BorderColor = Color.Transparent;
         OrderPanel.RemoveAllChildren();
         OrderDisplay.Clear();
 
         if (Order != null)
         {
-            OrderPanel.Height.Pixels = 16 + (32 * Order.Count);
+            OrderPanel.Height.Pixels = 8 + (32 * TypeCounts.Where(i => i > 0).Count());
+            OrderPanel.Top.Pixels = -OrderPanel.Height.Pixels / 2f;
+            OrderPanel.Top.Pixels += 32;
+
+            int typeIndex = 0;
+            int count = 0;
+            float accumulatedWidth = 0f;
+            float[] typeWidths = new float[3];
 
             foreach (var (FoodID, Count) in Order)
             {
                 UIItem icon = new(FoodID);
-                icon.SetRectangle(10 - (icon.Width.Pixels / 2f), 4 + (32 * count) - (icon.Height.Pixels / 2f), icon.Width.Pixels, icon.Height.Pixels);
+                float offset = 10 - (icon.Width.Pixels / 2f);
+                icon.SetRectangle(offset + accumulatedWidth, 4 + (32 * typeIndex) - (icon.Height.Pixels / 2f), icon.Width.Pixels, icon.Height.Pixels);
                 icon.shouldDisplay = () => Opacity >= 0.75f;
                 icon.Color = Color.Transparent;
+                accumulatedWidth += offset + icon.Width.Pixels;
 
                 UIText amt = null;
                 if (Count > 1)
                 {
                     amt = new("x" + Count);
-                    amt.SetRectangle(16 - (icon.Width.Pixels / 2f) + icon.Width.Pixels, 4 + (32 * count) - (icon.Height.Pixels / 3f), amt.Width.Pixels, amt.Height.Pixels);
+                    amt.SetRectangle(6 + accumulatedWidth, 4 + (32 * typeIndex) - (icon.Height.Pixels / 3f), amt.Width.Pixels, amt.Height.Pixels);
                     amt.ShadowColor = Color.Transparent;
                     amt.TextColor = Color.Transparent;
+                    accumulatedWidth += 6 + FontAssets.MouseText.Value.MeasureString(amt.Text).X;
                 }
+
+                accumulatedWidth += 12;
 
                 OrderDisplay.Add((icon, amt));
                 count++;
+                if(count >= TypeCounts[typeIndex])
+                {
+                    count = 0;
+                    typeWidths[typeIndex] = accumulatedWidth;
+                    accumulatedWidth = 0;
+                    typeIndex++;
+                }
             }
 
             foreach (var (Icon, Amt) in OrderDisplay)
@@ -69,6 +90,8 @@ internal class TableOrderUI(Dictionary<int, int> order, int tableID) : UIState
                 if (Amt != null)
                     OrderPanel.Append(Amt);
             }
+
+            OrderPanel.Width.Pixels = typeWidths.Max() + 8;
         }
 
         Vector2 tableScreenPos = LunarCultBaseSystem.CafeteriaTables[TableID].ToWorldCoordinates().ToScreenPosition(); 
@@ -164,11 +187,7 @@ internal class TableOrderUI(Dictionary<int, int> order, int tableID) : UIState
                 {
                     CombatText.NewText(npc.Hitbox, Color.White, GetWindfallTextValue("Dialogue.LunarCult.LunarBishop.Cafeteria.Thanks." + Main.rand.Next(3)));
                     npc.ai[3] = -1;
-                    if (++LunarCultBaseSystem.SatisfiedCustomers == LunarCultBaseSystem.CustomerGoal)
-                    {
-                        NPC chef = Main.npc[NPC.FindFirstNPC(ModContent.NPCType<TheChef>())];
-                        CombatText.NewText(chef.Hitbox, Color.LimeGreen, GetWindfallTextValue("Dialogue.LunarCult.TheChef.Activity.AlmostDone"), true);
-                    }
+                    ++LunarCultBaseSystem.SatisfiedCustomers;
                 }
 
                 LunarCultBaseSystem.SeatedTables[TableID] = null;
@@ -188,10 +207,13 @@ public class TableOrderUISystem : ModSystem
     private UserInterface[] tableUIs = new UserInterface[3];
     public bool uiOpen = false;
 
-    public void ActivateTableOrderUI(int tableID, Dictionary<int, int> order)
+    public void ActivateTableOrderUI(int tableID, Dictionary<int, int> order, int[] typeCounts)
     {
         uiOpen = true;
         TableOrderUIs[tableID].Order = order;
+        TableOrderUIs[tableID].TypeCounts[0] = typeCounts[0];
+        TableOrderUIs[tableID].TypeCounts[1] = typeCounts[1];
+        TableOrderUIs[tableID].TypeCounts[2] = typeCounts[2];
         //TableOrderUIs[tableID].OnInitialize();
         TableOrderUIs[tableID].Activate();
         tableUIs[tableID]?.SetState(TableOrderUIs[tableID]);
@@ -200,6 +222,8 @@ public class TableOrderUISystem : ModSystem
     public void DeactivateTableOrderUI(int tableID)
     {
         uiOpen = false;
+        for(int i = 0; i < 3; i++)
+            TableOrderUIs[tableID].TypeCounts[0] = 0;
         TableOrderUIs[tableID].Order = null;
         tableUIs[tableID]?.SetState(null);
     }

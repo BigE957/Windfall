@@ -17,7 +17,7 @@ public class TheChef : ModNPC
         get => NPC.ai[2];
         set => NPC.ai[2] = value;
     }
-    private const int CookTime = 120;
+    private const int CookTime = 60;
     private float ItemCooking
     {
         get => NPC.ai[3];
@@ -94,7 +94,6 @@ public class TheChef : ModNPC
         NPC.spriteDirection = 1;
         SoundEngine.PlaySound(SpawnSound, NPC.Center);
     }
-    private bool dozedOff = false;
     private int interuptedTimer = 0;
     public override void AI()
     {
@@ -104,7 +103,6 @@ public class TheChef : ModNPC
                 {
                     ItemCooking = -1;
                     interuptedTimer = 0;
-                    dozedOff = false;
                     int shutdownTimer = AtMaxTimer - (10 * 60);
                     switch (shutdownTimer)
                     {
@@ -132,13 +130,10 @@ public class TheChef : ModNPC
 
                 if (ItemCooking != -1)
                 {
-                    if (!dozedOff && interuptedTimer == 0)
+                    if (interuptedTimer == 0)
                     {
                         CurrentAnimation = Animation.Cooking;
                         TimeCooking++;
-
-                        if (TimeCooking == CookTime / 2 && Main.rand.NextBool(3))
-                            dozedOff = true;
 
                         if (TimeCooking >= CookTime)
                         {
@@ -164,11 +159,6 @@ public class TheChef : ModNPC
                     CurrentAnimation = Animation.IdleTongue;
                     NPC.direction = 1;
                 }
-                if (dozedOff && (Main.GlobalTimeWrappedHourly - (int)Main.GlobalTimeWrappedHourly) < 0.015)
-                {
-                    CombatText z = Main.combatText[CombatText.NewText(new((int)NPC.Center.X, (int)NPC.Bottom.Y, 1, 1), Color.LimeGreen, "Z", true)];
-                    z.lifeTime /= 2;
-                }
             }
         
         NPC.spriteDirection = NPC.direction;
@@ -182,16 +172,9 @@ public class TheChef : ModNPC
 
         if (IsCafeteriaActivityActive())
         {
-            if(dozedOff)
+            if(ItemCooking != -1)
             {
-                dozedOff = false;
-                interuptedTimer = 30;
-                CombatText.NewText(NPC.Hitbox, Color.LimeGreen, GetWindfallTextValue(chefPath + "Activity.Awoken." + Main.rand.Next(3)), true);
-                return "";
-            }
-            else if(ItemCooking != -1)
-            {
-                interuptedTimer = 60;
+                interuptedTimer = CookTime / 2;
                 CombatText.NewText(NPC.Hitbox, Color.LimeGreen, GetWindfallTextValue(chefPath + "Activity.Interuptted." + Main.rand.Next(3)), true);
                 return "";
             }
@@ -210,9 +193,6 @@ public class TheChef : ModNPC
         DialogueUISystem uiSystem = ModContent.GetInstance<DialogueUISystem>();
         switch (treeKey)
         {
-            case "TheChef/FoodSelection":
-                uiSystem.CurrentTree.Dialogues[0].Responses = GetMenuResponses();
-                break;
             case "TheChef/Default":
                 List<Response> response = [.. uiSystem.CurrentTree.Dialogues[0].Responses];
                 if (Main.LocalPlayer.LunarCult().hasRecievedChefMeal)
@@ -220,11 +200,13 @@ public class TheChef : ModNPC
                     response[1].Requirement = false;
                     return;
                 }
+                /*
                 uiSystem.CurrentTree.Dialogues[1].Responses = GetMenuResponses();
                 for (int i = 0; i < uiSystem.CurrentTree.Dialogues[1].Responses.Length; i++)
                 {
                     uiSystem.CurrentTree.Dialogues[1].Responses[i].Heading = 2;
                 }
+                */
                 break;
         }
     }
@@ -238,14 +220,35 @@ public class TheChef : ModNPC
             return;
 
         NPC chef = Main.npc[(int)ModContent.GetInstance<DialogueUISystem>().CurrentDialogueContext.Arguments[0]];
-        if (treeKey == "TheChef/FoodSelection" && dialogueID == 0)
-            chef.ai[3] = MenuIDs[buttonID];
+        if (treeKey == "TheChef/FoodSelection")
+        {
+            if (dialogueID == 0)
+            {
+                uiSystem.CurrentTree.Dialogues[1].Responses = GetMenuResponses(buttonID);
+                uiSystem.CurrentDialogueContext.Arguments[1] = buttonID;
+            }
+            else if (dialogueID == 1)
+            {
+                switch (uiSystem.CurrentDialogueContext.Arguments[1])
+                {
+                    case 0:
+                        chef.ai[3] = MenuIDs[buttonID];
+                        break;
+                    case 1:
+                        chef.ai[3] = MenuIDs[buttonID + AppetizerRange.start];
+                        break;
+                    case 2:
+                        chef.ai[3] = MenuIDs[buttonID + DrinkRange.start];
+                        break;
+                }
+            }
+        }
         else if (treeKey == "TheChef/CafeteriaActivityStart" && dialogueID == 0 && buttonID == 1)
         {
             Item i = Main.item[Item.NewItem(chef.GetSource_Loot(), chef.Center, new Vector2(8, 4), ModContent.ItemType<ChefMenu>())];
             i.velocity = Vector2.UnitX * 4;
         }
-        else if(treeKey == "TheChef/Default")
+        else if (treeKey == "TheChef/Default")
         {
             if (dialogueID == 1)
             {
@@ -338,7 +341,7 @@ public class TheChef : ModNPC
 
         Vector2 barOrigin = barBG.Size() * 0.5f;
         float yOffset = 23f;
-        Vector2 drawPos = (NPC.Center - screenPos) + Vector2.UnitY * barScale * (NPC.frame.Height - yOffset);
+        Vector2 drawPos = (NPC.Center - screenPos) + Vector2.UnitY * barScale * (NPC.frame.Height / 2f - yOffset);
         Rectangle frameCrop = new(0, 0, (int)(TimeCooking / CookTime * barFG.Width), barFG.Height);
 
         Color bgColor = Color.DarkGray * 0.5f;

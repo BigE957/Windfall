@@ -1,7 +1,24 @@
 {
   "Dialogues": [
     {
-      "DialogueText": [ { "Text": "Wadaya need?" } ]
+      "DialogueText": [ { "Text": "Wadaya need?" } ],
+      "Responses": [
+        {
+          "Title": "An Entree!",
+          "Heading": 1
+        },
+        {
+          "Title": "An Apetizer!",
+          "Heading": 1
+        },
+        {
+          "Title": "A Drink!",
+          "Heading": 1
+        }
+      ]
+    },
+    {
+      "DialogueText": [ { "Text": "..." } ]
     },
     {
       "DialogueText": [ { "Text": "On it!" } ]

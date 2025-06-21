@@ -155,21 +155,7 @@ public class LunarCultistArcher : ModNPC
                             if (system.TableOrderUIs[tableIndex].Order == null)
                             {
                                 //seated dialogue could be put here
-                                Dictionary<int, int> order = [];
-                                int count = LunarCultBaseSystem.SeatedTables[tableIndex].Value.PartySize;
-                                for (int i = 0; i < count; i++)
-                                {
-                                    int entree = LunarCultBaseSystem.MenuIDs[RandFromRange(LunarCultBaseSystem.EntreeRange)];
-                                    if (!order.TryAdd(entree, 1))
-                                        order[entree]++;
-                                    int drink = LunarCultBaseSystem.MenuIDs[RandFromRange(LunarCultBaseSystem.DrinkRange)];
-                                    if (!order.TryAdd(drink, 1))
-                                        order[drink]++;
-
-                                }
-                                if (count == 2)
-                                    order.Add(LunarCultBaseSystem.MenuIDs[RandFromRange(LunarCultBaseSystem.AppetizerRange)], 1);
-                                system.ActivateTableOrderUI(tableIndex, order);
+                                LunarCultistDevotee.CreateOrder(tableIndex);
                             }
                         }
                         else

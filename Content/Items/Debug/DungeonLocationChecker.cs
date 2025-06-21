@@ -1,5 +1,7 @@
-﻿using Windfall.Common.Systems.WorldEvents;
+﻿using System.Reflection.Metadata.Ecma335;
+using Windfall.Common.Systems.WorldEvents;
 using Windfall.Content.Items.Food;
+using Windfall.Content.NPCs.WorldEvents.LunarCult;
 using Windfall.Content.UI.Activities;
 
 namespace Windfall.Content.Items.Debug;
@@ -88,6 +90,9 @@ public class DungeonLocationChecker : ModItem, ILocalizedModType
     {
         //NPC.NewNPCDirect(Entity.GetSource_FromAI(), new Vector2(Main.dungeonX, Main.dungeonY).ToWorldCoordinates(), NPCID.Zombie);
         LunarCultBaseSystem.RecruitmentsSkipped = 0;
+
+        LunarCultBaseSystem.SeatedTables[0] = new(0, Main.rand.Next(1, 3));
+        LunarCultistDevotee.CreateOrder(0);
         return true;
     }
 }
