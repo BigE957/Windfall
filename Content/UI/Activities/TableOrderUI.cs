@@ -4,11 +4,11 @@ using Windfall.Common.Systems.WorldEvents;
 using Windfall.Content.NPCs.WorldEvents.LunarCult;
 
 namespace Windfall.Content.UI.Activities;
-internal class TableOrderUI((int FoodID, int Count)[] order, int tableID) : UIState
+internal class TableOrderUI(Dictionary<int, int> order, int tableID) : UIState
 {
     UIPanel OrderPanel;
     UIPanel Hitbox;
-    internal (int FoodID, int Count)[] Order = order;
+    internal Dictionary<int, int> Order = order;
     private readonly List<(UIItem Icon, UIText Amt)> OrderDisplay = [];
     private readonly int TableID = tableID;
     float Opacity = 0f;
@@ -36,35 +36,39 @@ internal class TableOrderUI((int FoodID, int Count)[] order, int tableID) : UISt
     public override void OnActivate()
     {
         int count = 0;
-        OrderPanel.Height.Pixels = 16 + (32 * Order.Length);
         OrderPanel.RemoveAllChildren();
         OrderDisplay.Clear();
 
-        foreach (var (FoodID, Count) in Order)
+        if (Order != null)
         {
-            UIItem icon = new(FoodID);
-            icon.SetRectangle(10 -(icon.Width.Pixels / 2f), 4 + (32 * count) - (icon.Height.Pixels / 2f), icon.Width.Pixels, icon.Height.Pixels);
-            icon.shouldDisplay = () => Opacity >= 0.75f;
-            icon.Color = Color.Transparent;
-            
-            UIText amt = null;
-            if (Count > 1)
+            OrderPanel.Height.Pixels = 16 + (32 * Order.Count);
+
+            foreach (var (FoodID, Count) in Order)
             {
-                amt = new("x" +  Count);
-                amt.SetRectangle(16 - (icon.Width.Pixels / 2f) + icon.Width.Pixels, 4 + (32 * count) - (icon.Height.Pixels / 3f), amt.Width.Pixels, amt.Height.Pixels);
-                amt.ShadowColor = Color.Transparent;
-                amt.TextColor = Color.Transparent;
+                UIItem icon = new(FoodID);
+                icon.SetRectangle(10 - (icon.Width.Pixels / 2f), 4 + (32 * count) - (icon.Height.Pixels / 2f), icon.Width.Pixels, icon.Height.Pixels);
+                icon.shouldDisplay = () => Opacity >= 0.75f;
+                icon.Color = Color.Transparent;
+
+                UIText amt = null;
+                if (Count > 1)
+                {
+                    amt = new("x" + Count);
+                    amt.SetRectangle(16 - (icon.Width.Pixels / 2f) + icon.Width.Pixels, 4 + (32 * count) - (icon.Height.Pixels / 3f), amt.Width.Pixels, amt.Height.Pixels);
+                    amt.ShadowColor = Color.Transparent;
+                    amt.TextColor = Color.Transparent;
+                }
+
+                OrderDisplay.Add((icon, amt));
+                count++;
             }
 
-            OrderDisplay.Add((icon, amt));
-            count++;
-        }
-
-        foreach (var (Icon, Amt) in OrderDisplay)
-        {
-            OrderPanel.Append(Icon);
-            if(Amt != null)
-                OrderPanel.Append(Amt);
+            foreach (var (Icon, Amt) in OrderDisplay)
+            {
+                OrderPanel.Append(Icon);
+                if (Amt != null)
+                    OrderPanel.Append(Amt);
+            }
         }
 
         Vector2 tableScreenPos = LunarCultBaseSystem.CafeteriaTables[TableID].ToWorldCoordinates().ToScreenPosition(); 
@@ -105,25 +109,27 @@ internal class TableOrderUI((int FoodID, int Count)[] order, int tableID) : UISt
         if (Opacity >= 0.75f && Hitbox.IsMouseHovering)
         {
             //Phase 1: Check if the player has all of the required Items in the correct amounts
-            int[] itemCounts = new int[Order.Length];
+            int[] itemCounts = new int[Order.Count];
+            var orderArray = Order.ToArray();
+
             for(int i = 0; i < Main.LocalPlayer.inventory.Length; i++)
             {
                 Item item = Main.LocalPlayer.inventory[i];
-                for (int j = 0; j < Order.Length; j++)
+                for (int j = 0; j < Order.Count; j++)
                 {
-                    if (item.type == Order[j].FoodID)
+                    if (item.type == orderArray[j].Key)
                         itemCounts[j] += item.stack;
                 }
             }
             bool canAfford = true;
             for (int i = 0; i < itemCounts.Length; i++)
             {
-                if(itemCounts[i] < Order[i].Count)
+                if(itemCounts[i] < orderArray[i].Value)
                 {
                     canAfford = false;
                     break;
                 }
-                itemCounts[i] = Order[i].Count;
+                itemCounts[i] = orderArray[i].Value;
             }
 
             //Phase 2: If the player can afford the cost, remove the correct amount of items to match the amounts of the order
@@ -133,9 +139,10 @@ internal class TableOrderUI((int FoodID, int Count)[] order, int tableID) : UISt
                 {
                     Item item = Main.LocalPlayer.inventory[i];
                     int zeroes = 0;
-                    for (int j = 0; j < Order.Length; j++)
+                    int j = 0;
+                    foreach(var pair in Order)
                     {
-                        if (item.type == Order[j].FoodID && itemCounts[j] > 0)
+                        if (item.type == pair.Key && itemCounts[j] > 0)
                         {
                             while (itemCounts[j] > 0 && item.stack > 0)
                             {
@@ -145,13 +152,13 @@ internal class TableOrderUI((int FoodID, int Count)[] order, int tableID) : UISt
                         }
                         else if (itemCounts[j] == 0)
                             zeroes++;
+                        j++;
                     }
                     if (zeroes == Main.LocalPlayer.inventory.Length)
                         break;
                 }
 
                 ModContent.GetInstance<TableOrderUISystem>().DeactivateTableOrderUI(TableID);
-                LunarCultBaseSystem.QueuedTables[TableID] = null;
 
                 foreach (NPC npc in Main.npc.Where(n => n.active && n.IsSelenicCultist() && n.ai[2] == 2 && ((int)n.ai[3]) == LunarCultBaseSystem.SeatedTables[TableID].Value.PartyID))
                 {
@@ -163,6 +170,8 @@ internal class TableOrderUI((int FoodID, int Count)[] order, int tableID) : UISt
                         CombatText.NewText(chef.Hitbox, Color.LimeGreen, GetWindfallTextValue("Dialogue.LunarCult.TheChef.Activity.AlmostDone"), true);
                     }
                 }
+
+                LunarCultBaseSystem.SeatedTables[TableID] = null;
             }
             else
             {
@@ -179,7 +188,7 @@ public class TableOrderUISystem : ModSystem
     private UserInterface[] tableUIs = new UserInterface[3];
     public bool uiOpen = false;
 
-    public void ActivateTableOrderUI(int tableID, (int FoodID, int Count)[] order)
+    public void ActivateTableOrderUI(int tableID, Dictionary<int, int> order)
     {
         uiOpen = true;
         TableOrderUIs[tableID].Order = order;
@@ -202,7 +211,7 @@ public class TableOrderUISystem : ModSystem
             tableUIs = [new UserInterface(), new UserInterface(), new UserInterface()];
             // Creating custom UIState
 
-            TableOrderUIs = [new TableOrderUI([(0, 1)], 0), new TableOrderUI([(0, 1)], 1), new TableOrderUI([(0, 1)], 2)];
+            TableOrderUIs = [new TableOrderUI(null, 0), new TableOrderUI(null, 1), new TableOrderUI(null, 2)];
 
             // Activate calls Initialize() on the UIState if not initialized, then calls OnActivate and then calls Activate on every child element
             foreach(var TableOrderUI in TableOrderUIs)

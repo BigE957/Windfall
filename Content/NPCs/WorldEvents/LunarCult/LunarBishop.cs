@@ -2,6 +2,7 @@
 using Windfall.Content.Projectiles.Other;
 using DialogueHelper.UI.Dialogue;
 using Windfall.Content.NPCs.WorldEvents.DragonCult;
+using Windfall.Content.UI.Activities;
 
 namespace Windfall.Content.NPCs.WorldEvents.LunarCult;
 
@@ -96,13 +97,14 @@ public class LunarBishop : ModNPC
         {
             case States.CafeteriaEvent:
                 const int queueGap = 64;
-                int queueID = (int)NPC.ai[3];
-                if (queueID == -1 || !LunarCultBaseSystem.Active)
+                int partyID = (int)NPC.ai[3];
+                if (partyID == -1 || !LunarCultBaseSystem.Active)
                 {
-                    if (NPC.velocity.X < 1.5f)
-                        NPC.velocity.X += 0.05f;
+                    if (NPC.velocity.X < (LunarCultBaseSystem.BaseFacingLeft ? -1.5f : 1.5f))
+                        NPC.velocity.X += LunarCultBaseSystem.BaseFacingLeft ? -0.05f : 0.05f;
                     else
-                        NPC.velocity.X = 1.5f;
+                        NPC.velocity.X = LunarCultBaseSystem.BaseFacingLeft ? -1.5f : 1.5f;
+                    NPC.direction = Math.Sign(NPC.velocity.X);
 
                     float goalY = (LunarCultBaseSystem.LunarCultBaseLocation.Y * 16 - 96) - NPC.height;
                     if (NPC.velocity.Y >= 0 && NPC.position.Y >= goalY)
@@ -114,8 +116,7 @@ public class LunarBishop : ModNPC
                     if (NPC.position.Y < goalY)
                         NPC.velocity.Y += 0.5f;
 
-                    NPC.direction = 1;
-                    if (NPC.Center.X - (LunarCultBaseSystem.LunarCultBaseLocation.X * 16 - (380 * (LunarCultBaseSystem.BaseFacingLeft ? 1 : -1))) > 800)
+                    if (NPC.Center.X - (LunarCultBaseSystem.LunarCultBaseLocation.X * 16 + (380 * (LunarCultBaseSystem.BaseFacingLeft ? -1 : 1))) > 800)
                     {
                         for (int i = 0; i <= 50; i++)
                         {
@@ -131,46 +132,79 @@ public class LunarBishop : ModNPC
                 }
                 else
                 {
-                    int subID = (int)(NPC.ai[3] - Math.Floor(NPC.ai[3])) * 10;
+                    int subID = (int)NPC.ai[1];
 
-                    if (LunarCultBaseSystem.SeatedTables.Any(t => t.HasValue && t.Value.PartyID == queueID)) //Should Be Seated
+                    if (LunarCultBaseSystem.SeatedTables.Any(t => t.HasValue && t.Value.PartyID == partyID)) //Should Be Seated
                     {
-                        int tableIndex = LunarCultBaseSystem.SeatedTables.ToList().FindIndex(t => t.HasValue && t.Value.PartyID == queueID);
+                        int tableIndex = LunarCultBaseSystem.SeatedTables.ToList().FindIndex(t => t.HasValue && t.Value.PartyID == partyID);
                         Vector2 goalLocation = LunarCultBaseSystem.CafeteriaTables[tableIndex].ToWorldCoordinates();
-                        if (subID == 0)
-                            goalLocation.X += 32 * (queueID % 2 == 0 ? -1 : 1);
-                        else
-                            goalLocation.X += 32 * (subID == 2 ? -1 : 1);
+                        goalLocation.Y += 72;
+                        int chairSide = subID == 0 ? (partyID % 2 == 0 ? -1 : 1) : (subID == 2 ? -1 : 1);
 
-                        if (NPC.Center.DistanceSQ(goalLocation) < 256)
+                        goalLocation.X += 32 * chairSide;
+
+                        if (Math.Abs(NPC.Center.X - goalLocation.X) < 8)
                         {
+                            TableOrderUISystem system = ModContent.GetInstance<TableOrderUISystem>();
                             NPC.velocity.X = 0;
+                            NPC.direction = -chairSide;
 
-                            //seated dialogue could be put here, or a seated bool could be used so we arent distance checking all the ding dang time :P
+                            if (system.TableOrderUIs[tableIndex].Order == null)
+                            {
+                                //seated dialogue could be put here
+                                Dictionary<int, int> order = [];
+                                int count = LunarCultBaseSystem.SeatedTables[tableIndex].Value.PartySize;
+                                for (int i = 0; i < count; i++)
+                                {
+                                    int entree = LunarCultBaseSystem.MenuIDs[RandFromRange(LunarCultBaseSystem.EntreeRange)];
+                                    if (!order.TryAdd(entree, 1))
+                                        order[entree]++;
+                                    int drink = LunarCultBaseSystem.MenuIDs[RandFromRange(LunarCultBaseSystem.DrinkRange)];
+                                    if (!order.TryAdd(drink, 1))
+                                        order[drink]++;
+
+                                }
+                                if (count == 2)
+                                    order.Add(LunarCultBaseSystem.MenuIDs[RandFromRange(LunarCultBaseSystem.AppetizerRange)], 1);
+                                system.ActivateTableOrderUI(tableIndex, order);
+                            }
                         }
                         else
                         {
                             if (NPC.Center.X < goalLocation.X)
                             {
-                                if (Math.Abs(NPC.velocity.X) < 1.5f)
+                                if (NPC.velocity.X < 1.5f)
                                     NPC.velocity.X += 0.05f;
                                 else
                                     NPC.velocity.X = 1.5f;
                             }
                             else
                             {
-                                if (Math.Abs(NPC.velocity.X) > -1.5f)
+                                if (NPC.velocity.X > -1.5f)
                                     NPC.velocity.X -= 0.05f;
                                 else
                                     NPC.velocity.X = -1.5f;
                             }
+                            NPC.direction = Math.Sign(NPC.velocity.X);
                         }
+
+                        if (NPC.velocity.Y >= 0 && NPC.position.Y >= goalLocation.Y - NPC.height)
+                        {
+                            NPC.position.Y = goalLocation.Y - NPC.height;
+                            if (NPC.velocity.Y != 0)
+                                NPC.velocity.Y = 0;
+                        }
+                        if (NPC.position.Y < goalLocation.Y - NPC.height)
+                            NPC.velocity.Y += 0.5f;
                     }
                     else //Within Queue
                     {
-                        int queueIndex = LunarCultBaseSystem.QueuedTables.FindIndex(t => t.HasValue && t.Value.PartyID == queueID);
+                        int queueIndex = LunarCultBaseSystem.QueuedTables.FindIndex(t => t.HasValue && t.Value.PartyID == partyID);
                         if (queueIndex == -1)
-                            Main.NewText("HEY SOMETHINGS GONE HORRIBLY WRONG BRO I CANT FIND MY QUEUE INDEX YOU MOTHERFUCKER!!!");
+                        {
+                            NPC.ai[3] = -1;
+                            return;
+                        }
 
                         LunarCultBaseSystem.Table myTable = LunarCultBaseSystem.QueuedTables[queueIndex].Value;
                         float goalOffset = 0f;
@@ -197,7 +231,7 @@ public class LunarBishop : ModNPC
                             NPC.velocity.Y += 0.5f;
                         if (queueIndex != 0 && !LunarCultBaseSystem.QueuedTables[queueIndex - 1].HasValue)
                         {
-                            goalPosition.X -= queueGap;
+                            goalPosition.X -= queueGap * (LunarCultBaseSystem.BaseFacingLeft ? -1 : 1);
                             if (NPC.Center.X - goalPosition.X < queueGap / 2 && subID != 2)
                             {
                                 LunarCultBaseSystem.QueuedTables[queueIndex - 1] = LunarCultBaseSystem.QueuedTables[queueIndex];
@@ -205,18 +239,30 @@ public class LunarBishop : ModNPC
                                     LunarCultBaseSystem.QueuedTables.RemoveAt(queueIndex);
                                 else
                                     LunarCultBaseSystem.QueuedTables[queueIndex] = null;
-                                int currentID = queueID;
+                                int currentID = partyID;
                                 foreach (NPC npc in Main.npc.Where(n => n.active && n.type == Type && ((int)n.ai[3]) == currentID))
                                     NPC.ai[3] -= 1;
                             }
                         }
-                        if (goalPosition.X < NPC.Center.X)
-                            if (NPC.velocity.X > -1.5f)
-                                NPC.velocity.X -= 0.05f;
-                            else
-                                NPC.velocity.X = -1.5f;
-                        else
+                        if (Math.Abs(goalPosition.X - NPC.Center.X) < 1.5f)
                             NPC.velocity.X = 0;
+                        else
+                        {
+                            if (goalPosition.X < NPC.Center.X)
+                            {
+                                if (NPC.velocity.X > -1.5f)
+                                    NPC.velocity.X -= 0.05f;
+                                else
+                                    NPC.velocity.X = -1.5f;
+                            }
+                            else
+                            {
+                                if (NPC.velocity.X < 1.5f)
+                                    NPC.velocity.X += 0.05f;
+                                else
+                                    NPC.velocity.X = 1.5f;
+                            }
+                        }
                     }
                 }
                 break;
@@ -224,8 +270,9 @@ public class LunarBishop : ModNPC
 
                 break;
         }
+        NPC.spriteDirection = NPC.direction;
     }
-    public override bool CanChat() => ((AIState == States.SelenicChat || AIState == States.StaticCharacter) && !ModContent.GetInstance<DialogueUISystem>().isDialogueOpen) || (AIState == States.CafeteriaEvent && NPC.ai[3] == 0 && NPC.velocity.X == 0);
+    public override bool CanChat() => ((AIState == States.SelenicChat || AIState == States.StaticCharacter) && !ModContent.GetInstance<DialogueUISystem>().isDialogueOpen);
     public override string GetChat()
     {
         Main.CloseNPCChatOrSign();
