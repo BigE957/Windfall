@@ -5,7 +5,7 @@
       "Responses": [
         {
           "Title": "I'd like to ask you something.",
-          "Heading": 3
+          "Heading": 4
         },
         {
           "Title": "I'm kinda hungry...",
@@ -14,7 +14,24 @@
       ]
     },
     {
-      "DialogueText": [ { "Text": "Well you came to the right place! What can I get for ya?" } ]
+      "DialogueText": [ { "Text": "Well you came to the right place! What can I get for ya?" } ],
+      "Responses": [
+        {
+          "Title": "An Entree!",
+          "Heading": 2
+        },
+        {
+          "Title": "An Apetizer!",
+          "Heading": 2
+        },
+        {
+          "Title": "A Drink!",
+          "Heading": 2
+        }
+      ]
+    },
+    {
+      "DialogueText": [ { "Text": "..." } ]
     },
     {
       "DialogueText": [ { "Text": "Well that's just perfect! I've got some leftovers; here you go! Enjoy!" } ],
@@ -29,15 +46,15 @@
       "Responses": [
         {
           "Title": "How'd you learn to cook so well?",
-          "Heading": 5
-        },
-        {
-          "Title": "How'd you meet the Orator?",
           "Heading": 6
         },
         {
-          "Title": "Thoughts on the Seamstress?",
+          "Title": "How'd you meet the Orator?",
           "Heading": 7
+        },
+        {
+          "Title": "Thoughts on the Seamstress?",
+          "Heading": 8
         }
       ]
     },
@@ -49,15 +66,15 @@
         },
         {
           "Title": "How'd you learn to cook so well?",
-          "Heading": 5
-        },
-        {
-          "Title": "How'd you meet the Orator?",
           "Heading": 6
         },
         {
-          "Title": "What do you think of the Seamstress?",
+          "Title": "How'd you meet the Orator?",
           "Heading": 7
+        },
+        {
+          "Title": "What do you think of the Seamstress?",
+          "Heading": 8
         }
       ]
     },
@@ -66,11 +83,11 @@
       "Responses": [
         {
           "Title": "How interesting!",
-          "Heading": 4
+          "Heading": 5
         },
         {
           "Title": "I'm glad as well.",
-          "Heading": 4
+          "Heading": 5
         }
       ]
     },
@@ -79,11 +96,11 @@
       "Responses": [
         {
           "Title": "Gotcha...",
-          "Heading": 4
+          "Heading": 5
         },
         {
           "Title": "That's nice to hear!",
-          "Heading": 4
+          "Heading": 5
         }
       ]
     },
@@ -99,7 +116,7 @@
       "Responses": [
         {
           "Title": "Will do!",
-          "Heading": 4
+          "Heading": 5
         }
       ]
     }

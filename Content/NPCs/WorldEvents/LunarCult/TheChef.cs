@@ -200,13 +200,6 @@ public class TheChef : ModNPC
                     response[1].Requirement = false;
                     return;
                 }
-                /*
-                uiSystem.CurrentTree.Dialogues[1].Responses = GetMenuResponses();
-                for (int i = 0; i < uiSystem.CurrentTree.Dialogues[1].Responses.Length; i++)
-                {
-                    uiSystem.CurrentTree.Dialogues[1].Responses[i].Heading = 2;
-                }
-                */
                 break;
         }
     }
@@ -250,10 +243,32 @@ public class TheChef : ModNPC
         }
         else if (treeKey == "TheChef/Default")
         {
-            if (dialogueID == 1)
+            if(dialogueID == 1)
+            {
+                uiSystem.CurrentTree.Dialogues[2].Responses = GetMenuResponses(buttonID);
+                uiSystem.CurrentDialogueContext.Arguments[1] = buttonID;
+                for (int i = 0; i < uiSystem.CurrentTree.Dialogues[1].Responses.Length; i++)
+                {
+                    uiSystem.CurrentTree.Dialogues[2].Responses[i].Heading = 2;
+                }
+            }
+            if (dialogueID == 2)
             {
                 Main.LocalPlayer.LunarCult().hasRecievedChefMeal = true;
-                Item item = Main.item[Item.NewItem(Item.GetSource_NaturalSpawn(), chef.Center, Vector2.Zero, MenuIDs[buttonID])];
+                int foodID = 0;
+                switch (uiSystem.CurrentDialogueContext.Arguments[1])
+                {
+                    case 0:
+                        foodID = MenuIDs[buttonID];
+                        break;
+                    case 1:
+                        foodID = MenuIDs[buttonID + AppetizerRange.start];
+                        break;
+                    case 2:
+                        foodID = MenuIDs[buttonID + DrinkRange.start];
+                        break;
+                }
+                Item item = Main.item[Item.NewItem(Item.GetSource_NaturalSpawn(), chef.Center, Vector2.Zero, foodID)];
                 item.velocity = new Vector2(1.75f, Main.rand.NextFloat(-3, 0));
             }
             else if (Main.LocalPlayer.LunarCult().apostleQuestTracker == 0 && dialogueID == 7)

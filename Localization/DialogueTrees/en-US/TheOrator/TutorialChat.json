@@ -86,19 +86,21 @@
       "DialogueText": [ { "Text": "I believe that is all then! I do hope this will be a fruitful arrangement for the both of us." } ]
     },
     {
-      "DialogueText": [ { "Text": "..." } ]
+      "DialogueText": [ { "Text": "..." } ],
+      "Music": { "ID": -1 }
     },
     {
-      "DialogueText": [ { "Text": "Oh... one other thing." } ]
+      "DialogueText": [ { "Text": "Oh... one other thing." } ],
+      "Music": { "ID": -1 }
     },
     {
-      "DialogueText": [ { "Text": "Do not go in the basement." } ]
+      "DialogueText": [ { "Text": "Do not go in the basement." } ],
+      "Music": { "ID": -1 }
     },
     {
-      "DialogueText": [ { "Text": "That is all." } ]
+      "DialogueText": [ { "Text": "That is all." } ],
+      "Music": { "ID": -1 }
     }
   ],
-  "Characters": [
-    "TheOrator"
-  ]
+  "Characters": [ "TheOrator" ]
 }

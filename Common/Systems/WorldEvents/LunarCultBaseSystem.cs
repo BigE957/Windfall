@@ -783,6 +783,7 @@ public class LunarCultBaseSystem : ModSystem
                                 SeatedTables[i] = null;
 
                             SatisfiedCustomers = 0;
+                            CustomerTimer = 360;
                             break;
                         case SystemStates.OratorVisit:
                             ActivityCoords = new Point(LunarCultBaseLocation.X * 16 + (BaseFacingLeft ? -1858 : 1858), (CultBaseTileArea.Top + 30) * 16);
@@ -988,9 +989,7 @@ public class LunarCultBaseSystem : ModSystem
                                     SeatedTables[i] = new(QueuedTables[0].Value.PartyID, QueuedTables[0].Value.PartySize);
                                     QueuedTables.RemoveAt(0);
                                     if (QueuedTables.Count == 0 && SatisfiedCustomers >= CustomerGoal)
-                                    {
                                         CombatText.NewText(Main.npc[NPC.FindFirstNPC(ModContent.NPCType<TheChef>())].Hitbox, Color.LimeGreen, GetWindfallTextValue("Dialogue.LunarCult.TheChef.Activity.AlmostDone"), true);
-                                    }
                                 }
                         }
 
