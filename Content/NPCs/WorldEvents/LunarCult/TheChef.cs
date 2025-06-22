@@ -255,19 +255,12 @@ public class TheChef : ModNPC
             if (dialogueID == 2)
             {
                 Main.LocalPlayer.LunarCult().hasRecievedChefMeal = true;
-                int foodID = 0;
-                switch (uiSystem.CurrentDialogueContext.Arguments[1])
+                int foodID = uiSystem.CurrentDialogueContext.Arguments[1] switch
                 {
-                    case 0:
-                        foodID = MenuIDs[buttonID];
-                        break;
-                    case 1:
-                        foodID = MenuIDs[buttonID + AppetizerRange.start];
-                        break;
-                    case 2:
-                        foodID = MenuIDs[buttonID + DrinkRange.start];
-                        break;
-                }
+                    1 => MenuIDs[buttonID + AppetizerRange.start],
+                    2 => MenuIDs[buttonID + DrinkRange.start],
+                    _ => MenuIDs[buttonID],
+                };
                 Item item = Main.item[Item.NewItem(Item.GetSource_NaturalSpawn(), chef.Center, Vector2.Zero, foodID)];
                 item.velocity = new Vector2(1.75f, Main.rand.NextFloat(-3, 0));
             }
@@ -338,21 +331,18 @@ public class TheChef : ModNPC
     }
     public override void PostDraw(SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor)
     {
-        //if (CurrentAnimation != Animation.Cooking)
-        {
-            Texture2D texture = PotTexture.Value;
-            Rectangle frame = texture.Frame(1, Main.npcFrameCount[Type], 0, (int)((Main.GlobalTimeWrappedHourly * 12) % Main.npcFrameCount[Type]));
-            Vector2 offset = new(BaseFacingLeft ? 17 : -17, 0);
+        Texture2D texture = PotTexture.Value;
+        Rectangle frame = texture.Frame(1, Main.npcFrameCount[Type], 0, (int)((Main.GlobalTimeWrappedHourly * 12) % Main.npcFrameCount[Type]));
+        Vector2 offset = new(BaseFacingLeft ? 17 : -17, 0);
 
-            spriteBatch.Draw(texture, NPC.Center - screenPos + offset, frame, drawColor, 0f, frame.Size() * 0.5f, 2, 0f, 0f);
-        }
+        spriteBatch.Draw(texture, NPC.Center - screenPos + offset, frame, drawColor, 0f, frame.Size() * 0.5f, 2, 0f, 0f);
 
         if (ItemCooking == -1)
             return;
         float barScale = 1.34f;
 
-        var barBG = ModContent.Request<Texture2D>("CalamityMod/UI/MiscTextures/GenericBarBack").Value;
-        var barFG = ModContent.Request<Texture2D>("CalamityMod/UI/MiscTextures/GenericBarFront").Value;
+        Texture2D barBG = LoadSystem.DefaultBarBG.Value;
+        Texture2D barFG = LoadSystem.DefaultBarFG.Value;
 
         Vector2 barOrigin = barBG.Size() * 0.5f;
         float yOffset = 23f;
@@ -365,5 +355,4 @@ public class TheChef : ModNPC
         spriteBatch.Draw(barBG, drawPos, null, bgColor, 0f, barOrigin, barScale, 0f, 0f);
         spriteBatch.Draw(barFG, drawPos, frameCrop, Color.Lerp(Color.Yellow, Color.LimeGreen, TimeCooking / CookTime), 0f, barOrigin, barScale, 0f, 0f);
     }
-
 }

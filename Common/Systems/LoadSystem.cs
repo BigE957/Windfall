@@ -17,6 +17,8 @@ public class LoadSystem : ModSystem
     public static Asset<Texture2D> Circle;
     public static Asset<Texture2D> SwordSlash;
     public static Asset<Texture2D> PerlinNoise;
+    public static Asset<Texture2D> DefaultBarBG;
+    public static Asset<Texture2D> DefaultBarFG;
     #endregion
 
     public override void Load()
@@ -40,6 +42,8 @@ public class LoadSystem : ModSystem
         Circle = ModContent.Request<Texture2D>("Windfall/Assets/Graphics/Metaballs/BasicCircle");
         SwordSlash = ModContent.Request<Texture2D>("CalamityMod/ExtraTextures/Trails/SwordSlashTexture");
         PerlinNoise = ModContent.Request<Texture2D>("Windfall/Assets/Graphics/Extra/PerlinNoise");
+        DefaultBarBG = ModContent.Request<Texture2D>("CalamityMod/UI/MiscTextures/GenericBarBack");
+        DefaultBarFG = ModContent.Request<Texture2D>("CalamityMod/UI/MiscTextures/GenericBarFront");
         #endregion
     }
     public override void PostSetupContent()

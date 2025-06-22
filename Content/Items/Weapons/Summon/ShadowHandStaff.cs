@@ -54,7 +54,6 @@ public class ShadowHandStaff : ModItem, ILocalizedModType
     public int GrazePoints = 0;
     internal const float MaxGraze = 100f;
 
-
     public override bool PreDrawTooltip(ReadOnlyCollection<TooltipLine> lines, ref int x, ref int y)
     {
         int lineCount = 0;
@@ -203,8 +202,8 @@ public class ShadowHandStaff : ModItem, ILocalizedModType
 
         float barScale = 1f;
 
-        var barBG = ModContent.Request<Texture2D>("CalamityMod/UI/MiscTextures/GenericBarBack").Value;
-        var barFG = ModContent.Request<Texture2D>("CalamityMod/UI/MiscTextures/GenericBarFront").Value;
+        Texture2D barBG = LoadSystem.DefaultBarBG.Value;
+        Texture2D barFG = LoadSystem.DefaultBarFG.Value;
 
         Vector2 barOrigin = barBG.Size() * 0.5f;
         Vector2 drawPos = (myPlayer.Center - Main.screenPosition) + Vector2.UnitY * barScale * myPlayer.height;
