@@ -26,9 +26,13 @@ public class WretchedFountain : ModProjectile
 
     int Time = 0;
     static int upTime = 1200;
+    private static int Orator => NPC.FindFirstNPC(ModContent.NPCType<TheOrator>());
+
 
     public override void OnSpawn(IEntitySource source)
     {
+        Projectile.position.Y = Main.npc[Orator].As<TheOrator>().target.Center.Y - Projectile.height / 2f;
+        Projectile.position.Y += 360;
         Point ground = FindSurfaceBelow(Projectile.Center.ToTileCoordinates(), true);
         Projectile.Center = ground.ToWorldCoordinates();
     }
@@ -36,10 +40,11 @@ public class WretchedFountain : ModProjectile
     public override void AI()
     {
         float openness = Clamp(Time / 30f, 0f, 1f);
-        int Orator = NPC.FindFirstNPC(ModContent.NPCType<TheOrator>());
         if(Time < (CalamityWorld.revenge ? 60 : 30) && Orator != -1)
         {
-            Point ground = FindSurfaceBelow(Main.npc[Orator].Center.ToTileCoordinates(), true);
+            Projectile.position.Y = Main.npc[Orator].As<TheOrator>().target.Center.Y - Projectile.height / 2f;
+            Projectile.position.Y += 360;
+            Point ground = FindSurfaceBelow(Projectile.Center.ToTileCoordinates(), false);
             Projectile.Center = ground.ToWorldCoordinates();
         }
         float localPlayerY = Main.LocalPlayer.Bottom.Y + Main.screenHeight / 2f;
@@ -57,10 +62,8 @@ public class WretchedFountain : ModProjectile
         Time++;
 
         if (Time == upTime)
-        {
             for (int i = 0; i < 48; i++)
                 EmpyreanMetaball.SpawnDefaultParticle(new(Projectile.Center.X + (Main.rand.NextFloat(-96, 96) * openness), Projectile.Center.Y), Vector2.UnitY.RotatedBy(Main.rand.NextFloat(-PiOver2, PiOver2)) * Main.rand.NextFloat(-14, -4), Main.rand.NextFloat(80, 160));
-        }
     }
 
     public override bool PreDraw(ref Color lightColor)

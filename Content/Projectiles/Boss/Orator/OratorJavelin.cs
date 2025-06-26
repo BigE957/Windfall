@@ -146,9 +146,9 @@ public class OratorJavelin : ModProjectile
                     float reelBackSpeedExponent = 2.6f;
                     float reelBackCompletion = Utils.GetLerpValue(0f, 30, Time - Delay, true);
                     float reelBackSpeed = Lerp(2.5f, 16f, MathF.Pow(reelBackCompletion, reelBackSpeedExponent));
-                    Vector2 reelBackVelocity = (target.Center - Projectile.Center).SafeNormalize(Vector2.UnitY) * -reelBackSpeed;
+                    Vector2 reelBackVelocity = Projectile.rotation.ToRotationVector2() * -reelBackSpeed;
                     Projectile.velocity = Vector2.Lerp(Projectile.velocity, reelBackVelocity, 0.25f);
-                    Projectile.rotation = (target.Center - Projectile.Center).ToRotation();
+                    //Projectile.rotation = (target.Center - Projectile.Center).ToRotation();
                 }
                 else if (Time - Delay == 30)
                 {

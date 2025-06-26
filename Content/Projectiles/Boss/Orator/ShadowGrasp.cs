@@ -256,6 +256,7 @@ public class ShadowGrasp : ModProjectile
                         }
                     }
                 }
+                Projectile.direction = Math.Sign(attackDir.X);
 
                 break;
         }

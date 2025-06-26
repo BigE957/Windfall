@@ -856,8 +856,8 @@ public class TheOrator : ModNPC
 
                 break;
             case States.DarkTides:
-                int attackFrequency = CalamityWorld.death ? 750 : CalamityWorld.revenge ? 800 : 850;
-                int attackGap = CalamityWorld.death ? 375 : CalamityWorld.revenge ? 400 : 425;
+                int attackFrequency = 850;
+                int attackGap = attackFrequency / 2;
                 if (aiCounter < attackFrequency * 3 - 20)
                 {
                     border = Main.projectile.First(p => p.active && p.type == ModContent.ProjectileType<OratorBorder>());
@@ -866,7 +866,7 @@ public class TheOrator : ModNPC
                         attackCounter = -PiOver2 + Main.rand.NextFloat(0, Pi);
                         if (Main.netMode != NetmodeID.MultiplayerClient)
                         {
-                            Projectile p = Projectile.NewProjectileDirect(Terraria.Entity.GetSource_NaturalSpawn(), border.Center, Vector2.UnitX.RotatedBy(attackCounter), ModContent.ProjectileType<DarkTide>(), 0, 0f, ai0: 180, ai1: 1500, ai2: CalamityWorld.death ? 6f : CalamityWorld.revenge ? 5.5f : 5f);
+                            Projectile p = Projectile.NewProjectileDirect(Terraria.Entity.GetSource_NaturalSpawn(), border.Center, Vector2.UnitX.RotatedBy(attackCounter), ModContent.ProjectileType<DarkTide>(), 0, 0f, ai0: 150, ai1: 1500, ai2: CalamityWorld.death ? 5f : CalamityWorld.revenge ? 4.5f : 4f);
                             SoundEngine.PlaySound(SoundID.DD2_EtherianPortalSpawnEnemy with { Volume = 10f }, p.Center);
                         }
                     }
@@ -887,7 +887,7 @@ public class TheOrator : ModNPC
                         }
                         if (Main.netMode != NetmodeID.MultiplayerClient)
                         {
-                            Projectile p = Projectile.NewProjectileDirect(Terraria.Entity.GetSource_NaturalSpawn(), border.Center, Vector2.UnitX.RotatedBy(attackCounter + Pi), ModContent.ProjectileType<DarkTide>(), 0, 0f, ai0: 180, ai1: 1500, ai2: CalamityWorld.death ? 6f : CalamityWorld.revenge ? 5.5f : 5f);
+                            Projectile p = Projectile.NewProjectileDirect(Terraria.Entity.GetSource_NaturalSpawn(), border.Center, Vector2.UnitX.RotatedBy(attackCounter + Pi), ModContent.ProjectileType<DarkTide>(), 0, 0f, ai0: 150, ai1: 1500, ai2: CalamityWorld.death ? 5f : CalamityWorld.revenge ? 4.5f : 4f);
                             SoundEngine.PlaySound(SoundID.DD2_EtherianPortalSpawnEnemy with { Volume = 10f }, p.Center);
                         }
                     }

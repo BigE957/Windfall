@@ -58,6 +58,8 @@ public class OratorHand : ModNPC
     private Rectangle cuffFrame = new(0, 0, 150, 114);
     private int cuffCounter = 0;
 
+    int barrageFireRate = 120;
+
     public static Asset<Texture2D> Cuffs;
 
     public override void SetStaticDefaults()
@@ -586,21 +588,21 @@ public class OratorHand : ModNPC
                                 NPC.velocity = (goalPos - NPC.Center).SafeNormalize(Vector2.Zero) * ((goalPos - NPC.Center).Length() / 10f);
                                 NPC.direction = -WhatHand;                                
 
-                                int projectileCounter = (aiCounter + 45) % 90;
+                                int projectileCounter = (aiCounter + (barrageFireRate / 2)) % barrageFireRate;
                                 Vector2 ToTarget = (modOrator.target.Center - NPC.Center).SafeNormalize(Vector2.Zero);
 
                                 NPC.rotation = ToTarget.ToRotation();
 
                                 if (projectileCounter == 0)
                                 {
-                                    bool everyOther = (aiCounter + 45) % 180 == 0;
+                                    bool everyOther = (aiCounter + 45) % (barrageFireRate * 2) == 0;
 
-                                    FireBarrageSpread(ToTarget, everyOther);
+                                    FireBarrageSpread(NPC, ToTarget, everyOther);
                                 }
                                 else
                                 {
                                     Vector2 spawn = NPC.Center + (NPC.velocity * 2) + Vector2.UnitX * 72 * (ToTarget.X < 0 ? -1 : 1) + (Vector2.UnitY * -36);
-                                    float lerpValue = projectileCounter / 90f;
+                                    float lerpValue = projectileCounter / (float)barrageFireRate;
                                     if (projectileCounter % 5 == 0 && Main.rand.NextBool(lerpValue))
                                     {
                                         Vector2 spawnPos = spawn + Main.rand.NextVector2CircularEdge(4f, 4f);
@@ -614,7 +616,7 @@ public class OratorHand : ModNPC
                             {
                                 CurrentPose = Pose.Fist;
 
-                                goalPos = modOrator.target.Center + new Vector2(600f, 0);
+                                goalPos = modOrator.target.Center + new Vector2(400f, 0);
 
                                 NPC.velocity = (goalPos - NPC.Center).SafeNormalize(Vector2.Zero) * ((goalPos - NPC.Center).Length() / 10f);
                                 NPC.direction = -WhatHand;
@@ -656,21 +658,21 @@ public class OratorHand : ModNPC
                                 NPC.velocity = (goalPos - NPC.Center).SafeNormalize(Vector2.Zero) * ((goalPos - NPC.Center).Length() / 10f);
                                 NPC.direction = WhatHand;
 
-                                int projectileCounter = aiCounter % 90;
+                                int projectileCounter = aiCounter % barrageFireRate;
                                 Vector2 ToTarget = (modOrator.target.Center - NPC.Center).SafeNormalize(Vector2.Zero);
 
                                 NPC.rotation = ToTarget.ToRotation();
 
                                 if (projectileCounter == 0)
                                 {
-                                    bool everyOther = aiCounter % 180 == 0;
+                                    bool everyOther = aiCounter % (barrageFireRate * 2) == 0;
 
-                                    FireBarrageSpread(ToTarget, everyOther);
+                                    FireBarrageSpread(NPC, ToTarget, everyOther);
                                 }
                                 else
                                 {
                                     Vector2 spawn = NPC.Center + (NPC.velocity * 2) + Vector2.UnitX * 72 * (ToTarget.X < 0 ? -1 : 1) + (Vector2.UnitY * -36);
-                                    float lerpValue = projectileCounter / 90f;
+                                    float lerpValue = projectileCounter / (float)barrageFireRate;
                                     if (projectileCounter % 5 == 0 && Main.rand.NextBool(lerpValue))
                                     {
                                         Vector2 spawnPos = spawn + Main.rand.NextVector2CircularEdge(4f, 4f);
@@ -683,7 +685,7 @@ public class OratorHand : ModNPC
                             {
                                 CurrentPose = Pose.Fist;
 
-                                goalPos = modOrator.target.Center + new Vector2(-600f, 0);
+                                goalPos = modOrator.target.Center + new Vector2(-400f, 0);
 
                                 NPC.velocity = (goalPos - NPC.Center).SafeNormalize(Vector2.Zero) * ((goalPos - NPC.Center).Length() / 10f);
                                 NPC.direction = WhatHand;
@@ -808,21 +810,21 @@ public class OratorHand : ModNPC
                                 NPC.velocity = (goalPos - NPC.Center).SafeNormalize(Vector2.Zero) * ((goalPos - NPC.Center).Length() / 10f);
                                 NPC.direction = -WhatHand;
 
-                                int projectileCounter = (aiCounter + 90) % 90;
+                                int projectileCounter = (aiCounter + barrageFireRate) % barrageFireRate;
                                 Vector2 ToTarget = (modOrator.target.Center - NPC.Center).SafeNormalize(Vector2.Zero);
 
                                 NPC.rotation = ToTarget.ToRotation();
 
                                 if (projectileCounter == 0)
                                 {
-                                    bool everyOther = (aiCounter + 90) % 180 == 0;
+                                    bool everyOther = (aiCounter + barrageFireRate) % (barrageFireRate * 2) == 0;
 
-                                    FireBarrageSpread(ToTarget, everyOther);
+                                    FireBarrageSpread(NPC, ToTarget, everyOther);
                                 }
                                 else
                                 {
                                     Vector2 spawn = NPC.Center + (NPC.velocity * 2) + Vector2.UnitX * 72 * (ToTarget.X < 0 ? -1 : 1) + (Vector2.UnitY * -36);
-                                    float lerpValue = projectileCounter / 90f;
+                                    float lerpValue = projectileCounter / (float)barrageFireRate;
                                     if (projectileCounter % 5 == 0 && Main.rand.NextBool(lerpValue))
                                     {
                                         Vector2 spawnPos = spawn + Main.rand.NextVector2CircularEdge(4f, 4f);
@@ -836,7 +838,7 @@ public class OratorHand : ModNPC
                             {
                                 CurrentPose = Pose.Fist;
 
-                                goalPos = modOrator.target.Center + new Vector2(-600f, 0);
+                                goalPos = modOrator.target.Center + new Vector2(-400f, 0);
 
                                 NPC.velocity = (goalPos - NPC.Center).SafeNormalize(Vector2.Zero) * ((goalPos - NPC.Center).Length() / 10f);
                                 NPC.direction = -WhatHand;
@@ -887,7 +889,7 @@ public class OratorHand : ModNPC
                                 {
                                     bool everyOther = (aiCounter + 45) % 180 == 0;
 
-                                    FireBarrageSpread(ToTarget, everyOther);
+                                    FireBarrageSpread(NPC, ToTarget, everyOther);
                                 }
                                 else
                                 {
@@ -905,7 +907,7 @@ public class OratorHand : ModNPC
                             {
                                 CurrentPose = Pose.Fist;
 
-                                goalPos = modOrator.target.Center + new Vector2(600f, 0);
+                                goalPos = modOrator.target.Center + new Vector2(400f, 0);
 
                                 NPC.velocity = (goalPos - NPC.Center).SafeNormalize(Vector2.Zero) * ((goalPos - NPC.Center).Length() / 10f);
                                 NPC.direction = WhatHand;
@@ -1168,7 +1170,10 @@ public class OratorHand : ModNPC
     }
     
     public override void PostDraw(SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor)
-    {            
+    {
+        if (deadCounter >= 360)
+            return;
+
         Texture2D texture = Cuffs.Value;
         cuffFrame.Width = texture.Width;
         cuffFrame.Height = texture.Height / 9;       
@@ -1208,12 +1213,12 @@ public class OratorHand : ModNPC
         CurrentPose = (Pose)reader.ReadByte();
     }
 
-    private void FireBarrageSpread(Vector2 toTarget, bool everyOther)
+    private static void FireBarrageSpread(NPC npc, Vector2 toTarget, bool everyOther)
     {
         float startSpeed = CalamityWorld.death ? 1f : CalamityWorld.revenge ? 0f : Main.expertMode ? -1f : -2f;
 
-        SoundEngine.PlaySound(SoundID.DD2_OgreSpit, NPC.Center);
-        Vector2 spawnPos = NPC.Center + (NPC.velocity * 2) + Vector2.UnitX * 72 * (toTarget.X < 0 ? -1 : 1) + (Vector2.UnitY * -36);
+        SoundEngine.PlaySound(SoundID.DD2_OgreSpit, npc.Center);
+        Vector2 spawnPos = npc.Center + (npc.velocity * 2) + Vector2.UnitX * 72 * (toTarget.X < 0 ? -1 : 1) + (Vector2.UnitY * -36);
 
         for(int i = 0; i < 5; i++)
         {
