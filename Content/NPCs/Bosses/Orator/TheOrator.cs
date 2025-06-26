@@ -260,32 +260,29 @@ public class TheOrator : ModNPC
                     return;
                 }
                 break;
-            case States.DarkSpawn:                
-                const int EndTime = 1800;
-                Vector2 homeInVec;
-                float distance;
+            case States.DarkSpawn:
+                #region Movement
+                Vector2 homeInVec = target.Center - NPC.Center;
+                float distance = homeInVec.Length();
+                homeInVec.Normalize();
+                if (distance > 350)
+                    NPC.velocity = (NPC.velocity * 40f + homeInVec * 18f) / 41f;
+                else
+                {
+                    if (distance < 300)
+                        NPC.velocity = (NPC.velocity * 40f + homeInVec * -18f) / 41f;
+                    else
+                        NPC.velocity *= 0.975f;
+                }
+                #endregion
+                const int EndTime = 720;
 
                 if (Main.projectile.Any(p => p.active && p.type == ModContent.ProjectileType<SelenicIdol>()))
                     aiCounter = 0;
 
                 NPC.damage = 0;
-                if (aiCounter > 1200)
+                if (aiCounter > 120)
                 {
-                    #region Movement
-                    homeInVec = target.Center - NPC.Center;
-                    distance = homeInVec.Length();
-                    homeInVec.Normalize();
-                    if (distance > 350)
-                        NPC.velocity = (NPC.velocity * 40f + homeInVec * 18f) / 41f;
-                    else
-                    {
-                        if (distance < 300)
-                            NPC.velocity = (NPC.velocity * 40f + homeInVec * -18f) / 41f;
-                        else
-                            NPC.velocity *= 0.975f;
-                    }
-                    #endregion
-
                     if (ShadowGrasp.hands.Count > 0 && aiCounter % 60 == 0)
                     {
                         int index = -1;
@@ -296,7 +293,7 @@ public class TheOrator : ModNPC
 
                         Main.projectile[ShadowGrasp.hands[index]].ai[0] = 2;
                     }
-                    else if(aiCounter > EndTime)
+                    else if (aiCounter > EndTime)
                     {
                         aiCounter = 0;
                         target = Main.player[Player.FindClosest(NPC.Center, NPC.width, NPC.height)];
@@ -310,28 +307,6 @@ public class TheOrator : ModNPC
                         attackCounter = 0;
                         return;
                     }
-                }
-                else
-                {
-                    #region Movement
-                    /*
-                    homeInVec = target.Center - NPC.Center;
-                    distance = homeInVec.Length();
-                    homeInVec.Normalize();
-                    if (distance > 350)
-                        NPC.velocity = (NPC.velocity * 40f + homeInVec * 8f) / 41f;
-                    else
-                    {
-                        if (distance < 300)
-                            NPC.velocity = (NPC.velocity * 40f + homeInVec * -8f) / 41f;
-                        else
-                            NPC.velocity *= 0.975f;
-                    }
-                    */
-                    if(aiCounter <= 30)
-                        VectorToTarget = target.Center + Vector2.UnitY * -300;
-                    NPC.velocity = (VectorToTarget - NPC.Center) / 20f;
-                    #endregion
                 }
                 break;
             case States.DarkBarrage:
