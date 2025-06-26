@@ -70,7 +70,7 @@ public class ShadowGrasp : ModProjectile
         }
     }
 
-    public static List<Projectile> hands => [.. Main.projectile.Where(p => p.active && p.type == ModContent.ProjectileType<ShadowGrasp>())];
+    public static List<int> hands = [];
 
     public static int MaxHands => (CalamityWorld.death ? 7 : CalamityWorld.revenge ? 5 : Main.expertMode ? 3 : 2) * 2 + 4;
 
@@ -129,7 +129,7 @@ public class ShadowGrasp : ModProjectile
 
                 if (Time == 0)
                 {
-                    handID = hands.IndexOf(Projectile);
+                    handID = hands.IndexOf(Projectile.whoAmI);
                 }
                 if (Time == 1)
                 {
@@ -139,18 +139,18 @@ public class ShadowGrasp : ModProjectile
                         {
                             case 0:
                             case 1:
-                                partnerIndex = hands[handID + 2].whoAmI;
+                                partnerIndex = hands[handID + 2];
                                 break;
                             case 2:
                             case 3:
-                                partnerIndex = hands[handID - 2].whoAmI;
+                                partnerIndex = hands[handID - 2];
                                 break;
                         }
                     }
                     else
                     {
                         bool frontHalf = handID < (MaxHands - 4) / 2;
-                        partnerIndex = hands[handID + ((MaxHands - 4) / (frontHalf ? 2 : -2))].whoAmI;
+                        partnerIndex = hands[handID + ((MaxHands - 4) / (frontHalf ? 2 : -2))];
                     }
                 }
 
@@ -246,9 +246,11 @@ public class ShadowGrasp : ModProjectile
                         {
                             Projectile.velocity = Vector2.Zero;
                             Projectile.active = false;
+                            hands.Remove(Projectile.whoAmI);
 
                             Main.projectile[partnerIndex].velocity = Vector2.Zero;
                             Main.projectile[partnerIndex].active = false;
+                            hands.Remove(Main.projectile[partnerIndex].whoAmI);
 
                             Explode();
                         }

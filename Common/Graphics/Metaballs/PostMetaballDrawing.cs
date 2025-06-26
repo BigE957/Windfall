@@ -17,10 +17,6 @@ public class PostMetaballDrawing : ModSystem
     {
         Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.NonPremultiplied, SamplerState.PointClamp, DepthStencilState.Default, Main.Rasterizer, null, Matrix.Identity);
 
-        foreach (NPC npc in Main.ActiveNPCs)
-            if (npc.ModNPC != null && npc.ModNPC is ShadowHand hand)
-                hand.PostDraw(Main.spriteBatch, Main.screenPosition, EmpyreanMetaball.BorderColor);
-
         foreach (Projectile proj in Main.ActiveProjectiles)
             if (proj.ModProjectile != null && proj.ModProjectile is ShadowGrasp hand)
                 hand.PostDraw(EmpyreanMetaball.BorderColor);

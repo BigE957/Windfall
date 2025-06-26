@@ -51,7 +51,7 @@ public class WretchedFountain : ModProjectile
             if (Main.netMode != NetmodeID.MultiplayerClient)
             {
                 Vector2 spawnPos = new(Projectile.Center.X + Main.rand.NextFloat(-72, 72), Projectile.Center.Y + Main.rand.NextFloat(0, 32));
-                Projectile.NewProjectileDirect(Terraria.Entity.GetSource_NaturalSpawn(), spawnPos, Vector2.UnitY.RotatedBy(Main.rand.NextFloat(-0.25f, 0.25f)) * Main.rand.NextFloat(-16, -4), ModContent.ProjectileType<DarkGlob>(), 100, 0f, -1, 2, Main.rand.NextFloat(0.5f, 1f));
+                Projectile.NewProjectileDirect(Terraria.Entity.GetSource_NaturalSpawn(), spawnPos, Vector2.UnitY.RotatedBy(Main.rand.NextFloat(-0.25f, 0.25f)) * Main.rand.NextFloat(-16, -4), ModContent.ProjectileType<DarkGlob>(), TheOrator.GlobDamage, 0f, -1, 2, Main.rand.NextFloat(0.5f, 1f));
             }
         }
         Time++;

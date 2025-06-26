@@ -129,7 +129,7 @@ public class OratorSky : CustomSky
         Vector2 halfSizeTexture = new(bloomRing.Width / 2, bloomRing.Height / 2);
         spriteBatch.Draw(bloomRing, position, null, Color.DarkOliveGreen * Opacity, counter / 100f, halfSizeTexture, 1.4375f * resolutionScale.X, SpriteEffects.None, 0f);
         Main.spriteBatch.End();
-        Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.LinearClamp, DepthStencilState.None, Main.Rasterizer, null, Utilities.GetCustomSkyBackgroundMatrix());
+        Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.NonPremultiplied, SamplerState.LinearClamp, DepthStencilState.None, Main.Rasterizer, null, Utilities.GetCustomSkyBackgroundMatrix());
     }
     public override void Update(GameTime gameTime)
     {

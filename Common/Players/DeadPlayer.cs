@@ -28,7 +28,7 @@ public class DeadPlayer : ModPlayer
         {
             damageSource = PlayerDeathReason.ByCustomReason(GetWindfallLocalText("Status.Death.Hand." + Main.rand.Next(1, 3 + 1)).ToNetworkText(Player.name));
         }
-        if ((damageSource.SourceNPCIndex >= 0 && Main.npc[damageSource.SourceNPCIndex].type == ModContent.NPCType<ShadowHand>()) || damageSource.SourceProjectileType == ModContent.ProjectileType<DarkCoalescence>() || damageSource.SourceProjectileType == ModContent.ProjectileType<UnstableDarkness>() || damageSource.SourceProjectileType == ModContent.ProjectileType<EmpyreanThorn>())
+        if (damageSource.SourceProjectileType == ModContent.ProjectileType<ShadowGrasp>() || damageSource.SourceProjectileType == ModContent.ProjectileType<DarkCoalescence>() || damageSource.SourceProjectileType == ModContent.ProjectileType<UnstableDarkness>() || damageSource.SourceProjectileType == ModContent.ProjectileType<EmpyreanThorn>())
         {
             damageSource = PlayerDeathReason.ByCustomReason(GetWindfallLocalText("Status.Death.BigDark." + Main.rand.Next(1, 3 + 1)).ToNetworkText(Player.name));
         }

@@ -194,8 +194,9 @@ public class SelenicIdol : ModProjectile, IEmpyreanDissolve
                     Orator = Main.npc[NPC.FindFirstNPC(ModContent.NPCType<TheOrator>())];
                 if (Main.netMode != NetmodeID.MultiplayerClient && Orator != null && Orator.ai[0] == 2 && (float)Orator.life / (float)Orator.lifeMax > 0.1f)
                 {
+                    ShadowGrasp.hands.Clear();
                     for (int i = 0; i < ShadowGrasp.MaxHands; i++)
-                        Projectile.NewProjectile(Terraria.Entity.GetSource_NaturalSpawn(), Projectile.Center, Vector2.Zero, ModContent.ProjectileType<ShadowGrasp>(), TheOrator.BoltDamage, 0);
+                        ShadowGrasp.hands.Add(Projectile.NewProjectile(Terraria.Entity.GetSource_NaturalSpawn(), Projectile.Center, Vector2.Zero, ModContent.ProjectileType<ShadowGrasp>(), TheOrator.BoltDamage, 0));
 
                     for (int i = 0; i < 24; i++)
                     {

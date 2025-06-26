@@ -291,9 +291,7 @@ public class OratorHand : ModNPC
         }
         #endregion
 
-        if (NPC.AnyNPCs(ModContent.NPCType<ShadowHand>()))
-            NPC.dontTakeDamage = true;
-        else if(NPC.life != 1)
+        if(NPC.life != 1)
             NPC.dontTakeDamage = false;
 
         if (modOrator.AIState == TheOrator.States.Spawning)
@@ -1026,16 +1024,61 @@ public class OratorHand : ModNPC
                     break;
                 case TheOrator.States.DarkSpawn:
                     CurrentPose = Pose.Palm;
-
                     NPC.damage = 0;
-                    goal = new(orator.Center.X + (240 * WhatHand), orator.Center.Y);
-                    goal.X += (float)Math.Sin(aiCounter / 20f) * 12f * WhatHand;
 
-                    #region Movement
-                    NPC.velocity = (goal - NPC.Center).SafeNormalize(Vector2.Zero) * ((goal - NPC.Center).Length() / 10f);
-                    NPC.rotation = Pi + PiOver2;
-                    NPC.direction = -WhatHand;
-                    #endregion
+                    if (modOrator.aiCounter > 1200)
+                    {
+                        goal = new(orator.Center.X + (240 * WhatHand), orator.Center.Y);
+                        goal.X += (float)Math.Sin(aiCounter / 20f) * 12f * WhatHand;
+
+                        #region Movement
+                        NPC.velocity = (goal - NPC.Center).SafeNormalize(Vector2.Zero) * ((goal - NPC.Center).Length() / 10f);
+                        NPC.rotation = Pi + PiOver2;
+                        NPC.direction = -WhatHand;
+                        #endregion
+                    }
+                    else
+                    {
+                        if (aiCounter > 1)
+                        {
+                            float maxDist = 1400;
+                            float dist = Clamp(Lerp(32, maxDist, aiCounter / 180f), 32, maxDist);
+                            if (dist == maxDist)
+                                NPC.damage = StatCorrections.ScaleContactDamage(Main.masterMode ? 360 : CalamityWorld.death ? 280 : CalamityWorld.revenge ? 268 : Main.expertMode ? 240 : 120);
+                            else
+                                NPC.damage = 0;
+
+                                float rot = (aiCounter * 0.05f) + (WhatHand == 1 ? 0 : Pi);
+                            Vector2 dir = rot.ToRotationVector2();
+                            NPC.Center = orator.Center + dir * dist;
+                            NPC.rotation = rot + PiOver2;
+                            NPC.direction = 1;
+
+                            if (aiCounter >= 180)
+                            {
+                                if (Main.netMode != NetmodeID.MultiplayerClient && aiCounter % 8 == 0)
+                                {
+                                    Vector2 spawnPos = NPC.Center + NPC.velocity;
+                                    Projectile glob = Projectile.NewProjectileDirect(NPC.GetSource_FromThis(), spawnPos, (orator.Center - spawnPos).SafeNormalize(Vector2.One) * 4f, ModContent.ProjectileType<DarkGlob>(), TheOrator.GlobDamage, 0.5f, -1, 2, 0.75f);
+                                    glob.timeLeft = 360;
+                                }
+                            }
+                        }
+                        else
+                        {
+                            CurrentPose = Pose.Default;
+
+                            NPC.damage = 0;
+                            goalPos = orator.Center + orator.velocity + new Vector2(124 * WhatHand, +75);
+                            goalPos.Y += (float)Math.Sin(aiCounter / 20f) * 16f;
+
+                            #region Movement
+                            NPC.velocity = (goalPos - NPC.Center).SafeNormalize(Vector2.Zero) * ((goalPos - NPC.Center).Length() / 10f);
+                            NPC.rotation = (-3 * Pi / 2) - (Pi / 8 * WhatHand);
+                            NPC.direction = WhatHand;
+                            #endregion
+                        }
+                    }
                     break;
                 default:
                     CurrentPose = Pose.Default;

@@ -64,6 +64,9 @@ public class DarkGlob : ModProjectile, ILocalizedModType
             };
         else
             Trail = TrailType.None;
+        Vector2 position = Projectile.position;
+        Projectile.Hitbox = new Rectangle((int)Projectile.position.X, (int)Projectile.position.Y, (int)(70 * MaxSize), (int)(70 * MaxSize));
+        Projectile.Center = position;
 
         Projectile.netUpdate = true;
     }

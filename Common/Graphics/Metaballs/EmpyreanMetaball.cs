@@ -172,7 +172,6 @@ public class EmpyreanMetaball : Metaball
         AnyProjectiles(ModContent.ProjectileType<Dissolver>()) ||
         AnyProjectiles(ModContent.ProjectileType<WretchedFountain>()) ||
         AnyProjectiles(ModContent.ProjectileType<ShadowGrasp>()) ||
-        NPC.AnyNPCs(ModContent.NPCType<ShadowHand>()) ||
         NPC.AnyNPCs(ModContent.NPCType<OratorHand>()) ||
         NPC.AnyNPCs(ModContent.NPCType<SealingTablet>())
     ;
@@ -340,15 +339,12 @@ public class EmpyreanMetaball : Metaball
             }
         }
         foreach (NPC n in Main.npc.Where(n => n.active && (
-            n.type == ModContent.NPCType<ShadowHand>() || 
             n.type == ModContent.NPCType<OratorHand>() ||
             n.type == ModContent.NPCType<SealingTablet>()
         )))
         {
             Vector2 drawPosition = n.Center - Main.screenPosition;
-            if (n.type == ModContent.NPCType<ShadowHand>())
-                n.As<ShadowHand>().DrawSelf(drawPosition, n.GetAlpha(Color.White), n.rotation);
-            else if (n.type == ModContent.NPCType<OratorHand>())
+            if (n.type == ModContent.NPCType<OratorHand>())
                 n.As<OratorHand>().PostDraw(Main.spriteBatch, Main.screenPosition, n.GetAlpha(Color.White));
             else if (n.ai[0] == 2)
                 n.As<SealingTablet>().PostDraw(Main.spriteBatch, Main.screenPosition, n.GetAlpha(Color.White));
