@@ -1174,6 +1174,16 @@ Items: {
 			DisplayName: Corded Big Chains
 			Tooltip: ""
 		}
+
+		OratorRelic: {
+			DisplayName: Orator Relic
+			Tooltip: ""
+		}
+
+		OratorTrophy: {
+			DisplayName: Orator Trophy
+			Tooltip: ""
+		}
 	}
 
 	Fishing: {
@@ -1531,6 +1541,22 @@ Items: {
 	BeetleJuice: {
 		DisplayName: Beetle Juice
 		Tooltip: ""
+	}
+
+	TreasureBags: {
+		OratorBag: {
+			DisplayName: Orator Bag
+			Tooltip: ""
+		}
+	}
+
+	Armor: {
+		Vanity: {
+			OratorMask: {
+				DisplayName: Orator Mask
+				Tooltip: ""
+			}
+		}
 	}
 }
 
