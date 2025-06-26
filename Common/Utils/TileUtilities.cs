@@ -440,4 +440,20 @@ public static partial class WindfallUtils
             SetMerge(myType, otherTypes[i]);
         }
     }
+
+    public static void SetUpTrophy(this ModTile mt)
+    {
+        // TODO -- how to force trophy drops correctly? they all have zero code in them
+
+        Main.tileFrameImportant[mt.Type] = true;
+        Main.tileLavaDeath[mt.Type] = true;
+        Main.tileSpelunker[mt.Type] = true;
+        TileObjectData.newTile.CopyFrom(TileObjectData.Style3x3Wall);
+        TileObjectData.addTile(mt.Type);
+        TileID.Sets.DisableSmartCursor[mt.Type] = true;
+        TileID.Sets.FramesOnKillWall[mt.Type] = true;
+
+        mt.AddMapEntry(new Color(120, 85, 60), Language.GetText("MapObject.Trophy"));
+        mt.DustType = 7;
+    }
 }

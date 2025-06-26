@@ -13,6 +13,13 @@ using Windfall.Content.UI.BossBars;
 using CalamityMod;
 using CalamityMod.Particles;
 using Windfall.Content.Items.Utility;
+using Windfall.Content.Items.LootBags;
+using Windfall.Content.Items.Placeables.Furnature;
+using Windfall.Content.Items.Weapons.Melee;
+using Windfall.Content.Items.Weapons.Ranged;
+using Windfall.Content.Items.Weapons.Magic;
+using Windfall.Content.Items.Weapons.Rogue;
+using Windfall.Content.Items.Vanity.Masks;
 
 namespace Windfall.Content.NPCs.Bosses.Orator;
 
@@ -253,35 +260,33 @@ public class TheOrator : ModNPC
                     return;
                 }
                 break;
-            case States.DarkSpawn:
-                #region Movement
-                Vector2 homeInVec = target.Center - NPC.Center;
-                float distance = homeInVec.Length();
-                homeInVec.Normalize();
-                if (distance > 350)
-                    NPC.velocity = (NPC.velocity * 40f + homeInVec * 18f) / 41f;
-                else
-                {
-                    if (distance < 300)
-                        NPC.velocity = (NPC.velocity * 40f + homeInVec * -18f) / 41f;
-                    else
-                        NPC.velocity *= 0.975f;
-                }
-                #endregion
-                const int EndTime = 720;
+            case States.DarkSpawn:                
+                const int EndTime = 1800;
+                Vector2 homeInVec;
+                float distance;
 
                 if (Main.projectile.Any(p => p.active && p.type == ModContent.ProjectileType<SelenicIdol>()))
                     aiCounter = 0;
 
                 NPC.damage = 0;
-                if (aiCounter > 120)
+                if (aiCounter > 1200)
                 {
-                    /*
-                    if (aiCounter < EndTime - 100 && aiCounter % 90 == 0 && Main.netMode != NetmodeID.MultiplayerClient)
-                        Projectile.NewProjectile(Terraria.Entity.GetSource_NaturalSpawn(), NPC.Center, Vector2.Zero, ModContent.ProjectileType<OratorJavelin>(), BoltDamage, 0f, -1, 120, 2);
-                    */
+                    #region Movement
+                    homeInVec = target.Center - NPC.Center;
+                    distance = homeInVec.Length();
+                    homeInVec.Normalize();
+                    if (distance > 350)
+                        NPC.velocity = (NPC.velocity * 40f + homeInVec * 18f) / 41f;
+                    else
+                    {
+                        if (distance < 300)
+                            NPC.velocity = (NPC.velocity * 40f + homeInVec * -18f) / 41f;
+                        else
+                            NPC.velocity *= 0.975f;
+                    }
+                    #endregion
 
-                    if(ShadowGrasp.hands.Count > 0 && aiCounter % 60 == 0)
+                    if (ShadowGrasp.hands.Count > 0 && aiCounter % 60 == 0)
                     {
                         int index = -1;
                         if (ShadowGrasp.hands.Count <= 4)
@@ -289,7 +294,7 @@ public class TheOrator : ModNPC
                         else
                             index = Main.rand.Next((ShadowGrasp.hands.Count - 4) / 2);
 
-                        ShadowGrasp.hands[index].ai[0] = 2;
+                        Main.projectile[ShadowGrasp.hands[index]].ai[0] = 2;
                     }
                     else if(aiCounter > EndTime)
                     {
@@ -306,7 +311,28 @@ public class TheOrator : ModNPC
                         return;
                     }
                 }
-
+                else
+                {
+                    #region Movement
+                    /*
+                    homeInVec = target.Center - NPC.Center;
+                    distance = homeInVec.Length();
+                    homeInVec.Normalize();
+                    if (distance > 350)
+                        NPC.velocity = (NPC.velocity * 40f + homeInVec * 8f) / 41f;
+                    else
+                    {
+                        if (distance < 300)
+                            NPC.velocity = (NPC.velocity * 40f + homeInVec * -8f) / 41f;
+                        else
+                            NPC.velocity *= 0.975f;
+                    }
+                    */
+                    if(aiCounter <= 30)
+                        VectorToTarget = target.Center + Vector2.UnitY * -300;
+                    NPC.velocity = (VectorToTarget - NPC.Center) / 20f;
+                    #endregion
+                }
                 break;
             case States.DarkBarrage:
                 if (aiCounter <= 1100)
@@ -796,7 +822,7 @@ public class TheOrator : ModNPC
                     if(Main.netMode != NetmodeID.MultiplayerClient)
                         Projectile.NewProjectile(Projectile.GetSource_NaturalSpawn(), NPC.Center, (target.Center - NPC.Center).SafeNormalize(Vector2.Zero) * 30f, ModContent.ProjectileType<OratorScythe>(), MonsterDamage, 0.5f);
                 }
-                if(aiCounter > 480)
+                if(aiCounter > 350)
                 {
                     EmpyreanMetaball.SpawnDefaultParticle(NPC.Center + (target.Center - NPC.Center).SafeNormalize(Vector2.Zero) * 80f, Main.rand.NextVector2Circular(5f, 5f), Lerp(0f, 1f, (aiCounter - 400) % 120));
                     if (Main.netMode != NetmodeID.MultiplayerClient && (aiCounter - 400) % 120 == 0)
@@ -811,7 +837,7 @@ public class TheOrator : ModNPC
                 }
                 #endregion
 
-                if(aiCounter >= 2200)
+                if(aiCounter >= 1400)
                 {
                     aiCounter = 0;
                     target = Main.player[Player.FindClosest(NPC.Center, NPC.width, NPC.height)];
@@ -1671,22 +1697,28 @@ public class TheOrator : ModNPC
         npcLoot.Add(ItemID.LunarCraftingStation);
 
         //Boss Bag
-        npcLoot.Add(ItemDropRule.BossBag(ItemID.CultistBossBag));
+        npcLoot.Add(ItemDropRule.BossBag(ModContent.ItemType<OratorBag>()));
 
         //Normal Only
         var normalOnly = npcLoot.DefineNormalOnlyDropSet();
         {
-            normalOnly.Add(ItemID.BossMaskCultist, 7);
+            normalOnly.Add(DropHelper.CalamityStyle(DropHelper.BagWeaponDropRateFraction,
+            [
+                ModContent.ItemType<Apotelesma>(),
+                ModContent.ItemType<FingerGuns>(),
+                ModContent.ItemType<Kaimos>(),
+                ModContent.ItemType<ShadowHandStaff>(),
+                ModContent.ItemType<Prodosia>()
+            ]));
+
+            normalOnly.Add(ModContent.ItemType<OratorMask>(), 7);
         }
 
-        // Test Drop for not letting Orator heal
-        npcLoot.DefineConditionalDropSet(WindfallConditions.OratorNeverHeal).Add(ModContent.ItemType<ShadowHandStaff>());
-
         // Trophy
-        npcLoot.Add(ItemID.AncientCultistTrophy, 10);
+        npcLoot.Add(ModContent.ItemType<OratorTrophy>(), 10);
 
         // Relic
-        npcLoot.DefineConditionalDropSet(DropHelper.RevAndMaster).Add(ItemID.LunaticCultistMasterTrophy);
+        npcLoot.DefineConditionalDropSet(DropHelper.RevAndMaster).Add(ModContent.ItemType<OratorRelic>());
 
         //Lore
         npcLoot.AddConditionalPerPlayer(() => !WorldSaveSystem.SelenicChestOpened, ModContent.ItemType<CrescentKey>(), desc: "Drops until its chest is opened");

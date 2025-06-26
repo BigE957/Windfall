@@ -155,7 +155,6 @@
     <Folder Include="Localization\DialogueTrees\en-US\Cutscenes\SealingRitual\" />
     <Folder Include="Localization\DialogueTrees\en-US\IlmeranPaladin\" />
     <Folder Include="Localization\DialogueTrees\en-US\TravellingCultist\QuestProgress\" />
-    <Folder Include="Localization\DialogueTrees\en-US\Watchman\Greetings\" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="CalamityMod">
