@@ -270,10 +270,12 @@ public class LunarCultBaseSystem : ModSystem
     #endregion
 
     private static SoundStyle TeleportSound => new("CalamityMod/Sounds/Custom/SCalSounds/BrimstoneHellblastSound");
+    
     public override void OnWorldLoad()
     {
         ActivityTimer = -1;           
     }
+    
     public override void PreUpdateWorld()
     {
         if (NPC.downedAncientCultist || LunarCultBaseLocation == new Point(-1, -1))
@@ -581,6 +583,7 @@ public class LunarCultBaseSystem : ModSystem
                     OnCooldown = true;
                 }
                 #endregion
+                
                 break;
             case SystemStates.Yap:
                 NPC watchman = Main.npc.First(n => n.active && n.type == ModContent.NPCType<Watchman>());
@@ -1687,9 +1690,13 @@ public class LunarCultBaseSystem : ModSystem
         CombatText MyDialogue = Main.combatText[CombatText.NewText(location, color, GetWindfallTextValue(text), true)];
         return MyDialogue;
     }
+    
     public static bool IsTailorActivityActive() => Active && State == SystemStates.Tailor;
+    
     public static bool IsCafeteriaActivityActive() => Active && State == SystemStates.Cafeteria;
+    
     public static bool IsRitualActivityActive() => Active && State == SystemStates.Ritual;
+    
     public static Response[] GetMenuResponses(int type)
     {
         Response[] Responses;
@@ -1720,7 +1727,9 @@ public class LunarCultBaseSystem : ModSystem
         }
         return Responses;
     }
+    
     public static void ResetTimer() => ActivityTimer = 0;
+    
     public static void SpawnFingerling()
     {
         if (Main.netMode == NetmodeID.MultiplayerClient)

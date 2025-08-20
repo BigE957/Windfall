@@ -3,9 +3,7 @@ using Windfall.Content.Tiles.Furnature.VerletHangers.Hangers;
 using static Windfall.Common.Netcode.WindfallNetcode;
 using static Windfall.Common.Graphics.Verlet.VerletIntegration;
 using static Windfall.Common.Systems.WFSchematicManager;
-using Terraria;
-using Windfall.Common.Systems;
-using Microsoft.CodeAnalysis;
+using Windfall.Content.Items.Placeables.Furnature.VerletHangers.Decorations;
 
 namespace Windfall.Content.Tiles.TileEntities;
 public class HangerEntity : ModTileEntity
@@ -111,8 +109,35 @@ public class HangerEntity : ModTileEntity
         if (partnerLocation != Point16.NegativeOne)
         {
             HangerEntity partner = FindTileEntity<HangerEntity>(partnerLocation.X, partnerLocation.Y, 1, 1);
+
+            if(state == PairedState.Start)
+            {
+                Item.NewItem(Item.GetSource_NaturalSpawn(), Position.ToWorldCoordinates(), Vector2.Zero, Items.Placeables.Furnature.VerletHangers.Cords.CordID.CordTypes[cordID]);
+                foreach(var v in DecorationVerlets.Values)
+                {
+                    if(v.decorationID != 0)
+                    {
+                        Vector2 position = v.chain.Positions[0];
+                        Item.NewItem(Item.GetSource_NaturalSpawn(), position, Vector2.Zero, DecorationID.DecorationTypes[v.decorationID]);
+                    }
+                }
+            }
+
             if (partner != null)
             {
+                if (partner.state == PairedState.Start)
+                {
+                    Item.NewItem(Item.GetSource_NaturalSpawn(), Position.ToWorldCoordinates(), Vector2.Zero, Items.Placeables.Furnature.VerletHangers.Cords.CordID.CordTypes[partner.cordID]);
+                    foreach (var v in partner.DecorationVerlets.Values)
+                    {
+                        if (v.decorationID != 0)
+                        {
+                            Vector2 position = v.chain.Positions[0];
+                            Item.NewItem(Item.GetSource_NaturalSpawn(), position, Vector2.Zero, DecorationID.DecorationTypes[v.decorationID]);
+                        }
+                    }
+                }
+
                 partner.state = 0;
                 partner.PartnerLocation = null;
             }

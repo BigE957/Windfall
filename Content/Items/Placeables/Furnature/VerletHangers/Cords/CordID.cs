@@ -29,6 +29,7 @@ public class CordID : ModSystem
 
     public static Cord GetTwine(int type) => type switch
     {
+        None => null,
         SelenicTwine => new SelenicTwine(),
         CordedRope => new CordedRope(),
         CordedSilk => new CordedSilk(),

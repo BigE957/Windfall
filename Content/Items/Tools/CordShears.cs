@@ -30,6 +30,8 @@ public class CordShears : ModItem
     {
         if (HangIndex == -2)
         {
+            Main.NewText("NEGATIVE 2");
+
             if ((Main.MouseWorld - HE.Position.ToWorldCoordinates()).LengthSquared() > 625)
             {
                 HE = null;
@@ -47,11 +49,32 @@ public class CordShears : ModItem
                 switch (HE.State)
                 {
                     case 1:
+                        Item.NewItem(Item.GetSource_NaturalSpawn(), HE.Position.ToWorldCoordinates(), Vector2.Zero, Items.Placeables.Furnature.VerletHangers.Cords.CordID.CordTypes[(int)HE.CordID]);
+                        foreach (var v in HE.DecorationVerlets.Values)
+                        {
+                            if (v.decorationID != 0)
+                            {
+                                Vector2 position = v.chain.Positions[0];
+                                Item.NewItem(Item.GetSource_NaturalSpawn(), position, Vector2.Zero, DecorationID.DecorationTypes[v.decorationID]);
+                            }
+                        }
+
                         HE.MainVerlet = null;
                         HE.DecorationVerlets.Clear();
                         break;
                     case 2:
                         HangerEntity mainEntity = FindTileEntity<HangerEntity>(HE.PartnerLocation.Value.X, HE.PartnerLocation.Value.Y, 1, 1);
+
+                        Item.NewItem(Item.GetSource_NaturalSpawn(), HE.Position.ToWorldCoordinates(), Vector2.Zero, Items.Placeables.Furnature.VerletHangers.Cords.CordID.CordTypes[(int)mainEntity.CordID]);
+                        foreach (var v in mainEntity.DecorationVerlets.Values)
+                        {
+                            if (v.decorationID != 0)
+                            {
+                                Vector2 position = v.chain.Positions[0];
+                                Item.NewItem(Item.GetSource_NaturalSpawn(), position, Vector2.Zero, DecorationID.DecorationTypes[v.decorationID]);
+                            }
+                        }
+
                         mainEntity.MainVerlet = null;
                         if (mainEntity.DecorationVerlets.TryGetValue(-1, out (VerletObject chain, int decorationID, int segmentCount) hangerDecor))
                         {
@@ -81,6 +104,8 @@ public class CordShears : ModItem
         }
         else if(HangIndex != -1)
         {
+            Main.NewText("NOT NEGATIVE 1");
+
             if ((Main.MouseWorld - HE.MainVerlet[HangIndex].Position).LengthSquared() > 625)
             {
                 HE = null;
