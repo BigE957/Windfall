@@ -114,7 +114,7 @@ public class LunarCultBaseSystem : ModSystem
 
         QueuedTables = [];
         for(int i = 0; i< SeatedTables.Length; i++)
-            SeatedTables[i] = null;
+            SeatedTables[i].Active = false;
 
         TutorialComplete = false;
 
@@ -212,12 +212,22 @@ public class LunarCultBaseSystem : ModSystem
     #region Cafeteria Variables
     public struct Table(int id, int count)
     {
+        public bool Active = true;
+
         public int PartyID = id;
         public int PartySize = count;
+        public int SeatedTimer = 0;
+
+        public void Deactivate()
+        {
+            Active = false;
+        }
+
+        public float TimeRatio(int extraTimeFrames = 0) => Clamp(SeatedTimer / ((1800f * (PartySize + 1)) + extraTimeFrames), 0f, 1f);
     }
 
-    public static Table?[] SeatedTables = new Table?[3];
-    public static List<Table?> QueuedTables = [];
+    public static Table[] SeatedTables = new Table[3];
+    public static List<Table> QueuedTables = [];
 
     public static readonly List<int> MenuIDs =
     [
@@ -780,7 +790,7 @@ public class LunarCultBaseSystem : ModSystem
 
                             QueuedTables = [];
                             for (int i = 0; i < SeatedTables.Length; i++)
-                                SeatedTables[i] = null;
+                                SeatedTables[i].Active = false;
 
                             SatisfiedCustomers = 0;
                             CustomerTimer = 360;
@@ -984,13 +994,21 @@ public class LunarCultBaseSystem : ModSystem
                         if (QueuedTables.Count > 0)
                         {
                             for (int i = 0; i < SeatedTables.Length; i++)
-                                if (SeatedTables[i] == null)
+                            {
+                                if (!SeatedTables[i].Active)
                                 {
-                                    SeatedTables[i] = new(QueuedTables[0].Value.PartyID, QueuedTables[0].Value.PartySize);
+                                    SeatedTables[i] = QueuedTables[0];
                                     QueuedTables.RemoveAt(0);
                                     if (QueuedTables.Count == 0 && SatisfiedCustomers >= CustomerGoal)
                                         CombatText.NewText(Main.npc[NPC.FindFirstNPC(ModContent.NPCType<TheChef>())].Hitbox, Color.LimeGreen, GetWindfallTextValue("Dialogue.LunarCult.TheChef.Activity.AlmostDone"), true);
                                 }
+                            }
+                        }
+
+                        for (int i = 0; i < SeatedTables.Length; i++)
+                        {
+                            if (SeatedTables[i].Active)
+                                SeatedTables[i].SeatedTimer++;
                         }
 
                         float intensity = Terraria.Utils.GetLerpValue(0, 10800, ActivityTimer, true);
@@ -1017,7 +1035,7 @@ public class LunarCultBaseSystem : ModSystem
 
                             bool openTable = false;
                             for (int i = 0; i < SeatedTables.Length; i++)
-                                if(SeatedTables[i] == null)
+                                if(!SeatedTables[i].Active)
                                 {
                                     SeatedTables[i] = table;
                                     openTable = true;
@@ -1031,7 +1049,7 @@ public class LunarCultBaseSystem : ModSystem
                             CustomerTimer = count == 2 ? -180 : 0;
                             PartyIDCounter++;
                         }
-                        else if (SatisfiedCustomers >= CustomerGoal && QueuedTables.Count == 0 && !SeatedTables.Any(t => t.HasValue))
+                        else if (SatisfiedCustomers >= CustomerGoal && QueuedTables.Count == 0 && !SeatedTables.Any(t => t.Active))
                         {
                             NPC chef = Main.npc[NPC.FindFirstNPC(ModContent.NPCType<TheChef>())];
                             DisplayMessage(chef.Hitbox, Color.LimeGreen, "Dialogue.LunarCult.TheChef.Activity.Finished");

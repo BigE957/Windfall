@@ -1,7 +1,7 @@
 ﻿using Terraria.GameContent.UI.Elements;
 using Terraria.UI;
+using Windfall.Common.Systems;
 using Windfall.Common.Systems.WorldEvents;
-using Windfall.Content.NPCs.WorldEvents.LunarCult;
 
 namespace Windfall.Content.UI.Activities;
 internal class TableOrderUI(Dictionary<int, int> order, int tableID) : UIState
@@ -105,7 +105,7 @@ internal class TableOrderUI(Dictionary<int, int> order, int tableID) : UIState
         Vector2 tableWorldCoords = LunarCultBaseSystem.CafeteriaTables[TableID].ToWorldCoordinates();
         Vector2 tableScreenPos = (tableWorldCoords - Main.LocalPlayer.velocity).ToScreenPosition();
         Hitbox.Left.Pixels = tableScreenPos.X - Hitbox.Width.Pixels / 2f;
-        Hitbox.Top.Pixels = tableScreenPos.Y - Hitbox.Height.Pixels / 2f;
+        Hitbox.Top.Pixels = tableScreenPos.Y - Hitbox.Height.Pixels / 2f - 16;
 
         float dist = (Math.Abs(tableWorldCoords.X - Main.LocalPlayer.Center.X) - 32) / 40f;
         Opacity = 1 - Clamp(dist, 0f, 1f);
@@ -183,21 +183,49 @@ internal class TableOrderUI(Dictionary<int, int> order, int tableID) : UIState
 
                 ModContent.GetInstance<TableOrderUISystem>().DeactivateTableOrderUI(TableID);
 
-                foreach (NPC npc in Main.npc.Where(n => n.active && n.IsSelenicCultist() && n.ai[2] == 2 && ((int)n.ai[3]) == LunarCultBaseSystem.SeatedTables[TableID].Value.PartyID))
+                bool completedInTime = LunarCultBaseSystem.SeatedTables[TableID].TimeRatio(600) != 1f;
+
+                foreach (NPC npc in Main.npc.Where(n => n.active && n.IsSelenicCultist() && n.ai[2] == 2 && ((int)n.ai[3]) == LunarCultBaseSystem.SeatedTables[TableID].PartyID))
                 {
-                    CombatText.NewText(npc.Hitbox, Color.White, GetWindfallTextValue("Dialogue.LunarCult.LunarBishop.Cafeteria.Thanks." + Main.rand.Next(3)));
                     npc.ai[3] = -1;
-                    ++LunarCultBaseSystem.SatisfiedCustomers;
+
+                    if (completedInTime)
+                    {
+                        CombatText.NewText(npc.Hitbox, Color.White, GetWindfallTextValue("Dialogue.LunarCult.LunarBishop.Cafeteria.Thanks." + Main.rand.Next(3)));
+                        ++LunarCultBaseSystem.SatisfiedCustomers;
+                    }
+                    else
+                        CombatText.NewText(npc.Hitbox, Color.White, GetWindfallTextValue("Dialogue.LunarCult.LunarBishop.Cafeteria.TooSlow." + Main.rand.Next(3)));
                 }
 
-                LunarCultBaseSystem.SeatedTables[TableID] = null;
+                LunarCultBaseSystem.SeatedTables[TableID].Deactivate();
             }
             else
             {
-                NPC npc = Main.npc.Where(n => n.active && n.IsSelenicCultist() && n.ai[2] == 2 && ((int)n.ai[3]) == LunarCultBaseSystem.SeatedTables[TableID].Value.PartyID).ToArray()[0];
+                NPC npc = Main.npc.Where(n => n.active && n.IsSelenicCultist() && n.ai[2] == 2 && ((int)n.ai[3]) == LunarCultBaseSystem.SeatedTables[TableID].PartyID).ToArray()[0];
                 CombatText.NewText(npc.Hitbox, Color.White, GetWindfallTextValue("Dialogue.LunarCult.LunarBishop.Cafeteria.Where." + Main.rand.Next(3)));
             }
         }
+    }
+
+    public override void Draw(SpriteBatch spriteBatch)
+    {
+        base.Draw(spriteBatch);
+
+        Texture2D barBG = LoadSystem.DefaultBarBG.Value;
+        Texture2D barFG = LoadSystem.DefaultBarFG.Value;
+
+        Vector2 barOrigin = barBG.Size() * 0.5f;
+        float yOffset = 24f;
+        float barScale = 1.34f;
+        Vector2 drawPos = Hitbox.GetDimensions().Center() + Vector2.UnitY * (OrderPanel.Height.Pixels / 2f - yOffset);
+        float timeRatio = LunarCultBaseSystem.SeatedTables[TableID].TimeRatio();
+        Rectangle frameCrop = new(0, 0, (int)(timeRatio * barFG.Width), barFG.Height);
+
+        Color bgColor = Color.DarkGray * 0.5f;
+        bgColor.A = 255;
+        spriteBatch.Draw(barBG, drawPos, null, bgColor, 0f, barOrigin, barScale, 0f, 0f);
+        spriteBatch.Draw(barFG, drawPos, frameCrop, Color.Lerp(Color.LimeGreen, Color.Red, timeRatio), 0f, barOrigin, barScale, 0f, 0f);
     }
 }
 

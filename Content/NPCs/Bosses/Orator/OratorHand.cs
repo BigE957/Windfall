@@ -2,9 +2,7 @@
 using CalamityMod.Particles;
 using CalamityMod.World;
 using Luminance.Core.Graphics;
-using Terraria.Chat;
 using Terraria.GameContent.Bestiary;
-using Terraria.ModLoader.IO;
 using Windfall.Common.Graphics.Metaballs;
 using Windfall.Common.Systems;
 using Windfall.Content.Projectiles.Boss.Orator;

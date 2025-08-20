@@ -1,6 +1,5 @@
 ﻿using DialogueHelper.UI.Dialogue;
 using Windfall.Common.Systems.WorldEvents;
-using Windfall.Content.Projectiles.Other;
 using Windfall.Content.UI.Activities;
 
 namespace Windfall.Content.NPCs.WorldEvents.LunarCult;
@@ -137,9 +136,9 @@ public class LunarCultistArcher : ModNPC
                 {
                     int subID = (int)NPC.ai[1];
 
-                    if (LunarCultBaseSystem.SeatedTables.Any(t => t.HasValue && t.Value.PartyID == partyID)) //Should Be Seated
+                    if (LunarCultBaseSystem.SeatedTables.Any(t => t.Active && t.PartyID == partyID)) //Should Be Seated
                     {
-                        int tableIndex = LunarCultBaseSystem.SeatedTables.ToList().FindIndex(t => t.HasValue && t.Value.PartyID == partyID);
+                        int tableIndex = LunarCultBaseSystem.SeatedTables.ToList().FindIndex(t => t.Active && t.PartyID == partyID);
                         Vector2 goalLocation = LunarCultBaseSystem.CafeteriaTables[tableIndex].ToWorldCoordinates();
                         goalLocation.Y += 72;
                         int chairSide = subID == 0 ? (partyID % 2 == 0 ? -1 : 1) : (subID == 2 ? -1 : 1);
@@ -188,14 +187,14 @@ public class LunarCultistArcher : ModNPC
                     }
                     else //Within Queue
                     {
-                        int queueIndex = LunarCultBaseSystem.QueuedTables.FindIndex(t => t.HasValue && t.Value.PartyID == partyID);
+                        int queueIndex = LunarCultBaseSystem.QueuedTables.FindIndex(t => t.Active && t.PartyID == partyID);
                         if (queueIndex == -1)
                         {
                             NPC.ai[3] = -1;
                             return;
                         }
 
-                        LunarCultBaseSystem.Table myTable = LunarCultBaseSystem.QueuedTables[queueIndex].Value;
+                        LunarCultBaseSystem.Table myTable = LunarCultBaseSystem.QueuedTables[queueIndex];
                         float goalOffset = 0f;
                         if (subID != 0)
                             goalOffset = queueGap / 3f * (LunarCultBaseSystem.BaseFacingLeft ? 1 : -1) * (subID == 1 ? 1 : -1);
@@ -218,7 +217,7 @@ public class LunarCultistArcher : ModNPC
                         }
                         if (NPC.position.Y < goalPosition.Y - NPC.height)
                             NPC.velocity.Y += 0.5f;
-                        if (queueIndex != 0 && !LunarCultBaseSystem.QueuedTables[queueIndex - 1].HasValue)
+                        if (queueIndex != 0 && !LunarCultBaseSystem.QueuedTables[queueIndex - 1].Active)
                         {
                             goalPosition.X -= queueGap * (LunarCultBaseSystem.BaseFacingLeft ? -1 : 1);
                             if (NPC.Center.X - goalPosition.X < queueGap / 2 && subID != 2)
@@ -227,7 +226,7 @@ public class LunarCultistArcher : ModNPC
                                 if (queueIndex + 1 == LunarCultBaseSystem.QueuedTables.Count)
                                     LunarCultBaseSystem.QueuedTables.RemoveAt(queueIndex);
                                 else
-                                    LunarCultBaseSystem.QueuedTables[queueIndex] = null;
+                                    LunarCultBaseSystem.QueuedTables[queueIndex].Deactivate();
                                 int currentID = partyID;
                                 foreach (NPC npc in Main.npc.Where(n => n.active && n.type == Type && ((int)n.ai[3]) == currentID))
                                     NPC.ai[3] -= 1;

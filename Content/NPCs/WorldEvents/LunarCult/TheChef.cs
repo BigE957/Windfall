@@ -247,9 +247,9 @@ public class TheChef : ModNPC
             {
                 uiSystem.CurrentTree.Dialogues[2].Responses = GetMenuResponses(buttonID);
                 uiSystem.CurrentDialogueContext.Arguments[1] = buttonID;
-                for (int i = 0; i < uiSystem.CurrentTree.Dialogues[1].Responses.Length; i++)
+                for (int i = 0; i < uiSystem.CurrentTree.Dialogues[2].Responses.Length; i++)
                 {
-                    uiSystem.CurrentTree.Dialogues[2].Responses[i].Heading = 2;
+                    uiSystem.CurrentTree.Dialogues[2].Responses[i].Heading = 3;
                 }
             }
             if (dialogueID == 2)
