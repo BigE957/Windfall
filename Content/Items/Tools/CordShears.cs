@@ -30,8 +30,6 @@ public class CordShears : ModItem
     {
         if (HangIndex == -2)
         {
-            Main.NewText("NEGATIVE 2");
-
             if ((Main.MouseWorld - HE.Position.ToWorldCoordinates()).LengthSquared() > 625)
             {
                 HE = null;
@@ -104,8 +102,6 @@ public class CordShears : ModItem
         }
         else if(HangIndex != -1)
         {
-            Main.NewText("NOT NEGATIVE 1");
-
             if ((Main.MouseWorld - HE.MainVerlet[HangIndex].Position).LengthSquared() > 625)
             {
                 HE = null;
