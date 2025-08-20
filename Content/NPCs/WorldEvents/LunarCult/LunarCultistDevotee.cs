@@ -7,7 +7,7 @@ namespace Windfall.Content.NPCs.WorldEvents.LunarCult;
 
 public class LunarCultistDevotee : ModNPC
 {
-    private enum States
+    public enum States
     {
         //Selenic Order Base
         Idle,

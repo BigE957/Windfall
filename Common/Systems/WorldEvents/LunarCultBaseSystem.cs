@@ -472,13 +472,18 @@ public class LunarCultBaseSystem : ModSystem
                     #region Static Character Setup
                     foreach (NPC cultist in Main.npc.Where(n => n.active && (n.type == ModContent.NPCType<LunarCultistDevotee>() || n.type == ModContent.NPCType<LunarCultistArcher>() || n.type == ModContent.NPCType<LunarBishop>())))
                     {
-                        if (cultist.ai[2] == 4) //removes all StaticCharacter cultists
+                        if(cultist.type == ModContent.NPCType<LunarCultistDevotee>() && cultist.ai[2] == (float)LunarCultistDevotee.States.StaticCharacter)
                             cultist.active = false;
+                        else if (cultist.type == ModContent.NPCType<LunarCultistArcher>() && cultist.ai[2] == (float)LunarCultistArcher.States.StaticCharacter)
+                            cultist.active = false;
+                        else if (cultist.type == ModContent.NPCType<LunarBishop>() && cultist.ai[2] == (float)LunarBishop.States.StaticCharacter)
+                            cultist.active = false;
+
                     }
                     switch(PlannedActivity)
                     {
                         case SystemStates.Ritual:
-                            NPC warn = NPC.NewNPCDirect(Entity.GetSource_None(), LunarCultBaseLocation.X * 16 + (BaseFacingLeft ? -1790 : 1790), (LunarCultBaseLocation.Y - 24) * 16, ModContent.NPCType<LunarCultistArcher>(), ai2: 4);
+                            NPC warn = NPC.NewNPCDirect(Entity.GetSource_None(), LunarCultBaseLocation.X * 16 + (BaseFacingLeft ? -1790 : 1790), (LunarCultBaseLocation.Y - 24) * 16, ModContent.NPCType<LunarCultistArcher>(), ai2: (float)LunarCultistArcher.States.StaticCharacter);
                             warn.As<LunarCultistArcher>().myCharacter = LunarCultistArcher.Character.RitualWarn;
                             break;
                         case SystemStates.Meeting:               
@@ -492,30 +497,30 @@ public class LunarCultBaseSystem : ModSystem
                     }
                     if(PlannedActivity != SystemStates.Meeting && PlannedActivity != SystemStates.FinalMeeting)
                     {
-                        NPC speaker = NPC.NewNPCDirect(Entity.GetSource_None(), LunarCultBaseLocation.X * 16 + (BaseFacingLeft ? -816 : 816), (LunarCultBaseLocation.Y + 24) * 16, ModContent.NPCType<LunarBishop>(), ai2: 4);
+                        NPC speaker = NPC.NewNPCDirect(Entity.GetSource_None(), LunarCultBaseLocation.X * 16 + (BaseFacingLeft ? -816 : 816), (LunarCultBaseLocation.Y + 24) * 16, ModContent.NPCType<LunarBishop>(), ai2: (float)LunarBishop.States.StaticCharacter);
                         speaker.As<LunarBishop>().myCharacter = LunarBishop.Character.Speaker;
                         speaker.spriteDirection *= -1;
 
-                        NPC eeper = NPC.NewNPCDirect(Entity.GetSource_None(), LunarCultBaseLocation.X * 16 + (BaseFacingLeft ? -208 : 208), (LunarCultBaseLocation.Y + 24) * 16, ModContent.NPCType<LunarCultistDevotee>(), ai2: 4);
+                        NPC eeper = NPC.NewNPCDirect(Entity.GetSource_None(), LunarCultBaseLocation.X * 16 + (BaseFacingLeft ? -208 : 208), (LunarCultBaseLocation.Y + 24) * 16, ModContent.NPCType<LunarCultistDevotee>(), ai2: (float)LunarCultistDevotee.States.StaticCharacter);
                         eeper.As<LunarCultistDevotee>().myCharacter = LunarCultistDevotee.Character.Eeper;
                         eeper.spriteDirection *= -1;
                     }
                     if (PlannedActivity != SystemStates.Cafeteria)
                     {
                         Vector2 chefCenter = Main.npc[NPC.FindFirstNPC(ModContent.NPCType<TheChef>())].Center;
-                        NPC foodie = NPC.NewNPCDirect(Entity.GetSource_None(), (int)chefCenter.X + 280, (int)chefCenter.Y, ModContent.NPCType<LunarBishop>(), ai2: 4);
+                        NPC foodie = NPC.NewNPCDirect(Entity.GetSource_None(), (int)chefCenter.X + 280, (int)chefCenter.Y, ModContent.NPCType<LunarBishop>(), ai2: (float)LunarBishop.States.StaticCharacter);
                         foodie.As<LunarBishop>().myCharacter = LunarBishop.Character.Foodie;
                         foodie.spriteDirection *= -1;
                     }
                     if (PlannedActivity != SystemStates.Tailor)
                     {
                         Vector2 seamstressCenter = Main.npc[NPC.FindFirstNPC(ModContent.NPCType<Seamstress>())].Center;
-                        NPC dripped = NPC.NewNPCDirect(Entity.GetSource_None(), (int)seamstressCenter.X + (BaseFacingLeft ? 400 : -400), (int)seamstressCenter.Y, ModContent.NPCType<LunarCultistDevotee>(), ai2: 4);
+                        NPC dripped = NPC.NewNPCDirect(Entity.GetSource_None(), (int)seamstressCenter.X + (BaseFacingLeft ? 400 : -400), (int)seamstressCenter.Y, ModContent.NPCType<LunarCultistDevotee>(), ai2: (float)LunarCultistDevotee.States.StaticCharacter);
                         dripped.As<LunarCultistDevotee>().myCharacter = LunarCultistDevotee.Character.NewClothes;
                     }
                     if (PlannedActivity != SystemStates.OratorVisit)
                     {
-                        NPC broke = NPC.NewNPCDirect(Entity.GetSource_None(), LunarCultBaseLocation.X * 16 + (BaseFacingLeft ? -1258 : 1258), (LunarCultBaseLocation.Y - 46) * 16, ModContent.NPCType<LunarCultistArcher>(), ai2: 4);
+                        NPC broke = NPC.NewNPCDirect(Entity.GetSource_None(), LunarCultBaseLocation.X * 16 + (BaseFacingLeft ? -1258 : 1258), (LunarCultBaseLocation.Y - 46) * 16, ModContent.NPCType<LunarCultistArcher>(), ai2: (float)LunarCultistArcher.States.StaticCharacter);
                         broke.As<LunarCultistArcher>().myCharacter = LunarCultistArcher.Character.Broke;
                     }
                     #endregion

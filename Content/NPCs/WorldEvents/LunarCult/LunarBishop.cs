@@ -6,7 +6,7 @@ namespace Windfall.Content.NPCs.WorldEvents.LunarCult;
 
 public class LunarBishop : ModNPC
 {
-    private enum States
+    public enum States
     {
         Idle,
         SelenicChat,
