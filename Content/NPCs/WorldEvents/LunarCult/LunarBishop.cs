@@ -283,7 +283,7 @@ public class LunarBishop : ModNPC
         if (treeKey == States.SelenicChat.ToString())
         {
             NPC me = Main.npc[(int)ModContent.GetInstance<DialogueUISystem>().CurrentDialogueContext.Arguments[0]];
-            me.As<LunarBishop>().Despawn();
+            (me.ModNPC as LunarBishop).Despawn();
         }
     }
     public void Despawn()

@@ -1,7 +1,8 @@
 ﻿using CalamityMod;
 using CalamityMod.Particles;
-using Luminance.Core.Graphics;
+using Daybreak.Common.Rendering;
 using Terraria.GameContent.Bestiary;
+using Windfall.Common.Systems;
 using Windfall.Common.Systems.WorldEvents;
 using Windfall.Content.Items.Weapons.Misc;
 
@@ -168,7 +169,6 @@ public class PortalMole : ModNPC
         Vector2 origin = texture.Size() * 0.5f;
         spriteBatch.Draw(texture, drawPosition, null, NPC.GetAlpha(Color.Black), 0f, origin, NPC.scale / 1.8f, SpriteEffects.None, 0f);
 
-        spriteBatch.UseBlendState(BlendState.AlphaBlend);
         texture = ModContent.Request<Texture2D>("Terraria/Images/Projectile_656").Value;
         origin = texture.Size() * 0.5f;
         spriteBatch.Draw(texture, drawPosition, null, NPC.GetAlpha(new(117, 255, 159)), -NPC.rotation / 2.25f, origin, NPC.scale * (2.25f + (0.5f * ((float)Math.Sin(aiCounter / -20f) / 2f + 0.5f))), SpriteEffects.None, 0f);
@@ -179,7 +179,11 @@ public class PortalMole : ModNPC
         origin = texture.Size() * 0.5f;
         spriteBatch.Draw(texture, drawPosition, null, NPC.GetAlpha(Color.Black), 0f, origin, NPC.scale / 3f, SpriteEffects.None, 0f);
 
-        spriteBatch.UseBlendState(BlendState.Additive);
+        spriteBatch.End(out var scope);
+        var newScope = scope;
+        newScope.BlendState = BlendState.Additive;
+        spriteBatch.Begin(newScope);
+  
         texture = TextureAssets.Npc[NPC.type].Value;
         origin = texture.Size() * 0.5f;
         spriteBatch.Draw(texture, drawPosition, null, new(117, 255, 159, 150), NPC.rotation, origin, NPC.scale / 3.5f, SpriteEffects.None, 0f);
@@ -187,7 +191,8 @@ public class PortalMole : ModNPC
         spriteBatch.Draw(texture, drawPosition, null, new(Color.Green.R, Color.Green.G, Color.Green.B, 200), NPC.rotation, origin, NPC.scale / 4.5f, SpriteEffects.None, 0f);
         spriteBatch.Draw(texture, drawPosition, null, new(Color.Teal.R, Color.Teal.G, Color.Teal.B, 175), -NPC.rotation, origin, NPC.scale / 5f, SpriteEffects.None, 0f);
 
-        spriteBatch.UseBlendState(BlendState.AlphaBlend);
+        spriteBatch.End();
+        spriteBatch.Begin(scope);
         return false;
     }
     public override bool CheckDead()
@@ -212,7 +217,7 @@ public class PortalMole : ModNPC
             dust.noGravity = true;
             dust.color = dust.type == dustStyle ? Color.LightGreen : default;
         }
-        ScreenShakeSystem.StartShake(2f);
+        CameraSystem.StartScreenShake(NPC.Center, Vector2.Zero, 2f, 5, 60);
 
         LunarCultBaseSystem.ActivePortals--;
 

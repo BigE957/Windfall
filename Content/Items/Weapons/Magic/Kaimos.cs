@@ -1,11 +1,14 @@
 ﻿using CalamityMod;
+using CalamityMod.Buffs.StatDebuffs;
 using CalamityMod.Graphics.Primitives;
 using CalamityMod.Items;
 using CalamityMod.Particles;
+using Daybreak.Common.Rendering;
 using Microsoft.Xna.Framework.Input;
 using System.Collections.ObjectModel;
 using Terraria.Graphics.Shaders;
 using Windfall.Common.Graphics.Metaballs;
+using Windfall.Common.Systems;
 using Windfall.Content.NPCs.GlobalNPCs;
 
 namespace Windfall.Content.Items.Weapons.Magic;
@@ -112,9 +115,9 @@ public class KaimosHoldout : ModProjectile, ILocalizedModType
             }
             else
             {
-                if (Time % (owner.manaSick ? 30 : 15) == 0 && owner.CheckMana(owner.ActiveItem(), 20))
+                if (Time % (owner.manaSick ? 30 : 15) == 0 && owner.CheckMana(owner.HeldItem(), 20))
                 {
-                    owner.CheckMana(owner.ActiveItem(), 20, true);
+                    owner.CheckMana(owner.HeldItem(), 20, true);
                     ++fireStrength;
 
                     Particle pulse = new DirectionalPulseRing(Projectile.Center + toMouse * 28 + owner.velocity, toMouse * 4f, (Time % (owner.manaSick ? 60 : 30)) == 0 ? Color.MediumSeaGreen : Color.Orange, new(0.5f, 1f), toMouse.ToRotation(), 0f, 0.5f, 16);
@@ -252,7 +255,7 @@ public class PotGlob : ModProjectile, ILocalizedModType
                     else
                         TargetIndex = -1;
 
-                    target.Calamity().marked = 2;
+                    target.AddBuff(ModContent.BuffType<MarkedforDeath>(), 2);
                 }
             }
 
@@ -282,7 +285,7 @@ public class PotGlob : ModProjectile, ILocalizedModType
 
                 foreach(Projectile p in Main.projectile.Where(p => p.active && p.type == Type && p.owner == Projectile.owner && p.whoAmI != Projectile.whoAmI))
                 {
-                    PotGlob glob = p.As<PotGlob>();
+                    PotGlob glob = p.ModProjectile as PotGlob;
                     if (glob.WhoAmIAttachedTo >= 0)
                         continue;
                     
@@ -362,7 +365,7 @@ public class PotGlob : ModProjectile, ILocalizedModType
             int whoDidIHit = target.whoAmI;
             whoDidIHit = WindfallGlobalNPC.GetWormHead(whoDidIHit);
 
-            Projectile[] stuckOrbs = Main.projectile.Where(p => p.active && p.type == Type && p.ai[1] == 2 && p.As<PotGlob>().WhoAmIAttachedTo == whoDidIHit && p.owner == Projectile.owner).ToArray();
+            Projectile[] stuckOrbs = Main.projectile.Where(p => p.active && p.type == Type && p.ai[1] == 2 && (p.ModProjectile as PotGlob).WhoAmIAttachedTo == whoDidIHit && p.owner == Projectile.owner).ToArray();
             if (stuckOrbs.Length > 0)
             {
                 int damageMult = stuckOrbs.Length;
@@ -371,7 +374,7 @@ public class PotGlob : ModProjectile, ILocalizedModType
 
                 SoundEngine.PlaySound(SoundID.DD2_EtherianPortalDryadTouch, Projectile.Center);
 
-                Luminance.Core.Graphics.ScreenShakeSystem.StartShake(5f);
+                CameraSystem.StartScreenShake(Projectile.Center, Vector2.Zero, 5f, 10, 60);
                 
                 for (int i = 0; i <= 50; i++)
                     EmpyreanMetaball.SpawnDefaultParticle(Projectile.Center, Main.rand.NextVector2Circular(10f, 10f) * Main.rand.NextFloat(1f, 2f), 40 * Main.rand.NextFloat(3f, 5f));
@@ -413,7 +416,7 @@ public class PotGlob : ModProjectile, ILocalizedModType
         }
     }
 
-    private Color ColorFunction(float completionRatio)
+    private Color ColorFunction(float completionRatio, Vector2 v)
     {
         Color colorA = Color.Lerp(Color.LimeGreen, Color.Orange, EmpyreanMetaball.BorderLerpValue);
         Color colorB = Color.Lerp(Color.GreenYellow, Color.Goldenrod, EmpyreanMetaball.BorderLerpValue);
@@ -425,7 +428,7 @@ public class PotGlob : ModProjectile, ILocalizedModType
         return Color.Lerp(Color.White, endColor, fadeToEnd) * fadeOpacity;
     }
 
-    private float WidthFunction(float completionRatio)
+    private float WidthFunction(float completionRatio, Vector2 v)
     {
         float expansionCompletion = 1f - (float)Math.Pow(1f - Utils.GetLerpValue(0f, 0.3f, completionRatio, true), 2D);
         float maxWidth = Projectile.Opacity * Projectile.scale * 180f;
@@ -438,14 +441,20 @@ public class PotGlob : ModProjectile, ILocalizedModType
         if (Trail == TrailType.Shader && Projectile.velocity.LengthSquared() >= 9 && WhoAmIAttachedTo != -2)
         {
             GameShaders.Misc["CalamityMod:ImpFlameTrail"].SetTexture(ModContent.Request<Texture2D>("CalamityMod/ExtraTextures/Trails/ScarletDevilStreak"));
-            PrimitiveRenderer.RenderTrail(Projectile.oldPos, new(WidthFunction, ColorFunction, (_) => Projectile.Size * 0.5f, shader: GameShaders.Misc["CalamityMod:ImpFlameTrail"]), 20);
+            PrimitiveRenderer.RenderTrail(Projectile.oldPos, new(WidthFunction, ColorFunction, (_,_) => Projectile.Size * 0.5f, shader: GameShaders.Misc["CalamityMod:ImpFlameTrail"]), 20);
         }
 
-        Main.spriteBatch.UseBlendState(BlendState.Additive);
+        Main.spriteBatch.End(out var scope);
+        var newScope = scope;
+        newScope.BlendState = BlendState.Additive;
+        Main.spriteBatch.Begin(newScope);
+
         Texture2D tex = ModContent.Request<Texture2D>("CalamityMod/Particles/BloomCircle").Value;
         Vector2 drawPos = Projectile.Center - Main.screenPosition;
-        Main.EntitySpriteDraw(tex, drawPos, tex.Frame(), ColorFunction(0) * 0.75f, Projectile.rotation, tex.Size() * 0.5f, Projectile.scale * 0.8f, SpriteEffects.None, 0);
-        Main.spriteBatch.UseBlendState(BlendState.AlphaBlend);
+        Main.EntitySpriteDraw(tex, drawPos, tex.Frame(), ColorFunction(0, Vector2.Zero) * 0.75f, Projectile.rotation, tex.Size() * 0.5f, Projectile.scale * 0.8f, SpriteEffects.None, 0);
+
+        Main.spriteBatch.End();
+        Main.spriteBatch.Begin(scope);
 
         return false;
     }

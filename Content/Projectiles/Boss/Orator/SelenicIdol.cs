@@ -1,7 +1,7 @@
 ﻿using CalamityMod;
 using CalamityMod.Particles;
 using CalamityMod.World;
-using Luminance.Core.Graphics;
+using Daybreak.Common.Rendering;
 using ReLogic.Utilities;
 using Terraria.Graphics.Shaders;
 using Windfall.Common.Interfaces;
@@ -81,7 +81,8 @@ public class SelenicIdol : ModProjectile, IEmpyreanDissolve
     {        
         Projectile.scale = 0;
         SoundEngine.PlaySound(SoundID.DD2_EtherianPortalOpen, Projectile.Center);
-        ScreenShakeSystem.StartShake(5f);
+        CameraSystem.StartScreenShake(Projectile.Center, Vector2.Zero, 5f, 15, 120);
+
         for (int i = 0; i <= 50; i++)
         {
             Vector2 spawnPos = Projectile.Center + Main.rand.NextVector2Circular(10f, 10f) * 10;
@@ -94,7 +95,7 @@ public class SelenicIdol : ModProjectile, IEmpyreanDissolve
     {
         Player target = Main.LocalPlayer;
         if (NPC.AnyNPCs(ModContent.NPCType<TheOrator>()))
-            target = Main.npc[NPC.FindFirstNPC(ModContent.NPCType<TheOrator>())].As<TheOrator>().target;                           
+            target = (Main.npc[NPC.FindFirstNPC(ModContent.NPCType<TheOrator>())].ModNPC as TheOrator).target;                           
         else
         {
             target = Main.player[Player.FindClosest(Projectile.Center, Projectile.width, Projectile.height)];
@@ -186,7 +187,8 @@ public class SelenicIdol : ModProjectile, IEmpyreanDissolve
                 break;
             case States.Exploding:
                 SoundEngine.PlaySound(SoundID.DD2_EtherianPortalDryadTouch, Projectile.Center);
-                ScreenShakeSystem.StartShake(7.5f);
+                CameraSystem.StartScreenShake(Projectile.Center, Vector2.Zero, 7.5f, 15, 150);
+
                 for (int i = 0; i <= 50; i++)
                     SpawnDefaultParticle(Projectile.Center, Main.rand.NextVector2Circular(10f, 10f) * Main.rand.NextFloat(1f, 2f), 40 * Main.rand.NextFloat(3f, 5f));
                 NPC Orator = null;
@@ -234,9 +236,12 @@ public class SelenicIdol : ModProjectile, IEmpyreanDissolve
     {
         GameShaders.Misc["CalamityMod:PhaseslayerRipEffect"].SetTexture(LoadSystem.SwordSlash);
 
-        CalamityMod.Graphics.Primitives.PrimitiveRenderer.RenderTrail(Projectile.oldPos, new(WidthFunction, ColorFunction, (_) => Projectile.Size * 0.5f, shader: GameShaders.Misc["CalamityMod:PhaseslayerRipEffect"]), 40);
+        CalamityMod.Graphics.Primitives.PrimitiveRenderer.RenderTrail(Projectile.oldPos, new(WidthFunction, ColorFunction, (_,_) => Projectile.Size * 0.5f, shader: GameShaders.Misc["CalamityMod:PhaseslayerRipEffect"]), 40);
 
-        Main.spriteBatch.UseBlendState(BlendState.Additive);
+        Main.spriteBatch.End(out var scope);
+        var newScope = scope;
+        newScope.BlendState = BlendState.Additive;
+        Main.spriteBatch.Begin(newScope);
 
         Texture2D tex = OratorSky.MoonBloom.Value;
 
@@ -249,7 +254,8 @@ public class SelenicIdol : ModProjectile, IEmpyreanDissolve
 
         Main.EntitySpriteDraw(tex, Projectile.Center - Main.screenPosition, null, LerpColors(Main.GlobalTimeWrappedHourly * 0.25f, colors), Main.GlobalTimeWrappedHourly * 0.25f, tex.Size() * 0.5f, ((Projectile.scale * 0.825f) + (float)(Math.Sin(Main.GlobalTimeWrappedHourly * 4) * 0.025f)) * DissolveIntensity, 0);
 
-        Main.spriteBatch.UseBlendState(BlendState.AlphaBlend);
+        Main.spriteBatch.End();
+        Main.spriteBatch.Begin(scope);
 
         tex = TextureAssets.Projectile[Type].Value;
 
@@ -258,7 +264,7 @@ public class SelenicIdol : ModProjectile, IEmpyreanDissolve
         return false;
     }
 
-    internal Color ColorFunction(float completionRatio)
+    internal Color ColorFunction(float completionRatio, Vector2 v)
     {
         float opacity = Projectile.Opacity;
         bool dying = deathCounter > 0;
@@ -273,7 +279,7 @@ public class SelenicIdol : ModProjectile, IEmpyreanDissolve
         return Color.Lerp(Color.Gold, new(170, 100, 30), (completionRatio ) * 3f) * opacity * (Projectile.velocity.Length() / MaxSpeed);
     }
 
-    internal float WidthFunction(float completionRatio) => 200f * (1f - completionRatio) * 0.8f * Projectile.scale;
+    internal float WidthFunction(float completionRatio, Vector2 v) => 200f * (1f - completionRatio) * 0.8f * Projectile.scale;
 
     public void DrawOverlay(SpriteBatch sb)
     {

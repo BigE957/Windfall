@@ -1,4 +1,5 @@
-﻿using Windfall.Content.Buffs.DoT;
+﻿using Daybreak.Common.Rendering;
+using Windfall.Content.Buffs.DoT;
 using Windfall.Content.NPCs.Bosses.Orator;
 using static Windfall.Common.Graphics.Metaballs.EmpyreanMetaball;
 
@@ -92,7 +93,7 @@ public class DarkTide : ModProjectile
                     Projectile.velocity = Vector2.Zero;
                 if (holdCounter == holdDuration / 3 && NPC.AnyNPCs(ModContent.NPCType<TheOrator>()))
                 {
-                    TheOrator Orator = Main.npc[NPC.FindFirstNPC(ModContent.NPCType<TheOrator>())].As<TheOrator>();
+                    TheOrator Orator = Main.npc[NPC.FindFirstNPC(ModContent.NPCType<TheOrator>())].ModNPC as TheOrator;
                     if (Orator.AIState == TheOrator.States.DarkTides && Main.netMode != NetmodeID.MultiplayerClient)
                     {
                         for (int i = 0; i < 16; i++)
@@ -135,7 +136,9 @@ public class DarkTide : ModProjectile
 
     public override bool PreDraw(ref Color lightColor)
     {
-        Main.spriteBatch.UseBlendState(BlendState.Additive);
+        Main.spriteBatch.End(out var scope);
+        var newScope = scope with { BlendState = BlendState.Additive };
+        Main.spriteBatch.Begin(newScope);
 
         Vector2 drawPos = Projectile.Center - Main.screenPosition;
         Color drawColor = ColorFunction(0.5f);
@@ -162,7 +165,8 @@ public class DarkTide : ModProjectile
             Main.EntitySpriteDraw(tex, drawPos + shiftOffset + (displacement * i) + scroll, null, drawColor * 0.85f, Projectile.rotation + PiOver2, tex.Size() * 0.5f, scale, SpriteEffects.None, 0);
         }
         
-        Main.spriteBatch.UseBlendState(BlendState.AlphaBlend);
+        Main.spriteBatch.End();
+        Main.spriteBatch.Begin(scope);
         return false;
     }
 

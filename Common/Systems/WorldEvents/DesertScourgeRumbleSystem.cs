@@ -1,5 +1,6 @@
 ﻿using CalamityMod;
-using Luminance.Core.Graphics;
+using Terraria.Graphics.CameraModifiers;
+using Windfall.Common.Utils;
 
 namespace Windfall.Common.Systems.WorldEvents;
 
@@ -77,13 +78,13 @@ public class DesertScourgeRumbleSystem : ModSystem
         {
             if (Main.rand.NextFloat() >= groundShakeInterpolant + 0.2f)
                 continue;
-            Point point = Utilities.FindGroundVertical((target.Center + new Vector2(Main.rand.NextFloatDirection() * 1200f, -560f)).ToTileCoordinates());
+            Point point = WindfallUtils.FindSurfaceBelow((target.Center + new Vector2(Main.rand.NextFloatDirection() * 1200f, -560f)).ToTileCoordinates(), true);
             bool sandBelow = ParanoidTileRetrieval(point).TileType == TileID.Sand;
             if (sandBelow)
                 Dust.NewDustPerfect(new Vector2(point.ToWorldCoordinates().X, point.ToWorldCoordinates().Y) + new Vector2(Main.rand.NextFloatDirection() * 8f, -8f), DustID.Sand, Main.rand.NextVector2Circular(1.5f, 1.5f) - Vector2.UnitY * 1.5f);
         }
         // Create screen shake effects.
-        ScreenShakeSystem.StartShake((float)(MathF.Pow(groundShakeInterpolant, 1.81f) * 10f));
+        CameraSystem.StartScreenShake(Main.LocalPlayer.Center, Vector2.Zero, (float)(MathF.Pow(groundShakeInterpolant, 1.81f) * 10f), 10, 2);
         if (scoogTimer == midpoint)
             if (leftSide)
                 SoundEngine.PlaySound(Roar with { Volume = volume }, target.Center + new Vector2(Main.rand.Next(-300, -200), 150));

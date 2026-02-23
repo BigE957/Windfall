@@ -2,6 +2,7 @@
 using CalamityMod.Dusts;
 using CalamityMod.NPCs.Crags;
 using Windfall.Common.Systems.WorldEvents;
+using Windfall.Common.Utils;
 using Windfall.Content.NPCs.WorldEvents.CalClone;
 
 namespace Windfall.Content.Projectiles.NPCAnimations;
@@ -77,7 +78,7 @@ public class CalCloneProj : ModProjectile
         {
             case AIState.Spawning:
                 Point worldPosition = new((int)Projectile.position.ToTileCoordinates().X, (int)Projectile.position.ToTileCoordinates().Y);
-                float groundY = Utilities.FindGroundVertical(worldPosition).ToWorldCoordinates().Y;
+                float groundY = WindfallUtils.FindSurfaceBelow(worldPosition, true).ToWorldCoordinates().Y;
                 Projectile.position.Y = groundY - Projectile.height - 32;
                 CurrentAI = AIState.WaitingForPlayer;
                 break;

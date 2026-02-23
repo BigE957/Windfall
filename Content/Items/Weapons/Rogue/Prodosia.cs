@@ -6,6 +6,7 @@ using CalamityMod.Particles;
 using Microsoft.Xna.Framework.Input;
 using System.Collections.ObjectModel;
 using Windfall.Common.Graphics.Metaballs;
+using Windfall.Common.Utils;
 using Windfall.Content.Buffs.DoT;
 
 namespace Windfall.Content.Items.Weapons.Rogue;
@@ -177,15 +178,15 @@ public class GoldenTrinket : ModProjectile, ILocalizedModType
                 }
 
                 bool colliding = false;
-                foreach (Projectile spear in Main.projectile.Where(p => p.active && p.type == ModContent.ProjectileType<GoldenJavelin>() && p.owner == Projectile.owner && (int)p.As<GoldenJavelin>().State == 1))
+                foreach (Projectile spear in Main.projectile.Where(p => p.active && p.type == ModContent.ProjectileType<GoldenJavelin>() && p.owner == Projectile.owner && (int)(p.ModProjectile as GoldenJavelin).State == 1))
                 {
-                    colliding = spear.As<GoldenJavelin>().Colliding(spear.Hitbox, Projectile.Hitbox).Value;
+                    colliding = (spear.ModProjectile as GoldenJavelin).Colliding(spear.Hitbox, Projectile.Hitbox).Value;
 
                     if(colliding)
                     {
                         float sign = Math.Sign(Projectile.velocity.X);
 
-                        spear.As<GoldenJavelin>().State++;
+                        (spear.ModProjectile as GoldenJavelin).State++;
                         State = States.Die;
 
                         Projectile.damage = 0;
@@ -225,7 +226,7 @@ public class GoldenTrinket : ModProjectile, ILocalizedModType
                 else
                     goalPos = target.Center;
 
-                Projectile.velocity = Projectile.velocity.RotateTowards((goalPos - Projectile.Center).ToRotation(), 0.15f);
+                Projectile.velocity = WindfallUtils.RotateTowards(Projectile.velocity, (goalPos - Projectile.Center).ToRotation(), 0.15f);
 
                 float seekVelocity = 10f;
                 float seekTime = 10;

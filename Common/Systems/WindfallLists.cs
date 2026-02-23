@@ -73,13 +73,23 @@ public class WindfallLists : ModSystem
         ];
 
         //Calamity Worms
-        WormIDs.AddRange(CalamityLists.AstrumDeusIDs);
-        WormIDs.AddRange(CalamityLists.AquaticScourgeIDs);
-        WormIDs.AddRange(CalamityLists.DevourerOfGodsIDs);
-        WormIDs.AddRange(CalamityLists.DesertScourgeIDs);
-        WormIDs.AddRange(CalamityLists.PerforatorIDs);
-        WormIDs.AddRange(CalamityLists.StormWeaverIDs);
-        WormIDs.AddRange(CalamityLists.ThanatosIDs);
+        WormIDs.AddRange([NPCType<AstrumDeusHead>(), NPCType<AstrumDeusBody>(), NPCType<AstrumDeusTail>()]);
+
+        WormIDs.AddRange([NPCType<AquaticScourgeHead>(), NPCType<AquaticScourgeBody>(), NPCType<AquaticScourgeBodyAlt>(), NPCType<AquaticScourgeTail>()]);
+
+        WormIDs.AddRange([NPCType<DevourerofGodsHead>(), NPCType<DevourerofGodsBody>(), NPCType<DevourerofGodsTail>()]);
+
+        WormIDs.AddRange([NPCType<DesertScourgeHead>(), NPCType<DesertScourgeBody>(), NPCType<DesertScourgeTail>()]);
+        WormIDs.AddRange([NPCType<DesertNuisanceHead>(), NPCType<DesertNuisanceBody>(), NPCType<DesertNuisanceTail>()]);
+        WormIDs.AddRange([NPCType<DesertNuisanceHeadYoung>(), NPCType<DesertNuisanceBodyYoung>(), NPCType<DesertNuisanceTailYoung>()]);
+
+        WormIDs.AddRange([NPCType<PerforatorHeadLarge>(), NPCType<PerforatorBodyLarge>(), NPCType<PerforatorTailLarge>()]);
+        WormIDs.AddRange([NPCType<PerforatorHeadMedium>(), NPCType<PerforatorBodyMedium>(), NPCType<PerforatorTailMedium>()]);
+        WormIDs.AddRange([NPCType<PerforatorHeadSmall>(), NPCType<PerforatorBodySmall>(), NPCType<PerforatorTailSmall>()]);
+
+        WormIDs.AddRange([NPCType<StormWeaverHead>(), NPCType<StormWeaverBody>(), NPCType<StormWeaverTail>()]);
+
+        WormIDs.AddRange([NPCType<ThanatosHead>(), NPCType<ThanatosBody1>(), NPCType<ThanatosBody2>(), NPCType<ThanatosTail>()]);
 
         WormHeadIDs = [
             //Vanilla Worms

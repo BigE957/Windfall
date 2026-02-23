@@ -1,8 +1,10 @@
 ﻿using CalamityMod.Graphics.Primitives;
 using CalamityMod.World;
+using Daybreak.Common.Rendering;
 using Terraria.Graphics.Shaders;
 using Windfall.Common.Graphics.Metaballs;
 using Windfall.Content.NPCs.Bosses.Orator;
+using static System.Formats.Asn1.AsnWriter;
 
 namespace Windfall.Content.Projectiles.Boss.Orator;
 
@@ -143,7 +145,7 @@ public class DarkGlob : ModProjectile, ILocalizedModType
         return false;
     }
 
-    private Color ColorFunction(float completionRatio)
+    private Color ColorFunction(float completionRatio, Vector2 v)
     {
         Color colorA = Color.Lerp(Color.LimeGreen, Color.Orange, EmpyreanMetaball.BorderLerpValue);
         Color colorB = Color.Lerp(Color.GreenYellow, Color.Goldenrod, EmpyreanMetaball.BorderLerpValue);
@@ -155,7 +157,7 @@ public class DarkGlob : ModProjectile, ILocalizedModType
         return Color.Lerp(Color.White, endColor, fadeToEnd) * fadeOpacity;
     }
 
-    private float WidthFunction(float completionRatio)
+    private float WidthFunction(float completionRatio, Vector2 v)
     {
         float expansionCompletion = 1f - (float)Math.Pow(1f - Utils.GetLerpValue(0f, 0.3f, completionRatio, true), 2D);
         float maxWidth = Projectile.Opacity * Projectile.scale * 180f;
@@ -168,15 +170,20 @@ public class DarkGlob : ModProjectile, ILocalizedModType
         if (Trail == TrailType.Shader)
         {
             GameShaders.Misc["CalamityMod:ImpFlameTrail"].SetTexture(ModContent.Request<Texture2D>("CalamityMod/ExtraTextures/Trails/ScarletDevilStreak"));
-            PrimitiveRenderer.RenderTrail(Projectile.oldPos, new(WidthFunction, ColorFunction, (_) => Projectile.Size * 0.5f, shader: GameShaders.Misc["CalamityMod:ImpFlameTrail"]), 20);
+            PrimitiveRenderer.RenderTrail(Projectile.oldPos, new(WidthFunction, ColorFunction, (_,_) => Projectile.Size * 0.5f, shader: GameShaders.Misc["CalamityMod:ImpFlameTrail"]), 20);
         }
 
-        Main.spriteBatch.UseBlendState(BlendState.Additive);
+        Main.spriteBatch.End(out var scope);
+        var newScope = scope with { BlendState = BlendState.Additive };
+        Main.spriteBatch.Begin(newScope);
+
         Texture2D tex = ModContent.Request<Texture2D>("CalamityMod/Particles/BloomCircle").Value;
         Vector2 drawPos = Projectile.Center - Main.screenPosition - (Projectile.ai[0] == 0 ? Vector2.Zero : Projectile.velocity.SafeNormalize(Vector2.UnitX) * (16 * Projectile.scale));
-        Main.EntitySpriteDraw(tex, drawPos, tex.Frame(), ColorFunction(0) * 0.75f, Projectile.rotation, tex.Size() * 0.5f, Projectile.scale * 0.8f, SpriteEffects.None, 0);
-        Main.spriteBatch.UseBlendState(BlendState.AlphaBlend);
-        
+        Main.EntitySpriteDraw(tex, drawPos, tex.Frame(), ColorFunction(0, Vector2.Zero) * 0.75f, Projectile.rotation, tex.Size() * 0.5f, Projectile.scale * 0.8f, SpriteEffects.None, 0);
+
+        Main.spriteBatch.End();
+        Main.spriteBatch.Begin(scope);
+
         return false;
     }
 

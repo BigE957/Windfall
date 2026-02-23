@@ -3,7 +3,9 @@ using CalamityMod.Buffs.DamageOverTime;
 using CalamityMod.Items;
 using CalamityMod.Items.Weapons.Rogue;
 using CalamityMod.Particles;
+using Terraria;
 using Windfall.Common.Graphics.Metaballs;
+using Windfall.Common.Systems;
 using static Windfall.Content.NPCs.GlobalNPCs.DebuffGlobalNPC;
 
 namespace Windfall.Content.Items.Weapons.Rogue;
@@ -61,15 +63,150 @@ public class ExodiumSpearProj : ModProjectile, ILocalizedModType
 
     public override void AI()
     {
-        if (Projectile.ai[0] == 0f)
+        if (base.Projectile.ai[0] == 0f)
         {
-            Projectile.rotation = Projectile.velocity.ToRotation() + PiOver4;
+            base.Projectile.rotation = base.Projectile.velocity.ToRotation() + PiOver4;
         }
+
         //Sticky Behaviour
-        Projectile.StickyProjAI(30);
+        if (Projectile.ai[0] == 1f)
+        {
+            int seconds = 30;
+            bool killProj = false;
+            bool spawnDust = false;
+
+            //the projectile follows the NPC, even if it goes into blocks
+            Projectile.tileCollide = false;
+
+            //timer for triggering hit effects
+            Projectile.localAI[0]++;
+            if (Projectile.localAI[0] % 30f == 0f)
+            {
+                spawnDust = true;
+            }
+
+            //So AI knows what NPC it is sticking to
+            int npcIndex = (int)Projectile.ai[1];
+            NPC npc = Main.npc[npcIndex];
+
+            //Kill projectile after so many seconds or if the NPC it is stuck to no longer exists
+            if (Projectile.localAI[0] >= (float)(60 * seconds))
+            {
+                killProj = true;
+            }
+            else if (!npcIndex.WithinBounds(Main.maxNPCs))
+            {
+                killProj = true;
+            }
+
+            else if (npc.active && !npc.dontTakeDamage)
+            {
+                //follow the NPC
+                Projectile.Center = npc.Center - Projectile.velocity * 2f;
+                Projectile.gfxOffY = npc.gfxOffY;
+
+                //if attached to npc, trigger npc hit effects every half a second
+                if (spawnDust)
+                {
+                    npc.HitEffect(0, 1.0);
+                }
+            }
+            else
+            {
+                killProj = true;
+            }
+
+            //Kill the projectile or reset stats if needed
+            if (killProj)
+                Projectile.Kill();
+        }
     }
 
-    public override void ModifyHitNPC(NPC target, ref NPC.HitModifiers modifiers) => Projectile.ModifyHitNPCSticky(12);
+    public override void ModifyHitNPC(NPC target, ref NPC.HitModifiers modifiers)
+    {
+        Player player = Main.player[Projectile.owner];
+        Rectangle myRect = Projectile.Hitbox;
+
+        if (Projectile.owner == Main.myPlayer)
+        {
+            for (int npcIndex = 0; npcIndex < Main.maxNPCs; npcIndex++)
+            {
+                NPC npc = Main.npc[npcIndex];
+                //covers most edge cases like voodoo dolls
+                if (npc.active && !npc.dontTakeDamage &&
+                    ((Projectile.friendly && (!npc.friendly || (npc.type == NPCID.Guide && Projectile.owner < Main.maxPlayers && player.killGuide) || (npc.type == NPCID.Clothier && Projectile.owner < Main.maxPlayers && player.killClothier))) ||
+                    (Projectile.hostile && npc.friendly && !npc.dontTakeDamageFromHostiles)) && (Projectile.owner < 0 || npc.immune[Projectile.owner] == 0 || Projectile.maxPenetrate == 1))
+                {
+                    if (npc.noTileCollide || !Projectile.ownerHitCheck)
+                    {
+                        bool stickingToNPC;
+                        //Solar Crawltipede tail has special collision
+                        if (npc.type == NPCID.SolarCrawltipedeTail)
+                        {
+                            Rectangle rect = npc.Hitbox;
+                            int crawltipedeHitboxMod = 8;
+                            rect.X -= crawltipedeHitboxMod;
+                            rect.Y -= crawltipedeHitboxMod;
+                            rect.Width += crawltipedeHitboxMod * 2;
+                            rect.Height += crawltipedeHitboxMod * 2;
+                            stickingToNPC = Projectile.Colliding(myRect, rect);
+                        }
+                        else
+                        {
+                            stickingToNPC = Projectile.Colliding(myRect, npc.Hitbox);
+                        }
+                        if (stickingToNPC)
+                        {
+                            //reflect projectile if the npc can reflect it (like Selenians)
+                            if (npc.reflectsProjectiles && Projectile.CanBeReflected())
+                            {
+                                npc.ReflectProjectile(Projectile);
+                                return;
+                            }
+
+                            //let the projectile know it is sticking and the npc it is sticking too
+                            Projectile.ai[0] = 1f;
+                            Projectile.ai[1] = (float)npcIndex;
+
+                            //follow the NPC
+                            Projectile.velocity = (npc.Center - Projectile.Center);
+
+                            Projectile.netUpdate = true;
+
+                            //Count how many projectiles are attached, delete as necessary
+                            Point[] array2 = new Point[12];
+                            int projCount = 0;
+                            for (int projIndex = 0; projIndex < Main.maxProjectiles; projIndex++)
+                            {
+                                Projectile proj = Main.projectile[projIndex];
+                                if (projIndex != Projectile.whoAmI && proj.active && proj.owner == Main.myPlayer && proj.type == Projectile.type && proj.ai[0] == 1f && proj.ai[1] == (float)npcIndex)
+                                {
+                                    array2[projCount++] = new Point(projIndex, proj.timeLeft);
+                                    if (projCount >= array2.Length)
+                                    {
+                                        break;
+                                    }
+                                }
+                            }
+                            if (projCount >= array2.Length)
+                            {
+                                int stuckProjAmt = 0;
+                                for (int m = 1; m < array2.Length; m++)
+                                {
+                                    if (array2[m].Y < array2[stuckProjAmt].Y)
+                                    {
+                                        stuckProjAmt = m;
+                                    }
+                                }
+                                Main.projectile[array2[stuckProjAmt].X].Kill();
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
     public override bool? CanDamage() => Projectile.ai[0] == 1f ? false : base.CanDamage();
 
     public override bool? Colliding(Rectangle projHitbox, Rectangle targetHitbox)
@@ -131,28 +268,28 @@ public class ExodiumSpearProj : ModProjectile, ILocalizedModType
                             switch (index)
                             {
                                 case 0: //Daybreak
-                                    damage += (int)(100 * (impaledNPC.buffTime[i] / 60D) * VanillaHeatDamageMult(target));
+                                    damage += (int)( (impaledNPC.buffTime[i] / 60D) * impaledNPC.Calamity().HeatDebuffMultiplier.ApplyTo(100));
                                     break;
                                 case 1: //Nightwither
-                                    damage += (int)(100 * (impaledNPC.buffTime[i] / 60D) * ColdDamageMult(target));
+                                    damage += (int)((impaledNPC.buffTime[i] / 60D) * impaledNPC.Calamity().ColdDebuffMultiplier.ApplyTo(100));
                                     break;
                                 case 2: //Brimstone Flames
-                                    damage += (int)(30 * (impaledNPC.buffTime[i] / 60D) * HeatDamageMult(target));
+                                    damage += (int)((impaledNPC.buffTime[i] / 60D) * impaledNPC.Calamity().HeatDebuffMultiplier.ApplyTo(30));
                                     break;
                                 case 3: //Astral Infection
-                                    damage += (int)(37.5 * (impaledNPC.buffTime[i] / 60D) * SicknessDamageMult(target));
+                                    damage += (int)((impaledNPC.buffTime[i] / 60D) * impaledNPC.Calamity().SicknessDebuffMultiplier.ApplyTo(37.5f));
                                     break;
                                 case 4: //Holy Flames
-                                    damage += (int)(100 * (impaledNPC.buffTime[i] / 60D) * HeatDamageMult(target));
+                                    damage += (int)((impaledNPC.buffTime[i] / 60D) * impaledNPC.Calamity().HeatDebuffMultiplier.ApplyTo(100));
                                     break;
                                 case 5: //Plague
-                                    damage += (int)(50 * (impaledNPC.buffTime[i] / 60D) * SicknessDamageMult(target));
+                                    damage += (int)((impaledNPC.buffTime[i] / 60D) * impaledNPC.Calamity().SicknessDebuffMultiplier.ApplyTo(50));
                                     break;
                                 case 6: //Hellfire
-                                    damage += (int)(15 * (impaledNPC.buffTime[i] / 60D) * VanillaHeatDamageMult(target));
+                                    damage += (int)((impaledNPC.buffTime[i] / 60D) * impaledNPC.Calamity().HeatDebuffMultiplier.ApplyTo(15));
                                     break;
                                 case 7: //Sage Poison
-                                    damage += (int)(impaledNPC.Calamity().sagePoisonDamage * (impaledNPC.buffTime[i] / 60D) * SicknessDamageMult(target));
+                                    damage += (int)((impaledNPC.buffTime[i] / 60D) * impaledNPC.Calamity().SicknessDebuffMultiplier.ApplyTo(impaledNPC.Calamity().sagePoisonDamage));
                                     break;
                                 case 8: //Elemental Mix
                                     damage += (int)(200 * (impaledNPC.buffTime[i] / 60D));
@@ -170,7 +307,7 @@ public class ExodiumSpearProj : ModProjectile, ILocalizedModType
             target.StrikeNPC(target.CalculateHitInfo(damage, hit.HitDirection, true, hit.Knockback * 2, Projectile.DamageType));
 
             SoundEngine.PlaySound(SoundID.DD2_EtherianPortalDryadTouch, Projectile.Center);
-            Luminance.Core.Graphics.ScreenShakeSystem.StartShake(5f);
+            CameraSystem.StartScreenShake(Projectile.Center, Vector2.Zero, 5f, 10, 60);
             for (int i = 0; i <= 50; i++)
                 EmpyreanMetaball.SpawnDefaultParticle(Projectile.Center, Main.rand.NextVector2Circular(10f, 10f) * Main.rand.NextFloat(1f, 2f), 40 * Main.rand.NextFloat(3f, 5f));
             Particle pulse = new PulseRing(Projectile.Center, Vector2.Zero, Color.Teal, 0f, 2.5f, 16);

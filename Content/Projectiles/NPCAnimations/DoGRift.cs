@@ -1,4 +1,5 @@
 ﻿using CalamityMod.Particles;
+using Daybreak.Common.Rendering;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics.Metrics;
@@ -63,19 +64,26 @@ public class DoGRift : ModProjectile
         Texture2D texture = ModContent.Request<Texture2D>("CalamityMod/Particles/LargeBloom").Value;
         Vector2 drawPosition = Projectile.Center - Main.screenPosition + Vector2.UnitY * Projectile.gfxOffY;
         Vector2 origin = texture.Size() * 0.5f;
-        spriteBatch.Draw(texture, drawPosition, null, Projectile.GetAlpha(Color.Black), 0f, origin, Projectile.scale / 2f, SpriteEffects.None, 0f);            
-        
-        spriteBatch.UseBlendState(BlendState.Additive);
+        spriteBatch.Draw(texture, drawPosition, null, Projectile.GetAlpha(Color.Black), 0f, origin, Projectile.scale / 2f, SpriteEffects.None, 0f);
+
+        Main.spriteBatch.End(out var scope);
+        var newScope = scope with { BlendState = BlendState.Additive };
+        Main.spriteBatch.Begin(newScope);
+
         texture = ModContent.Request<Texture2D>("Windfall/Assets/Skies/OratorMoonBloom2").Value;
         origin = texture.Size() * 0.5f;
         spriteBatch.Draw(texture, drawPosition, null, Projectile.GetAlpha(Color.Violet), -Projectile.rotation / 2.25f, origin, Projectile.scale * (0.24f + 0.02f * ((float)Math.Sin(aiCounter / -20f) / 2f + 0.5f)), SpriteEffects.None, 0f);
 
-        spriteBatch.UseBlendState(BlendState.AlphaBlend);
+        Main.spriteBatch.End();
+        Main.spriteBatch.Begin(scope);
+
         texture = ModContent.Request<Texture2D>("CalamityMod/Particles/LargeBloom").Value;
         origin = texture.Size() * 0.5f;
         spriteBatch.Draw(texture, drawPosition, null, Projectile.GetAlpha(Color.Black), 0f, origin, Projectile.scale / 3f, SpriteEffects.None, 0f);
 
-        spriteBatch.UseBlendState(BlendState.Additive);
+        Main.spriteBatch.End();
+        Main.spriteBatch.Begin(newScope);
+
         texture = ModContent.Request<Texture2D>("CalamityMod/ExtraTextures/SoulVortex").Value;
         origin = texture.Size() * 0.5f;
         Color color = Color.Violet;
@@ -90,7 +98,9 @@ public class DoGRift : ModProjectile
         color.A = 100;
         spriteBatch.Draw(texture, drawPosition, null, color, -Projectile.rotation / 1.75f, origin, Projectile.scale / 4.75f, SpriteEffects.None, 0f);
 
-        spriteBatch.UseBlendState(BlendState.AlphaBlend);
+        Main.spriteBatch.End();
+        Main.spriteBatch.Begin(scope);
+
         texture = ModContent.Request<Texture2D>("Windfall/Assets/Projectiles/NPCAnimations/DoGEyes").Value;
         origin = texture.Size() * 0.5f;
         spriteBatch.Draw(texture, drawPosition, null, Color.White * eyeOpacity, 0f, origin, Projectile.scale / 6f, SpriteEffects.None, 0f);

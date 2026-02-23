@@ -13,8 +13,8 @@ public class Wildfire : ModBuff
         Main.pvpBuff[Type] = true;
         Main.buffNoSave[Type] = true;
 
-        CalamityLists.debuffList.Add(Type);
-        CalamityLists.fireDebuffList.Add(Type);
+        //CalamityLists.debuffList.Add(Type);
+        //CalamityLists.fireDebuffList.Add(Type);
         CalamityGlobalNPC.moddedDebuffTextureList.Add((Texture, NPC => NPC.Debuff().Wildfire));
     }
 

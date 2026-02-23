@@ -1,5 +1,4 @@
 ﻿using CalamityMod;
-using Luminance.Core.Graphics;
 using Terraria.Utilities;
 using Windfall.Common.Systems;
 
@@ -147,13 +146,13 @@ public class WanderingPotionSeller : ModNPC
                     zoom = Lerp(zoom, 1, 0.075f);
                 else
                     zoom = 1;
-                CameraPanSystem.Zoom = zoom;
-                CameraPanSystem.PanTowards(new Vector2(NPC.Center.X - 2, NPC.Center.Y - 8), zoom);
+                CameraSystem.Zoom = zoom;
+                CameraSystem.InterpolateCamera(new Vector2(NPC.Center.X - 2, NPC.Center.Y - 8), zoom);
             }
             else if (aiCounter == 120)
             {
-                CameraPanSystem.Zoom = 50;
-                CameraPanSystem.PanTowards(NPC.Center, 50);
+                CameraSystem.Zoom = 50;
+                CameraSystem.CameraCenter = NPC.Center;
                 for (int i = 0; i < 50; i++)
                 {
                     Vector2 speed = Main.rand.NextVector2Circular(1.5f, 2f);

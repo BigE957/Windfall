@@ -55,14 +55,6 @@ public static class DragonMonkRuins
         tile.WallType == ModContent.WallType<NavystoneWall>() ||
         tile.TileType == ModContent.TileType<EutrophicSand>() ||
         tile.WallType == ModContent.WallType<EutrophicSandWall>() ||
-        tile.TileType == ModContent.TileType<SmallCorals>() ||
-        tile.TileType == ModContent.TileType<MediumCoral>() ||
-        tile.TileType == ModContent.TileType<MediumCoral2>() ||
-        tile.TileType == ModContent.TileType<CoralPileLarge>() ||
-        tile.TileType == ModContent.TileType<SmallBrainCoral>() ||
-        tile.TileType == ModContent.TileType<BrainCoral>() ||
-        tile.TileType == ModContent.TileType<FanCoral>() ||
-        tile.TileType == ModContent.TileType<TubeCoral>() ||
         tile.TileType == ModContent.TileType<SeaPrism>() ||
         tile.TileType == ModContent.TileType<SeaPrismCrystals>())
             return true;

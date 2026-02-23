@@ -44,10 +44,6 @@ public class SiphonCollider : ModNPC
 
         NPC.Calamity().VulnerableToHeat = true;
         NPC.Calamity().VulnerableToSickness = false;
-
-        // Scale stats in Expert and Master
-        CalamityGlobalNPC.AdjustExpertModeStatScaling(NPC);
-        CalamityGlobalNPC.AdjustMasterModeStatScaling(NPC);
     }
 
     int aiCounter = 0;
@@ -56,7 +52,7 @@ public class SiphonCollider : ModNPC
 
     public override void AI()
     {
-        if (!Main.npc.Any(n => n.active && n.type == ModContent.NPCType<SelenicSiphon>() && n.As<SelenicSiphon>().EventActive))
+        if (!Main.npc.Any(n => n.active && n.type == ModContent.NPCType<SelenicSiphon>() && (n.ModNPC as SelenicSiphon).EventActive))
         {
             NPC.Transform(ModContent.NPCType<SightseerCollider>());
             return;

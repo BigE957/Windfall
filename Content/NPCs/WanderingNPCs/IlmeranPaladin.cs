@@ -119,7 +119,7 @@ public class IlmeranPaladin : ModNPC
                 chat.Add(GetWindfallTextValue($"Dialogue.IlmeranPaladin.Chat.LookingIlmeran1"));
                 chat.Add(GetWindfallTextValue($"Dialogue.IlmeranPaladin.Chat.LookingIlmeran2"));
             }
-        if (NPC.FindFirstNPC(ModContent.NPCType<SEAHOE>()) != -1)
+        if (NPC.FindFirstNPC(ModContent.NPCType<SeaKing>()) != -1)
         {
             chat.Add(GetWindfallTextValue($"Dialogue.IlmeranPaladin.Chat.Amidias1"));
             chat.Add(GetWindfallTextValue($"Dialogue.IlmeranPaladin.Chat.Amidias2"));
@@ -158,7 +158,7 @@ public class IlmeranPaladin : ModNPC
     public override void AddShops()
     {
         new NPCShop(Type)
-            .AddWithPrice<AmidiasSpark>(5000)
+            .AddWithPrice<IlmerisSpark>(5000)
             .AddWithPrice<Cnidrisnack>(50)
             .AddWithPrice<AncientIlmeranRod>(1000, WindfallConditions.ScoogHunt1ActiveOrComplete)
             .AddWithPrice<IlmeranHorn>(20000, WindfallConditions.ScoogHunt1Complete)

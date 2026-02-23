@@ -1,10 +1,10 @@
 ﻿using CalamityMod;
 using CalamityMod.Particles;
 using CalamityMod.World;
-using Luminance.Core.Graphics;
 using Terraria.GameContent.Bestiary;
 using Windfall.Common.Graphics.Metaballs;
 using Windfall.Common.Systems;
+using Windfall.Common.Utils;
 using Windfall.Content.Projectiles.Boss.Orator;
 
 namespace Windfall.Content.NPCs.Bosses.Orator;
@@ -113,10 +113,10 @@ public class OratorHand : ModNPC
         }
         else
         {
-            OratorHand mainHand = Main.npc.First(n => n != null && n.active && n.type == ModContent.NPCType<OratorHand>() && n.whoAmI != NPC.whoAmI).As<OratorHand>();
+            OratorHand mainHand = Main.npc.First(n => n != null && n.active && n.type == ModContent.NPCType<OratorHand>() && n.whoAmI != NPC.whoAmI).ModNPC as OratorHand;
             MainHandIndex = mainHand.NPC.whoAmI;
             SubHandIndex = NPC.whoAmI;
-            Main.npc[MainHandIndex].As<OratorHand>().SubHandIndex = NPC.whoAmI;
+            (Main.npc[MainHandIndex].ModNPC as OratorHand).SubHandIndex = NPC.whoAmI;
             
         }
         /*
@@ -165,7 +165,7 @@ public class OratorHand : ModNPC
             return true;
         }
         NPC orator = Main.npc[OratorIndex];
-        TheOrator modOrator = orator.As<TheOrator>();
+        TheOrator modOrator = orator.ModNPC as TheOrator;
         if (modOrator.AIState == TheOrator.States.Spawning)
             return true;
         if (NPC.life == 0)
@@ -217,7 +217,7 @@ public class OratorHand : ModNPC
         #endregion
 
         NPC orator = Main.npc[OratorIndex];
-        TheOrator modOrator = orator.As<TheOrator>();
+        TheOrator modOrator = orator.ModNPC as TheOrator;
         int aiCounter = modOrator.aiCounter;
 
         #region Death Scene
@@ -246,8 +246,8 @@ public class OratorHand : ModNPC
                     zoom = Lerp(0f, 0.4f, deadCounter / 60f);
                 else
                     zoom = 0.4f;
-                CameraPanSystem.Zoom = zoom;
-                CameraPanSystem.PanTowards(NPC.Center + ((subHand.Center - NPC.Center) / 2f), Clamp(deadCounter / 60f, 0f, 1f));
+                CameraSystem.Zoom = zoom;
+                CameraSystem.InterpolateCamera(NPC.Center + ((subHand.Center - NPC.Center) / 2f), Clamp(deadCounter / 60f, 0f, 1f));
             }
 
             if (deadCounter < 300)
@@ -272,7 +272,7 @@ public class OratorHand : ModNPC
                     dust.noGravity = true;
                 }
 
-                DeathAshParticle.CreateAshesFromNPC(NPC);
+                DeathAshParticle.CreateAshesFromNPC(NPC, NPC.velocity);
 
                 for(int i = 0; i < 30; i++)
                     EmpyreanMetaball.SpawnDefaultParticle(NPC.Center - (NPC.rotation.ToRotationVector2() * (NPC.width / 1.5f)) + (NPC.rotation.ToRotationVector2().RotatedBy(PiOver2) * Main.rand.NextFloat(-16f, 16f)), (NPC.rotation.ToRotationVector2().RotatedBy(Pi + Main.rand.NextFloat(-PiOver4, PiOver4)) * Main.rand.NextFloat(2f, 6f) * 3f), Main.rand.NextFloat(20f, 40f));
@@ -407,7 +407,7 @@ public class OratorHand : ModNPC
                                         subHand.Center = midPoint - (subHand.rotation.ToRotationVector2() * (subHand.width / 3f));
 
 
-                                        ScreenShakeSystem.StartShake(9f);
+                                        CameraSystem.StartScreenShake(NPC.Center, Vector2.Zero, 9f, 18, 90);
                                         SoundEngine.PlaySound(SoundID.DD2_MonkStaffGroundImpact, midPoint);
                                         if (Main.netMode != NetmodeID.MultiplayerClient)
                                         {
@@ -469,7 +469,7 @@ public class OratorHand : ModNPC
                                         if (aiCounter == 110)
                                             NPC.velocity = direction * -75;
                                         NPC.velocity *= 0.93f;
-                                        NPC.velocity = NPC.velocity.RotateTowards((mainHand.Center - NPC.Center).ToRotation(), PiOver4);
+                                        NPC.velocity = WindfallUtils.RotateTowards(NPC.velocity, (mainHand.Center - NPC.Center).ToRotation(), PiOver4);
                                     }
                                     else
                                     {
@@ -766,7 +766,7 @@ public class OratorHand : ModNPC
                                 Tile tile = Main.tile[midPoint.ToTileCoordinates()];
                                 if (aiCounter >= 1000 && (NPC.velocity.LengthSquared() < 784 || (tile.HasTile && (tile.IsTileSolid() || TileID.Sets.Platforms[tile.TileType]) && midPoint.Y > modOrator.target.Center.Y)))
                                 {
-                                    ScreenShakeSystem.StartShake(9f);
+                                    CameraSystem.StartScreenShake(NPC.Center, Vector2.Zero, 9f, 18, 90);
                                     SoundEngine.PlaySound(SoundID.DD2_MonkStaffGroundImpact, midPoint);
                                     int projCount = 16;
                                     for (int i = 0; i < projCount; i++)
@@ -1060,7 +1060,7 @@ public class OratorHand : ModNPC
         {
             NPC.dontTakeDamage = true;               
             if (OratorIndex != -1)
-                Main.npc[OratorIndex].As<TheOrator>().AIState = TheOrator.States.PhaseChange;
+                (Main.npc[OratorIndex].ModNPC as TheOrator).AIState = TheOrator.States.PhaseChange;
             
             if (NPC.realLife != -1)
                 Main.npc[NPC.realLife].life = 1;

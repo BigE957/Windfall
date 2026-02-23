@@ -31,7 +31,7 @@ public class WretchedFountain : ModProjectile
 
     public override void OnSpawn(IEntitySource source)
     {
-        Projectile.position.Y = Main.npc[Orator].As<TheOrator>().target.Center.Y - Projectile.height / 2f;
+        Projectile.position.Y = (Main.npc[Orator].ModNPC as TheOrator).target.Center.Y - Projectile.height / 2f;
         Projectile.position.Y += 360;
         Point ground = FindSurfaceBelow(Projectile.Center.ToTileCoordinates(), true);
         Projectile.Center = ground.ToWorldCoordinates();
@@ -42,7 +42,7 @@ public class WretchedFountain : ModProjectile
         float openness = Clamp(Time / 30f, 0f, 1f);
         if(Time < (CalamityWorld.revenge ? 60 : 30) && Orator != -1)
         {
-            Projectile.position.Y = Main.npc[Orator].As<TheOrator>().target.Center.Y - Projectile.height / 2f;
+            Projectile.position.Y = (Main.npc[Orator].ModNPC as TheOrator).target.Center.Y - Projectile.height / 2f;
             Projectile.position.Y += 360;
             Point ground = FindSurfaceBelow(Projectile.Center.ToTileCoordinates(), false);
             Projectile.Center = ground.ToWorldCoordinates();

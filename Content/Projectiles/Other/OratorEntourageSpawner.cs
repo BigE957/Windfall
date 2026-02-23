@@ -1,5 +1,5 @@
 ﻿using DialogueHelper.UI.Dialogue;
-using Luminance.Core.Graphics;
+using Windfall.Common.Systems;
 using Windfall.Content.Buffs.Inhibitors;
 using Windfall.Content.Items.Quests;
 using Windfall.Content.NPCs.TravellingNPCs;
@@ -95,7 +95,7 @@ public class OratorEntourageSpawner : ModProjectile
                 // Allow travelling cultist to immedietely comment on the player's encounter should they be present for whatever reason
                 int travellingCultist = NPC.FindFirstNPC(ModContent.NPCType<TravellingCultist>());
                 if (travellingCultist != -1)
-                    Main.npc[travellingCultist].As<TravellingCultist>().introductionDone = false;
+                    (Main.npc[travellingCultist].ModNPC as TravellingCultist).introductionDone = false;
 
                 Projectile.active = false;
             }
@@ -107,8 +107,8 @@ public class OratorEntourageSpawner : ModProjectile
                 zoom = Lerp(zoom, 0.4f, 0.075f);
             else
                 zoom = 0.4f;
-            CameraPanSystem.Zoom = zoom;
-            CameraPanSystem.PanTowards(Main.npc[OratorIndex].Center + Vector2.UnitY * 108, zoom);
+            CameraSystem.Zoom = zoom;
+            CameraSystem.InterpolateCamera(Main.npc[OratorIndex].Center + Vector2.UnitY * 108, zoom);
         }
 
         if (Time <= 60 * 9 || !uiSystem.isDialogueOpen)

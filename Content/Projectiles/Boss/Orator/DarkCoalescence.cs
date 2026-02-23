@@ -1,8 +1,8 @@
 ﻿using CalamityMod;
 using CalamityMod.Particles;
 using CalamityMod.World;
-using Luminance.Core.Graphics;
 using Windfall.Common.Graphics.Metaballs;
+using Windfall.Common.Systems;
 using Windfall.Content.NPCs.Bosses.Orator;
 using static Windfall.Common.Graphics.Metaballs.EmpyreanMetaball;
 
@@ -49,7 +49,7 @@ public class DarkCoalescence : ModProjectile
         {
             SpawnBorderParticle(Projectile, Vector2.Zero, 1f * i, 20, Main.rand.NextFloat(80, 110), TwoPi / pCount * i);
         }
-        ScreenShakeSystem.StartShake(5f);
+        CameraSystem.StartScreenShake(Projectile.Center, Vector2.Zero, 5f, 15, 120);
     }
     public override void AI()
     {        
@@ -67,7 +67,7 @@ public class DarkCoalescence : ModProjectile
                 Orator = null;
         }
         
-        if(Orator == null || Orator.As<TheOrator>().AIState == TheOrator.States.PhaseChange)
+        if(Orator == null || (Orator.ModNPC as TheOrator).AIState == TheOrator.States.PhaseChange)
         {
             SoundEngine.PlaySound(SoundID.DD2_EtherianPortalDryadTouch, Projectile.Center);
             for (int i = 0; i <= 50; i++)
@@ -76,7 +76,7 @@ public class DarkCoalescence : ModProjectile
             return;
         }
         
-        Player target = Orator.As<TheOrator>().target;
+        Player target = (Orator.ModNPC as TheOrator).target;
 
         if(aiCounter == 1)
         {
@@ -136,7 +136,8 @@ public class DarkCoalescence : ModProjectile
                 {
                     if (Orator.ai[0] < 7)
                         SoundEngine.PlaySound(new("CalamityMod/Sounds/Custom/Ravager/RavagerMissileExplosion"), Projectile.Center);
-                    ScreenShakeSystem.StartShake(11f);
+                    CameraSystem.StartScreenShake(Projectile.Center, Vector2.Zero, 11f, 30, 180);
+
                     SoundEngine.PlaySound(SoundID.DD2_MonkStaffGroundImpact, Projectile.Center);
                     for (int i = 0; i < 24; i++)
                     {

@@ -1,7 +1,6 @@
 ﻿using CalamityMod;
 using CalamityMod.Dusts;
 using CalamityMod.NPCs.CalClone;
-using Luminance.Core.Graphics;
 using Terraria.Utilities;
 using Windfall.Common.Systems;
 
@@ -155,8 +154,8 @@ public class WanderingCalClone : ModNPC
             {
                 if (aiCounter < 150)
                 {
-                    CameraPanSystem.Zoom = 1;
-                    CameraPanSystem.PanTowards(NPC.Center, 1);
+                    CameraSystem.Zoom = 1;
+                    CameraSystem.CameraCenter = NPC.Center;
                 }
                 string key = "Mods.Windfall.Dialogue.CalPotionSeller.WorldText.Initial.";
                 switch (aiCounter)

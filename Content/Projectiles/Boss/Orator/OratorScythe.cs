@@ -3,6 +3,7 @@ using CalamityMod.NPCs.TownNPCs;
 using CalamityMod.World;
 using System.Diagnostics.Metrics;
 using Windfall.Common.Graphics.Metaballs;
+using Windfall.Common.Utils;
 using Windfall.Content.NPCs.Bosses.Orator;
 
 namespace Windfall.Content.Projectiles.Boss.Orator;
@@ -60,7 +61,7 @@ public class OratorScythe : ModProjectile
         {
             orator = Main.npc[NPC.FindFirstNPC(ModContent.NPCType<TheOrator>())];
 
-            if (orator.As<TheOrator>().AIState != TheOrator.States.DarkFlight && orator.As<TheOrator>().AIState != TheOrator.States.DarkCrush)
+            if ((orator.ModNPC as TheOrator).AIState != TheOrator.States.DarkFlight && (orator.ModNPC as TheOrator).AIState != TheOrator.States.DarkCrush)
                 behavior = (BehaviorType)4;
         }
         else
@@ -88,7 +89,7 @@ public class OratorScythe : ModProjectile
                         Projectile.velocity = Projectile.velocity.SafeNormalize(Vector2.UnitX) * -40;
                     else
                     {
-                        Projectile.velocity = Projectile.velocity.RotateTowards((target.Center - Projectile.Center).ToRotation(), CalamityWorld.death ? 0.0015f : 0.00125f * (Time - 30));
+                        Projectile.velocity = WindfallUtils.RotateTowards(Projectile.velocity, (target.Center - Projectile.Center).ToRotation(), CalamityWorld.death ? 0.0015f : 0.00125f * (Time - 30));
                         Projectile.velocity *= CalamityWorld.death ? 0.97f : 0.975f;
                         if (Projectile.velocity.LengthSquared() < 25)
                             Time = 0;
@@ -97,7 +98,7 @@ public class OratorScythe : ModProjectile
                 break;
             case BehaviorType.SawThrow:
                 Projectile border = Main.projectile.First(p => p.active && p.type == ModContent.ProjectileType<OratorBorder>());
-                float radius = border.As<OratorBorder>().Radius;
+                float radius = (border.ModProjectile as OratorBorder).Radius;
                 if (Time >= 0)
                 {
                     Projectile.rotation += 0.01f * (5 + Projectile.velocity.Length());
@@ -156,7 +157,7 @@ public class OratorScythe : ModProjectile
                 }
                 break;
             default:
-                Projectile.velocity = Projectile.velocity.RotateTowards((orator.Center - Projectile.Center).ToRotation(), 0.09f).SafeNormalize(Vector2.Zero) * Clamp(Projectile.velocity.Length() * 1.05f, 0f, 30f);
+                Projectile.velocity = WindfallUtils.RotateTowards(Projectile.velocity, (orator.Center - Projectile.Center).ToRotation(), 0.09f).SafeNormalize(Vector2.Zero) * Clamp(Projectile.velocity.Length() * 1.05f, 0f, 30f);
                 if (Projectile.Hitbox.Intersects(orator.Hitbox))
                     Projectile.active = false;
                 break;

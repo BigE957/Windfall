@@ -149,7 +149,6 @@
     <None Remove="icon_small.png" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Assets\AutoloadedEffects\Shaders\" />
     <Folder Include="Content\Items\Armor\Selenic\" />
     <Folder Include="Localization\DialogueTrees\en-US\Apostle\" />
     <Folder Include="Localization\DialogueTrees\en-US\Cutscenes\SealingRitual\" />
@@ -160,8 +159,8 @@
     <Reference Include="CalamityMod">
       <HintPath>..\..\ModReader\CalamityMod\CalamityMod.dll</HintPath>
     </Reference>
-    <Reference Include="Luminance">
-      <HintPath>..\..\ModReader\Luminance\Luminance.dll</HintPath>
+    <Reference Include="Daybreak">
+      <HintPath>lib\Daybreak.dll</HintPath>
     </Reference>
   </ItemGroup>
 </Project>

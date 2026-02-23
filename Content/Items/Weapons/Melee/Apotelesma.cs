@@ -3,10 +3,12 @@ using CalamityMod.Graphics.Primitives;
 using CalamityMod.Items;
 using CalamityMod.Particles;
 using CalamityMod.World;
+using Daybreak.Common.Rendering;
 using Microsoft.Xna.Framework.Input;
 using System.Collections.ObjectModel;
 using Terraria.Enums;
 using Terraria.Graphics.Shaders;
+using Windfall.Common.Utils;
 using Windfall.Content.NPCs.Bosses.Orator;
 
 namespace Windfall.Content.Items.Weapons.Melee;
@@ -72,7 +74,7 @@ public class Apotelesma : ModItem, ILocalizedModType
     public override bool CanUseItem(Player player)
     {
         //Updates the swing state before anything else, to ensure the state can accurately be referred to in all cases
-        if(Main.projectile.Any(p => p.active && p.type == Item.shoot && p.As<ApotelesmaProj>().State == (float)AIState.Throw))
+        if(Main.projectile.Any(p => p.active && p.type == Item.shoot && (p.ModProjectile as ApotelesmaProj).State == (float)AIState.Throw))
             return false;
 
         if (player.altFunctionUse == 2)
@@ -413,7 +415,7 @@ public class ApotelesmaProj : ModProjectile
                             }
                             else
                             {
-                                Projectile.velocity = Projectile.velocity.RotateTowards((targetPosition - Projectile.Center).ToRotation(), CalamityWorld.death ? 0.0015f : 0.00125f * (Time - 30));
+                                Projectile.velocity = WindfallUtils.RotateTowards(Projectile.velocity, (targetPosition - Projectile.Center).ToRotation(), CalamityWorld.death ? 0.0015f : 0.00125f * (Time - 30));
                                 Projectile.velocity *= 0.95f;
                                 if (Projectile.velocity.LengthSquared() < 25)
                                     Time = 0;
@@ -422,7 +424,7 @@ public class ApotelesmaProj : ModProjectile
                     }
                     else
                     {
-                        Projectile.velocity = Projectile.velocity.RotateTowards((owner.Center - Projectile.Center).ToRotation(), 0.09f).SafeNormalize(Vector2.Zero) * Clamp(Projectile.velocity.Length() * 1.05f, 0f, 30f);
+                        Projectile.velocity = WindfallUtils.RotateTowards(Projectile.velocity, (owner.Center - Projectile.Center).ToRotation(), 0.09f).SafeNormalize(Vector2.Zero) * Clamp(Projectile.velocity.Length() * 1.05f, 0f, 30f);
                         if ((owner.Center - Projectile.Center).Length() < 32)
                             Projectile.active = false;
                     }
@@ -800,7 +802,7 @@ public class RushBolt : ModProjectile
         Projectile.velocity = DirectionalVelocity.SafeNormalize(Vector2.UnitX) * (Velocity / 2);
 
         if(target != null && Projectile.penetrate > 17)
-            DirectionalVelocity = DirectionalVelocity.RotateTowards((target.Center - Projectile.Center).ToRotation(), 0.01f * (1 + aiCounter / 10f));
+            DirectionalVelocity = WindfallUtils.RotateTowards(DirectionalVelocity, (target.Center - Projectile.Center).ToRotation(), 0.01f * (1 + aiCounter / 10f));
         
         if(Velocity < 64)
             Velocity += 1f;
@@ -818,10 +820,10 @@ public class RushBolt : ModProjectile
         {
             Vector2 position = new Vector2(Projectile.position.X, Projectile.Center.Y) + (Vector2.UnitY.RotatedBy(Projectile.rotation) * Main.rand.NextFloat(-16f, 16f));
 
-            Particle spark = new SparkParticle(position, Projectile.velocity.RotatedByRandom(PiOver4) * -0.5f, false, 12, Main.rand.NextFloat(0.25f, 1f), ColorFunction(0));
+            Particle spark = new SparkParticle(position, Projectile.velocity.RotatedByRandom(PiOver4) * -0.5f, false, 12, Main.rand.NextFloat(0.25f, 1f), ColorFunction(0, Vector2.Zero));
             GeneralParticleHandler.SpawnParticle(spark);
         }
-        Lighting.AddLight(Projectile.Center, ColorFunction(0).ToVector3());
+        Lighting.AddLight(Projectile.Center, ColorFunction(0, Vector2.Zero).ToVector3());
     }
     public override void ModifyDamageHitbox(ref Rectangle hitbox)
     {
@@ -831,7 +833,7 @@ public class RushBolt : ModProjectile
         hitbox.Location = new Point((int)(hitbox.Location.X + rotation.X), (int)(hitbox.Location.Y + rotation.Y));
     }
 
-    internal Color ColorFunction(float completionRatio)
+    internal Color ColorFunction(float completionRatio, Vector2 v)
     {
         Color colorA = MyColor == myColor.Green ? Color.LimeGreen : Color.Orange;
         Color colorB = MyColor == myColor.Green ? Color.GreenYellow : Color.Goldenrod;
@@ -843,7 +845,7 @@ public class RushBolt : ModProjectile
         return Color.Lerp(Color.White, endColor, fadeToEnd) * fadeOpacity;
     }
 
-    internal float WidthFunction(float completionRatio)
+    internal float WidthFunction(float completionRatio, Vector2 v)
     {
         float expansionCompletion = 1f - (float)Math.Pow(1f - Utils.GetLerpValue(0f, 0.3f, completionRatio, true), 2D);
         float maxWidth = Projectile.Opacity * Projectile.width * 2f;
@@ -856,18 +858,21 @@ public class RushBolt : ModProjectile
         if (Velocity > 2)
         {
             GameShaders.Misc["CalamityMod:ImpFlameTrail"].SetShaderTexture(ModContent.Request<Texture2D>("CalamityMod/ExtraTextures/Trails/" + (MyColor == myColor.Green ? "ScarletDevilStreak" : "SylvestaffStreak")));
-            PrimitiveRenderer.RenderTrail(Projectile.oldPos, new(WidthFunction, ColorFunction, (_) => Projectile.Size * 0.5f, shader: GameShaders.Misc["CalamityMod:ImpFlameTrail"]), 30);
+            PrimitiveRenderer.RenderTrail(Projectile.oldPos, new(WidthFunction, ColorFunction, (_,_) => Projectile.Size * 0.5f, shader: GameShaders.Misc["CalamityMod:ImpFlameTrail"]), 30);
         }
 
         Vector2 drawPos = Projectile.Center - Main.screenPosition;
         Texture2D texture = ModContent.Request<Texture2D>("CalamityMod/Particles/BloomCircle").Value;
         Vector2 origin = texture.Size() * 0.5f;
 
-        Main.spriteBatch.UseBlendState(BlendState.Additive);
+        Main.spriteBatch.End(out var scope);
+        var newScope = scope with { BlendState = BlendState.Additive };
+        Main.spriteBatch.Begin(newScope);
 
-        Main.EntitySpriteDraw(texture, drawPos - Vector2.UnitX.RotatedBy(Projectile.rotation) * (MyColor == myColor.Green ? 48 : 28) + Vector2.UnitY * (MyColor == myColor.Green ? 2 : 0), texture.Frame(), ColorFunction(0) * 0.6f, Projectile.rotation, origin, new Vector2(MyColor == myColor.Green ? 3 : 2f, 1) * Projectile.scale * 0.33f, SpriteEffects.None, 0);
+        Main.EntitySpriteDraw(texture, drawPos - Vector2.UnitX.RotatedBy(Projectile.rotation) * (MyColor == myColor.Green ? 48 : 28) + Vector2.UnitY * (MyColor == myColor.Green ? 2 : 0), texture.Frame(), ColorFunction(0, Vector2.Zero) * 0.6f, Projectile.rotation, origin, new Vector2(MyColor == myColor.Green ? 3 : 2f, 1) * Projectile.scale * 0.33f, SpriteEffects.None, 0);
 
-        Main.spriteBatch.UseBlendState(BlendState.AlphaBlend);
+        Main.spriteBatch.End();
+        Main.spriteBatch.Begin(scope);
 
         texture = (MyColor == myColor.Green ? TextureAssets.Projectile[Type] : ModContent.Request<Texture2D>("Windfall/Assets/Projectiles/Boss/MagicShot")).Value;
         origin = texture.Size();

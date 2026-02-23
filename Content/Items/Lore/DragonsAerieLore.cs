@@ -6,7 +6,7 @@ public class DragonsAerieLore : BaseLoreItem, ILocalizedModType
 {
     public new string LocalizationCategory => "Items.Lore";
     public override string Texture => "Windfall/Assets/Items/Lore/DragonsAerieLore";
-    internal override int Rarity => ModContent.RarityType<DarkBlue>();
+    internal override int Rarity => ModContent.RarityType<BurnishedAuric>();
     internal override string Key => "LoreDragonsAerie";
     internal override Color LightColor => Color.Red;
 

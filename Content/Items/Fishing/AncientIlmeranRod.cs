@@ -4,7 +4,6 @@ using CalamityMod.Items;
 using CalamityMod.NPCs.AquaticScourge;
 using CalamityMod.NPCs.DesertScourge;
 using CalamityMod.World;
-using Luminance.Core.Graphics;
 using Windfall.Common.Systems;
 using Windfall.Common.Systems.WorldEvents;
 using Windfall.Content.NPCs.WanderingNPCs;
@@ -119,8 +118,8 @@ public class AncientIlmeranRod : ModItem, ILocalizedModType
                             zoom = Lerp(zoom, 0.4f, 0.075f);
                         else
                             zoom = 0.4f;
-                        CameraPanSystem.Zoom = zoom;
-                        CameraPanSystem.PanTowards(Paladin.Center, zoom);
+                        CameraSystem.Zoom = zoom;
+                        CameraSystem.InterpolateCamera(Paladin.Center, zoom);
                     }
 
                     float Delay = 0;

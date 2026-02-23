@@ -9,7 +9,7 @@ public class SpacialLock : ModBuff
         Main.debuff[Type] = true;
         Main.pvpBuff[Type] = true;
 
-        CalamityLists.debuffList.Add(Type);
+        //CalamityLists.debuffList.Add(Type);
     }
     public override void Update(Player player, ref int buffIndex)
     {

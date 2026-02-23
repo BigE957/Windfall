@@ -11,26 +11,26 @@ public class WindfallGlobalTownNPC : GlobalNPC
     private static readonly string Path = "Dialogue.Others";
     public override void GetChat(NPC npc, ref string chat)
     {
-        bool DragonDeez = NPC.FindFirstNPC(NPCType<TravellingCultist>()) != -1;
-        bool DrugDealer = NPC.FindFirstNPC(NPCType<WanderingPotionSeller>()) != -1;
-        bool Calculus = NPC.FindFirstNPC(NPCType<WanderingCalClone>()) != -1;
+        bool cultist = NPC.FindFirstNPC(NPCType<TravellingCultist>()) != -1;
+        bool potionseller = NPC.FindFirstNPC(NPCType<WanderingPotionSeller>()) != -1;
+        bool calclone = NPC.FindFirstNPC(NPCType<WanderingCalClone>()) != -1;
 
-        bool permadong = NPC.FindFirstNPC(NPCType<DILF>()) != -1;
-        bool seahorse = NPC.FindFirstNPC(NPCType<SEAHOE>()) != -1;
-        bool thief = NPC.FindFirstNPC(NPCType<THIEF>()) != -1;
+        bool archmage = NPC.FindFirstNPC(NPCType<Archmage>()) != -1;
+        bool seaking = NPC.FindFirstNPC(NPCType<SeaKing>()) != -1;
+        bool bandit = NPC.FindFirstNPC(NPCType<Bandit>()) != -1;
 
-        bool angelstatue = NPC.FindFirstNPC(NPCID.Merchant) != -1;
+        bool merchant = NPC.FindFirstNPC(NPCID.Merchant) != -1;
 
-        if (npc.type == NPCType<DILF>())
+        if (npc.type == NPCType<Archmage>())
         {
-            if (Main.rand.NextBool(2) && Calculus)
+            if (Main.rand.NextBool(2) && calclone)
                 chat = GetWindfallTextValue($"{Path}.Archmage.CalClone");
         }
-        if (npc.type == NPCType<SEAHOE>())
+        if (npc.type == NPCType<SeaKing>())
         {
 
         }
-        if (npc.type == NPCType<THIEF>())
+        if (npc.type == NPCType<Bandit>())
         {
 
         }
@@ -39,19 +39,19 @@ public class WindfallGlobalTownNPC : GlobalNPC
             case NPCID.Angler:
                 break;
             case NPCID.ArmsDealer:
-                if (Main.rand.NextBool(2) && Calculus)
+                if (Main.rand.NextBool(2) && calclone)
                     chat = GetWindfallTextValue($"{Path}.ArmsDealer.CalClone");
                 break;
             case NPCID.Clothier:
                 break;
             case NPCID.Cyborg:
-                if (Main.rand.NextBool(2) && Calculus)
+                if (Main.rand.NextBool(2) && calclone)
                     chat = GetWindfallTextValue($"{Path}.Cyborg.CalClone");
                 break;
             case NPCID.Demolitionist:
                 break;
             case NPCID.Dryad:
-                if (Main.rand.NextBool(2) && DrugDealer)
+                if (Main.rand.NextBool(2) && potionseller)
                     chat = GetWindfallTextValue($"{Path}.Dryad.Potionseller");
                 break;
             case NPCID.DyeTrader:
@@ -59,31 +59,31 @@ public class WindfallGlobalTownNPC : GlobalNPC
             case NPCID.GoblinTinkerer:
                 break;
             case NPCID.Golfer:
-                if (Main.rand.NextBool(2) && Calculus)
+                if (Main.rand.NextBool(2) && calclone)
                     chat = GetWindfallTextValue($"{Path}.Golfer.CalClone");
                 break;
             case NPCID.Guide:
                 break;
             case NPCID.Mechanic:
-                if (DragonDeez && Main.rand.NextBool(2))
+                if (cultist && Main.rand.NextBool(2))
                     chat = GetWindfallTextValue($"{Path}.Mechanic.TravellingCultist");
                 else if (Main.rand.NextBool(10))
                     chat = GetWindfallTextValue($"{Path}.Mechanic.DragonCult");
                 break;
             case NPCID.Merchant:
-                if (Main.rand.NextBool(2) && DrugDealer)
+                if (Main.rand.NextBool(2) && potionseller)
                     chat = GetWindfallTextValue($"{Path}.Merchant.Potionseller");
                 break;
             case NPCID.Nurse:
-                if (Main.rand.NextBool(2) && Calculus)
+                if (Main.rand.NextBool(2) && calclone)
                     chat = GetWindfallTextValue($"{Path}.Nurse.CalClone");
                 break;
             case NPCID.Painter:
-                if (Main.rand.NextBool(2) && Calculus)
+                if (Main.rand.NextBool(2) && calclone)
                     chat = GetWindfallTextValue($"{Path}.Painter.CalClone");
                 break;
             case NPCID.PartyGirl:
-                if (Main.rand.NextBool(2) && DrugDealer)
+                if (Main.rand.NextBool(2) && potionseller)
                     chat = GetWindfallTextValue($"{Path}.PartyGirl.Potionseller");
                 break;
             case NPCID.Pirate:
@@ -101,17 +101,17 @@ public class WindfallGlobalTownNPC : GlobalNPC
             case NPCID.DD2Bartender:
                 break;
             case NPCID.TaxCollector:
-                if (Main.rand.NextBool(2) && DrugDealer)
+                if (Main.rand.NextBool(2) && potionseller)
                     chat = GetWindfallTextValue($"{Path}.TaxCollector.Potionseller");
                 break;
             case NPCID.TravellingMerchant:
                 break;
             case NPCID.Truffle:
-                if (Main.rand.NextBool(2) && DrugDealer)
+                if (Main.rand.NextBool(2) && potionseller)
                     chat = GetWindfallTextValue($"{Path}.Truffle.Potionseller");
                 break;
             case NPCID.WitchDoctor:
-                if (Main.rand.NextBool(2) && DrugDealer)
+                if (Main.rand.NextBool(2) && potionseller)
                     chat = GetWindfallTextValue($"{Path}.WitchDoctor.Potionseller");
                 break;
             case NPCID.Wizard:

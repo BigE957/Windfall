@@ -1,5 +1,6 @@
 ﻿using CalamityMod.Events;
 using Terraria.Graphics.Effects;
+using Windfall.Common.Utils;
 using Windfall.Content.NPCs.Bosses.Orator;
 
 namespace Windfall.Content.Skies;
@@ -120,7 +121,7 @@ public class OratorSky : CustomSky
         Vector2 resolutionScale = new(Main.screenWidth / 1366f, Main.screenHeight / 768);
 
         spriteBatch.End();
-        Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.Additive, SamplerState.LinearClamp, DepthStencilState.None, Main.Rasterizer, null, Utilities.GetCustomSkyBackgroundMatrix());
+        Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.Additive, SamplerState.LinearClamp, DepthStencilState.None, Main.Rasterizer, null, WindfallUtils.GetCustomSkyBackgroundMatrix());
         
         //Texture2D bloomCircle = ModContent.Request<Texture2D>("CalamityMod/Particles/LargeBloom", AssetRequestMode.ImmediateLoad).Value;
         //spriteBatch.Draw(bloomCircle, position, null, Color.AliceBlue * Opacity * 0.75f, 0f, bloomCircle.Size() / 2f, 2.4f * resolutionScale.X, SpriteEffects.None, 0f);
@@ -129,7 +130,7 @@ public class OratorSky : CustomSky
         Vector2 halfSizeTexture = new(bloomRing.Width / 2, bloomRing.Height / 2);
         spriteBatch.Draw(bloomRing, position, null, Color.DarkOliveGreen * Opacity, counter / 100f, halfSizeTexture, 1.4375f * resolutionScale.X, SpriteEffects.None, 0f);
         Main.spriteBatch.End();
-        Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.NonPremultiplied, SamplerState.LinearClamp, DepthStencilState.None, Main.Rasterizer, null, Utilities.GetCustomSkyBackgroundMatrix());
+        Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.NonPremultiplied, SamplerState.LinearClamp, DepthStencilState.None, Main.Rasterizer, null, WindfallUtils.GetCustomSkyBackgroundMatrix());
     }
     public override void Update(GameTime gameTime)
     {

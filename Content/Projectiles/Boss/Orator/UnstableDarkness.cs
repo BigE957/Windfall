@@ -1,7 +1,6 @@
 ﻿using CalamityMod;
 using CalamityMod.Particles;
 using CalamityMod.World;
-using Luminance.Core.Graphics;
 using Windfall.Common.Graphics.Metaballs;
 using Windfall.Common.Systems;
 using Windfall.Content.NPCs.Bosses.Orator;
@@ -39,7 +38,8 @@ public class UnstableDarkness: ModProjectile
     {
         Projectile.scale = 0;
         SoundEngine.PlaySound(SoundID.DD2_EtherianPortalOpen, Projectile.Center);
-        ScreenShakeSystem.StartShake(5f);
+        CameraSystem.StartScreenShake(Projectile.Center, Vector2.Zero, 5f, 15, 120);
+
         for (int i = 0; i <= 50; i++)
         {
             Vector2 spawnPos = Projectile.Center + Main.rand.NextVector2Circular(10f, 10f) * 10;
@@ -84,11 +84,11 @@ public class UnstableDarkness: ModProjectile
     private void Explode()
     {
         SoundEngine.PlaySound(SoundID.DD2_EtherianPortalDryadTouch, Projectile.Center);
-        ScreenShakeSystem.StartShake(7.5f);
+        CameraSystem.StartScreenShake(Projectile.Center, Vector2.Zero, 7.5f, 15, 150);
+
         for (int i = 0; i <= 50; i++)
-        {
             SpawnDefaultParticle(Projectile.Center, Main.rand.NextVector2Circular(10f, 10f) * Main.rand.NextFloat(1f, 2f), 40 * Main.rand.NextFloat(3f, 5f));
-        }
+
         NPC Orator = null;
         if (NPC.FindFirstNPC(ModContent.NPCType<TheOrator>()) != -1)
             Orator = Main.npc[NPC.FindFirstNPC(ModContent.NPCType<TheOrator>())];

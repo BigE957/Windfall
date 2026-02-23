@@ -113,7 +113,7 @@ public class CalCloneSpawnSystem : ModSystem
                             Player p = Main.player[i];
                             if (!p.dead && p.active)
                             {
-                                Utilities.NewProjectileBetter(Entity.GetSource_NaturalSpawn(), CalCloneSpawnLocation, Vector2.Zero, ModContent.ProjectileType<CalCloneProj>(), 0, 0f);
+                                Projectile.NewProjectile(Entity.GetSource_NaturalSpawn(), CalCloneSpawnLocation, Vector2.Zero, ModContent.ProjectileType<CalCloneProj>(), 0, 0f);
                                 break;
                             }
                         }
@@ -141,7 +141,7 @@ public class CalCloneSpawnSystem : ModSystem
                             Player p = Main.player[i];
                             if (!p.dead && p.active)
                             {
-                                Utilities.NewProjectileBetter(Entity.GetSource_NaturalSpawn(), CalCloneSpawnLocation, Vector2.Zero, ModContent.ProjectileType<CalCloneProj>(), 0, 0f);
+                                Projectile.NewProjectile(Entity.GetSource_NaturalSpawn(), CalCloneSpawnLocation, Vector2.Zero, ModContent.ProjectileType<CalCloneProj>(), 0, 0f);
                                 break;
                             }
                         }

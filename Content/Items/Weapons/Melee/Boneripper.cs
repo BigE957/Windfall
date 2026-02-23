@@ -104,7 +104,7 @@ public class BoneripperProj : ModProjectile
 
             Projectile.ai[0] += 1f;
             Projectile.rotation += MathF.PI * 4f / num * num2;
-            int num3 = (player.SafeDirectionTo(Main.MouseWorld).X > 0f).ToDirectionInt();
+            int num3 = (player.DirectionTo(Main.MouseWorld).X > 0f).ToDirectionInt();
             if (Projectile.ai[0] % num > num * 0.5f && num3 != Projectile.velocity.X)
             {
                 player.ChangeDir(num3);
@@ -195,7 +195,7 @@ public class BoneripperProj : ModProjectile
         if (Main.rand.NextBool(2))
         {
             Dust dust = Dust.NewDustDirect(vector - new Vector2(5f), 10, 10, (int)CalamityDusts.Brimstone, Projectile.velocity.X, Projectile.velocity.Y, 150);
-            dust.velocity = Projectile.SafeDirectionTo(dust.position) * 0.1f + dust.velocity * 0.1f;
+            dust.velocity = Projectile.DirectionTo(dust.position) * 0.1f + dust.velocity * 0.1f;
         }
 
         for (int i = 0; i < 2; i++)

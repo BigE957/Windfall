@@ -1,5 +1,6 @@
 ﻿using CalamityMod.Graphics.Primitives;
 using CalamityMod.Particles;
+using Daybreak.Common.Rendering;
 using Terraria.Graphics.Shaders;
 using Windfall.Content.NPCs.Bosses.Orator;
 
@@ -36,7 +37,7 @@ public class FadingStar : ModProjectile, ILocalizedModType
         }
     }
 
-    internal Color ColorFunction(float completionRatio)
+    internal Color ColorFunction(float completionRatio, Vector2 v)
     {
         Color colorA = Color.LightSteelBlue;
         Color colorB = Color.Silver;
@@ -48,7 +49,7 @@ public class FadingStar : ModProjectile, ILocalizedModType
         return Color.Lerp(Color.Black, endColor, fadeToEnd) * fadeOpacity;
     }
 
-    internal float WidthFunction(float completionRatio)
+    internal float WidthFunction(float completionRatio, Vector2 v)
     {
         float widthRatio = Utils.GetLerpValue(0f, 0.05f, completionRatio, true);
         float baseWidth = MathHelper.Lerp(0f, 60f, widthRatio) * MathHelper.Clamp(1f - (float)Math.Pow(completionRatio, 0.4D), 0.37f, 1f);
@@ -64,18 +65,21 @@ public class FadingStar : ModProjectile, ILocalizedModType
         if (positions.Length > 0)
         {
             GameShaders.Misc["CalamityMod:ImpFlameTrail"].SetTexture(ModContent.Request<Texture2D>("CalamityMod/ExtraTextures/Trails/ScarletDevilStreak"));
-            PrimitiveRenderer.RenderTrail(positions, new(WidthFunction, ColorFunction, (_) => Vector2.Zero, shader: GameShaders.Misc["CalamityMod:ImpFlameTrail"]), 30);
+            PrimitiveRenderer.RenderTrail(positions, new(WidthFunction, ColorFunction, (_,_) => Vector2.Zero, shader: GameShaders.Misc["CalamityMod:ImpFlameTrail"]), 30);
         }
 
         Vector2 drawPos = Projectile.Center - Main.screenPosition - Projectile.velocity.SafeNormalize(Vector2.UnitX) * 8;
         Texture2D texture = ModContent.Request<Texture2D>("CalamityMod/Particles/BloomCircle").Value;
         Vector2 origin = texture.Size() * 0.5f;
 
-        Main.spriteBatch.UseBlendState(BlendState.Additive);
+        Main.spriteBatch.End(out var scope);
+        var newScope = scope with { BlendState = BlendState.Additive };
+        Main.spriteBatch.Begin(newScope);
 
         Main.EntitySpriteDraw(texture, drawPos, texture.Frame(), Color.White * 0.5f, 0, origin, Projectile.scale * 0.33f, SpriteEffects.None, 0);
 
-        Main.spriteBatch.UseBlendState(BlendState.AlphaBlend);
+        Main.spriteBatch.End();
+        Main.spriteBatch.Begin(scope);
 
         texture = TextureAssets.Projectile[Type].Value;
         origin = texture.Size() * 0.5f;

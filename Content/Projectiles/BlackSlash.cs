@@ -1,9 +1,10 @@
 ﻿using CalamityMod;
+using CalamityMod.Graphics.Primitives;
 using CalamityMod.Particles;
-using Luminance.Core.Graphics;
+using Daybreak.Common.Rendering;
 
 namespace Windfall.Content.Projectiles;
-public class BlackSlash : ModProjectile, IPixelatedPrimitiveRenderer
+public class BlackSlash : ModProjectile
 {
     public override string Texture => "CalamityMod/ExtraTextures/Line";
     public override void SetDefaults()
@@ -121,8 +122,12 @@ public class BlackSlash : ModProjectile, IPixelatedPrimitiveRenderer
 
     public override bool PreDraw(ref Color lightColor)
     {
-        if(Time < rotateDuration)
-            Main.spriteBatch.UseBlendState(BlendState.Additive);
+        SpriteBatchSnapshot snapshot = new();
+        if (Time < rotateDuration)
+        {
+            Main.spriteBatch.End(out snapshot);
+            Main.spriteBatch.Begin(snapshot with { BlendState = BlendState.Additive });
+        }
 
         for (int i = 0; i < slashCount; i++)
         {
@@ -141,7 +146,10 @@ public class BlackSlash : ModProjectile, IPixelatedPrimitiveRenderer
         }
 
         if (Time < rotateDuration)
-            Main.spriteBatch.UseBlendState(BlendState.AlphaBlend);
+        {
+            Main.spriteBatch.End();
+            Main.spriteBatch.Begin(snapshot);
+        }
 
         for (int i = 0; i < slashCount; i++)
         {
@@ -175,12 +183,12 @@ public class BlackSlash : ModProjectile, IPixelatedPrimitiveRenderer
 
     private float slashWidth = 1f;
 
-    internal float OuterWidthFunction(float completionRatio)
+    internal float OuterWidthFunction(float completionRatio, Vector2 v)
     {
         return 64 * (float)Math.Sin(completionRatio * Pi) * slashWidth;
     }
 
-    internal float InnerWidthFunction(float completionRatio)
+    internal float InnerWidthFunction(float completionRatio, Vector2 v)
     {
         return 32 * Clamp((float)Math.Sin(completionRatio * Pi), 0f, 1f) * slashWidth;
     }
@@ -208,14 +216,14 @@ public class BlackSlash : ModProjectile, IPixelatedPrimitiveRenderer
                 Color color = Color.Red;
                 if (slashTimes[i] > 2)
                     color = Color.Lerp(Color.Red, Color.White, (slashTimes[i] - 2) / 10f);
-                PrimitiveRenderer.RenderTrail(positions, new(OuterWidthFunction, (_) => color, (_) => Vector2.Zero, true, true, null));
+                PrimitiveRenderer.RenderTrail(positions, new(OuterWidthFunction, (_,_) => color, (_,_) => Vector2.Zero, true, true, null));
 
                 start = Projectile.Center + myRotation.ToRotationVector2() * (length * Projectile.scale / 1.5f) * 0.75f * lengthScale;
                 end = Projectile.Center + myRotation.ToRotationVector2() * (length * -Projectile.scale / 1.5f) * 0.75f * lengthScale;
 
                 for (int j = 0; j < posCount; j++)
                     positions[j] = Vector2.Lerp(start, end, j / posCount);
-                PrimitiveRenderer.RenderTrail(positions, new(InnerWidthFunction, (_) => Color.Black, (_) => Vector2.Zero, true, true, null));
+                PrimitiveRenderer.RenderTrail(positions, new(InnerWidthFunction, (_,_) => Color.Black, (_,_) => Vector2.Zero, true, true, null));
             }
         }
     }

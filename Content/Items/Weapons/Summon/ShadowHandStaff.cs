@@ -1,9 +1,11 @@
 ﻿using CalamityMod;
+using CalamityMod.Graphics.Primitives;
 using CalamityMod.Items;
+using CalamityMod.NPCs;
+using CalamityMod.NPCs.DevourerofGods;
 using CalamityMod.Particles;
 using CalamityMod.Projectiles.Summon;
-using Luminance.Assets;
-using Luminance.Core.Graphics;
+using Daybreak.Common.Rendering;
 using Microsoft.Xna.Framework.Input;
 using ReLogic.Utilities;
 using System.Collections.ObjectModel;
@@ -11,6 +13,7 @@ using Terraria.Graphics.Shaders;
 using Windfall.Common.Graphics.Metaballs;
 using Windfall.Common.Players;
 using Windfall.Common.Systems;
+using Windfall.Common.Utils;
 using Windfall.Content.Buffs.StatBuffs;
 using Windfall.Content.Buffs.Weapons.Minions;
 using Windfall.Content.Items.Weapons.Melee;
@@ -333,7 +336,7 @@ public class OratorHandMinion : ModProjectile
             }
             else if (player.HeldItem().type == ModContent.ItemType<ShadowHandStaff>() && player.Calamity().mouseRight)
             {
-                consumedGraze = ((ShadowHandStaff)Owner.ActiveItem().ModItem).GrazePoints;
+                consumedGraze = ((ShadowHandStaff)Owner.HeldItem().ModItem).GrazePoints;
                 if (consumedGraze == 0)
                 {
                     CurrentAI = AIState.Protect;
@@ -355,7 +358,7 @@ public class OratorHandMinion : ModProjectile
                 }
 
                 if (HandSide == 1)
-                    ((ShadowHandStaff)Owner.ActiveItem().ModItem).GrazePoints = 0;
+                    ((ShadowHandStaff)Owner.HeldItem().ModItem).GrazePoints = 0;
                 SharedTime = 0;
             }
         }
@@ -447,7 +450,7 @@ public class OratorHandMinion : ModProjectile
                         Projectile.velocity = toTarget * 64f;
                     else
                     {
-                        Projectile.velocity.RotateTowards(toTargetRot, 0.05f);
+                        Projectile.velocity = WindfallUtils.RotateTowards(Projectile.velocity, toTargetRot, 0.05f);
                         Projectile.velocity *= 0.9f;
                     }
 
@@ -490,14 +493,14 @@ public class OratorHandMinion : ModProjectile
                         grazeArea = new(Owner.Center, Vector2.Zero, Color.LimeGreen, 1f, 1f, 24);
                         GeneralParticleHandler.SpawnParticle(grazeArea);
 
-                        if (((ShadowHandStaff)Owner.ActiveItem().ModItem).GrazePoints < ShadowHandStaff.MaxGraze && grazeTime == 0 && Owner.immuneTime == 0 && !Owner.immune)
+                        if (((ShadowHandStaff)Owner.HeldItem().ModItem).GrazePoints < ShadowHandStaff.MaxGraze && grazeTime == 0 && Owner.immuneTime == 0 && !Owner.immune)
                         {
                             int projectilesInGraze = Main.projectile.Count(p => p.active && p.hostile && !Owner.Hitbox.Intersects(p.Hitbox) && (p.Center - Owner.Center).Length() < grazeRadius);
                             if (projectilesInGraze > 0)
                             {
-                                ((ShadowHandStaff)Owner.ActiveItem().ModItem).GrazePoints += projectilesInGraze;
-                                if (((ShadowHandStaff)Owner.ActiveItem().ModItem).GrazePoints > ShadowHandStaff.MaxGraze)
-                                    ((ShadowHandStaff)Owner.ActiveItem().ModItem).GrazePoints = (int)ShadowHandStaff.MaxGraze;
+                                ((ShadowHandStaff)Owner.HeldItem().ModItem).GrazePoints += projectilesInGraze;
+                                if (((ShadowHandStaff)Owner.HeldItem().ModItem).GrazePoints > ShadowHandStaff.MaxGraze)
+                                    ((ShadowHandStaff)Owner.HeldItem().ModItem).GrazePoints = (int)ShadowHandStaff.MaxGraze;
                                 grazeTime = 4;
                             }
                         }
@@ -559,8 +562,8 @@ public class OratorHandMinion : ModProjectile
                                 Projectile.Center = midPoint - (Projectile.rotation.ToRotationVector2() * (Projectile.width / 3f));
                                 subHand.Center = midPoint - (subHand.rotation.ToRotationVector2() * (subHand.width / 3f));
 
+                                CameraSystem.StartScreenShake(Projectile.Center, Vector2.Zero, 9f, 20, 100);
 
-                                ScreenShakeSystem.StartShake(9f);
                                 SoundEngine.PlaySound(SoundID.DD2_MonkStaffGroundImpact, midPoint);
                                 if (Main.netMode != NetmodeID.MultiplayerClient)
                                 {
@@ -626,7 +629,7 @@ public class OratorHandMinion : ModProjectile
                                 if (SharedTime == 110)
                                     Projectile.velocity = attackVec * -75;
                                 Projectile.velocity *= 0.93f;
-                                Projectile.velocity = Projectile.velocity.RotateTowards((mainHand.Center - Projectile.Center).ToRotation(), PiOver4);
+                                Projectile.velocity = WindfallUtils.RotateTowards(Projectile.velocity, (mainHand.Center - Projectile.Center).ToRotation(), PiOver4);
                             }
                             else
                             {
@@ -827,7 +830,7 @@ public class MinionHandRing : ModProjectile
                 Projectile.velocity = (target.Center - Projectile.Center).SafeNormalize(Vector2.UnitX);
 
             if(target != null && target.active)
-                Projectile.velocity = Projectile.velocity.RotateTowards((target.Center - Projectile.Center).ToRotation(), 0.33f);
+                Projectile.velocity = WindfallUtils.RotateTowards(Projectile.velocity, (target.Center - Projectile.Center).ToRotation(), 0.33f);
             float maxSpeed = 18f;
             Projectile.velocity = Projectile.velocity.SafeNormalize(Vector2.Zero) * Clamp(Lerp(0.01f, maxSpeed, CircOutEasing((Time - 60) / 120)), 0.01f, maxSpeed);
 
@@ -966,7 +969,7 @@ public class SelenicIdolMinion : ModProjectile, ILocalizedModType
     {
         Projectile.scale = 0;
         SoundEngine.PlaySound(SoundID.DD2_EtherianPortalOpen, Projectile.Center);
-        ScreenShakeSystem.StartShake(5f);
+        CameraSystem.StartScreenShake(Projectile.Center, Vector2.Zero, 5f, 10, 60);
         for (int i = 0; i <= 50; i++)
         {
             Vector2 spawnPos = Projectile.Center + Main.rand.NextVector2Circular(10f, 10f) * 10;
@@ -1052,7 +1055,7 @@ public class SelenicIdolMinion : ModProjectile, ILocalizedModType
                 break;
             case States.Exploding:
                 SoundEngine.PlaySound(SoundID.DD2_EtherianPortalDryadTouch, Projectile.Center);
-                ScreenShakeSystem.StartShake(7.5f);
+                CameraSystem.StartScreenShake(Projectile.Center, Vector2.Zero, 7.5f, 15, 90);
                 for (int i = 0; i <= 50; i++)
                     EmpyreanMetaball.SpawnDefaultParticle(Projectile.Center, Main.rand.NextVector2Circular(10f, 10f) * Main.rand.NextFloat(1f, 2f), 40 * Main.rand.NextFloat(3f, 5f));
 
@@ -1087,9 +1090,11 @@ public class SelenicIdolMinion : ModProjectile, ILocalizedModType
     {
         GameShaders.Misc["CalamityMod:PhaseslayerRipEffect"].SetTexture(LoadSystem.SwordSlash);
 
-        CalamityMod.Graphics.Primitives.PrimitiveRenderer.RenderTrail(Projectile.oldPos, new(WidthFunction, ColorFunction, (_) => Projectile.Size * 0.5f, shader: GameShaders.Misc["CalamityMod:PhaseslayerRipEffect"]), 40);
+        PrimitiveRenderer.RenderTrail(Projectile.oldPos, new(WidthFunction, ColorFunction, (_,_) => Projectile.Size * 0.5f, shader: GameShaders.Misc["CalamityMod:PhaseslayerRipEffect"]), 40);
 
-        Main.spriteBatch.UseBlendState(BlendState.Additive);
+        Main.spriteBatch.End(out var scope);
+        var newScope = scope with { BlendState = BlendState.Additive };
+        Main.spriteBatch.Begin(newScope);
 
         Texture2D tex = OratorSky.MoonBloom.Value;
 
@@ -1102,7 +1107,8 @@ public class SelenicIdolMinion : ModProjectile, ILocalizedModType
 
         Main.EntitySpriteDraw(tex, Projectile.Center - Main.screenPosition, null, LerpColors(Main.GlobalTimeWrappedHourly * 0.25f, colors), Main.GlobalTimeWrappedHourly * 0.25f, tex.Size() * 0.5f, ((Projectile.scale * 0.825f) + (float)(Math.Sin(Main.GlobalTimeWrappedHourly * 4) * 0.025f)) * (1 - Dissolve), 0);
 
-        Main.spriteBatch.UseBlendState(BlendState.AlphaBlend);
+        Main.spriteBatch.End();
+        Main.spriteBatch.Begin(scope);
 
         tex = TextureAssets.Projectile[Type].Value;
 
@@ -1111,7 +1117,7 @@ public class SelenicIdolMinion : ModProjectile, ILocalizedModType
         return false;
     }
 
-    internal Color ColorFunction(float completionRatio)
+    internal Color ColorFunction(float completionRatio, Vector2 v)
     {
         float opacity = Projectile.Opacity;
         opacity *= (float)Math.Pow(Utils.GetLerpValue(1f, 0.45f, completionRatio, true), 4D);
@@ -1122,7 +1128,7 @@ public class SelenicIdolMinion : ModProjectile, ILocalizedModType
         return Color.Lerp(Color.Gold, new(170, 100, 30), (completionRatio) * 3f) * opacity * (Projectile.velocity.Length() / MaxSpeed);
     }
 
-    internal float WidthFunction(float completionRatio) => 200f * (1f - completionRatio) * 0.8f * Projectile.scale;
+    internal float WidthFunction(float completionRatio, Vector2 v) => 200f * (1f - completionRatio) * 0.8f * Projectile.scale;
 
     public override void PostDraw(Color lightColor)
     {
@@ -1130,17 +1136,25 @@ public class SelenicIdolMinion : ModProjectile, ILocalizedModType
         {
             Texture2D tex = LoadSystem.Circle.Value;
 
-            Main.spriteBatch.PrepareForShaders(BlendState.NonPremultiplied);
+            Main.spriteBatch.End(out var snap);
+            Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.NonPremultiplied, Main.DefaultSamplerState, DepthStencilState.None, RasterizerState.CullNone, null, Matrix.Identity);
 
-            ManagedShader dissolveShader = ShaderManager.GetShader("Windfall.Dissolve");
+            MiscShaderData dissolveShader = GameShaders.Misc["CalamityMod:Dissolve"];
 
-            dissolveShader.TrySetParameter("dissolveIntensity", 1 - Dissolve);
-            dissolveShader.SetTexture(MiscTexturesRegistry.TurbulentNoise.Value, 1, SamplerState.LinearWrap);
+            dissolveShader.Shader.Parameters["noiseScale"].SetValue(0.25f);
+            dissolveShader.Shader.Parameters["dissolveIntensity"].SetValue(1 - Dissolve);
+            //dissolveShader.Shader.Parameters["transitionColor"].SetValue(DevourerofGodsHead.SpecialMoveColor.ToVector4());
+            //dissolveShader.Shader.Parameters["transitionOffset"].SetValue(0.05f);
+
+            Main.instance.GraphicsDevice.Textures[1] = LoadSystem.TurbulentNoise.Value;
+            Main.instance.GraphicsDevice.SamplerStates[1] = SamplerState.LinearWrap;
+
             dissolveShader.Apply();
 
             Main.spriteBatch.Draw(tex, Projectile.Center - Main.screenPosition, null, Color.White, rotationCounter, tex.Size() * 0.5f, Projectile.scale * 5f, 0, 0);
 
-            Main.spriteBatch.PrepareForShaders();
+            Main.spriteBatch.End();
+            Main.spriteBatch.Begin(snap);
         }
     }
 }

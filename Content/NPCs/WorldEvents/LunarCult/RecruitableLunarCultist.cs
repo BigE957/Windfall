@@ -167,14 +167,14 @@ public class RecruitableLunarCultist : ModNPC
                     recruit.State = DialogueState.Unrecruited;
                 }
             }
-            me.As<RecruitableLunarCultist>().State = DialogueState.Recruited;
+            (me.ModNPC as RecruitableLunarCultist).State = DialogueState.Recruited;
         }
         else
         {
             if(uiSystem.CurrentTree.Dialogues.Length == dialogueID)
-                me.As<RecruitableLunarCultist>().State = DialogueState.Unrecruited;
+                (me.ModNPC as RecruitableLunarCultist).State = DialogueState.Unrecruited;
             else
-                me.As<RecruitableLunarCultist>().State = DialogueState.Recruitable;
+                (me.ModNPC as RecruitableLunarCultist).State = DialogueState.Recruitable;
         }
         if(!swapped)
             TalkingTo = -1;

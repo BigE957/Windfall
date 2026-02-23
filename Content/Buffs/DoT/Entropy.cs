@@ -13,7 +13,7 @@ public class Entropy : ModBuff
         Main.pvpBuff[Type] = true;
         Main.buffNoSave[Type] = true;
 
-        CalamityLists.debuffList.Add(Type);
+        //CalamityLists.debuffList.Add(Type);
         CalamityGlobalNPC.moddedDebuffTextureList.Add((Texture, NPC => NPC.Debuff().Entropy));
     }
 

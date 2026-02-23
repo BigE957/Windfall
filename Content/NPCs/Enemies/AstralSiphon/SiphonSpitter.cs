@@ -41,9 +41,6 @@ public class SiphonSpitter : ModNPC
         NPC.DeathSound = SoundID.NPCDeath18;
         NPC.Calamity().VulnerableToHeat = true;
         NPC.Calamity().VulnerableToSickness = false;
-
-        CalamityGlobalNPC.AdjustExpertModeStatScaling(NPC);
-        CalamityGlobalNPC.AdjustMasterModeStatScaling(NPC);
     }
 
     int aiCounter = 0;
@@ -52,7 +49,7 @@ public class SiphonSpitter : ModNPC
 
     public override void AI()
     {
-        if(!Main.npc.Any(n => n.active && n.type == ModContent.NPCType<SelenicSiphon>() && n.As<SelenicSiphon>().EventActive))
+        if(!Main.npc.Any(n => n.active && n.type == ModContent.NPCType<SelenicSiphon>() && (n.ModNPC as SelenicSiphon).EventActive))
         {
             NPC.Transform(ModContent.NPCType<SightseerSpitter>());
             return;

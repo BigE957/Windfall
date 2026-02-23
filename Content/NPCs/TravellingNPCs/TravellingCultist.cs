@@ -144,7 +144,7 @@ public class TravellingCultist : ModNPC, ILocalizedModType
         //No Priority
         new("TravellingCultist/Introductions/Standard1", (player) => true, (byte)PriorityTiers.None, true),
         new("TravellingCultist/Introductions/Standard2", (player) => true, (byte)PriorityTiers.None, true),
-        new("TravellingCultist/Introductions/Permafrost", (player) => DownedBossSystem.downedCryogen && NPC.AnyNPCs(ModContent.NPCType<DILF>()), (byte)PriorityTiers.None, true),
+        new("TravellingCultist/Introductions/Permafrost", (player) => DownedBossSystem.downedCryogen && NPC.AnyNPCs(ModContent.NPCType<Archmage>()), (byte)PriorityTiers.None, true),
         new("TravellingCultist/Introductions/AstralInfection", (player) => Main.hardMode, (byte)PriorityTiers.None, false),
 
         //Hints (No Priority)
@@ -462,7 +462,7 @@ public class TravellingCultist : ModNPC, ILocalizedModType
         bool behaviorAltered = false;
 
         if (treeKey.Contains("Introductions"))
-            cultist.As<TravellingCultist>().introductionDone = true;
+            (cultist.ModNPC as TravellingCultist).introductionDone = true;
         
         switch (treeKey)
         {
@@ -515,8 +515,8 @@ public class TravellingCultist : ModNPC, ILocalizedModType
                 {
                     QuestSystem.Quests["TabletFragment"].IncrementProgress();
                     CurrentDialogue = DialogueState.RitualQuestTablet;
-                    cultist.As<TravellingCultist>().PlayerIndex = Main.LocalPlayer.whoAmI;
-                    cultist.As<TravellingCultist>().myBehavior = BehaviorState.FollowPlayer;
+                    (cultist.ModNPC as TravellingCultist).PlayerIndex = Main.LocalPlayer.whoAmI;
+                    (cultist.ModNPC as TravellingCultist).myBehavior = BehaviorState.FollowPlayer;
                     behaviorAltered = true;
                 }
                 break;
@@ -536,15 +536,15 @@ public class TravellingCultist : ModNPC, ILocalizedModType
         }
 
         if(!behaviorAltered)
-            cultist.As<TravellingCultist>().myBehavior = BehaviorState.Wander;
+            (cultist.ModNPC as TravellingCultist).myBehavior = BehaviorState.Wander;
     }
 
     public override bool PreAI()
     {
         if (myBehavior == BehaviorState.Wander && (!Main.dayTime || Main.time >= despawnTime) && !IsNPCOnScreen(NPC.Center)) // If it's past the despawn time and the NPC isn't onscreen
         {
-            if (NPC.active)
-                CalamityUtils.DisplayLocalizedText("The " + DisplayName + " has departed!", new(50, 125, 255));
+            if (NPC.active && !Main.dedServ)
+                Main.NewText("The " + DisplayName + " has departed!", new Color(50, 125, 255));
             NPC.netSkip = -1;
             NPC.active = false;
             return false;

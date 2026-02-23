@@ -1,9 +1,9 @@
-﻿using CalamityMod;
+﻿using CalamityMod.Graphics.Primitives;
 using CalamityMod.Items;
 using CalamityMod.Particles;
-using Luminance.Core.Graphics;
 using Microsoft.Xna.Framework.Input;
 using System.Collections.ObjectModel;
+using Terraria.Graphics.Shaders;
 
 namespace Windfall.Content.Items.Weapons.Ranged;
 public class FingerGuns : ModItem, ILocalizedModType
@@ -127,8 +127,8 @@ public class FingerBolt : ModProjectile, ILocalizedModType
 
                 Vector2 goalPos;
                 NPC target = Projectile.Center.ClosestNPC(1100f, bossPriority: true);
-                if (target == null)
-                    goalPos = Main.player[Projectile.owner].Calamity().mouseWorld;
+                if (target == null && Main.myPlayer == Projectile.owner)
+                    goalPos = Main.MouseWorld;
                 else
                     goalPos = target.Center;
 
@@ -142,8 +142,8 @@ public class FingerBolt : ModProjectile, ILocalizedModType
             {
                 Vector2 goalPos;
                 NPC target = Projectile.Center.ClosestNPC(1100f, bossPriority: true);
-                if (target == null)
-                    goalPos = Main.player[Projectile.owner].Calamity().mouseWorld;
+                if (target == null && Main.myPlayer == Projectile.owner)
+                    goalPos = Main.MouseWorld;
                 else
                     goalPos = target.Center;
 
@@ -185,7 +185,7 @@ public class FingerBolt : ModProjectile, ILocalizedModType
         }
     }
 
-    internal Color ColorFunction(float completionRatio)
+    internal Color ColorFunction(float completionRatio, Vector2 v)
     {
         Color colorA = MyColor == myColor.Green ? Color.LimeGreen : Color.Orange;
         Color colorB = MyColor == myColor.Green ? Color.GreenYellow : Color.Goldenrod;
@@ -196,7 +196,7 @@ public class FingerBolt : ModProjectile, ILocalizedModType
         Color endColor = Color.Lerp(colorA, colorB, (float)Math.Sin(completionRatio * Pi * 1.6f - Main.GlobalTimeWrappedHourly * 5f) * 0.5f + 0.5f);
         return Color.Lerp(Color.White, endColor, fadeToEnd) * fadeOpacity;
     }
-    internal float WidthFunction(float completionRatio)
+    internal float WidthFunction(float completionRatio, Vector2 v)
     {
         float expansionCompletion = 1f - (float)Math.Pow(1f - Utils.GetLerpValue(0f, 0.3f, completionRatio, true), 2D);
         float maxWidth = Projectile.Opacity * Projectile.width * 2f;
@@ -206,9 +206,8 @@ public class FingerBolt : ModProjectile, ILocalizedModType
 
     public override bool PreDraw(ref Color lightColor)
     {
-        ManagedShader shader = ShaderManager.GetShader("Windfall.GenericFlameTrail");
-        shader.SetTexture(ModContent.Request<Texture2D>("CalamityMod/ExtraTextures/Trails/" + (MyColor == myColor.Green ? "ScarletDevilStreak" : "SylvestaffStreak")), 1, SamplerState.LinearWrap);
-        PrimitiveSettings settings = new(WidthFunction, ColorFunction, (_) => Projectile.Size * 0.5f, Shader: shader);
+        GameShaders.Misc["CalamityMod:ImpFlameTrail"].SetTexture(ModContent.Request<Texture2D>("CalamityMod/ExtraTextures/Trails/" + (MyColor == myColor.Green ? "ScarletDevilStreak" : "SylvestaffStreak")));
+        PrimitiveSettings settings = new(WidthFunction, ColorFunction, (_,_) => Projectile.Size * 0.5f, shader: GameShaders.Misc["CalamityMod:ImpFlameTrail"]);
         PrimitiveRenderer.RenderTrail(Projectile.oldPos, settings, 30);
         /*
         Vector2 drawPos = Projectile.Center - Main.screenPosition;
@@ -277,7 +276,10 @@ public class FingerlingGun : ModProjectile, ILocalizedModType
             Projectile.velocity += toHand.SafeNormalize(Vector2.UnitX * -owner.direction) * force;
         }
 
-        Vector2 toMouse = (owner.Calamity().mouseWorld - Projectile.Center);
+        if (Main.myPlayer != Projectile.owner)
+            return;
+
+        Vector2 toMouse = (Main.MouseWorld - Projectile.Center);
 
         switch (State)
         {

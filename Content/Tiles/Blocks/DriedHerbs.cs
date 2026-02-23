@@ -46,7 +46,7 @@ public class DriedHerbs : ModTile
         Player nearestPlayer = Main.player[Player.FindClosest(worldPosition, 16, 16)];
         if (nearestPlayer.active)
         {
-            if (nearestPlayer.ActiveItem().type == ItemID.Sickle)
+            if (nearestPlayer.HeldItem().type == ItemID.Sickle)
                 yield return new Item(ItemID.Hay, Main.rand.Next(1, 2 + 1));
 
             if (Main.rand.NextBool(20))

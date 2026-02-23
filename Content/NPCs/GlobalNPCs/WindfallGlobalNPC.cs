@@ -1,10 +1,13 @@
-﻿using CalamityMod.NPCs.AquaticScourge;
+﻿using CalamityMod;
+using CalamityMod.NPCs;
+using CalamityMod.NPCs.AquaticScourge;
 using CalamityMod.NPCs.Astral;
 using CalamityMod.NPCs.AstrumDeus;
 using CalamityMod.NPCs.DesertScourge;
 using CalamityMod.NPCs.DevourerofGods;
 using CalamityMod.NPCs.NormalNPCs;
 using CalamityMod.NPCs.Polterghast;
+using Terraria.ID;
 using Windfall.Common.Systems;
 using Windfall.Common.Systems.WorldEvents;
 using Windfall.Content.NPCs.Enemies;
@@ -13,8 +16,6 @@ using Windfall.Content.Projectiles.Enemies;
 using Windfall.Content.Projectiles.NPCAnimations;
 using Windfall.Content.Projectiles.Other;
 using Windfall.Content.Projectiles.Props;
-using Terraria.ID;
-using CalamityMod;
 
 namespace Windfall.Content.NPCs.GlobalNPCs;
 
@@ -29,7 +30,7 @@ public class WindfallGlobalNPC : GlobalNPC
         if (!spawnInfo.Player.InAstral(1))
             AstralSiphonSpawns = false;
 
-        if (AstralSiphonSpawns && !Main.npc.Any(n => n.active && n.type == ModContent.NPCType<SelenicSiphon>() && n.As<SelenicSiphon>().EventActive))
+        if (AstralSiphonSpawns && !Main.npc.Any(n => n.active && n.type == ModContent.NPCType<SelenicSiphon>() && (n.ModNPC as SelenicSiphon).EventActive))
             AstralSiphonSpawns = false;
 
         if (AstralSiphonSpawns)
@@ -53,7 +54,7 @@ public class WindfallGlobalNPC : GlobalNPC
         if (!player.InAstral(1))
             AstralSiphonSpawns = false;
 
-        if (AstralSiphonSpawns && !Main.npc.Any(n => n.active && n.type == ModContent.NPCType<SelenicSiphon>() && n.As<SelenicSiphon>().EventActive))
+        if (AstralSiphonSpawns && !Main.npc.Any(n => n.active && n.type == ModContent.NPCType<SelenicSiphon>() && (n.ModNPC as SelenicSiphon).EventActive))
             AstralSiphonSpawns = false;
 
         if (AstralSiphonSpawns)
@@ -89,7 +90,7 @@ public class WindfallGlobalNPC : GlobalNPC
         if (npc.type == NPCID.SkeletronHead && !NPC.downedBoss3)
             Projectile.NewProjectile(Entity.GetSource_NaturalSpawn(), new Vector2(Main.dungeonX, Main.dungeonY).ToWorldCoordinates(), Vector2.Zero, ModContent.ProjectileType<LunaticCultistProj>(), 0, 0, -1, 1);
 
-        if (Main.npc.Any(n => n.active && n.type == ModContent.NPCType<SelenicSiphon>() && n.As<SelenicSiphon>().EventActive) && npc.type == calamity.Find<ModNPC>("Nova").Type)
+        if (Main.npc.Any(n => n.active && n.type == ModContent.NPCType<SelenicSiphon>() && (n.ModNPC as SelenicSiphon).EventActive) && npc.type == calamity.Find<ModNPC>("Nova").Type)
         {
             NPC siphon = Main.npc[NPC.FindFirstNPC(ModContent.NPCType<SelenicSiphon>())];
             Projectile.NewProjectile(Entity.GetSource_NaturalSpawn(), npc.Center, (npc.Center - siphon.Center).SafeNormalize(Vector2.UnitX * npc.direction) * 6f, ModContent.ProjectileType<AstralEnergy>(), 0, 0f);
@@ -115,11 +116,11 @@ public class WindfallGlobalNPC : GlobalNPC
         if (!DownedBossSystem.downedPolterghast && !NPC.AnyNPCs(ModContent.NPCType<Polterghast>()) && (npc.type == ModContent.NPCType<PhantomSpirit>() || npc.type == ModContent.NPCType<PhantomSpiritS>() || npc.type == ModContent.NPCType<PhantomSpiritM>() ||
             npc.type == ModContent.NPCType<PhantomSpiritL>()))
         {
-            if (CalamityMod.CalamityMod.ghostKillCount == 10)
+            if (CalamityNaturalSpawnBossNPC.ghostKillCount == 10)
             {
                 SoundEngine.PlaySound(PolterAmbiance with { Volume = 1f }, Main.player[0].Center + new Vector2(Main.rand.NextFloat(-1f, 1f), Main.rand.NextFloat(-1f, 1f)).SafeNormalize(Vector2.UnitX) * (Main.rand.Next(1200, 1500)));
             }
-            else if (CalamityMod.CalamityMod.ghostKillCount == 20)
+            else if (CalamityNaturalSpawnBossNPC.ghostKillCount == 20)
             {
                 SoundEngine.PlaySound(PolterAmbiance with { Volume = 1f }, Main.player[0].Center + new Vector2(Main.rand.NextFloat(-1f, 1f), Main.rand.NextFloat(-1f, 1f)).SafeNormalize(Vector2.UnitX) * (Main.rand.Next(800, 1000)));
             }

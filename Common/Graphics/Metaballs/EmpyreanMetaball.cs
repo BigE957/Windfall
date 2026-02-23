@@ -1,7 +1,10 @@
-﻿using CalamityMod.Graphics.Metaballs;
-using Luminance.Assets;
-using Luminance.Core.Graphics;
+﻿using CalamityMod.Enums;
+using CalamityMod.Graphics;
+using CalamityMod.Graphics.Metaballs;
+using Daybreak.Common.Rendering;
+using Terraria.Graphics.Shaders;
 using Windfall.Common.Interfaces;
+using Windfall.Common.Systems;
 using Windfall.Content.Items.Weapons.Magic;
 using Windfall.Content.Items.Weapons.Ranged;
 using Windfall.Content.Items.Weapons.Summon;
@@ -185,13 +188,13 @@ public class EmpyreanMetaball : Metaball
         }
     }
 
-    public override MetaballDrawLayer DrawContext => MetaballDrawLayer.AfterProjectiles;
-
     public static float BorderLerpValue => (float)(Math.Sin(Main.GlobalTimeWrappedHourly * 1f) / 0.5f) + 0.5f;
 
     public static Color BorderColor => Color.Lerp(new Color(117, 255, 159), new Color(255, 180, 80), BorderLerpValue);
 
     public override Color EdgeColor => BorderColor;
+
+    public override GeneralDrawLayer DrawLayer => GeneralDrawLayer.AfterProjectiles;
 
     public override void Load()
     {
@@ -345,9 +348,9 @@ public class EmpyreanMetaball : Metaball
         {
             Vector2 drawPosition = n.Center - Main.screenPosition;
             if (n.type == ModContent.NPCType<OratorHand>())
-                n.As<OratorHand>().PostDraw(Main.spriteBatch, Main.screenPosition, n.GetAlpha(Color.White));
+                (n.ModNPC as OratorHand).PostDraw(Main.spriteBatch, Main.screenPosition, n.GetAlpha(Color.White));
             else if (n.ai[0] == 2)
-                n.As<SealingTablet>().PostDraw(Main.spriteBatch, Main.screenPosition, n.GetAlpha(Color.White));
+                (n.ModNPC as SealingTablet).PostDraw(Main.spriteBatch, Main.screenPosition, n.GetAlpha(Color.White));
         }
 
         EmpyreanMetaballSystem.DrawDissolves(Main.spriteBatch);
@@ -397,22 +400,26 @@ public class EmpyreanMetaballSystem : ModSystem
         orig(self);
     }
 
-    public static CalamityMod.Graphics.ManagedRenderTarget dissolveTarget = null;
+    private static RenderTargetLease dissolveTarget = null;
 
     private void UpdateDissolveTargets()
     {
-        if (!ShaderManager.TryGetShader("Windfall.Dissolve", out ManagedShader dissolveShader))
-            return;
-
-        dissolveTarget ??= new(true, ManagedRenderTarget.CreateScreenSizedTarget);
+        dissolveTarget ??= ScreenspaceTargetPool.Shared.Rent(Main.instance.GraphicsDevice, Main.screenWidth, Main.screenHeight, RenderTargetDescriptor.Default);
 
         var gd = Main.instance.GraphicsDevice;
-        gd.SetRenderTarget(dissolveTarget);
+        gd.SetRenderTarget(dissolveTarget.Target);
         gd.Clear(Color.Transparent);
 
         Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.NonPremultiplied, Main.DefaultSamplerState, DepthStencilState.None, RasterizerState.CullNone, null, Matrix.Identity);
 
-        dissolveShader.SetTexture(MiscTexturesRegistry.TurbulentNoise.Value, 1, SamplerState.LinearWrap);
+        MiscShaderData dissolveShader = GameShaders.Misc["CalamityMod:Dissolve"];
+
+        dissolveShader.Shader.Parameters["noiseScale"].SetValue(0.25f);
+
+        Main.instance.GraphicsDevice.Textures[1] = LoadSystem.TurbulentNoise.Value;
+        Main.instance.GraphicsDevice.SamplerStates[1] = SamplerState.LinearWrap;
+
+        dissolveShader.Apply();
 
         foreach (Projectile p in Main.projectile.Where(p => p.active && p.ModProjectile is IEmpyreanDissolve))
         {
@@ -421,8 +428,8 @@ public class EmpyreanMetaballSystem : ModSystem
             if (diss.DissolveIntensity == 1)
                 continue;
 
-            dissolveShader.TrySetParameter("dissolveIntensity", diss.DissolveIntensity);
-            dissolveShader.TrySetParameter("sampleOffset", diss.sampleOffset);
+            dissolveShader.Shader.Parameters["dissolveIntensity"].SetValue(diss.DissolveIntensity);
+            dissolveShader.Shader.Parameters["sampleOffset"].SetValue(diss.sampleOffset);
             dissolveShader.Apply();
 
             diss.DrawOverlay(Main.spriteBatch);
@@ -434,6 +441,6 @@ public class EmpyreanMetaballSystem : ModSystem
 
     internal static void DrawDissolves(SpriteBatch sb)
     {
-        sb.Draw(dissolveTarget, Main.screenLastPosition - Main.screenPosition, Color.White);
+        sb.Draw(dissolveTarget.Target, Main.screenLastPosition - Main.screenPosition, Color.White);
     }
 }

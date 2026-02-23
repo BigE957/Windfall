@@ -1,4 +1,6 @@
-﻿namespace Windfall.Common.Graphics.Verlet;
+﻿using Windfall.Common.Utils;
+
+namespace Windfall.Common.Graphics.Verlet;
 public static class VerletIntegration
 {
     public class VerletPoint(Vector2 start, bool locked)
@@ -225,7 +227,7 @@ public static class VerletIntegration
                     {
                         // Weigh the entity's distance between the two segments.
                         float distanceBetweenSegments = segment.Position.Distance(next.Position);
-                        float currentMovementOffsetInterpolant = Utilities.InverseLerp(distanceToEntity, distanceBetweenSegments, distanceBetweenSegments * 0.2f);
+                        float currentMovementOffsetInterpolant = WindfallUtils.InverseLerp(distanceToEntity, distanceBetweenSegments, distanceBetweenSegments * 0.2f);
                         float nextMovementOffsetInterpolant = 1f - currentMovementOffsetInterpolant;
 
                         // Move the segments based on the weight values.

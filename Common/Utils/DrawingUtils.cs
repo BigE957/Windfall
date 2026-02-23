@@ -32,7 +32,7 @@ public static partial class WindfallUtils
         }
 
         bool flag = false;
-        if (CalamityConfig.Instance.Afterimages)
+        if (CalamityClientConfig.Instance.Afterimages)
         {
             Vector2 vector = (drawCentered ? (proj.Size / 2f) : Vector2.Zero);
             Color alpha = proj.GetAlpha(lightColor);
@@ -88,10 +88,22 @@ public static partial class WindfallUtils
             }
         }
 
-        if (!CalamityConfig.Instance.Afterimages || ProjectileID.Sets.TrailCacheLength[proj.type] <= 0 || flag)
+        if (!CalamityClientConfig.Instance.Afterimages || ProjectileID.Sets.TrailCacheLength[proj.type] <= 0 || flag)
         {
             Vector2 vector2 = (drawCentered ? proj.Center : proj.position);
             Main.spriteBatch.Draw(texture, vector2 - Main.screenPosition + new Vector2(0f, proj.gfxOffY), rectangle, proj.GetAlpha(lightColor), rotation, origin, scale, effects, 0f);
         }
+    }
+
+    /// <summary>
+    ///     Calculates a <see cref="Matrix"/> for the purpose of <see cref="SpriteBatch"/> resets in the context of background/sky drawing.
+    /// </summary>
+    public static Matrix GetCustomSkyBackgroundMatrix()
+    {
+        Matrix transformationMatrix = Main.BackgroundViewMatrix.TransformationMatrix;
+        Vector3 translationDirection = new(1f, Main.BackgroundViewMatrix.Effects.HasFlag(SpriteEffects.FlipVertically) ? -1f : 1f, 1f);
+
+        transformationMatrix.Translation -= Main.BackgroundViewMatrix.ZoomMatrix.Translation * translationDirection;
+        return transformationMatrix;
     }
 }

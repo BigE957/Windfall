@@ -1,8 +1,8 @@
 ﻿using CalamityMod;
 using CalamityMod.Particles;
 using CalamityMod.World;
-using Luminance.Core.Graphics;
 using Windfall.Common.Graphics.Metaballs;
+using Windfall.Common.Systems;
 using Windfall.Content.NPCs.Bosses.Orator;
 
 namespace Windfall.Content.Projectiles.Boss.Orator;
@@ -66,7 +66,7 @@ public class ShadowGrasp : ModProjectile
             int oratorIndex = NPC.FindFirstNPC(ModContent.NPCType<TheOrator>());
             if (oratorIndex == -1)
                 return null;
-            return Main.npc[oratorIndex].As<TheOrator>();
+            return Main.npc[oratorIndex].ModNPC as TheOrator;
         }
     }
 
@@ -97,11 +97,11 @@ public class ShadowGrasp : ModProjectile
     {
         if (CurrentAI == AIState.Attacking)
         {
-            if (Main.projectile[partnerIndex].As<ShadowGrasp>().CurrentAI != AIState.Attacking)
+            if ((Main.projectile[partnerIndex].ModProjectile as ShadowGrasp).CurrentAI != AIState.Attacking)
             {
-                Main.projectile[partnerIndex].As<ShadowGrasp>().CurrentAI = AIState.Attacking;
+                (Main.projectile[partnerIndex].ModProjectile as ShadowGrasp).CurrentAI = AIState.Attacking;
                 Time = 0;
-                Main.projectile[partnerIndex].As<ShadowGrasp>().Time = 0;
+                (Main.projectile[partnerIndex].ModProjectile as ShadowGrasp).Time = 0;
             }
         }
 
@@ -271,7 +271,7 @@ public class ShadowGrasp : ModProjectile
     private void Explode()
     {
         SoundEngine.PlaySound(SoundID.DD2_EtherianPortalDryadTouch with { Volume = 0.5f }, Projectile.Center);
-        ScreenShakeSystem.StartShake(2.5f);
+        CameraSystem.StartScreenShake(Projectile.Center, Vector2.Zero, 2.5f, 10, 30);
 
         for (int i = 0; i <= 50; i++)
             EmpyreanMetaball.SpawnDefaultParticle(Projectile.Center, Main.rand.NextVector2Circular(10f, 10f) * Main.rand.NextFloat(1f, 2f), 40 * Main.rand.NextFloat(3f, 5f));
@@ -317,7 +317,7 @@ public class ShadowGrasp : ModProjectile
 
     public static void DrawSelf(Projectile p)
     {
-        Rectangle frame = TextureAssets.Projectile[p.type].Frame(6, 9, p.As<ShadowGrasp>().frameX, p.frame);
+        Rectangle frame = TextureAssets.Projectile[p.type].Frame(6, 9, (p.ModProjectile as ShadowGrasp).frameX, p.frame);
 
         SpriteEffects spriteEffects = SpriteEffects.None;
         if (p.spriteDirection == -1)

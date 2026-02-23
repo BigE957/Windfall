@@ -1,5 +1,4 @@
 ﻿using DialogueHelper.UI.Dialogue;
-using Luminance.Core.Graphics;
 using Terraria.ModLoader.IO;
 using Windfall.Common.Graphics.Metaballs;
 using Windfall.Content.NPCs.Bosses.Orator;
@@ -75,7 +74,7 @@ public class SealingRitualSystem : ModSystem
     {
         State = SystemState.CheckReqs;
         zoom = 0;
-        CameraPanSystem.Zoom = 0;
+        CameraSystem.Zoom = 0;
     }
     public override void PreUpdateWorld()
     {
@@ -281,8 +280,8 @@ public class SealingRitualSystem : ModSystem
                             zoom = Lerp(zoom, 0.4f, 0.075f);
                         else
                             zoom = 0.4f;
-                        CameraPanSystem.Zoom = zoom;
-                        CameraPanSystem.PanTowards(new Vector2(RitualWorld.X + 120, RitualWorld.Y), zoom * 2.5f);
+                        CameraSystem.Zoom = zoom;
+                        CameraSystem.InterpolateCamera(new Vector2(RitualWorld.X + 120, RitualWorld.Y), zoom * 2.5f);
                         
                         #region Additional Visuals 
 
@@ -449,7 +448,7 @@ public class SealingRitualSystem : ModSystem
                 if (ThornIndex == -1)
                     ThornIndex = FindFirstProjectile(ModContent.ProjectileType<EmpyreanThorn>());
 
-                Main.projectile[ThornIndex].As<EmpyreanThorn>().canDespawn = true;
+                (Main.projectile[ThornIndex].ModProjectile as EmpyreanThorn).canDespawn = true;
 
                 for(int i = 0; i < 4; i++)
                     RecruitsHover[i] = -1;

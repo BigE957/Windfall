@@ -3,6 +3,7 @@ using CalamityMod.Items.Accessories;
 using CalamityMod.Items.Armor.Victide;
 using CalamityMod.Items.Materials;
 using CalamityMod.Items.Placeables;
+using CalamityMod.Items.Placeables.SunkenSea;
 using CalamityMod.Items.Weapons.Melee;
 using CalamityMod.Items.Weapons.Rogue;
 using CalamityMod.NPCs.SunkenSea;
@@ -37,7 +38,7 @@ public class IlmeranKnife : ModItem, ILocalizedModType
         new lootItem {Type = ModContent.ItemType<PrismShard>(), MinStack = 10, MaxStack = 15},
         new lootItem {Type = ModContent.ItemType<ShieldoftheOcean>(), MinStack = 1, MaxStack = 1},
         new lootItem {Type = ModContent.ItemType<FishboneBoomerang>(), MinStack = 1, MaxStack = 1},
-        new lootItem {Type = ModContent.ItemType<RedtideSpear>(), MinStack = 1, MaxStack = 1},
+        new lootItem {Type = ModContent.ItemType<UrchinMace>(), MinStack = 1, MaxStack = 1},
         new lootItem {Type = ModContent.ItemType<VictideHeadSummon>(), MinStack = 1, MaxStack = 1},
     ];
     public override void SetDefaults()

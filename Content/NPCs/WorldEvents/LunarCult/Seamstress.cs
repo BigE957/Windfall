@@ -471,7 +471,7 @@ public class Seamstress : ModNPC
                     CompletedClothesCount = 0;
                     State = SystemStates.Tailor;
                     Active = true;
-                    me.As<Seamstress>().BeginActivity = true;
+                    (me.ModNPC as Seamstress).BeginActivity = true;
                 }
             }
             if (treeKey == "TheSeamstress/Default" && dialogueID == 6 && Main.LocalPlayer.LunarCult().apostleQuestTracker == 1)

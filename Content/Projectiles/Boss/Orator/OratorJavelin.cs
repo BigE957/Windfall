@@ -70,7 +70,7 @@ public class OratorJavelin : ModProjectile
         if (NPC.AnyNPCs(ModContent.NPCType<TheOrator>()))
         {
             NPC orator = Main.npc[NPC.FindFirstNPC(ModContent.NPCType<TheOrator>())];
-            target = orator.As<TheOrator>().target;
+            target = (orator.ModNPC as TheOrator).target;
 
         }
 
@@ -126,7 +126,7 @@ public class OratorJavelin : ModProjectile
             {
                 NPC orator = Main.npc[NPC.FindFirstNPC(ModContent.NPCType<TheOrator>())];
                 centerPosition = orator.Center;
-                target = orator.As<TheOrator>().target;
+                target = (orator.ModNPC as TheOrator).target;
             }
             else if (positioning == PositioningType.StickToPlayer || positioning == PositioningType.StickToPlayerNoRotate)
                 centerPosition = target.Center;
@@ -177,7 +177,7 @@ public class OratorJavelin : ModProjectile
         if (NPC.AnyNPCs(ModContent.NPCType<TheOrator>()))
         {
             NPC orator = Main.npc[NPC.FindFirstNPC(ModContent.NPCType<TheOrator>())];
-            target = orator.As<TheOrator>().target;
+            target = (orator.ModNPC as TheOrator).target;
         }
 
         if ((target.Center - Projectile.Center).Length() > 700f || PointInTriangle(Projectile.Hitbox.Center(), target.Center, target.Center + ((Projectile.rotation + Pi).ToRotationVector2().RotatedBy(PiOver4) * 1000f), target.Center + ((Projectile.rotation + Pi).ToRotationVector2().RotatedBy(-PiOver4) * 1000f)))

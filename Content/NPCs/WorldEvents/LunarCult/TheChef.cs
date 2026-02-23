@@ -285,7 +285,7 @@ public class TheChef : ModNPC
             Active = true;
         }
         else if (treeKey == "TheChef/Default")
-            Main.npc[(int)uiSystem.CurrentDialogueContext.Arguments[0]].As<TheChef>().CurrentAnimation = Animation.Laugh;
+            (Main.npc[(int)uiSystem.CurrentDialogueContext.Arguments[0]].ModNPC as TheChef).CurrentAnimation = Animation.Laugh;
     }
 
     public override void FindFrame(int frameHeight)

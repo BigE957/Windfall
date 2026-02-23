@@ -1,7 +1,7 @@
 ﻿using CalamityMod.Items.Accessories;
 using CalamityMod.Items.Armor.Vanity;
 using CalamityMod.Items.Materials;
-using CalamityMod.Items.Placeables.Furniture.DevPaintings;
+using CalamityMod.Items.Placeables.Furniture;
 using CalamityMod.Items.Weapons.Rogue;
 using CalamityMod.Items.Weapons.Summon;
 using CalamityMod.NPCs.Signus;
@@ -14,6 +14,7 @@ using Windfall.Content.Items.Weapons.Magic;
 using Windfall.Content.Items.Weapons.Summon;
 using Windfall.Content.Items.Weapons.Rogue;
 using Windfall.Content.Items.Vanity.Masks;
+using CalamityMod.Items.Placeables.Furniture.Paintings;
 
 namespace Windfall.Content.Items.LootBags;
 public class OratorBag : ModItem, ILocalizedModType

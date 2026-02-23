@@ -1,8 +1,8 @@
 ﻿using CalamityMod;
+using CalamityMod.Graphics.Primitives;
 using CalamityMod.Items;
 using CalamityMod.Particles;
 using CalamityMod.Projectiles.BaseProjectiles;
-using Luminance.Core.Graphics;
 using Windfall.Content.NPCs.WorldEvents.LunarCult;
 using static Windfall.Common.Graphics.Verlet.VerletIntegration;
 
@@ -429,10 +429,10 @@ public class RiftWeaverThrow : ModProjectile
     }
 
     private readonly PrimitiveSettings.VertexWidthFunction widthFunction = WidthFunction;
-    private static float WidthFunction(float interpolent) => 1.6f;
+    private static float WidthFunction(float interpolent, Vector2 v) => 1.6f;
 
     private readonly PrimitiveSettings.VertexColorFunction colorFunction = ColorFunction;
-    private static Color ColorFunction(float interpolent)
+    private static Color ColorFunction(float interpolent, Vector2 v)
     {
         return Color.Lerp(Color.Cyan, Color.LimeGreen, interpolent * 2f) * (0.9f - interpolent);
     }

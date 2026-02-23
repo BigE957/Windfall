@@ -35,7 +35,7 @@ public class WorldCataclysm : ModNPC
         NPC.defense = CalamityWorld.death ? 15 : 10;
         NPC.DR_NERD(CalamityWorld.death ? 0.225f : 0.15f);
         NPC.LifeMaxNERB(11000 + 9200, 13200 + 11025, 80000 + 80000);
-        double HPBoost = CalamityConfig.Instance.BossHealthBoost * 0.01;
+        double HPBoost = CalamityServerConfig.Instance.BossHealthBoost * 0.01;
         NPC.lifeMax += (int)(NPC.lifeMax * HPBoost);
         NPC.aiStyle = -1;
         AIType = -1;
@@ -70,7 +70,7 @@ public class WorldCataclysm : ModNPC
 
     public override void AI()
     {
-        CalamityAIs.CataclysmAI(NPC, Mod);
+        //CalamityAIs.CataclysmAI(NPC, Mod);
     }
 
     public override bool PreDraw(SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor)
@@ -83,7 +83,7 @@ public class WorldCataclysm : ModNPC
         Vector2 halfSizeTexture = new(TextureAssets.Npc[NPC.type].Value.Width / 2, TextureAssets.Npc[NPC.type].Value.Height / Main.npcFrameCount[NPC.type] / 2);
         int afterimageAmt = 7;
 
-        if (CalamityConfig.Instance.Afterimages)
+        if (CalamityClientConfig.Instance.Afterimages)
         {
             for (int i = 1; i < afterimageAmt; i += 2)
             {
@@ -106,7 +106,7 @@ public class WorldCataclysm : ModNPC
         texture2D15 = ModContent.Request<Texture2D>("CalamityMod/NPCs/CalClone/CataclysmGlow").Value;
         Color pinkLerp = Color.Lerp(Color.White, Color.Red, 0.5f);
 
-        if (CalamityConfig.Instance.Afterimages)
+        if (CalamityClientConfig.Instance.Afterimages)
         {
             for (int j = 1; j < afterimageAmt; j++)
             {

@@ -1,4 +1,5 @@
-﻿using Windfall.Content.Buffs.DoT;
+﻿using Daybreak.Common.Rendering;
+using Windfall.Content.Buffs.DoT;
 using Windfall.Content.NPCs.Bosses.Orator;
 using static Windfall.Common.Graphics.Metaballs.EmpyreanMetaball;
 
@@ -102,7 +103,9 @@ public class OratorBorder : ModProjectile
 
     public override bool PreDraw(ref Color lightColor)
     {
-        Main.spriteBatch.UseBlendState(BlendState.Additive);
+        Main.spriteBatch.End(out var scope);
+        var newScope = scope with { BlendState = BlendState.Additive };
+        Main.spriteBatch.Begin(newScope);
 
         Vector2 drawPos = Projectile.Center - Main.screenPosition;
         Color drawColor = ColorFunction(0.5f);
@@ -117,7 +120,8 @@ public class OratorBorder : ModProjectile
         drawColor = ColorFunction(0f);
         Main.EntitySpriteDraw(tex, drawPos, null, drawColor * 0.5f, Main.GlobalTimeWrappedHourly / 2f, tex.Size() * 0.5f, Projectile.scale * Lerp(0.73f, 0.4f, 1 - TrueScale / 3f) + ((float)Math.Sin(Main.GlobalTimeWrappedHourly) * -0.05f), SpriteEffects.None, 0);
 
-        Main.spriteBatch.UseBlendState(BlendState.AlphaBlend);
+        Main.spriteBatch.End();
+        Main.spriteBatch.Begin(scope);
 
         return false;
     }

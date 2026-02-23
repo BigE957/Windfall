@@ -1,4 +1,4 @@
-﻿using Luminance.Core.Graphics;
+﻿using Windfall.Common.Systems;
 
 namespace Windfall.Content.Projectiles.NPCAnimations;
 
@@ -72,8 +72,8 @@ public abstract class ProjectileNPC : ModProjectile
                         zoom = Lerp(zoom, 0.4f, 0.075f);
                     else
                         zoom = 0.4f;
-                    CameraPanSystem.Zoom = zoom;
-                    CameraPanSystem.PanTowards(Projectile.Center, zoom);
+                    CameraSystem.Zoom = zoom;
+                    CameraSystem.InterpolateCamera(Projectile.Center, zoom);
                 }
                 if (Delays.Count == dialogueCounter)
                 {
@@ -104,8 +104,8 @@ public abstract class ProjectileNPC : ModProjectile
                 }
                 else
                 {
-                    CameraPanSystem.Zoom = 0.4f;
-                    CameraPanSystem.PanTowards(Projectile.Center, zoom);
+                    CameraSystem.Zoom = 0.4f;
+                    CameraSystem.InterpolateCamera(Projectile.Center, zoom);
                 }
                 break;
 

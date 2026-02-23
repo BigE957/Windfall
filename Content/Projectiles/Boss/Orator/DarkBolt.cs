@@ -3,6 +3,7 @@
 using CalamityMod;
 using CalamityMod.Graphics.Primitives;
 using CalamityMod.Particles;
+using Daybreak.Common.Rendering;
 using Terraria.Graphics.Shaders;
 
 namespace Windfall.Content.Projectiles.Boss.Orator;
@@ -65,10 +66,10 @@ public class DarkBolt : ModProjectile
         {
             Vector2 position = new Vector2(Projectile.position.X, Projectile.Center.Y) + (Vector2.UnitY.RotatedBy(Projectile.rotation) * Main.rand.NextFloat(-16f, 16f));
 
-            Particle spark = new SparkParticle(position, Projectile.velocity.RotatedByRandom(PiOver4) * -0.5f, false, 12, Main.rand.NextFloat(0.25f, 1f), ColorFunction(0));
+            Particle spark = new SparkParticle(position, Projectile.velocity.RotatedByRandom(PiOver4) * -0.5f, false, 12, Main.rand.NextFloat(0.25f, 1f), ColorFunction(0, Vector2.Zero));
             GeneralParticleHandler.SpawnParticle(spark);
         }
-        Lighting.AddLight(Projectile.Center, ColorFunction(0).ToVector3());
+        Lighting.AddLight(Projectile.Center, ColorFunction(0, Vector2.Zero).ToVector3());
     }
     public override void ModifyDamageHitbox(ref Rectangle hitbox)
     {
@@ -78,7 +79,7 @@ public class DarkBolt : ModProjectile
         hitbox.Location = new Point((int)(hitbox.Location.X + rotation.X), (int)(hitbox.Location.Y + rotation.Y));
     }
 
-    internal Color ColorFunction(float completionRatio)
+    internal Color ColorFunction(float completionRatio, Vector2 v)
     {
         Color colorA = MyColor == myColor.Green ? Color.LimeGreen : Color.Orange;
         Color colorB = MyColor == myColor.Green ? Color.GreenYellow : Color.Goldenrod;
@@ -90,7 +91,7 @@ public class DarkBolt : ModProjectile
         return Color.Lerp(Color.White, endColor, fadeToEnd) * fadeOpacity;
     }
 
-    internal float WidthFunction(float completionRatio)
+    internal float WidthFunction(float completionRatio, Vector2 v)
     {
         float expansionCompletion = 1f - (float)Math.Pow(1f - Utils.GetLerpValue(0f, 0.3f, completionRatio, true), 2D);
         float maxWidth = Projectile.Opacity * Projectile.width * 2f;
@@ -103,18 +104,21 @@ public class DarkBolt : ModProjectile
         if (Velocity > 2)
         {
             GameShaders.Misc["CalamityMod:ImpFlameTrail"].SetTexture(ModContent.Request<Texture2D>("CalamityMod/ExtraTextures/Trails/" + (MyColor == myColor.Green ? "ScarletDevilStreak" : "SylvestaffStreak")));
-            PrimitiveRenderer.RenderTrail(Projectile.oldPos, new(WidthFunction, ColorFunction, (_) => Projectile.Size * 0.5f, shader: GameShaders.Misc["CalamityMod:ImpFlameTrail"]), 30);
+            PrimitiveRenderer.RenderTrail(Projectile.oldPos, new(WidthFunction, ColorFunction, (_, _) => Projectile.Size * 0.5f, shader: GameShaders.Misc["CalamityMod:ImpFlameTrail"]), 30);
         }
 
         Vector2 drawPos = Projectile.Center - Main.screenPosition;
         Texture2D texture = ModContent.Request<Texture2D>("CalamityMod/Particles/BloomCircle").Value;
         Vector2 origin = texture.Size() * 0.5f;
 
-        Main.spriteBatch.UseBlendState(BlendState.Additive);
+        Main.spriteBatch.End(out var scope);
+        var newScope = scope with { BlendState = BlendState.Additive };
+        Main.spriteBatch.Begin(newScope);
 
-        Main.EntitySpriteDraw(texture, drawPos - Vector2.UnitX.RotatedBy(Projectile.rotation) * (MyColor == myColor.Green ? 48 : 28) + Vector2.UnitY * (MyColor == myColor.Green ? 2 : 0), texture.Frame(), ColorFunction(0) * 0.6f, Projectile.rotation, origin, new Vector2(MyColor == myColor.Green ? 3 : 2f, 1) * Projectile.scale * 0.33f, SpriteEffects.None, 0);
+        Main.EntitySpriteDraw(texture, drawPos - Vector2.UnitX.RotatedBy(Projectile.rotation) * (MyColor == myColor.Green ? 48 : 28) + Vector2.UnitY * (MyColor == myColor.Green ? 2 : 0), texture.Frame(), ColorFunction(0, Vector2.Zero) * 0.6f, Projectile.rotation, origin, new Vector2(MyColor == myColor.Green ? 3 : 2f, 1) * Projectile.scale * 0.33f, SpriteEffects.None, 0);
 
-        Main.spriteBatch.UseBlendState(BlendState.AlphaBlend);
+        Main.spriteBatch.End();
+        Main.spriteBatch.Begin(scope);
 
         texture = (MyColor == myColor.Green ? TextureAssets.Projectile[Type] : ModContent.Request<Texture2D>("Windfall/Assets/Projectiles/Boss/MagicShot")).Value;
         origin = texture.Size();

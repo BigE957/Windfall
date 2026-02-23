@@ -24,7 +24,7 @@ public class AstralBolt : ModProjectile, ILocalizedModType
 
     public override void AI()
     {
-        if (!Main.npc.Any(n => n.active && n.type == ModContent.NPCType<SelenicSiphon>() && n.As<SelenicSiphon>().EventActive))
+        if (!Main.npc.Any(n => n.active && n.type == ModContent.NPCType<SelenicSiphon>() && (n.ModNPC as SelenicSiphon).EventActive))
         {
             for (int i = 0; i < 6; i++)
             {

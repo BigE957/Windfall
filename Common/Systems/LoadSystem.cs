@@ -2,6 +2,9 @@
 using DialogueHelper.UI.Dialogue;
 using System.Reflection;
 using Terraria.Graphics.Effects;
+using Terraria.Graphics.Shaders;
+using Terraria.ModLoader;
+using Terraria.WorldBuilding;
 using Windfall.Content.Items.GlobalItems;
 using Windfall.Content.Skies;
 using Windfall.Content.Skies.CorruptCommunion;
@@ -13,13 +16,20 @@ namespace Windfall.Common.Systems;
 
 public class LoadSystem : ModSystem
 {
+    private static string WindfallShaderPrefix => "Windfall";
+
     #region VFX Textures
     public static Asset<Texture2D> Circle;
     public static Asset<Texture2D> SwordSlash;
     public static Asset<Texture2D> PerlinNoise;
+    public static Asset<Texture2D> TurbulentNoise;
     public static Asset<Texture2D> DefaultBarBG;
     public static Asset<Texture2D> DefaultBarFG;
     #endregion
+
+    internal static Asset<Effect> Dissolve;
+    internal static Asset<Effect> RadialBlur;
+    internal static Asset<Effect> TestScreenShader;
 
     public override void Load()
     {
@@ -42,8 +52,26 @@ public class LoadSystem : ModSystem
         Circle = ModContent.Request<Texture2D>("Windfall/Assets/Graphics/Metaballs/BasicCircle");
         SwordSlash = ModContent.Request<Texture2D>("CalamityMod/ExtraTextures/Trails/SwordSlashTexture");
         PerlinNoise = ModContent.Request<Texture2D>("Windfall/Assets/Graphics/Extra/PerlinNoise");
+        TurbulentNoise = ModContent.Request<Texture2D>("Windfall/Assets/Graphics/Extra/TurbulentNoise");
         DefaultBarBG = ModContent.Request<Texture2D>("CalamityMod/UI/MiscTextures/GenericBarBack");
         DefaultBarFG = ModContent.Request<Texture2D>("CalamityMod/UI/MiscTextures/GenericBarFront");
+        #endregion
+
+        #region Shaders
+        AssetRepository windAssets = Windfall.Instance.Assets;
+        string ShaderPath = "Windfall/Assets/Shaders";
+
+        // Shorthand to load shaders immediately.
+        Asset<Effect> LoadShader(string path) => windAssets.Request<Effect>($"{ShaderPath}{path}", AssetRequestMode.ImmediateLoad);
+
+        RadialBlur = LoadShader("ScreenShaders/RadialBlur");
+        RegisterScreenShader(RadialBlur, "RadialBlurPass", "RadialBlurShader");
+
+        TestScreenShader = LoadShader("ScreenShaders/TestScreenShader");
+        RegisterScreenShader(TestScreenShader, "AutoloadPass", "TestScreenShader");
+
+        Dissolve = LoadShader("Dissolve");
+        RegisterMiscShader(Dissolve, "DissolvePass", "Dissolve");
         #endregion
     }
     public override void PostSetupContent()
@@ -75,5 +103,30 @@ public class LoadSystem : ModSystem
         WindfallGlobalItem.SpacialLockAffectedItems.Add(ItemID.MagicConch);
         WindfallGlobalItem.SpacialLockAffectedItems.Add(ItemID.DemonConch);
         #endregion
+    }
+
+    // Shorthand to register a loaded shader in Terraria's graphics engine
+    // All shaders registered this way are accessible under GameShaders.Misc
+    // They will use the prefix described above
+    private static void RegisterMiscShader(Asset<Effect> shader, string passName, string registrationName)
+    {
+        MiscShaderData passParamRegistration = new(shader, passName);
+        GameShaders.Misc[$"{WindfallShaderPrefix}{registrationName}"] = passParamRegistration;
+    }
+
+    private static void RegisterSceneFilter(ScreenShaderData passReg, string registrationName, EffectPriority priority = EffectPriority.High)
+    {
+        string prefixedRegistrationName = $"{WindfallShaderPrefix}{registrationName}";
+        Filters.Scene[prefixedRegistrationName] = new Filter(passReg, priority);
+        Filters.Scene[prefixedRegistrationName].Load();
+    }
+
+    // Shorthand to register a loaded shader in Terraria's graphics engine
+    // All shaders registered this way are accessible under Filters.Scene
+    // They will use the prefix described above
+    private static void RegisterScreenShader(Asset<Effect> shader, string passName, string registrationName, EffectPriority priority = EffectPriority.High)
+    {
+        ScreenShaderData passParamRegistration = new(shader, passName);
+        RegisterSceneFilter(passParamRegistration, registrationName, priority);
     }
 }

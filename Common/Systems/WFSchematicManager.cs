@@ -27,9 +27,9 @@ public class WFSchematicManager : ModSystem
     internal const string DraconicRuinsFileName = StructureFilePath + "DragonMonkRuins.csch";
 
     internal static Dictionary<string, SchematicMetaTile[,]> TileMaps =>
-        typeof(SchematicManager).GetField("TileMaps", Utilities.UniversalBindingFlags).GetValue(null) as Dictionary<string, SchematicMetaTile[,]>;
+        typeof(SchematicManager).GetField("TileMaps", BindingFlags.Instance | BindingFlags.Static | BindingFlags.NonPublic | BindingFlags.Public).GetValue(null) as Dictionary<string, SchematicMetaTile[,]>;
 
-    internal static readonly MethodInfo ImportSchematicMethod = typeof(CalamitySchematicIO).GetMethod("ImportSchematic", Utilities.UniversalBindingFlags);
+    internal static readonly MethodInfo ImportSchematicMethod = typeof(CalamitySchematicIO).GetMethod("ImportSchematic", BindingFlags.Instance | BindingFlags.Static | BindingFlags.NonPublic | BindingFlags.Public);
 
     private static readonly int[] FlipIgnoreTiles = [
         TileID.TallGateOpen,

@@ -1,4 +1,4 @@
-﻿using Luminance.Core.Graphics;
+﻿using Windfall.Common.Systems;
 
 namespace Windfall.Content.Items.Debug;
 
@@ -42,7 +42,7 @@ public class TheZoomer : ModItem, ILocalizedModType
         if (zooming)
         {
             zoom += 0.1f;
-            CameraPanSystem.Zoom = zoom;
+            CameraSystem.Zoom = zoom;
         }
     }
 }

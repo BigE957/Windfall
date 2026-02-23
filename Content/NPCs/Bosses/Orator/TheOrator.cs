@@ -194,13 +194,13 @@ public class TheOrator : ModNPC
 
                         float rotationRate = 0.03f;
                         if (target.velocity.Length() > 0.1f)
-                            rotationRate *= Math.Abs(Utilities.AngleBetween(target.velocity, VectorToTarget) - Pi);
+                            rotationRate *= Math.Abs(WindfallUtils.AngleBetween(target.velocity, VectorToTarget) - Pi);
                         else
                         {
                             if (target.direction == 1)
-                                rotationRate *= Math.Abs(Utilities.AngleBetween(VectorToTarget, 0f.ToRotationVector2()) - Pi);
+                                rotationRate *= Math.Abs(WindfallUtils.AngleBetween(VectorToTarget, 0f.ToRotationVector2()) - Pi);
                             else
-                                rotationRate *= Math.Abs(Utilities.AngleBetween(VectorToTarget, Pi.ToRotationVector2()) - Pi);
+                                rotationRate *= Math.Abs(WindfallUtils.AngleBetween(VectorToTarget, Pi.ToRotationVector2()) - Pi);
                         }
 
                         float circleDistance = 450;
@@ -211,14 +211,15 @@ public class TheOrator : ModNPC
                         else if (currentDistance < circleDistance - approachRate)
                             currentDistance += approachRate;
 
+                        Vector2 normToTarg = VectorToTarget.SafeNormalize(Vector2.Zero);
                         if (target.velocity != Vector2.Zero)
-                            NPC.Center = target.Center - VectorToTarget.SafeNormalize(Vector2.Zero).RotateTowards(target.velocity.ToRotation() + Pi, rotationRate) * currentDistance;
+                            NPC.Center = target.Center - WindfallUtils.RotateTowards(normToTarg, target.velocity.ToRotation() + Pi, rotationRate) * currentDistance;
                         else
                         {
                             if (target.direction == 1)
-                                NPC.Center = target.Center - VectorToTarget.SafeNormalize(Vector2.Zero).RotateTowards(Pi, rotationRate) * currentDistance;
+                                NPC.Center = target.Center - WindfallUtils.RotateTowards(normToTarg, Pi, rotationRate) * currentDistance;
                             else
-                                NPC.Center = target.Center - VectorToTarget.SafeNormalize(Vector2.Zero).RotateTowards(0f, rotationRate) * currentDistance;
+                                NPC.Center = target.Center - WindfallUtils.RotateTowards(normToTarg, 0f, rotationRate) * currentDistance;
                         }
                     }
                     #endregion
