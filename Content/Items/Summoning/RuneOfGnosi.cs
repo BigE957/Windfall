@@ -5,7 +5,7 @@ namespace Windfall.Content.Items.Summoning;
 
 public class RuneOfGnosi : ModItem, ILocalizedModType
 {
-    public override string Texture => "CalamityMod/Items/SummonItems/RuneofKos";
+    public override string Texture => "CalamityMod/Items/SummonItems/MarkofProvidence";
 
     public new string LocalizationCategory => "Items.SummonItems";
     public override void SetStaticDefaults()

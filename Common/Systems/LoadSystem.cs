@@ -16,7 +16,7 @@ namespace Windfall.Common.Systems;
 
 public class LoadSystem : ModSystem
 {
-    private static string WindfallShaderPrefix => "Windfall";
+    private static string WindfallShaderPrefix => "Windfall:";
 
     #region VFX Textures
     public static Asset<Texture2D> Circle;
@@ -56,23 +56,6 @@ public class LoadSystem : ModSystem
         DefaultBarBG = ModContent.Request<Texture2D>("CalamityMod/UI/MiscTextures/GenericBarBack");
         DefaultBarFG = ModContent.Request<Texture2D>("CalamityMod/UI/MiscTextures/GenericBarFront");
         #endregion
-
-        #region Shaders
-        AssetRepository windAssets = Windfall.Instance.Assets;
-        string ShaderPath = "Windfall/Assets/Shaders";
-
-        // Shorthand to load shaders immediately.
-        Asset<Effect> LoadShader(string path) => windAssets.Request<Effect>($"{ShaderPath}{path}", AssetRequestMode.ImmediateLoad);
-
-        RadialBlur = LoadShader("ScreenShaders/RadialBlur");
-        RegisterScreenShader(RadialBlur, "RadialBlurPass", "RadialBlurShader");
-
-        TestScreenShader = LoadShader("ScreenShaders/TestScreenShader");
-        RegisterScreenShader(TestScreenShader, "AutoloadPass", "TestScreenShader");
-
-        Dissolve = LoadShader("Dissolve");
-        RegisterMiscShader(Dissolve, "DissolvePass", "Dissolve");
-        #endregion
     }
     public override void PostSetupContent()
     {
@@ -102,6 +85,23 @@ public class LoadSystem : ModSystem
         WindfallGlobalItem.SpacialLockAffectedItems.Add(ItemID.ShellphoneSpawn);
         WindfallGlobalItem.SpacialLockAffectedItems.Add(ItemID.MagicConch);
         WindfallGlobalItem.SpacialLockAffectedItems.Add(ItemID.DemonConch);
+        #endregion
+
+        #region Shaders
+        AssetRepository windAssets = Windfall.Instance.Assets;
+        string ShaderPath = "Assets/Shaders/";
+
+        // Shorthand to load shaders immediately.
+        Asset<Effect> LoadShader(string path) => windAssets.Request<Effect>($"{ShaderPath}{path}", AssetRequestMode.ImmediateLoad);
+
+        Dissolve = LoadShader("Dissolve");
+        RegisterMiscShader(Dissolve, "DissolvePass", "Dissolve");
+
+        RadialBlur = LoadShader("ScreenShaders/RadialBlur");
+        RegisterScreenShader(RadialBlur, "RadialBlurPass", "RadialBlurShader");
+
+        TestScreenShader = LoadShader("ScreenShaders/TestScreenShader");
+        RegisterScreenShader(TestScreenShader, "AutoloadPass", "TestScreenShader");
         #endregion
     }
 

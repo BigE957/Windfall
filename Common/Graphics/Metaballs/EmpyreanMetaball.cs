@@ -1,7 +1,6 @@
 ﻿using CalamityMod.Enums;
 using CalamityMod.Graphics;
 using CalamityMod.Graphics.Metaballs;
-using Daybreak.Common.Rendering;
 using Terraria.Graphics.Shaders;
 using Windfall.Common.Interfaces;
 using Windfall.Common.Systems;
@@ -400,21 +399,24 @@ public class EmpyreanMetaballSystem : ModSystem
         orig(self);
     }
 
-    private static RenderTargetLease dissolveTarget = null;
+    public static CalamityMod.Graphics.ManagedRenderTarget dissolveTarget = null;
 
     private void UpdateDissolveTargets()
     {
-        dissolveTarget ??= ScreenspaceTargetPool.Shared.Rent(Main.instance.GraphicsDevice, Main.screenWidth, Main.screenHeight, RenderTargetDescriptor.Default);
+        if (Main.gameMenu)
+            return;
+
+        dissolveTarget ??= new(true, ManagedRenderTarget.CreateScreenSizedTarget);
 
         var gd = Main.instance.GraphicsDevice;
-        gd.SetRenderTarget(dissolveTarget.Target);
+        gd.SetRenderTarget(dissolveTarget);
         gd.Clear(Color.Transparent);
 
         Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.NonPremultiplied, Main.DefaultSamplerState, DepthStencilState.None, RasterizerState.CullNone, null, Matrix.Identity);
 
-        MiscShaderData dissolveShader = GameShaders.Misc["CalamityMod:Dissolve"];
+        MiscShaderData dissolveShader = GameShaders.Misc["Windfall:Dissolve"];
 
-        dissolveShader.Shader.Parameters["noiseScale"].SetValue(0.25f);
+        dissolveShader.Shader.Parameters["noiseScale"].SetValue(1f);
 
         Main.instance.GraphicsDevice.Textures[1] = LoadSystem.TurbulentNoise.Value;
         Main.instance.GraphicsDevice.SamplerStates[1] = SamplerState.LinearWrap;
@@ -441,6 +443,6 @@ public class EmpyreanMetaballSystem : ModSystem
 
     internal static void DrawDissolves(SpriteBatch sb)
     {
-        sb.Draw(dissolveTarget.Target, Main.screenLastPosition - Main.screenPosition, Color.White);
+        sb.Draw(dissolveTarget, Main.screenLastPosition - Main.screenPosition, Color.White);
     }
 }

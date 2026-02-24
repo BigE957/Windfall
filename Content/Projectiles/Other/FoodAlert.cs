@@ -4,7 +4,7 @@ namespace Windfall.Content.Projectiles.Other;
 
 public class FoodAlert : ModProjectile
 {
-    public override string Texture => "CalamityMod/Items/Potions/LavaChickenBroth";
+    public override string Texture => "CalamityMod/Items/Potions/Food/LavaChickenBroth";
     private int FoodID
     {
         get => (int)Projectile.ai[0];

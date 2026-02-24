@@ -59,6 +59,8 @@ public class CameraSystem : ModSystem
             ResetTimer = 0;
         else
             ResetTimer++;
+
+        cameraModified = false;
     }
 
     public override void ModifyTransformMatrix(ref SpriteViewMatrix transform)
