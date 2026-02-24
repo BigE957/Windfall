@@ -189,6 +189,8 @@ public class DarkGlob : ModProjectile, ILocalizedModType
 
     public override void PostDraw(Color lightColor)
     {
+        if (lightColor != Color.Red)
+            return;
         Texture2D tex = TextureAssets.Projectile[Type].Value;
         Vector2 origin = tex.Size() * 0.5f;
         Vector2 drawPos = Projectile.Center - Main.screenPosition - (Projectile.ai[0] == 0 ? Vector2.Zero : Projectile.velocity.SafeNormalize(Vector2.UnitX) * (16 * Projectile.scale));

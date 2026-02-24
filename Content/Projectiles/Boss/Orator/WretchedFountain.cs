@@ -68,6 +68,8 @@ public class WretchedFountain : ModProjectile
 
     public override bool PreDraw(ref Color lightColor)
     {
+        if (lightColor != Color.Red)
+            return false;
         Texture2D tex = TextureAssets.Projectile[Type].Value;
         float sineWave = (float)Math.Sin(Main.GlobalTimeWrappedHourly * 4);
         Main.EntitySpriteDraw(tex, Projectile.Bottom - Main.screenPosition + Vector2.UnitY * 16, null, Color.White, 0f, tex.Size() * 0.5f, new Vector2(5f + sineWave / 2f, 1.5f + sineWave / 4f), 0);

@@ -15,7 +15,7 @@ public class PostMetaballDrawing : ModSystem
 
     private void AfterDrawMetaballsAfterProjectiles(On_Main.orig_DrawPlayers_AfterProjectiles orig, Main self)
     {
-        Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.NonPremultiplied, SamplerState.PointClamp, DepthStencilState.Default, Main.Rasterizer, null, Matrix.Identity);
+        Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.NonPremultiplied, SamplerState.PointClamp, DepthStencilState.Default, Main.Rasterizer, null, Main.GameViewMatrix.TransformationMatrix);
 
         foreach (Projectile proj in Main.ActiveProjectiles)
             if (proj.ModProjectile != null && proj.ModProjectile is ShadowGrasp hand)

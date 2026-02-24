@@ -1124,14 +1124,14 @@ public class OratorHand : ModNPC
     
     public override void PostDraw(SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor)
     {
-        if (deadCounter >= 360)
+        if (deadCounter >= 360 || screenPos != Vector2.Zero)
             return;
 
         Texture2D texture = Cuffs.Value;
         cuffFrame.Width = texture.Width;
         cuffFrame.Height = texture.Height / 9;       
 
-        Vector2 drawPosition = NPC.Center - screenPos + (Vector2.UnitY * NPC.gfxOffY);
+        Vector2 drawPosition = NPC.Center - Main.screenPosition + (Vector2.UnitY * NPC.gfxOffY);
         Vector2 origin = cuffFrame.Size() * 0.5f;
         origin.X *= 0.8f;
         origin.Y -= 1;

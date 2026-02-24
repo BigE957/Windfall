@@ -139,7 +139,7 @@ public class HandRing : ModProjectile
     
     public override void PostDraw(Color lightColor)
     {
-        if (Projectile.timeLeft > 90)
+        if (Projectile.timeLeft > 90 || lightColor != Color.Red)
             return;
 
         Texture2D WhiteOutTexture = (Projectile.localAI[1] == 0 ? WhiteOut0 : WhiteOut1).Value;

@@ -1,9 +1,11 @@
-﻿using CalamityMod.Enums;
+﻿using CalamityMod;
+using CalamityMod.Enums;
 using CalamityMod.Graphics;
 using CalamityMod.Graphics.Metaballs;
 using Terraria.Graphics.Shaders;
 using Windfall.Common.Interfaces;
 using Windfall.Common.Systems;
+using Windfall.Common.Utils;
 using Windfall.Content.Items.Weapons.Magic;
 using Windfall.Content.Items.Weapons.Ranged;
 using Windfall.Content.Items.Weapons.Summon;
@@ -97,7 +99,7 @@ public class EmpyreanMetaball : Metaball
                     Opacity = 1f;
 
                 if (Time > 8)
-                    Velocity = Velocity.RotateTowards(IdealAngle, 0.01f);
+                    Velocity = WindfallUtils.RotateTowards(Velocity, IdealAngle, 0.01f);
 
                 if (Time > 45)
                 {
@@ -257,8 +259,8 @@ public class EmpyreanMetaball : Metaball
 
     public override void PrepareSpriteBatch(SpriteBatch spriteBatch)
     {
-        spriteBatch.End();
-        spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.NonPremultiplied, SamplerState.PointClamp, DepthStencilState.Default, Main.Rasterizer, null, Matrix.Identity);
+        //spriteBatch.End();
+        //spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.NonPremultiplied, SamplerState.PointClamp, DepthStencilState.Default, Main.Rasterizer, null, Main.GameViewMatrix.TransformationMatrix);
     }
     
     public override Vector2 CalculateManualOffsetForLayer(int layerIndex)
@@ -327,16 +329,13 @@ public class EmpyreanMetaball : Metaball
         {
             if(p.type == ModContent.ProjectileType<Dissolver>() || p.type == ModContent.ProjectileType<SelenicIdolMinion>() || p.type == ModContent.ProjectileType<OratorHandMinion>() || p.type == ModContent.ProjectileType<MinionHandRing>() ||  p.type == ModContent.ProjectileType<HandRing>() || p.type == ModContent.ProjectileType<DarkGlob>() || p.type == ModContent.ProjectileType<OratorBorder>() || p.type == ModContent.ProjectileType<DarkTide>() || p.type == ModContent.ProjectileType<SelenicIdol>() || p.type == ModContent.ProjectileType<FingerlingGun>() || p.type == ModContent.ProjectileType<PotGlob>())
             {
-                Color c = Color.White;
-                c.A = 0;
-                p.ModProjectile.PostDraw(c);
+                p.ModProjectile.PostDraw(Color.Red);
             }
             else if (p.type == ModContent.ProjectileType<ShadowGrasp>())
                 ShadowGrasp.DrawSelf(p);
             else
             {
-                Color c = Color.White;
-                c.A = 0;
+                Color c = Color.Red;
                 p.ModProjectile.PreDraw(ref c);
             }
         }
@@ -347,9 +346,9 @@ public class EmpyreanMetaball : Metaball
         {
             Vector2 drawPosition = n.Center - Main.screenPosition;
             if (n.type == ModContent.NPCType<OratorHand>())
-                (n.ModNPC as OratorHand).PostDraw(Main.spriteBatch, Main.screenPosition, n.GetAlpha(Color.White));
+                (n.ModNPC as OratorHand).PostDraw(Main.spriteBatch, Vector2.Zero, n.GetAlpha(Color.White));
             else if (n.ai[0] == 2)
-                (n.ModNPC as SealingTablet).PostDraw(Main.spriteBatch, Main.screenPosition, n.GetAlpha(Color.White));
+                (n.ModNPC as SealingTablet).PostDraw(Main.spriteBatch, Vector2.Zero, n.GetAlpha(Color.White));
         }
 
         EmpyreanMetaballSystem.DrawDissolves(Main.spriteBatch);

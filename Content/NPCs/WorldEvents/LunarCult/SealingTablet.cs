@@ -223,6 +223,9 @@ public class SealingTablet : ModNPC
     }
     public override void PostDraw(SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor)
     {
+        if (screenPos != Vector2.Zero)
+            return;
+
         if (NPC.ai[0] == 2)
         {
             Texture2D texture = ModContent.Request<Texture2D>(Texture + "Crack").Value;
