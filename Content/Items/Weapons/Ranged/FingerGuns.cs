@@ -336,7 +336,7 @@ public class FingerlingGun : ModProjectile, ILocalizedModType
     public override bool PreDraw(ref Color lightColor)
     {
         Texture2D tex = TextureAssets.Projectile[Type].Value;
-        Rectangle frame = tex.Frame(2, (int)Projectile.localAI[0]);
+        Rectangle frame = tex.Frame(2, (int)Projectile.localAI[0] == 0 ? 1 : (int)Projectile.localAI[0]);
 
         SpriteEffects effects = SpriteEffects.None;
         if (Projectile.spriteDirection == -1)
