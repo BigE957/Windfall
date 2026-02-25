@@ -11,8 +11,6 @@ public class EmpyreanThorn : ModProjectile
     public override void SetStaticDefaults()
     {
         Main.projFrames[Projectile.type] = 6;
-        ProjectileID.Sets.TrailingMode[Projectile.type] = 2;
-        ProjectileID.Sets.TrailCacheLength[Projectile.type] = 1;
     }
 
     public override void SetDefaults()
@@ -34,6 +32,7 @@ public class EmpyreanThorn : ModProjectile
         Projectile.damage = 100;
         Projectile.netImportant = true;
     }
+
     int aiCounter = 0;
     Vector2 initialPoint = Vector2.Zero;
     float trueRotation = 0f;
@@ -93,7 +92,7 @@ public class EmpyreanThorn : ModProjectile
             Projectile.scale = (InitialScale / 2f);
 
             if (aiCounter < delay + 30)
-                EmpyreanMetaball.SpawnDefaultParticle(initialPoint, Projectile.rotation.ToRotationVector2().RotatedBy(Main.rand.NextFloat(-0.15f, 0.15f)) * Main.rand.NextFloat(16f, 18f), 40f);
+                ExampleMetaballParticle.SpawnParticle(initialPoint, Projectile.rotation.ToRotationVector2().RotatedBy(Main.rand.NextFloat(-0.15f, 0.15f)) * Main.rand.NextFloat(16f, 18f), 40f);
             
             //if (!NPC.AnyNPCs(ModContent.NPCType<TheOrator>()) && aiCounter < delay + 60)
             //    aiCounter = delay + 60;
@@ -115,13 +114,15 @@ public class EmpyreanThorn : ModProjectile
 
     public override bool PreDraw(ref Color lightColor)
     {
-        Texture2D tex = ModContent.Request<Texture2D>(Texture).Value;
+        Texture2D tex = TextureAssets.Projectile[Type].Value;
 
         Vector2 drawPosition = Projectile.Center - Main.screenPosition;
         Rectangle frame = tex.Frame(1, Main.projFrames[Projectile.type], 0, Projectile.frame);
 
         Color drawColor = Color.White;
-        DrawCenteredAfterimages(Projectile, ProjectileID.Sets.TrailingMode[Projectile.type], drawColor);
+
+        MetaballSystem.AddMetaballFill<ExampleMetaball>(new(tex, drawPosition, frame, Projectile.rotation, frame.Size() * 0.5f, Projectile.scale, 0), 1);
+
         return false;
     }
 
@@ -140,8 +141,10 @@ public class EmpyreanThorn : ModProjectile
 
     public override void DrawBehind(int index, List<int> drawCacheProjsBehindNPCsAndTiles, List<int> drawCacheProjsBehindNPCs, List<int> drawCacheProjsBehindProjectiles, List<int> drawCacheProjsOverWiresUI, List<int> overWiresUI)
     {
-        if(Projectile.ai[0] == -1)
+        if (Projectile.ai[0] == -1)
             drawCacheProjsBehindNPCsAndTiles.Add(index);
+        else
+            drawCacheProjsBehindProjectiles.Add(index);
     }
 
     public override void SendExtraAI(BinaryWriter writer)

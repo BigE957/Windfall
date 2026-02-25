@@ -230,7 +230,7 @@ public class TheOrator : ModNPC
                         SoundEngine.PlaySound(SoundID.DD2_OgreSpit, NPC.Center);
                         for (int i = 0; i <= 20; i++)
                         {
-                            EmpyreanMetaball.SpawnDefaultParticle(NPC.Center, Main.rand.NextVector2Circular(10f, 10f), 40 * Main.rand.NextFloat(1.5f, 2.3f));
+                            ExampleMetaballParticle.SpawnParticle(NPC.Center, Main.rand.NextVector2Circular(10f, 10f), 40 * Main.rand.NextFloat(1.5f, 2.3f));
                         }
                         int globCount = CalamityWorld.death ? 5 : CalamityWorld.revenge ? 4 : 3;
                         for (int i = 0; i < globCount; i++)
@@ -344,7 +344,7 @@ public class TheOrator : ModNPC
                             NPC.velocity *= 0.975f;
                     }
 
-                    EmpyreanMetaball.SpawnDefaultParticle(NPC.Center + homeIn * 150f, Main.rand.NextVector2Circular(5f, 5f), 1.5f * ((aiCounter - 1100) / 2));
+                    ExampleMetaballParticle.SpawnParticle(NPC.Center + homeIn * 150f, Main.rand.NextVector2Circular(5f, 5f), 1.5f * ((aiCounter - 1100) / 2));
                     if (aiCounter > 1300 || !NPC.AnyNPCs(ModContent.NPCType<OratorHand>()))
                     {
                         aiCounter = 0;
@@ -496,7 +496,7 @@ public class TheOrator : ModNPC
                         SoundEngine.PlaySound(SoundID.DD2_OgreSpit, NPC.Center);
                         for (int i = 0; i < 10; i++)
                         {
-                            EmpyreanMetaball.SpawnDefaultParticle(new(NPC.Center.X, NPC.Center.Y - 50), Main.rand.NextVector2Unit(0, -Pi) * Main.rand.NextFloat(0f, 15f), 25 * Main.rand.NextFloat(1f, 2f));
+                            ExampleMetaballParticle.SpawnParticle(new(NPC.Center.X, NPC.Center.Y - 50), Main.rand.NextVector2Unit(0, -Pi) * Main.rand.NextFloat(0f, 15f), 25 * Main.rand.NextFloat(1f, 2f));
                         }
                         if (Main.netMode != NetmodeID.MultiplayerClient)
                         {
@@ -618,7 +618,7 @@ public class TheOrator : ModNPC
                             SoundEngine.PlaySound(SoundID.DD2_DarkMageAttack, NPC.Center);
                             for (int i = 0; i < 20; i++)
                             {
-                                EmpyreanMetaball.SpawnDefaultParticle(NPC.Center, (border.Center - NPC.Center).SafeNormalize(Vector2.Zero).RotatedByRandom(Pi / 6) * Main.rand.NextFloat(0f, 25f), 30 * Main.rand.NextFloat(1f, 2f));
+                                ExampleMetaballParticle.SpawnParticle(NPC.Center, (border.Center - NPC.Center).SafeNormalize(Vector2.Zero).RotatedByRandom(Pi / 6) * Main.rand.NextFloat(0f, 25f), 30 * Main.rand.NextFloat(1f, 2f));
                             }
                             for (int i = 1; i < 8; i++)
                             {
@@ -800,7 +800,7 @@ public class TheOrator : ModNPC
                 }
                 if(aiCounter > 350)
                 {
-                    EmpyreanMetaball.SpawnDefaultParticle(NPC.Center + (target.Center - NPC.Center).SafeNormalize(Vector2.Zero) * 80f, Main.rand.NextVector2Circular(5f, 5f), Lerp(0f, 1f, (aiCounter - 400) % 120));
+                    ExampleMetaballParticle.SpawnParticle(NPC.Center + (target.Center - NPC.Center).SafeNormalize(Vector2.Zero) * 80f, Main.rand.NextVector2Circular(5f, 5f), Lerp(0f, 1f, (aiCounter - 400) % 120));
                     if (Main.netMode != NetmodeID.MultiplayerClient && (aiCounter - 400) % 120 == 0)
                         Projectile.NewProjectile(Projectile.GetSource_NaturalSpawn(), NPC.Center + (target.Center - NPC.Center).SafeNormalize(Vector2.Zero) * 80f, (target.Center - NPC.Center).SafeNormalize(Vector2.Zero) * 6f, ModContent.ProjectileType<UnstableDarkness>(), BoltDamage, 0.5f);
                 }
@@ -982,7 +982,7 @@ public class TheOrator : ModNPC
                             SoundEngine.PlaySound(SoundID.DD2_OgreSpit, NPC.Center);
                             for (int i = 0; i < 10; i++)
                             {
-                                EmpyreanMetaball.SpawnDefaultParticle(new(NPC.Center.X, NPC.Center.Y - 50), Main.rand.NextVector2Unit(0, -Pi) * Main.rand.NextFloat(0f, 15f), 25 * Main.rand.NextFloat(1f, 2f));
+                                ExampleMetaballParticle.SpawnParticle(new(NPC.Center.X, NPC.Center.Y - 50), Main.rand.NextVector2Unit(0, -Pi) * Main.rand.NextFloat(0f, 15f), 25 * Main.rand.NextFloat(1f, 2f));
                             }
                             proj = Projectile.NewProjectileDirect(Terraria.Entity.GetSource_NaturalSpawn(), NPC.Center, new Vector2((float)(8 * Math.Sin(aiCounter)), -5), ModContent.ProjectileType<DarkGlob>(), GlobDamage, 0f, -1, 1, 0.5f);
                             proj.Calamity().DealsDefenseDamage = true;
@@ -1064,7 +1064,7 @@ public class TheOrator : ModNPC
                                 SoundEngine.PlaySound(SoundID.DD2_EtherianPortalDryadTouch, NPC.Center);
                                 dashing = false;
                                 for (int i = 0; i < 32; i++)
-                                    EmpyreanMetaball.SpawnDefaultParticle(NPC.Center + new Vector2(Main.rand.NextFloat(-64, 64), 160), Vector2.UnitY * Main.rand.NextFloat(4f, 18f) * -1, Main.rand.NextFloat(110f, 130f));
+                                    ExampleMetaballParticle.SpawnParticle(NPC.Center + new Vector2(Main.rand.NextFloat(-64, 64), 160), Vector2.UnitY * Main.rand.NextFloat(4f, 18f) * -1, Main.rand.NextFloat(110f, 130f));
 
                                 for (int i = 0; i < (CalamityWorld.death ? 16 : CalamityWorld.revenge ? 12 : 10); i++)
                                 {
@@ -1096,7 +1096,7 @@ public class TheOrator : ModNPC
                                         NPC.velocity.X = -8;
                                     else
                                         NPC.velocity.X = 8;
-                                EmpyreanMetaball.SpawnDefaultParticle(NPC.Center + Vector2.UnitX * Main.rand.NextFloat(-48, 48), Vector2.UnitY * Main.rand.NextFloat(8f, 12f) * -1, Main.rand.NextFloat(90f, 110f));
+                                ExampleMetaballParticle.SpawnParticle(NPC.Center + Vector2.UnitX * Main.rand.NextFloat(-48, 48), Vector2.UnitY * Main.rand.NextFloat(8f, 12f) * -1, Main.rand.NextFloat(90f, 110f));
 
                                 if (Main.expertMode && aiCounter % 60 == 0)
                                 {
@@ -1109,7 +1109,7 @@ public class TheOrator : ModNPC
                             else if (aiCounter >= attackLength + 450)
                             {
                                 for (int i = 0; i < 2; i++)
-                                    EmpyreanMetaball.SpawnDefaultParticle(NPC.Center + new Vector2(Main.rand.NextFloat(-64, 64), 64), Vector2.UnitY * Main.rand.NextFloat(10f, 14f) * -1, Main.rand.NextFloat(110f, 130f));
+                                    ExampleMetaballParticle.SpawnParticle(NPC.Center + new Vector2(Main.rand.NextFloat(-64, 64), 64), Vector2.UnitY * Main.rand.NextFloat(10f, 14f) * -1, Main.rand.NextFloat(110f, 130f));
                                 if (aiCounter == attackLength + 450)
                                 {
                                     dashing = true;
@@ -1144,7 +1144,7 @@ public class TheOrator : ModNPC
                                 SoundEngine.PlaySound(SoundID.DD2_EtherianPortalDryadTouch, NPC.Center);
 
                                 for (int i = 0; i < 32; i++)
-                                    EmpyreanMetaball.SpawnDefaultParticle(NPC.Center + new Vector2(Main.rand.NextFloat(-64, 64), 64), Vector2.UnitY * Main.rand.NextFloat(4f, 24f) * -1, Main.rand.NextFloat(110f, 130f));
+                                    ExampleMetaballParticle.SpawnParticle(NPC.Center + new Vector2(Main.rand.NextFloat(-64, 64), 64), Vector2.UnitY * Main.rand.NextFloat(4f, 24f) * -1, Main.rand.NextFloat(110f, 130f));
 
                                 for (int i = 0; i < (CalamityWorld.death ? 16 : CalamityWorld.revenge ? 12 : 10); i++)
                                 {
@@ -1207,7 +1207,7 @@ public class TheOrator : ModNPC
                     float width = Clamp(96f * EasedRatio, 0f, 64f);
 
                     for (int i = 0; i < 12; i++)
-                        EmpyreanMetaball.SpawnDefaultParticle(NPC.Center + new Vector2(128 + Main.rand.NextFloat(-width, width), Main.rand.NextFloat(-24, 0)).RotatedBy(-PiOver4), new Vector2(Main.rand.Next(-2, 2), Main.rand.Next(1, 5) * SineInEasing(ratio)).RotatedBy(-PiOver4), Main.rand.NextFloat(15f, 25f) * (ratio * 2f));
+                        ExampleMetaballParticle.SpawnParticle(NPC.Center + new Vector2(128 + Main.rand.NextFloat(-width, width), Main.rand.NextFloat(-24, 0)).RotatedBy(-PiOver4), new Vector2(Main.rand.Next(-2, 2), Main.rand.Next(1, 5) * SineInEasing(ratio)).RotatedBy(-PiOver4), Main.rand.NextFloat(15f, 25f) * (ratio * 2f));
                 }
                 if (aiCounter == 150)
                 {
@@ -1220,7 +1220,7 @@ public class TheOrator : ModNPC
                         Main.npc[index].ai[0] = NPC.whoAmI;
                     }
                     for (int i = 0; i < 24; i++)
-                        EmpyreanMetaball.SpawnDefaultParticle(spawnPos + new Vector2(Main.rand.NextFloat(-64, 64), -32).RotatedBy(-PiOver4), Vector2.UnitY.RotatedBy(-PiOver4) * Main.rand.NextFloat(2f, 18f), Main.rand.NextFloat(110f, 130f));
+                        ExampleMetaballParticle.SpawnParticle(spawnPos + new Vector2(Main.rand.NextFloat(-64, 64), -32).RotatedBy(-PiOver4), Vector2.UnitY.RotatedBy(-PiOver4) * Main.rand.NextFloat(2f, 18f), Main.rand.NextFloat(110f, 130f));
                 }
                 if (aiCounter > 180 && aiCounter <= 240)
                 {
@@ -1229,7 +1229,7 @@ public class TheOrator : ModNPC
                     float width = Clamp(96f * EasedRatio, 0f, 64f);
 
                     for (int i = 0; i < 12; i++)
-                        EmpyreanMetaball.SpawnDefaultParticle(NPC.Center + new Vector2(-128 + Main.rand.NextFloat(-width, width), Main.rand.NextFloat(-24, 0)).RotatedBy(PiOver4), new Vector2(Main.rand.Next(-2, 2), Main.rand.Next(1, 5) * SineInEasing(ratio)).RotatedBy(PiOver4), Main.rand.NextFloat(15f, 25f) * (ratio * 2f));
+                        ExampleMetaballParticle.SpawnParticle(NPC.Center + new Vector2(-128 + Main.rand.NextFloat(-width, width), Main.rand.NextFloat(-24, 0)).RotatedBy(PiOver4), new Vector2(Main.rand.Next(-2, 2), Main.rand.Next(1, 5) * SineInEasing(ratio)).RotatedBy(PiOver4), Main.rand.NextFloat(15f, 25f) * (ratio * 2f));
                 }
                 if (Main.netMode != NetmodeID.MultiplayerClient && aiCounter == 240)
                 {
@@ -1241,7 +1241,7 @@ public class TheOrator : ModNPC
                         Main.npc[index].ai[0] = NPC.whoAmI;
                     }
                     for (int i = 0; i < 24; i++)
-                        EmpyreanMetaball.SpawnDefaultParticle(spawnPos + new Vector2(Main.rand.NextFloat(-64, 64), -32).RotatedBy(PiOver4), Vector2.UnitY.RotatedBy(PiOver4) * Main.rand.NextFloat(2f, 18f), Main.rand.NextFloat(110f, 130f));
+                        ExampleMetaballParticle.SpawnParticle(spawnPos + new Vector2(Main.rand.NextFloat(-64, 64), -32).RotatedBy(PiOver4), Vector2.UnitY.RotatedBy(PiOver4) * Main.rand.NextFloat(2f, 18f), Main.rand.NextFloat(110f, 130f));
                 }
 
                 if (aiCounter == 360)
@@ -1381,16 +1381,16 @@ public class TheOrator : ModNPC
 
                     for (int i = 0; i < 12; i++)
                     {
-                        EmpyreanMetaball.SpawnDefaultParticle(NPC.Center + Vector2.UnitY * 48 + (Vector2.UnitX * Main.rand.NextFloat(-width, width)), new Vector2(Main.rand.Next(-4, 4), Main.rand.Next(-10, -5) * SineInEasing(ratio, 1)), Main.rand.NextFloat(15f, 25f) * (ratio * 2f));
-                        EmpyreanMetaball.SpawnDefaultParticle((target.Center - Vector2.UnitY * 100) + (Vector2.UnitX * Main.rand.NextFloat(-width, width)), new Vector2(Main.rand.Next(-4, 4), Main.rand.Next(-10, -5) * SineInEasing(ratio, 1)), Main.rand.NextFloat(15f, 25f) * (ratio * 2f));
+                        ExampleMetaballParticle.SpawnDefaultParticle(NPC.Center + Vector2.UnitY * 48 + (Vector2.UnitX * Main.rand.NextFloat(-width, width)), new Vector2(Main.rand.Next(-4, 4), Main.rand.Next(-10, -5) * SineInEasing(ratio, 1)), Main.rand.NextFloat(15f, 25f) * (ratio * 2f));
+                        ExampleMetaballParticle.SpawnDefaultParticle((target.Center - Vector2.UnitY * 100) + (Vector2.UnitX * Main.rand.NextFloat(-width, width)), new Vector2(Main.rand.Next(-4, 4), Main.rand.Next(-10, -5) * SineInEasing(ratio, 1)), Main.rand.NextFloat(15f, 25f) * (ratio * 2f));
                     }
                 }
                 if (wrappedCounter == 180)
                 {
                     for (int i = 0; i < 36; i++)
                     {
-                        EmpyreanMetaball.SpawnDefaultParticle(NPC.Center + new Vector2(Main.rand.NextFloat(-90, 90), 32), Vector2.UnitY * Main.rand.NextFloat(-18f, -4f), Main.rand.NextFloat(110f, 130f));
-                        EmpyreanMetaball.SpawnDefaultParticle(target.Center - (Vector2.UnitY * 110) + new Vector2(Main.rand.NextFloat(-90, 90), 0), Vector2.UnitY * Main.rand.NextFloat(-18f, -4f), Main.rand.NextFloat(130f, 160f));
+                        ExampleMetaballParticle.SpawnDefaultParticle(NPC.Center + new Vector2(Main.rand.NextFloat(-90, 90), 32), Vector2.UnitY * Main.rand.NextFloat(-18f, -4f), Main.rand.NextFloat(110f, 130f));
+                        ExampleMetaballParticle.SpawnDefaultParticle(target.Center - (Vector2.UnitY * 110) + new Vector2(Main.rand.NextFloat(-90, 90), 0), Vector2.UnitY * Main.rand.NextFloat(-18f, -4f), Main.rand.NextFloat(130f, 160f));
                     }
                 }
                 if(wrappedCounter == 5)

@@ -28,6 +28,8 @@ public class LoadSystem : ModSystem
     #endregion
 
     internal static Asset<Effect> Dissolve;
+    internal static Asset<Effect> Masking;
+    internal static Asset<Effect> MaskEdge;
     internal static Asset<Effect> RadialBlur;
     internal static Asset<Effect> TestScreenShader;
 
@@ -97,8 +99,14 @@ public class LoadSystem : ModSystem
         Dissolve = LoadShader("Dissolve");
         RegisterMiscShader(Dissolve, "DissolvePass", "Dissolve");
 
+        Masking = LoadShader("Masking");
+        RegisterMiscShader(Masking, "MaskingPass", "Masking");
+
+        MaskEdge = LoadShader("MaskEdge");
+        RegisterMiscShader(MaskEdge, "EdgePass", "MaskEdge");
+
         RadialBlur = LoadShader("ScreenShaders/RadialBlur");
-        RegisterScreenShader(RadialBlur, "RadialBlurPass", "RadialBlurShader");
+        RegisterScreenShader(RadialBlur, "RadialBlurPass", "RadialBlur");
 
         TestScreenShader = LoadShader("ScreenShaders/TestScreenShader");
         RegisterScreenShader(TestScreenShader, "AutoloadPass", "TestScreenShader");

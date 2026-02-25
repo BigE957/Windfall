@@ -24,7 +24,7 @@ public class CameraSystem : ModSystem
     private static Vector2 cameraPosition = Main.screenPosition;
     private static Vector2 setCameraPosition = Main.screenPosition;
     private static bool cameraModified = false;
-    private static int ResetTimer = 0;
+    private static int ResetTimer = 60;
 
     public static float Zoom
     {

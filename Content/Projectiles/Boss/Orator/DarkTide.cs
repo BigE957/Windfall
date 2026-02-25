@@ -1,7 +1,10 @@
 ﻿using Daybreak.Common.Rendering;
+using Microsoft.CodeAnalysis;
+using System;
+using Windfall.Common.Graphics.Metaballs;
+using Windfall.Common.Systems;
 using Windfall.Content.Buffs.DoT;
 using Windfall.Content.NPCs.Bosses.Orator;
-using static Windfall.Common.Graphics.Metaballs.EmpyreanMetaball;
 
 
 namespace Windfall.Content.Projectiles.Boss.Orator;
@@ -35,25 +38,24 @@ public class DarkTide : ModProjectile
         Projectile.Center += newPosition;
         Projectile.velocity = trueRotation.ToRotationVector2() * moveSpeed;
 
+        /*
         const int particleCounter = 50;
         for(int i = 0; i < particleCounter; i++)
         {
             Vector2 spawnOffset = (trueRotation.ToRotationVector2() * (Projectile.width / 2.7f)) + (trueRotation.ToRotationVector2().RotatedBy(PiOver2) * ((Projectile.width / 2) - Projectile.width / particleCounter * i));
             SpawnBorderParticle(Projectile, spawnOffset, 0.5f * i, 30, Main.rand.NextFloat(80, 160), 0f, false);
         }
+        */
     }
 
     public override void AI()
     {
+        /*
         if(Main.netMode == NetmodeID.MultiplayerClient && moveCount == 0 && holdCounter == 0)
         {
-            const int particleCounter = 50;
-            for (int i = 0; i < particleCounter; i++)
-            {
-                Vector2 spawnOffset = (trueRotation.ToRotationVector2() * (Projectile.width / 2.7f)) + (trueRotation.ToRotationVector2().RotatedBy(PiOver2) * ((Projectile.width / 2) - Projectile.width / particleCounter * i));
-                SpawnBorderParticle(Projectile, spawnOffset, 0.5f * i, 30, Main.rand.NextFloat(80, 160), 0f, false);
-            }
+            
         }
+        */
 
         int holdDuration = (int)holdtime;
         float particleVelocity = Main.rand.NextFloat(6f, 8f);
@@ -119,14 +121,14 @@ public class DarkTide : ModProjectile
         }
         Vector2 spawnPosition = Projectile.Center + (trueRotation.ToRotationVector2() * (Projectile.width / 2.05f)) + (trueRotation.ToRotationVector2().RotatedBy(PiOver2) * Main.rand.NextFloat(-Projectile.width / 2, Projectile.width / 2));
         Projectile.rotation = trueRotation;
-        SpawnDefaultParticle(spawnPosition, trueRotation.ToRotationVector2().RotatedBy(Main.rand.NextFloat(-Pi/2, Pi/2)) * particleVelocity, Main.rand.NextFloat(80f, 120f));
+        ExampleMetaballParticle.SpawnParticle(spawnPosition, trueRotation.ToRotationVector2().RotatedBy(Main.rand.NextFloat(-Pi/2, Pi/2)) * particleVelocity, Main.rand.NextFloat(80f, 120f));
     }
     public override Color? GetAlpha(Color lightColor) => Color.White * Projectile.Opacity;
 
     private static Color ColorFunction(float completionRatio)
     {
-        Color colorA = Color.Lerp(Color.LimeGreen, Color.Orange, BorderLerpValue);
-        Color colorB = Color.Lerp(Color.GreenYellow, Color.Goldenrod, BorderLerpValue);
+        Color colorA = Color.Lerp(Color.LimeGreen, Color.Orange, ExampleMetaball.BorderLerpValue(0));
+        Color colorB = Color.Lerp(Color.GreenYellow, Color.Goldenrod, ExampleMetaball.BorderLerpValue(0));
 
         float fadeToEnd = Lerp(0.65f, 1f, (float)Math.Cos(-Main.GlobalTimeWrappedHourly * 3f) * 0.5f + 0.5f);
 
@@ -167,12 +169,38 @@ public class DarkTide : ModProjectile
         
         Main.spriteBatch.End();
         Main.spriteBatch.Begin(scope);
-        return false;
-    }
 
-    public override void PostDraw(Color lightColor)
-    {
-        DrawCenteredAfterimages(Projectile, ProjectileID.Sets.TrailingMode[Projectile.type], Color.White);
+        MetaballSystem.AddMetaballFill<ExampleMetaball>(new(Projectile), 1);
+
+        const int particleCounter = 50;
+        for (int i = 0; i < particleCounter; i++)
+        {
+            float bump = i * 1;
+            Vector2 Offset = (trueRotation.ToRotationVector2() * (Projectile.width / 2.7f)) + (trueRotation.ToRotationVector2().RotatedBy(PiOver2) * ((Projectile.width / 2) - Projectile.width / particleCounter * bump));
+            Vector2 Center = Projectile.Center + Offset + (new Vector2(Projectile.width / 2 * (Projectile.scale / 5f) * 1.05f, 0).RotatedBy(Projectile.rotation));
+            Center += (Projectile.Center + Offset - Center).SafeNormalize(Vector2.Zero) * ExampleMetaball.SumofSines(0.5f * bump, 30, 1.5f, 2f);
+            Center -= Projectile.velocity / 2;
+
+            float size = (i % 10) switch
+            {
+                0 => 2.1f,
+                1 => 2.2f,
+                2 => 2.8f,
+                3 => 2.7f,
+                4 => 2.3f,
+                5 => 2f,
+                6 => 1.9f,
+                7 => 2.4f,
+                8 => 2.7f,
+                9 => 2.9f,
+                _ => 2.5f
+            };
+
+            MetaballSystem.AddMetaballFill<ExampleMetaball>(new(LoadSystem.Circle.Value, Center - Main.screenPosition, null, 0, LoadSystem.Circle.Size() * 0.5f, size, 0), 1);
+            MetaballSystem.AddMetaballFill<ExampleMetaball>(new(LoadSystem.Circle.Value, Center + trueRotation.ToRotationVector2() * 100 - Main.screenPosition, null, 0, LoadSystem.Circle.Size() * 0.5f, size, 0), 0);
+        }
+
+        return false;
     }
 
     public static bool isLeft(Vector2 a, Vector2 b, Vector2 c) => (b.X - a.X) * (c.Y - a.Y) - (b.Y - a.Y) * (c.X - a.X) > 0;

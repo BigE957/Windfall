@@ -1,7 +1,11 @@
 ﻿using Daybreak.Common.Rendering;
+using Microsoft.CodeAnalysis;
+using Newtonsoft.Json.Linq;
+using System;
+using Windfall.Common.Graphics.Metaballs;
+using Windfall.Common.Systems;
 using Windfall.Content.Buffs.DoT;
 using Windfall.Content.NPCs.Bosses.Orator;
-using static Windfall.Common.Graphics.Metaballs.EmpyreanMetaball;
 
 namespace Windfall.Content.Projectiles.Boss.Orator;
 
@@ -32,9 +36,9 @@ public class OratorBorder : ModProjectile
         Projectile.scale = 5f;
         Projectile.ai[1] = 5f;
         Radius = BaseRadius * Projectile.scale;
-        const int pCount = 250;
-        for (int i = 0; i <= pCount; i++)
-            SpawnBorderParticle(Projectile, Vector2.Zero, 0.5f * i, 25, Main.rand.NextFloat(80, 160), TwoPi / pCount * i);
+        //const int pCount = 250;
+        //for (int i = 0; i <= pCount; i++)
+        //    SpawnBorderParticle(Projectile, Vector2.Zero, 0.5f * i, 25, Main.rand.NextFloat(80, 160), TwoPi / pCount * i);
         Projectile.netUpdate = true;
     }
     public override void AI()
@@ -42,14 +46,14 @@ public class OratorBorder : ModProjectile
         #region Particles
         if (Time == 0 && Main.netMode == NetmodeID.MultiplayerClient)
         {
-            const int pCount = 250;
-            for (int i = 0; i <= pCount; i++)
-                SpawnBorderParticle(Projectile, Vector2.Zero, 0.5f * i, 25, Main.rand.NextFloat(80, 160), TwoPi / pCount * i);
+            //const int pCount = 250;
+            //for (int i = 0; i <= pCount; i++)
+            //    SpawnBorderParticle(Projectile, Vector2.Zero, 0.5f * i, 25, Main.rand.NextFloat(80, 160), TwoPi / pCount * i);
         }
         for (int i = 0; i < 5; i++)
         {
             Vector2 spawnPosition = Projectile.Center + Main.rand.NextVector2CircularEdge(Projectile.width * Projectile.scale / 9.65f, Projectile.width * Projectile.scale / 9.65f);
-            SpawnDefaultParticle(spawnPosition, ((Projectile.Center - spawnPosition).SafeNormalize(Vector2.Zero).RotatedBy(Main.rand.NextFloat(-1f, 1f)) * Main.rand.NextFloat(2f, 5f)), Main.rand.NextFloat(60f, 100f));
+            ExampleMetaballParticle.SpawnParticle(spawnPosition, ((Projectile.Center - spawnPosition).SafeNormalize(Vector2.Zero).RotatedBy(Main.rand.NextFloat(-1f, 1f)) * Main.rand.NextFloat(2f, 5f)), Main.rand.NextFloat(60f, 100f));
         }
         #endregion
 
@@ -92,8 +96,8 @@ public class OratorBorder : ModProjectile
 
     private static Color ColorFunction(float completionRatio)
     {
-        Color colorA = Color.Lerp(Color.LimeGreen, Color.Orange, BorderLerpValue);
-        Color colorB = Color.Lerp(Color.GreenYellow, Color.Goldenrod, BorderLerpValue);
+        Color colorA = Color.Lerp(Color.LimeGreen, Color.Orange, ExampleMetaball.BorderLerpValue(0));
+        Color colorB = Color.Lerp(Color.GreenYellow, Color.Goldenrod, ExampleMetaball.BorderLerpValue(0));
 
         float fadeToEnd = Lerp(0.65f, 1f, (float)Math.Cos(-Main.GlobalTimeWrappedHourly * 3f) * 0.5f + 0.5f);
 
@@ -123,11 +127,32 @@ public class OratorBorder : ModProjectile
         Main.spriteBatch.End();
         Main.spriteBatch.Begin(scope);
 
-        return false;
-    }
+        MetaballSystem.AddMetaballFill<ExampleMetaball>(new(Projectile), 1);
+        const int pCount = 250;
+        for (int i = 0; i <= pCount; i++)
+        {
+            float bump = i;
+            float Rotation = TwoPi / pCount * i;
+            Vector2 Center = Projectile.Center + (new Vector2(Projectile.width / 2 * (Projectile.scale / 5f) * 1.05f, 0).RotatedBy(Rotation + Projectile.rotation));
+            Center += (Projectile.Center - Center).SafeNormalize(Vector2.Zero) * ExampleMetaball.SumofSines(0.5f * bump, 25, 1.5f, 2f);
+            Center -= Projectile.velocity / 2;
+            MetaballSystem.AddMetaballFill<ExampleMetaball>(new(LoadSystem.Circle.Value, Center - Main.screenPosition, null, 0, LoadSystem.Circle.Size() * 0.5f, 2f, 0), 1);
+        }
 
-    public override void PostDraw(Color lightColor)
-    {
-        DrawCenteredAfterimages(Projectile, ProjectileID.Sets.TrailingMode[Projectile.type], Color.White);
+        Projectile.scale *= 0.85f;
+        MetaballSystem.AddMetaballFill<ExampleMetaball>(new(Projectile), 0);
+        for (int i = 0; i <= pCount; i++)
+        {
+            float bump = i;
+            float Rotation = TwoPi / pCount * i;
+            Vector2 Center = Projectile.Center + (new Vector2(Projectile.width / 2 * (Projectile.scale / 5f) * 1.05f, 0).RotatedBy(Rotation + Projectile.rotation));
+            Center += (Projectile.Center - Center).SafeNormalize(Vector2.Zero) * ExampleMetaball.SumofSines(0.5f * bump, 25, 1.5f, 2f);
+            Center -= Projectile.velocity / 2;
+
+            MetaballSystem.AddMetaballFill<ExampleMetaball>(new(LoadSystem.Circle.Value, Center - Main.screenPosition, null, 0, LoadSystem.Circle.Size() * 0.5f, 2f, 0), 0);
+        }
+        Projectile.scale /= 0.85f;
+
+        return false;
     }
 }

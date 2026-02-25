@@ -102,12 +102,12 @@ public class HandRing : ModProjectile
         }
         */
 
-        Lighting.AddLight(Projectile.Center, EmpyreanMetaball.BorderColor.ToVector3());
+        Lighting.AddLight(Projectile.Center, ExampleMetaball.BorderColor(0).ToVector3());
         Time++;
     }
     public override bool PreDraw(ref Color lightColor)
     {
-        Texture2D WhiteOutTexture = ModContent.Request<Texture2D>("Windfall/Assets/Projectiles/Boss/HandRingsWhiteOut" + (Projectile.localAI[1] == 0 ? 0 : 1)).Value;
+        Texture2D WhiteOutTexture = (Projectile.localAI[1] == 0 ? WhiteOut0 : WhiteOut1).Value;
         Color color = Color.Black;
         switch (Projectile.localAI[0])
         {
@@ -122,7 +122,7 @@ public class HandRing : ModProjectile
                 break;
         }
         if(Projectile.timeLeft <= 90)
-            color = Color.Lerp(color, EmpyreanMetaball.BorderColor, (90 - Projectile.timeLeft) / 60f);
+            color = Color.Lerp(color, ExampleMetaball.BorderColor(0), (90 - Projectile.timeLeft) / 60f);
         DrawCenteredAfterimages(Projectile, ProjectileID.Sets.TrailingMode[Projectile.type], color * AfterImageOpacity, 2, texture: WhiteOutTexture);
 
         Vector2 drawPosition = Projectile.Center - Main.screenPosition;
@@ -133,6 +133,16 @@ public class HandRing : ModProjectile
         Rectangle frame = tex.Frame(3, 4, (int)Projectile.ai[1], (int)Projectile.localAI[1]);
 
         Main.EntitySpriteDraw(tex, drawPosition, frame, Color.White * Projectile.Opacity, Projectile.rotation, frame.Size() * 0.5f, Projectile.scale, SpriteEffects.None);
+
+        if (Projectile.timeLeft > 90)
+            return false;
+
+        float ratio = 0f;
+        if (Projectile.timeLeft <= 90)
+            ratio = (90 - Projectile.timeLeft) / 60f;
+        ratio = Clamp(ratio, 0f, 1f);
+
+        MetaballSystem.AddMetaballFill<ExampleMetaball>(new(WhiteOutTexture, drawPosition, WhiteOutTexture.Frame(), Projectile.rotation, WhiteOutTexture.Frame().Size() * 0.5f, Projectile.scale * ratio, 0), 1);
 
         return false;
     }
@@ -156,7 +166,7 @@ public class HandRing : ModProjectile
     {
         for (int i = 0; i <= 10; i++)
         {
-            EmpyreanMetaball.SpawnDefaultParticle(Projectile.Center, Main.rand.NextVector2Circular(4f, 4f), Main.rand.NextFloat(10f, 20f));
+            ExampleMetaballParticle.SpawnParticle(Projectile.Center, Main.rand.NextVector2Circular(4f, 4f), Main.rand.NextFloat(10f, 20f));
         }
     }
 

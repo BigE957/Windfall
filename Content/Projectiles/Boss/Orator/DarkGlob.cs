@@ -104,7 +104,7 @@ public class DarkGlob : ModProjectile, ILocalizedModType
                     Projectile.netUpdate = true;
                     if(Projectile.timeLeft == 5)
                         for (int i = 0; i <= 10; i++)
-                            EmpyreanMetaball.SpawnDefaultParticle(Projectile.Center, Main.rand.NextVector2Circular(3f, 3f) * Main.rand.NextFloat(1f, 2f) * MaxSize, 8 * Main.rand.NextFloat(3f, 5f) * MaxSize);
+                            ExampleMetaballParticle.SpawnParticle(Projectile.Center, Main.rand.NextVector2Circular(3f, 3f) * Main.rand.NextFloat(1f, 2f) * MaxSize, 8 * Main.rand.NextFloat(3f, 5f) * MaxSize);
                 }
             }
         }
@@ -128,12 +128,12 @@ public class DarkGlob : ModProjectile, ILocalizedModType
             Projectile.rotation = Projectile.velocity.ToRotation();
 
             if(MaxSize <= 1.5f && Main.rand.NextBool(3))
-                EmpyreanMetaball.SpawnDefaultParticle(Projectile.Center - Projectile.velocity.RotatedBy(PiOver2).SafeNormalize(Vector2.UnitX) * (Main.rand.NextFloat(-32, 32) * Projectile.scale), Vector2.Zero, Projectile.scale * 48);
+                ExampleMetaballParticle.SpawnParticle(Projectile.Center - Projectile.velocity.RotatedBy(PiOver2).SafeNormalize(Vector2.UnitX) * (Main.rand.NextFloat(-32, 32) * Projectile.scale), Vector2.Zero, Projectile.scale * 48);
         }
         Projectile.Hitbox = new Rectangle((int)Projectile.position.X, (int)Projectile.position.Y, (int)(70 * MaxSize), (int)(70 * MaxSize));
 
         if(Trail == TrailType.Particle)
-            EmpyreanMetaball.SpawnDefaultParticle(Projectile.Center, Vector2.Zero, Projectile.scale * 48);
+            ExampleMetaballParticle.SpawnParticle(Projectile.Center, Vector2.Zero, Projectile.scale * 48);
 
         Lighting.AddLight(Projectile.Center, new Vector3(0.32f, 0.92f, 0.71f));
     }
@@ -147,8 +147,8 @@ public class DarkGlob : ModProjectile, ILocalizedModType
 
     private Color ColorFunction(float completionRatio, Vector2 v)
     {
-        Color colorA = Color.Lerp(Color.LimeGreen, Color.Orange, EmpyreanMetaball.BorderLerpValue);
-        Color colorB = Color.Lerp(Color.GreenYellow, Color.Goldenrod, EmpyreanMetaball.BorderLerpValue);
+        Color colorA = Color.Lerp(Color.LimeGreen, Color.Orange, ExampleMetaball.BorderLerpValue(0));
+        Color colorB = Color.Lerp(Color.GreenYellow, Color.Goldenrod, ExampleMetaball.BorderLerpValue(0));
 
         float fadeToEnd = Lerp(0.65f, 1f, (float)Math.Cos(-Main.GlobalTimeWrappedHourly * 3f) * 0.5f + 0.5f);
         float fadeOpacity = Utils.GetLerpValue(1f, 0f, completionRatio + 0.1f, true) * Projectile.Opacity;
@@ -184,17 +184,11 @@ public class DarkGlob : ModProjectile, ILocalizedModType
         Main.spriteBatch.End();
         Main.spriteBatch.Begin(scope);
 
+        Texture2D metaTex = TextureAssets.Projectile[Type].Value;
+        Vector2 metaOrigin = metaTex.Size() * 0.5f;
+
+        MetaballSystem.AddMetaballFill<ExampleMetaball>(new(metaTex, drawPos, null, 0, metaOrigin, Projectile.scale, 0), 1);
+
         return false;
     }
-
-    public override void PostDraw(Color lightColor)
-    {
-        if (lightColor != Color.Red)
-            return;
-        Texture2D tex = TextureAssets.Projectile[Type].Value;
-        Vector2 origin = tex.Size() * 0.5f;
-        Vector2 drawPos = Projectile.Center - Main.screenPosition - (Projectile.ai[0] == 0 ? Vector2.Zero : Projectile.velocity.SafeNormalize(Vector2.UnitX) * (16 * Projectile.scale));
-        Main.EntitySpriteDraw(tex, drawPos, null, Color.White, Projectile.rotation, origin, Projectile.scale, SpriteEffects.None);        
-    }
-
 }

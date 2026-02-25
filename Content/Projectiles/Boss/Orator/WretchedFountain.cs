@@ -49,7 +49,7 @@ public class WretchedFountain : ModProjectile
         }
         float localPlayerY = Main.LocalPlayer.Bottom.Y + Main.screenHeight / 2f;
         for(int i = 0; i < 2; i++)
-            EmpyreanMetaball.SpawnDefaultParticle(new(Projectile.Center.X + (Main.rand.NextFloat(-96, 96) * openness), localPlayerY < Projectile.Center.Y ? localPlayerY : Projectile.Center.Y), Vector2.UnitY.RotatedBy(Main.rand.NextFloat(-PiOver4 / 4f, PiOver4 / 4f)) * Main.rand.NextFloat(-14, -4) * (Time > 90 ? 2 : (1 / (2 - openness))), Main.rand.NextFloat(80, 160));
+            ExampleMetaballParticle.SpawnParticle(new(Projectile.Center.X + (Main.rand.NextFloat(-96, 96) * openness), localPlayerY < Projectile.Center.Y ? localPlayerY : Projectile.Center.Y), Vector2.UnitY.RotatedBy(Main.rand.NextFloat(-PiOver4 / 4f, PiOver4 / 4f)) * Main.rand.NextFloat(-14, -4) * (Time > 90 ? 2 : (1 / (2 - openness))), Main.rand.NextFloat(80, 160));
 
         if (Time > 90 && Time % 4 == 0)
         {
@@ -63,16 +63,14 @@ public class WretchedFountain : ModProjectile
 
         if (Time == upTime)
             for (int i = 0; i < 48; i++)
-                EmpyreanMetaball.SpawnDefaultParticle(new(Projectile.Center.X + (Main.rand.NextFloat(-96, 96) * openness), Projectile.Center.Y), Vector2.UnitY.RotatedBy(Main.rand.NextFloat(-PiOver2, PiOver2)) * Main.rand.NextFloat(-14, -4), Main.rand.NextFloat(80, 160));
+                ExampleMetaballParticle.SpawnParticle(new(Projectile.Center.X + (Main.rand.NextFloat(-96, 96) * openness), Projectile.Center.Y), Vector2.UnitY.RotatedBy(Main.rand.NextFloat(-PiOver2, PiOver2)) * Main.rand.NextFloat(-14, -4), Main.rand.NextFloat(80, 160));
     }
 
     public override bool PreDraw(ref Color lightColor)
     {
-        if (lightColor != Color.Red)
-            return false;
         Texture2D tex = TextureAssets.Projectile[Type].Value;
         float sineWave = (float)Math.Sin(Main.GlobalTimeWrappedHourly * 4);
-        Main.EntitySpriteDraw(tex, Projectile.Bottom - Main.screenPosition + Vector2.UnitY * 16, null, Color.White, 0f, tex.Size() * 0.5f, new Vector2(5f + sineWave / 2f, 1.5f + sineWave / 4f), 0);
+        MetaballSystem.AddMetaballFill<ExampleMetaball>(new(tex, Projectile.Bottom - Main.screenPosition + Vector2.UnitY * 16, null, 0f, tex.Size() * 0.5f, new Vector2(5f + sineWave / 2f, 1.5f + sineWave / 4f), 0), 1);
         return false;
     }
 }

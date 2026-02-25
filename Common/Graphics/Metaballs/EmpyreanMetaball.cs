@@ -3,7 +3,6 @@ using CalamityMod.Enums;
 using CalamityMod.Graphics;
 using CalamityMod.Graphics.Metaballs;
 using Terraria.Graphics.Shaders;
-using Windfall.Common.Interfaces;
 using Windfall.Common.Systems;
 using Windfall.Common.Utils;
 using Windfall.Content.Items.Weapons.Magic;
@@ -18,23 +17,8 @@ using static Windfall.Common.Graphics.Metaballs.EmpyreanMetaball;
 namespace Windfall.Common.Graphics.Metaballs;
 
 public class EmpyreanMetaball : Metaball
-{
-    public class EmpyreanParticle(Vector2 center, Vector2 velocity, float size)
-    {
-        public float Size = size;
-
-        public Vector2 Velocity = velocity;
-
-        public Vector2 Center = center;
-
-        public void Update()
-        {
-            Velocity *= 0.99f;
-            Size *= 0.9f;
-            Center += Velocity;
-        }
-    }
-    
+{   
+    /*
     public class EmpyreanBorderParticle(Projectile projectile, Vector2 offset, float sineOffset, float interpolant, float size, float rotation, bool spin)
     {
         public float Size = size;
@@ -69,7 +53,9 @@ public class EmpyreanMetaball : Metaball
                 Center -= myProj.velocity / 2;
         }
     }
+    */
 
+    /*
     public class OpulentFlake(Vector2 relativePosition, Vector2 velocity, float spin, float scale, float idealDir, bool isFront)
     {
         internal Vector2 Position = relativePosition;
@@ -127,22 +113,19 @@ public class EmpyreanMetaball : Metaball
             spriteBatch.Draw(texture, Position - Main.screenPosition, frame, Color.Lerp(Color.White, Lighting.GetColor(Position.ToTileCoordinates()), Time / 45f) * Opacity, Rotation, frame.Size() * 0.5f, Scale, 0, 0f);
         }
     }
-
+    */
 
     private static List<Asset<Texture2D>> layerAssets;
 
-    public static List<EmpyreanParticle> EmpyreanParticles
-    {
-        get;
-        private set;
-    } = [];
-
+    /*
     public static List<EmpyreanBorderParticle> EmpyreanStickyParticles
     {
         get;
         private set;
     } = [];
+    */
 
+    /*
     public static List<OpulentFlake> OpulentFlakeFrontParticles
     {
         get;
@@ -154,30 +137,31 @@ public class EmpyreanMetaball : Metaball
         get;
         private set;
     } = [];
+    */
 
     public override bool AnythingToDraw =>
-        EmpyreanParticles.Count != 0 ||
-        EmpyreanStickyParticles.Count != 0 ||
-        OpulentFlakeFrontParticles.Count != 0 ||
-        OpulentFlakeBackParticles.Count != 0 ||
-        AnyProjectiles(ModContent.ProjectileType<DarkGlob>()) ||
+        //EmpyreanParticles.Count != 0 ||
+        //EmpyreanStickyParticles.Count != 0 ||
+        //OpulentFlakeFrontParticles.Count != 0 ||
+        //OpulentFlakeBackParticles.Count != 0 ||
+        //AnyProjectiles(ModContent.ProjectileType<DarkGlob>()) ||
         AnyProjectiles(ModContent.ProjectileType<SelenicIdol>()) ||
-        AnyProjectiles(ModContent.ProjectileType<EmpyreanThorn>()) ||
-        AnyProjectiles(ModContent.ProjectileType<DarkCoalescence>()) ||
-        AnyProjectiles(ModContent.ProjectileType<OratorBorder>()) ||
-        AnyProjectiles(ModContent.ProjectileType<DarkTide>()) ||
-        AnyProjectiles(ModContent.ProjectileType<OratorHandMinion>()) ||
-        AnyProjectiles(ModContent.ProjectileType<HandRing>()) ||
-        AnyProjectiles(ModContent.ProjectileType<UnstableDarkness>()) ||
-        AnyProjectiles(ModContent.ProjectileType<FingerlingGun>()) ||
-        AnyProjectiles(ModContent.ProjectileType<PotGlob>()) ||
-        AnyProjectiles(ModContent.ProjectileType<MinionHandRing>()) ||
+        //AnyProjectiles(ModContent.ProjectileType<EmpyreanThorn>()) ||
+        //AnyProjectiles(ModContent.ProjectileType<DarkCoalescence>()) ||
+        //AnyProjectiles(ModContent.ProjectileType<OratorBorder>()) ||
+        //AnyProjectiles(ModContent.ProjectileType<DarkTide>()) ||
+        //AnyProjectiles(ModContent.ProjectileType<OratorHandMinion>()) ||
+        //AnyProjectiles(ModContent.ProjectileType<HandRing>()) ||
+        //AnyProjectiles(ModContent.ProjectileType<UnstableDarkness>()) ||
+        //AnyProjectiles(ModContent.ProjectileType<FingerlingGun>()) ||
+        //AnyProjectiles(ModContent.ProjectileType<PotGlob>()) ||
+        //AnyProjectiles(ModContent.ProjectileType<MinionHandRing>()) ||
         AnyProjectiles(ModContent.ProjectileType<SelenicIdolMinion>()) ||
-        AnyProjectiles(ModContent.ProjectileType<Dissolver>()) ||
-        AnyProjectiles(ModContent.ProjectileType<WretchedFountain>()) ||
-        AnyProjectiles(ModContent.ProjectileType<ShadowGrasp>()) ||
-        NPC.AnyNPCs(ModContent.NPCType<OratorHand>()) ||
-        NPC.AnyNPCs(ModContent.NPCType<SealingTablet>())
+        AnyProjectiles(ModContent.ProjectileType<Dissolver>())
+        //AnyProjectiles(ModContent.ProjectileType<WretchedFountain>()) ||
+        //AnyProjectiles(ModContent.ProjectileType<ShadowGrasp>()) ||
+        //NPC.AnyNPCs(ModContent.NPCType<OratorHand>()) ||
+        //NPC.AnyNPCs(ModContent.NPCType<SealingTablet>())
     ;
 
     public override IEnumerable<Texture2D> Layers
@@ -202,8 +186,8 @@ public class EmpyreanMetaball : Metaball
         if (Main.netMode == NetmodeID.Server)
             return;
 
-        OpulentFlake.Atlas = ModContent.Request<Texture2D>("Windfall/Assets/Graphics/Particles/OpulentFlakesAtlas");
-        OpulentFlake.overlay = ModContent.Request<Texture2D>("Windfall/Assets/Graphics/Particles/OpulentFlakesOverlay");
+        //OpulentFlake.Atlas = ModContent.Request<Texture2D>("Windfall/Assets/Graphics/Particles/OpulentFlakesAtlas");
+        //OpulentFlake.overlay = ModContent.Request<Texture2D>("Windfall/Assets/Graphics/Particles/OpulentFlakesOverlay");
 
         // Load layer assets.
         layerAssets = [];
@@ -214,16 +198,15 @@ public class EmpyreanMetaball : Metaball
 
     public override void ClearInstances()
     {
-        EmpyreanParticles.Clear();
-        EmpyreanStickyParticles.Clear();
+        //EmpyreanParticles.Clear();
+        //EmpyreanStickyParticles.Clear();
     }
     
-    public static void SpawnDefaultParticle(Vector2 position, Vector2 velocity, float size) =>
-        EmpyreanParticles.Add(new(position, velocity, size));
     
-    public static void SpawnBorderParticle(Projectile projectile, Vector2 offset, float sineOffset, float interpolant, float size, float rotation, bool spin = true) =>
-       EmpyreanStickyParticles.Add(new(projectile, offset, sineOffset, interpolant, size, rotation, spin));
+    //public static void SpawnBorderParticle(Projectile projectile, Vector2 offset, float sineOffset, float interpolant, float size, float rotation, bool spin = true) =>
+    //   EmpyreanStickyParticles.Add(new(projectile, offset, sineOffset, interpolant, size, rotation, spin));
    
+    /*
     public static void SpawnFlakeParticle(Vector2 position, Vector2 velocity, float spin, float scale, float idealDir)
     {
         if (Main.rand.NextBool())
@@ -231,21 +214,24 @@ public class EmpyreanMetaball : Metaball
         else
             OpulentFlakeFrontParticles.Add(new(position, velocity, spin, scale, idealDir, true));
     }
+    */
 
     public override void Update()
     {
         // Update all particle instances.
         // Once sufficiently small, they vanish.
+        /*
         foreach (EmpyreanParticle particle in EmpyreanParticles)
             particle.Update();      
         if (EmpyreanParticles.Count != 0)
             EmpyreanParticles.RemoveAll(p => p.Size <= 2.5f);
-        
         foreach (EmpyreanBorderParticle particle in EmpyreanStickyParticles)
             particle.Update(); 
         if(EmpyreanStickyParticles.Count != 0)
             EmpyreanStickyParticles.RemoveAll(p => !Main.projectile.IndexInRange(p.ProjectileIndex) || !Main.projectile[p.ProjectileIndex].active);
+        */
 
+        /*
         foreach (OpulentFlake flake in OpulentFlakeFrontParticles)
             flake.Update();
         if (OpulentFlakeFrontParticles.Count != 0)
@@ -255,6 +241,7 @@ public class EmpyreanMetaball : Metaball
             flake.Update();
         if (OpulentFlakeBackParticles.Count != 0)
             OpulentFlakeBackParticles.RemoveAll(p => p.Time > 90);
+        */
     }
 
     public override void PrepareSpriteBatch(SpriteBatch spriteBatch)
@@ -293,6 +280,7 @@ public class EmpyreanMetaball : Metaball
         Texture2D tex = ModContent.Request<Texture2D>("CalamityMod/ExtraTextures/BasicCircle").Value;
 
         // Draw all particles.
+        /*
         foreach (EmpyreanParticle particle in EmpyreanParticles)
         {
             Vector2 drawPosition = particle.Center - Main.screenPosition;
@@ -300,6 +288,7 @@ public class EmpyreanMetaball : Metaball
             Vector2 scale = Vector2.One * particle.Size / tex.Size();
             Main.spriteBatch.Draw(tex, drawPosition, null, Color.White, 0f, origin, scale, 0, 0f);
         }
+        
         foreach (EmpyreanBorderParticle particle in EmpyreanStickyParticles)
         {
             Vector2 drawPosition = particle.Center - Main.screenPosition;
@@ -307,53 +296,36 @@ public class EmpyreanMetaball : Metaball
             Vector2 scale = Vector2.One * particle.Size / tex.Size();
             Main.spriteBatch.Draw(tex, drawPosition, null, Color.White, 0f, origin, scale, 0, 0f);
         }
+        */
         
         foreach (Projectile p in Main.projectile.Where(p => p.active && (
-            p.type == ModContent.ProjectileType<DarkGlob>() || 
             p.type == ModContent.ProjectileType<SelenicIdol>() || 
-            p.type == ModContent.ProjectileType<EmpyreanThorn>() || 
-            p.type == ModContent.ProjectileType<DarkCoalescence>() || 
-            p.type == ModContent.ProjectileType<OratorBorder>() || 
-            p.type == ModContent.ProjectileType<DarkTide>() ||
-            p.type == ModContent.ProjectileType<OratorHandMinion>() ||
-            p.type == ModContent.ProjectileType<HandRing>() ||
-            p.type == ModContent.ProjectileType<UnstableDarkness>() ||
-            p.type == ModContent.ProjectileType<FingerlingGun>() ||
-            p.type == ModContent.ProjectileType<PotGlob>() ||
-            p.type == ModContent.ProjectileType<MinionHandRing>() ||
             p.type == ModContent.ProjectileType<SelenicIdolMinion>() ||
-            p.type == ModContent.ProjectileType<Dissolver>() ||
-            p.type == ModContent.ProjectileType<WretchedFountain>() ||
-            p.type == ModContent.ProjectileType<ShadowGrasp>()
+            p.type == ModContent.ProjectileType<Dissolver>()
         )))
         {
-            if(p.type == ModContent.ProjectileType<Dissolver>() || p.type == ModContent.ProjectileType<SelenicIdolMinion>() || p.type == ModContent.ProjectileType<OratorHandMinion>() || p.type == ModContent.ProjectileType<MinionHandRing>() ||  p.type == ModContent.ProjectileType<HandRing>() || p.type == ModContent.ProjectileType<DarkGlob>() || p.type == ModContent.ProjectileType<OratorBorder>() || p.type == ModContent.ProjectileType<DarkTide>() || p.type == ModContent.ProjectileType<SelenicIdol>() || p.type == ModContent.ProjectileType<FingerlingGun>() || p.type == ModContent.ProjectileType<PotGlob>())
+            if(p.type == ModContent.ProjectileType<Dissolver>() || p.type == ModContent.ProjectileType<SelenicIdolMinion>() || p.type == ModContent.ProjectileType<SelenicIdol>())
             {
                 p.ModProjectile.PostDraw(Color.Red);
             }
-            else if (p.type == ModContent.ProjectileType<ShadowGrasp>())
-                ShadowGrasp.DrawSelf(p);
-            else
-            {
-                Color c = Color.Red;
-                p.ModProjectile.PreDraw(ref c);
-            }
         }
+        /*
         foreach (NPC n in Main.npc.Where(n => n.active && (
-            n.type == ModContent.NPCType<OratorHand>() ||
+            //n.type == ModContent.NPCType<OratorHand>() ||
             n.type == ModContent.NPCType<SealingTablet>()
         )))
         {
             Vector2 drawPosition = n.Center - Main.screenPosition;
-            if (n.type == ModContent.NPCType<OratorHand>())
-                (n.ModNPC as OratorHand).PostDraw(Main.spriteBatch, Vector2.Zero, n.GetAlpha(Color.White));
-            else if (n.ai[0] == 2)
+            //if (n.type == ModContent.NPCType<OratorHand>())
+            //    (n.ModNPC as OratorHand).PostDraw(Main.spriteBatch, Vector2.Zero, n.GetAlpha(Color.White));
+            if (n.ai[0] == 2)
                 (n.ModNPC as SealingTablet).PostDraw(Main.spriteBatch, Vector2.Zero, n.GetAlpha(Color.White));
         }
-
-        EmpyreanMetaballSystem.DrawDissolves(Main.spriteBatch);
+        */
+        //EmpyreanMetaballSystem.DrawDissolves(Main.spriteBatch);
     }
 
+    /*
     public static float SumofSines(EmpyreanBorderParticle particle, float wavelength, float speed)
     {
         float time = Main.GlobalTimeWrappedHourly;
@@ -363,24 +335,24 @@ public class EmpyreanMetaball : Metaball
         float s = speed * w;
         return (a * 2f) * (float)Math.Sin(x * w + time * (s * 0.25f)) + a * (float)Math.Sin(x * (w * 0.75f) + time * (s * 2f)) + (a * 0.5f) * (float)Math.Sin(x * (w * 1.5f) + time * s);
     }
+    */
 }
 
 public class EmpyreanMetaballSystem : ModSystem
 {
     public override void OnModLoad()
     {
-        RenderTargetManager.RenderTargetUpdateLoopEvent += UpdateDissolveTargets;
-        On_Main.DrawProjectiles += DrawFrontFlakes;
-        On_Main.DoDraw_DrawNPCsOverTiles += DrawBackFlakes;
+        //On_Main.DrawProjectiles += DrawFrontFlakes;
+        //On_Main.DoDraw_DrawNPCsOverTiles += DrawBackFlakes;
     }
 
     private void DrawBackFlakes(On_Main.orig_DoDraw_DrawNPCsOverTiles orig, Main self)
     {
         Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.PointWrap, DepthStencilState.None, Main.Rasterizer, null, Main.GameViewMatrix.TransformationMatrix);
-
+        /*
         foreach (OpulentFlake flake in OpulentFlakeBackParticles)
             flake.Draw(Main.spriteBatch);
-
+        */
         Main.spriteBatch.End();
 
         orig(self);
@@ -389,15 +361,16 @@ public class EmpyreanMetaballSystem : ModSystem
     private void DrawFrontFlakes(On_Main.orig_DrawProjectiles orig, Main self)
     {
         Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.PointWrap, DepthStencilState.None, Main.Rasterizer, null, Main.GameViewMatrix.TransformationMatrix);
-
+        /*
         foreach (OpulentFlake flake in OpulentFlakeFrontParticles)
             flake.Draw(Main.spriteBatch);
-
+        */
         Main.spriteBatch.End();
 
         orig(self);
     }
 
+    /*
     public static CalamityMod.Graphics.ManagedRenderTarget dissolveTarget = null;
 
     private void UpdateDissolveTargets()
@@ -444,4 +417,5 @@ public class EmpyreanMetaballSystem : ModSystem
     {
         sb.Draw(dissolveTarget, Main.screenLastPosition - Main.screenPosition, Color.White);
     }
+    */
 }

@@ -4,15 +4,14 @@ using CalamityMod.World;
 using Daybreak.Common.Rendering;
 using ReLogic.Utilities;
 using Terraria.Graphics.Shaders;
-using Windfall.Common.Interfaces;
+using Windfall.Common.Graphics.Metaballs;
 using Windfall.Common.Systems;
 using Windfall.Content.NPCs.Bosses.Orator;
 using Windfall.Content.Skies;
-using static Windfall.Common.Graphics.Metaballs.EmpyreanMetaball;
 
 namespace Windfall.Content.Projectiles.Boss.Orator;
 
-public class SelenicIdol : ModProjectile, IEmpyreanDissolve
+public class SelenicIdol : ModProjectile
 {
     public new static string LocalizationCategory => "Projectiles.Boss";
     public override string Texture => "Windfall/Assets/Projectiles/Boss/GoldenMoon";
@@ -86,7 +85,7 @@ public class SelenicIdol : ModProjectile, IEmpyreanDissolve
         for (int i = 0; i <= 50; i++)
         {
             Vector2 spawnPos = Projectile.Center + Main.rand.NextVector2Circular(10f, 10f) * 10;
-            SpawnDefaultParticle(spawnPos, (Projectile.Center - spawnPos).SafeNormalize(Vector2.Zero) * 4, 40 * Main.rand.NextFloat(3f, 5f));
+            ExampleMetaballParticle.SpawnParticle(spawnPos, (Projectile.Center - spawnPos).SafeNormalize(Vector2.Zero) * 4, 40 * Main.rand.NextFloat(3f, 5f));
         }
         DissolveIntensity = 1;
     }
@@ -115,7 +114,7 @@ public class SelenicIdol : ModProjectile, IEmpyreanDissolve
                     float lerp = Clamp(Time / 60f, 0f, 1f);
                     Projectile.scale = CircOutEasing(lerp);
                     DissolveIntensity = SineInEasing(lerp);
-                    SpawnDefaultParticle(Projectile.Center + (Main.rand.NextVector2Circular(48f, 48f) * Projectile.scale), Main.rand.NextVector2Circular(18, 18) + Projectile.velocity, 200 * Main.rand.NextFloat(0.75f, 0.9f) * (1 - lerp));
+                    ExampleMetaballParticle.SpawnParticle(Projectile.Center + (Main.rand.NextVector2Circular(48f, 48f) * Projectile.scale), Main.rand.NextVector2Circular(18, 18) + Projectile.velocity, 200 * Main.rand.NextFloat(0.75f, 0.9f) * (1 - lerp));
                 }
                 
                 Projectile.velocity += (target.Center - Projectile.Center).SafeNormalize(Vector2.Zero) * Acceleration;
@@ -135,12 +134,14 @@ public class SelenicIdol : ModProjectile, IEmpyreanDissolve
                 }
                 #endregion
 
+                /*
                 if(DissolveIntensity >= 0.75f && Main.rand.NextBool(3))
                 {
                     Vector2 flakeDir = (-Projectile.velocity).SafeNormalize(Vector2.UnitX);
                     Vector2 spawnPos = Projectile.Center + (Main.rand.NextVector2Circular(Projectile.width / 2f, Projectile.height / 2f) * Projectile.scale);
                     SpawnFlakeParticle(spawnPos, flakeDir * Main.rand.NextFloat(2f, 4f), Main.rand.NextFloat(0.01f, 0.1f), Main.rand.NextFloat(0.66f, 1f), flakeDir.ToRotation());
                 }
+                */
 
                 break;
             case States.Dying:
@@ -173,24 +174,25 @@ public class SelenicIdol : ModProjectile, IEmpyreanDissolve
 
                 if (DissolveIntensity < 0.5f)
                 {
-                    SpawnDefaultParticle(Projectile.Center + (Main.rand.NextVector2Circular(25f, 25f) * Projectile.scale), Main.rand.NextVector2Circular(12, 12) * (lerpValue + 0.5f), 180 * (Main.rand.NextFloat(0.75f, 0.9f)));
-                    SpawnDefaultParticle(Projectile.Center + (Main.rand.NextVector2Circular(25f, 25f) * Projectile.scale), Main.rand.NextVector2Circular(18, 18) * (lerpValue + 0.5f), 90 * (Main.rand.NextFloat(0.75f, 0.9f)));
+                    ExampleMetaballParticle.SpawnParticle(Projectile.Center + (Main.rand.NextVector2Circular(25f, 25f) * Projectile.scale), Main.rand.NextVector2Circular(12, 12) * (lerpValue + 0.5f), 180 * (Main.rand.NextFloat(0.75f, 0.9f)));
+                    ExampleMetaballParticle.SpawnParticle(Projectile.Center + (Main.rand.NextVector2Circular(25f, 25f) * Projectile.scale), Main.rand.NextVector2Circular(18, 18) * (lerpValue + 0.5f), 90 * (Main.rand.NextFloat(0.75f, 0.9f)));
                 }
+                /*
                 else if(Main.rand.NextBool(4))
                 {
                     Vector2 flakeDir = (-Projectile.velocity).SafeNormalize(Vector2.UnitX);
                     Vector2 spawnPos = Projectile.Center + (Main.rand.NextVector2Circular(Projectile.width / 2f, Projectile.height / 2f) * Projectile.scale);
                     SpawnFlakeParticle(spawnPos, (Projectile.Center + (flakeDir * 72) - spawnPos).SafeNormalize(Vector2.UnitX) * Main.rand.NextFloat(0.25f, 1f), Main.rand.NextFloat(0.01f, 0.1f), Main.rand.NextFloat(0.5f, 2f), flakeDir.ToRotation());
                 }
-
-                    deathCounter++;
+                */
+                deathCounter++;
                 break;
             case States.Exploding:
                 SoundEngine.PlaySound(SoundID.DD2_EtherianPortalDryadTouch, Projectile.Center);
                 CameraSystem.StartScreenShake(Projectile.Center, Vector2.Zero, 7.5f, 15, 150);
 
                 for (int i = 0; i <= 50; i++)
-                    SpawnDefaultParticle(Projectile.Center, Main.rand.NextVector2Circular(10f, 10f) * Main.rand.NextFloat(1f, 2f), 40 * Main.rand.NextFloat(3f, 5f));
+                    ExampleMetaballParticle.SpawnParticle(Projectile.Center, Main.rand.NextVector2Circular(10f, 10f) * Main.rand.NextFloat(1f, 2f), 40 * Main.rand.NextFloat(3f, 5f));
                 NPC Orator = null;
                 if (NPC.FindFirstNPC(ModContent.NPCType<TheOrator>()) != -1)
                     Orator = Main.npc[NPC.FindFirstNPC(ModContent.NPCType<TheOrator>())];

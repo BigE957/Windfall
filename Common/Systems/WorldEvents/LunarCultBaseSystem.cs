@@ -344,11 +344,11 @@ public class LunarCultBaseSystem : ModSystem
                 if (!QuestSystem.Quests["DraconicBone"].Active && player.Center.Y > (LunarCultBaseLocation.Y + 30) * 16)
                 {
                     for (int i = 0; i <= 20; i++)
-                        EmpyreanMetaball.SpawnDefaultParticle(player.Center, Main.rand.NextVector2Circular(5f, 5f), 30 * Main.rand.NextFloat(1.5f, 2.3f));
+                        ExampleMetaballParticle.SpawnParticle(player.Center, Main.rand.NextVector2Circular(5f, 5f), 30 * Main.rand.NextFloat(1.5f, 2.3f));
                     player.Teleport(new Vector2((LunarCultBaseLocation.X + (BaseFacingLeft ? -106 : 106)) * 16, (CultBaseTileArea.Top + 27) * 16), TeleportationStyleID.DebugTeleport);
                     SoundEngine.PlaySound(SoundID.Item8, player.Center);
                     for (int i = 0; i <= 20; i++)
-                        EmpyreanMetaball.SpawnDefaultParticle(player.Center, Main.rand.NextVector2Circular(5f, 5f), 30 * Main.rand.NextFloat(1.5f, 2.3f));
+                        ExampleMetaballParticle.SpawnParticle(player.Center, Main.rand.NextVector2Circular(5f, 5f), 30 * Main.rand.NextFloat(1.5f, 2.3f));
                     if (NPC.AnyNPCs(ModContent.NPCType<OratorNPC>()))
                     {
                         NPC orator = Main.npc[NPC.FindFirstNPC(ModContent.NPCType<OratorNPC>())];

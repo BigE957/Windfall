@@ -4,7 +4,6 @@ using CalamityMod.World;
 using Windfall.Common.Graphics.Metaballs;
 using Windfall.Common.Systems;
 using Windfall.Content.NPCs.Bosses.Orator;
-using static Windfall.Common.Graphics.Metaballs.EmpyreanMetaball;
 using static Windfall.Content.NPCs.Bosses.Orator.TheOrator;
 
 namespace Windfall.Content.Projectiles.Boss.Orator;
@@ -43,8 +42,9 @@ public class UnstableDarkness: ModProjectile
         for (int i = 0; i <= 50; i++)
         {
             Vector2 spawnPos = Projectile.Center + Main.rand.NextVector2Circular(10f, 10f) * 10;
-            SpawnDefaultParticle(spawnPos, (Projectile.Center - spawnPos).SafeNormalize(Vector2.Zero) * 4, 40 * Main.rand.NextFloat(3f, 5f));
+            ExampleMetaballParticle.SpawnParticle(spawnPos, (Projectile.Center - spawnPos).SafeNormalize(Vector2.Zero) * 4, 40 * Main.rand.NextFloat(3f, 5f));
         }
+        /*
         for (int i = 0; i < 30; i++)
         {
             SpawnBorderParticle(Projectile, Vector2.Zero, 0f, 5, 50, TwoPi / 30 * i, false);
@@ -56,6 +56,7 @@ public class UnstableDarkness: ModProjectile
             SpawnBorderParticle(Projectile, Vector2.Zero, 0f, Main.rand.NextFloat(10, 25), Main.rand.NextFloat(75, 100), TwoPi / pCount * i);
             SpawnBorderParticle(Projectile, Vector2.Zero, 0f, Main.rand.NextFloat(10, 25), Main.rand.NextFloat(60, 80), TwoPi / pCount * -i - TwoPi / (pCount / 2));
         }
+        */
     }
     public override void AI()
     {
@@ -87,7 +88,7 @@ public class UnstableDarkness: ModProjectile
         CameraSystem.StartScreenShake(Projectile.Center, Vector2.Zero, 7.5f, 15, 150);
 
         for (int i = 0; i <= 50; i++)
-            SpawnDefaultParticle(Projectile.Center, Main.rand.NextVector2Circular(10f, 10f) * Main.rand.NextFloat(1f, 2f), 40 * Main.rand.NextFloat(3f, 5f));
+            ExampleMetaballParticle.SpawnParticle(Projectile.Center, Main.rand.NextVector2Circular(10f, 10f) * Main.rand.NextFloat(1f, 2f), 40 * Main.rand.NextFloat(3f, 5f));
 
         NPC Orator = null;
         if (NPC.FindFirstNPC(ModContent.NPCType<TheOrator>()) != -1)
@@ -102,16 +103,16 @@ public class UnstableDarkness: ModProjectile
         CalamityMod.Particles.Particle explosion = new DetailedExplosion(Projectile.Center, Vector2.Zero, new(117, 255, 159), new Vector2(1f, 1f), 0f, 0f, 1f, 16);
         GeneralParticleHandler.SpawnParticle(explosion);
         Projectile.active = false;
-        EmpyreanStickyParticles.RemoveAll(p => p.ProjectileIndex == Projectile.whoAmI);
+        //EmpyreanStickyParticles.RemoveAll(p => p.ProjectileIndex == Projectile.whoAmI);
     }
     private void ParticleTrail()
     {
         //smaller particles
-        EmpyreanMetaball.SpawnDefaultParticle(Projectile.Center + (Main.rand.NextVector2Circular(25f, 25f) * Projectile.scale), Projectile.velocity.SafeNormalize(Vector2.Zero) * Main.rand.NextFloat(0f, 5f), 40 * (Main.rand.NextFloat(0.75f, 0.9f) * Projectile.scale));
+        ExampleMetaballParticle.SpawnParticle(Projectile.Center + (Main.rand.NextVector2Circular(25f, 25f) * Projectile.scale), Projectile.velocity.SafeNormalize(Vector2.Zero) * Main.rand.NextFloat(0f, 5f), 40 * (Main.rand.NextFloat(0.75f, 0.9f) * Projectile.scale));
 
         //larger trails
         float gasSize = 90 * Projectile.scale;
-        EmpyreanMetaball.SpawnDefaultParticle(Projectile.Center - Projectile.velocity * (2 * Projectile.scale), Vector2.Zero, gasSize);
+        ExampleMetaballParticle.SpawnParticle(Projectile.Center - Projectile.velocity * (2 * Projectile.scale), Vector2.Zero, gasSize);
     }
     public override bool? Colliding(Rectangle projHitbox, Rectangle targetHitbox)
     {
@@ -121,8 +122,7 @@ public class UnstableDarkness: ModProjectile
     }
     public override bool PreDraw(ref Color lightColor)
     {
-        Color drawColor = Color.White;
-        DrawCenteredAfterimages(Projectile, ProjectileID.Sets.TrailingMode[Projectile.type], drawColor);
+        MetaballSystem.AddMetaballFill<ExampleMetaball>(new(Projectile), 1);
         return false;
     }
 }

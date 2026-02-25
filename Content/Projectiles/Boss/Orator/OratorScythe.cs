@@ -145,7 +145,7 @@ public class OratorScythe : ModProjectile
 
                         Projectile.Center = border.Center - toBorder * (radius - 64);
                        
-                        EmpyreanMetaball.SpawnDefaultParticle(Projectile.Center + (Projectile.Center - border.Center).SafeNormalize(Vector2.Zero) * 48f + toBorder.RotatedBy(PiOver2) * Main.rand.NextFloat(-48f, 48f), toBorder.RotatedBy(Main.rand.NextFloat(-PiOver4 / 2f, PiOver4 / 2f)) * Main.rand.NextFloat(4, 10), Main.rand.NextFloat(30f, 60f));
+                        ExampleMetaballParticle.SpawnParticle(Projectile.Center + (Projectile.Center - border.Center).SafeNormalize(Vector2.Zero) * 48f + toBorder.RotatedBy(PiOver2) * Main.rand.NextFloat(-48f, 48f), toBorder.RotatedBy(Main.rand.NextFloat(-PiOver4 / 2f, PiOver4 / 2f)) * Main.rand.NextFloat(4, 10), Main.rand.NextFloat(30f, 60f));
                         if (Time % 6 == 0)
                         {
                             SoundEngine.PlaySound(SoundID.DD2_LightningBugZap, Projectile.Center);

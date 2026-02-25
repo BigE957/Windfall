@@ -4,6 +4,7 @@ using CalamityMod.Particles;
 using Microsoft.Xna.Framework.Input;
 using System.Collections.ObjectModel;
 using Terraria.Graphics.Shaders;
+using Windfall.Common.Graphics.Metaballs;
 
 namespace Windfall.Content.Items.Weapons.Ranged;
 public class FingerGuns : ModItem, ILocalizedModType
@@ -342,17 +343,10 @@ public class FingerlingGun : ModProjectile, ILocalizedModType
             effects = SpriteEffects.FlipVertically;
 
         Main.EntitySpriteDraw(tex, Projectile.Center - Main.screenPosition, frame, lightColor, Projectile.rotation, frame.Size() * 0.5f, Projectile.scale, effects);
+
+        Texture2D metaTex = ModContent.Request<Texture2D>("Windfall/Assets/Items/Weapons/Ranged/FingerGuns/FingerGunsMetaball").Value;
+
+        MetaballSystem.AddMetaballFill<ExampleMetaball>(new(metaTex, Projectile.Center - Main.screenPosition, null, Projectile.rotation, metaTex.Size() * 0.5f, Projectile.scale, effects), 1);
         return false;
-    }
-
-    public override void PostDraw(Color lightColor)
-    {
-        Texture2D tex = ModContent.Request<Texture2D>("Windfall/Assets/Items/Weapons/Ranged/FingerGuns/FingerGunsMetaball").Value;
-
-        SpriteEffects effects = SpriteEffects.None;
-        if (Projectile.spriteDirection == -1)
-            effects = SpriteEffects.FlipVertically;
-
-        Main.EntitySpriteDraw(tex, Projectile.Center - Main.screenPosition, null, Color.White, Projectile.rotation, tex.Size() * 0.5f, Projectile.scale, effects);
     }
 }

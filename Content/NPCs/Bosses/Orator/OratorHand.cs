@@ -275,11 +275,11 @@ public class OratorHand : ModNPC
                 DeathAshParticle.CreateAshesFromNPC(NPC, NPC.velocity);
 
                 for(int i = 0; i < 30; i++)
-                    EmpyreanMetaball.SpawnDefaultParticle(NPC.Center - (NPC.rotation.ToRotationVector2() * (NPC.width / 1.5f)) + (NPC.rotation.ToRotationVector2().RotatedBy(PiOver2) * Main.rand.NextFloat(-16f, 16f)), (NPC.rotation.ToRotationVector2().RotatedBy(Pi + Main.rand.NextFloat(-PiOver4, PiOver4)) * Main.rand.NextFloat(2f, 6f) * 3f), Main.rand.NextFloat(20f, 40f));
+                    ExampleMetaballParticle.SpawnParticle(NPC.Center - (NPC.rotation.ToRotationVector2() * (NPC.width / 1.5f)) + (NPC.rotation.ToRotationVector2().RotatedBy(PiOver2) * Main.rand.NextFloat(-16f, 16f)), (NPC.rotation.ToRotationVector2().RotatedBy(Pi + Main.rand.NextFloat(-PiOver4, PiOver4)) * Main.rand.NextFloat(2f, 6f) * 3f), Main.rand.NextFloat(20f, 40f));
             }
 
             if (deadCounter < 300)
-                EmpyreanMetaball.SpawnDefaultParticle(NPC.Center - (NPC.rotation.ToRotationVector2() * (NPC.width / 1.5f)) + (NPC.rotation.ToRotationVector2().RotatedBy(PiOver2) * Main.rand.NextFloat(-16f, 16f)), (NPC.rotation.ToRotationVector2().RotatedBy(Pi + Main.rand.NextFloat(-PiOver4, PiOver4)) * Main.rand.NextFloat(2f, 6f) * (1f + deadCounter / 100f)), Main.rand.NextFloat(20f, 40f));
+                ExampleMetaballParticle.SpawnParticle(NPC.Center - (NPC.rotation.ToRotationVector2() * (NPC.width / 1.5f)) + (NPC.rotation.ToRotationVector2().RotatedBy(PiOver2) * Main.rand.NextFloat(-16f, 16f)), (NPC.rotation.ToRotationVector2().RotatedBy(Pi + Main.rand.NextFloat(-PiOver4, PiOver4)) * Main.rand.NextFloat(2f, 6f) * (1f + deadCounter / 100f)), Main.rand.NextFloat(20f, 40f));
 
             if (deadCounter == 420)
                 NPC.active = false;
@@ -319,7 +319,7 @@ public class OratorHand : ModNPC
                 NPC.rotation = PiOver2 + (-PiOver4 * WhatHand);
                 NPC.velocity *= 0.9f;
             }
-            EmpyreanMetaball.SpawnDefaultParticle(NPC.Center - (NPC.rotation.ToRotationVector2() * (NPC.width / 1.5f)) + (NPC.rotation.ToRotationVector2().RotatedBy(PiOver2) * Main.rand.NextFloat(-16f, 16f)), (NPC.rotation.ToRotationVector2().RotatedBy(Pi + Main.rand.NextFloat(-PiOver4, PiOver4)) * Main.rand.NextFloat(2f, 6f)), Main.rand.NextFloat(20f, 40f));
+            ExampleMetaballParticle.SpawnParticle(NPC.Center - (NPC.rotation.ToRotationVector2() * (NPC.width / 1.5f)) + (NPC.rotation.ToRotationVector2().RotatedBy(PiOver2) * Main.rand.NextFloat(-16f, 16f)), (NPC.rotation.ToRotationVector2().RotatedBy(Pi + Main.rand.NextFloat(-PiOver4, PiOver4)) * Main.rand.NextFloat(2f, 6f)), Main.rand.NextFloat(20f, 40f));
 
         }
         else
@@ -1049,7 +1049,7 @@ public class OratorHand : ModNPC
                     #endregion
                     break;
             }
-            EmpyreanMetaball.SpawnDefaultParticle(NPC.Center - (NPC.rotation.ToRotationVector2() * (NPC.width / 1.5f)) + (NPC.rotation.ToRotationVector2().RotatedBy(PiOver2) * Main.rand.NextFloat(-16f, 16f)), (NPC.rotation.ToRotationVector2().RotatedBy(Pi + Main.rand.NextFloat(-PiOver4, PiOver4)) * Main.rand.NextFloat(2f, 6f)), Main.rand.NextFloat(20f, 40f));
+            ExampleMetaballParticle.SpawnParticle(NPC.Center - (NPC.rotation.ToRotationVector2() * (NPC.width / 1.5f)) + (NPC.rotation.ToRotationVector2().RotatedBy(PiOver2) * Main.rand.NextFloat(-16f, 16f)), (NPC.rotation.ToRotationVector2().RotatedBy(Pi + Main.rand.NextFloat(-PiOver4, PiOver4)) * Main.rand.NextFloat(2f, 6f)), Main.rand.NextFloat(20f, 40f));
         }
         effectCounter++;
     }
@@ -1112,36 +1112,35 @@ public class OratorHand : ModNPC
     public override bool PreDraw(SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor)
     {
         Texture2D texture = TextureAssets.Npc[NPC.type].Value;
-        Vector2 drawPosition = NPC.Center - screenPos + (Vector2.UnitY * NPC.gfxOffY);
+        Vector2 drawPosition = NPC.Center - Main.screenPosition + (Vector2.UnitY * NPC.gfxOffY);
         Vector2 origin = NPC.frame.Size() * 0.5f;
         origin.X *= 0.75f;
         SpriteEffects spriteEffects = SpriteEffects.None;
         if (NPC.direction == -1)
             spriteEffects = SpriteEffects.FlipVertically;
         spriteBatch.Draw(texture, drawPosition, NPC.frame, NPC.GetAlpha(drawColor), NPC.rotation, origin, NPC.scale, spriteEffects, 0f);
+
+        if (deadCounter >= 360)
+            return false;
+
+        Texture2D cuffTexture = Cuffs.Value;
+        cuffFrame.Width = cuffTexture.Width;
+        cuffFrame.Height = cuffTexture.Height / 9;
+
+        Vector2 cuffOrigin = cuffFrame.Size() * 0.5f;
+        cuffOrigin.X *= 0.8f;
+        cuffOrigin.Y -= 1;
+        if (NPC.direction == -1)
+            cuffOrigin.Y += 2;
+
+        MetaballSystem.AddMetaballFill<ExampleMetaball>(new(cuffTexture, drawPosition, cuffFrame, NPC.rotation, cuffOrigin, NPC.scale, spriteEffects), 1);
+
         return false;
     }
     
     public override void PostDraw(SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor)
     {
-        if (deadCounter >= 360 || screenPos != Vector2.Zero)
-            return;
-
-        Texture2D texture = Cuffs.Value;
-        cuffFrame.Width = texture.Width;
-        cuffFrame.Height = texture.Height / 9;       
-
-        Vector2 drawPosition = NPC.Center - Main.screenPosition + (Vector2.UnitY * NPC.gfxOffY);
-        Vector2 origin = cuffFrame.Size() * 0.5f;
-        origin.X *= 0.8f;
-        origin.Y -= 1;
-        SpriteEffects spriteEffects = SpriteEffects.None;
-        if (NPC.direction == -1)
-        {
-            spriteEffects = SpriteEffects.FlipVertically;
-            origin.Y += 2;
-        }
-        spriteBatch.Draw(texture, drawPosition, cuffFrame, Color.White, NPC.rotation, origin, NPC.scale, spriteEffects, 0f);
+        
     }
 
     public override void SendExtraAI(BinaryWriter writer)

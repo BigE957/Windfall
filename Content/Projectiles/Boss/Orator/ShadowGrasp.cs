@@ -90,7 +90,7 @@ public class ShadowGrasp : ModProjectile
         Projectile.direction = 1;// Math.Sign(Projectile.velocity.X);
         FindFrame();
         for (int i = 0; i <= 20; i++)
-            EmpyreanMetaball.SpawnDefaultParticle(Projectile.Center, Main.rand.NextVector2Circular(7f, 7f), 40 * Main.rand.NextFloat(1.5f, 2.3f));
+            ExampleMetaballParticle.SpawnParticle(Projectile.Center, Main.rand.NextVector2Circular(7f, 7f), 40 * Main.rand.NextFloat(1.5f, 2.3f));
     }
 
     public override bool PreAI()
@@ -274,7 +274,7 @@ public class ShadowGrasp : ModProjectile
         CameraSystem.StartScreenShake(Projectile.Center, Vector2.Zero, 2.5f, 10, 30);
 
         for (int i = 0; i <= 50; i++)
-            EmpyreanMetaball.SpawnDefaultParticle(Projectile.Center, Main.rand.NextVector2Circular(10f, 10f) * Main.rand.NextFloat(1f, 2f), 40 * Main.rand.NextFloat(3f, 5f));
+            ExampleMetaballParticle.SpawnParticle(Projectile.Center, Main.rand.NextVector2Circular(10f, 10f) * Main.rand.NextFloat(1f, 2f), 40 * Main.rand.NextFloat(3f, 5f));
 
         if (Main.netMode != NetmodeID.MultiplayerClient && Orator != null && (float)Orator.NPC.life / (float)Orator.NPC.lifeMax > 0.1f)
         {
@@ -313,24 +313,20 @@ public class ShadowGrasp : ModProjectile
         }
     }
 
-    public override bool PreDraw(ref Color lightColor) => false;
-
-    public static void DrawSelf(Projectile p)
+    public override bool PreDraw(ref Color lightColor)
     {
-        Rectangle frame = TextureAssets.Projectile[p.type].Frame(6, 9, (p.ModProjectile as ShadowGrasp).frameX, p.frame);
+        Rectangle frame = TextureAssets.Projectile[Type].Frame(6, 9, frameX, Projectile.frame);
 
         SpriteEffects spriteEffects = SpriteEffects.None;
-        if (p.spriteDirection == -1)
+        if (Projectile.spriteDirection == -1)
             spriteEffects = SpriteEffects.FlipVertically;
 
-        Main.EntitySpriteDraw(TextureAssets.Projectile[p.type].Value, p.Center - Main.screenPosition, frame, Color.White, p.rotation, frame.Size() * 0.5f, p.scale, spriteEffects, 0);
+        MetaballSystem.AddMetaballFill<ExampleMetaball>(new(TextureAssets.Projectile[Type].Value, Projectile.Center - Main.screenPosition, frame, Projectile.rotation, frame.Size() * 0.5f, Projectile.scale, spriteEffects), 1);
+        return false;
     }
 
     public override void PostDraw(Color lightColor)
     {
-        if (lightColor != EmpyreanMetaball.BorderColor)
-            return;
-
         Texture2D texture = Details.Value;
         Rectangle frame = Details.Frame(6, 9, frameX, Projectile.frame);
 
@@ -338,6 +334,6 @@ public class ShadowGrasp : ModProjectile
         if (Projectile.spriteDirection == -1)
             spriteEffects = SpriteEffects.FlipVertically;
 
-        Main.EntitySpriteDraw(texture, Projectile.Center - Main.screenPosition, frame, EmpyreanMetaball.BorderColor, Projectile.rotation, frame.Size() * 0.5f, Projectile.scale, spriteEffects, 0);
+        MetaballSystem.AddMetaballEdge<ExampleMetaball>(new(texture, Projectile.Center - Main.screenPosition, frame, Projectile.rotation, frame.Size() * 0.5f, Projectile.scale, spriteEffects), 1);
     }
 }

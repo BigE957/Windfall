@@ -1,10 +1,10 @@
 ﻿using CalamityMod;
 using CalamityMod.Particles;
 using CalamityMod.World;
+using Terraria.GameContent;
 using Windfall.Common.Graphics.Metaballs;
 using Windfall.Common.Systems;
 using Windfall.Content.NPCs.Bosses.Orator;
-using static Windfall.Common.Graphics.Metaballs.EmpyreanMetaball;
 
 namespace Windfall.Content.Projectiles.Boss.Orator;
 
@@ -40,6 +40,7 @@ public class DarkCoalescence : ModProjectile
     public override void OnSpawn(IEntitySource source)
     {
         Projectile.scale = 0f;
+        /*
         for(int i = 0; i < 30; i++)
         {
             SpawnBorderParticle(Projectile, Vector2.Zero, 0f, 5, 50, TwoPi / 30 * i, false);
@@ -49,6 +50,7 @@ public class DarkCoalescence : ModProjectile
         {
             SpawnBorderParticle(Projectile, Vector2.Zero, 1f * i, 20, Main.rand.NextFloat(80, 110), TwoPi / pCount * i);
         }
+        */
         CameraSystem.StartScreenShake(Projectile.Center, Vector2.Zero, 5f, 15, 120);
     }
     public override void AI()
@@ -71,7 +73,7 @@ public class DarkCoalescence : ModProjectile
         {
             SoundEngine.PlaySound(SoundID.DD2_EtherianPortalDryadTouch, Projectile.Center);
             for (int i = 0; i <= 50; i++)
-                SpawnDefaultParticle(Projectile.Center, Main.rand.NextVector2Circular(10f, 10f), 40 * Main.rand.NextFloat(1.5f, 2.3f));
+                ExampleMetaballParticle.SpawnParticle(Projectile.Center, Main.rand.NextVector2Circular(10f, 10f), 40 * Main.rand.NextFloat(1.5f, 2.3f));
             Projectile.active = false;
             return;
         }
@@ -81,6 +83,7 @@ public class DarkCoalescence : ModProjectile
         if(aiCounter == 1)
         {
             SoundEngine.PlaySound(SoundID.DD2_EtherianPortalOpen, Projectile.Center);
+            /*
             if (Main.netMode == NetmodeID.MultiplayerClient)
             {
                 for (int i = 0; i < 30; i++)
@@ -90,10 +93,11 @@ public class DarkCoalescence : ModProjectile
                 for (int i = 0; i <= pCount; i++)
                     SpawnBorderParticle(Projectile, Vector2.Zero, 1f * i, 20, Main.rand.NextFloat(80, 110), TwoPi / pCount * i);
             }
+            */
             for (int i = 0; i <= 50; i++)
             {
                 Vector2 spawnPos = Projectile.Center + Main.rand.NextVector2Circular(10f, 10f) * 10;
-                SpawnDefaultParticle(spawnPos, (Projectile.Center - spawnPos).SafeNormalize(Vector2.Zero) * 4, 40 * Main.rand.NextFloat(3f, 5f));
+                ExampleMetaballParticle.SpawnParticle(spawnPos, (Projectile.Center - spawnPos).SafeNormalize(Vector2.Zero) * 4, 40 * Main.rand.NextFloat(3f, 5f));
             }
         }           
         if (aiCounter < fireDelay)
@@ -104,7 +108,7 @@ public class DarkCoalescence : ModProjectile
         }
         else
         {
-            SpawnDefaultParticle(Projectile.Center + (Main.rand.NextVector2Circular(20f, 25f) * Projectile.scale), Vector2.Zero, 40 * Main.rand.NextFloat(3f, 5f));
+            ExampleMetaballParticle.SpawnParticle(Projectile.Center + (Main.rand.NextVector2Circular(20f, 25f) * Projectile.scale), Vector2.Zero, 40 * Main.rand.NextFloat(3f, 5f));
             if (aiCounter == fireDelay)
             {
                 SoundEngine.PlaySound(SoundID.DD2_EtherianPortalSpawnEnemy with {Volume = 10f}, Projectile.Center);
@@ -130,7 +134,7 @@ public class DarkCoalescence : ModProjectile
                 SoundEngine.PlaySound(SoundID.DD2_EtherianPortalDryadTouch, Projectile.Center);                   
                 for (int i = 0; i <= 50; i++)
                 {
-                    SpawnDefaultParticle(Projectile.Center, Main.rand.NextVector2Circular(10f, 10f) * Main.rand.NextFloat(1f, 2f), 40 * Main.rand.NextFloat(3f, 5f));
+                    ExampleMetaballParticle.SpawnParticle(Projectile.Center, Main.rand.NextVector2Circular(10f, 10f) * Main.rand.NextFloat(1f, 2f), 40 * Main.rand.NextFloat(3f, 5f));
                 }
                 if (Main.projectile.First(p => p.type == ModContent.ProjectileType<DarkCoalescence>()).whoAmI == Projectile.whoAmI)
                 {
@@ -156,21 +160,20 @@ public class DarkCoalescence : ModProjectile
                     GeneralParticleHandler.SpawnParticle(explosion);
                 }                    
                 Projectile.active = false;
-                EmpyreanStickyParticles.RemoveAll(p => p.ProjectileIndex == Projectile.whoAmI);
+                //EmpyreanStickyParticles.RemoveAll(p => p.ProjectileIndex == Projectile.whoAmI);
             }
         }
         aiCounter++;
         Lighting.AddLight(Projectile.Center, new Vector3(0.32f, 0.92f, 0.71f));
-        SpawnDefaultParticle(Projectile.Center, Vector2.Zero, Projectile.scale * 80);           
+        ExampleMetaballParticle.SpawnParticle(Projectile.Center, Vector2.Zero, Projectile.scale * 80);           
         if (Projectile.ai[1] != 0)
-            SpawnDefaultParticle(new(Projectile.Center.X, Projectile.Center.Y + (Main.rand.Next(-19, 19) * Projectile.scale)), Vector2.Zero, Projectile.scale * 40);
+            ExampleMetaballParticle.SpawnParticle(new(Projectile.Center.X, Projectile.Center.Y + (Main.rand.Next(-19, 19) * Projectile.scale)), Vector2.Zero, Projectile.scale * 40);
         else
-            SpawnDefaultParticle(new(Projectile.Center.X + (Main.rand.Next(-19, 19) * Projectile.scale), Projectile.Center.Y), Vector2.Zero, Projectile.scale * 40);
+            ExampleMetaballParticle.SpawnParticle(new(Projectile.Center.X + (Main.rand.Next(-19, 19) * Projectile.scale), Projectile.Center.Y), Vector2.Zero, Projectile.scale * 40);
     }
     public override bool PreDraw(ref Color lightColor)
     {
-        Color drawColor = Color.White;
-        CalamityMod.CalamityUtils.DrawAfterimagesCentered(Projectile, ProjectileID.Sets.TrailingMode[Projectile.type], drawColor);
+        MetaballSystem.AddMetaballFill<ExampleMetaball>(new(Projectile), 1);
         return false;
     }
     public override bool? Colliding(Rectangle projHitbox, Rectangle targetHitbox)
