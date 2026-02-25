@@ -73,7 +73,7 @@ public class DarkCoalescence : ModProjectile
         {
             SoundEngine.PlaySound(SoundID.DD2_EtherianPortalDryadTouch, Projectile.Center);
             for (int i = 0; i <= 50; i++)
-                ExampleMetaballParticle.SpawnParticle(Projectile.Center, Main.rand.NextVector2Circular(10f, 10f), 40 * Main.rand.NextFloat(1.5f, 2.3f));
+                SelenicMetaballParticle.SpawnParticle(Projectile.Center, Main.rand.NextVector2Circular(10f, 10f), 40 * Main.rand.NextFloat(1.5f, 2.3f));
             Projectile.active = false;
             return;
         }
@@ -97,7 +97,7 @@ public class DarkCoalescence : ModProjectile
             for (int i = 0; i <= 50; i++)
             {
                 Vector2 spawnPos = Projectile.Center + Main.rand.NextVector2Circular(10f, 10f) * 10;
-                ExampleMetaballParticle.SpawnParticle(spawnPos, (Projectile.Center - spawnPos).SafeNormalize(Vector2.Zero) * 4, 40 * Main.rand.NextFloat(3f, 5f));
+                SelenicMetaballParticle.SpawnParticle(spawnPos, (Projectile.Center - spawnPos).SafeNormalize(Vector2.Zero) * 4, 40 * Main.rand.NextFloat(3f, 5f));
             }
         }           
         if (aiCounter < fireDelay)
@@ -108,7 +108,7 @@ public class DarkCoalescence : ModProjectile
         }
         else
         {
-            ExampleMetaballParticle.SpawnParticle(Projectile.Center + (Main.rand.NextVector2Circular(20f, 25f) * Projectile.scale), Vector2.Zero, 40 * Main.rand.NextFloat(3f, 5f));
+            SelenicMetaballParticle.SpawnParticle(Projectile.Center + (Main.rand.NextVector2Circular(20f, 25f) * Projectile.scale), Vector2.Zero, 40 * Main.rand.NextFloat(3f, 5f));
             if (aiCounter == fireDelay)
             {
                 SoundEngine.PlaySound(SoundID.DD2_EtherianPortalSpawnEnemy with {Volume = 10f}, Projectile.Center);
@@ -134,7 +134,7 @@ public class DarkCoalescence : ModProjectile
                 SoundEngine.PlaySound(SoundID.DD2_EtherianPortalDryadTouch, Projectile.Center);                   
                 for (int i = 0; i <= 50; i++)
                 {
-                    ExampleMetaballParticle.SpawnParticle(Projectile.Center, Main.rand.NextVector2Circular(10f, 10f) * Main.rand.NextFloat(1f, 2f), 40 * Main.rand.NextFloat(3f, 5f));
+                    SelenicMetaballParticle.SpawnParticle(Projectile.Center, Main.rand.NextVector2Circular(10f, 10f) * Main.rand.NextFloat(1f, 2f), 40 * Main.rand.NextFloat(3f, 5f));
                 }
                 if (Main.projectile.First(p => p.type == ModContent.ProjectileType<DarkCoalescence>()).whoAmI == Projectile.whoAmI)
                 {
@@ -165,15 +165,15 @@ public class DarkCoalescence : ModProjectile
         }
         aiCounter++;
         Lighting.AddLight(Projectile.Center, new Vector3(0.32f, 0.92f, 0.71f));
-        ExampleMetaballParticle.SpawnParticle(Projectile.Center, Vector2.Zero, Projectile.scale * 80);           
+        SelenicMetaballParticle.SpawnParticle(Projectile.Center, Vector2.Zero, Projectile.scale * 80);           
         if (Projectile.ai[1] != 0)
-            ExampleMetaballParticle.SpawnParticle(new(Projectile.Center.X, Projectile.Center.Y + (Main.rand.Next(-19, 19) * Projectile.scale)), Vector2.Zero, Projectile.scale * 40);
+            SelenicMetaballParticle.SpawnParticle(new(Projectile.Center.X, Projectile.Center.Y + (Main.rand.Next(-19, 19) * Projectile.scale)), Vector2.Zero, Projectile.scale * 40);
         else
-            ExampleMetaballParticle.SpawnParticle(new(Projectile.Center.X + (Main.rand.Next(-19, 19) * Projectile.scale), Projectile.Center.Y), Vector2.Zero, Projectile.scale * 40);
+            SelenicMetaballParticle.SpawnParticle(new(Projectile.Center.X + (Main.rand.Next(-19, 19) * Projectile.scale), Projectile.Center.Y), Vector2.Zero, Projectile.scale * 40);
     }
     public override bool PreDraw(ref Color lightColor)
     {
-        MetaballSystem.AddMetaballFill<ExampleMetaball>(new(Projectile), 1);
+        MetaballSystem.AddMetaballFill<SelenicMetaball>(new(Projectile), 1);
         return false;
     }
     public override bool? Colliding(Rectangle projHitbox, Rectangle targetHitbox)

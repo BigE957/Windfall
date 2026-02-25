@@ -87,14 +87,14 @@ public class SealingTablet : ModNPC
                 Vector2 spawnOffset = Vector2.One * Main.rand.NextFloat(-16f, 24f);
                 Vector2 DungeonCoords = new Vector2(Main.dungeonX + (Main.dungeonX > Main.spawnTileX ? 4 : -4), Main.dungeonY).ToWorldCoordinates();
                 if (Main.rand.NextBool(summonRatio))
-                    ExampleMetaballParticle.SpawnParticle(NPC.Center + spawnOffset, spawnOffset.RotatedBy((Main.rand.NextBool() ? PiOver2 : -PiOver2) + Main.rand.NextFloat(-PiOver4, PiOver4)).SafeNormalize(Vector2.Zero) * Main.rand.NextFloat(0f, 4f), Main.rand.NextFloat(10, 20));
+                    SelenicMetaballParticle.SpawnParticle(NPC.Center + spawnOffset, spawnOffset.RotatedBy((Main.rand.NextBool() ? PiOver2 : -PiOver2) + Main.rand.NextFloat(-PiOver4, PiOver4)).SafeNormalize(Vector2.Zero) * Main.rand.NextFloat(0f, 4f), Main.rand.NextFloat(10, 20));
                 if (summonRatio > 0.75f)
                 {
                     float width = 124f * ExpInEasing((summonRatio - 0.75f) / 0.25f);
                     width = Clamp(width, 0f, 96f);
                     //Main.NewText(width);
                     for (int i = 0; i < 18; i++)
-                        ExampleMetaballParticle.SpawnParticle(new Vector2(DungeonCoords.X + Main.rand.NextFloat(-width, width), DungeonCoords.Y + Main.rand.NextFloat(0, 24f)), new Vector2(Main.rand.Next(-2, 2), Main.rand.Next(-5, -1) * SineInEasing((summonRatio - 0.75f) / 0.25f)), Main.rand.NextFloat(15f, 25f) * ((summonRatio - 0.75f) / 0.25f) * 2f);
+                        SelenicMetaballParticle.SpawnParticle(new Vector2(DungeonCoords.X + Main.rand.NextFloat(-width, width), DungeonCoords.Y + Main.rand.NextFloat(0, 24f)), new Vector2(Main.rand.Next(-2, 2), Main.rand.Next(-5, -1) * SineInEasing((summonRatio - 0.75f) / 0.25f)), Main.rand.NextFloat(15f, 25f) * ((summonRatio - 0.75f) / 0.25f) * 2f);
                 }
                 if (summonRatio >= 1f && !NPC.AnyNPCs(ModContent.NPCType<TheOrator>()))
                 {
@@ -102,7 +102,7 @@ public class SealingTablet : ModNPC
                     Vector2 spawnPos = new(DungeonCoords.X, DungeonCoords.Y - 8);
                     NPC boss = NPC.NewNPCDirect(NPC.GetSource_NaturalSpawn(), (int)spawnPos.X, (int)spawnPos.Y, ModContent.NPCType<TheOrator>());
                     for (int i = 0; i < 32; i++)
-                        ExampleMetaballParticle.SpawnParticle(boss.Center + new Vector2(Main.rand.NextFloat(-64, 64), 64), Vector2.UnitY * Main.rand.NextFloat(4f, 24f) * -1, Main.rand.NextFloat(110f, 130f));
+                        SelenicMetaballParticle.SpawnParticle(boss.Center + new Vector2(Main.rand.NextFloat(-64, 64), 64), Vector2.UnitY * Main.rand.NextFloat(4f, 24f) * -1, Main.rand.NextFloat(110f, 130f));
                 }
             }
         }
@@ -226,7 +226,7 @@ public class SealingTablet : ModNPC
             drawPosition.Y -= 4;
             Vector2 origin = texture.Size() * 0.5f;
 
-            MetaballSystem.AddMetaballFill<ExampleMetaball>(new(texture, drawPosition, null, NPC.rotation, origin, 1f, 0), 1);
+            MetaballSystem.AddMetaballFill<SelenicMetaball>(new(texture, drawPosition, null, NPC.rotation, origin, 1f, 0), 1);
         }
 
         return false;

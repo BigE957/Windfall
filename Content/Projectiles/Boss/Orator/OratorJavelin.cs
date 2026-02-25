@@ -164,7 +164,7 @@ public class OratorJavelin : ModProjectile
         {
             Vector2 spawnPos = Projectile.Center - (Projectile.rotation.ToRotationVector2() * Main.rand.NextFloat(-64f, 64f));
             if (!Main.tile[spawnPos.ToTileCoordinates()].IsSolid())
-                ExampleMetaballParticle.SpawnParticle(spawnPos, Main.rand.NextVector2Circular(2f, 2f), Main.rand.NextFloat(10f, 20f));
+                SelenicMetaballParticle.SpawnParticle(spawnPos, Main.rand.NextVector2Circular(2f, 2f), Main.rand.NextFloat(10f, 20f));
 
         }
         //Lighting.AddLight(Projectile.Center, Color.White.ToVector3() / 3f);
@@ -243,7 +243,7 @@ public class OratorJavelin : ModProjectile
         {
             Vector2 spawnPos = Projectile.Center - (Projectile.rotation.ToRotationVector2() * Main.rand.NextFloat(-64f, 64f));
             if (!Main.tile[spawnPos.ToTileCoordinates()].IsSolid())
-                ExampleMetaballParticle.SpawnParticle(spawnPos, Main.rand.NextVector2Circular(2f, 2f), Main.rand.NextFloat(10f, 20f));
+                SelenicMetaballParticle.SpawnParticle(spawnPos, Main.rand.NextVector2Circular(2f, 2f), Main.rand.NextFloat(10f, 20f));
         }
     }
     

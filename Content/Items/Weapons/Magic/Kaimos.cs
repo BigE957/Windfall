@@ -141,7 +141,7 @@ public class KaimosHoldout : ModProjectile, ILocalizedModType
                 if (Time % 8 == 0)
                 {
                     for (int i = 0; i < 10; i++)
-                        ExampleMetaballParticle.SpawnParticle(spawnPos, toMouse.RotatedBy(Main.rand.NextFloat(-PiOver4, PiOver4)) * Main.rand.NextFloat(0.1f, 3f), Main.rand.NextFloat(40, 80));
+                        SelenicMetaballParticle.SpawnParticle(spawnPos, toMouse.RotatedBy(Main.rand.NextFloat(-PiOver4, PiOver4)) * Main.rand.NextFloat(0.1f, 3f), Main.rand.NextFloat(40, 80));
                     SoundEngine.PlaySound(SoundID.Item60, Projectile.Center);
 
                     rotationOffset = Main.rand.NextFloat(-PiOver4 / 8f, PiOver4 / 8f);
@@ -261,7 +261,7 @@ public class PotGlob : ModProjectile, ILocalizedModType
             }
 
             if (Projectile.velocity.LengthSquared() > 5f)
-                ExampleMetaballParticle.SpawnParticle(Projectile.Center, Vector2.Zero, Projectile.scale * 48);
+                SelenicMetaballParticle.SpawnParticle(Projectile.Center, Vector2.Zero, Projectile.scale * 48);
         }
         else
         {
@@ -330,7 +330,7 @@ public class PotGlob : ModProjectile, ILocalizedModType
                 }
             }
             if(WhoAmIAttachedTo == -2)
-                ExampleMetaballParticle.SpawnParticle(Projectile.Center - Projectile.rotation.ToRotationVector2() * Size * 10, Projectile.velocity * -0.5f, Projectile.scale * 48);
+                SelenicMetaballParticle.SpawnParticle(Projectile.Center - Projectile.rotation.ToRotationVector2() * Size * 10, Projectile.velocity * -0.5f, Projectile.scale * 48);
         }
         
         if (Projectile.timeLeft <= 30)
@@ -378,7 +378,7 @@ public class PotGlob : ModProjectile, ILocalizedModType
                 CameraSystem.StartScreenShake(Projectile.Center, Vector2.Zero, 5f, 10, 60);
                 
                 for (int i = 0; i <= 50; i++)
-                    ExampleMetaballParticle.SpawnParticle(Projectile.Center, Main.rand.NextVector2Circular(10f, 10f) * Main.rand.NextFloat(1f, 2f), 40 * Main.rand.NextFloat(3f, 5f));
+                    SelenicMetaballParticle.SpawnParticle(Projectile.Center, Main.rand.NextVector2Circular(10f, 10f) * Main.rand.NextFloat(1f, 2f), 40 * Main.rand.NextFloat(3f, 5f));
                
                 Particle pulse = new PulseRing(Projectile.Center, Vector2.Zero, Color.Teal, 0f, 2.5f, 16);
                 GeneralParticleHandler.SpawnParticle(pulse);
@@ -419,8 +419,8 @@ public class PotGlob : ModProjectile, ILocalizedModType
 
     private Color ColorFunction(float completionRatio, Vector2 v)
     {
-        Color colorA = Color.Lerp(Color.LimeGreen, Color.Orange, ExampleMetaball.BorderLerpValue(0));
-        Color colorB = Color.Lerp(Color.GreenYellow, Color.Goldenrod, ExampleMetaball.BorderLerpValue(0));
+        Color colorA = Color.Lerp(Color.LimeGreen, Color.Orange, SelenicMetaball.BorderLerpValue(0));
+        Color colorB = Color.Lerp(Color.GreenYellow, Color.Goldenrod, SelenicMetaball.BorderLerpValue(0));
 
         float fadeToEnd = Lerp(0.65f, 1f, (float)Math.Cos(-Main.GlobalTimeWrappedHourly * 3f) * 0.5f + 0.5f);
         float fadeOpacity = Utils.GetLerpValue(1f, 0f, completionRatio + 0.1f, true) * Projectile.Opacity;
@@ -457,7 +457,7 @@ public class PotGlob : ModProjectile, ILocalizedModType
         Main.spriteBatch.End();
         Main.spriteBatch.Begin(scope);
 
-        MetaballSystem.AddMetaballFill<ExampleMetaball>(new(Projectile), 1);
+        MetaballSystem.AddMetaballFill<SelenicMetaball>(new(Projectile), 1);
 
         return false;
     }

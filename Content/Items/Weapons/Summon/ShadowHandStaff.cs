@@ -96,7 +96,7 @@ public class ShadowHandStaff : ModItem, ILocalizedModType
             int mainHand = Projectile.NewProjectile(source, position, velocity, type, Item.damage, knockback, player.whoAmI, -1);
 
             for (int i = 0; i <= 20; i++)
-                ExampleMetaballParticle.SpawnParticle(position, Main.rand.NextVector2Circular(5f, 5f), 20 * Main.rand.NextFloat(1.5f, 2.3f));
+                SelenicMetaballParticle.SpawnParticle(position, Main.rand.NextVector2Circular(5f, 5f), 20 * Main.rand.NextFloat(1.5f, 2.3f));
 
             float xOff = (player.Center.X - position.X) * 2;
             position.X += xOff;
@@ -105,7 +105,7 @@ public class ShadowHandStaff : ModItem, ILocalizedModType
             Main.projectile[mainHand].ai[0] = subHand;
 
             for (int i = 0; i <= 20; i++)
-                ExampleMetaballParticle.SpawnParticle(position, Main.rand.NextVector2Circular(5f, 5f), 20 * Main.rand.NextFloat(1.5f, 2.3f));
+                SelenicMetaballParticle.SpawnParticle(position, Main.rand.NextVector2Circular(5f, 5f), 20 * Main.rand.NextFloat(1.5f, 2.3f));
 
             if ((position - player.Center).X < 0)
             {
@@ -655,7 +655,7 @@ public class OratorHandMinion : ModProjectile
                     goalPos -= rotation * Lerp(32, 150, SharedTime / 200f);
                     Projectile.rotation = rotation.ToRotation();
 
-                    ExampleMetaballParticle.SpawnParticle(Owner.Center + goalDirection * 150f, Main.rand.NextVector2Circular(5f, 5f), 1.5f * (SharedTime / 2));
+                    SelenicMetaballParticle.SpawnParticle(Owner.Center + goalDirection * 150f, Main.rand.NextVector2Circular(5f, 5f), 1.5f * (SharedTime / 2));
                 }
                 else
                 {
@@ -685,7 +685,7 @@ public class OratorHandMinion : ModProjectile
             grazeArea.Position = Owner.Center;
 
         Vector2 rotVec = Projectile.rotation.ToRotationVector2();
-        ExampleMetaballParticle.SpawnParticle(Projectile.Center - (rotVec * (Projectile.width / (Main.rand.NextFloat(1.5f, 1.75f)))) + rotVec.RotatedBy(-PiOver2 * Projectile.direction) * Main.rand.NextFloat(0f, 48f), (rotVec.RotatedBy(Pi + Main.rand.NextFloat(-PiOver4, PiOver4)) * Main.rand.NextFloat(1f, 5f)), Main.rand.NextFloat(20f, 30f));
+        SelenicMetaballParticle.SpawnParticle(Projectile.Center - (rotVec * (Projectile.width / (Main.rand.NextFloat(1.5f, 1.75f)))) + rotVec.RotatedBy(-PiOver2 * Projectile.direction) * Main.rand.NextFloat(0f, 48f), (rotVec.RotatedBy(Pi + Main.rand.NextFloat(-PiOver4, PiOver4)) * Main.rand.NextFloat(1f, 5f)), Main.rand.NextFloat(20f, 30f));
         
         if(HandSide == 1)
             SharedTime++;
@@ -763,7 +763,7 @@ public class OratorHandMinion : ModProjectile
             spriteEffects = SpriteEffects.FlipVertically;
             origin.Y += 2;
         }
-        MetaballSystem.AddMetaballFill<ExampleMetaball>(new(texture, drawPosition, cuffFrame, Projectile.rotation, origin, Projectile.scale, spriteEffects), 1);
+        MetaballSystem.AddMetaballFill<SelenicMetaball>(new(texture, drawPosition, cuffFrame, Projectile.rotation, origin, Projectile.scale, spriteEffects), 1);
     }
 }
 
@@ -841,7 +841,7 @@ public class MinionHandRing : ModProjectile
             Projectile.velocity *= 0.97f;
         }
 
-        Lighting.AddLight(Projectile.Center, ExampleMetaball.BorderColor(0).ToVector3());
+        Lighting.AddLight(Projectile.Center, SelenicMetaball.BorderColor(0).ToVector3());
         Time++;
     }
     public override bool PreDraw(ref Color lightColor)
@@ -861,7 +861,7 @@ public class MinionHandRing : ModProjectile
                 break;
         }
         if (Projectile.timeLeft <= 90)
-            color = Color.Lerp(color, ExampleMetaball.BorderColor(0), (90 - Projectile.timeLeft) / 60f);
+            color = Color.Lerp(color, SelenicMetaball.BorderColor(0), (90 - Projectile.timeLeft) / 60f);
         DrawCenteredAfterimages(Projectile, ProjectileID.Sets.TrailingMode[Projectile.type], color * AfterImageOpacity, 2, texture: WhiteOutTexture);
 
         Vector2 drawPosition = Projectile.Center - Main.screenPosition;
@@ -881,7 +881,7 @@ public class MinionHandRing : ModProjectile
             ratio = (90 - Projectile.timeLeft) / 60f;
         ratio = Clamp(ratio, 0f, 1f);
 
-        MetaballSystem.AddMetaballFill<ExampleMetaball>(new(WhiteOutTexture, drawPosition, WhiteOutTexture.Frame(), Projectile.rotation, WhiteOutTexture.Frame().Size() * 0.5f, Projectile.scale * ratio, 0), 1);
+        MetaballSystem.AddMetaballFill<SelenicMetaball>(new(WhiteOutTexture, drawPosition, WhiteOutTexture.Frame(), Projectile.rotation, WhiteOutTexture.Frame().Size() * 0.5f, Projectile.scale * ratio, 0), 1);
 
         return false;
     }
@@ -889,7 +889,7 @@ public class MinionHandRing : ModProjectile
     public override void OnKill(int timeLeft)
     {
         for (int i = 0; i <= 10; i++)
-            ExampleMetaballParticle.SpawnParticle(Projectile.Center, Main.rand.NextVector2Circular(4f, 4f), Main.rand.NextFloat(10f, 20f));
+            SelenicMetaballParticle.SpawnParticle(Projectile.Center, Main.rand.NextVector2Circular(4f, 4f), Main.rand.NextFloat(10f, 20f));
     }
 
     public override void SendExtraAI(BinaryWriter writer)
@@ -966,7 +966,7 @@ public class SelenicIdolMinion : ModProjectile, ILocalizedModType
         for (int i = 0; i <= 50; i++)
         {
             Vector2 spawnPos = Projectile.Center + Main.rand.NextVector2Circular(10f, 10f) * 10;
-            ExampleMetaballParticle.SpawnParticle(spawnPos, (Projectile.Center - spawnPos).SafeNormalize(Vector2.Zero) * 4, 40 * Main.rand.NextFloat(3f, 5f));
+            SelenicMetaballParticle.SpawnParticle(spawnPos, (Projectile.Center - spawnPos).SafeNormalize(Vector2.Zero) * 4, 40 * Main.rand.NextFloat(3f, 5f));
         }
     }
 
@@ -980,7 +980,7 @@ public class SelenicIdolMinion : ModProjectile, ILocalizedModType
                     float lerp = Time / 60f;
                     Projectile.scale = CircOutEasing(lerp);
                     Dissolve = 1 - SineInEasing(lerp);
-                    ExampleMetaballParticle.SpawnParticle(Projectile.Center + (Main.rand.NextVector2Circular(48f, 48f) * Projectile.scale), Main.rand.NextVector2Circular(18, 18) + Projectile.velocity, 200 * Main.rand.NextFloat(0.75f, 0.9f) * (1 - lerp));
+                    SelenicMetaballParticle.SpawnParticle(Projectile.Center + (Main.rand.NextVector2Circular(48f, 48f) * Projectile.scale), Main.rand.NextVector2Circular(18, 18) + Projectile.velocity, 200 * Main.rand.NextFloat(0.75f, 0.9f) * (1 - lerp));
                 }
 
                 if (Projectile.owner == Main.myPlayer)
@@ -1041,8 +1041,8 @@ public class SelenicIdolMinion : ModProjectile, ILocalizedModType
 
                 if (Dissolve >= 0.75f)
                 {
-                    ExampleMetaballParticle.SpawnParticle(Projectile.Center + (Main.rand.NextVector2Circular(25f, 25f) * Projectile.scale), Main.rand.NextVector2Circular(12, 12) * (lerpValue + 0.5f), 180 * (Main.rand.NextFloat(0.75f, 0.9f)));
-                    ExampleMetaballParticle.SpawnParticle(Projectile.Center + (Main.rand.NextVector2Circular(25f, 25f) * Projectile.scale), Main.rand.NextVector2Circular(18, 18) * (lerpValue + 0.5f), 90 * (Main.rand.NextFloat(0.75f, 0.9f)));
+                    SelenicMetaballParticle.SpawnParticle(Projectile.Center + (Main.rand.NextVector2Circular(25f, 25f) * Projectile.scale), Main.rand.NextVector2Circular(12, 12) * (lerpValue + 0.5f), 180 * (Main.rand.NextFloat(0.75f, 0.9f)));
+                    SelenicMetaballParticle.SpawnParticle(Projectile.Center + (Main.rand.NextVector2Circular(25f, 25f) * Projectile.scale), Main.rand.NextVector2Circular(18, 18) * (lerpValue + 0.5f), 90 * (Main.rand.NextFloat(0.75f, 0.9f)));
                 }
                 deathCounter++;
                 break;
@@ -1050,7 +1050,7 @@ public class SelenicIdolMinion : ModProjectile, ILocalizedModType
                 SoundEngine.PlaySound(SoundID.DD2_EtherianPortalDryadTouch, Projectile.Center);
                 CameraSystem.StartScreenShake(Projectile.Center, Vector2.Zero, 7.5f, 15, 90);
                 for (int i = 0; i <= 50; i++)
-                    ExampleMetaballParticle.SpawnParticle(Projectile.Center, Main.rand.NextVector2Circular(10f, 10f) * Main.rand.NextFloat(1f, 2f), 40 * Main.rand.NextFloat(3f, 5f));
+                    SelenicMetaballParticle.SpawnParticle(Projectile.Center, Main.rand.NextVector2Circular(10f, 10f) * Main.rand.NextFloat(1f, 2f), 40 * Main.rand.NextFloat(3f, 5f));
 
                 if (Main.netMode != NetmodeID.MultiplayerClient)
                 {
@@ -1106,6 +1106,46 @@ public class SelenicIdolMinion : ModProjectile, ILocalizedModType
         tex = TextureAssets.Projectile[Type].Value;
 
         Main.EntitySpriteDraw(tex, Projectile.Center - Main.screenPosition, null, Color.White, rotationCounter, tex.Size() * 0.5f, Projectile.scale, 0);
+
+        Texture2D overlayTex = LoadSystem.Circle.Value;
+        Vector2 size = overlayTex.Size() * Projectile.scale * 5.05f;
+
+        float dissolveIntensity = 1 - Dissolve;
+
+        if (dissolveIntensity == 0)
+        {
+            MetaballSystem.AddMetaballFill<SelenicMetaball>(new(overlayTex, Projectile.Center - Main.screenPosition, null, rotationCounter, overlayTex.Size() * 0.5f, Projectile.scale * 5.05f, 0), 1);
+        }
+        else if (dissolveIntensity < 1 && size.X > 0 && size.Y > 0)
+        {
+            Main.spriteBatch.End(out var snap);
+
+            using RenderTargetLease lease = RenderTargetPool.Shared.Rent(Main.instance.GraphicsDevice, (int)Math.Ceiling(size.X), (int)Math.Ceiling(size.Y), RenderTargetDescriptor.Default);
+
+            using (lease.Scope(clearColor: Color.Transparent))
+            {
+                Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.NonPremultiplied, Main.DefaultSamplerState, DepthStencilState.None, RasterizerState.CullNone, null, Matrix.Identity);
+
+                MiscShaderData dissolveShader = GameShaders.Misc["CalamityMod:Dissolve"];
+
+                dissolveShader.Shader.Parameters["noiseScale"].SetValue(1f);
+                dissolveShader.Shader.Parameters["dissolveIntensity"].SetValue(dissolveIntensity);
+
+                Main.instance.GraphicsDevice.Textures[1] = LoadSystem.TurbulentNoise.Value;
+                Main.instance.GraphicsDevice.SamplerStates[1] = SamplerState.LinearWrap;
+
+                dissolveShader.Apply();
+
+                Main.spriteBatch.Draw(overlayTex, Vector2.Zero, null, Color.White, 0, Vector2.Zero, Projectile.scale * 5.05f, 0, 0);
+
+                Main.spriteBatch.End();
+            }
+            Texture2D overlay = lease.Target;
+
+            MetaballSystem.AddMetaballFill<SelenicMetaball>(new(overlay, Projectile.Center - Main.screenPosition, null, rotationCounter, overlay.Size() * 0.5f, 1f, 0), 1);
+
+            Main.spriteBatch.Begin(snap);
+        }
 
         return false;
     }

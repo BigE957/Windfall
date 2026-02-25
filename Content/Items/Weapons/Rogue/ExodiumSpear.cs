@@ -234,7 +234,7 @@ public class ExodiumSpearProj : ModProjectile, ILocalizedModType
         {
             Vector2 spawnPos = Projectile.Center - ((Projectile.rotation - PiOver4).ToRotationVector2() * Main.rand.NextFloat(-64f, 64f));
             if (!Main.tile[spawnPos.ToTileCoordinates()].IsTileSolid())
-                ExampleMetaballParticle.SpawnParticle(spawnPos, Main.rand.NextVector2Circular(2f, 2f), Main.rand.NextFloat(10f, 20f));
+                SelenicMetaballParticle.SpawnParticle(spawnPos, Main.rand.NextVector2Circular(2f, 2f), Main.rand.NextFloat(10f, 20f));
         }
     }
     private readonly List<int> DebuffTypes =
@@ -309,7 +309,7 @@ public class ExodiumSpearProj : ModProjectile, ILocalizedModType
             SoundEngine.PlaySound(SoundID.DD2_EtherianPortalDryadTouch, Projectile.Center);
             CameraSystem.StartScreenShake(Projectile.Center, Vector2.Zero, 5f, 10, 60);
             for (int i = 0; i <= 50; i++)
-                ExampleMetaballParticle.SpawnParticle(Projectile.Center, Main.rand.NextVector2Circular(10f, 10f) * Main.rand.NextFloat(1f, 2f), 40 * Main.rand.NextFloat(3f, 5f));
+                SelenicMetaballParticle.SpawnParticle(Projectile.Center, Main.rand.NextVector2Circular(10f, 10f) * Main.rand.NextFloat(1f, 2f), 40 * Main.rand.NextFloat(3f, 5f));
             Particle pulse = new PulseRing(Projectile.Center, Vector2.Zero, Color.Teal, 0f, 2.5f, 16);
             GeneralParticleHandler.SpawnParticle(pulse);
             Particle explosion = new DetailedExplosion(Projectile.Center, Vector2.Zero, new(117, 255, 159), new Vector2(1f, 1f), 0f, 0f, 1f, 16);

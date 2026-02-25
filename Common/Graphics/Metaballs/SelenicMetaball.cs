@@ -1,16 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Terraria;
+﻿using Terraria;
 using Windfall.Common.Systems;
-using static Windfall.Common.Graphics.Metaballs.EmpyreanMetaball;
 using static Windfall.Common.Graphics.Metaballs.MetaballSystem;
 
 namespace Windfall.Common.Graphics.Metaballs;
 
-public class ExampleMetaball : MyMetaball
+public class SelenicMetaball : MyMetaball
 {
     public override bool ShouldRender => true;
 
@@ -76,21 +70,21 @@ public class ExampleMetaball : MyMetaball
 
     internal override void Update()
     {
-        foreach (var p in ExampleMetaballParticle.ExampleParticles)
+        foreach (var p in SelenicMetaballParticle.SelenicParticles)
             p.Update();
 
-        ExampleMetaballParticle.ExampleParticles.RemoveAll(p => p.Size <= 0.05f);
+        SelenicMetaballParticle.SelenicParticles.RemoveAll(p => p.Size <= 0.05f);
     }
 
     internal override void PreDrawCallContent()
     {
-        foreach (var p in ExampleMetaballParticle.ExampleParticles)
+        foreach (var p in SelenicMetaballParticle.SelenicParticles)
             p.Draw();
     }
 
     internal override void ClearInstances()
     {
-        ExampleMetaballParticle.ExampleParticles.Clear();
+        SelenicMetaballParticle.SelenicParticles.Clear();
     }
 
     public static float SumofSines(float sineOff, float interp, float wavelength, float speed)
@@ -104,9 +98,9 @@ public class ExampleMetaball : MyMetaball
     }
 }
 
-public class ExampleMetaballParticle
+public class SelenicMetaballParticle
 {
-    internal static List<ExampleMetaballParticle> ExampleParticles { get; private set; } = [];
+    internal static List<SelenicMetaballParticle> SelenicParticles { get; private set; } = [];
 
     public float Size;
 
@@ -120,7 +114,7 @@ public class ExampleMetaballParticle
 
     public float SizeDecay;
 
-    private ExampleMetaballParticle(Vector2 center, Vector2 velocity, float size, byte layer, float speedDecay, float sizeDecay)
+    private SelenicMetaballParticle(Vector2 center, Vector2 velocity, float size, byte layer, float speedDecay, float sizeDecay)
     {
         this.Center = center;
         this.Velocity = velocity;
@@ -132,7 +126,7 @@ public class ExampleMetaballParticle
 
     public static void SpawnParticle(Vector2 center, Vector2 velocity, float size, byte layer = 1, float speedDecay = 0.99f, float sizeDecay = 0.9f)
     {
-        ExampleParticles.Add(new(center, velocity, size, layer, speedDecay, sizeDecay));
+        SelenicParticles.Add(new(center, velocity, size, layer, speedDecay, sizeDecay));
     }
 
     public void Update()
@@ -144,7 +138,7 @@ public class ExampleMetaballParticle
 
     public void Draw()
     {
-        ModContent.GetInstance<ExampleMetaball>().AddMetaballFill(new(LoadSystem.Circle.Value, Center - Main.screenPosition, null, 0f, LoadSystem.Circle.Size() * 0.5f, Size, 0), Layer);
+        ModContent.GetInstance<SelenicMetaball>().AddMetaballFill(new(LoadSystem.Circle.Value, Center - Main.screenPosition, null, 0f, LoadSystem.Circle.Size() * 0.5f, Size, 0), Layer);
     }
 }
 

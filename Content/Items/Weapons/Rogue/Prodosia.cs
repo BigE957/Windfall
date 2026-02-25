@@ -315,7 +315,7 @@ public class GoldenTrinket : ModProjectile, ILocalizedModType
     public override bool OnTileCollide(Vector2 oldVelocity)
     {
         for (int i = 0; i <= 10; i++)
-            ExampleMetaballParticle.SpawnParticle(Projectile.Center + Projectile.velocity, Main.rand.NextVector2Circular(4f, 4f), Main.rand.NextFloat(10f, 20f));
+            SelenicMetaballParticle.SpawnParticle(Projectile.Center + Projectile.velocity, Main.rand.NextVector2Circular(4f, 4f), Main.rand.NextFloat(10f, 20f));
         
         return true;
     }

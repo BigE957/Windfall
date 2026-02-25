@@ -346,7 +346,7 @@ public class FingerlingGun : ModProjectile, ILocalizedModType
 
         Texture2D metaTex = ModContent.Request<Texture2D>("Windfall/Assets/Items/Weapons/Ranged/FingerGuns/FingerGunsMetaball").Value;
 
-        MetaballSystem.AddMetaballFill<ExampleMetaball>(new(metaTex, Projectile.Center - Main.screenPosition, null, Projectile.rotation, metaTex.Size() * 0.5f, Projectile.scale, effects), 1);
+        MetaballSystem.AddMetaballFill<SelenicMetaball>(new(metaTex, Projectile.Center - Main.screenPosition, null, Projectile.rotation, metaTex.Size() * 0.5f, Projectile.scale, effects), 1);
         return false;
     }
 }

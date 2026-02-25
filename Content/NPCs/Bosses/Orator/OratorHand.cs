@@ -275,11 +275,11 @@ public class OratorHand : ModNPC
                 DeathAshParticle.CreateAshesFromNPC(NPC, NPC.velocity);
 
                 for(int i = 0; i < 30; i++)
-                    ExampleMetaballParticle.SpawnParticle(NPC.Center - (NPC.rotation.ToRotationVector2() * (NPC.width / 1.5f)) + (NPC.rotation.ToRotationVector2().RotatedBy(PiOver2) * Main.rand.NextFloat(-16f, 16f)), (NPC.rotation.ToRotationVector2().RotatedBy(Pi + Main.rand.NextFloat(-PiOver4, PiOver4)) * Main.rand.NextFloat(2f, 6f) * 3f), Main.rand.NextFloat(20f, 40f));
+                    SelenicMetaballParticle.SpawnParticle(NPC.Center - (NPC.rotation.ToRotationVector2() * (NPC.width / 1.5f)) + (NPC.rotation.ToRotationVector2().RotatedBy(PiOver2) * Main.rand.NextFloat(-16f, 16f)), (NPC.rotation.ToRotationVector2().RotatedBy(Pi + Main.rand.NextFloat(-PiOver4, PiOver4)) * Main.rand.NextFloat(2f, 6f) * 3f), Main.rand.NextFloat(20f, 40f));
             }
 
             if (deadCounter < 300)
-                ExampleMetaballParticle.SpawnParticle(NPC.Center - (NPC.rotation.ToRotationVector2() * (NPC.width / 1.5f)) + (NPC.rotation.ToRotationVector2().RotatedBy(PiOver2) * Main.rand.NextFloat(-16f, 16f)), (NPC.rotation.ToRotationVector2().RotatedBy(Pi + Main.rand.NextFloat(-PiOver4, PiOver4)) * Main.rand.NextFloat(2f, 6f) * (1f + deadCounter / 100f)), Main.rand.NextFloat(20f, 40f));
+                SelenicMetaballParticle.SpawnParticle(NPC.Center - (NPC.rotation.ToRotationVector2() * (NPC.width / 1.5f)) + (NPC.rotation.ToRotationVector2().RotatedBy(PiOver2) * Main.rand.NextFloat(-16f, 16f)), (NPC.rotation.ToRotationVector2().RotatedBy(Pi + Main.rand.NextFloat(-PiOver4, PiOver4)) * Main.rand.NextFloat(2f, 6f) * (1f + deadCounter / 100f)), Main.rand.NextFloat(20f, 40f));
 
             if (deadCounter == 420)
                 NPC.active = false;
@@ -319,7 +319,6 @@ public class OratorHand : ModNPC
                 NPC.rotation = PiOver2 + (-PiOver4 * WhatHand);
                 NPC.velocity *= 0.9f;
             }
-            ExampleMetaballParticle.SpawnParticle(NPC.Center - (NPC.rotation.ToRotationVector2() * (NPC.width / 1.5f)) + (NPC.rotation.ToRotationVector2().RotatedBy(PiOver2) * Main.rand.NextFloat(-16f, 16f)), (NPC.rotation.ToRotationVector2().RotatedBy(Pi + Main.rand.NextFloat(-PiOver4, PiOver4)) * Main.rand.NextFloat(2f, 6f)), Main.rand.NextFloat(20f, 40f));
 
         }
         else
@@ -1049,8 +1048,11 @@ public class OratorHand : ModNPC
                     #endregion
                     break;
             }
-            ExampleMetaballParticle.SpawnParticle(NPC.Center - (NPC.rotation.ToRotationVector2() * (NPC.width / 1.5f)) + (NPC.rotation.ToRotationVector2().RotatedBy(PiOver2) * Main.rand.NextFloat(-16f, 16f)), (NPC.rotation.ToRotationVector2().RotatedBy(Pi + Main.rand.NextFloat(-PiOver4, PiOver4)) * Main.rand.NextFloat(2f, 6f)), Main.rand.NextFloat(20f, 40f));
         }
+
+        Vector2 rotVec = NPC.rotation.ToRotationVector2();
+        SelenicMetaballParticle.SpawnParticle(NPC.Center - (rotVec * (NPC.width / (Main.rand.NextFloat(1.5f, 1.75f)))) + rotVec.RotatedBy(-PiOver2 * NPC.direction) * Main.rand.NextFloat(0f, 48f), (rotVec.RotatedBy(Pi + Main.rand.NextFloat(-PiOver4, PiOver4)) * Main.rand.NextFloat(1f, 5f)), Main.rand.NextFloat(20f, 30f));
+
         effectCounter++;
     }
     
@@ -1133,7 +1135,7 @@ public class OratorHand : ModNPC
         if (NPC.direction == -1)
             cuffOrigin.Y += 2;
 
-        MetaballSystem.AddMetaballFill<ExampleMetaball>(new(cuffTexture, drawPosition, cuffFrame, NPC.rotation, cuffOrigin, NPC.scale, spriteEffects), 1);
+        MetaballSystem.AddMetaballFill<SelenicMetaball>(new(cuffTexture, drawPosition, cuffFrame, NPC.rotation, cuffOrigin, NPC.scale, spriteEffects), 1);
 
         return false;
     }

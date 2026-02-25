@@ -41,7 +41,7 @@ public class OratorMonolithTile : ModTile
 
         if (Main.tile[i, j + 1].TileType != Type && Main.tile[i - 1 , j].TileType != Type)
         {
-            ExampleMetaballParticle.SpawnParticle(new Vector2(i * 16, j * 16) + new Vector2(24, -32), Vector2.Zero, 40f);
+            SelenicMetaballParticle.SpawnParticle(new Vector2(i * 16, j * 16) + new Vector2(24, -32), Vector2.Zero, 40f);
         }
     }
 

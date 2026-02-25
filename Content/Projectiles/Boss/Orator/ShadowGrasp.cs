@@ -90,7 +90,7 @@ public class ShadowGrasp : ModProjectile
         Projectile.direction = 1;// Math.Sign(Projectile.velocity.X);
         FindFrame();
         for (int i = 0; i <= 20; i++)
-            ExampleMetaballParticle.SpawnParticle(Projectile.Center, Main.rand.NextVector2Circular(7f, 7f), 40 * Main.rand.NextFloat(1.5f, 2.3f));
+            SelenicMetaballParticle.SpawnParticle(Projectile.Center, Main.rand.NextVector2Circular(7f, 7f), 40 * Main.rand.NextFloat(1.5f, 2.3f));
     }
 
     public override bool PreAI()
@@ -274,7 +274,7 @@ public class ShadowGrasp : ModProjectile
         CameraSystem.StartScreenShake(Projectile.Center, Vector2.Zero, 2.5f, 10, 30);
 
         for (int i = 0; i <= 50; i++)
-            ExampleMetaballParticle.SpawnParticle(Projectile.Center, Main.rand.NextVector2Circular(10f, 10f) * Main.rand.NextFloat(1f, 2f), 40 * Main.rand.NextFloat(3f, 5f));
+            SelenicMetaballParticle.SpawnParticle(Projectile.Center, Main.rand.NextVector2Circular(10f, 10f) * Main.rand.NextFloat(1f, 2f), 40 * Main.rand.NextFloat(3f, 5f));
 
         if (Main.netMode != NetmodeID.MultiplayerClient && Orator != null && (float)Orator.NPC.life / (float)Orator.NPC.lifeMax > 0.1f)
         {
@@ -321,7 +321,7 @@ public class ShadowGrasp : ModProjectile
         if (Projectile.spriteDirection == -1)
             spriteEffects = SpriteEffects.FlipVertically;
 
-        MetaballSystem.AddMetaballFill<ExampleMetaball>(new(TextureAssets.Projectile[Type].Value, Projectile.Center - Main.screenPosition, frame, Projectile.rotation, frame.Size() * 0.5f, Projectile.scale, spriteEffects), 1);
+        MetaballSystem.AddMetaballFill<SelenicMetaball>(new(TextureAssets.Projectile[Type].Value, Projectile.Center - Main.screenPosition, frame, Projectile.rotation, frame.Size() * 0.5f, Projectile.scale, spriteEffects), 1);
         return false;
     }
 
@@ -334,6 +334,6 @@ public class ShadowGrasp : ModProjectile
         if (Projectile.spriteDirection == -1)
             spriteEffects = SpriteEffects.FlipVertically;
 
-        MetaballSystem.AddMetaballEdge<ExampleMetaball>(new(texture, Projectile.Center - Main.screenPosition, frame, Projectile.rotation, frame.Size() * 0.5f, Projectile.scale, spriteEffects), 1);
+        MetaballSystem.AddMetaballEdge<SelenicMetaball>(new(texture, Projectile.Center - Main.screenPosition, frame, Projectile.rotation, frame.Size() * 0.5f, Projectile.scale, spriteEffects), 1);
     }
 }

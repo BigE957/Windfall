@@ -244,7 +244,7 @@ public class SealingRitualSystem : ModSystem
                                 orator.direction = Math.Sign(Main.player[0].Center.X - orator.Center.X);
                                 SoundEngine.PlaySound(SoundID.DD2_EtherianPortalDryadTouch, orator.Center);
                                 for (int i = 0; i < 32; i++)
-                                    ExampleMetaballParticle.SpawnParticle(orator.Center + new Vector2(Main.rand.NextFloat(-64, 64), 64), Vector2.UnitY * Main.rand.NextFloat(4f, 24f) * -1, Main.rand.NextFloat(110f, 130f));
+                                    SelenicMetaballParticle.SpawnParticle(orator.Center + new Vector2(Main.rand.NextFloat(-64, 64), 64), Vector2.UnitY * Main.rand.NextFloat(4f, 24f) * -1, Main.rand.NextFloat(110f, 130f));
                                 break;
 
                             case 710:
@@ -324,7 +324,7 @@ public class SealingRitualSystem : ModSystem
                             float width = 64f * ExpInEasing(ratio);
                             width = Clamp(width, 0f, 72f);
                             for (int i = 0; i < 18; i++)
-                                ExampleMetaballParticle.SpawnParticle(new Vector2(RitualWorld.X + Main.rand.NextFloat(-width, width), RitualWorld.Y + Main.rand.NextFloat(0, 24f)), new Vector2(Main.rand.Next(-2, 2), Main.rand.Next(-3, -1) * SineInEasing(ratio)), Main.rand.NextFloat(14f, 28f) * ratio);
+                                SelenicMetaballParticle.SpawnParticle(new Vector2(RitualWorld.X + Main.rand.NextFloat(-width, width), RitualWorld.Y + Main.rand.NextFloat(0, 24f)), new Vector2(Main.rand.Next(-2, 2), Main.rand.Next(-3, -1) * SineInEasing(ratio)), Main.rand.NextFloat(14f, 28f) * ratio);
                         }
 
                         if (Recruit1.Center.Y <= SealingTablet.Center.Y)

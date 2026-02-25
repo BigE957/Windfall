@@ -2,11 +2,14 @@
 using CalamityMod.Particles;
 using CalamityMod.World;
 using Daybreak.Common.Rendering;
+using Microsoft.Xna.Framework.Graphics;
 using ReLogic.Utilities;
+using Terraria.Graphics.Effects;
 using Terraria.Graphics.Shaders;
 using Windfall.Common.Graphics.Metaballs;
 using Windfall.Common.Systems;
 using Windfall.Content.NPCs.Bosses.Orator;
+using Windfall.Content.Projectiles.Debug;
 using Windfall.Content.Skies;
 
 namespace Windfall.Content.Projectiles.Boss.Orator;
@@ -49,7 +52,7 @@ public class SelenicIdol : ModProjectile
         Projectile.netImportant = true;
         Projectile.hide = true;
 
-        sampleOffset = Main.rand.NextVector2Circular(240, 240);
+        SampleOffset = Main.rand.NextVector2Circular(240, 240);
     }        
 
     private int Time
@@ -69,9 +72,9 @@ public class SelenicIdol : ModProjectile
         get => (States)Projectile.ai[0];
         set => Projectile.ai[0] = (float)value;
     }
-    Vector2 offset = Vector2.Zero;
+    Vector2 sampleOff = Vector2.Zero;
     public float DissolveIntensity { get => Projectile.ai[2]; set => Projectile.ai[2] = value; }
-    public Vector2 sampleOffset { get => offset; set => offset = value; }
+    public Vector2 SampleOffset { get => sampleOff; set => sampleOff = value; }
 
     int deathCounter = 0;
     float rotationCounter = 0;
@@ -85,7 +88,7 @@ public class SelenicIdol : ModProjectile
         for (int i = 0; i <= 50; i++)
         {
             Vector2 spawnPos = Projectile.Center + Main.rand.NextVector2Circular(10f, 10f) * 10;
-            ExampleMetaballParticle.SpawnParticle(spawnPos, (Projectile.Center - spawnPos).SafeNormalize(Vector2.Zero) * 4, 40 * Main.rand.NextFloat(3f, 5f));
+            SelenicMetaballParticle.SpawnParticle(spawnPos, (Projectile.Center - spawnPos).SafeNormalize(Vector2.Zero) * 4, 40 * Main.rand.NextFloat(3f, 5f));
         }
         DissolveIntensity = 1;
     }
@@ -114,7 +117,7 @@ public class SelenicIdol : ModProjectile
                     float lerp = Clamp(Time / 60f, 0f, 1f);
                     Projectile.scale = CircOutEasing(lerp);
                     DissolveIntensity = SineInEasing(lerp);
-                    ExampleMetaballParticle.SpawnParticle(Projectile.Center + (Main.rand.NextVector2Circular(48f, 48f) * Projectile.scale), Main.rand.NextVector2Circular(18, 18) + Projectile.velocity, 200 * Main.rand.NextFloat(0.75f, 0.9f) * (1 - lerp));
+                    SelenicMetaballParticle.SpawnParticle(Projectile.Center + (Main.rand.NextVector2Circular(48f, 48f) * Projectile.scale), Main.rand.NextVector2Circular(18, 18) + Projectile.velocity, 200 * Main.rand.NextFloat(0.75f, 0.9f) * (1 - lerp));
                 }
                 
                 Projectile.velocity += (target.Center - Projectile.Center).SafeNormalize(Vector2.Zero) * Acceleration;
@@ -146,7 +149,7 @@ public class SelenicIdol : ModProjectile
                 break;
             case States.Dying:
                 if(deathCounter == 0)
-                    sampleOffset = Main.rand.NextVector2Circular(240, 240);
+                    SampleOffset = Main.rand.NextVector2Circular(240, 240);
                 float lerpValue = Clamp(deathCounter / 150f, 0f, 1f);
 
                 Projectile.scale = Lerp(1f, 0.5f, lerpValue);
@@ -172,10 +175,10 @@ public class SelenicIdol : ModProjectile
                     Projectile.oldPos[i] += shakeOffset;
                 #endregion
 
-                if (DissolveIntensity < 0.5f)
+                if (DissolveIntensity == 0f)
                 {
-                    ExampleMetaballParticle.SpawnParticle(Projectile.Center + (Main.rand.NextVector2Circular(25f, 25f) * Projectile.scale), Main.rand.NextVector2Circular(12, 12) * (lerpValue + 0.5f), 180 * (Main.rand.NextFloat(0.75f, 0.9f)));
-                    ExampleMetaballParticle.SpawnParticle(Projectile.Center + (Main.rand.NextVector2Circular(25f, 25f) * Projectile.scale), Main.rand.NextVector2Circular(18, 18) * (lerpValue + 0.5f), 90 * (Main.rand.NextFloat(0.75f, 0.9f)));
+                    SelenicMetaballParticle.SpawnParticle(Projectile.Center + (Main.rand.NextVector2Circular(25f, 25f) * Projectile.scale), Main.rand.NextVector2Circular(12, 12) * (lerpValue + 0.5f), 180 * (Main.rand.NextFloat(0.75f, 0.9f)));
+                    SelenicMetaballParticle.SpawnParticle(Projectile.Center + (Main.rand.NextVector2Circular(25f, 25f) * Projectile.scale), Main.rand.NextVector2Circular(18, 18) * (lerpValue + 0.5f), 90 * (Main.rand.NextFloat(0.75f, 0.9f)));
                 }
                 /*
                 else if(Main.rand.NextBool(4))
@@ -192,7 +195,7 @@ public class SelenicIdol : ModProjectile
                 CameraSystem.StartScreenShake(Projectile.Center, Vector2.Zero, 7.5f, 15, 150);
 
                 for (int i = 0; i <= 50; i++)
-                    ExampleMetaballParticle.SpawnParticle(Projectile.Center, Main.rand.NextVector2Circular(10f, 10f) * Main.rand.NextFloat(1f, 2f), 40 * Main.rand.NextFloat(3f, 5f));
+                    SelenicMetaballParticle.SpawnParticle(Projectile.Center, Main.rand.NextVector2Circular(10f, 10f) * Main.rand.NextFloat(1f, 2f), 40 * Main.rand.NextFloat(3f, 5f));
                 NPC Orator = null;
                 if (NPC.FindFirstNPC(ModContent.NPCType<TheOrator>()) != -1)
                     Orator = Main.npc[NPC.FindFirstNPC(ModContent.NPCType<TheOrator>())];
@@ -261,7 +264,45 @@ public class SelenicIdol : ModProjectile
 
         tex = TextureAssets.Projectile[Type].Value;
 
-        Main.EntitySpriteDraw(tex, Projectile.Center - Main.screenPosition, null, Color.White, rotationCounter, tex.Size() * 0.5f, Projectile.scale, 0);
+        Main.spriteBatch.Draw(tex, Projectile.Center - Main.screenPosition, null, Color.White, rotationCounter, tex.Size() * 0.5f, Projectile.scale, 0, 0);
+
+        Texture2D overlayTex = LoadSystem.Circle.Value;
+        Vector2 size = overlayTex.Size() * Projectile.scale * 5.05f;
+
+        if(DissolveIntensity == 0)
+        {
+            MetaballSystem.AddMetaballFill<SelenicMetaball>(new(overlayTex, Projectile.Center - Main.screenPosition, null, rotationCounter, overlayTex.Size() * 0.5f, Projectile.scale * 5.05f, 0), 1);
+        }
+        else if (DissolveIntensity < 1 && size.X > 0 && size.Y > 0)
+        {
+            Main.spriteBatch.End(out var snap);
+
+            using RenderTargetLease lease = RenderTargetPool.Shared.Rent(Main.instance.GraphicsDevice, (int)Math.Ceiling(size.X), (int)Math.Ceiling(size.Y), RenderTargetDescriptor.Default);
+
+            using (lease.Scope(clearColor: Color.Transparent))
+            {
+                Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.NonPremultiplied, Main.DefaultSamplerState, DepthStencilState.None, RasterizerState.CullNone, null, Matrix.Identity);
+
+                MiscShaderData dissolveShader = GameShaders.Misc["CalamityMod:Dissolve"];
+
+                dissolveShader.Shader.Parameters["noiseScale"].SetValue(1f);
+                dissolveShader.Shader.Parameters["dissolveIntensity"].SetValue(DissolveIntensity);
+
+                Main.instance.GraphicsDevice.Textures[1] = LoadSystem.TurbulentNoise.Value;
+                Main.instance.GraphicsDevice.SamplerStates[1] = SamplerState.LinearWrap;
+
+                dissolveShader.Apply();
+
+                Main.spriteBatch.Draw(overlayTex, Vector2.Zero, null, Color.White, 0, Vector2.Zero, Projectile.scale * 5.05f, 0, 0);
+
+                Main.spriteBatch.End();
+            }
+            Texture2D overlay = lease.Target;
+
+            MetaballSystem.AddMetaballFill<SelenicMetaball>(new(overlay, Projectile.Center - Main.screenPosition, null, rotationCounter, overlay.Size() * 0.5f, 1f, 0), 1);
+
+            Main.spriteBatch.Begin(snap);
+        }
 
         return false;
     }
@@ -282,13 +323,4 @@ public class SelenicIdol : ModProjectile
     }
 
     internal float WidthFunction(float completionRatio, Vector2 v) => 200f * (1f - completionRatio) * 0.8f * Projectile.scale;
-
-    public void DrawOverlay(SpriteBatch sb)
-    {
-        Texture2D tex = LoadSystem.Circle.Value;
-        Vector2 offset = Projectile.velocity;
-        if (Main.gamePaused)
-            offset = Vector2.Zero;
-        Main.spriteBatch.Draw(tex, Projectile.Center - Main.screenPosition + offset, null, Color.White, rotationCounter, tex.Size() * 0.5f, Projectile.scale * 5.05f, 0, 0);
-    }
 }

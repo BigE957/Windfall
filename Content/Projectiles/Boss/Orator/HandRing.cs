@@ -102,7 +102,7 @@ public class HandRing : ModProjectile
         }
         */
 
-        Lighting.AddLight(Projectile.Center, ExampleMetaball.BorderColor(0).ToVector3());
+        Lighting.AddLight(Projectile.Center, SelenicMetaball.BorderColor(0).ToVector3());
         Time++;
     }
     public override bool PreDraw(ref Color lightColor)
@@ -122,7 +122,7 @@ public class HandRing : ModProjectile
                 break;
         }
         if(Projectile.timeLeft <= 90)
-            color = Color.Lerp(color, ExampleMetaball.BorderColor(0), (90 - Projectile.timeLeft) / 60f);
+            color = Color.Lerp(color, SelenicMetaball.BorderColor(0), (90 - Projectile.timeLeft) / 60f);
         DrawCenteredAfterimages(Projectile, ProjectileID.Sets.TrailingMode[Projectile.type], color * AfterImageOpacity, 2, texture: WhiteOutTexture);
 
         Vector2 drawPosition = Projectile.Center - Main.screenPosition;
@@ -142,7 +142,7 @@ public class HandRing : ModProjectile
             ratio = (90 - Projectile.timeLeft) / 60f;
         ratio = Clamp(ratio, 0f, 1f);
 
-        MetaballSystem.AddMetaballFill<ExampleMetaball>(new(WhiteOutTexture, drawPosition, WhiteOutTexture.Frame(), Projectile.rotation, WhiteOutTexture.Frame().Size() * 0.5f, Projectile.scale * ratio, 0), 1);
+        MetaballSystem.AddMetaballFill<SelenicMetaball>(new(WhiteOutTexture, drawPosition, WhiteOutTexture.Frame(), Projectile.rotation, WhiteOutTexture.Frame().Size() * 0.5f, Projectile.scale * ratio, 0), 1);
 
         return false;
     }
@@ -166,7 +166,7 @@ public class HandRing : ModProjectile
     {
         for (int i = 0; i <= 10; i++)
         {
-            ExampleMetaballParticle.SpawnParticle(Projectile.Center, Main.rand.NextVector2Circular(4f, 4f), Main.rand.NextFloat(10f, 20f));
+            SelenicMetaballParticle.SpawnParticle(Projectile.Center, Main.rand.NextVector2Circular(4f, 4f), Main.rand.NextFloat(10f, 20f));
         }
     }
 

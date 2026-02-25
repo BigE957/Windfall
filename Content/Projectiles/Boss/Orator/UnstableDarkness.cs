@@ -42,7 +42,7 @@ public class UnstableDarkness: ModProjectile
         for (int i = 0; i <= 50; i++)
         {
             Vector2 spawnPos = Projectile.Center + Main.rand.NextVector2Circular(10f, 10f) * 10;
-            ExampleMetaballParticle.SpawnParticle(spawnPos, (Projectile.Center - spawnPos).SafeNormalize(Vector2.Zero) * 4, 40 * Main.rand.NextFloat(3f, 5f));
+            SelenicMetaballParticle.SpawnParticle(spawnPos, (Projectile.Center - spawnPos).SafeNormalize(Vector2.Zero) * 4, 40 * Main.rand.NextFloat(3f, 5f));
         }
         /*
         for (int i = 0; i < 30; i++)
@@ -88,7 +88,7 @@ public class UnstableDarkness: ModProjectile
         CameraSystem.StartScreenShake(Projectile.Center, Vector2.Zero, 7.5f, 15, 150);
 
         for (int i = 0; i <= 50; i++)
-            ExampleMetaballParticle.SpawnParticle(Projectile.Center, Main.rand.NextVector2Circular(10f, 10f) * Main.rand.NextFloat(1f, 2f), 40 * Main.rand.NextFloat(3f, 5f));
+            SelenicMetaballParticle.SpawnParticle(Projectile.Center, Main.rand.NextVector2Circular(10f, 10f) * Main.rand.NextFloat(1f, 2f), 40 * Main.rand.NextFloat(3f, 5f));
 
         NPC Orator = null;
         if (NPC.FindFirstNPC(ModContent.NPCType<TheOrator>()) != -1)
@@ -108,11 +108,11 @@ public class UnstableDarkness: ModProjectile
     private void ParticleTrail()
     {
         //smaller particles
-        ExampleMetaballParticle.SpawnParticle(Projectile.Center + (Main.rand.NextVector2Circular(25f, 25f) * Projectile.scale), Projectile.velocity.SafeNormalize(Vector2.Zero) * Main.rand.NextFloat(0f, 5f), 40 * (Main.rand.NextFloat(0.75f, 0.9f) * Projectile.scale));
+        SelenicMetaballParticle.SpawnParticle(Projectile.Center + (Main.rand.NextVector2Circular(25f, 25f) * Projectile.scale), Projectile.velocity.SafeNormalize(Vector2.Zero) * Main.rand.NextFloat(0f, 5f), 40 * (Main.rand.NextFloat(0.75f, 0.9f) * Projectile.scale));
 
         //larger trails
         float gasSize = 90 * Projectile.scale;
-        ExampleMetaballParticle.SpawnParticle(Projectile.Center - Projectile.velocity * (2 * Projectile.scale), Vector2.Zero, gasSize);
+        SelenicMetaballParticle.SpawnParticle(Projectile.Center - Projectile.velocity * (2 * Projectile.scale), Vector2.Zero, gasSize);
     }
     public override bool? Colliding(Rectangle projHitbox, Rectangle targetHitbox)
     {
@@ -122,7 +122,7 @@ public class UnstableDarkness: ModProjectile
     }
     public override bool PreDraw(ref Color lightColor)
     {
-        MetaballSystem.AddMetaballFill<ExampleMetaball>(new(Projectile), 1);
+        MetaballSystem.AddMetaballFill<SelenicMetaball>(new(Projectile), 1);
         return false;
     }
 }

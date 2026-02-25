@@ -121,14 +121,16 @@ public class DarkTide : ModProjectile
         }
         Vector2 spawnPosition = Projectile.Center + (trueRotation.ToRotationVector2() * (Projectile.width / 2.05f)) + (trueRotation.ToRotationVector2().RotatedBy(PiOver2) * Main.rand.NextFloat(-Projectile.width / 2, Projectile.width / 2));
         Projectile.rotation = trueRotation;
-        ExampleMetaballParticle.SpawnParticle(spawnPosition, trueRotation.ToRotationVector2().RotatedBy(Main.rand.NextFloat(-Pi/2, Pi/2)) * particleVelocity, Main.rand.NextFloat(80f, 120f));
+        SelenicMetaballParticle.SpawnParticle(spawnPosition, trueRotation.ToRotationVector2().RotatedBy(Main.rand.NextFloat(-Pi/2, Pi/2)) * particleVelocity, Main.rand.NextFloat(80f, 120f));
+        SelenicMetaballParticle.SpawnParticle(spawnPosition + trueRotation.ToRotationVector2() * 100, trueRotation.ToRotationVector2().RotatedBy(Main.rand.NextFloat(-Pi / 2, Pi / 2)) * particleVelocity, Main.rand.NextFloat(80f, 120f), 0);
+
     }
     public override Color? GetAlpha(Color lightColor) => Color.White * Projectile.Opacity;
 
     private static Color ColorFunction(float completionRatio)
     {
-        Color colorA = Color.Lerp(Color.LimeGreen, Color.Orange, ExampleMetaball.BorderLerpValue(0));
-        Color colorB = Color.Lerp(Color.GreenYellow, Color.Goldenrod, ExampleMetaball.BorderLerpValue(0));
+        Color colorA = Color.Lerp(Color.LimeGreen, Color.Orange, SelenicMetaball.BorderLerpValue(0));
+        Color colorB = Color.Lerp(Color.GreenYellow, Color.Goldenrod, SelenicMetaball.BorderLerpValue(0));
 
         float fadeToEnd = Lerp(0.65f, 1f, (float)Math.Cos(-Main.GlobalTimeWrappedHourly * 3f) * 0.5f + 0.5f);
 
@@ -170,7 +172,7 @@ public class DarkTide : ModProjectile
         Main.spriteBatch.End();
         Main.spriteBatch.Begin(scope);
 
-        MetaballSystem.AddMetaballFill<ExampleMetaball>(new(Projectile), 1);
+        MetaballSystem.AddMetaballFill<SelenicMetaball>(new(Projectile), 1);
 
         const int particleCounter = 50;
         for (int i = 0; i < particleCounter; i++)
@@ -178,7 +180,7 @@ public class DarkTide : ModProjectile
             float bump = i * 1;
             Vector2 Offset = (trueRotation.ToRotationVector2() * (Projectile.width / 2.7f)) + (trueRotation.ToRotationVector2().RotatedBy(PiOver2) * ((Projectile.width / 2) - Projectile.width / particleCounter * bump));
             Vector2 Center = Projectile.Center + Offset + (new Vector2(Projectile.width / 2 * (Projectile.scale / 5f) * 1.05f, 0).RotatedBy(Projectile.rotation));
-            Center += (Projectile.Center + Offset - Center).SafeNormalize(Vector2.Zero) * ExampleMetaball.SumofSines(0.5f * bump, 30, 1.5f, 2f);
+            Center += (Projectile.Center + Offset - Center).SafeNormalize(Vector2.Zero) * SelenicMetaball.SumofSines(0.5f * bump, 30, 1.5f, 2f);
             Center -= Projectile.velocity / 2;
 
             float size = (i % 10) switch
@@ -196,8 +198,8 @@ public class DarkTide : ModProjectile
                 _ => 2.5f
             };
 
-            MetaballSystem.AddMetaballFill<ExampleMetaball>(new(LoadSystem.Circle.Value, Center - Main.screenPosition, null, 0, LoadSystem.Circle.Size() * 0.5f, size, 0), 1);
-            MetaballSystem.AddMetaballFill<ExampleMetaball>(new(LoadSystem.Circle.Value, Center + trueRotation.ToRotationVector2() * 100 - Main.screenPosition, null, 0, LoadSystem.Circle.Size() * 0.5f, size, 0), 0);
+            MetaballSystem.AddMetaballFill<SelenicMetaball>(new(LoadSystem.Circle.Value, Center - Main.screenPosition, null, 0, LoadSystem.Circle.Size() * 0.5f, size, 0), 1);
+            MetaballSystem.AddMetaballFill<SelenicMetaball>(new(LoadSystem.Circle.Value, Center + trueRotation.ToRotationVector2() * 100 - Main.screenPosition, null, 0, LoadSystem.Circle.Size() * 0.5f, size, 0), 0);
         }
 
         return false;

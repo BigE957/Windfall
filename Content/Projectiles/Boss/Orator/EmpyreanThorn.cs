@@ -92,7 +92,7 @@ public class EmpyreanThorn : ModProjectile
             Projectile.scale = (InitialScale / 2f);
 
             if (aiCounter < delay + 30)
-                ExampleMetaballParticle.SpawnParticle(initialPoint, Projectile.rotation.ToRotationVector2().RotatedBy(Main.rand.NextFloat(-0.15f, 0.15f)) * Main.rand.NextFloat(16f, 18f), 40f);
+                SelenicMetaballParticle.SpawnParticle(initialPoint, Projectile.rotation.ToRotationVector2().RotatedBy(Main.rand.NextFloat(-0.15f, 0.15f)) * Main.rand.NextFloat(16f, 18f), 40f);
             
             //if (!NPC.AnyNPCs(ModContent.NPCType<TheOrator>()) && aiCounter < delay + 60)
             //    aiCounter = delay + 60;
@@ -121,7 +121,7 @@ public class EmpyreanThorn : ModProjectile
 
         Color drawColor = Color.White;
 
-        MetaballSystem.AddMetaballFill<ExampleMetaball>(new(tex, drawPosition, frame, Projectile.rotation, frame.Size() * 0.5f, Projectile.scale, 0), 1);
+        MetaballSystem.AddMetaballFill<SelenicMetaball>(new(tex, drawPosition, frame, Projectile.rotation, frame.Size() * 0.5f, Projectile.scale, 0), 1);
 
         return false;
     }
