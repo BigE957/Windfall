@@ -1,9 +1,10 @@
-
+﻿
 <Project Sdk="Microsoft.NET.Sdk">
   <Import Project="..\tModLoader.targets" />
   <PropertyGroup>
     <AssemblyName>Windfall</AssemblyName>
     <LangVersion>latest</LangVersion>
+	<AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
     <PropertyGroup>
 		<NoWarn>MSB3270</NoWarn>

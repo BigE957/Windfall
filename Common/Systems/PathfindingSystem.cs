@@ -11,7 +11,27 @@ public class PathfindingSystem : ModSystem
     // Give em a watch!
 
 
-    private static Node[][] NodeMap;
+    // --- Chunk Configuration ---
+    // Each chunk covers a CHUNK_SIZE x CHUNK_SIZE tile region.
+    // Larger values = fewer chunks, more memory per chunk load.
+    // Smaller values = more chunks, finer-grained eviction.
+    public const int CHUNK_SIZE = 64;
+
+    // Maximum number of chunks to keep loaded simultaneously.
+    // A 1225-tile-radius search area covers roughly a 39x39 chunk region at most,
+    public const int MAX_LOADED_CHUNKS = 256;
+
+    private static NodeChunk[][] ChunkMap;   // [chunkX][chunkY]
+    private static int ChunkCountX;
+    private static int ChunkCountY;
+    private static int WorldMaxX;
+    private static int WorldMaxY;
+
+    // LRU eviction: tracks which chunks were accessed most recently
+    private static readonly LinkedList<(int cx, int cy)> LruList = new();
+    private static readonly Dictionary<(int, int), LinkedListNode<(int, int)>> LruIndex = new();
+    private static int LoadedChunkCount = 0;
+
     public static readonly Point16[] Dirs =
     [
         new(-1, -1), // 0: Top-left
@@ -27,90 +47,143 @@ public class PathfindingSystem : ModSystem
     public override void OnWorldLoad()
     {
         Windfall.Instance.Logger.Debug("Beginning Pathfinding Initialization.");
-        ushort MaxX = (ushort)Main.maxTilesX; // 6400 or 8400
-        ushort MaxY = (ushort)Main.maxTilesY; // 1800 or 2400
-        NodeMap = new Node[MaxX][];
 
-        // Configuration for optimal parallelism with large grids
-        int processorCount = Environment.ProcessorCount;
+        WorldMaxX = Main.maxTilesX;
+        WorldMaxY = Main.maxTilesY;
 
-        Windfall.Instance.Logger.Debug("System processor count: " + processorCount);
+        ChunkCountX = (WorldMaxX + CHUNK_SIZE - 1) / CHUNK_SIZE;
+        ChunkCountY = (WorldMaxY + CHUNK_SIZE - 1) / CHUNK_SIZE;
 
-        Windfall.Instance.Logger.Debug("Beginning NodeMap array initialization.");
-        var watch = System.Diagnostics.Stopwatch.StartNew();
+        ChunkMap = new NodeChunk[ChunkCountX][];
+        for (int cx = 0; cx < ChunkCountX; cx++)
+            ChunkMap[cx] = new NodeChunk[ChunkCountY];
 
-        // Step 1: Initialize the arrays in parallel with custom partitioning
-        // Store the task for proper synchronization
-        Task initNodesTask = Task.Run(() =>
-        {
-            Parallel.For(0, MaxX, new ParallelOptions { MaxDegreeOfParallelism = processorCount }, x =>
-            {
-                NodeMap[x] = new Node[MaxY];
+        LruList.Clear();
+        LruIndex.Clear();
+        LoadedChunkCount = 0;
 
-                // Create nodes in bulk for each column
-                for (ushort y = 0; y < MaxY; y++)
-                    NodeMap[x][y] = new Node((ushort)x, y);
-            });
-        });
-
-        // Ensure the first step completes before proceeding
-        initNodesTask.Wait();
-        watch.Stop();
-        Windfall.Instance.Logger.Debug("NodeMap array initialized in " + watch.ElapsedMilliseconds + "ms");
-
-        Windfall.Instance.Logger.Debug("Beginning Neighbor initialization.");
-        watch = System.Diagnostics.Stopwatch.StartNew();
-
-        // Step 2: Initialize neighbors in parallel with improved partitioning
-        Task initNeighborsTask = Task.Run(() =>
-        {
-            Parallel.For(0, MaxX, new ParallelOptions { MaxDegreeOfParallelism = processorCount }, x =>
-            {
-                // Cache the column to improve memory access patterns
-                Node[] column = NodeMap[x];
-
-                // Pre-calculate frequently accessed values
-                int maxXIdx = MaxX - 1;
-                int maxYIdx = MaxY - 1;
-
-                for (int y = 0; y < MaxY; y++)
-                {
-                    // For struct types we need to get a copy, modify it, and place it back
-                    Node node = NodeMap[x][y];
-                    node.InitNeighbors(maxXIdx, maxYIdx);
-                    NodeMap[x][y] = node;
-                }
-            });
-        });
-
-        initNeighborsTask.Wait();
-        watch.Stop();
-        Windfall.Instance.Logger.Debug("Neighbors initialized in" + watch.ElapsedMilliseconds + "ms");
+        Windfall.Instance.Logger.Debug(
+            $"Chunk map initialized: {ChunkCountX}x{ChunkCountY} chunks " +
+            $"({ChunkCountX * ChunkCountY} total, max {MAX_LOADED_CHUNKS} loaded at once). " +
+            $"World size: {WorldMaxX}x{WorldMaxY}");
     }
 
     public override void OnWorldUnload()
     {
-        for (int i = 0; i < NodeMap.Length; i++)
-            NodeMap[i] = null;
-        NodeMap = null;
+        if (ChunkMap == null)
+            return;
+
+        for (int cx = 0; cx < ChunkCountX; cx++)
+        {
+            if (ChunkMap[cx] != null)
+            {
+                for (int cy = 0; cy < ChunkCountY; cy++)
+                    ChunkMap[cx][cy] = null;
+                ChunkMap[cx] = null;
+            }
+        }
+
+        ChunkMap = null;
+        LruList.Clear();
+        LruIndex.Clear();
+        LoadedChunkCount = 0;
     }
 
-    public struct Node(ushort x, ushort y) : IComparable<Node>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public static ref Node GetNode(int worldX, int worldY)
+    {
+        int cx = worldX / CHUNK_SIZE;
+        int cy = worldY / CHUNK_SIZE;
+        NodeChunk chunk = GetOrLoadChunk(cx, cy);
+        int localX = worldX - cx * CHUNK_SIZE;
+        int localY = worldY - cy * CHUNK_SIZE;
+        return ref chunk.Nodes[localX * chunk.Height + localY];
+    }
+
+    private static NodeChunk GetOrLoadChunk(int cx, int cy)
+    {
+        NodeChunk chunk = ChunkMap[cx][cy];
+        if (chunk != null)
+        {
+            // Promote to most-recently-used
+            var node = LruIndex[(cx, cy)];
+            LruList.Remove(node);
+            LruList.AddLast(node);
+            return chunk;
+        }
+
+        // Evict least-recently-used chunk if we're at the cap
+        if (LoadedChunkCount >= MAX_LOADED_CHUNKS)
+            EvictLruChunk();
+
+        // Load (generate) the new chunk
+        chunk = new NodeChunk(cx, cy, WorldMaxX - 1, WorldMaxY - 1);
+        ChunkMap[cx][cy] = chunk;
+        LoadedChunkCount++;
+
+        var lruNode = LruList.AddLast((cx, cy));
+        LruIndex[(cx, cy)] = lruNode;
+
+        return chunk;
+    }
+
+    private static void EvictLruChunk()
+    {
+        var lruNode = LruList.First;
+        if (lruNode == null)
+            return;
+
+        (int cx, int cy) = lruNode.Value;
+        LruList.RemoveFirst();
+        LruIndex.Remove((cx, cy));
+
+        ChunkMap[cx][cy] = null;
+        LoadedChunkCount--;
+    }
+
+    public class NodeChunk
+    {
+        public readonly Node[] Nodes;
+        public readonly int Width;   // actual tile width  (may be < CHUNK_SIZE at world edge)
+        public readonly int Height;  // actual tile height (may be < CHUNK_SIZE at world edge)
+
+        public NodeChunk(int chunkX, int chunkY, int maxWorldX, int maxWorldY)
+        {
+            int startX = chunkX * CHUNK_SIZE;
+            int startY = chunkY * CHUNK_SIZE;
+
+            Width = Math.Min(CHUNK_SIZE, maxWorldX + 1 - startX);
+            Height = Math.Min(CHUNK_SIZE, maxWorldY + 1 - startY);
+
+            Nodes = new Node[Width * Height];
+
+            // Initialize all nodes in this chunk (neighbors computed at init time)
+            for (int lx = 0; lx < Width; lx++)
+            {
+                for (int ly = 0; ly < Height; ly++)
+                {
+                    ushort wx = (ushort)(startX + lx);
+                    ushort wy = (ushort)(startY + ly);
+                    ref Node n = ref Nodes[lx * Height + ly];
+                    n = new Node(wx, wy);
+                    n.InitNeighbors(maxWorldX, maxWorldY);
+                }
+            }
+        }
+    }
+
+    public unsafe struct Node(ushort x, ushort y) : IComparable<Node>
     {
         public readonly ushort X = x;
         public readonly ushort Y = y;
 
         public Point TilePosition => new(X, Y);
 
-        public byte[] NeighborLocations = new byte[8];
+        public fixed byte NeighborLocations[8];
         public byte NeighborCount = 0;
         public Point16 ConnectionLocation = new(-1, -1);
-
         public int G = int.MaxValue;
         public int F = int.MaxValue;
-
-        [NonSerialized]
-        public int QueueIndex = -1;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public void SetConnection(Point16 p) => ConnectionLocation = p;
@@ -127,9 +200,6 @@ public class PathfindingSystem : ModSystem
             int dx = Math.Abs(X - targetX);
             int dy = Math.Abs(Y - targetY);
             int min = Math.Min(dx, dy);
-            // For 10*x and 14*y, we use optimized multiplications
-            // 10*x = 8*x + 2*x = x<<3 + x<<1
-            // 14*y = 16*y - 2*y = y<<4 - y<<1
             return (min << 4) - (min << 1) + ((dx + dy - 2 * min) << 3) + ((dx + dy - 2 * min) << 1);
         }
 
@@ -137,36 +207,19 @@ public class PathfindingSystem : ModSystem
         {
             NeighborCount = 0;
 
-            // Boundary checks using pre-calculated values passed into the method
             bool hasLeft = X > 0;
             bool hasRight = X < maxX;
             bool hasTop = Y > 0;
             bool hasBottom = Y < maxY;
 
-            // Top-left
-            if (hasLeft && hasTop)
-                NeighborLocations[NeighborCount++] = 0;
-            // Top
-            if (hasTop)
-                NeighborLocations[NeighborCount++] = 1;
-            // Top-right
-            if (hasRight && hasTop)
-                NeighborLocations[NeighborCount++] = 2;
-            // Left
-            if (hasLeft)
-                NeighborLocations[NeighborCount++] = 3;
-            // Right
-            if (hasRight)
-                NeighborLocations[NeighborCount++] = 4;
-            // Bottom-left
-            if (hasLeft && hasBottom)
-                NeighborLocations[NeighborCount++] = 5;
-            // Bottom
-            if (hasBottom)
-                NeighborLocations[NeighborCount++] = 6;
-            // Bottom-right
-            if (hasRight && hasBottom)
-                NeighborLocations[NeighborCount++] = 7;
+            if (hasLeft && hasTop) NeighborLocations[NeighborCount++] = 0;
+            if (hasTop) NeighborLocations[NeighborCount++] = 1;
+            if (hasRight && hasTop) NeighborLocations[NeighborCount++] = 2;
+            if (hasLeft) NeighborLocations[NeighborCount++] = 3;
+            if (hasRight) NeighborLocations[NeighborCount++] = 4;
+            if (hasLeft && hasBottom) NeighborLocations[NeighborCount++] = 5;
+            if (hasBottom) NeighborLocations[NeighborCount++] = 6;
+            if (hasRight && hasBottom) NeighborLocations[NeighborCount++] = 7;
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -199,43 +252,43 @@ public class PathfindingSystem : ModSystem
     {
         private struct QueueItem
         {
-            public Node Item;
+            public Point16 Key;
             public float Priority;
         }
 
         private QueueItem[] heap = new QueueItem[capacity > 0 ? capacity : 16];
-        private readonly Dictionary<Point16, int> itemPosToIndex = new(capacity);
+        private readonly Dictionary<Point16, int> keyToIndex = new(capacity);
         private int count = 0;
 
         public int Count => count;
 
-        public bool Contains(Node item) => itemPosToIndex.ContainsKey(new Point16(item.X, item.Y));
+        public bool Contains(Point16 key) => keyToIndex.ContainsKey(key);
 
-        public void Enqueue(Node item, float priority)
+        public void Enqueue(Point16 key, float priority)
         {
             if (count == heap.Length)
                 Resize(heap.Length * 2);
 
-            heap[count] = new QueueItem { Item = item, Priority = priority };
-            itemPosToIndex[new Point16(item.X, item.Y)] = count;
+            heap[count] = new QueueItem { Key = key, Priority = priority };
+            keyToIndex[key] = count;
             SortUp(count);
             count++;
         }
 
-        public Node Dequeue()
+        public Point16 Dequeue()
         {
             if (count == 0)
                 throw new InvalidOperationException("Queue is empty");
 
-            Node result = heap[0].Item;
+            Point16 result = heap[0].Key;
             count--;
 
             if (count > 0)
             {
                 heap[0] = heap[count];
-                itemPosToIndex[new Point16(heap[0].Item.X, heap[0].Item.Y)] = 0;
+                keyToIndex[heap[0].Key] = 0;
             }
-            itemPosToIndex.Remove(new Point16(result.X, result.Y));
+            keyToIndex.Remove(result);
 
             if (count > 0)
                 SortDown(0);
@@ -243,14 +296,12 @@ public class PathfindingSystem : ModSystem
             return result;
         }
 
-        public void UpdatePriority(Node item, float newPriority)
+        public void UpdatePriority(Point16 key, float newPriority)
         {
-            Point16 pos = new(item.X, item.Y);
-            if (!itemPosToIndex.TryGetValue(pos, out int index))
+            if (!keyToIndex.TryGetValue(key, out int index))
                 throw new InvalidOperationException("Item not found in queue");
 
             float oldPriority = heap[index].Priority;
-            heap[index].Item = item;
             heap[index].Priority = newPriority;
 
             if (newPriority < oldPriority)
@@ -262,14 +313,13 @@ public class PathfindingSystem : ModSystem
         public void Clear()
         {
             Array.Clear(heap);
-            itemPosToIndex.Clear();
+            keyToIndex.Clear();
             count = 0;
         }
 
         private void SortUp(int index)
         {
             QueueItem item = heap[index];
-            Point16 itemPos = new(item.Item.X, item.Item.Y);
 
             while (index > 0)
             {
@@ -278,18 +328,17 @@ public class PathfindingSystem : ModSystem
                     break;
 
                 heap[index] = heap[parentIndex];
-                itemPosToIndex[new Point16(heap[index].Item.X, heap[index].Item.Y)] = index;
+                keyToIndex[heap[index].Key] = index;
                 index = parentIndex;
             }
 
             heap[index] = item;
-            itemPosToIndex[itemPos] = index;
+            keyToIndex[item.Key] = index;
         }
 
         private void SortDown(int index)
         {
             QueueItem item = heap[index];
-            Point16 itemPos = new(item.Item.X, item.Item.Y);
 
             while (true)
             {
@@ -307,12 +356,12 @@ public class PathfindingSystem : ModSystem
                     break;
 
                 heap[index] = heap[smallestChild];
-                itemPosToIndex[new Point16(heap[index].Item.X, heap[index].Item.Y)] = index;
+                keyToIndex[heap[index].Key] = index;
                 index = smallestChild;
             }
 
             heap[index] = item;
-            itemPosToIndex[itemPos] = index;
+            keyToIndex[item.Key] = index;
         }
 
         private void Resize(int newSize) => Array.Resize(ref heap, newSize);
@@ -380,7 +429,7 @@ public class PathfindingSystem : ModSystem
             FindPath(startWorld, targetWorld, isWalkable, searchArea.Contains, costFunction);
         }
 
-        public void FindPath(Vector2 startWorld, Vector2 targetWorld, Func<Point, Point, bool> isWalkable, Func<Point, bool> isValid, Func<Point, int> costFunction = null)
+        public unsafe void FindPath(Vector2 startWorld, Vector2 targetWorld, Func<Point, Point, bool> isWalkable, Func<Point, bool> isValid, Func<Point, int> costFunction = null)
         {
             if (ModifiedNodesLocations.Count > 0)
                 ClearNodeStates(ModifiedNodesLocations);
@@ -393,43 +442,39 @@ public class PathfindingSystem : ModSystem
             int targetX = targetPoint.X;
             int targetY = targetPoint.Y;
 
-            ref Node startNode = ref NodeMap[startPoint.X][startPoint.Y];
+            ref Node startNode = ref GetNode(startPoint.X, startPoint.Y);
+            Point16 startKey = new(startNode.X, startNode.Y);
 
             startNode.ResetState();
             startNode.SetG(0);
-            startNode.SetF(startNode.GetDistance(targetPoint.X, targetPoint.Y));
+            startNode.SetF(startNode.GetDistance(targetX, targetY));
 
-            //NodeMap[startPoint.X][startPoint.Y] = startNode;
-            
-            ModifiedNodesLocations.Add(new(startNode.X, startNode.Y));
+            ModifiedNodesLocations.Add(startKey);
 
             const int maxIterations = 4096 * 2;
             int iterations = 0;
 
             Func<Point, int> cachedCostFunction = costFunction ?? (_ => 0);
 
-            OpenSet.Enqueue(startNode, startNode.F);
+            OpenSet.Enqueue(startKey, startNode.F);
 
             Point16 neighborLoc = new();
             Point neighborPoint = new();
 
             while (OpenSet.Count > 0 && iterations < maxIterations)
             {
-                Node current = OpenSet.Dequeue();
-
-                //Particle p = new GlowOrbParticle(current.TilePosition.ToWorldCoordinates(), Vector2.Zero, false, 2, 0.5f, Color.Red);
-                //GeneralParticleHandler.SpawnParticle(p);
+                Point16 currentKey = OpenSet.Dequeue();
+                ref Node current = ref GetNode(currentKey.X, currentKey.Y);
 
                 if (current.X == targetX && current.Y == targetY)
                 {
                     Main.NewText("Iteration Count: " + iterations);
                     MyPath = ReconstructPath(current, startNode);
-                    //Main.NewText("Path Length: " + MyPath.Points.Length);
                     ClearNodeStates(ModifiedNodesLocations);
                     return;
                 }
 
-                ClosedSet.Add(new(current.X, current.Y));
+                ClosedSet.Add(currentKey);
 
                 for (int i = 0; i < current.NeighborCount; i++)
                 {
@@ -450,30 +495,24 @@ public class PathfindingSystem : ModSystem
                     if (!isWalkable(current.TilePosition, neighborPoint))
                         continue;
 
-                    ref Node neighbor = ref NodeMap[neighborLoc.X][neighborLoc.Y];
-                    /*
-                    int moveCost = current.GetDistance(neighborLoc.X, neighborLoc.Y);
-                    int additionalCost = cachedCostFunction(neighborPoint);
-                    int tentativeG = current.G + moveCost + additionalCost;
-                    */
+                    ref Node neighbor = ref GetNode(neighborLoc.X, neighborLoc.Y);
+
                     int tentativeG = current.G + current.GetDistance(neighborLoc.X, neighborLoc.Y) + cachedCostFunction(neighborPoint);
 
                     if (tentativeG < neighbor.G)
                     {
                         ModifiedNodesLocations.Add(neighborLoc);
-                        
+
                         neighbor.SetConnection(new Point16(current.X, current.Y));
                         neighbor.SetG(tentativeG);
 
-                        int newF = tentativeG + neighbor.GetDistance(targetPoint.X, targetPoint.Y);
+                        int newF = tentativeG + neighbor.GetDistance(targetX, targetY);
                         neighbor.SetF(newF);
 
-                        //NodeMap[neighborLoc.X][neighborLoc.Y] = neighbor;
-
-                        if (OpenSet.Contains(neighbor))
-                            OpenSet.UpdatePriority(neighbor, newF);
+                        if (OpenSet.Contains(neighborLoc))
+                            OpenSet.UpdatePriority(neighborLoc, newF);
                         else
-                            OpenSet.Enqueue(neighbor, newF);
+                            OpenSet.Enqueue(neighborLoc, newF);
                     }
                 }
                 iterations++;
@@ -486,8 +525,8 @@ public class PathfindingSystem : ModSystem
         private static void ClearNodeStates(HashSet<Point16> locations)
         {
             foreach (Point16 pos in locations)
-                NodeMap[pos.X][pos.Y].ResetState();
-            
+                GetNode(pos.X, pos.Y).ResetState();
+
             locations.Clear();
         }
 
@@ -505,7 +544,7 @@ public class PathfindingSystem : ModSystem
             {
                 path.Add(current.TilePosition);
                 Point16 connLoc = current.ConnectionLocation;
-                current = NodeMap[connLoc.X][connLoc.Y];
+                current = GetNode(connLoc.X, connLoc.Y);
             }
             path.Add(current.TilePosition);
 
