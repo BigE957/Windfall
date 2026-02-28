@@ -233,18 +233,179 @@ public class PathfindingSystem : ModSystem
         public readonly int CompareTo(Node other) => (F != other.F) ? F.CompareTo(other.F) : G.CompareTo(other.G);
     }
 
-    public class FoundPath(Point[] nodes)
+    public struct JumpSegment
     {
-        public Point[] Points { get; } = nodes;
+        public Point StartPoint;
+        public Point EndPoint;
+        public int StartIndex;
+        public int EndIndex;
+
+        public JumpSegment(Point start, Point end, int startIdx, int endIdx)
+        {
+            StartPoint = start;
+            EndPoint = end;
+            StartIndex = startIdx;
+            EndIndex = endIdx;
+        }
+    }
+
+    public class FoundPath
+    {
+        public Point[] Points { get; private set; }
+        public JumpSegment[] Jumps { get; private set; }
+        public bool IsGroundedPath { get; private set; }
+
+        // Original constructor - maintains backward compatibility
+        public FoundPath(Point[] nodes)
+        {
+            Points = nodes;
+            Jumps = Array.Empty<JumpSegment>();
+            IsGroundedPath = false;
+        }
+
+        // New constructor with jump processing
+        public FoundPath(Point[] nodes, bool isGroundedPath)
+        {
+            IsGroundedPath = isGroundedPath;
+
+            if (isGroundedPath && nodes.Length > 1)
+            {
+                ProcessJumps(nodes);
+            }
+            else
+            {
+                Points = nodes;
+                Jumps = Array.Empty<JumpSegment>();
+            }
+        }
+
+        private void ProcessJumps(Point[] originalPath)
+        {
+            List<Point> newPath = new();
+            List<JumpSegment> jumpList = new();
+
+            int i = 0;
+            while (i < originalPath.Length)
+            {
+                // Check if this is the start of a jump sequence
+                int jumpEndIndex = DetectJumpSequence(originalPath, i);
+
+                if (jumpEndIndex > i)
+                {
+                    // We found a jump sequence from i to jumpEndIndex
+                    Point jumpStart = originalPath[i];
+                    Point jumpEnd = originalPath[jumpEndIndex];
+
+                    // Add the jump start point to the path
+                    newPath.Add(jumpStart);
+
+                    // Record this jump segment
+                    jumpList.Add(new JumpSegment(jumpStart, jumpEnd, newPath.Count - 1, newPath.Count));
+
+                    // Add the jump end point to the path
+                    newPath.Add(jumpEnd);
+
+                    // Skip to the end of the jump sequence
+                    i = jumpEndIndex;
+                }
+                else
+                {
+                    // Not a jump, just add the point normally
+                    newPath.Add(originalPath[i]);
+                    i++;
+                }
+            }
+
+            Points = newPath.ToArray();
+            Jumps = jumpList.ToArray();
+        }
+
+        private static int DetectJumpSequence(Point[] path, int startIndex)
+        {
+            if (startIndex >= path.Length - 1)
+                return startIndex;
+
+            Point current = path[startIndex];
+            Point next = path[startIndex + 1];
+
+            if (IsSolidOrPlatform(next + new Point(0, 1)))
+                return startIndex;
+
+            // Find the end of the jump sequence - look for the FIRST good landing spot
+            int endIndex = startIndex + 1;
+
+            for (int i = startIndex + 1; i < path.Length; i++)
+            {
+                endIndex = i;
+                Point p = path[i];
+                Point prevP = path[i - 1];
+
+                if (IsSolidOrPlatform(p + new Point(0, 1)))
+                    break;
+            }
+
+            if(path[endIndex].Y - 2 > current.Y)
+                return startIndex;
+
+            return endIndex;
+        }
 
         public void DrawPath(SpriteBatch sb)
         {
             for (int i = 0; i < Points.Length - 1; i++)
             {
-                sb.DrawLineBetween(Points[i].ToWorldCoordinates(), Points[i + 1].ToWorldCoordinates(), Color.Red, 4);
-                Particle p = new GlowOrbParticle(Points[i].ToWorldCoordinates(), Vector2.Zero, false, 2, 0.5f, Color.Red);
-                GeneralParticleHandler.SpawnParticle(p);
+                bool isJumpSegment = false;
+                foreach (var jump in Jumps)
+                    if (i == jump.StartIndex)
+                    {
+                        isJumpSegment = true;
+                        break;
+                    }
+
+                if (!isJumpSegment)
+                {
+                    sb.DrawLineBetween(Points[i].ToWorldCoordinates(), Points[i + 1].ToWorldCoordinates(), Color.Red, 4);
+                    Particle p = new GlowOrbParticle(Points[i].ToWorldCoordinates(), Vector2.Zero, false, 2, 0.5f, Color.Red);
+                    GeneralParticleHandler.SpawnParticle(p);
+                }
             }
+
+            foreach (var jump in Jumps)
+                DrawJumpArc(sb, jump.StartPoint.ToWorldCoordinates(), jump.EndPoint.ToWorldCoordinates());
+        }
+
+        private static void DrawJumpArc(SpriteBatch sb, Vector2 start, Vector2 end)
+        {
+            Vector2 midpoint = (start + end) / 2f;
+            float distance = Vector2.Distance(start, end);
+
+            float arcHeight = Math.Min(distance * 0.3f, 200f);
+            Vector2 arcPeak = midpoint - new Vector2(0, arcHeight);
+
+            int segments = Math.Max(8, (int)(distance / 16f));
+            Vector2 previousPoint = start;
+
+            for (int i = 1; i <= segments; i++)
+            {
+                float t = i / (float)segments;
+
+                Vector2 currentPoint = QuadraticBezier(start, arcPeak, end, t);
+
+                sb.DrawLineBetween(previousPoint, currentPoint, Color.CornflowerBlue, 4);
+                previousPoint = currentPoint;
+            }
+
+            Particle startParticle = new GlowOrbParticle(start, Vector2.Zero, false, 3, 0.5f, Color.Blue);
+            GeneralParticleHandler.SpawnParticle(startParticle);
+
+            Particle endParticle = new GlowOrbParticle(end, Vector2.Zero, false, 3, 0.5f, Color.Cyan);
+            GeneralParticleHandler.SpawnParticle(endParticle);
+        }
+
+        private static Vector2 QuadraticBezier(Vector2 p0, Vector2 p1, Vector2 p2, float t)
+        {
+            float u = 1 - t;
+            return u * u * p0 + 2 * u * t * p1 + t * t * p2;
         }
     }
 
@@ -375,7 +536,7 @@ public class PathfindingSystem : ModSystem
         private readonly HashSet<Point16> ClosedSet = new(4096);
         private readonly HashSet<Point16> ModifiedNodesLocations = new(100);
 
-        public void FindPathInRadius(Vector2 startWorld, Vector2 targetWorld, Func<Point, Point, bool> isWalkable, Func<Point, int> costFunction = null, float searchRadius = 1225)
+        public void FindPathInRadius(Vector2 startWorld, Vector2 targetWorld, Func<Point, Point, bool> isWalkable, Func<Point, int> costFunction = null, float searchRadius = 1225, bool processJumps = false)
         {
             Point StartPoint = startWorld.ToTileCoordinates();
             Point TargetPoint = targetWorld.ToTileCoordinates();
@@ -388,7 +549,7 @@ public class PathfindingSystem : ModSystem
 
             if (StartPoint == TargetPoint)
             {
-                MyPath = new FoundPath([StartPoint, TargetPoint]);
+                MyPath = new FoundPath([StartPoint, TargetPoint], processJumps);
                 return;
             }
 
@@ -400,10 +561,10 @@ public class PathfindingSystem : ModSystem
                 return;
             }
 
-            FindPath(startWorld, targetWorld, isWalkable, new(p => Vector2.DistanceSquared(p.ToWorldCoordinates(), targetWorld) <= radiusSquared), costFunction);
+            FindPath(startWorld, targetWorld, isWalkable, new(p => Vector2.DistanceSquared(p.ToWorldCoordinates(), targetWorld) <= radiusSquared), costFunction, processJumps);
         }
 
-        public void FindPathInArea(Vector2 startWorld, Vector2 targetWorld, Func<Point, Point, bool> isWalkable, Rectangle searchArea, Func<Point, int> costFunction = null)
+        public void FindPathInArea(Vector2 startWorld, Vector2 targetWorld, Func<Point, Point, bool> isWalkable, Rectangle searchArea, Func<Point, int> costFunction = null, bool processJumps = false)
         {
             Point StartPoint = startWorld.ToTileCoordinates();
             Point TargetPoint = targetWorld.ToTileCoordinates();
@@ -416,7 +577,7 @@ public class PathfindingSystem : ModSystem
 
             if (StartPoint == TargetPoint)
             {
-                MyPath = new FoundPath([StartPoint, TargetPoint]);
+                MyPath = new FoundPath([StartPoint, TargetPoint], processJumps);
                 return;
             }
 
@@ -426,10 +587,10 @@ public class PathfindingSystem : ModSystem
                 return;
             }
 
-            FindPath(startWorld, targetWorld, isWalkable, searchArea.Contains, costFunction);
+            FindPath(startWorld, targetWorld, isWalkable, searchArea.Contains, costFunction, processJumps);
         }
 
-        public unsafe void FindPath(Vector2 startWorld, Vector2 targetWorld, Func<Point, Point, bool> isWalkable, Func<Point, bool> isValid, Func<Point, int> costFunction = null)
+        public unsafe void FindPath(Vector2 startWorld, Vector2 targetWorld, Func<Point, Point, bool> isWalkable, Func<Point, bool> isValid, Func<Point, int> costFunction = null, bool processJumps = false)
         {
             if (ModifiedNodesLocations.Count > 0)
                 ClearNodeStates(ModifiedNodesLocations);
@@ -469,7 +630,7 @@ public class PathfindingSystem : ModSystem
                 if (current.X == targetX && current.Y == targetY)
                 {
                     Main.NewText("Iteration Count: " + iterations);
-                    MyPath = ReconstructPath(current, startNode);
+                    MyPath = ReconstructPath(current, startNode, processJumps);
                     ClearNodeStates(ModifiedNodesLocations);
                     return;
                 }
@@ -530,7 +691,7 @@ public class PathfindingSystem : ModSystem
             locations.Clear();
         }
 
-        private static FoundPath ReconstructPath(Node endNode, Node startNode)
+        private static FoundPath ReconstructPath(Node endNode, Node startNode, bool processJumps = false)
         {
             int estimatedLength = (int)(Math.Sqrt(
                 Math.Pow(endNode.X - startNode.X, 2) +
@@ -551,7 +712,7 @@ public class PathfindingSystem : ModSystem
             Point[] pathArray = [.. path];
             Array.Reverse(pathArray);
 
-            return new FoundPath(pathArray);
+            return new FoundPath(pathArray, processJumps);
         }
     }
 }

@@ -21,7 +21,7 @@ public static partial class WindfallUtils
             return false;
 
         float distanceToWaypoint = Vector2.Distance(npc.Center, pathFinding.MyPath.Points[currentWaypoint].ToWorldCoordinates());
-        //Main.NewText(dist);
+
         while (distanceToWaypoint < 24)
         {
             currentWaypoint++;
@@ -49,84 +49,196 @@ public static partial class WindfallUtils
 
         return true;
     }
-    
+
     public static bool GravityAffectedPathfindingMovement(NPC npc, PathFinding pathFinding, ref int currentWaypoint, out Vector2 velocity, out bool jumpStarted, float maxXSpeed, float jumpForce, float xAccelMult = 0.5f)
     {
-        //Calculate Missing Values
-        float testJump = jumpForce;
-        float jumpHeight = 0;
-        float jumpLength = 0;
-        while (testJump > 0)
-        {
-            jumpLength += maxXSpeed;
-            jumpHeight += testJump;
-            testJump -= 0.3f;
-        }
-        int finalJumpheight = (int)Math.Ceiling(jumpHeight / 16);
-
-        while (jumpHeight > 0)
-        {
-            jumpLength += maxXSpeed;
-            jumpHeight += testJump;
-            if (testJump > 10)
-                testJump -= 0.3f;
-            else
-                testJump = -10;
-        }
-        int finalJumpLength = (int)Math.Ceiling(jumpLength / 16) + 2;
-        return GravityAffectedPathfindingMovement(npc, pathFinding, ref currentWaypoint, out velocity, out jumpStarted, maxXSpeed, jumpForce, xAccelMult, finalJumpheight, finalJumpLength);
-    }
-    
-    public static bool GravityAffectedPathfindingMovement(NPC npc, PathFinding pathFinding, ref int currentWaypoint, out Vector2 velocity, out bool jumpStarted, float maxXSpeed = 4, float jumpForce = 12, float xAccelMult = 0.5f, int jumpHeight = 8, int jumpLength = 10)
-    {
-        // Initialize output parameters
         jumpStarted = false;
         velocity = npc.velocity;
 
-        // Check if we have a valid path to follow
         if (!IsPathValid(pathFinding, currentWaypoint))
             return false;
-
-        // Update our current waypoint if we've reached it
         if (!UpdateWaypoint(pathFinding, ref currentWaypoint, npc.Center))
             return false;
 
-        //Dust.NewDustPerfect(pathFinding.MyPath.Points[currentWaypoint].ToWorldCoordinates(), DustID.Terra).velocity /= 2f;
+        INPCJumpController jumpCtrl = npc.ModNPC as INPCJumpController;
 
-        // Get the direction to the next waypoint
-        Vector2 waypointDirection = CalculateWaypointDirection(pathFinding, currentWaypoint, npc);
-
-        // Check if we need to jump and can jump
-        Point standingTilePosition = npc.Bottom.ToTileCoordinates();
-        bool canJump = npc.IsGrounded(standingTilePosition, true);
-        bool shouldJump = DetermineIfShouldJump(waypointDirection, standingTilePosition, npc, out bool gapJump);
-        //Main.NewText(gapJump);
-        // Handle advanced jump logic (when we might need to jump over obstacles)
-        if (canJump && shouldJump && gapJump)
+        if (jumpCtrl != null && jumpCtrl.IsJumping)
         {
-            ProcessJumpLogic(ref shouldJump, pathFinding, currentWaypoint, standingTilePosition,
-                velocity, jumpHeight, jumpLength, ref jumpStarted);
+            Vector2 target = jumpCtrl.JumpEndPoint;
+            float remainingY = target.Y - npc.Center.Y;
+            float vy = velocity.Y;
+            float g = 0.4f;
+
+            // Estimate remaining flight time using current vertical position and velocity
+            // Solve 0.5*g*t^2 + vy*t - remainingY = 0  (assuming Y increases downward)
+            float discriminant = vy * vy + 2 * g * remainingY;
+            if (discriminant > 0)
+            {
+                float remainingTime = (-vy + (float)Math.Sqrt(discriminant)) / g; // positive time to land
+
+                if (remainingTime > 0)
+                {
+                    float remainingX = target.X - npc.Center.X;
+                    float vx = velocity.X;
+
+                    // Desired horizontal acceleration to land exactly at target.X in remainingTime
+                    // remainingX = vx * remainingTime + 0.5 * a * remainingTime^2
+                    // => a = 2*(remainingX - vx*remainingTime) / (remainingTime^2)
+                    float desiredAccel = 2 * (remainingX - vx * remainingTime) / (remainingTime * remainingTime);
+                    velocity.X += Math.Clamp(desiredAccel, -jumpCtrl.MaxAirAccel, jumpCtrl.MaxAirAccel);
+                }
+            }
+
+            velocity.X = Math.Clamp(velocity.X, -maxXSpeed, maxXSpeed);
+
+            if (npc.IsGrounded(npc.Bottom.ToTileCoordinates(), true))
+                jumpCtrl.IsJumping = false;
+
+            return true;
         }
 
-        // Perform the jump if needed
-        if (canJump && shouldJump)
+        if (pathFinding.MyPath.IsGroundedPath && currentWaypoint < pathFinding.MyPath.Points.Length)
         {
-            //Main.NewText(waypointDirection.X);
-            velocity.X = maxXSpeed * waypointDirection.X;
-            velocity.Y = -jumpForce;
-            jumpStarted = true;
+            Point currentPoint = pathFinding.MyPath.Points[currentWaypoint];
+
+            foreach (var jump in pathFinding.MyPath.Jumps)
+            {
+                if (currentPoint != jump.StartPoint)
+                    continue;
+
+                if (!npc.IsGrounded(npc.Bottom.ToTileCoordinates(), true))
+                    break;
+
+                Vector2 start = jump.StartPoint.ToWorldCoordinates();
+                Vector2 end = jump.EndPoint.ToWorldCoordinates();
+
+                float dx = end.X - start.X;
+                float dy = end.Y - start.Y;
+
+                float g = 0.4f;
+
+                bool directClear;
+                {
+                    Vector2 upDir = new(0, -1);
+                    float upDist = Math.Abs(dy) + 32f;
+                    Vector2? upHit = RayCast(start, upDir, upDist, out _);
+                    directClear = !upHit.HasValue;
+                }
+
+                float lateralSign = 0f;
+                float lateralClear = 0f;
+                bool needsSideJump = false;
+
+                if (!directClear)
+                {
+                    Vector2[] sides = dx >= 0 ? [new Vector2(1, 0), new Vector2(-1, 0)] : [new Vector2(-1, 0), new Vector2(1, 0)];
+
+                    float checkDist = 6 * 16f;
+
+                    foreach (var sideDir in sides)
+                    {
+                        RayCast(start, sideDir, checkDist, out float wallDist);
+                        if (wallDist < 16f) 
+                            continue;
+
+                        Vector2 offsetPos = start + sideDir * wallDist;
+                        float upDist = Math.Abs(dy) + 32f;
+                        Vector2? vertHit = RayCast(offsetPos, new Vector2(0, -1), upDist, out _);
+
+                        if (!vertHit.HasValue)
+                        {
+                            lateralSign = sideDir.X;
+                            lateralClear = wallDist;
+                            needsSideJump = true;
+                            break;
+                        }
+                    }
+
+                    if (!needsSideJump)
+                    {
+                        velocity.X = maxXSpeed * Math.Sign(dx == 0 ? 1 : dx);
+                        velocity.Y = -jumpForce;
+                        jumpStarted = true;
+                        if (jumpCtrl != null)
+                        {
+                            jumpCtrl.IsJumping = true;
+                            jumpCtrl.JumpEndPoint = end;
+                        }
+                        return true;
+                    }
+                }
+
+                float t;
+                float vy0;
+
+                if (!needsSideJump)
+                {
+                    float idealT = Math.Abs(dx) / maxXSpeed;
+
+                    // Minimum vy0 to reach dy in that time:
+                    // dy = vy0*t + 0.5*g*t^2  =>  vy0 = (dy - 0.5*g*t^2) / t
+                    float minVy0 = idealT > 0f
+                        ? (dy - 0.5f * g * idealT * idealT) / idealT
+                        : -jumpForce;
+
+                    vy0 = Math.Clamp(minVy0, -jumpForce, -0.1f); // -0.1f prevents zero/upward launch
+
+                    // Recompute actual flight time from chosen vy0
+                    float disc = vy0 * vy0 + 2f * g * dy;
+                    t = disc >= 0f
+                        ? (-vy0 + MathF.Sqrt(disc)) / g
+                        : -2f * vy0 / g;
+                }
+                else
+                {
+                    vy0 = Math.Min(-jumpForce, -MathF.Sqrt(2f * g * (Math.Abs(dy) + 16f)));
+                    float disc = vy0 * vy0 + 2f * g * dy;
+                    t = disc >= 0f ? (-vy0 + MathF.Sqrt(disc)) / g : -2f * vy0 / g;
+                }
+
+                if (t <= 0f) 
+                    t = -2f * vy0 / g;
+
+                if (needsSideJump)
+                {
+                    velocity.X = maxXSpeed * lateralSign;
+
+                    float requiredVy = -MathF.Sqrt(2f * g * (Math.Abs(dy) + 16f)); // +16 for extra tile clearance
+                    velocity.Y = Math.Min(vy0, requiredVy);
+                }
+                else
+                {
+                    velocity.X = t > 0f ? dx / t : maxXSpeed * Math.Sign(dx);
+                    velocity.Y = vy0;
+                }
+
+                velocity.X = Math.Clamp(velocity.X, -maxXSpeed, maxXSpeed);
+                if (jumpCtrl != null)
+                {
+                    jumpCtrl.IsJumping = true;
+                    jumpCtrl.JumpEndPoint = end;
+                }
+
+                jumpStarted = true;
+                return true;
+            }
         }
 
-        // Apply horizontal movement and limit speed
-        Vector2 targetPoint = (currentWaypoint + 2 >= pathFinding.MyPath.Points.Length ? pathFinding.MyPath.Points[^1] : pathFinding.MyPath.Points[currentWaypoint + 2]).ToWorldCoordinates();
-        Vector2 toWaypoint = (targetPoint - npc.Center).SafeNormalize(npc.velocity.SafeNormalize(Vector2.Zero));
-        //Dust.NewDustPerfect(targetPoint, DustID.Terra, Vector2.Zero);
-        velocity.X += Math.Sign(toWaypoint.X) * xAccelMult;
-        velocity.X = Clamp(velocity.X, -maxXSpeed, maxXSpeed);
+        if (npc.IsGrounded(npc.Bottom.ToTileCoordinates(), true))
+        {
+            Vector2 targetPoint = (currentWaypoint + 2 >= pathFinding.MyPath.Points.Length
+                ? pathFinding.MyPath.Points[^1]
+                : pathFinding.MyPath.Points[currentWaypoint + 2]).ToWorldCoordinates();
 
-        // Handle collision step-up
-        if (velocity.Y <= 0)
-            Collision.StepUp(ref npc.position, ref velocity, npc.width, npc.height, ref npc.stepSpeed, ref npc.gfxOffY);
+            Vector2 toWaypoint = targetPoint - npc.Center;
+            Vector2 wayPointDir = toWaypoint.SafeNormalize(Vector2.Zero);
+
+            velocity.X += Math.Sign(wayPointDir.X) * xAccelMult;
+            velocity.X = Math.Clamp(velocity.X, -maxXSpeed, maxXSpeed);
+
+            if (velocity.Y <= 0)
+                Collision.StepUp(ref npc.position, ref velocity, npc.width, npc.height, ref npc.stepSpeed, ref npc.gfxOffY);
+        }
 
         return true;
     }
@@ -143,140 +255,6 @@ public static partial class WindfallUtils
             return false;
 
         return true;
-    }
-
-    /// <summary>
-    /// Calculates the direction to the next waypoint.
-    /// </summary>
-    private static Vector2 CalculateWaypointDirection(PathFinding pathFinding, int currentWaypoint, NPC npc)
-    {
-        // If we're heading to the last waypoint, aim directly at it       
-        if (currentWaypoint + 1 >= pathFinding.MyPath.Points.Length)
-        {
-            Vector2 targetPoint = pathFinding.MyPath.Points[currentWaypoint].ToWorldCoordinates();
-            return (targetPoint - npc.Center).SafeNormalize(npc.velocity.SafeNormalize(Vector2.Zero));
-        }
-        // Otherwise aim at the next waypoint
-        else
-        {
-            Vector2 targetPoint = pathFinding.MyPath.Points[currentWaypoint + 1].ToWorldCoordinates();
-            return (targetPoint - pathFinding.MyPath.Points[currentWaypoint].ToWorldCoordinates()).SafeNormalize(npc.velocity.SafeNormalize(Vector2.Zero));
-        }
-    }
-
-    /// <summary>
-    /// Determines if the NPC should attempt to jump based on path direction and terrain.
-    /// </summary>
-    private static bool DetermineIfShouldJump(Vector2 waypointDirection, Point standingTilePosition, NPC npc, out bool gapJump)
-    {
-        gapJump = false;
-
-        // Don't jump if we're explicitly trying to go downward
-        if (waypointDirection.Y == 1)
-            return false;
-
-        // Jump if we're trying to move sharply upward
-        if (waypointDirection.Y < -0.94f)
-            return true;
-        //Main.NewText(waypointDirection);
-        // Jump if there's no solid ground ahead in our movement direction
-        bool solidAhead = IsSolidOrPlatform(standingTilePosition + new Point(npc.velocity.X == 0 ? npc.direction : Math.Sign(npc.velocity.X), 0));
-        bool solidBelow = IsSolidOrPlatform(standingTilePosition);
-        bool solidInWay = false;
-        
-        for (int i = 2; i <= Math.Ceiling(npc.height / 16f); i++)
-        {
-            Point checkPos = (npc.direction == -1 ? npc.BottomLeft : npc.BottomRight).ToTileCoordinates() + new Point(npc.direction == -1 ? -1 : 0, -i);
-            //Dust.NewDustPerfect(checkPos.ToWorldCoordinates(), DustID.Terra, Vector2.Zero);
-            if (IsSolidNotDoor(checkPos))
-            {
-                solidInWay = true;
-                break;
-            }
-        }
-        //Main.NewText(solidInWay);
-        gapJump = !solidInWay;
-
-        return !solidAhead || !solidBelow || solidInWay;
-    }
-
-    /// <summary>
-    /// Processes complex jump logic to determine if jumping is necessary and possible.
-    /// </summary>
-    private static void ProcessJumpLogic(ref bool shouldJump, PathFinding pathFinding, int currentWaypoint,
-        Point standingTilePosition, Vector2 velocity, int jumpHeight, int jumpLength, ref bool jumpStarted)
-    {
-        shouldJump = false;
-        bool needJump = true;
-
-        // Check if the path leads downward (no need to jump)
-        int checkIndex = Math.Min(currentWaypoint + 8, pathFinding.MyPath.Points.Length - 1);
-        if (pathFinding.MyPath.Points[checkIndex].Y > pathFinding.MyPath.Points[currentWaypoint].Y)
-        {
-            needJump = false;
-        }
-        else
-        {
-            // Check if there are obstacles that can be walked around
-            needJump = !CanWalkAroundObstacle(standingTilePosition, velocity, jumpHeight, jumpLength);
-        }
-
-        // If we need to jump, check if we can make it
-        if (needJump)
-        {
-            shouldJump = CanMakeJump(standingTilePosition, velocity.X, jumpLength);
-
-            if (!shouldJump)
-            {
-                jumpStarted = true;
-                // Cannot make the jump, will need alternate routing
-            }
-        }
-    }
-
-    /// <summary>
-    /// Checks if the NPC can walk around an obstacle without jumping.
-    /// </summary>
-    private static bool CanWalkAroundObstacle(Point standingTilePosition, Vector2 velocity, int jumpHeight, int jumpLength)
-    {
-        // Dont care about one tile gaps
-        if (IsSolidOrPlatform(standingTilePosition + new Point(Math.Sign(velocity.X) * 2, 0)))
-            return true;
-
-        // Check if there's any easy way to simply climb up instead of needing to jump the gap
-        for (int i = jumpLength / 2; i > 1; i--)
-        {
-            int checkX = standingTilePosition.X + ((i - 1) * Math.Sign(velocity.X));
-
-            for (int j = 1; j < 4; j++)
-            {
-                Point checkPoint = new(checkX, standingTilePosition.Y + j);
-                if (IsSolidOrPlatform(checkPoint))
-                    return true;
-            }
-        }
-
-        return false;
-    }
-
-    /// <summary>
-    /// Checks if the NPC can make the jump over a gap.
-    /// </summary>
-    private static bool CanMakeJump(Point standingTilePosition, float velocityX, int jumpLength)
-    {
-        int movementDirection = Math.Sign(velocityX);
-
-        // Look ahead to see if there's a landing point within jump distance
-        for (int i = 0; i < jumpLength; i++)
-        {
-            int checkPointX = standingTilePosition.X + ((jumpLength - i) * movementDirection);
-            Point checkPoint = new(checkPointX, standingTilePosition.Y);
-
-            if (IsSolidOrPlatform(checkPoint))
-                return true;
-        }
-
-        return false;
     }
 
     /// <summary>
@@ -368,6 +346,10 @@ public static partial class WindfallUtils
         if (IsSolidNotDoor(toPoint))
             return false;
 
+        for(int i = 0; i < Math.Ceiling(NPC.height / 16f); i++)
+            if (IsSolidNotDoor(toPoint - new Point(0, i)))
+                return false;
+
         //Point dir = toPoint - fromPoint;
         //bool diagonal = Math.Abs(dir.X) != 0 && Math.Abs(dir.Y) != 0;
 
@@ -388,14 +370,15 @@ public static partial class WindfallUtils
     public static int GravityCostFunction(Point p)
     {
         Vector2 ground = FindSurfaceBelow(p).ToWorldCoordinates();
-        int penalty = (int)Vector2.Distance(p.ToWorldCoordinates(), ground) * 12;
+        int penalty = (int)Vector2.Distance(p.ToWorldCoordinates(), ground) * 24;
+        //penalty = (int)Math.Pow(penalty, 2);
 
         if (TileID.Sets.Platforms[Main.tile[p].TileType])
             penalty += 100;
-        
-        if (TileID.Sets.Platforms[Main.tile[p + new Point(0,1)].TileType])
-            penalty -= 100;
 
+        if (TileID.Sets.Platforms[Main.tile[p + new Point(0, 1)].TileType])
+            penalty -= 100;
+        /*
         for (int i = -1; i < 1; i++)
         {
             if (IsSolidNotDoor(p + new Point(-1, i)))
@@ -410,11 +393,18 @@ public static partial class WindfallUtils
                 break;
             }
         }
-
+        
         if (IsSolidNotDoor(p + new Point(0, -1)))
             penalty += 9999;
-
+        */
         return penalty;
     }
 
+}
+
+public interface INPCJumpController
+{
+    bool IsJumping { get; set; }
+    Vector2 JumpEndPoint { get; set; }
+    float MaxAirAccel { get; }          // per‑NPC air acceleration limit
 }
