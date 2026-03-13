@@ -347,6 +347,8 @@ public static partial class WindfallUtils
 
         bool hitTIle = false;
         distanceMoved = 0f;
+        int iter = 0;
+        int iterationCap = 1000;
         while(!hitTIle && distanceMoved < maxDist)
         {
             if(RayLength1D.X < RayLength1D.Y)
@@ -368,6 +370,14 @@ public static partial class WindfallUtils
             {
                 hitTIle = true;
             }
+
+            if (iter >= iterationCap)
+            {
+                Main.NewText("ITERATION CAP HIT. WTF.", Color.Red);
+                return null;
+            }
+
+            iter++;
         }
 
         if (hitTIle)
