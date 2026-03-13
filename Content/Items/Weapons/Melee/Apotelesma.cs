@@ -1,5 +1,5 @@
 ﻿using CalamityMod;
-using CalamityMod.Graphics.Primitives;
+using Windfall.Common.Graphics.Primitives;
 using CalamityMod.Items;
 using CalamityMod.Particles;
 using CalamityMod.World;

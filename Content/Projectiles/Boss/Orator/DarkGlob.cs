@@ -1,4 +1,4 @@
-﻿using CalamityMod.Graphics.Primitives;
+﻿using Windfall.Common.Graphics.Primitives;
 using CalamityMod.World;
 using Daybreak.Common.Rendering;
 using Terraria.Graphics.Shaders;

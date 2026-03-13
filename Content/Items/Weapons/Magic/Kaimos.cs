@@ -1,6 +1,6 @@
 ﻿using CalamityMod;
 using CalamityMod.Buffs.StatDebuffs;
-using CalamityMod.Graphics.Primitives;
+using Windfall.Common.Graphics.Primitives;
 using CalamityMod.Items;
 using CalamityMod.Particles;
 using Daybreak.Common.Rendering;

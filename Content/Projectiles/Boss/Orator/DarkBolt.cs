@@ -1,7 +1,7 @@
 ﻿
 
 using CalamityMod;
-using CalamityMod.Graphics.Primitives;
+using Windfall.Common.Graphics.Primitives;
 using CalamityMod.Particles;
 using Daybreak.Common.Rendering;
 using Terraria.Graphics.Shaders;
