@@ -148,7 +148,7 @@ public class ParticleSystem : ModSystem
             Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.LinearClamp, DepthStencilState.None, RasterizerState.CullCounterClockwise, null, Main.Transform);
 
             foreach (Particle p in alphablendParticles[targetLayer])
-                p.PreDraw(Main.spriteBatch);
+                p.Draw(Main.spriteBatch);
 
             Main.spriteBatch.End();
         }
@@ -158,19 +158,19 @@ public class ParticleSystem : ModSystem
             Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.Additive, SamplerState.LinearClamp, DepthStencilState.None, RasterizerState.CullCounterClockwise, null, Main.Transform);
 
             foreach (Particle p in additiveParticles[targetLayer])
-                p.PreDraw(Main.spriteBatch);
+                p.Draw(Main.spriteBatch);
 
             Main.spriteBatch.End();
         }
     }
 
-    public static void AddParticle(Particle p)
+    public static void SpawnParticle(Particle p)
     {
         if (Main.dedServ)
             return;
 
         if (activeCount >= MaxParticles && !TryEvictOldest())
-            return; // all particles are important, nowhere to make room
+            return;
 
         p.SpawnOrder = spawnCounter++;
         (p.Additive ? additiveParticles : alphablendParticles)[p.Layer].Add(p);
@@ -178,10 +178,28 @@ public class ParticleSystem : ModSystem
         p.OnSpawn();
     }
 
-    public static void AddParticle(Particle p, DrawLayer layer)
+    public static void SpawnParticle(Particle p, DrawLayer layer)
     {
         p.Layer = layer;
-        AddParticle(p);
+        SpawnParticle(p);
+    }
+
+    public static void RemoveParticle(Particle p)
+    {
+        if(p.Additive)
+        {
+            foreach (var v in additiveParticles.Values)
+                foreach (Particle particle in v)
+                    if (particle == p)
+                        particle.Active = false;
+        }
+        else
+        {
+            foreach (var v in alphablendParticles.Values)
+                foreach (Particle particle in v)
+                    if (particle == p)
+                        particle.Active = false;
+        }
     }
 
     private static bool TryEvictOldest()
@@ -219,11 +237,11 @@ public abstract class Particle
     public int Time { get; set; } = 0;
     public int Lifetime { get; set; } = 60;
     public float LifeRatio => Time / (float)Lifetime;
-    public Vector2 Position { get; set; }
-    public Vector2 Velocity { get; set; }
-    public float Rotation { get; set; }
-    public Vector2 Scale { get; set; }
-    public Color Color { get; set; } = Color.White;
+    public Vector2 Position;
+    public Vector2 Velocity;
+    public float Rotation;
+    public Vector2 Scale;
+    public Color Color = Color.White;
     public DrawLayer Layer { get; set; }
     public virtual bool Additive => false;
     public virtual bool Important => false;
@@ -240,5 +258,5 @@ public abstract class Particle
         Time++;
     }
     public virtual void OnKill(bool wasEvicted) { }
-    public abstract void PreDraw(SpriteBatch spritebatch);
+    public abstract void Draw(SpriteBatch spritebatch);
 }

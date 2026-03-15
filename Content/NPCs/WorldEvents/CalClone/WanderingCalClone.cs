@@ -52,7 +52,7 @@ public class WanderingCalClone : ModNPC
         NPC.townNPC = true;
         NPC.width = 18;
         NPC.height = 40;
-        NPC.aiStyle = 7;
+        NPC.aiStyle = NPCAIStyleID.Passive;
         NPC.damage = 10;
         NPC.defense = 15;
         NPC.lifeMax = 250;
@@ -77,7 +77,7 @@ public class WanderingCalClone : ModNPC
     {
         if (NPC.ai[0] == 1f)
         {
-            NPC.aiStyle = 0;
+            NPC.aiStyle = NPCAIStyleID.FaceClosestPlayer;
             NPC.noGravity = true;
         }
         else
@@ -130,7 +130,7 @@ public class WanderingCalClone : ModNPC
     {
         if (firstButton)
         {
-            NPC.aiStyle = 0;
+            NPC.aiStyle = NPCAIStyleID.FaceClosestPlayer;
             NPC.noGravity = true;
             Main.CloseNPCChatOrSign();
         }
@@ -147,7 +147,7 @@ public class WanderingCalClone : ModNPC
     public override void AI()
     {
         NPC.homeless = true;
-        if (NPC.aiStyle == 0)
+        if (NPC.aiStyle == NPCAIStyleID.FaceClosestPlayer)
         {
             aiCounter++;
             if (!WorldSaveSystem.CloneRevealed)

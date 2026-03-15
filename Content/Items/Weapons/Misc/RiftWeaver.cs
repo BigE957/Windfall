@@ -1,7 +1,7 @@
 ﻿using CalamityMod;
 using Windfall.Common.Graphics.Primitives;
 using CalamityMod.Items;
-using CalamityMod.Particles;
+using Windfall.Common.Graphics.Particles;
 using CalamityMod.Projectiles.BaseProjectiles;
 using Windfall.Content.NPCs.WorldEvents.LunarCult;
 using static Windfall.Common.Graphics.Verlet.VerletIntegration;
@@ -163,10 +163,10 @@ public class RiftWeaverStab : BaseShortswordProjectile
         if (hitCount >= 5)
         {
             bool colorCombo = Main.rand.NextBool();
-            CalamityMod.Particles.Particle pulse = new PulseRing(target.Center + (Owner.Center - target.Center) / 7f, Vector2.Zero, colorCombo ? Color.Cyan : Color.LimeGreen, 0f, 0.5f, 30);
-            GeneralParticleHandler.SpawnParticle(pulse);
+            Particle pulse = new PulseRing(target.Center + (Owner.Center - target.Center) / 7f, Vector2.Zero, colorCombo ? Color.Cyan : Color.LimeGreen, 0f, 0.5f, 30);
+            ParticleSystem.SpawnParticle(pulse);
             pulse = new PulseRing(target.Center + (Owner.Center - target.Center) / 7f, Vector2.Zero, colorCombo ? Color.LimeGreen : Color.Cyan, 0f, 0.3f, 30);
-            GeneralParticleHandler.SpawnParticle(pulse);
+            ParticleSystem.SpawnParticle(pulse);
 
             Owner.velocity.Y = -12;
             Owner.velocity.X = target.Center.X > Owner.Center.X ? -4 : 4;
@@ -178,8 +178,8 @@ public class RiftWeaverStab : BaseShortswordProjectile
         }
         else
         {
-            CalamityMod.Particles.Particle pulse = new PulseRing(target.Center + (Owner.Center - target.Center) / 7f, Vector2.Zero, Main.rand.NextBool() ? Color.Cyan : Color.LimeGreen, 0f, 0.3f, 30);
-            GeneralParticleHandler.SpawnParticle(pulse);
+            Particle pulse = new PulseRing(target.Center + (Owner.Center - target.Center) / 7f, Vector2.Zero, Main.rand.NextBool() ? Color.Cyan : Color.LimeGreen, 0f, 0.3f, 30);
+            ParticleSystem.SpawnParticle(pulse);
             if (Owner.velocity.Y != 0)
             {
                 Owner.velocity.X /= 2f;
@@ -263,8 +263,8 @@ public class RiftWeaverThrow : ModProjectile
                     int count = 8;
                     for (int i = 1; i < count; i++)
                     {
-                        CalamityMod.Particles.Particle particle = new GlowOrbParticle(Projectile.Center + (owner.Calamity().mouseWorld - Projectile.Center).SafeNormalize(Vector2.Zero) * (620f * charge * (i / (float)count)), (owner.Calamity().mouseWorld - Projectile.Center).SafeNormalize(Vector2.Zero) * 0.01f + owner.velocity, false, 8 * i, 0.5f, i % 2 == 0 ? Color.Cyan : Color.LimeGreen);
-                        GeneralParticleHandler.SpawnParticle(particle);
+                        Particle particle = new GlowOrb(Projectile.Center + (owner.Calamity().mouseWorld - Projectile.Center).SafeNormalize(Vector2.Zero) * (620f * charge * (i / (float)count)), (owner.Calamity().mouseWorld - Projectile.Center).SafeNormalize(Vector2.Zero) * 0.01f + owner.velocity, false, 8 * i, 0.5f, i % 2 == 0 ? Color.Cyan : Color.LimeGreen);
+                        ParticleSystem.SpawnParticle(particle);
                     }
 
                     Projectile.damage = (int)(damage * 1.5f * charge);
@@ -279,8 +279,8 @@ public class RiftWeaverThrow : ModProjectile
                     int count = 8;
                     for (int i = 1; i < count; i++)
                     {
-                        CalamityMod.Particles.Particle particle = new GlowOrbParticle(Projectile.Center + (owner.Calamity().mouseWorld - Projectile.Center).SafeNormalize(Vector2.Zero) * (620f * charge * (i / (float)count)), (owner.Calamity().mouseWorld - Projectile.Center).SafeNormalize(Vector2.Zero) * 0.01f + owner.velocity, false, 4, 0.5f, i % 2 == 0 ? Color.Cyan : Color.LimeGreen);
-                        GeneralParticleHandler.SpawnParticle(particle);
+                        Particle particle = new GlowOrb(Projectile.Center + (owner.Calamity().mouseWorld - Projectile.Center).SafeNormalize(Vector2.Zero) * (620f * charge * (i / (float)count)), (owner.Calamity().mouseWorld - Projectile.Center).SafeNormalize(Vector2.Zero) * 0.01f + owner.velocity, false, 4, 0.5f, i % 2 == 0 ? Color.Cyan : Color.LimeGreen);
+                        ParticleSystem.SpawnParticle(particle);
                     }
 
                     chargeCounter++;
@@ -334,8 +334,8 @@ public class RiftWeaverThrow : ModProjectile
                         for (int i = 0; i < (fullChargeThrow ? 2 : 1); i++)
                         {
                             Vector2 particleSpeed = Projectile.velocity.SafeNormalize(Vector2.Zero) * -1 * Clamp(Projectile.velocity.Length() / 6f, 4f, 10f);
-                            CalamityMod.Particles.Particle speedline = new SparkParticle(Projectile.Center + Main.rand.NextVector2Circular(20f, 20f), particleSpeed, false, 30, 1f, Main.rand.NextBool() ? Color.Cyan : Color.LimeGreen);
-                            GeneralParticleHandler.SpawnParticle(speedline);
+                            Particle speedline = new Spark(Projectile.Center + Main.rand.NextVector2Circular(20f, 20f), particleSpeed, false, 30, 1f, Main.rand.NextBool() ? Color.Cyan : Color.LimeGreen);
+                            ParticleSystem.SpawnParticle(speedline);
                         }
                     }
                     if (aiCounter < timeOut && (owner.Center - Projectile.Center).Length() < 600f)
@@ -379,10 +379,10 @@ public class RiftWeaverThrow : ModProjectile
     public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
     {
         bool colorCombo = Main.rand.NextBool();
-        CalamityMod.Particles.Particle pulse = new PulseRing(target.Center + (Projectile.Center - target.Center) / 7f, Vector2.Zero, colorCombo ? Color.Cyan : Color.LimeGreen, 0f, 0.5f, 30);
-        GeneralParticleHandler.SpawnParticle(pulse);
+        Particle pulse = new PulseRing(target.Center + (Projectile.Center - target.Center) / 7f, Vector2.Zero, colorCombo ? Color.Cyan : Color.LimeGreen, 0f, 0.5f, 30);
+        ParticleSystem.SpawnParticle(pulse);
         pulse = new PulseRing(target.Center + (Projectile.Center - target.Center) / 7f, Vector2.Zero, colorCombo ? Color.LimeGreen : Color.Cyan, 0f, 0.3f, 30);
-        GeneralParticleHandler.SpawnParticle(pulse);
+        ParticleSystem.SpawnParticle(pulse);
 
         if (!impaled)
         {

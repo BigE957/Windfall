@@ -337,7 +337,7 @@ public class SealingRitualSystem : ModSystem
                             switch(CultistDir)
                             {
                                 case CultistFacing.Player:
-                                    LunaticCultist.aiStyle = 0;
+                                    LunaticCultist.aiStyle = NPCAIStyleID.FaceClosestPlayer;
                                     break;
                                 default:
                                     LunaticCultist.aiStyle = -1;

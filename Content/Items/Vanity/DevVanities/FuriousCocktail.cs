@@ -1,7 +1,7 @@
 ﻿using CalamityMod.Items;
 using CalamityMod;
 using Windfall.Common.Players.DrawLayers;
-using CalamityMod.Particles;
+using Windfall.Common.Graphics.Particles;
 
 namespace Windfall.Content.Items.Vanity.DevVanities;
 public class FuriousCocktail : DevVanity, IHatExtension, IAnimatedHead

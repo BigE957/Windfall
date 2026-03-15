@@ -2,7 +2,7 @@
 using Windfall.Content.Items.Placeables.Furnature.VerletHangers.Cords;
 using Windfall.Content.Tiles.TileEntities;
 using Windfall.Content.Items.Tools;
-using CalamityMod.Particles;
+using Windfall.Common.Graphics.Particles;
 using static Windfall.Common.Graphics.Verlet.VerletIntegration;
 
 namespace Windfall.Common.Graphics.Verlet;
@@ -53,7 +53,7 @@ public class PlaceableVerletDrawing : ModSystem
             HandleTileEntityItemInteractions(te, ref particle);
 
             if (particle != null)
-                GeneralParticleHandler.SpawnParticle(particle);
+                ParticleSystem.SpawnParticle(particle);
             #endregion
 
             if (te.State == 1 && te.PartnerLocation.HasValue)
@@ -62,7 +62,7 @@ public class PlaceableVerletDrawing : ModSystem
                 HandleTileEntityItemInteractions(FindTileEntity<HangerEntity>(p16.X, p16.Y, 1, 1), ref particle);
 
                 if (particle != null)
-                    GeneralParticleHandler.SpawnParticle(particle);
+                    ParticleSystem.SpawnParticle(particle);
 
                 Vector2 StringStart = te.Position.ToWorldCoordinates();
                 Vector2 StringEnd = te.PartnerLocation.Value.ToWorldCoordinates();
@@ -93,7 +93,7 @@ public class PlaceableVerletDrawing : ModSystem
                                 color = Color.Green;
                             }
 
-                            particle = new GlowOrbParticle(te.MainVerlet.Positions[k], Vector2.Zero, false, 2, 0.5f, color, needed: true);
+                            particle = new GlowOrb(te.MainVerlet.Positions[k], Vector2.Zero, false, 2, 0.5f, color, needed: true);
                         }
                         else if (Main.LocalPlayer.HeldItem.type == ModContent.ItemType<CordShears>())
                         {
@@ -109,7 +109,7 @@ public class PlaceableVerletDrawing : ModSystem
                                 color = Color.Green;
                             }
 
-                            particle = new GlowOrbParticle(te.MainVerlet.Positions[k], Vector2.Zero, false, 2, 0.5f, color, needed: true);
+                            particle = new GlowOrb(te.MainVerlet.Positions[k], Vector2.Zero, false, 2, 0.5f, color, needed: true);
                         }
                         else if (Main.LocalPlayer.HeldItem.type == ModContent.ItemType<CordageMeter>())
                         {
@@ -125,11 +125,11 @@ public class PlaceableVerletDrawing : ModSystem
                                 color = Color.Green;
                             }
 
-                            particle = new GlowOrbParticle(te.MainVerlet.Positions[k], Vector2.Zero, false, 2, 0.5f, color, needed: true);
+                            particle = new GlowOrb(te.MainVerlet.Positions[k], Vector2.Zero, false, 2, 0.5f, color, needed: true);
                         }
 
                         if(particle != null)
-                            GeneralParticleHandler.SpawnParticle(particle);
+                            ParticleSystem.SpawnParticle(particle);
                     }
 
                 VerletSimulation(te.MainVerlet, 30, windAffected: te.Position.Y < Main.worldSurface || (te.PartnerLocation.HasValue && te.PartnerLocation.Value.Y < Main.worldSurface));
@@ -272,7 +272,7 @@ public class PlaceableVerletDrawing : ModSystem
                 color = Color.Green;
             }
 
-            particle = new GlowOrbParticle(worldPos, Vector2.Zero, false, 2, 0.5f, color, needed: true);
+            particle = new GlowOrb(worldPos, Vector2.Zero, false, 2, 0.5f, color, needed: true);
         }
         else if (Main.LocalPlayer.HeldItem.type == ModContent.ItemType<CordShears>())
         {
@@ -291,7 +291,7 @@ public class PlaceableVerletDrawing : ModSystem
                 color = Color.Green;
             }
 
-            particle = new GlowOrbParticle(worldPos, Vector2.Zero, false, 2, 0.5f, color, needed: true);
+            particle = new GlowOrb(worldPos, Vector2.Zero, false, 2, 0.5f, color, needed: true);
         }
         else if (Main.LocalPlayer.HeldItem.type == ModContent.ItemType<CordageMeter>())
         {
@@ -310,7 +310,7 @@ public class PlaceableVerletDrawing : ModSystem
                 color = Color.Green;
             }
 
-            particle = new GlowOrbParticle(worldPos, Vector2.Zero, false, 2, 0.5f, color, needed: true);
+            particle = new GlowOrb(worldPos, Vector2.Zero, false, 2, 0.5f, color, needed: true);
         }
     }
 }

@@ -51,7 +51,7 @@ public class SelenicMetaball : MyMetaball
 
     public override Color DrawLayerColor(int layer) => layer == 1 ? Color.White : Color.Gray;
 
-    public override MetaballSystem.DrawLayer[] DrawLayers => [MetaballSystem.DrawLayer.BeforeAllTiles, MetaballSystem.DrawLayer.AfterEverything];
+    public override DrawLayer[] DrawLayers => [DrawLayer.BeforeAllTiles, DrawLayer.AfterEverything];
 
     private static Asset<Texture2D>[] layerAssets = null;
 

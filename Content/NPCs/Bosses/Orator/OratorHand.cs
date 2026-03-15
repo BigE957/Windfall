@@ -1,5 +1,5 @@
 ﻿using CalamityMod;
-using CalamityMod.Particles;
+using Windfall.Common.Graphics.Particles;
 using CalamityMod.World;
 using Terraria.GameContent.Bestiary;
 using Windfall.Common.Graphics.Metaballs;
@@ -261,8 +261,8 @@ public class OratorHand : ModNPC
 
             if (deadCounter == 360)
             {
-                CalamityMod.Particles.Particle p = new PulseRing(NPC.Center, Vector2.Zero, Color.Gray, 0f, 2f, 45);
-                GeneralParticleHandler.SpawnParticle(p);
+                Particle p = new PulseRing(NPC.Center, Vector2.Zero, Color.Gray, 0f, 2f, 45);
+                ParticleSystem.SpawnParticle(p);
 
                 for (int i = 0; i <= 50; i++)
                 {
@@ -272,7 +272,7 @@ public class OratorHand : ModNPC
                     dust.noGravity = true;
                 }
 
-                DeathAshParticle.CreateAshesFromNPC(NPC, NPC.velocity);
+                CalamityMod.Particles.DeathAshParticle.CreateAshesFromNPC(NPC, NPC.velocity);
 
                 for(int i = 0; i < 30; i++)
                     SelenicMetaballParticle.SpawnParticle(NPC.Center - (NPC.rotation.ToRotationVector2() * (NPC.width / 1.5f)) + (NPC.rotation.ToRotationVector2().RotatedBy(PiOver2) * Main.rand.NextFloat(-16f, 16f)), (NPC.rotation.ToRotationVector2().RotatedBy(Pi + Main.rand.NextFloat(-PiOver4, PiOver4)) * Main.rand.NextFloat(2f, 6f) * 3f), Main.rand.NextFloat(20f, 40f));
@@ -418,10 +418,10 @@ public class OratorHand : ModNPC
                                                 Projectile.NewProjectile(Terraria.Entity.GetSource_NaturalSpawn(), midPoint, velocity, ModContent.ProjectileType<HandRing>(), TheOrator.BoltDamage, 0f);
                                             }
                                         }
-                                        CalamityMod.Particles.Particle pulse = new PulseRing(midPoint, Vector2.Zero, new(253, 189, 53), 0f, 3f, 16);
-                                        GeneralParticleHandler.SpawnParticle(pulse);
-                                        CalamityMod.Particles.Particle explosion = new DetailedExplosion(midPoint, Vector2.Zero, new(255, 133, 187), new Vector2(1f, 1f), 0f, 0f, 1f, 16);
-                                        GeneralParticleHandler.SpawnParticle(explosion);
+                                        Particle pulse = new PulseRing(midPoint, Vector2.Zero, new(253, 189, 53), 0f, 3f, 16);
+                                        ParticleSystem.SpawnParticle(pulse);
+                                        Particle explosion = new DetailedExplosion(midPoint, Vector2.Zero, new(255, 133, 187), new Vector2(1f, 1f), 0f, 0f, 1f, 16);
+                                        ParticleSystem.SpawnParticle(explosion);
 
                                         NPC.velocity = Vector2.Zero;
                                         subHand.velocity = Vector2.Zero;
@@ -603,8 +603,8 @@ public class OratorHand : ModNPC
                                     if (projectileCounter % 5 == 0 && Main.rand.NextBool(lerpValue))
                                     {
                                         Vector2 spawnPos = spawn + Main.rand.NextVector2CircularEdge(4f, 4f);
-                                        CalamityMod.Particles.Particle particle = new AltSparkParticle(spawnPos, ToTarget.RotatedBy(Main.rand.NextFloat(-PiOver4, PiOver4)) * Main.rand.NextFloat(4, 2), false, 200, Main.rand.NextFloat(0.5f, 1f), Main.rand.NextBool() ? Color.LimeGreen : Color.Orange);
-                                        GeneralParticleHandler.SpawnParticle(particle);
+                                        Particle particle = new AltSpark(spawnPos, ToTarget.RotatedBy(Main.rand.NextFloat(-PiOver4, PiOver4)) * Main.rand.NextFloat(4, 2), false, 200, Main.rand.NextFloat(0.5f, 1f), Main.rand.NextBool() ? Color.LimeGreen : Color.Orange);
+                                        ParticleSystem.SpawnParticle(particle);
                                     }
 
                                 }
@@ -673,8 +673,8 @@ public class OratorHand : ModNPC
                                     if (projectileCounter % 5 == 0 && Main.rand.NextBool(lerpValue))
                                     {
                                         Vector2 spawnPos = spawn + Main.rand.NextVector2CircularEdge(4f, 4f);
-                                        CalamityMod.Particles.Particle particle = new AltSparkParticle(spawnPos, ToTarget.RotatedBy(Main.rand.NextFloat(-PiOver4, PiOver4)) * Main.rand.NextFloat(4, 2), false, 200, Main.rand.NextFloat(0.5f, 1f), Main.rand.NextBool() ? Color.LimeGreen : Color.Orange);
-                                        GeneralParticleHandler.SpawnParticle(particle);
+                                        Particle particle = new AltSpark(spawnPos, ToTarget.RotatedBy(Main.rand.NextFloat(-PiOver4, PiOver4)) * Main.rand.NextFloat(4, 2), false, 200, Main.rand.NextFloat(0.5f, 1f), Main.rand.NextBool() ? Color.LimeGreen : Color.Orange);
+                                        ParticleSystem.SpawnParticle(particle);
                                     }
                                 }
                             }
@@ -775,10 +775,10 @@ public class OratorHand : ModNPC
                                         velocity.X *= 0.5f;
                                         Projectile.NewProjectile(Terraria.Entity.GetSource_NaturalSpawn(), midPoint, velocity, ModContent.ProjectileType<HandRing>(), TheOrator.BoltDamage, 0f);
                                     }
-                                    CalamityMod.Particles.Particle pulse = new PulseRing(midPoint, Vector2.Zero, new(253, 189, 53), 0f, 3f, 16);
-                                    GeneralParticleHandler.SpawnParticle(pulse);
-                                    CalamityMod.Particles.Particle explosion = new DetailedExplosion(midPoint, Vector2.Zero, new(255, 133, 187), new Vector2(1f, 1f), 0f, 0f, 1f, 16);
-                                    GeneralParticleHandler.SpawnParticle(explosion);
+                                    Particle pulse = new PulseRing(midPoint, Vector2.Zero, new(253, 189, 53), 0f, 3f, 16);
+                                    ParticleSystem.SpawnParticle(pulse);
+                                    Particle explosion = new DetailedExplosion(midPoint, Vector2.Zero, new(255, 133, 187), new Vector2(1f, 1f), 0f, 0f, 1f, 16);
+                                    ParticleSystem.SpawnParticle(explosion);
 
                                     attackBool = true;
                                 }
@@ -825,8 +825,8 @@ public class OratorHand : ModNPC
                                     if (projectileCounter % 5 == 0 && Main.rand.NextBool(lerpValue))
                                     {
                                         Vector2 spawnPos = spawn + Main.rand.NextVector2CircularEdge(4f, 4f);
-                                        CalamityMod.Particles.Particle particle = new AltSparkParticle(spawnPos, ToTarget.RotatedBy(Main.rand.NextFloat(-PiOver4, PiOver4)) * Main.rand.NextFloat(4, 2), false, 200, Main.rand.NextFloat(0.5f, 1f), Main.rand.NextBool() ? Color.LimeGreen : Color.Orange);
-                                        GeneralParticleHandler.SpawnParticle(particle);
+                                        Particle particle = new AltSpark(spawnPos, ToTarget.RotatedBy(Main.rand.NextFloat(-PiOver4, PiOver4)) * Main.rand.NextFloat(4, 2), false, 200, Main.rand.NextFloat(0.5f, 1f), Main.rand.NextBool() ? Color.LimeGreen : Color.Orange);
+                                        ParticleSystem.SpawnParticle(particle);
                                     }
                                 }
 
@@ -895,8 +895,8 @@ public class OratorHand : ModNPC
                                     if (projectileCounter % 5 == 0 && Main.rand.NextBool(lerpValue))
                                     {
                                         Vector2 spawnPos = spawn + Main.rand.NextVector2CircularEdge(4f, 4f);
-                                        CalamityMod.Particles.Particle particle = new AltSparkParticle(spawnPos, ToTarget.RotatedBy(Main.rand.NextFloat(-PiOver4, PiOver4)) * Main.rand.NextFloat(4, 2), false, 200, Main.rand.NextFloat(0.5f, 1f), Main.rand.NextBool() ? Color.LimeGreen : Color.Orange);
-                                        GeneralParticleHandler.SpawnParticle(particle);
+                                        Particle particle = new AltSpark(spawnPos, ToTarget.RotatedBy(Main.rand.NextFloat(-PiOver4, PiOver4)) * Main.rand.NextFloat(4, 2), false, 200, Main.rand.NextFloat(0.5f, 1f), Main.rand.NextBool() ? Color.LimeGreen : Color.Orange);
+                                        ParticleSystem.SpawnParticle(particle);
                                     }
                                 }
                             }
@@ -1177,11 +1177,11 @@ public class OratorHand : ModNPC
         for(int i = 0; i < 5; i++)
         {
             Vector2 spawn = spawnPos + Main.rand.NextVector2CircularEdge(4f, 4f);
-            CalamityMod.Particles.Particle p = new AltSparkParticle(spawn, toTarget.RotatedBy(Main.rand.NextFloat(-PiOver4, PiOver4)) * Main.rand.NextFloat(4, 2), false, 200, Main.rand.NextFloat(0.5f, 1f), Main.rand.NextBool() ? Color.LimeGreen : Color.Orange);
-            GeneralParticleHandler.SpawnParticle(p);
+            Particle p = new AltSpark(spawn, toTarget.RotatedBy(Main.rand.NextFloat(-PiOver4, PiOver4)) * Main.rand.NextFloat(4, 2), false, 200, Main.rand.NextFloat(0.5f, 1f), Main.rand.NextBool() ? Color.LimeGreen : Color.Orange);
+            ParticleSystem.SpawnParticle(p);
         }
-        CalamityMod.Particles.Particle particle = new DirectionalPulseRing(spawnPos, toTarget * 3f, Main.rand.NextBool() ? Color.LimeGreen : Color.Orange, new(0.5f, 1), toTarget.ToRotation(), 0f, 0.75f, 30);
-        GeneralParticleHandler.SpawnParticle(particle);
+        Particle particle = new DirectionalPulseRing(spawnPos, toTarget * 3f, Main.rand.NextBool() ? Color.LimeGreen : Color.Orange, new(0.5f, 1), toTarget.ToRotation(), 0f, 0.75f, 30);
+        ParticleSystem.SpawnParticle(particle);
 
         if (Main.netMode != NetmodeID.MultiplayerClient)
         {

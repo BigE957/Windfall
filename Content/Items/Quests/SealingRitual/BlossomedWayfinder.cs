@@ -1,7 +1,7 @@
 ﻿
 using Windfall.Common.Systems.WorldEvents;
 using Terraria.ID;
-using CalamityMod.Particles;
+using Windfall.Common.Graphics.Particles;
 
 namespace Windfall.Content.Items.Quests.SealingRitual;
 
@@ -36,7 +36,7 @@ public class BlossomedWayfinder : ModItem, ILocalizedModType
             for (int i = 1; i < 8; i++)
             {
                 Particle particle = new DirectionalPulseRing(player.Center + (toRuins * i * 32), toRuins * 4f, Color.Cyan, new Vector2(0.5f, 1f) * (1 - (float)(i / 8f)), toRuins.ToRotation(), 0f, 1.5f, 12 * (i+1));
-                GeneralParticleHandler.SpawnParticle(particle);
+                ParticleSystem.SpawnParticle(particle);
             }
         }
 

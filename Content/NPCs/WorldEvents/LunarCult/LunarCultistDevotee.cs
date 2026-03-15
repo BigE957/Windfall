@@ -439,7 +439,7 @@ public class LunarCultistDevotee : ModNPC
                         for (int i = 0; i < pathFinding.MyPath.Points.Length; i++)
                         {
                             Particle p = new GlowOrbParticle(pathFinding.MyPath.Points[i].ToWorldCoordinates(), Vector2.Zero, false, 2, 0.5f, i == CurrentWaypoint ? Color.White : Color.Red);
-                            GeneralParticleHandler.SpawnParticle(p);
+                            ParticleSystem.SpawnParticle(p);
                         }
                         */
                         MoveSpeed = pathFinding.MyPath.Points.Length / 10f + 2;
@@ -627,7 +627,7 @@ public class LunarCultistDevotee : ModNPC
                         for (int i = 0; i < pathFinding.MyPath.Points.Length; i++)
                         {
                             Particle p = new GlowOrbParticle(pathFinding.MyPath.Points[i].ToWorldCoordinates(), Vector2.Zero, false, 2, 0.5f, i == CurrentWaypoint ? Color.White : Color.Red);
-                            GeneralParticleHandler.SpawnParticle(p);
+                            ParticleSystem.SpawnParticle(p);
                         }
                         */
                         if (Attack == AttackState.None)

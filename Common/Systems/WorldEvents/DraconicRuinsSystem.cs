@@ -1,4 +1,4 @@
-﻿using CalamityMod.Particles;
+﻿using Windfall.Common.Graphics.Particles;
 using DialogueHelper.UI.Dialogue;
 using Terraria.ModLoader.IO;
 using Windfall.Content.Buffs.Inhibitors;
@@ -191,8 +191,8 @@ public class DraconicRuinsSystem : ModSystem
                             player.Hurt(PlayerDeathReason.ByCustomReason(GetWindfallLocalText("Status.Death.DraconicBarrier." + Main.rand.Next(1, 3 + 1)).ToNetworkText(player.name)), 100, FacingLeft ? -1 : 1, dodgeable: false, knockback: 0f);
                             for (int i = 0; i < 4; i++)
                             {
-                                CalamityMod.Particles.Particle particle = new DirectionalPulseRing(player.Center, Vector2.UnitX * (FacingLeft ? -2 : 2) * i, new(25, 255, 140), new Vector2(0.5f, 1f), 0f, 0f, (i + 1) * 0.4f, 30);
-                                GeneralParticleHandler.SpawnParticle(particle);
+                                Particle particle = new DirectionalPulseRing(player.Center, Vector2.UnitX * (FacingLeft ? -2 : 2) * i, new(25, 255, 140), new Vector2(0.5f, 1f), 0f, 0f, (i + 1) * 0.4f, 30);
+                                ParticleSystem.SpawnParticle(particle);
                             }
                         }
                         

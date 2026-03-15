@@ -1,4 +1,4 @@
-﻿using CalamityMod.Particles;
+﻿using Windfall.Common.Graphics.Particles;
 using System.Runtime.CompilerServices;
 using Windfall.Common.Utils;
 
@@ -305,8 +305,8 @@ public class PathfindingSystem : ModSystem
                 if (!isJump)
                 {
                     sb.DrawLineBetween(Points[i].ToWorldCoordinates(), Points[i + 1].ToWorldCoordinates(), Color.Red, 4);
-                    GeneralParticleHandler.SpawnParticle(
-                        new GlowOrbParticle(Points[i].ToWorldCoordinates(), Vector2.Zero, false, 2, 0.5f, Color.Red));
+                    ParticleSystem.SpawnParticle(
+                        new GlowOrb(Points[i].ToWorldCoordinates(), Vector2.Zero, false, 2, 0.5f, Color.Red));
                 }
             }
 
@@ -333,8 +333,8 @@ public class PathfindingSystem : ModSystem
                 prev = cur;
             }
 
-            GeneralParticleHandler.SpawnParticle(new GlowOrbParticle(start, Vector2.Zero, false, 3, 0.5f, Color.Blue));
-            GeneralParticleHandler.SpawnParticle(new GlowOrbParticle(end, Vector2.Zero, false, 3, 0.5f, Color.Cyan));
+            ParticleSystem.SpawnParticle(new GlowOrb(start, Vector2.Zero, false, 3, 0.5f, Color.Blue));
+            ParticleSystem.SpawnParticle(new GlowOrb(end, Vector2.Zero, false, 3, 0.5f, Color.Cyan));
         }
     }
 

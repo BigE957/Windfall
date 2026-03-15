@@ -1,5 +1,5 @@
 ﻿using CalamityMod;
-using CalamityMod.Particles;
+using Windfall.Common.Graphics.Particles;
 using CalamityMod.World;
 using Daybreak.Common.Rendering;
 using Microsoft.Xna.Framework.Graphics;
@@ -213,9 +213,9 @@ public class SelenicIdol : ModProjectile
                     }
                 }
                 PulseRing pulse = new(Projectile.Center, Vector2.Zero, Color.Teal, 0f, 2.5f, 16);
-                GeneralParticleHandler.SpawnParticle(pulse);
+                ParticleSystem.SpawnParticle(pulse);
                 DetailedExplosion explosion = new(Projectile.Center, Vector2.Zero, new(117, 255, 159), new Vector2(1f, 1f), 0f, 0f, 1f, 16);
-                GeneralParticleHandler.SpawnParticle(explosion);
+                ParticleSystem.SpawnParticle(explosion);
                 Projectile.active = false;
                 Projectile.netUpdate = true;
                 break;

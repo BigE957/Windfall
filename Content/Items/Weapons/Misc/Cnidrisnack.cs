@@ -64,7 +64,7 @@ public class CnidrisnackThrow : ModProjectile
         Projectile.tileCollide = true;
         Projectile.usesLocalNPCImmunity = true;
         Projectile.localNPCHitCooldown = 15;
-        Projectile.aiStyle = 2;
+        Projectile.aiStyle = ProjAIStyleID.ThrownProjectile;
     }
     public override void OnKill(int timeLeft)
     {

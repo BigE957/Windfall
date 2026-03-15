@@ -1,5 +1,5 @@
 ﻿using CalamityMod.NPCs.Astral;
-using CalamityMod.Particles;
+using Windfall.Common.Graphics.Particles;
 using Windfall.Content.NPCs.Enemies.AstralSiphon;
 using Windfall.Content.NPCs.WorldEvents.LunarCult;
 using Windfall.Content.Projectiles.Enemies;
@@ -139,11 +139,11 @@ public class SelenicSiphon : ModNPC
                         for (int i = 0; i < 6; i++)
                         {
                             Color color = Main.rand.NextBool() ? Color.Cyan * 1.5f : Color.OrangeRed;
-                            Particle particle = new SparkParticle(poofPos, Main.rand.NextVector2Circular(4f, 4f), false, 32, 1f, color);
-                            GeneralParticleHandler.SpawnParticle(particle);
+                            Particle particle = new Spark(poofPos, Main.rand.NextVector2Circular(4f, 4f), false, 32, 1f, color);
+                            ParticleSystem.SpawnParticle(particle);
                         }
                         Particle pulse = new PulseRing(poofPos, Vector2.Zero, Main.rand.NextBool() ? Color.Cyan * 1.5f : Color.OrangeRed, 0f, 0.35f, 16);
-                        GeneralParticleHandler.SpawnParticle(pulse);
+                        ParticleSystem.SpawnParticle(pulse);
 
                         n.active = false;
 
@@ -159,11 +159,11 @@ public class SelenicSiphon : ModNPC
                         for (int i = 0; i < 6; i++)
                         {
                             Color color = Main.rand.NextBool() ? Color.Cyan * 1.5f : Color.OrangeRed;
-                            Particle particle = new SparkParticle(poofPos, Main.rand.NextVector2Circular(4f, 4f), false, 32, 1f, color);
-                            GeneralParticleHandler.SpawnParticle(particle);
+                            Particle particle = new Spark(poofPos, Main.rand.NextVector2Circular(4f, 4f), false, 32, 1f, color);
+                            ParticleSystem.SpawnParticle(particle);
                         }
                         Particle pulse = new PulseRing(poofPos, Vector2.Zero, Main.rand.NextBool() ? Color.Cyan * 1.5f : Color.OrangeRed, 0f, 0.35f, 16);
-                        GeneralParticleHandler.SpawnParticle(pulse);
+                        ParticleSystem.SpawnParticle(pulse);
 
                         p.active = false;
 
@@ -177,7 +177,7 @@ public class SelenicSiphon : ModNPC
                 if (FillRatio > oldFillRatio)
                 {
                     Particle pulse = new PulseRing(HarvestingHitbox.Center(), Vector2.Zero, Main.rand.NextBool() ? Color.Cyan * 1.5f : Color.OrangeRed, 0f, 0.75f, 24);
-                    GeneralParticleHandler.SpawnParticle(pulse);
+                    ParticleSystem.SpawnParticle(pulse);
                 }
 
                 if (FillRatio >= 1f)
@@ -199,13 +199,13 @@ public class SelenicSiphon : ModNPC
                 if(EndTime % 15 == 0)
                 {
                     Particle pulse = new PulseRing(HarvestingHitbox.Center(), Vector2.Zero, Main.rand.NextBool() ? Color.Cyan * 1.5f : Color.OrangeRed, 1f, Lerp(0.75f, 0, EndTime / 135f), 24);
-                    GeneralParticleHandler.SpawnParticle(pulse);
+                    ParticleSystem.SpawnParticle(pulse);
                 }
             }
             if (EndTime == 135)
             {
                 Particle pulse = new PulseRing(HarvestingHitbox.Center(), Vector2.Zero, Main.rand.NextBool() ? Color.Cyan * 1.5f : Color.OrangeRed, 0f, 1.5f, 24);
-                GeneralParticleHandler.SpawnParticle(pulse);
+                ParticleSystem.SpawnParticle(pulse);
 
                 EventActive = false;
                 foreach(Player player in Main.ActivePlayers)

@@ -1,5 +1,5 @@
 ﻿using Windfall.Common.Graphics.Primitives;
-using CalamityMod.Particles;
+using Windfall.Common.Graphics.Particles;
 using Daybreak.Common.Rendering;
 using Terraria.Graphics.Shaders;
 using Windfall.Content.NPCs.Bosses.Orator;
@@ -32,8 +32,8 @@ public class FadingStar : ModProjectile, ILocalizedModType
         if (Projectile.timeLeft % 5 == 0)
         {
             Vector2 position = new Vector2(Projectile.position.X, Projectile.Center.Y) + (Vector2.UnitY.RotatedBy(Projectile.rotation) * Main.rand.NextFloat(-16f, 16f) - (Vector2.UnitX.RotatedBy(Projectile.rotation) * Main.rand.NextFloat(-16f, 24f)));
-            Particle spark = new SparkleParticle(position, Projectile.velocity.RotatedByRandom(PiOver4) * -0.5f, Color.White, Color.SkyBlue, Main.rand.NextFloat(0.25f, 0.5f), 24, Main.rand.NextFloat(0, 0.3f));
-            GeneralParticleHandler.SpawnParticle(spark);
+            Particle sparkle = new Sparkle(position, Projectile.velocity.RotatedByRandom(PiOver4) * -0.5f, Color.White, Color.SkyBlue, Main.rand.NextFloat(0.25f, 0.5f), 24, Main.rand.NextFloat(0, 0.3f));
+            ParticleSystem.SpawnParticle(sparkle);
         }
     }
 

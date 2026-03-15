@@ -32,7 +32,7 @@ public class DisgracedApostleNPC : ModNPC
         NPC.friendly = true;
         NPC.width = 58;
         NPC.height = 70;
-        NPC.aiStyle = 0;
+        NPC.aiStyle = NPCAIStyleID.FaceClosestPlayer;
         NPC.damage = 0;
         NPC.defense = 0;
         NPC.lifeMax = 800;

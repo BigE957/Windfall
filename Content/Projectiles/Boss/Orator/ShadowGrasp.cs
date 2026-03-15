@@ -1,5 +1,5 @@
 ﻿using CalamityMod;
-using CalamityMod.Particles;
+using Windfall.Common.Graphics.Particles;
 using CalamityMod.World;
 using Windfall.Common.Graphics.Metaballs;
 using Windfall.Common.Systems;
@@ -286,10 +286,10 @@ public class ShadowGrasp : ModProjectile
             //    Projectile.NewProjectile(Terraria.Entity.GetSource_NaturalSpawn(), Projectile.Center, (TwoPi / 4 * i + (Orator.target.Center - Projectile.Center).ToRotation()).ToRotationVector2(), ModContent.ProjectileType<DarkBolt>(), TheOrator.BoltDamage, 0f, -1, 0, 10, color ? 1 : 0);
         }
 
-        CalamityMod.Particles.Particle pulse = new PulseRing(Projectile.Center, Vector2.Zero, Color.Teal, 0f, 2.5f, 16);
-        GeneralParticleHandler.SpawnParticle(pulse);
-        CalamityMod.Particles.Particle explosion = new DetailedExplosion(Projectile.Center, Vector2.Zero, new(117, 255, 159), new Vector2(1f, 1f), 0f, 0f, 1f, 16);
-        GeneralParticleHandler.SpawnParticle(explosion);
+        Particle pulse = new PulseRing(Projectile.Center, Vector2.Zero, Color.Teal, 0f, 2.5f, 16);
+        ParticleSystem.SpawnParticle(pulse);
+        Particle explosion = new DetailedExplosion(Projectile.Center, Vector2.Zero, new(117, 255, 159), new Vector2(1f, 1f), 0f, 0f, 1f, 16);
+        ParticleSystem.SpawnParticle(explosion);
     }
 
     internal int frameX = 0;

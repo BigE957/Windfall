@@ -1,6 +1,6 @@
 ﻿using CalamityMod;
 using Windfall.Common.Graphics.Primitives;
-using CalamityMod.Particles;
+using Windfall.Common.Graphics.Particles;
 using Daybreak.Common.Rendering;
 
 namespace Windfall.Content.Projectiles;
@@ -84,13 +84,13 @@ public class BlackSlash : ModProjectile
                     {
                         Vector2 spawnPos = Projectile.Center + myRotation.ToRotationVector2() * (length * Main.rand.NextFloat(0.1f, 1f) * Projectile.scale / 2f);
                         spawnPos += myRotation.ToRotationVector2().RotatedBy(PiOver2) * Main.rand.NextFloat(32f, 64f) * (Main.rand.NextBool() ? -1 : 1);
-                        SparkParticle spark = new(spawnPos, myRotation.ToRotationVector2().RotatedBy(Main.rand.NextFloat(-0.01f, 0.01f)) * Main.rand.NextFloat(1f, 6f), false, 48, Main.rand.NextFloat(0.5f, 1.5f), Color.Red);
-                        GeneralParticleHandler.SpawnParticle(spark);
+                        Spark spark = new(spawnPos, myRotation.ToRotationVector2().RotatedBy(Main.rand.NextFloat(-0.01f, 0.01f)) * Main.rand.NextFloat(1f, 6f), false, 48, Main.rand.NextFloat(0.5f, 1.5f), Color.Red);
+                        ParticleSystem.SpawnParticle(spark);
 
                         spawnPos = Projectile.Center + myRotation.ToRotationVector2() * (-length * Main.rand.NextFloat(0.1f, 1f) * Projectile.scale / 2f);
                         spawnPos += myRotation.ToRotationVector2().RotatedBy(PiOver2) * Main.rand.NextFloat(32f, 64f) * (Main.rand.NextBool() ? -1 : 1);
-                        SparkParticle spark2 = new(spawnPos, myRotation.ToRotationVector2().RotatedBy(Main.rand.NextFloat(-0.01f, 0.01f)) * -Main.rand.NextFloat(1f, 6f), false, 48, Main.rand.NextFloat(0.5f, 1.5f), Color.Red);
-                        GeneralParticleHandler.SpawnParticle(spark2);
+                        Spark spark2 = new(spawnPos, myRotation.ToRotationVector2().RotatedBy(Main.rand.NextFloat(-0.01f, 0.01f)) * -Main.rand.NextFloat(1f, 6f), false, 48, Main.rand.NextFloat(0.5f, 1.5f), Color.Red);
+                        ParticleSystem.SpawnParticle(spark2);
                     }
                 }
             }

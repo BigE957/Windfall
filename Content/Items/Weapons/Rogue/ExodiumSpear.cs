@@ -2,7 +2,7 @@
 using CalamityMod.Buffs.DamageOverTime;
 using CalamityMod.Items;
 using CalamityMod.Items.Weapons.Rogue;
-using CalamityMod.Particles;
+using Windfall.Common.Graphics.Particles;
 using Terraria;
 using Windfall.Common.Graphics.Metaballs;
 using Windfall.Common.Systems;
@@ -311,9 +311,9 @@ public class ExodiumSpearProj : ModProjectile, ILocalizedModType
             for (int i = 0; i <= 50; i++)
                 SelenicMetaballParticle.SpawnParticle(Projectile.Center, Main.rand.NextVector2Circular(10f, 10f) * Main.rand.NextFloat(1f, 2f), 40 * Main.rand.NextFloat(3f, 5f));
             Particle pulse = new PulseRing(Projectile.Center, Vector2.Zero, Color.Teal, 0f, 2.5f, 16);
-            GeneralParticleHandler.SpawnParticle(pulse);
+            ParticleSystem.SpawnParticle(pulse);
             Particle explosion = new DetailedExplosion(Projectile.Center, Vector2.Zero, new(117, 255, 159), new Vector2(1f, 1f), 0f, 0f, 1f, 16);
-            GeneralParticleHandler.SpawnParticle(explosion);
+            ParticleSystem.SpawnParticle(explosion);
             Projectile.active = false;
         }
         else

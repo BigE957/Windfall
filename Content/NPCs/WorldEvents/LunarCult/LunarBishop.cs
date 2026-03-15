@@ -40,7 +40,7 @@ public class LunarBishop : ModNPC
         NPC.friendly = true; // NPC Will not attack player
         NPC.width = 36;
         NPC.height = 58;
-        NPC.aiStyle = 0;
+        NPC.aiStyle = NPCAIStyleID.FaceClosestPlayer;
         NPC.damage = 0;
         NPC.defense = 0;
         NPC.lifeMax = 500;

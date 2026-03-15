@@ -11,7 +11,7 @@ using Terraria.GameContent.Bestiary;
 using CalamityMod.Items.LoreItems;
 using Windfall.Content.UI.BossBars;
 using CalamityMod;
-using CalamityMod.Particles;
+using Windfall.Common.Graphics.Particles;
 using Windfall.Content.Items.Utility;
 using Windfall.Content.Items.LootBags;
 using Windfall.Content.Items.Placeables.Furnature;
@@ -357,7 +357,7 @@ public class TheOrator : ModNPC
                         {
                             AIState = States.IdolEnactment;
                             Particle pulse = new DirectionalPulseRing(NPC.Center, homeIn * 8f, new(117, 255, 159), new Vector2(0.5f, 1f), homeIn.ToRotation(), 0f, 3f, 32);
-                            GeneralParticleHandler.SpawnParticle(pulse);
+                            ParticleSystem.SpawnParticle(pulse);
                         }
                     }
                     #endregion
@@ -423,7 +423,7 @@ public class TheOrator : ModNPC
                     NPC.damage = StatCorrections.ScaleContactDamage(Main.masterMode ? 360 : CalamityWorld.death ? 280 : CalamityWorld.revenge ? 268 : Main.expertMode ? 240 : 120);
 
                     Particle pulse = new DirectionalPulseRing(NPC.Center, VectorToTarget.SafeNormalize(Vector2.Zero) * 0f, new(117, 255, 159), new Vector2(0.5f, 2f), (target.Center - NPC.Center).ToRotation(), 0f, 1f, 24);
-                    GeneralParticleHandler.SpawnParticle(pulse);
+                    ParticleSystem.SpawnParticle(pulse);
                 }
                 if (aiCounter >= 0)
                 {
@@ -1045,7 +1045,7 @@ public class TheOrator : ModNPC
                                 //values gotten from Astrum Deus' contact damage. Subject to change.
                                 NPC.damage = StatCorrections.ScaleContactDamage(Main.masterMode ? 360 : CalamityWorld.death ? 280 : CalamityWorld.revenge ? 268 : Main.expertMode ? 240 : 120);
                                 Particle pulse = new DirectionalPulseRing(NPC.Center, VectorToTarget.SafeNormalize(Vector2.Zero) * 0f, new(117, 255, 159), new Vector2(0.5f, 2f), 3 * Pi / 2, 0f, 1f, 24);
-                                GeneralParticleHandler.SpawnParticle(pulse);
+                                ParticleSystem.SpawnParticle(pulse);
                             }
                             NPC.velocity = VectorToTarget;
                             VectorToTarget *= 0.925f;
@@ -1436,18 +1436,18 @@ public class TheOrator : ModNPC
                     spinSmear.Rotation = spinDirection.ToRotation() + MathHelper.PiOver2;
                     spinSmear.Time = 0;
                     spinSmear.Position = NPC.Center;
-                    spinSmear.Scale = NPC.scale * 1.9f;
+                    spinSmear.Scale = NPC.scale * 1.9f * Vector2.One;
                     spinSmear.Color = Color.Lerp(Color.LimeGreen, Color.Teal, spinCounter / 40f);
                     spinSmear.Color.A = (byte)(255 - 255 * MathHelper.Clamp((spinCounter - 15) / 15f, 0f, 1f));
                 }
                 else
                 {
                     //if (spinSmear != null)
-                    //    GeneralParticleHandler.RemoveParticle(spinSmear);
+                    //    ParticleSystem.RemoveParticle(spinSmear);
                     spinSmear = null;
 
                     //if (spinHandle != null)
-                    //    GeneralParticleHandler.RemoveParticle(spinHandle);
+                    //    ParticleSystem.RemoveParticle(spinHandle);
                     spinHandle = null;
 
                     scytheSpin = false;
@@ -1460,13 +1460,13 @@ public class TheOrator : ModNPC
         {
             if(spinHandle == null)
             {
-                spinHandle = new SemiCircularSmearVFX(NPC.Center, Color.LimeGreen, spinDirection.ToRotation(), NPC.scale * 1.5f, Vector2.One);
-                GeneralParticleHandler.SpawnParticle(spinHandle);
+                spinHandle = new SemiCircularSmear(NPC.Center, Color.LimeGreen, spinDirection.ToRotation(), NPC.scale * 1.5f, Vector2.One);
+                ParticleSystem.SpawnParticle(spinHandle);
             }
             if (spinSmear == null)
             {
-                spinSmear = new CircularSmearVFX(NPC.Center, Color.LimeGreen, spinDirection.ToRotation(), NPC.scale * 1.5f);
-                GeneralParticleHandler.SpawnParticle(spinSmear);
+                spinSmear = new CircularSmear(NPC.Center, Color.LimeGreen, spinDirection.ToRotation(), NPC.scale * 1.5f);
+                ParticleSystem.SpawnParticle(spinSmear);
                 spinSmear.Color.A = 0;                   
             }
             else
@@ -1474,7 +1474,7 @@ public class TheOrator : ModNPC
                 spinSmear.Rotation = spinDirection.ToRotation() + MathHelper.PiOver2;
                 spinSmear.Time = 0;
                 spinSmear.Position = NPC.Center;
-                spinSmear.Scale = NPC.scale * 1.9f;
+                spinSmear.Scale = NPC.scale * 1.9f * Vector2.One;
                 spinSmear.Color = Color.Lerp(Color.LimeGreen, Color.Teal, spinCounter / 40f);
                 spinSmear.Color.A = (byte)(255 * MathHelper.Clamp((spinCounter / 10f), 0f, 1f));
             }
@@ -1529,19 +1529,19 @@ public class TheOrator : ModNPC
                     sliceSmear.Rotation = sliceDirection.ToRotation() + MathHelper.PiOver2;
                     sliceSmear.Time = 0;
                     sliceSmear.Position = NPC.Center;
-                    sliceSmear.Scale = NPC.scale * 1.5f;
+                    sliceSmear.Scale = NPC.scale * 1.5f * Vector2.One;
                     sliceSmear.Color = Color.Lerp(Color.LimeGreen, Color.Teal, sliceCounter / 20f);
                     sliceSmear.Color.A = (byte)(255 - 255 * MathHelper.Clamp(((sliceCounter - 8) / 8f), 0f, 1f));
                 }
                 else
                 {
                     //if (sliceSmear != null)
-                    //    GeneralParticleHandler.RemoveParticle(sliceSmear);
+                    //    ParticleSystem.RemoveParticle(sliceSmear);
                     sliceSmear = null;
 
 
                     //if (sliceHandle != null)
-                    //    GeneralParticleHandler.RemoveParticle(sliceHandle);
+                    //    ParticleSystem.RemoveParticle(sliceHandle);
                     sliceHandle = null;
 
                     scytheSlice = false;
@@ -1556,13 +1556,13 @@ public class TheOrator : ModNPC
         {
             if (sliceHandle == null)
             {
-                sliceHandle = new SemiCircularSmearVFX(NPC.Center, Color.LimeGreen, spinDirection.ToRotation(), NPC.scale * 1.5f, Vector2.One);
-                GeneralParticleHandler.SpawnParticle(sliceHandle);
+                sliceHandle = new SemiCircularSmear(NPC.Center, Color.LimeGreen, spinDirection.ToRotation(), NPC.scale * 1.5f, Vector2.One);
+                ParticleSystem.SpawnParticle(sliceHandle);
             }
             if (sliceSmear == null)
             {
-                sliceSmear = new CircularSmearVFX(NPC.Center, Color.LimeGreen, sliceDirection.ToRotation(), NPC.scale * 1.5f);
-                GeneralParticleHandler.SpawnParticle(sliceSmear);
+                sliceSmear = new CircularSmear(NPC.Center, Color.LimeGreen, sliceDirection.ToRotation(), NPC.scale * 1.5f);
+                ParticleSystem.SpawnParticle(sliceSmear);
                 sliceSmear.Color.A = 0;
             }
             else
@@ -1570,7 +1570,7 @@ public class TheOrator : ModNPC
                 sliceSmear.Rotation = sliceDirection.ToRotation() + MathHelper.PiOver2;
                 sliceSmear.Time = 0;
                 sliceSmear.Position = NPC.Center;
-                sliceSmear.Scale = NPC.scale * 1.5f;
+                sliceSmear.Scale = NPC.scale * 1.5f * Vector2.One;
                 sliceSmear.Color = Color.Lerp(Color.LimeGreen, Color.Teal, sliceCounter / 20f);
                 sliceSmear.Color.A = (byte)(255 * MathHelper.Clamp((sliceCounter / 4f), 0f, 1f));
             }
@@ -1664,7 +1664,7 @@ public class TheOrator : ModNPC
         DownedNPCSystem.downedOrator = true;
     }
     
-    public override void BossLoot(ref string name, ref int potionType)
+    public override void BossLoot(ref int potionType)
     {
         potionType = ItemID.GreaterHealingPotion;
     }

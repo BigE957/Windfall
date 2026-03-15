@@ -1,7 +1,7 @@
 ﻿using CalamityMod;
 using CalamityMod.Buffs.DamageOverTime;
 using CalamityMod.NPCs.NormalNPCs;
-using CalamityMod.Particles;
+using Windfall.Common.Graphics.Particles;
 using Windfall.Content.Buffs.StatBuffs;
 
 namespace Windfall.Content.NPCs.PlayerNPCs;
@@ -66,8 +66,8 @@ public class GodlyTumor : ModNPC
             Dust.NewDustPerfect(NPC.Bottom + new Vector2(Main.rand.NextFloat(-24f, 24f), 0f), DustID.Demonite, new Vector2(Main.rand.NextFloat(-3f, 3f), Main.rand.NextFloat(-2.5f, 0f)));
         }
 
-        Particle pulse = new StaticPulseRing(NPC.Center, Vector2.Zero, Color.Purple, new Vector2(1f, 1f), 0f, 0f, 0.2925f, 11);
-        GeneralParticleHandler.SpawnParticle(pulse);
+        //Particle pulse = new StaticPulseRing(NPC.Center, Vector2.Zero, Color.Purple, new Vector2(1f, 1f), 0f, 0f, 0.2925f, 11);
+        //ParticleSystem.SpawnParticle(pulse);
     }
     private int WitherFactor = 1;
     private int aiCounter = 0;
@@ -93,8 +93,8 @@ public class GodlyTumor : ModNPC
         #region Visual Effects
         if (aiCounter == 10)
         {
-            Aura = new StaticPulseRing(NPC.Center, Vector2.Zero, Color.Purple, new Vector2(1f, 1f), 0f, 0.2925f, 0.2925f, 9000);
-            GeneralParticleHandler.SpawnParticle(Aura);
+            //Aura = new StaticPulseRing(NPC.Center, Vector2.Zero, Color.Purple, new Vector2(1f, 1f), 0f, 0.2925f, 0.2925f, 9000);
+            //ParticleSystem.SpawnParticle(Aura);
         }
         else if (aiCounter >= 10)
         {
@@ -145,9 +145,9 @@ public class GodlyTumor : ModNPC
                 {
                     player.AddBuff(ModContent.BuffType<WretchedHarvest>(), 240);
                 }
-            GeneralParticleHandler.RemoveParticle(Aura);
-            Aura = new StaticPulseRing(NPC.Center, Vector2.Zero, Color.Purple, new Vector2(1f, 1f), 0f, 0.2925f, 0f, 10);
-            GeneralParticleHandler.SpawnParticle(Aura);
+            //ParticleSystem.RemoveParticle(Aura);
+            //Aura = new StaticPulseRing(NPC.Center, Vector2.Zero, Color.Purple, new Vector2(1f, 1f), 0f, 0.2925f, 0f, 10);
+            //ParticleSystem.SpawnParticle(Aura);
         }
     }
 }

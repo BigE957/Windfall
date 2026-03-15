@@ -1,6 +1,6 @@
 ﻿using Windfall.Common.Graphics.Primitives;
 using CalamityMod.Items;
-using CalamityMod.Particles;
+using Windfall.Common.Graphics.Particles;
 using Microsoft.Xna.Framework.Input;
 using System.Collections.ObjectModel;
 using Terraria.Graphics.Shaders;
@@ -103,8 +103,8 @@ public class FingerBolt : ModProjectile, ILocalizedModType
         direction = direction + Main.rand.NextFloat(-RotationOffset, RotationOffset);
 
         MyColor = Projectile.whoAmI % 2 == 0 ? myColor.Orange : myColor.Green;
-        CalamityMod.Particles.Particle pulse = new DirectionalPulseRing(Projectile.Center + Projectile.velocity.SafeNormalize(Vector2.Zero) * 20, Projectile.velocity.SafeNormalize(Vector2.Zero) * 4f, MyColor == myColor.Green ? Color.MediumSeaGreen : Color.Orange, new(0.5f, 1f), Projectile.velocity.ToRotation(), 0f, 0.5f, 16);
-        GeneralParticleHandler.SpawnParticle(pulse);
+        Particle pulse = new DirectionalPulseRing(Projectile.Center + Projectile.velocity.SafeNormalize(Vector2.Zero) * 20, Projectile.velocity.SafeNormalize(Vector2.Zero) * 4f, MyColor == myColor.Green ? Color.MediumSeaGreen : Color.Orange, new(0.5f, 1f), Projectile.velocity.ToRotation(), 0f, 0.5f, 16);
+        ParticleSystem.SpawnParticle(pulse);
 
         Time = 0;
 

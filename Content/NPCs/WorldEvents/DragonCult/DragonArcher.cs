@@ -19,7 +19,7 @@ public class DragonArcher : ModNPC
         NPC.friendly = true; // NPC Will not attack player
         NPC.width = 38;
         NPC.height = 52;
-        NPC.aiStyle = 0;
+        NPC.aiStyle = NPCAIStyleID.FaceClosestPlayer;
         NPC.damage = 45;
         NPC.defense = 14;
         NPC.lifeMax = 210;

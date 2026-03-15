@@ -1,4 +1,4 @@
-﻿using CalamityMod.Particles;
+﻿using Windfall.Common.Graphics.Particles;
 using Windfall.Content.Projectiles.GodlyAbilities;
 using Windfall.Content.Projectiles.Props;
 
@@ -31,11 +31,11 @@ public class AstralEnergy : ModProjectile, ILocalizedModType
             for (int i = 0; i < 6; i++)
             {
                 Color color = Main.rand.NextBool() ? Color.Cyan * 1.5f : Color.OrangeRed;
-                Particle particle = new SparkParticle(Projectile.Center, Main.rand.NextVector2Circular(4f, 4f), false, 32, 1f, color);
-                GeneralParticleHandler.SpawnParticle(particle);
+                Particle particle = new Spark(Projectile.Center, Main.rand.NextVector2Circular(4f, 4f), false, 32, 1f, color);
+                ParticleSystem.SpawnParticle(particle);
             }
             Particle pulse = new PulseRing(Projectile.Center, Vector2.Zero, Main.rand.NextBool() ? Color.Cyan * 1.5f : Color.OrangeRed, 0f, 0.35f, 16);
-            GeneralParticleHandler.SpawnParticle(pulse);
+            ParticleSystem.SpawnParticle(pulse);
             Projectile.active = false;
             return;
         }
@@ -77,7 +77,7 @@ public class AstralEnergy : ModProjectile, ILocalizedModType
         if(Projectile.timeLeft <= 120 && Projectile.timeLeft % 30 == 0)
         {
             Particle pulse = new PulseRing(Projectile.Center, Vector2.Zero * 0f, Main.rand.NextBool() ? Color.Cyan * 1.5f : Color.OrangeRed, 0.05f, (Projectile.friendly ? 0.9f : 0.5f), 24);
-            GeneralParticleHandler.SpawnParticle(pulse);
+            ParticleSystem.SpawnParticle(pulse);
         }
 
         Time++;
@@ -88,11 +88,11 @@ public class AstralEnergy : ModProjectile, ILocalizedModType
         for (int i = 0; i < 12; i++)
         {
             Color color = Main.rand.NextBool() ? Color.Cyan * 1.5f : Color.OrangeRed;
-            Particle particle = new SparkParticle(Projectile.Center, Main.rand.NextVector2Circular(4f, 4f) * (Projectile.friendly ? 2 : 1), false, 48, 1f, color);
-            GeneralParticleHandler.SpawnParticle(particle);
+            Particle particle = new Spark(Projectile.Center, Main.rand.NextVector2Circular(4f, 4f) * (Projectile.friendly ? 2 : 1), false, 48, 1f, color);
+            ParticleSystem.SpawnParticle(particle);
         }
         Particle pulse = new PulseRing(Projectile.Center, Vector2.Zero * 0f, Main.rand.NextBool() ? Color.Cyan * 1.5f : Color.OrangeRed, 0.05f, (Projectile.friendly ? 0.9f : 0.5f), 24);
-        GeneralParticleHandler.SpawnParticle(pulse);
+        ParticleSystem.SpawnParticle(pulse);
     }
 
     public override bool OnTileCollide(Vector2 oldVelocity)

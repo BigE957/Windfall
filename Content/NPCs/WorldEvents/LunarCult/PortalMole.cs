@@ -1,5 +1,5 @@
 ﻿using CalamityMod;
-using CalamityMod.Particles;
+using Windfall.Common.Graphics.Particles;
 using Daybreak.Common.Rendering;
 using Terraria.GameContent.Bestiary;
 using Windfall.Common.Systems;
@@ -76,8 +76,8 @@ public class PortalMole : ModNPC
                     {
                         Vector2 spawnPosition = NPC.Center;
                         Color color = Color.Lerp(Color.LimeGreen, new(117, 255, 159), Main.rand.NextFloat(0f, 1f));
-                        CalamityMod.Particles.Particle particle = new PulseRing(spawnPosition, Vector2.Zero, color, 0.25f, 0.9f, 30);
-                        GeneralParticleHandler.SpawnParticle(particle);
+                        Particle particle = new PulseRing(spawnPosition, Vector2.Zero, color, 0.25f, 0.9f, 30);
+                        ParticleSystem.SpawnParticle(particle);
                     }
                 }
                 else
@@ -96,8 +96,8 @@ public class PortalMole : ModNPC
                     {
                         Vector2 spawnPosition = NPC.Center;
                         Color color = Color.Lerp(Color.LimeGreen, new(117, 255, 159), Main.rand.NextFloat(0f, 1f));
-                        CalamityMod.Particles.Particle particle = new PulseRing(spawnPosition, Vector2.Zero, color, 1.25f, 0.1f, 100);
-                        GeneralParticleHandler.SpawnParticle(particle);
+                        Particle particle = new PulseRing(spawnPosition, Vector2.Zero, color, 1.25f, 0.1f, 100);
+                        ParticleSystem.SpawnParticle(particle);
                     }
                     NPC target = Main.npc[targetIndex];
                     if (target == null || !target.active)
@@ -145,8 +145,8 @@ public class PortalMole : ModNPC
         {
             Vector2 spawnPosition = NPC.Center + Main.rand.NextVector2CircularEdge(77f * NPC.scale, 77f * NPC.scale);
             Color color = Color.Lerp(Color.LimeGreen, new(117, 255, 159), Main.rand.NextFloat(0f, 1f));
-            CalamityMod.Particles.Particle particle = new AltSparkParticle(spawnPosition, (spawnPosition - NPC.Center).SafeNormalize(Vector2.Zero) * (Main.rand.NextFloat(-4, -2f) * NPC.scale), false, 200, Main.rand.NextFloat(0.5f, 1f) * NPC.scale, color);
-            GeneralParticleHandler.SpawnParticle(particle);
+            Particle particle = new AltSpark(spawnPosition, (spawnPosition - NPC.Center).SafeNormalize(Vector2.Zero) * (Main.rand.NextFloat(-4, -2f) * NPC.scale), false, 200, Main.rand.NextFloat(0.5f, 1f) * NPC.scale, color);
+            ParticleSystem.SpawnParticle(particle);
         }
         Lighting.AddLight(NPC.Center, new Vector3(0.32f, 0.92f, 0.71f));
         NPC.rotation += 0.05f;

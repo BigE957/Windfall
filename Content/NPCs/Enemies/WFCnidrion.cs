@@ -291,7 +291,7 @@ public class WFCnidrion : ModNPC
     }
     public override void HitEffect(NPC.HitInfo hit)
     {
-        if (NPC.aiStyle == 7)
+        if (NPC.aiStyle == NPCAIStyleID.Passive)
             NPC.aiStyle = -1;
         for (int k = 0; k < 5; k++)
         {

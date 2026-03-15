@@ -1,7 +1,7 @@
 ﻿using CalamityMod;
 using Windfall.Common.Graphics.Primitives;
 using CalamityMod.Items;
-using CalamityMod.Particles;
+using Windfall.Common.Graphics.Particles;
 using CalamityMod.World;
 using Daybreak.Common.Rendering;
 using Microsoft.Xna.Framework.Input;
@@ -190,8 +190,8 @@ public class Apotelesma : ModItem, ILocalizedModType
         for (int i = 0; i < 8; i++)
         {
             Color color = Color.Lerp(new Color(117, 255, 159), Color.Black, (i / 8f));
-            Particle p = new HeavySmokeParticle(position, Vector2.UnitY * -2 * (i+1), color, 32, 1f, (1 - (i / 8f)) * 0.5f, Main.rand.NextFloat(-0.05f, 0.05f), true);
-            GeneralParticleHandler.SpawnParticle(p);
+            Particle p = new HeavySmoke(position, Vector2.UnitY * -2 * (i+1), color, 32, 1f, (1 - (i / 8f)) * 0.5f, Main.rand.NextFloat(-0.05f, 0.05f), true);
+            ParticleSystem.SpawnParticle(p);
         }
     }
 }
@@ -294,7 +294,7 @@ public class ApotelesmaProj : ModProjectile
 
                         SoundEngine.PlaySound(TheOrator.DashWarn, owner.Center);
                         Particle pulse = new PulseRing(owner.Center, Vector2.Zero, new(117, 255, 159), 0f, 1f, 24);
-                        GeneralParticleHandler.SpawnParticle(pulse);
+                        ParticleSystem.SpawnParticle(pulse);
                     }
                 }
 
@@ -318,7 +318,7 @@ public class ApotelesmaProj : ModProjectile
                     Vector2 velocity = (owner.Calamity().mouseWorld - owner.Center).SafeNormalize(Vector2.UnitX * owner.direction);
 
                     Particle pulse = new DirectionalPulseRing(owner.Center, velocity.SafeNormalize(Vector2.Zero) * -1.5f, new(117, 255, 159), new Vector2(0.5f, 2f), velocity.ToRotation(), 0f, 1f, 24);
-                    GeneralParticleHandler.SpawnParticle(pulse);
+                    ParticleSystem.SpawnParticle(pulse);
                 }
                 else if (ConsumedCharge > 0)
                 {
@@ -458,7 +458,7 @@ public class ApotelesmaProj : ModProjectile
                     if (Time == 4 || Time == 12 || Time == 20)
                     {
                         Particle pulse = new DirectionalPulseRing(owner.Center, rushDirection * -1.5f, new(117, 255, 159), new Vector2(0.5f, 2f), rushDirection.ToRotation(), 0f, 0.75f, 48);
-                        GeneralParticleHandler.SpawnParticle(pulse);
+                        ParticleSystem.SpawnParticle(pulse);
                     }
 
                     if(Time % 4 == 0 && Time < 32)
@@ -466,11 +466,11 @@ public class ApotelesmaProj : ModProjectile
                         Color colorA = Main.rand.NextBool(3) ? Color.Gold : new(117, 255, 159);
                         Color colorB = Main.rand.NextBool(3) ? new(117, 255, 159) : Color.Gold;
 
-                        Particle spark = new SparkParticle(Projectile.Center + rushDirection.RotatedBy(PiOver2) * 96, -(rushDirection.RotatedBy(-PiOver4 / 4)), false, 12, 1.5f, colorA);
-                        GeneralParticleHandler.SpawnParticle(spark);
+                        Particle spark = new Spark(Projectile.Center + rushDirection.RotatedBy(PiOver2) * 96, -(rushDirection.RotatedBy(-PiOver4 / 4)), false, 12, 1.5f, colorA);
+                        ParticleSystem.SpawnParticle(spark);
 
-                        spark = new SparkParticle(Projectile.Center + rushDirection.RotatedBy(-PiOver2) * 96, -(rushDirection.RotatedBy(PiOver4 / 4)), false, 12, 1.5f, colorB);
-                        GeneralParticleHandler.SpawnParticle(spark);
+                        spark = new Spark(Projectile.Center + rushDirection.RotatedBy(-PiOver2) * 96, -(rushDirection.RotatedBy(PiOver4 / 4)), false, 12, 1.5f, colorB);
+                        ParticleSystem.SpawnParticle(spark);
 
                         if(Time % 8 == 0)
                         {
@@ -510,8 +510,8 @@ public class ApotelesmaProj : ModProjectile
             Vector2 velocity = hitDirection.RotatedBy(Main.rand.NextFloat(-PiOver4, PiOver4)) * Main.rand.NextFloat(8f, 12f);
             velocity.Y -= 4;
 
-            Particle spark = new SparkParticle(target.Center, velocity, true, 18, Main.rand.NextFloat(0.5f, 1f), new(117, 255, 159));
-            GeneralParticleHandler.SpawnParticle(spark);
+            Particle spark = new Spark(target.Center, velocity, true, 18, Main.rand.NextFloat(0.5f, 1f), new(117, 255, 159));
+            ParticleSystem.SpawnParticle(spark);
         }
 
         //if (!target.IsAnEnemy())
@@ -820,8 +820,8 @@ public class RushBolt : ModProjectile
         {
             Vector2 position = new Vector2(Projectile.position.X, Projectile.Center.Y) + (Vector2.UnitY.RotatedBy(Projectile.rotation) * Main.rand.NextFloat(-16f, 16f));
 
-            Particle spark = new SparkParticle(position, Projectile.velocity.RotatedByRandom(PiOver4) * -0.5f, false, 12, Main.rand.NextFloat(0.25f, 1f), ColorFunction(0, Vector2.Zero));
-            GeneralParticleHandler.SpawnParticle(spark);
+            Particle spark = new Spark(position, Projectile.velocity.RotatedByRandom(PiOver4) * -0.5f, false, 12, Main.rand.NextFloat(0.25f, 1f), ColorFunction(0, Vector2.Zero));
+            ParticleSystem.SpawnParticle(spark);
         }
         Lighting.AddLight(Projectile.Center, ColorFunction(0, Vector2.Zero).ToVector3());
     }

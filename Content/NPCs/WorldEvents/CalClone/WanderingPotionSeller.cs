@@ -41,7 +41,7 @@ public class WanderingPotionSeller : ModNPC
         NPC.friendly = true; // NPC Will not attack player
         NPC.width = 36;
         NPC.height = 52;
-        NPC.aiStyle = 7;
+        NPC.aiStyle = NPCAIStyleID.Passive;
         NPC.damage = 10;
         NPC.defense = 15;
         NPC.lifeMax = 250;
@@ -53,7 +53,7 @@ public class WanderingPotionSeller : ModNPC
     }
     public override bool CanChat()
     {
-        if (NPC.aiStyle == 0)
+        if (NPC.aiStyle == NPCAIStyleID.FaceClosestPlayer)
             return false;
         return true;
     }
@@ -119,7 +119,7 @@ public class WanderingPotionSeller : ModNPC
     {
         if (firstButton)
         {
-            NPC.aiStyle = 0;
+            NPC.aiStyle = NPCAIStyleID.FaceClosestPlayer;
             Main.CloseNPCChatOrSign();
         }
     }
@@ -130,7 +130,7 @@ public class WanderingPotionSeller : ModNPC
     public override void AI()
     {
         NPC.homeless = true;
-        if (NPC.aiStyle == 0)
+        if (NPC.aiStyle == NPCAIStyleID.FaceClosestPlayer)
         {
             aiCounter++;
             if (aiCounter == 1)

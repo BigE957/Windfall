@@ -3,7 +3,7 @@ using Windfall.Common.Graphics.Primitives;
 using CalamityMod.Items;
 using CalamityMod.NPCs;
 using CalamityMod.NPCs.DevourerofGods;
-using CalamityMod.Particles;
+using Windfall.Common.Graphics.Particles;
 using CalamityMod.Projectiles.Summon;
 using Daybreak.Common.Rendering;
 using Microsoft.Xna.Framework.Input;
@@ -343,7 +343,7 @@ public class OratorHandMinion : ModProjectile
                     if (HandSide == 1)
                     {
                         grazeArea = new(Owner.Center, Vector2.Zero, Color.LimeGreen, 0f, 1f, 20);
-                        GeneralParticleHandler.SpawnParticle(grazeArea);
+                        ParticleSystem.SpawnParticle(grazeArea);
                     }
                 }
                 else if (consumedGraze == ShadowHandStaff.MaxGraze)
@@ -489,9 +489,9 @@ public class OratorHandMinion : ModProjectile
                 {
                     if (SharedTime >= 10)
                     {
-                        GeneralParticleHandler.RemoveParticle(grazeArea);
+                        ParticleSystem.RemoveParticle(grazeArea);
                         grazeArea = new(Owner.Center, Vector2.Zero, Color.LimeGreen, 1f, 1f, 24);
-                        GeneralParticleHandler.SpawnParticle(grazeArea);
+                        ParticleSystem.SpawnParticle(grazeArea);
 
                         if (((ShadowHandStaff)Owner.HeldItem().ModItem).GrazePoints < ShadowHandStaff.MaxGraze && grazeTime == 0 && Owner.immuneTime == 0 && !Owner.immune)
                         {
@@ -576,9 +576,9 @@ public class OratorHandMinion : ModProjectile
                                     }
                                 }
                                 PulseRing pulse = new(midPoint, Vector2.Zero, new(253, 189, 53), 0f, 3f, 16);
-                                GeneralParticleHandler.SpawnParticle(pulse);
+                                ParticleSystem.SpawnParticle(pulse);
                                 DetailedExplosion explosion = new(midPoint, Vector2.Zero, new(255, 133, 187), new Vector2(1f, 1f), 0f, 0f, 1f, 16);
-                                GeneralParticleHandler.SpawnParticle(explosion);
+                                ParticleSystem.SpawnParticle(explosion);
 
                                 Projectile.velocity = Vector2.Zero;
                                 subHand.velocity = Vector2.Zero;
@@ -672,7 +672,7 @@ public class OratorHandMinion : ModProjectile
                     if (HandSide == 1)
                     {
                         DirectionalPulseRing pulse = new(Owner.Center, goalDirection * 8f, new(117, 255, 159), new Vector2(0.5f, 1f), goalDirection.ToRotation(), 0f, 3f, 32);
-                        GeneralParticleHandler.SpawnParticle(pulse);
+                        ParticleSystem.SpawnParticle(pulse);
 
                         if (Main.netMode != NetmodeID.MultiplayerClient)
                             Projectile.NewProjectile(Terraria.Entity.GetSource_NaturalSpawn(), Owner.Center + goalDirection * 150f, goalDirection * 40, ModContent.ProjectileType<SelenicIdolMinion>(), (int)(Projectile.damage * 1.5f), 0f, Owner.whoAmI);
@@ -712,11 +712,11 @@ public class OratorHandMinion : ModProjectile
                 Vector2 dir = toProjectile.RotatedBy(rot);
                 float scale = 1f - Math.Abs(rot);
                 Vector2 hitLocation = target.Center + dir * size / 2f;
-                SparkParticle particle = new(hitLocation, dir * Main.rand.NextFloat(2f, 12f), false, 24, scale * Main.rand.NextFloat(0.8f, 1.6f), Main.rand.NextBool() ? Color.Orange : Color.LimeGreen);
-                GeneralParticleHandler.SpawnParticle(particle);
+                Spark particle = new(hitLocation, dir * Main.rand.NextFloat(2f, 12f), false, 24, scale * Main.rand.NextFloat(0.8f, 1.6f), Main.rand.NextBool() ? Color.Orange : Color.LimeGreen);
+                ParticleSystem.SpawnParticle(particle);
             }
             //DirectionalPulseRing ring = new(target.Center, Vector2.Zero, Main.rand.NextBool() ? Color.Orange : Color.LimeGreen, 0f, size / 64f, 12);
-            //GeneralParticleHandler.SpawnParticle(ring);
+            //ParticleSystem.SpawnParticle(ring);
 
         }
     }
@@ -1059,9 +1059,9 @@ public class SelenicIdolMinion : ModProjectile, ILocalizedModType
                 }
 
                 PulseRing pulse = new(Projectile.Center, Vector2.Zero, Color.Teal, 0f, 2.5f, 16);
-                GeneralParticleHandler.SpawnParticle(pulse);
+                ParticleSystem.SpawnParticle(pulse);
                 DetailedExplosion explosion = new(Projectile.Center, Vector2.Zero, new(117, 255, 159), new Vector2(1f, 1f), 0f, 0f, 1f, 16);
-                GeneralParticleHandler.SpawnParticle(explosion);
+                ParticleSystem.SpawnParticle(explosion);
 
                 Projectile.active = false;
                 Projectile.netUpdate = true;

@@ -2,7 +2,7 @@
 using CalamityMod.Dusts;
 using CalamityMod.NPCs;
 using CalamityMod.NPCs.Astral;
-using CalamityMod.Particles;
+using Windfall.Common.Graphics.Particles;
 using CalamityMod.Sounds;
 using Terraria;
 using Windfall.Content.Projectiles.Enemies;
@@ -97,13 +97,13 @@ public class SiphonSpitter : ModNPC
                 if (attackCounter % 5 == 0 && Main.rand.NextBool(lerpValue))
                 {
                     Vector2 spawnPos = projectilePos + Main.rand.NextVector2CircularEdge(4f, 4f);
-                    Particle particle = new AltSparkParticle(spawnPos, (projectilePos - spawnPos).SafeNormalize(Vector2.Zero) * Main.rand.NextFloat(4, 2), false, 200, Main.rand.NextFloat(0.5f, 1f), Main.rand.NextBool() ? Color.Cyan * 1.5f : Color.OrangeRed);
-                    GeneralParticleHandler.SpawnParticle(particle);
+                    Particle particle = new AltSpark(spawnPos, (projectilePos - spawnPos).SafeNormalize(Vector2.Zero) * Main.rand.NextFloat(4, 2), false, 200, Main.rand.NextFloat(0.5f, 1f), Main.rand.NextBool() ? Color.Cyan * 1.5f : Color.OrangeRed);
+                    ParticleSystem.SpawnParticle(particle);
                 }
                 if (attackCounter % 30 == 0)
                 {
                     Particle particle = new PulseRing(projectilePos, Vector2.Zero, attackCounter % 60 == 0 ? Color.Cyan * 1.5f : Color.OrangeRed, 0f, 0.5f, 30);
-                    GeneralParticleHandler.SpawnParticle(particle);
+                    ParticleSystem.SpawnParticle(particle);
                 }
             }
             else

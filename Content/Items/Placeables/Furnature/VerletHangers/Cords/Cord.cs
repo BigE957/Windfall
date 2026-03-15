@@ -1,4 +1,4 @@
-﻿using CalamityMod.Particles;
+﻿using Windfall.Common.Graphics.Particles;
 using Windfall.Content.Tiles.Furnature.VerletHangers.Hangers;
 using Windfall.Content.Tiles.TileEntities;
 using static Windfall.Common.Graphics.Verlet.VerletIntegration;
@@ -86,13 +86,13 @@ public abstract class Cord : ModItem
 
             for (int i = 0; i < 8; i++)
             {
-                particle = new GlowOrbParticle(Vector2.Lerp(StringStart, StringEnd, i / 8f), Vector2.Zero, false, 2, 0.5f, Color.White);
-                GeneralParticleHandler.SpawnParticle(particle);
+                particle = new GlowOrb(Vector2.Lerp(StringStart, StringEnd, i / 8f), Vector2.Zero, false, 2, 0.5f, Color.White);
+                ParticleSystem.SpawnParticle(particle);
             }
-            particle = new GlowOrbParticle(StringStart, Vector2.Zero, false, 2, 0.5f, Color.White);
-            GeneralParticleHandler.SpawnParticle(particle);
-            particle = new GlowOrbParticle(StringEnd, Vector2.Zero, false, 2, 0.5f, Color.White);
-            GeneralParticleHandler.SpawnParticle(particle);
+            particle = new GlowOrb(StringStart, Vector2.Zero, false, 2, 0.5f, Color.White);
+            ParticleSystem.SpawnParticle(particle);
+            particle = new GlowOrb(StringEnd, Vector2.Zero, false, 2, 0.5f, Color.White);
+            ParticleSystem.SpawnParticle(particle);
         }
     }
 }

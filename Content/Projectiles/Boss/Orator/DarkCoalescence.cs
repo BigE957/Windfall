@@ -1,5 +1,5 @@
 ﻿using CalamityMod;
-using CalamityMod.Particles;
+using Windfall.Common.Graphics.Particles;
 using CalamityMod.World;
 using Terraria.GameContent;
 using Windfall.Common.Graphics.Metaballs;
@@ -154,10 +154,10 @@ public class DarkCoalescence : ModProjectile
                                 p.timeLeft /= 2;
                             }
                     }
-                    CalamityMod.Particles.Particle pulse = new PulseRing(Projectile.Center, Vector2.Zero, Color.Teal, 0f, 4f, 16);
-                    GeneralParticleHandler.SpawnParticle(pulse);
-                    CalamityMod.Particles.Particle explosion = new DetailedExplosion(Projectile.Center, Vector2.Zero, new(117, 255, 159), new Vector2(1f, 1f), 0f, 0f, 1.5f, 16);
-                    GeneralParticleHandler.SpawnParticle(explosion);
+                    Particle pulse = new PulseRing(Projectile.Center, Vector2.Zero, Color.Teal, 0f, 4f, 16);
+                    ParticleSystem.SpawnParticle(pulse);
+                    Particle explosion = new DetailedExplosion(Projectile.Center, Vector2.Zero, new(117, 255, 159), new Vector2(1f, 1f), 0f, 0f, 1.5f, 16);
+                    ParticleSystem.SpawnParticle(explosion);
                 }                    
                 Projectile.active = false;
                 //EmpyreanStickyParticles.RemoveAll(p => p.ProjectileIndex == Projectile.whoAmI);

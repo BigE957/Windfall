@@ -1,4 +1,4 @@
-﻿using CalamityMod.Particles;
+﻿using Windfall.Common.Graphics.Particles;
 using Daybreak.Common.Rendering;
 using System;
 using System.Collections.Generic;
@@ -49,8 +49,8 @@ public class DoGRift : ModProjectile
         {
             Vector2 spawnPosition = Projectile.Center + Main.rand.NextVector2CircularEdge(80f * Projectile.scale, 80f * Projectile.scale);
             Color color = Color.Lerp(Color.Fuchsia, Color.Aqua, Main.rand.NextFloat(0f, 1f));
-            Particle particle = new AltSparkParticle(spawnPosition, (spawnPosition - Projectile.Center).SafeNormalize(Vector2.Zero) * (Main.rand.NextFloat(-4, -2f) * Projectile.scale), false, 200, Main.rand.NextFloat(0.25f, 0.5f) * Projectile.scale, color);
-            GeneralParticleHandler.SpawnParticle(particle);
+            Particle particle = new AltSpark(spawnPosition, (spawnPosition - Projectile.Center).SafeNormalize(Vector2.Zero) * (Main.rand.NextFloat(-4, -2f) * Projectile.scale), false, 200, Main.rand.NextFloat(0.25f, 0.5f) * Projectile.scale, color);
+            ParticleSystem.SpawnParticle(particle);
         }
         if (aiCounter > 60 && eyeOpacity < 1f)
             eyeOpacity += 0.025f;

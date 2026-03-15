@@ -2,7 +2,7 @@
 using CalamityMod.Buffs.StatDebuffs;
 using Windfall.Common.Graphics.Primitives;
 using CalamityMod.Items;
-using CalamityMod.Particles;
+using Windfall.Common.Graphics.Particles;
 using Daybreak.Common.Rendering;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
@@ -122,7 +122,7 @@ public class KaimosHoldout : ModProjectile, ILocalizedModType
                     ++fireStrength;
 
                     Particle pulse = new DirectionalPulseRing(Projectile.Center + toMouse * 28 + owner.velocity, toMouse * 4f, (Time % (owner.manaSick ? 60 : 30)) == 0 ? Color.MediumSeaGreen : Color.Orange, new(0.5f, 1f), toMouse.ToRotation(), 0f, 0.5f, 16);
-                    GeneralParticleHandler.SpawnParticle(pulse);
+                    ParticleSystem.SpawnParticle(pulse);
                     SoundEngine.PlaySound(SoundID.Item17 with { Pitch = (fireStrength >= 30f ? 1f : fireStrength / 30f), PitchVariance = 0 }, Projectile.Center);
                 }
             }
@@ -295,9 +295,9 @@ public class PotGlob : ModProjectile, ILocalizedModType
                         if (glob.Trail == TrailType.Shader)
                         {
                             Particle pulse = new PulseRing(Projectile.Center, Vector2.Zero, Color.Teal, 0f, 2.5f, 16);
-                            GeneralParticleHandler.SpawnParticle(pulse);
+                            ParticleSystem.SpawnParticle(pulse);
                             Particle explosion = new DetailedExplosion(Projectile.Center, Vector2.Zero, new(117, 255, 159), new Vector2(1f, 1f), 0f, 0f, 1f, 16);
-                            GeneralParticleHandler.SpawnParticle(explosion);
+                            ParticleSystem.SpawnParticle(explosion);
 
                             for (int i = 0; i < Size * 3 + glob.Size * 3; i++)
                                 Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, Main.rand.NextVector2Circular(Size * 3f, Size * 3f), ModContent.ProjectileType<PotGlob>(), (int)Main.player[Projectile.owner].GetDamage(DamageClass.Magic).ApplyTo(Kaimos.BaseDamage), Projectile.knockBack, Projectile.owner, Main.rand.NextFloat(0.33f, 0.66f), 2, -1);
@@ -318,9 +318,9 @@ public class PotGlob : ModProjectile, ILocalizedModType
                 if(Size >= 4f)
                 {
                     Particle pulse = new PulseRing(Projectile.Center, Vector2.Zero, Color.Teal, 0f, 2.5f, 16);
-                    GeneralParticleHandler.SpawnParticle(pulse);
+                    ParticleSystem.SpawnParticle(pulse);
                     Particle explosion = new DetailedExplosion(Projectile.Center, Vector2.Zero, new(117, 255, 159), new Vector2(1f, 1f), 0f, 0f, 1f, 16);
-                    GeneralParticleHandler.SpawnParticle(explosion);
+                    ParticleSystem.SpawnParticle(explosion);
 
                     for (int i = 0; i < Size * 3; i++)
                         Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, Main.rand.NextVector2Circular(Size * 1.5f, Size * 1.5f), ModContent.ProjectileType<PotGlob>(), (int)Main.player[Projectile.owner].GetDamage(DamageClass.Magic).ApplyTo(Kaimos.BaseDamage), Projectile.knockBack, Projectile.owner, Main.rand.NextFloat(0.33f, 0.66f), 2, -1);
@@ -381,9 +381,9 @@ public class PotGlob : ModProjectile, ILocalizedModType
                     SelenicMetaballParticle.SpawnParticle(Projectile.Center, Main.rand.NextVector2Circular(10f, 10f) * Main.rand.NextFloat(1f, 2f), 40 * Main.rand.NextFloat(3f, 5f));
                
                 Particle pulse = new PulseRing(Projectile.Center, Vector2.Zero, Color.Teal, 0f, 2.5f, 16);
-                GeneralParticleHandler.SpawnParticle(pulse);
+                ParticleSystem.SpawnParticle(pulse);
                 Particle explosion = new DetailedExplosion(Projectile.Center, Vector2.Zero, new(117, 255, 159), new Vector2(1f, 1f), 0f, 0f, 1f, 16);
-                GeneralParticleHandler.SpawnParticle(explosion);
+                ParticleSystem.SpawnParticle(explosion);
 
                 target.StrikeNPC(target.CalculateHitInfo(Projectile.damage * damageMult, 0, true, Projectile.knockBack * 2f, Projectile.DamageType));
 

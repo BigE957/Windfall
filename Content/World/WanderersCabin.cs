@@ -44,7 +44,7 @@ public static class WanderersCabin
                 placementPositionY++;
             }
 
-            if (Main.tile[placementPositionX, placementPositionY].HasTile || Main.tile[placementPositionX, placementPositionY].WallType > 0)
+            if (Main.tile[placementPositionX, placementPositionY].HasTile || Main.tile[placementPositionX, placementPositionY].WallType > WallID.None)
             {
                 foundValidGround = true;
             }

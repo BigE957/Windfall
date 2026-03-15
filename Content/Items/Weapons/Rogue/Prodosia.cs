@@ -2,7 +2,7 @@
 using CalamityMod.Buffs.DamageOverTime;
 using CalamityMod.Items;
 using CalamityMod.Items.Weapons.Rogue;
-using CalamityMod.Particles;
+using Windfall.Common.Graphics.Particles;
 using Microsoft.Xna.Framework.Input;
 using System.Collections.ObjectModel;
 using Windfall.Common.Graphics.Metaballs;
@@ -158,8 +158,8 @@ public class GoldenTrinket : ModProjectile, ILocalizedModType
                         plannedVelocity.Y += 0.4f;
                     }
 
-                    Particle particle = new GlowOrbParticle(currentCenter, Vector2.Zero, false, 2, 0.5f, (i % 2 == 0 ? Color.Cyan : Color.LimeGreen) with {A = (byte)(255 * throwStrength) });
-                    GeneralParticleHandler.SpawnParticle(particle);
+                    Particle particle = new GlowOrb(currentCenter, Vector2.Zero, false, 2, 0.5f, (i % 2 == 0 ? Color.Cyan : Color.LimeGreen) with {A = (byte)(255 * throwStrength) });
+                    ParticleSystem.SpawnParticle(particle);
                 }
 
                 if (!owner.channel)
@@ -447,8 +447,8 @@ public class GoldenJavelin : ModProjectile, ILocalizedModType
                         Vector2 velocity = hitDirection.RotatedBy(Main.rand.NextFloat(-PiOver4, PiOver4)) * Main.rand.NextFloat(8f, 12f);
                         velocity.Y -= 4;
 
-                        Particle spark = new SparkParticle(target.Center, velocity, true, 18, Main.rand.NextFloat(0.5f, 1f), new(117, 255, 159));
-                        GeneralParticleHandler.SpawnParticle(spark);
+                        Particle spark = new Spark(target.Center, velocity, true, 18, Main.rand.NextFloat(0.5f, 1f), new(117, 255, 159));
+                        ParticleSystem.SpawnParticle(spark);
                     }
                 }
                 if (Time >= 16)

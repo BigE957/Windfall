@@ -2,7 +2,7 @@
 using CalamityMod.Buffs.DamageOverTime;
 using CalamityMod.Buffs.StatDebuffs;
 using CalamityMod.NPCs.NormalNPCs;
-using CalamityMod.Particles;
+using Windfall.Common.Graphics.Particles;
 using DialogueHelper.UI.Dialogue;
 using Terraria;
 using Terraria.Graphics.Effects;
@@ -537,7 +537,7 @@ public class GodlyPlayer : ModPlayer
             for (int i = 1; i < 3; i++)
             {
                 Particle boomRing = new DirectionalPulseRing(tumor.Center, Vector2.Zero, Color.MediumPurple, Vector2.One, 0f, 0.14f * i, 1.43f * i, 20);
-                GeneralParticleHandler.SpawnParticle(boomRing);
+                ParticleSystem.SpawnParticle(boomRing);
             }
             
             for (int i = 0; i < 30; i++)

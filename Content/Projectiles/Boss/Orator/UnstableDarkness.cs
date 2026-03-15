@@ -1,5 +1,5 @@
 ﻿using CalamityMod;
-using CalamityMod.Particles;
+using Windfall.Common.Graphics.Particles;
 using CalamityMod.World;
 using Windfall.Common.Graphics.Metaballs;
 using Windfall.Common.Systems;
@@ -98,10 +98,10 @@ public class UnstableDarkness: ModProjectile
             for (int i = 0; i < 24; i++)
                 Projectile.NewProjectile(Terraria.Entity.GetSource_NaturalSpawn(), Projectile.Center + Main.rand.NextVector2Circular(64f, 64f), Main.rand.NextVector2Circular(4f, 4f), ModContent.ProjectileType<DarkGlob>(), TheOrator.GlobDamage, 0f, -1, 0, Main.rand.NextFloat(0.5f, 0.75f));
         }
-        CalamityMod.Particles.Particle pulse = new PulseRing(Projectile.Center, Vector2.Zero, Color.Teal, 0f, 2.5f, 16);
-        GeneralParticleHandler.SpawnParticle(pulse);
-        CalamityMod.Particles.Particle explosion = new DetailedExplosion(Projectile.Center, Vector2.Zero, new(117, 255, 159), new Vector2(1f, 1f), 0f, 0f, 1f, 16);
-        GeneralParticleHandler.SpawnParticle(explosion);
+        Particle pulse = new PulseRing(Projectile.Center, Vector2.Zero, Color.Teal, 0f, 2.5f, 16);
+        ParticleSystem.SpawnParticle(pulse);
+        Particle explosion = new DetailedExplosion(Projectile.Center, Vector2.Zero, new(117, 255, 159), new Vector2(1f, 1f), 0f, 0f, 1f, 16);
+        ParticleSystem.SpawnParticle(explosion);
         Projectile.active = false;
         //EmpyreanStickyParticles.RemoveAll(p => p.ProjectileIndex == Projectile.whoAmI);
     }

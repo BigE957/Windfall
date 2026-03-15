@@ -20,6 +20,7 @@ public class LoadSystem : ModSystem
 
     #region VFX Textures
     public static Asset<Texture2D> Circle;
+    public static Asset<Texture2D> Bloom;
     public static Asset<Texture2D> SwordSlash;
     public static Asset<Texture2D> PerlinNoise;
     public static Asset<Texture2D> TurbulentNoise;
@@ -52,6 +53,7 @@ public class LoadSystem : ModSystem
 
         #region Assets
         Circle = ModContent.Request<Texture2D>("Windfall/Assets/Graphics/Metaballs/BasicCircle");
+        Bloom = ModContent.Request<Texture2D>("Windfall/Assets/Graphics/Metaballs/BloomCircle");
         SwordSlash = ModContent.Request<Texture2D>("CalamityMod/ExtraTextures/Trails/SwordSlashTexture");
         PerlinNoise = ModContent.Request<Texture2D>("Windfall/Assets/Graphics/Extra/PerlinNoise");
         TurbulentNoise = ModContent.Request<Texture2D>("Windfall/Assets/Graphics/Extra/TurbulentNoise");

@@ -646,7 +646,7 @@ public class TravellingCultist : ModNPC, ILocalizedModType
         for (int i = 0; i < pathFinding.MyPath.Points.Length; i++)
         {
             Particle p = new GlowOrbParticle(pathFinding.MyPath.Points[i].ToWorldCoordinates(), Vector2.Zero, false, 2, 0.5f, i == CurrentWaypoint ? Color.White : Color.Red);
-            GeneralParticleHandler.SpawnParticle(p);
+            ParticleSystem.SpawnParticle(p);
         }
         */
         Time++;

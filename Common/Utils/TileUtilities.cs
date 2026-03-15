@@ -129,11 +129,11 @@ public static partial class WindfallUtils
         {
             switch (Main.tile[x, y].TileType)
             {
-                case 314:
+                case TileID.MinecartTrack:
                     if (Minecart.FrameTrack(x, y, pound: true) && Main.netMode == NetmodeID.MultiplayerClient)
                         NetMessage.SendData(MessageID.TileManipulation, -1, -1, null, 15, x, y, 1f);
                     break;
-                case 137:
+                case TileID.Traps:
                     int frameNum = 0;
                     switch (Main.tile[x, y].TileFrameY / 18)
                     {
@@ -187,7 +187,7 @@ public static partial class WindfallUtils
                     if (Main.netMode == NetmodeID.MultiplayerClient)
                     NetMessage.SendTileSquare(-1, x, y);
                     break;
-                case 424:
+                case TileID.WirePipe:
                     if (Main.tile[x, y].TileFrameX == 0)
                     Main.tile[x, y].TileFrameX = 18;
                     else if (Main.tile[x, y].TileFrameX == 18)
@@ -199,7 +199,7 @@ public static partial class WindfallUtils
                     if (Main.netMode == NetmodeID.MultiplayerClient)
                     NetMessage.SendTileSquare(-1, x, y);
                     break;
-                case 442:
+                case TileID.ProjectilePressurePad:
                     Tile aboveTile = Main.tile[x, y - 1];
                     Tile belowTile = Main.tile[x, y + 1];
                     Tile leftTIle = Main.tile[x - 1, y];
@@ -464,6 +464,6 @@ public static partial class WindfallUtils
         TileID.Sets.FramesOnKillWall[mt.Type] = true;
 
         mt.AddMapEntry(new Color(120, 85, 60), Language.GetText("MapObject.Trophy"));
-        mt.DustType = 7;
+        mt.DustType = DustID.WoodFurniture;
     }
 }

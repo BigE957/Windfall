@@ -1,6 +1,6 @@
 ﻿using CalamityMod;
 using Windfall.Common.Graphics.Primitives;
-using CalamityMod.Particles;
+using Windfall.Common.Graphics.Particles;
 using Daybreak.Common.Rendering;
 using Terraria.Graphics.Shaders;
 
@@ -64,8 +64,8 @@ public class DarkBolt : ModProjectile
         {
             Vector2 position = new Vector2(Projectile.position.X, Projectile.Center.Y) + (Vector2.UnitY.RotatedBy(Projectile.rotation) * Main.rand.NextFloat(-16f, 16f));
 
-            Particle spark = new SparkParticle(position, Projectile.velocity.RotatedByRandom(PiOver4) * -0.5f, false, 12, Main.rand.NextFloat(0.25f, 1f), ColorFunction(0, Vector2.Zero));
-            GeneralParticleHandler.SpawnParticle(spark);
+            Particle spark = new Spark(position, Projectile.velocity.RotatedByRandom(PiOver4) * -0.5f, false, 12, Main.rand.NextFloat(0.25f, 1f), ColorFunction(0, Vector2.Zero));
+            ParticleSystem.SpawnParticle(spark);
         }
         Lighting.AddLight(Projectile.Center, ColorFunction(0, Vector2.Zero).ToVector3());
     }
