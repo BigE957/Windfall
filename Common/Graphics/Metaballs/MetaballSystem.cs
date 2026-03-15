@@ -13,20 +13,7 @@ namespace Windfall.Common.Graphics.Metaballs;
 
 public class MetaballSystem : ModSystem
 {
-    internal static List<MyMetaball> metaballs = [];
-
-    public enum MetaballDrawLayer
-    {
-        BeforeAllTiles,
-        BeforeSolidTiles,
-        BeforeNPCs,
-        AfterNPCs,
-        BeforeProjectiles,
-        AfterProjectiles,
-        AfterPlayers,
-        AfterDusts,
-        AfterEverything,
-    }
+    internal static readonly List<MyMetaball> metaballs = [];
 
     public override void Load()
     {
@@ -51,53 +38,56 @@ public class MetaballSystem : ModSystem
     private void DrawMetaballs_BeforeAllTiles(On_Main.orig_DrawBackgroundBlackFill orig, Main self)
     {
         Main.spriteBatch.End(out var ss);
-        DrawMetaballs(MetaballDrawLayer.BeforeAllTiles);
+        DrawMetaballs(DrawLayer.BeforeAllTiles);
         Main.spriteBatch.Begin(ss);
         orig(self);
     }
 
     private void DrawMetaballs_BeforeSolidTiles(On_Main.orig_DoDraw_Tiles_Solid orig, Main self)
     {
-        DrawMetaballs(MetaballDrawLayer.BeforeSolidTiles);
+        DrawMetaballs(DrawLayer.BeforeSolidTiles);
         orig(self);
     }
 
     private void DrawMetaballs_NPCs(On_Main.orig_DoDraw_DrawNPCsOverTiles orig, Main self)
     {
-        DrawMetaballs(MetaballDrawLayer.BeforeNPCs);
+        DrawMetaballs(DrawLayer.BeforeNPCs);
         orig(self);
-        DrawMetaballs(MetaballDrawLayer.AfterNPCs);
+        DrawMetaballs(DrawLayer.AfterNPCs);
     }
 
     private void DrawMetaballs_Projectiles(On_Main.orig_DrawProjectiles orig, Main self)
     {
-        DrawMetaballs(MetaballDrawLayer.BeforeProjectiles);
+        DrawMetaballs(DrawLayer.BeforeProjectiles);
         orig(self);
-        DrawMetaballs(MetaballDrawLayer.AfterProjectiles);
+        DrawMetaballs(DrawLayer.AfterProjectiles);
     }
 
     private void DrawMetaballs_AfterPlayers(On_Main.orig_DrawPlayers_AfterProjectiles orig, Main self)
     {
         orig(self);
-        DrawMetaballs(MetaballDrawLayer.AfterPlayers);
+        DrawMetaballs(DrawLayer.AfterPlayers);
     }
 
     private void DrawMetaballs_AfterDusts(On_Main.orig_DrawDust orig, Main self)
     {
         orig(self);
-        DrawMetaballs(MetaballDrawLayer.AfterDusts);
+        DrawMetaballs(DrawLayer.AfterDusts);
     }
 
     private void DrawMetaballs_AfterEverything(On_Main.orig_DrawInfernoRings orig, Main self)
     {
         orig(self);
         Main.spriteBatch.End(out var ss);
-        DrawMetaballs(MetaballDrawLayer.AfterEverything);
+        DrawMetaballs(DrawLayer.AfterEverything);
         Main.spriteBatch.Begin(ss);
     }
 
     public override void PreUpdateEntities()
     {
+        if (Main.dedServ)
+            return;
+
         // Get a list of all metaballs currently in use.
         var activeMetaballs = metaballs.Where(m => m.ShouldRender);
 
@@ -115,7 +105,7 @@ public class MetaballSystem : ModSystem
             metaball.ClearInstances();
     }
 
-    private static void DrawMetaballs(MetaballDrawLayer targetLayer)
+    private static void DrawMetaballs(DrawLayer targetLayer)
     {
         if (Main.gameMenu && (!GameShaders.Misc.ContainsKey("Windfall:Masking") || !GameShaders.Misc.ContainsKey("Windfall:MaskEdge")))
             return;
@@ -315,7 +305,7 @@ public abstract class MyMetaball : ModType
     /// </summary>
     public virtual bool FixedToScreen => false;
     
-    public abstract MetaballDrawLayer[] DrawLayers { get; }
+    public abstract DrawLayer[] DrawLayers { get; }
 
     public virtual Color DrawLayerColor(int layer) => Color.White;
 

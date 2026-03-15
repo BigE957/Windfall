@@ -1,6 +1,4 @@
-﻿
-
-using CalamityMod;
+﻿using CalamityMod;
 using Windfall.Common.Graphics.Primitives;
 using CalamityMod.Particles;
 using Daybreak.Common.Rendering;
